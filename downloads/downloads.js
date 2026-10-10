@@ -946,6 +946,105 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Settings Modal Elements
+  const btnSettings = document.getElementById('btn-settings');
+  const settingsModal = document.getElementById('settings-modal');
+  const btnCloseSettings = document.getElementById('btn-close-settings');
+  const btnSaveSettings = document.getElementById('btn-save-settings');
+  const modalFolderPath = document.getElementById('modal-folder-path');
+  const btnModalChangeFolder = document.getElementById('btn-modal-change-folder');
+  const settingOnpageButtons = document.getElementById('setting-onpage-buttons');
+  const settingDetachButton = document.getElementById('setting-detach-button');
+  const settingOneClick = document.getElementById('setting-one-click');
+  const settingPreferredQuality = document.getElementById('setting-preferred-quality');
+  const settingRememberQuality = document.getElementById('setting-remember-quality');
+
+  function openSettingsModal() {
+    if (!settingsModal) return;
+    chrome.storage.local.get([
+      'customDownloadDir',
+      'onPageButtonsEnabled',
+      'detachButtonEnabled',
+      'isOneClickEnabled',
+      'preferredQuality',
+      'preferLastQuality'
+    ], (data) => {
+      const currentDir = data.customDownloadDir || sidebarFolderPath.textContent || 'Downloads';
+      if (modalFolderPath) {
+        modalFolderPath.textContent = currentDir;
+        modalFolderPath.title = currentDir;
+      }
+      if (settingOnpageButtons) settingOnpageButtons.checked = data.onPageButtonsEnabled !== false;
+      if (settingDetachButton) settingDetachButton.checked = data.detachButtonEnabled !== false;
+      if (settingOneClick) settingOneClick.checked = Boolean(data.isOneClickEnabled);
+      if (settingPreferredQuality) settingPreferredQuality.value = data.preferredQuality || 'best';
+      if (settingRememberQuality) settingRememberQuality.checked = data.preferLastQuality !== false;
+
+      settingsModal.style.display = 'flex';
+    });
+  }
+
+  function closeSettingsModal() {
+    if (settingsModal) settingsModal.style.display = 'none';
+  }
+
+  if (btnSettings) {
+    btnSettings.addEventListener('click', openSettingsModal);
+  }
+
+  if (btnCloseSettings) {
+    btnCloseSettings.addEventListener('click', closeSettingsModal);
+  }
+
+  if (settingsModal) {
+    settingsModal.addEventListener('click', (e) => {
+      if (e.target === settingsModal) closeSettingsModal();
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && settingsModal && settingsModal.style.display === 'flex') {
+      closeSettingsModal();
+    }
+  });
+
+  if (btnModalChangeFolder) {
+    btnModalChangeFolder.addEventListener('click', () => {
+      safeSendMessage({ action: 'browseFolder' }, (res) => {
+        const selectedPath = (res && res.path) || (res && res.success && res.path);
+        if (selectedPath) {
+          if (modalFolderPath) {
+            modalFolderPath.textContent = selectedPath;
+            modalFolderPath.title = selectedPath;
+          }
+          if (sidebarFolderPath) {
+            sidebarFolderPath.textContent = selectedPath;
+            sidebarFolderPath.title = selectedPath;
+          }
+          chrome.storage.local.set({ customDownloadDir: selectedPath });
+          showToast('Đã đổi thư mục lưu!');
+        }
+      });
+    });
+  }
+
+  if (btnSaveSettings) {
+    btnSaveSettings.addEventListener('click', () => {
+      const settingsToSave = {
+        onPageButtonsEnabled: settingOnpageButtons ? settingOnpageButtons.checked : true,
+        detachButtonEnabled: settingDetachButton ? settingDetachButton.checked : true,
+        isOneClickEnabled: settingOneClick ? settingOneClick.checked : false,
+        preferredQuality: settingPreferredQuality ? settingPreferredQuality.value : 'best',
+        preferLastQuality: settingRememberQuality ? settingRememberQuality.checked : true
+      };
+
+      chrome.storage.local.set(settingsToSave, () => {
+        showToast('Đã lưu cài đặt thành công!');
+        closeSettingsModal();
+      });
+    });
+  }
+
   // Clear all history
   btnClearAll.addEventListener('click', async () => {
     if (confirm('Bạn có chắc muốn xoá toàn bộ lịch sử tải xuống không?')) {

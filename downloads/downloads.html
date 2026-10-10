@@ -29,6 +29,14 @@
       </div>
 
       <div class="header-actions">
+        <button id="btn-settings" class="header-btn secondary" title="Cài đặt tiện ích">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Cài đặt</span>
+        </button>
+
         <button id="btn-open-folder" class="header-btn" title="Mở thư mục Downloads trong máy tính">
           <span>Mở thư mục</span>
         </button>
@@ -101,8 +109,106 @@
     </div>
   </div>
 
-  <!-- Toast notification -->
-  <div id="toast" class="toast"></div>
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-backdrop" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <h3>Cài đặt Savior</h3>
+          </div>
+          <button id="btn-close-settings" class="modal-close-btn" title="Đóng">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Setting: Thư mục tải về -->
+          <div class="setting-item">
+            <div class="setting-label-wrap">
+              <label class="setting-title">Thư mục tải về mặc định</label>
+              <span class="setting-desc">Tất cả video và âm thanh tải xuống sẽ được lưu tại đây</span>
+            </div>
+            <div class="setting-folder-row">
+              <span id="modal-folder-path" class="folder-path-box">Downloads</span>
+              <button type="button" id="btn-modal-change-folder" class="btn-setting-action">Đổi thư mục...</button>
+            </div>
+          </div>
+
+          <!-- Setting: Nút trên video -->
+          <div class="setting-item">
+            <div class="setting-label-wrap">
+              <label class="setting-title" for="setting-onpage-buttons">Hiển thị thanh tải nổi trên video</label>
+              <span class="setting-desc">Tự động gắn nút tải Savior trên trình phát video (YouTube, Facebook...)</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-onpage-buttons" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Setting: Nút tách video PiP -->
+          <div class="setting-item">
+            <div class="setting-label-wrap">
+              <label class="setting-title" for="setting-detach-button">Nút ghim / tách video (Picture-in-Picture)</label>
+              <span class="setting-desc">Cho phép tách video xem ở cửa sổ nổi thu nhỏ</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-detach-button" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Setting: Tải 1-click -->
+          <div class="setting-item">
+            <div class="setting-label-wrap">
+              <label class="setting-title" for="setting-one-click">Tải nhanh một chạm (1-Click)</label>
+              <span class="setting-desc">Bấm tải ngay lập tức với chất lượng ưa thích mà không cần chọn lại</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-one-click">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Setting: Chất lượng mặc định -->
+          <div class="setting-item">
+            <div class="setting-label-wrap">
+              <label class="setting-title" for="setting-preferred-quality">Chất lượng tải mặc định</label>
+              <span class="setting-desc">Độ phân giải video được ưu tiên chọn khi tải</span>
+            </div>
+            <select id="setting-preferred-quality" class="setting-select">
+              <option value="best">Cao nhất (Tự động / 4K / 2K)</option>
+              <option value="1080p">1080p (Full HD)</option>
+              <option value="720p">720p (HD)</option>
+              <option value="480p">480p (SD)</option>
+              <option value="360p">360p</option>
+              <option value="audio">Chỉ tải âm thanh (MP3)</option>
+            </select>
+          </div>
+
+          <!-- Setting: Ghi nhớ chất lượng -->
+          <div class="setting-item">
+            <div class="setting-label-wrap">
+              <label class="setting-title" for="setting-remember-quality">Ghi nhớ chất lượng của lần tải trước</label>
+              <span class="setting-desc">Tự động chọn độ phân giải bạn vừa tải lần gần nhất</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-remember-quality" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-save-settings" class="btn-primary-action">Lưu cài đặt</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
 
   <script src="downloads.js"></script>
 </body>

@@ -882,7 +882,7 @@
    },
    "widget_other_options": {
       "description": "Message shows in widget when user hover on three dots button",
-      "message": "Other features"
+      "message": "Downloads Manager"
    },
    "widget_panel_hidden": {
       "message": "Panel hidden (Reload page to show this panel)"

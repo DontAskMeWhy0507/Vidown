@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Savior Video Downloader</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header: Clean Minimal Title & Manager Shortcut -->
+    <header class="popup-header">
+      <div class="brand">
+        <img src="../images/savior_logo.png" alt="Logo" class="brand-icon">
+        <div class="brand-text">
+          <h1>Savior Downloader</h1>
+        </div>
+      </div>
+      <button id="btn-open-manager" class="header-icon-btn" title="Mở trang quản lý tải xuống">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Top Action Card: Download Manager Banner -->
+    <div class="manager-shortcut-card" id="btn-header-manager" role="button" tabindex="0" title="Nhấn để mở Trang quản lý download">
+      <div class="shortcut-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      </div>
+      <div class="shortcut-info">
+        <span class="shortcut-title">Trang quản lý tải xuống</span>
+        <span class="shortcut-sub">Xem tiến trình, mở file, đổi thư mục lưu trữ</span>
+      </div>
+      <div class="shortcut-arrow">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Scrollable Body (Recent Downloads View) -->
+    <div class="popup-body">
+      <!-- Section: Recently Downloaded Videos -->
+      <section class="popup-section" id="section-recent">
+        <div class="recent-header">
+          <span class="recent-heading">Các video vừa tải xuống</span>
+          <span class="recent-badge-count" id="recent-total-badge">0 video</span>
+        </div>
+
+        <div class="recent-media-container" id="recent-media-list">
+          <!-- Populated dynamically by popup.js -->
+        </div>
+
+        <div class="empty-state empty-recent" id="recent-empty-state" style="display: none;">
+          <div class="empty-icon-wrap">
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <p class="empty-title">Chưa có video nào tải xuống</p>
+          <p class="empty-desc">Khi bạn tải video trên YouTube, Facebook, TikTok..., các tệp sẽ xuất hiện tại đây.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Prominent Bottom Manager Action Bar -->
+    <footer class="popup-footer">
+      <button id="btn-footer-manager" class="btn-manager-action">Mở trang quản lý download</button>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast" style="display: none;">Thông báo</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

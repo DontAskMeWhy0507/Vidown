@@ -1,0 +1,335 @@
+/**
+ * Savior Video Downloader - Popup Script
+ * 2 Main Sections: Download Manager Launcher & Recent Downloads List.
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toast = document.getElementById('toast');
+  const recentMediaList = document.getElementById('recent-media-list');
+  const recentEmptyState = document.getElementById('recent-empty-state');
+  const recentTotalBadge = document.getElementById('recent-total-badge');
+  const btnFooterManager = document.getElementById('btn-footer-manager');
+  const btnHeaderManager = document.getElementById('btn-header-manager');
+  const btnOpenManager = document.getElementById('btn-open-manager');
+
+  function showToast(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    setTimeout(() => {
+      toast.style.display = 'none';
+    }, 2800);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function formatBytes(bytes) {
+    if (!bytes || isNaN(bytes) || bytes <= 0) return '';
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    let i = 0;
+    let val = bytes;
+    while (val >= 1024 && i < units.length - 1) {
+      val /= 1024;
+      i++;
+    }
+    return `${val.toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
+  }
+
+  function formatTime(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return '';
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    const timeStr = d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+    if (isToday) return timeStr;
+    return `${d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' })} ${timeStr}`;
+  }
+
+  // Open Downloads Manager
+  function openDownloadsManager() {
+    try {
+      chrome.runtime.sendMessage({ action: 'openDownloadsPage' });
+    } catch (_) {
+      try {
+        if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
+          chrome.tabs.create({ url: chrome.runtime.getURL('downloads/downloads.html') });
+        }
+      } catch (__) {}
+    }
+  }
+
+  if (btnOpenManager) btnOpenManager.addEventListener('click', openDownloadsManager);
+  if (btnHeaderManager) btnHeaderManager.addEventListener('click', openDownloadsManager);
+  if (btnFooterManager) btnFooterManager.addEventListener('click', openDownloadsManager);
+
+  // Notify background that user opened popup
+  try {
+    chrome.runtime.sendMessage({ action: 'popupOpened' });
+  } catch (_) {}
+
+  // Load and render recently downloaded videos
+  async function loadRecentDownloads() {
+    try {
+      let historyList = [];
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        const storageData = await chrome.storage.local.get(['downloadHistory']);
+        historyList = Array.isArray(storageData.downloadHistory) ? storageData.downloadHistory : [];
+      }
+
+      let chromeDownloads = [];
+      try {
+        if (typeof chrome !== 'undefined' && chrome.downloads && chrome.downloads.search) {
+          chromeDownloads = await chrome.downloads.search({ orderBy: ['-startTime'], limit: 30 });
+        }
+      } catch (_) {}
+
+      const mediaDownloads = (chromeDownloads || [])
+        .filter(cd => cd.filename && /\.(mp4|webm|mkv|mov|mp3|m4a|ts|flv|m4s|aac|ogg|wav)$/i.test(cd.filename))
+        .map(cd => {
+          const isAudio = /\.(mp3|m4a|aac|flac|wav)$/i.test(cd.filename || '');
+          let state = 'downloading';
+          if (cd.state === 'complete') state = 'completed';
+          else if (cd.state === 'interrupted') state = 'error';
+
+          const fn = cd.filename.replace(/\\/g, '/').split('/').pop();
+          return {
+            id: `chrome_${cd.id}`,
+            chromeId: cd.id,
+            title: fn || 'video.mp4',
+            filename: cd.filename,
+            totalSize: cd.totalBytes || cd.fileSize || 0,
+            startTime: cd.startTime ? new Date(cd.startTime).getTime() : Date.now(),
+            state,
+            percent: cd.totalBytes > 0 ? `${Math.round((cd.bytesReceived / cd.totalBytes) * 100)}%` : '100%',
+            type: isAudio ? 'audio' : 'video'
+          };
+        });
+
+      // Query active engine tasks
+      let activeTaskIds = [];
+      try {
+        const bgStatus = await new Promise((res) => {
+          chrome.runtime.sendMessage({ action: 'getDownloadStatus' }, (r) => {
+            if (chrome.runtime?.lastError) return res(null);
+            res(r);
+          });
+        });
+        if (bgStatus && Array.isArray(bgStatus.activeTaskIds)) {
+          activeTaskIds = bgStatus.activeTaskIds;
+        }
+      } catch (_) {}
+
+      // Merge native history and chrome downloads, deduplicating by filename or title
+      const mergedMap = new Map();
+      const nowTs = Date.now();
+      let storageNeedsHealing = false;
+
+      for (const item of historyList) {
+        if (!item) continue;
+        if (item.state === 'downloading') {
+          const isAct = activeTaskIds.includes(item.id);
+          if (!isAct) {
+            if (item.percent === '100%' || item.speed === 'Hoàn thành' || item.outputFile) {
+              item.state = 'completed';
+              item.percent = '100%';
+              storageNeedsHealing = true;
+            } else if (nowTs - (item.startTime || 0) > 15000) {
+              item.state = 'error';
+              item.errorMessage = 'Bị gián đoạn';
+              storageNeedsHealing = true;
+            }
+          }
+        }
+
+        const key = (item.title || item.filename || item.outputFile || item.id || '').toLowerCase();
+        if (key && !mergedMap.has(key)) {
+          mergedMap.set(key, {
+            ...item,
+            startTime: item.timestamp || item.startTime || Date.now()
+          });
+        }
+      }
+
+      if (storageNeedsHealing) {
+        try {
+          chrome.storage.local.set({ downloadHistory: historyList.slice(0, 100) });
+        } catch (_) {}
+      }
+
+      for (const item of mediaDownloads) {
+        const key = (item.title || item.filename || item.id || '').toLowerCase();
+        if (key && !mergedMap.has(key)) {
+          mergedMap.set(key, item);
+        }
+      }
+
+      const recentItems = Array.from(mergedMap.values()).sort((a, b) => (b.startTime || 0) - (a.startTime || 0));
+
+      if (recentTotalBadge) {
+        recentTotalBadge.textContent = `${recentItems.length} video`;
+      }
+
+      renderRecentDownloads(recentItems);
+    } catch (_) {
+      renderRecentDownloads([]);
+    }
+  }
+
+  function openRecentFile(item) {
+    if (!item) return;
+    showToast(`Đang mở: ${item.title || 'tệp'}...`);
+    chrome.runtime.sendMessage({
+      action: 'openFile',
+      id: item.id,
+      chromeId: item.chromeId,
+      path: item.filename || item.outputFile || '',
+      filename: item.filename || item.outputFile || item.title || '',
+      title: item.title || ''
+    }, (res) => {
+      if (res && res.success) {
+        showToast(`Đang phát: ${item.title || 'video'}`);
+      } else {
+        const err = res && res.error ? res.error : 'Không tìm thấy tệp trên đĩa';
+        showToast(err);
+      }
+    });
+  }
+
+  function openRecentFolder(item) {
+    if (!item) return;
+    chrome.runtime.sendMessage({
+      action: 'openFolder',
+      path: item.filename || item.outputFile || ''
+    });
+  }
+
+  function renderRecentDownloads(items) {
+    if (!recentMediaList) return;
+    recentMediaList.innerHTML = '';
+
+    if (!items || items.length === 0) {
+      if (recentEmptyState) recentEmptyState.style.display = 'block';
+      return;
+    }
+
+    if (recentEmptyState) recentEmptyState.style.display = 'none';
+
+    // Show up to 15 most recent downloads in popup
+    const displayItems = items.slice(0, 15);
+
+    displayItems.forEach((item) => {
+      const card = document.createElement('div');
+      card.className = 'recent-card';
+
+      const isAudio = item.type === 'audio' || /\.(mp3|m4a|aac)$/i.test(item.filename || item.title || '');
+      const isCompleted = item.state === 'completed' || item.percent === '100%';
+      const isDownloading = item.state === 'downloading' && !isCompleted;
+      const isError = item.state === 'error' || item.state === 'interrupted';
+
+      let stateBadge = `<span class="status-badge completed">Đã tải xong</span>`;
+      if (isDownloading) {
+        stateBadge = `<span class="status-badge downloading">Đang tải: ${item.percent || '...'}</span>`;
+      } else if (isError) {
+        stateBadge = `<span class="status-badge error">Gián đoạn</span>`;
+      }
+
+      const sizeStr = item.totalSize ? formatBytes(item.totalSize) : (item.size || '');
+      const timeStr = formatTime(item.startTime);
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-icon">
+            ${isAudio ? `
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+              </svg>
+            ` : `
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
+            `}
+          </div>
+          <div class="card-details">
+            <span class="card-title" title="${escapeHtml(item.title)}">${escapeHtml(item.title || 'Video')}</span>
+            <div class="card-meta">
+              ${stateBadge}
+              ${sizeStr ? `<span>${sizeStr}</span>` : ''}
+              ${timeStr ? `<span>${timeStr}</span>` : ''}
+            </div>
+            ${isDownloading ? `
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" style="width: ${item.percent || '5%'}"></div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+        <div class="card-actions">
+          ${isCompleted ? `
+            <button class="btn-card-action primary btn-open-file" title="Mở phát tệp tin">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Mở tệp
+            </button>
+          ` : ''}
+          <button class="btn-card-action btn-open-folder" title="Mở thư mục chứa file">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            </svg>
+            Thư mục
+          </button>
+        </div>
+      `;
+
+      const btnOpenFile = card.querySelector('.btn-open-file');
+      if (btnOpenFile) {
+        btnOpenFile.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openRecentFile(item);
+        });
+      }
+
+      const btnOpenFolder = card.querySelector('.btn-open-folder');
+      if (btnOpenFolder) {
+        btnOpenFolder.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openRecentFolder(item);
+        });
+      }
+
+      recentMediaList.appendChild(card);
+    });
+  }
+
+  // Initial load
+  loadRecentDownloads();
+
+  // Listen for storage changes & background progress messages
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.onChanged) {
+    chrome.storage.onChanged.addListener((changes, areaName) => {
+      if (areaName === 'local' && changes.downloadHistory) {
+        loadRecentDownloads();
+      }
+    });
+  }
+
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
+    chrome.runtime.onMessage.addListener((msg) => {
+      if (msg && (msg.action === 'progress' || msg.action === 'complete' || msg.action === 'error')) {
+        loadRecentDownloads();
+      }
+    });
+  }
+});

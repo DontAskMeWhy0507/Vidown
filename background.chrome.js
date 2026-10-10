@@ -415,6 +415,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
   if (!req || !req.action) return false;
 
   switch (req.action) {
+    case 'openDownloadsManager':
     case 'openDownloadsPage': {
       chrome.tabs.create({ url: chrome.runtime.getURL('downloads/downloads.html') });
       sendResponse({ success: true });

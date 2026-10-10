@@ -54,9 +54,9 @@
   `;
   document.head.appendChild(style);
 
-  // Delegated click handler
+  // Delegated click handler for 3-dots button and manager buttons
   document.addEventListener('click', function (e) {
-    const btn = e.target.closest('#btn-open-downloads-manager, #btn-sidepanel-downloads');
+    const btn = e.target.closest('#btn-open-downloads-manager, #btn-sidepanel-downloads, #other-feature');
     if (btn) {
       e.preventDefault();
       e.stopPropagation();

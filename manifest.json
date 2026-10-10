@@ -1,7 +1,8 @@
 {
    "action": {
       "default_icon": "images/savior_logo.png",
-      "default_title": "__MSG_page_action_title__"
+      "default_title": "__MSG_page_action_title__",
+      "default_popup": "popup/popup.html"
    },
    "background": {
       "service_worker": "background.chrome.js"
@@ -9,7 +10,7 @@
    "content_scripts": [ {
       "all_frames": true,
       "exclude_matches": [ "file://*", "*://*.g.doubleclick.net/*" ],
-      "js": [ "common.js", "content-script.js" ],
+      "js": [ "common.js", "content-script.js", "downloads-nav.js" ],
       "matches": [ "<all_urls>" ],
       "run_at": "document_idle"
    } ],
@@ -51,6 +52,6 @@
    "version": "2.4.65",
    "web_accessible_resources": [ {
       "matches": [ "<all_urls>" ],
-      "resources": [ "css/content-script.css", "images/*.*", "/features.json", "downloads/*" ]
+      "resources": [ "css/content-script.css", "images/*.*", "/features.json", "downloads/*", "popup/*" ]
    } ]
 }
