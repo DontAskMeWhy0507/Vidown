@@ -722,7 +722,7 @@ function startFfmpegMux(req) {
       }
       sendMessage({
         action: 'progress',
-        percent: percent || (totalBytes > 0 ? formatBytes(totalBytes) : '1%'),
+        percent: percent || '',
         speed: computedSpeed || (percent ? '' : 'Đang ghép luồng (FFmpeg)...'),
         eta: '',
         size: formatBytes(totalBytes)

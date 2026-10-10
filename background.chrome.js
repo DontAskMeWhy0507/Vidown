@@ -120,6 +120,37 @@ function dispatchDownloadChanged(changeInfo) {
   }
 }
 
+function setActionBadge(text, color = '#10b981') {
+  try {
+    if (chrome.action && chrome.action.setBadgeText) {
+      chrome.action.setBadgeText({ text: text || '' });
+      if (text && chrome.action.setBadgeBackgroundColor) {
+        chrome.action.setBadgeBackgroundColor({ color });
+      }
+    }
+  } catch (_) {}
+}
+
+function broadcastTaskEvent(payload) {
+  try {
+    chrome.runtime.sendMessage(payload).catch(() => {});
+  } catch (_) {}
+  try {
+    if (chrome.tabs && chrome.tabs.query) {
+      chrome.tabs.query({}, (tabs) => {
+        if (chrome.runtime.lastError || !tabs) return;
+        for (const tab of tabs) {
+          if (tab.id && tab.id > 0) {
+            try {
+              chrome.tabs.sendMessage(tab.id, payload).catch(() => {});
+            } catch (_) {}
+          }
+        }
+      });
+    }
+  } catch (_) {}
+}
+
 // Probe native helper availability on startup
 function probeNativeHelper() {
   try {
@@ -247,14 +278,26 @@ function startNativeDownload(downloadParams, callback) {
     startTime: task.startTime
   });
 
+  setActionBadge('1%', '#10b981');
+  broadcastTaskEvent({
+    action: 'nativeProgress',
+    taskId: fakeId,
+    percent: '1%',
+    speed: 'Bắt đầu kết nối...',
+    size: '0 B'
+  });
+
   let lastStorageUpdate = 0;
 
   const messageHandler = (msg) => {
     if (!msg) return;
 
     if (msg.action === 'progress') {
-      if (msg.percent && chrome.action && chrome.action.setBadgeText) {
-        chrome.action.setBadgeText({ text: msg.percent });
+      const displayPct = (msg.percent && msg.percent.includes('%')) ? msg.percent : '';
+      if (displayPct) {
+        setActionBadge(displayPct, '#10b981');
+      } else if (msg.speed) {
+        setActionBadge('...', '#10b981');
       }
 
       const now = Date.now();
@@ -267,15 +310,13 @@ function startNativeDownload(downloadParams, callback) {
           size: msg.size || ''
         });
       }
-      try {
-        chrome.runtime.sendMessage({
-          action: 'nativeProgress',
-          taskId: fakeId,
-          percent: msg.percent || '',
-          speed: msg.speed || '',
-          size: msg.size || ''
-        }).catch(() => {});
-      } catch (e) {}
+      broadcastTaskEvent({
+        action: 'nativeProgress',
+        taskId: fakeId,
+        percent: msg.percent || '',
+        speed: msg.speed || '',
+        size: msg.size || ''
+      });
     } else if (msg.action === 'complete') {
       task.complete = true;
       task.state = 'completed';
@@ -292,24 +333,21 @@ function startNativeDownload(downloadParams, callback) {
         outputFile: msg.outputFile || safeFilename
       });
 
-      if (chrome.action && chrome.action.setBadgeText) {
-        chrome.action.setBadgeText({ text: '✓' });
-        setTimeout(() => {
-          chrome.action.setBadgeText({ text: '' });
-        }, 4000);
-      }
+      setActionBadge('✓', '#10b981');
+      setTimeout(() => {
+        setActionBadge('');
+      }, 4000);
+
       dispatchDownloadChanged({
         id: fakeId,
         state: { current: 'complete', previous: 'in_progress' },
         filename: { current: msg.outputFile || safeFilename }
       });
-      try {
-        chrome.runtime.sendMessage({
-          action: 'nativeComplete',
-          taskId: fakeId,
-          outputFile: msg.outputFile || safeFilename
-        }).catch(() => {});
-      } catch (e) {}
+      broadcastTaskEvent({
+        action: 'nativeComplete',
+        taskId: fakeId,
+        outputFile: msg.outputFile || safeFilename
+      });
     } else if (msg.action === 'error') {
       task.state = 'error';
       activeDownloads.delete(fakeId);
@@ -321,24 +359,21 @@ function startNativeDownload(downloadParams, callback) {
         error: msg.error || 'SERVER_BAD_CONTENT'
       });
 
-      if (chrome.action && chrome.action.setBadgeText) {
-        chrome.action.setBadgeText({ text: '!' });
-        setTimeout(() => {
-          chrome.action.setBadgeText({ text: '' });
-        }, 4000);
-      }
+      setActionBadge('!', '#ef4444');
+      setTimeout(() => {
+        setActionBadge('');
+      }, 4000);
+
       dispatchDownloadChanged({
         id: fakeId,
         error: { current: msg.error || 'SERVER_BAD_CONTENT' },
         state: { current: 'interrupted' }
       });
-      try {
-        chrome.runtime.sendMessage({
-          action: 'nativeError',
-          taskId: fakeId,
-          error: msg.error || 'SERVER_BAD_CONTENT'
-        }).catch(() => {});
-      } catch (e) {}
+      broadcastTaskEvent({
+        action: 'nativeError',
+        taskId: fakeId,
+        error: msg.error || 'SERVER_BAD_CONTENT'
+      });
     }
   };
 

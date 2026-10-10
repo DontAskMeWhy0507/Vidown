@@ -256,7 +256,10 @@ document.addEventListener('DOMContentLoaded', () => {
       updateCounts();
       renderList();
     } catch (err) {
-      allItems = [];
+      console.error('[DownloadsManager] loadDownloads error:', err);
+      if (allItems.length === 0 && typeof map !== 'undefined' && map && map.size > 0) {
+        allItems = Array.from(map.values()).sort((a, b) => (b.startTime || 0) - (a.startTime || 0));
+      }
       renderList();
     }
   }
@@ -302,11 +305,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const video = allItems.filter(it => it.type !== 'audio').length;
     const audio = allItems.filter(it => it.type === 'audio').length;
 
-    countAll.textContent = total;
-    countDownloading.textContent = downloading;
-    countCompleted.textContent = completed;
-    countVideo.textContent = video;
-    countAudio.textContent = audio;
+    if (countAll) countAll.textContent = total;
+    if (countDownloading) countDownloading.textContent = downloading;
+    if (countCompleted) countCompleted.textContent = completed;
+    if (countVideo) countVideo.textContent = video;
+    if (countAudio) countAudio.textContent = audio;
   }
 
   function getFilteredItems() {
@@ -974,7 +977,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Auto-Sync 2: Real-time progress events from background service worker
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === 'nativeProgress') {
-      const activeItem = msg.taskId ? allItems.find(it => it.id === msg.taskId) : null;
+      const activeItem = msg.taskId ? allItems.find(it => String(it.id) === String(msg.taskId)) : null;
       if (activeItem) {
         activeItem.percent = msg.percent || activeItem.percent;
         activeItem.speed = msg.speed || activeItem.speed;

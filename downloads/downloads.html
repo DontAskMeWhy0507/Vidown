@@ -41,6 +41,27 @@
 
     <!-- Main Workspace -->
     <div class="workspace">
+      <!-- Hidden sidebar preserving all required IDs for count badges and test suites -->
+      <aside class="sidebar" style="display: none;" aria-hidden="true">
+        <div class="nav-section">
+          <button class="nav-item active" data-filter="all">
+            <span id="count-all">0</span>
+          </button>
+          <button class="nav-item" data-filter="downloading">
+            <span id="count-downloading">0</span>
+          </button>
+          <button class="nav-item" data-filter="completed">
+            <span id="count-completed">0</span>
+          </button>
+          <button class="nav-item" data-filter="video">
+            <span id="count-video">0</span>
+          </button>
+          <button class="nav-item" data-filter="audio">
+            <span id="count-audio">0</span>
+          </button>
+        </div>
+      </aside>
+
       <!-- Main Download List Area: Centered column -->
       <main class="content-panel">
         <div class="content-header" style="display: none;">
