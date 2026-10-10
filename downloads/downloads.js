@@ -198,6 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
           if (statusRes.item) activeItem = statusRes.item;
           if (Array.isArray(statusRes.activeTaskIds)) {
             activeIds = new Set(statusRes.activeTaskIds);
+          } else if (Array.isArray(statusRes.activeDownloads)) {
+            activeIds = new Set(statusRes.activeDownloads.map(t => t.id));
           } else if (activeItem && activeItem.id) {
             activeIds.add(activeItem.id);
           }
@@ -209,6 +211,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const now = Date.now();
       const seenActiveTitles = new Set();
       for (const item of nativeHistory) {
+        // Normalize state strings from background
+        if (item.state === 'in_progress') item.state = 'downloading';
+        if (item.state === 'complete') item.state = 'completed';
+        if (item.state === 'interrupted' && item.error !== 'USER_CANCELED') item.state = 'error';
+
         const isFinished = item.percent === '100%' || item.speed === 'Hoàn thành';
         if (isFinished) {
           item.state = 'completed';
@@ -223,13 +230,13 @@ document.addEventListener('DOMContentLoaded', () => {
           const isTaskActive = activeIds.has(item.id) || (activeItem && activeItem.id === item.id);
           // If task is not active in the background engine
           if (!isTaskActive) {
-            if (item.outputFile || item.filename) {
+            if (item.outputFile || item.percent === '100%') {
               item.state = 'completed';
               item.percent = '100%';
-            } else if (now - (item.startTime || 0) > 900000) {
-              item.state = 'deleted';
+            } else if (now - (item.startTime || 0) > 300000) {
+              item.state = 'error';
               item.error = 'Bị gián đoạn';
-              item.errorMessage = 'Bị gián đoạn (Đã đóng trình duyệt hoặc tiến trình kết thúc)';
+              item.errorMessage = 'Bị gián đoạn';
             }
           }
         }
@@ -498,11 +505,11 @@ document.addEventListener('DOMContentLoaded', () => {
     card.className = 'download-card';
     card.id = `card_${item.id}`;
 
-    const isDownloading = item.state === 'downloading';
+    const isDownloading = item.state === 'downloading' || item.state === 'in_progress';
     const isError = item.state === 'error' || (item.state === 'interrupted' && item.error !== 'USER_CANCELED');
     const isDeleted = item.state === 'deleted';
     const isCanceled = item.state === 'canceled' || item.state === 'cancelled' || item.error === 'USER_CANCELED';
-    const isCompleted = item.state === 'completed' && !isDeleted && !isCanceled && !isError;
+    const isCompleted = (item.state === 'completed' || item.state === 'complete') && !isDeleted && !isCanceled && !isError;
     const fn = (item.filename || item.title || '').toLowerCase();
     const isAudio = item.type === 'audio' || /\.(mp3|m4a|aac|flac|wav)$/i.test(fn);
     const isVideo = !isAudio && !/\.(exe|msi|zip|rar|7z|tar|gz)$/i.test(fn);

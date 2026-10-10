@@ -598,6 +598,7 @@ function cleanFbCdnUrl(rawUrl) {
 
 function startFfmpegMux(req) {
   if (activeProcess) {
+    activeProcess.isKilledByHost = true;
     try { activeProcess.kill(); } catch (e) {}
     activeProcess = null;
   }
@@ -642,7 +643,8 @@ function startFfmpegMux(req) {
     args.push(
       '-headers', headers,
       '-i', audioUrl,
-      '-c', 'copy'
+      '-c', 'copy',
+      '-strict', '-2'
     );
   } else {
     args.push('-c', 'copy');
@@ -719,6 +721,10 @@ function startFfmpegMux(req) {
   });
 
   activeProcess.on('close', (code) => {
+    if (activeProcess && activeProcess.isKilledByHost) {
+      activeProcess = null;
+      return;
+    }
     activeProcess = null;
     if (code === 0 && fs.existsSync(outPath) && fs.statSync(outPath).size > 1000) {
       sendMessage({
@@ -734,9 +740,11 @@ function startFfmpegMux(req) {
         downloadsDir: targetDir
       });
     } else {
+      const errLines = errOutput.split('\n').filter(l => l.trim() && !l.startsWith('ffmpeg version') && !l.startsWith('  built with') && !l.startsWith('  configuration:'));
+      const shortErr = errLines.slice(-3).join(' ').trim() || `FFmpeg code ${code}`;
       sendMessage({
         action: 'error',
-        error: errOutput.slice(0, 200) || `FFmpeg exited with code ${code}`
+        error: shortErr
       });
     }
   });
@@ -807,6 +815,7 @@ function fetchHttpResource(urlStr, referer = '', isBin = false) {
 
 async function startFfmpegDirectStream(req) {
   if (activeProcess) {
+    activeProcess.isKilledByHost = true;
     try { activeProcess.kill(); } catch (e) {}
     activeProcess = null;
   }
@@ -1039,6 +1048,10 @@ async function startFfmpegDirectStream(req) {
     });
 
     proc.on('close', (code) => {
+      if (proc && proc.isKilledByHost) {
+        activeProcess = null;
+        return;
+      }
       activeProcess = null;
       if (tempSessionDir && fs.existsSync(tempSessionDir)) {
         try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}

@@ -177,9 +177,19 @@ function startNativeDownload(downloadParams, callback) {
     return false;
   }
 
+  const targetUrl = downloadParams.videoUrl || downloadParams.url || '';
+
+  // Deduplicate: if an active download already exists for this URL, return existing task
+  for (const [id, t] of activeDownloads.entries()) {
+    if (t.url === targetUrl && (t.state === 'in_progress' || t.state === 'downloading')) {
+      console.log('[Savior] Download already active for this URL, returning task:', id);
+      if (typeof callback === 'function') callback(id);
+      return true;
+    }
+  }
+
   const fakeId = ++fakeIdCounter;
   const safeFilename = (downloadParams.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
-  const targetUrl = downloadParams.videoUrl || downloadParams.url || '';
   const mediaType = (downloadParams.convertToMp3 || downloadParams.soundOnly) ? 'audio' : 'video';
 
   const task = {
@@ -189,7 +199,7 @@ function startNativeDownload(downloadParams, callback) {
     url: targetUrl,
     type: mediaType,
     params: downloadParams,
-    state: 'in_progress',
+    state: 'downloading',
     percent: '1%',
     speed: 'Bắt đầu kết nối...',
     size: '0 B',
@@ -205,7 +215,7 @@ function startNativeDownload(downloadParams, callback) {
     filename: safeFilename,
     url: targetUrl,
     type: mediaType,
-    state: 'in_progress',
+    state: 'downloading',
     percent: '1%',
     speed: 'Bắt đầu kết nối...',
     size: '0 B',
@@ -247,7 +257,7 @@ function startNativeDownload(downloadParams, callback) {
 
       updateDownloadHistory({
         id: fakeId,
-        state: 'complete',
+        state: 'completed',
         percent: '100%',
         speed: 'Hoàn thành',
         endTime: Date.now(),
@@ -277,7 +287,7 @@ function startNativeDownload(downloadParams, callback) {
 
       updateDownloadHistory({
         id: fakeId,
-        state: 'interrupted',
+        state: 'error',
         error: msg.error || 'SERVER_BAD_CONTENT'
       });
 
@@ -363,7 +373,11 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
     case 'getDownloadStatus': {
       const activeList = Array.from(activeDownloads.values());
-      sendResponse({ success: true, activeDownloads: activeList });
+      sendResponse({
+        success: true,
+        activeDownloads: activeList,
+        activeTaskIds: activeList.map(t => t.id)
+      });
       return false;
     }
 
@@ -487,6 +501,18 @@ const _origDownload = chrome.downloads.download.bind(chrome.downloads);
 
 chrome.downloads.download = function(options, callback) {
   console.log('[Savior] chrome.downloads.download invoked:', options);
+
+  // Ignore trick or duplicate download calls if already active
+  const reqUrl = options ? (options.videoUrl || options.url) : '';
+  if (reqUrl) {
+    for (const [id, t] of activeDownloads.entries()) {
+      if (t.url === reqUrl || (t.params && (t.params.videoUrl === reqUrl || t.params.url === reqUrl))) {
+        console.log('[Savior] Duplicate/trick download call ignored for active task:', id);
+        if (typeof callback === 'function') callback(id);
+        return;
+      }
+    }
+  }
 
   const isConversionStream = Boolean(
     options.convertToMp4 ||
