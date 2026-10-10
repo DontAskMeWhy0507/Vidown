@@ -315,7 +315,20 @@ function probeHttpRange(urlStr, headers, maxRedirects = 5) {
   });
 }
 
-function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency = 6, onProgress, signal }) {
+function calculateChunks(totalSize, concurrency = 8, minChunkSize = 512 * 1024) {
+  if (!totalSize || totalSize <= 0) return [{ start: 0, end: 0 }];
+  const numChunks = Math.min(concurrency, Math.max(1, Math.floor(totalSize / minChunkSize)));
+  const chunkSize = Math.ceil(totalSize / numChunks);
+  const chunks = [];
+  for (let i = 0; i < numChunks; i++) {
+    const chunkStart = i * chunkSize;
+    const chunkEnd = Math.min(totalSize - 1, (i + 1) * chunkSize - 1);
+    chunks.push({ start: chunkStart, end: chunkEnd });
+  }
+  return chunks;
+}
+
+function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency = 8, onProgress, signal }) {
   return new Promise((resolve, reject) => {
     let fd = null;
     try {
@@ -327,8 +340,8 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
       return reject(e);
     }
 
-    const numChunks = Math.min(concurrency, Math.max(1, Math.floor(totalSize / (1024 * 1024))));
-    const chunkSize = Math.ceil(totalSize / numChunks);
+    const chunks = calculateChunks(totalSize, concurrency);
+    const numChunks = chunks.length;
     let totalDownloaded = 0;
     let completedChunks = 0;
     let isAborted = false;
@@ -376,9 +389,7 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
     }, 200);
 
     for (let i = 0; i < numChunks; i++) {
-      const chunkStart = i * chunkSize;
-      const chunkEnd = Math.min(totalSize - 1, (i + 1) * chunkSize - 1);
-      downloadChunk(i, chunkStart, chunkEnd, 0);
+      downloadChunk(i, chunks[i].start, chunks[i].end, 0);
     }
 
     function downloadChunk(chunkIdx, start, end, retryCount) {
@@ -567,14 +578,14 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
       });
     };
 
-    if (probe.supported && probe.size > 2 * 1024 * 1024) {
-      logHost(`Starting 6-thread Range download for ${outPath} (${probe.size} bytes)`);
+    if (probe.supported && probe.size > 512 * 1024) {
+      logHost(`Starting 8-thread Range download for ${outPath} (${probe.size} bytes)`);
       await downloadFileMultiThread({
         url: probe.url || targetUrl,
         outPath,
         headers: reqHeaders,
         totalSize: probe.size,
-        concurrency: 6,
+        concurrency: 8,
         onProgress,
         signal
       });
@@ -1421,7 +1432,7 @@ function startYtDlpDownload(req, targetUrl) {
     '--socket-timeout', '20',
     '--extractor-retries', '3',
     '--http-chunk-size', '10M',
-    '--concurrent-fragments', '4',
+    '--concurrent-fragments', '8',
     '--throttled-rate', '100K',
     '-f', formatArg,
     '--format-sort', 'res,vcodec:h264,acodec:m4a,proto:https',
@@ -1624,6 +1635,7 @@ if (typeof module !== 'undefined') {
     extractYouTubeUrl,
     parseProgressLine,
     resolveDefaultReferer,
-    findBestFileMatch
+    findBestFileMatch,
+    calculateChunks
   };
 }
