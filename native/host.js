@@ -188,43 +188,26 @@ function handleMessage(msg) {
         resolvedFile = targetPath;
       } else if (targetPath && fs.existsSync(path.join(DOWNLOADS_DIR, targetPath))) {
         resolvedFile = path.join(DOWNLOADS_DIR, targetPath);
-      } else if (filename) {
-        const fn = path.basename(filename);
-        const directCandidate = path.join(DOWNLOADS_DIR, fn);
-        if (fs.existsSync(directCandidate)) {
-          resolvedFile = directCandidate;
-        } else {
-          const baseNameWithoutExt = fn.replace(/\.[^.]+$/, '');
-          try {
-            const files = fs.readdirSync(DOWNLOADS_DIR);
-            const match = files.find(f => f.startsWith(baseNameWithoutExt) && !f.endsWith('.part') && !f.endsWith('.tmp') && !f.endsWith('.crdownload'));
-            if (match) {
-              resolvedFile = path.join(DOWNLOADS_DIR, match);
-            }
-          } catch (_) {}
-
-          if (!resolvedFile) {
-            for (const ext of ['.mp4', '.mkv', '.webm', '.mp3', '.m4a']) {
-              const withExt = fn.toLowerCase().endsWith(ext) ? directCandidate : `${directCandidate}${ext}`;
-              if (fs.existsSync(withExt)) {
-                resolvedFile = withExt;
-                break;
-              }
-            }
+      } else {
+        const candidateName = filename || targetPath || '';
+        const fn = path.basename(candidateName);
+        const baseNameWithoutExt = fn.replace(/\.[^.]+$/, '');
+        try {
+          const files = fs.readdirSync(DOWNLOADS_DIR);
+          const match = findBestFileMatch(candidateName, files) ||
+            files.find(f => f.startsWith(baseNameWithoutExt) && !f.endsWith('.part') && !f.endsWith('.tmp') && !f.endsWith('.crdownload'));
+          if (match) {
+            resolvedFile = path.join(DOWNLOADS_DIR, match);
           }
-        }
+        } catch (_) {}
       }
 
       if (resolvedFile && fs.existsSync(resolvedFile)) {
         logHost(`openFile launching: "${resolvedFile}"`);
-        exec(`cmd /c start "" "${resolvedFile.replace(/"/g, '""')}"`, { windowsHide: true }, (err) => {
-          if (err) {
-            exec(`powershell -NoProfile -Command "Start-Process -FilePath '${resolvedFile.replace(/'/g, "''")}'"`, { windowsHide: true });
-          }
-        });
+        spawn('explorer.exe', [resolvedFile], { windowsHide: true, detached: true });
         sendMessage({ action: 'openFileResult', success: true, path: resolvedFile });
       } else {
-        exec(`explorer.exe "${DOWNLOADS_DIR}"`);
+        spawn('explorer.exe', [DOWNLOADS_DIR], { windowsHide: true, detached: true });
         sendMessage({ action: 'openFileResult', success: false, error: 'Không tìm thấy tệp. Đã mở thư mục Downloads.' });
       }
       break;
@@ -235,10 +218,19 @@ function handleMessage(msg) {
       if (filePath && !path.isAbsolute(filePath)) {
         filePath = path.join(DOWNLOADS_DIR, filePath);
       }
+      if (!fs.existsSync(filePath)) {
+        try {
+          const files = fs.readdirSync(DOWNLOADS_DIR);
+          const match = findBestFileMatch(msg.path || '', files);
+          if (match) {
+            filePath = path.join(DOWNLOADS_DIR, match);
+          }
+        } catch (_) {}
+      }
       if (filePath && fs.existsSync(filePath)) {
-        exec(`explorer.exe /select,"${filePath}"`);
+        spawn('explorer.exe', [`/select,${filePath}`], { windowsHide: true, detached: true });
       } else {
-        exec(`explorer.exe "${DOWNLOADS_DIR}"`);
+        spawn('explorer.exe', [DOWNLOADS_DIR], { windowsHide: true, detached: true });
       }
       sendMessage({ action: 'showInFolderResult', success: true });
       break;
@@ -1282,6 +1274,54 @@ function resolveDefaultReferer(targetUrl = '', reqReferer = '', pageUrl = '') {
   return '';
 }
 
+function findBestFileMatch(query, files) {
+  if (!query || !Array.isArray(files) || !files.length) return null;
+  const rawQ = path.basename(query).trim();
+  const exact = files.find(f => f === rawQ);
+  if (exact) return exact;
+
+  const normalizePreserveAccents = (s) => String(s || '')
+    .replace(/\.[a-zA-Z0-9]+$/, '')
+    .replace(/[<>:"/\\|?*@#%&()_+\-=[\]{}]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+
+  const normalize = (s) => String(s || '')
+    .replace(/\.[a-zA-Z0-9]+$/, '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[<>:"/\\|?*@#%&()_+\-=[\]{}]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+
+  const qAccents = normalizePreserveAccents(rawQ);
+  const qBase = normalize(rawQ);
+
+  const matchAccents = files.find(f => {
+    if (f.endsWith('.part') || f.endsWith('.tmp') || f.endsWith('.crdownload')) return false;
+    return normalizePreserveAccents(f) === qAccents;
+  });
+  if (matchAccents) return matchAccents;
+
+  const matchBase = files.find(f => {
+    if (f.endsWith('.part') || f.endsWith('.tmp') || f.endsWith('.crdownload')) return false;
+    return normalize(f) === qBase;
+  });
+  if (matchBase) return matchBase;
+
+  const matchSub = files.find(f => {
+    if (f.endsWith('.part') || f.endsWith('.tmp') || f.endsWith('.crdownload')) return false;
+    const fNorm = normalize(f);
+    return (qBase.length >= 4 && fNorm.startsWith(qBase)) ||
+           (fNorm.length >= 4 && qBase.startsWith(fNorm)) ||
+           (qBase.length >= 5 && fNorm.includes(qBase));
+  });
+  if (matchSub) return matchSub;
+
+  return null;
+}
+
 function checkIsFacebook(u) {
   if (!u || typeof u !== 'string') return false;
   return u.includes('facebook.com') || u.includes('fb.watch') || u.includes('fbcdn.net');
@@ -1583,6 +1623,7 @@ if (typeof module !== 'undefined') {
     checkIsFacebook,
     extractYouTubeUrl,
     parseProgressLine,
-    resolveDefaultReferer
+    resolveDefaultReferer,
+    findBestFileMatch
   };
 }

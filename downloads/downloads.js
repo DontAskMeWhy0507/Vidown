@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
       action: 'openFile',
       id: item.id,
       chromeId: item.chromeId,
-      path: item.filename || item.outputFile || item.outputPath || '',
+      path: item.outputPath || item.outputFile || item.filename || '',
       filename: item.filename || item.outputFile || item.outputPath || item.title || '',
       title: item.title || ''
     }, (res) => {
@@ -614,7 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
         safeSendMessage({
           action: 'showInFolder',
           chromeId: item.chromeId,
-          path: item.filename || item.outputFile || item.outputPath || ''
+          path: item.outputPath || item.outputFile || item.filename || ''
         });
       });
       actionsRow.appendChild(btnFolder);

@@ -1104,6 +1104,14 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'openFile': {
+      const cId = Number(req.chromeId);
+      if (cId && chrome.downloads && chrome.downloads.open) {
+        try {
+          chrome.downloads.open(cId);
+          sendResponse({ success: true });
+          return false;
+        } catch (_) {}
+      }
       const port = getOrCreateNativePort();
       if (port) {
         let responded = false;
@@ -1114,7 +1122,14 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
           sendResponse({ success: Boolean(msg.success), error: msg.error || '' });
         };
         port.onMessage.addListener(handler);
-        port.postMessage({ action: 'openFile', filename: req.filename, path: req.path });
+        if (cId && chrome.downloads && chrome.downloads.search) {
+          chrome.downloads.search({ id: cId }, (results) => {
+            const realPath = (results && results[0] && results[0].filename) ? results[0].filename : req.path;
+            port.postMessage({ action: 'openFile', filename: req.filename, path: realPath || req.path });
+          });
+        } else {
+          port.postMessage({ action: 'openFile', filename: req.filename, path: req.path });
+        }
         setTimeout(() => {
           if (!responded) {
             responded = true;
@@ -1130,16 +1145,24 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'showInFolder': {
-      if (req.chromeId && chrome.downloads && chrome.downloads.show) {
+      const cId = Number(req.chromeId);
+      if (cId && chrome.downloads && chrome.downloads.show) {
         try {
-          chrome.downloads.show(req.chromeId);
+          chrome.downloads.show(cId);
           sendResponse({ success: true });
           return false;
         } catch (_) {}
       }
       const port = getOrCreateNativePort();
       if (port) {
-        port.postMessage({ action: 'showInFolder', path: req.path });
+        if (cId && chrome.downloads && chrome.downloads.search) {
+          chrome.downloads.search({ id: cId }, (results) => {
+            const realPath = (results && results[0] && results[0].filename) ? results[0].filename : req.path;
+            port.postMessage({ action: 'showInFolder', path: realPath || req.path });
+          });
+        } else {
+          port.postMessage({ action: 'showInFolder', path: req.path });
+        }
         sendResponse({ success: true });
       } else {
         sendResponse({ success: false });
@@ -1185,12 +1208,15 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         quality: req.quality || (isAudio ? 'audio' : 'best'),
         soundOnly: isAudio
       };
-      // Match the original Cốc Cốc extension for session-protected streams.
-      // Its browser downloader keeps the authenticated session attached.
-      const started = isSessionProtectedStream(opts)
-        ? startCocCocSessionDownload(opts)
-        : startNativeDownload(opts);
-      if (!started) startBrowserDownload(opts);
+      // Prioritize Native Helper when available so all downloads save directly to disk
+      // with multi-threaded speed, eliminating Chrome's Save As prompt!
+      const started = nativeHelperAvailable
+        ? startNativeDownload(opts)
+        : (isSessionProtectedStream(opts) ? startCocCocSessionDownload(opts) : startBrowserDownload(opts));
+      if (!started) {
+        if (isSessionProtectedStream(opts)) startCocCocSessionDownload(opts);
+        else startBrowserDownload(opts);
+      }
       sendResponse({ success: true });
       return false;
     }
@@ -1277,13 +1303,6 @@ chrome.downloads.download = function(options, callback) {
     }
   }
 
-  // Do not replace Cốc Cốc's session-aware downloader for TikTok/Douyin.
-  // It is the path used by the original extension for private/login-required
-  // videos and preserves the browser's authenticated context.
-  if (isSessionProtectedStream(options)) {
-    return startCocCocSessionDownload(options, callback);
-  }
-
   // 1. Prefer Native Helper whenever available so all downloads save directly to disk
   // without any Chrome Save As prompt, with real-time speed, progress, and automatic audio track muxing
   if (nativeHelperAvailable) {
@@ -1291,7 +1310,12 @@ chrome.downloads.download = function(options, callback) {
     if (started) return;
   }
 
-  // 2. Fallback: Standard Chrome download engine
+  // 2. Session-protected streams fallback when Native Helper is unavailable
+  if (isSessionProtectedStream(options)) {
+    return startCocCocSessionDownload(options, callback);
+  }
+
+  // 3. Fallback: Standard Chrome download engine
   startBrowserDownload(options, callback);
 };
 
