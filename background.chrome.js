@@ -229,6 +229,7 @@ function trackBrowserDownload(chromeId, options, filename, url) {
     speed: 'Đang tải (Trình duyệt)...',
     size: '0 B'
   });
+  openOrFocusDownloadsManager();
 }
 
 function startBrowserDownload(options, callback) {
@@ -447,6 +448,29 @@ function broadcastTaskEvent(payload) {
   } catch (_) {}
 }
 
+// Open the Savior Downloads Manager tab, or focus it if already open.
+// ponytail: query all tabs safely and focus existing or create new.
+function openOrFocusDownloadsManager() {
+  try {
+    const targetUrl = chrome.runtime.getURL('downloads/downloads.html');
+    chrome.tabs.query({}, (tabs) => {
+      const existing = (tabs || []).find(t => t.url && (t.url === targetUrl || t.url.includes('downloads/downloads.html')));
+      if (existing && existing.id) {
+        chrome.tabs.update(existing.id, { active: true });
+        if (existing.windowId && chrome.windows && chrome.windows.update) {
+          try { chrome.windows.update(existing.windowId, { focused: true }); } catch (_) {}
+        }
+      } else {
+        chrome.tabs.create({ url: targetUrl });
+      }
+    });
+  } catch (_) {
+    try {
+      chrome.tabs.create({ url: chrome.runtime.getURL('downloads/downloads.html') });
+    } catch (__) {}
+  }
+}
+
 // Probe native helper availability on startup
 function probeNativeHelper() {
   try {
@@ -586,6 +610,7 @@ function startNativeDownload(downloadParams, callback) {
     speed: 'Bắt đầu kết nối...',
     size: '0 B'
   });
+  openOrFocusDownloadsManager();
 
   let lastStorageUpdate = 0;
 
