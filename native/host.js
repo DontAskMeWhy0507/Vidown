@@ -13,6 +13,7 @@ const https = require('https');
 
 const BIN_DIR = path.join(__dirname, 'bin');
 const FFMPEG_PATH = path.join(BIN_DIR, 'ffmpeg.exe');
+const YTDLP_PATH = path.join(BIN_DIR, 'yt-dlp.exe');
 const DOWNLOADS_DIR = path.join(os.homedir(), 'Downloads');
 
 // Ensure PATH contains our bin directory for ffmpeg
@@ -121,7 +122,8 @@ function handleMessage(msg) {
         action: 'pong',
         version: '2.4.65',
         downloadsDir: DOWNLOADS_DIR,
-        hasFfmpeg: fs.existsSync(FFMPEG_PATH)
+        hasFfmpeg: fs.existsSync(FFMPEG_PATH),
+        hasYtDlp: fs.existsSync(YTDLP_PATH)
       });
       break;
     }
@@ -632,15 +634,26 @@ function startFfmpegMux(req) {
     (req.cookie ? `Cookie: ${req.cookie}\r\n` : '') +
     'Accept: */*\r\n';
 
+  const netInputFlags = [
+    '-reconnect', '1',
+    '-reconnect_at_eof', '1',
+    '-reconnect_streamed', '1',
+    '-reconnect_delay_max', '5',
+    '-multiple_requests', '1',
+    '-buffer_size', '16M',
+    '-rw_timeout', '15000000'
+  ];
+
   const args = [
     '-y',
     '-fflags', '+genpts+igndts+discardcorrupt+sortdts',
-    '-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data',
-    '-headers', headers,
-    '-i', videoUrl
+    '-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data'
   ];
+  if (videoUrl.startsWith('http')) args.push(...netInputFlags);
+  args.push('-headers', headers, '-i', videoUrl);
 
   if (audioUrl && audioUrl !== videoUrl) {
+    if (audioUrl.startsWith('http')) args.push(...netInputFlags);
     args.push(
       '-headers', headers,
       '-i', audioUrl,
@@ -1126,10 +1139,286 @@ async function startFfmpegDirectStream(req) {
   attachDirectFfmpegHandlers(activeProcess);
 }
 
+function detectPlatformName(line, targetUrl) {
+  if (line.includes('youtube') || targetUrl.includes('youtube') || targetUrl.includes('youtu.be')) return 'YouTube';
+  if (line.includes('tiktok') || targetUrl.includes('tiktok')) return 'TikTok';
+  if (line.includes('facebook') || targetUrl.includes('facebook') || targetUrl.includes('fb.watch')) return 'Facebook';
+  if (line.includes('instagram') || targetUrl.includes('instagram')) return 'Instagram';
+  return 'máy chủ';
+}
+
+function parseProgressLine(line, targetUrl = '') {
+  if (line.startsWith('UVD_PROG::')) {
+    const parts = line.split('::');
+    return {
+      percent: (parts[1] || '').trim(),
+      speed: (parts[2] || '').trim(),
+      eta: (parts[3] || '').trim(),
+      size: (parts[4] || '').trim()
+    };
+  }
+
+  const dlMatch = line.match(/\[download\]\s+([\d\.]+)%\s+of\s+~?\s*([^\s]+)(?:\s+in\s+([^\s]+))?(?:\s+at\s+([^\s]+))?(?:\s+ETA\s+([^\s]+))?/i);
+  if (dlMatch) {
+    let speed = dlMatch[4] || '';
+    const fragMatch = line.match(/\(frag\s+(\d+\/\d+)\)/);
+    if (fragMatch) {
+      speed = speed ? `${speed} (${fragMatch[1]})` : `frag ${fragMatch[1]}`;
+    }
+    return {
+      percent: dlMatch[1] + '%',
+      size: dlMatch[2] || '',
+      speed: speed,
+      eta: dlMatch[5] || ''
+    };
+  }
+
+  if (line.includes('Extracting URL') || line.includes('Downloading webpage') || line.includes('Downloading JSON metadata')) {
+    const pName = detectPlatformName(line, targetUrl);
+    return { percent: '0%', speed: `Đang kết nối ${pName}...` };
+  }
+  if (line.includes('player API JSON') || line.includes('initial data API') || line.includes('Downloading m3u8 information') || line.includes('Downloading video webpage')) {
+    return { percent: '0%', speed: 'Đang chuẩn bị luồng video...' };
+  }
+  if (line.includes('Downloading 1 format') || line.includes('Destination:') || line.includes('[hlsnative]')) {
+    return { percent: '1%', speed: 'Bắt đầu tải stream...' };
+  }
+  if (line.includes('[Merger] Merging formats') || line.includes('Merging formats into')) {
+    return { percent: '99%', speed: 'Đang ghép âm thanh và hình ảnh (FFmpeg)...' };
+  }
+  if (line.includes('[ExtractAudio] Destination:') || line.includes('ExtractAudio')) {
+    return { percent: '99%', speed: 'Đang xuất file âm thanh MP3...' };
+  }
+
+  return null;
+}
+
+function startYtDlpDownload(req, targetUrl) {
+  if (activeProcess) {
+    activeProcess.isKilledByHost = true;
+    try { activeProcess.kill(); } catch (e) {}
+    activeProcess = null;
+  }
+
+  const isAudio = Boolean(req.soundOnly || req.quality === 'audio');
+  const quality = req.quality || 'best';
+  let formatArg = 'bv*+ba/b';
+
+  if (quality === '4k') formatArg = 'bv*[height<=2160]+ba/b';
+  else if (quality === '2k') formatArg = 'bv*[height<=1440]+ba/b';
+  else if (quality === '1080p') formatArg = 'bv*[height<=1080]+ba/b';
+  else if (quality === '720p') formatArg = 'bv*[height<=720]+ba/b';
+  else if (quality === '480p') formatArg = 'bv*[height<=480]+ba/b';
+  else if (quality === '360p') formatArg = 'bv*[height<=360]+ba/b';
+  else if (isAudio) formatArg = 'ba/b';
+
+  let safeTitle = (req.title || '').replace(/[<>:"/\\|?*]/g, '_').replace(/[\s.]+$/, '').trim().slice(0, 150).replace(/[\s.]+$/, '');
+  if (!safeTitle || safeTitle === 'video') {
+    if (targetUrl.includes('youtube') || targetUrl.includes('youtu.be')) safeTitle = `YouTube_${Date.now()}`;
+    else if (targetUrl.includes('facebook') || targetUrl.includes('fbcdn')) safeTitle = `Facebook_${Date.now()}`;
+    else if (targetUrl.includes('tiktok')) safeTitle = `TikTok_${Date.now()}`;
+    else safeTitle = `Video_${Date.now()}`;
+  }
+
+  const targetDir = (req.outputDir && fs.existsSync(req.outputDir)) ? req.outputDir : DOWNLOADS_DIR;
+  const outTemplate = path.join(targetDir, `${safeTitle}.%(ext)s`);
+
+  const checkIsYouTube = (u) => {
+    if (!u || typeof u !== 'string') return false;
+    return u.includes('youtube.com') || u.includes('youtu.be') || u.includes('googlevideo.com');
+  };
+  const isYouTube = checkIsYouTube(targetUrl) || checkIsYouTube(req.referer) || checkIsYouTube(req.pageUrl);
+
+  const args = [
+    '--no-playlist',
+    '--ffmpeg-location', BIN_DIR,
+    '--js-runtimes', `node:${process.execPath}`,
+    '--no-check-certificates',
+    '--geo-bypass',
+    '--retries', '5',
+    '--fragment-retries', '5',
+    '--socket-timeout', '20',
+    '--extractor-retries', '3',
+    '--http-chunk-size', '10M',
+    '--concurrent-fragments', '4',
+    '--throttled-rate', '100K',
+    '-f', formatArg,
+    '--format-sort', 'res,vcodec:h264,acodec:m4a,proto:https',
+    '--fixup', 'detect_or_warn',
+    '--no-warnings',
+    '--newline',
+    '--progress-template', 'download:UVD_PROG::%(progress._percent_str)s::%(progress._speed_str)s::%(progress._eta_str)s::%(progress._total_bytes_str)s',
+    '-o', outTemplate
+  ];
+
+  if (isYouTube) {
+    args.push('--extractor-args', 'youtube:player_client=visionos,android,web');
+  } else {
+    args.push('--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36');
+  }
+
+  if (isAudio) {
+    args.push('-x', '--audio-format', 'mp3');
+  } else {
+    args.push('--merge-output-format', 'mp4');
+  }
+
+  if (req.referer) {
+    const cleanRef = isYouTube ? 'https://www.youtube.com/' : req.referer;
+    args.push('--referer', cleanRef);
+    try {
+      const orig = new URL(cleanRef).origin;
+      args.push('--add-header', `Origin: ${orig}`);
+    } catch (_) {}
+  }
+
+  if (req.cookie && !isYouTube) {
+    args.push('--add-header', `Cookie: ${req.cookie}`);
+  }
+
+  args.push('--downloader-args', 'ffmpeg:-protocol_whitelist file,http,https,tcp,tls,crypto,data');
+  args.push('--postprocessor-args', 'ffmpeg:-avoid_negative_ts make_zero -max_muxing_queue_size 1024');
+
+  args.push(targetUrl);
+
+  sendMessage({
+    action: 'progress',
+    percent: '1%',
+    speed: 'Đang kết nối tăng tốc (yt-dlp)...',
+    eta: '',
+    size: ''
+  });
+
+  let finalFilename = '';
+  let lastSentTime = 0;
+
+  function processOutput(text) {
+    const lines = text.split(/\r?\n/);
+    for (const line of lines) {
+      const prog = parseProgressLine(line, targetUrl);
+      if (prog) {
+        const now = Date.now();
+        if (now - lastSentTime > 150 || prog.percent === '100%' || prog.percent === '100.0%') {
+          lastSentTime = now;
+          sendMessage({ action: 'progress', ...prog });
+        }
+      }
+
+      if (line.includes('[Merger] Merging formats into') || line.includes('[download] Destination:') || line.includes('[ExtractAudio] Destination:') || line.includes('has already been downloaded')) {
+        const match = line.match(/"([^"]+)"/) || line.match(/Destination:\s*(.+)$/) || line.match(/\[download\]\s*(.+?)\s+has already been downloaded/);
+        if (match && match[1]) {
+          finalFilename = path.basename(match[1].trim());
+        }
+      }
+    }
+  }
+
+  activeProcess = spawn(YTDLP_PATH, args, { windowsHide: true });
+  const proc = activeProcess;
+
+  let errOutput = '';
+  proc.stdout.on('data', (data) => {
+    const text = data.toString('utf8');
+    if (text.includes('ERROR:') || text.includes('Error:')) errOutput += text;
+    processOutput(text);
+  });
+
+  proc.stderr.on('data', (data) => {
+    const text = data.toString('utf8');
+    errOutput += text;
+    processOutput(text);
+  });
+
+  proc.on('close', (code) => {
+    if (proc && proc.isKilledByHost) {
+      if (activeProcess === proc) activeProcess = null;
+      return;
+    }
+    if (activeProcess === proc) activeProcess = null;
+
+    if (code === 0) {
+      let savedFile = finalFilename;
+      try {
+        const completedFiles = fs.readdirSync(targetDir)
+          .filter(f => !f.endsWith('.part') && !f.endsWith('.ytdl') && !f.endsWith('.tmp'))
+          .map(f => ({ name: f, time: fs.statSync(path.join(targetDir, f)).mtimeMs }))
+          .sort((a, b) => b.time - a.time);
+
+        if (safeTitle) {
+          const matchTitle = completedFiles.find(f => f.name.startsWith(safeTitle));
+          if (matchTitle) savedFile = matchTitle.name;
+        }
+        if (!savedFile && completedFiles.length > 0) {
+          savedFile = completedFiles[0].name;
+        }
+      } catch (_) {}
+
+      sendMessage({
+        action: 'progress',
+        percent: '100%',
+        speed: 'Hoàn thành',
+        eta: '',
+        size: ''
+      });
+      sendMessage({
+        action: 'complete',
+        outputFile: savedFile || `${safeTitle}.mp4`,
+        downloadsDir: targetDir
+      });
+    } else {
+      logHost(`yt-dlp exited with code ${code}. Falling back to FFmpeg.`);
+      if (req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl) {
+        startFfmpegMux(req);
+      } else {
+        startFfmpegDirectStream(req);
+      }
+    }
+  });
+
+  proc.on('error', (err) => {
+    logHost(`yt-dlp spawn error: ${err.message}. Falling back to FFmpeg.`);
+    if (activeProcess === proc) activeProcess = null;
+    if (req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl) {
+      startFfmpegMux(req);
+    } else {
+      startFfmpegDirectStream(req);
+    }
+  });
+}
+
 function startDownload(req) {
   logHost(`startDownload: ${JSON.stringify({ url: req.url, videoUrl: req.videoUrl, audioUrl: req.audioUrl, title: req.title, quality: req.quality })}`);
 
-  // Separate DASH video and audio streams
+  let targetUrl = req.videoUrl || req.url || '';
+
+  const checkIsYouTube = (u) => {
+    if (!u || typeof u !== 'string') return false;
+    return u.includes('youtube.com') || u.includes('youtu.be') || u.includes('googlevideo.com');
+  };
+
+  const isYouTube = checkIsYouTube(targetUrl) || checkIsYouTube(req.referer) || checkIsYouTube(req.pageUrl);
+
+  // If YouTube is detected, resolve canonical watch URL from candidates
+  if (isYouTube) {
+    const candidates = [req.pageUrl, req.referer, targetUrl, req.url];
+    for (const c of candidates) {
+      if (c && typeof c === 'string') {
+        const vMatch = c.match(/(?:[?&]v=|\/shorts\/|\/embed\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        if (vMatch && vMatch[1]) {
+          targetUrl = `https://www.youtube.com/watch?v=${vMatch[1]}`;
+          break;
+        }
+      }
+    }
+  }
+
+  // Fast Path 1: If yt-dlp is available and this is YouTube (or mainstream platform), use high-speed yt-dlp
+  if (fs.existsSync(YTDLP_PATH) && (isYouTube || targetUrl.includes('tiktok.com') || targetUrl.includes('facebook.com'))) {
+    logHost(`Routing to startYtDlpDownload: targetUrl=${targetUrl}`);
+    return startYtDlpDownload(req, targetUrl);
+  }
+
+  // Fast Path 2: Separate DASH video and audio streams via accelerated FFmpeg mux
   if (req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl) {
     logHost('Routing to startFfmpegMux (separate video + audio streams)');
     return startFfmpegMux(req);

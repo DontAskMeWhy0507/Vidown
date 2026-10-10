@@ -83,6 +83,26 @@ let heartbeatInterval = null;
 let fakeIdCounter = 900000;
 const activeDownloads = new Map();
 
+let currentActiveTabUrl = '';
+try {
+  if (chrome.tabs && chrome.tabs.onActivated) {
+    chrome.tabs.onActivated.addListener((activeInfo) => {
+      chrome.tabs.get(activeInfo.tabId, (tab) => {
+        if (!chrome.runtime.lastError && tab && tab.url) {
+          currentActiveTabUrl = tab.url;
+        }
+      });
+    });
+  }
+  if (chrome.tabs && chrome.tabs.onUpdated) {
+    chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+      if (tab && tab.active && tab.url) {
+        currentActiveTabUrl = tab.url;
+      }
+    });
+  }
+} catch (_) {}
+
 // Helper to update persistent download history in chrome.storage.local
 function updateDownloadHistory(record) {
   try {
@@ -366,6 +386,7 @@ function startNativeDownload(downloadParams, callback) {
   port.onMessage.addListener(messageHandler);
 
   // Send download request to native host
+  const resolvedPageUrl = downloadParams.pageUrl || downloadParams.referrer || currentActiveTabUrl || '';
   port.postMessage({
     action: 'download',
     url: downloadParams.url || '',
@@ -373,8 +394,9 @@ function startNativeDownload(downloadParams, callback) {
     audioUrl: downloadParams.audioUrl || '',
     title: safeFilename.replace(/\.[^.]+$/, ''),
     filename: safeFilename,
-    referer: downloadParams.referrer || '',
-    quality: downloadParams.convertToMp3 || downloadParams.soundOnly ? 'audio' : 'best',
+    referer: downloadParams.referrer || resolvedPageUrl,
+    pageUrl: resolvedPageUrl,
+    quality: downloadParams.convertToMp3 || downloadParams.soundOnly ? 'audio' : (downloadParams.quality || 'best'),
     soundOnly: Boolean(downloadParams.soundOnly),
     cookie: downloadParams.cookie || ''
   });
@@ -546,6 +568,12 @@ if (chrome.runtime.onMessageExternal) {
 // Polyfill chrome.downloads.combineStreams (YouTube 1080p+, Facebook DASH)
 chrome.downloads.combineStreams = function(options, callback) {
   console.log('[Savior] combineStreams invoked:', options);
+  if (options && !options.referrer && currentActiveTabUrl) {
+    options.referrer = currentActiveTabUrl;
+  }
+  if (options && !options.pageUrl && currentActiveTabUrl) {
+    options.pageUrl = currentActiveTabUrl;
+  }
   const ok = startNativeDownload(options, callback);
   if (!ok) {
     const cleanOpts = {
@@ -570,6 +598,12 @@ const _origDownload = chrome.downloads.download.bind(chrome.downloads);
 
 chrome.downloads.download = function(options, callback) {
   console.log('[Savior] chrome.downloads.download invoked:', options);
+  if (options && !options.referrer && currentActiveTabUrl) {
+    options.referrer = currentActiveTabUrl;
+  }
+  if (options && !options.pageUrl && currentActiveTabUrl) {
+    options.pageUrl = currentActiveTabUrl;
+  }
 
   // Ignore trick or duplicate download calls if already active
   const reqUrl = options ? (options.videoUrl || options.url) : '';
