@@ -1443,15 +1443,23 @@ function startDownload(req) {
     const canonicalYt = extractYouTubeUrl([req.pageUrl, req.referer, targetUrl, req.url]);
     if (canonicalYt) targetUrl = canonicalYt;
   } else if (isTikTok) {
-    if (req.pageUrl && req.pageUrl.includes('tiktok.com')) targetUrl = req.pageUrl;
-    else if (req.referer && req.referer.includes('tiktok.com')) targetUrl = req.referer;
+    // If targetUrl is already a direct media stream URL, DO NOT overwrite with pageUrl!
+    const isDirectCdn = targetUrl.includes('tiktokcdn.com') ||
+      targetUrl.includes('byteoversea.com') ||
+      targetUrl.includes('ibytedtos.com') ||
+      targetUrl.includes('video/tos/');
+    if (!isDirectCdn) {
+      if (req.pageUrl && req.pageUrl.includes('tiktok.com')) targetUrl = req.pageUrl;
+      else if (req.referer && req.referer.includes('tiktok.com')) targetUrl = req.referer;
+    }
   } else if (isFacebook) {
     if (req.pageUrl && (req.pageUrl.includes('facebook.com') || req.pageUrl.includes('fb.watch'))) targetUrl = req.pageUrl;
     else if (req.referer && (req.referer.includes('facebook.com') || req.referer.includes('fb.watch'))) targetUrl = req.referer;
   }
 
-  // Fast Path 1: If yt-dlp is available and this is YouTube (or mainstream platform), use high-speed yt-dlp
-  if (fs.existsSync(YTDLP_PATH) && (isYouTube || isTikTok || isFacebook)) {
+  // Fast Path 1: If yt-dlp is available and this is YouTube, use high-speed yt-dlp
+  // (TikTok MUST NOT use yt-dlp because TikTok CLI scraping triggers WAF/Cloudflare bot blocking)
+  if (fs.existsSync(YTDLP_PATH) && isYouTube) {
     logHost(`Routing to startYtDlpDownload: targetUrl=${targetUrl}`);
     return startYtDlpDownload(req, targetUrl);
   }

@@ -83,6 +83,10 @@ let heartbeatInterval = null;
 let fakeIdCounter = 900000;
 const activeDownloads = new Map();
 
+// Bind original Chrome download primitives early
+const _origDownload = (chrome.downloads && chrome.downloads.download) ? chrome.downloads.download.bind(chrome.downloads) : () => {};
+const _origCancel = (chrome.downloads && chrome.downloads.cancel) ? chrome.downloads.cancel.bind(chrome.downloads) : () => {};
+
 let currentActiveTabUrl = '';
 try {
   if (chrome.tabs && chrome.tabs.onActivated) {
@@ -122,13 +126,299 @@ function updateDownloadHistory(record) {
   }
 }
 
+function formatBytes(bytes) {
+  if (!bytes || bytes <= 0) return '0 B';
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let size = bytes;
+  let idx = 0;
+  while (size >= 1024 && idx < units.length - 1) {
+    size /= 1024;
+    idx++;
+  }
+  return `${size.toFixed(1)} ${units[idx]}`;
+}
+
+function formatSpeed(bytesPerSec) {
+  if (!bytesPerSec || bytesPerSec <= 0) return '0 KB/s';
+  if (bytesPerSec >= 1024 * 1024) {
+    return `${(bytesPerSec / (1024 * 1024)).toFixed(1)} MB/s`;
+  }
+  return `${Math.round(bytesPerSec / 1024)} KB/s`;
+}
+
+function requiresNativeHelper(options) {
+  if (!options) return false;
+  const url = options.videoUrl || options.url || '';
+  if (options.convertToMp3 || options.convertToMp4 || options.soundOnly || options.streamsNumber === -42 || options.streamsNumber === -43) {
+    return true;
+  }
+  if (options.videoUrl && options.audioUrl && options.videoUrl !== options.audioUrl) {
+    return true;
+  }
+  if (url.includes('.m3u8') || url.includes('kingcdn.xyz') || url.includes('buiduyanh.online')) {
+    return true;
+  }
+  if (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('googlevideo.com')) {
+    return true;
+  }
+  return false;
+}
+
+function isSessionProtectedStream(options) {
+  if (!options) return false;
+  const url = options.videoUrl || options.url || '';
+  const page = options.pageUrl || options.referrer || '';
+  return (
+    url.includes('tiktok.com') ||
+    url.includes('tiktokcdn.com') ||
+    url.includes('byteoversea.com') ||
+    url.includes('ibytedtos.com') ||
+    url.includes('douyin.com') ||
+    url.includes('iesdouyin.com') ||
+    page.includes('tiktok.com') ||
+    page.includes('douyin.com')
+  );
+}
+
+function trackBrowserDownload(chromeId, options, filename, url) {
+  if (!chromeId) return;
+  const safeFilename = filename || (options.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
+  const mediaType = (options.convertToMp3 || options.soundOnly) ? 'audio' : 'video';
+  const targetUrl = url || options.videoUrl || options.url || '';
+  const task = {
+    id: chromeId,
+    chromeId: chromeId,
+    isBrowserDownload: true,
+    title: safeFilename.replace(/\.[^.]+$/, ''),
+    filename: safeFilename,
+    url: targetUrl,
+    type: mediaType,
+    params: options,
+    state: 'downloading',
+    percent: '1%',
+    speed: 'Đang tải (Trình duyệt)...',
+    size: '0 B',
+    bytesReceived: 0,
+    totalBytes: 0,
+    lastBytes: 0,
+    lastTime: Date.now(),
+    startTime: Date.now(),
+    complete: false
+  };
+  activeDownloads.set(chromeId, task);
+
+  updateDownloadHistory({
+    id: chromeId,
+    chromeId: chromeId,
+    title: task.title,
+    filename: safeFilename,
+    url: targetUrl,
+    type: mediaType,
+    state: 'downloading',
+    percent: '1%',
+    speed: 'Đang tải (Trình duyệt)...',
+    size: '0 B',
+    startTime: task.startTime
+  });
+
+  setActionBadge('1%', '#10b981');
+  broadcastTaskEvent({
+    action: 'nativeProgress',
+    taskId: chromeId,
+    percent: '1%',
+    speed: 'Đang tải (Trình duyệt)...',
+    size: '0 B'
+  });
+}
+
+function startBrowserDownload(options, callback) {
+  const targetUrl = options.videoUrl || options.url;
+  if (!targetUrl) {
+    if (typeof callback === 'function') callback(null);
+    return false;
+  }
+
+  for (const [id, t] of activeDownloads.entries()) {
+    if (t.url === targetUrl && (t.state === 'in_progress' || t.state === 'downloading')) {
+      console.log('[Savior] Download already active for this URL, returning task:', id);
+      if (typeof callback === 'function') callback(id);
+      return true;
+    }
+  }
+
+  const safeFilename = (options.filename || 'video.mp4')
+    .replace(/[<>:"/\\|?*]/g, '_')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const chromeOptions = {
+    url: targetUrl,
+    filename: safeFilename,
+    conflictAction: options.conflictAction || 'uniquify',
+    saveAs: Boolean(options.saveAs)
+  };
+
+  const ref = options.referrer || options.pageUrl || currentActiveTabUrl;
+  if (ref && !targetUrl.includes('googlevideo.com')) {
+    chromeOptions.headers = [{ name: 'Referer', value: ref }];
+  }
+
+  try {
+    _origDownload(chromeOptions, (chromeId) => {
+      if (chrome.runtime.lastError) {
+        console.warn('[Savior] _origDownload with headers failed:', chrome.runtime.lastError.message);
+        if (chromeOptions.headers) {
+          delete chromeOptions.headers;
+          _origDownload(chromeOptions, (retryId) => {
+            if (chrome.runtime.lastError) {
+              console.error('[Savior] Bare _origDownload also failed:', chrome.runtime.lastError.message);
+              if (typeof callback === 'function') callback(null);
+            } else {
+              trackBrowserDownload(retryId, options, safeFilename, targetUrl);
+              if (typeof callback === 'function') callback(retryId);
+            }
+          });
+          return;
+        }
+        if (typeof callback === 'function') callback(null);
+        return;
+      }
+      trackBrowserDownload(chromeId, options, safeFilename, targetUrl);
+      if (typeof callback === 'function') callback(chromeId);
+    });
+    return true;
+  } catch (err) {
+    console.error('[Savior] Exception in startBrowserDownload:', err);
+    if (typeof callback === 'function') callback(null);
+    return false;
+  }
+}
+
 // Hook chrome.downloads.onChanged listeners so we can synthesize events for native downloads
+// AND monitor native Chrome downloads for real-time manager and badge updates
 const _onChangedListeners = new Set();
-const _origOnChangedAddListener = chrome.downloads.onChanged.addListener.bind(chrome.downloads.onChanged);
+const _origOnChangedAddListener = (chrome.downloads && chrome.downloads.onChanged && chrome.downloads.onChanged.addListener)
+  ? chrome.downloads.onChanged.addListener.bind(chrome.downloads.onChanged)
+  : () => {};
+
 chrome.downloads.onChanged.addListener = function(listener) {
   _onChangedListeners.add(listener);
   _origOnChangedAddListener(listener);
 };
+
+// Monitor browser downloads in activeDownloads
+try {
+  _origOnChangedAddListener((delta) => {
+    if (!delta || !delta.id) return;
+    const task = activeDownloads.get(delta.id);
+    if (!task || !task.isBrowserDownload) return;
+
+    const now = Date.now();
+    let updated = false;
+
+    if (delta.bytesReceived && typeof delta.bytesReceived.current === 'number') {
+      const received = delta.bytesReceived.current;
+      task.bytesReceived = received;
+
+      const timeDiff = (now - (task.lastTime || task.startTime)) / 1000;
+      if (timeDiff >= 0.4) {
+        const bytesDiff = received - (task.lastBytes || 0);
+        const speedBps = bytesDiff / timeDiff;
+        task.speed = formatSpeed(speedBps);
+        task.lastBytes = received;
+        task.lastTime = now;
+        updated = true;
+      }
+    }
+
+    if (delta.totalBytes && typeof delta.totalBytes.current === 'number') {
+      task.totalBytes = delta.totalBytes.current;
+      if (task.totalBytes > 0) {
+        task.size = formatBytes(task.totalBytes);
+        const pct = Math.min(99, Math.round((task.bytesReceived / task.totalBytes) * 100));
+        task.percent = `${pct}%`;
+        setActionBadge(`${pct}%`, '#10b981');
+        updated = true;
+      }
+    }
+
+    if (delta.filename && delta.filename.current) {
+      task.filename = delta.filename.current.split(/[\\/]/).pop();
+      task.outputPath = delta.filename.current;
+    }
+
+    if (delta.state) {
+      const st = delta.state.current;
+      if (st === 'complete') {
+        task.state = 'completed';
+        task.complete = true;
+        task.percent = '100%';
+        task.speed = 'Hoàn thành';
+        activeDownloads.delete(delta.id);
+
+        setActionBadge('✓', '#10b981');
+        setTimeout(() => {
+          if (activeDownloads.size === 0) setActionBadge('');
+        }, 4000);
+
+        updateDownloadHistory({
+          id: delta.id,
+          chromeId: delta.id,
+          state: 'completed',
+          percent: '100%',
+          speed: 'Hoàn thành',
+          endTime: now,
+          outputPath: task.outputPath || task.filename,
+          outputFile: task.outputPath || task.filename
+        });
+
+        broadcastTaskEvent({
+          action: 'nativeComplete',
+          taskId: delta.id,
+          outputFile: task.outputPath || task.filename
+        });
+        return;
+      } else if (st === 'interrupted') {
+        const err = delta.error ? delta.error.current : 'INTERRUPTED';
+        task.state = (err === 'USER_CANCELED') ? 'canceled' : 'error';
+        activeDownloads.delete(delta.id);
+
+        if (activeDownloads.size === 0) setActionBadge('');
+
+        updateDownloadHistory({
+          id: delta.id,
+          chromeId: delta.id,
+          state: task.state,
+          error: err,
+          speed: (err === 'USER_CANCELED') ? 'Đã hủy' : 'Gián đoạn'
+        });
+
+        broadcastTaskEvent({
+          action: (err === 'USER_CANCELED') ? 'nativeCanceled' : 'nativeError',
+          taskId: delta.id,
+          error: err
+        });
+        return;
+      }
+    }
+
+    if (updated) {
+      updateDownloadHistory({
+        id: delta.id,
+        percent: task.percent,
+        speed: task.speed,
+        size: task.size
+      });
+      broadcastTaskEvent({
+        action: 'nativeProgress',
+        taskId: delta.id,
+        percent: task.percent,
+        speed: task.speed,
+        size: task.size
+      });
+    }
+  });
+} catch (_) {}
 
 function dispatchDownloadChanged(changeInfo) {
   for (const listener of _onChangedListeners) {
@@ -233,6 +523,10 @@ function getOrCreateNativePort() {
 }
 
 function startNativeDownload(downloadParams, callback) {
+  if (!nativeHelperAvailable) {
+    console.warn('[Savior] Native helper not available, bypassing native download');
+    return false;
+  }
   const port = getOrCreateNativePort();
   if (!port) {
     console.warn('[Savior] Native port unavailable');
@@ -435,11 +729,17 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'cancelDownload': {
-      if (req.taskId && activeDownloads.has(req.taskId)) {
-        activeDownloads.delete(req.taskId);
-        const port = getOrCreateNativePort();
-        if (port) port.postMessage({ action: 'cancel' });
-        updateDownloadHistory({ id: req.taskId, state: 'interrupted', error: 'Người dùng đã hủy' });
+      const targetId = req.taskId || req.id;
+      if (targetId && activeDownloads.has(targetId)) {
+        const t = activeDownloads.get(targetId);
+        activeDownloads.delete(targetId);
+        if (t && t.isBrowserDownload) {
+          try { _origCancel(targetId); } catch (_) {}
+        } else {
+          const port = getOrCreateNativePort();
+          if (port) port.postMessage({ action: 'cancel' });
+        }
+        updateDownloadHistory({ id: targetId, state: 'canceled', error: 'Người dùng đã hủy' });
       }
       sendResponse({ success: true });
       return false;
@@ -527,14 +827,21 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'downloadNative': {
-      startNativeDownload({
+      const opts = {
         url: req.url,
         videoUrl: req.videoUrl,
         audioUrl: req.audioUrl,
         filename: req.title ? `${req.title}.mp4` : 'video.mp4',
         referrer: req.referer || req.pageUrl,
+        pageUrl: req.pageUrl,
         soundOnly: req.quality === 'audio'
-      });
+      };
+      if (isSessionProtectedStream(opts) || !requiresNativeHelper(opts)) {
+        startBrowserDownload(opts);
+      } else {
+        const started = startNativeDownload(opts);
+        if (!started) startBrowserDownload(opts);
+      }
       sendResponse({ success: true });
       return false;
     }
@@ -577,12 +884,7 @@ chrome.downloads.combineStreams = function(options, callback) {
   }
   const ok = startNativeDownload(options, callback);
   if (!ok) {
-    const cleanOpts = {
-      url: options.videoUrl || options.url,
-      filename: options.filename || 'video.mp4',
-      saveAs: false
-    };
-    _origDownload(cleanOpts, callback);
+    startBrowserDownload(options, callback);
   }
 };
 
@@ -595,8 +897,6 @@ if (!chrome.mediaDownload) {
 }
 
 // Intercept chrome.downloads.download
-const _origDownload = chrome.downloads.download.bind(chrome.downloads);
-
 chrome.downloads.download = function(options, callback) {
   console.log('[Savior] chrome.downloads.download invoked:', options);
   if (options && !options.referrer && currentActiveTabUrl) {
@@ -618,34 +918,30 @@ chrome.downloads.download = function(options, callback) {
     }
   }
 
-  const isConversionStream = Boolean(
-    options.convertToMp4 ||
-    options.convertToMp3 ||
-    options.streamsNumber === -42 ||
-    options.streamsNumber === -43 ||
-    options.soundOnly ||
-    (options.url && (options.url.includes('.m3u8') || options.url.includes('kingcdn.xyz') || options.url.includes('buiduyanh.online')))
-  );
+  // 1. Session-protected CDN streams (TikTok, Douyin) MUST use the browser download engine
+  // to avoid Slardar WAF / Cloudflare bot blocking and Akamai TLS fingerprint checks
+  if (isSessionProtectedStream(options)) {
+    console.log('[Savior] Protected CDN stream detected (TikTok/Douyin). Routing directly to browser download engine.');
+    startBrowserDownload(options, callback);
+    return;
+  }
 
-  // Route to native host when required or available
-  if (isConversionStream || nativeHelperAvailable) {
+  // 2. Streams requiring native helper (audio extraction to MP3, HLS m3u8 playlists, YouTube DASH muxing)
+  if (requiresNativeHelper(options)) {
+    if (nativeHelperAvailable) {
+      const started = startNativeDownload(options, callback);
+      if (started) return;
+    }
+  }
+
+  // 3. If native helper is available for standard progressive downloads, use it for desktop notifications/speed
+  if (nativeHelperAvailable && !isSessionProtectedStream(options)) {
     const started = startNativeDownload(options, callback);
     if (started) return;
   }
 
-  // Standard Chrome download fallback: clean Cốc Cốc proprietary options
-  const cleanOptions = { ...options };
-  delete cleanOptions.convertToMp4;
-  delete cleanOptions.convertToMp3;
-  delete cleanOptions.streamsNumber;
-  delete cleanOptions.soundOnly;
-  delete cleanOptions.soundQuality;
-  delete cleanOptions.playList;
-  delete cleanOptions.videoUrl;
-  delete cleanOptions.audioUrl;
-  delete cleanOptions.cookie;
-
-  return _origDownload(cleanOptions, callback);
+  // 4. Default: Standard Chrome download engine
+  startBrowserDownload(options, callback);
 };
 
 // Polyfill chrome.downloads.play
@@ -677,10 +973,13 @@ chrome.downloads.play = function(downloadId) {
 };
 
 // Intercept cancel
-const _origCancel = chrome.downloads.cancel.bind(chrome.downloads);
 chrome.downloads.cancel = function(downloadId, callback) {
   if (activeDownloads.has(downloadId)) {
+    const t = activeDownloads.get(downloadId);
     activeDownloads.delete(downloadId);
+    if (t && t.isBrowserDownload) {
+      return _origCancel(downloadId, callback);
+    }
     const port = getOrCreateNativePort();
     if (port) port.postMessage({ action: 'cancel' });
     if (typeof callback === 'function') callback();
