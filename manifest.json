@@ -12,16 +12,6 @@
       "js": [ "common.js", "content-script.js" ],
       "matches": [ "<all_urls>" ],
       "run_at": "document_idle"
-   }, {
-      "all_frames": true,
-      "js": [ "yserp-scrapper.js" ],
-      "matches": [ "*://*.youtube.com/*" ],
-      "run_at": "document_idle"
-   }, {
-      "all_frames": true,
-      "js": [ "fb-scrapper.js" ],
-      "matches": [ "*://*.facebook.com/*", "*://*.fb.com/*" ],
-      "run_at": "document_idle"
    } ],
    "default_locale": "en",
    "description": "__MSG_appDescription__",
