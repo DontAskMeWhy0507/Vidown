@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
 
-        const key = (item.filename || item.outputFile || item.id || item.title || '').toLowerCase();
+        const key = getItemDedupeKey(item);
         if (key && !mergedMap.has(key)) {
           mergedMap.set(key, {
             ...item,
@@ -174,9 +174,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       for (const item of mediaDownloads) {
-        const key = (item.filename || item.outputFile || item.id || item.title || '').toLowerCase();
+        const key = getItemDedupeKey(item);
         if (key && !mergedMap.has(key)) {
           mergedMap.set(key, item);
+        } else if (key && mergedMap.has(key) && item.chromeId) {
+          // Attach chromeId to existing native item if matched
+          const existing = mergedMap.get(key);
+          if (!existing.chromeId) existing.chromeId = item.chromeId;
+          if (!existing.filename && item.filename) existing.filename = item.filename;
         }
       }
 
@@ -190,6 +195,14 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (_) {
       renderRecentDownloads([]);
     }
+  }
+
+  function getItemDedupeKey(it) {
+    if (!it) return '';
+    const rawFn = it.filename || it.outputFile || '';
+    const baseName = rawFn ? rawFn.replace(/\\/g, '/').split('/').pop() : '';
+    const title = (it.title || '').trim();
+    return (baseName || title || String(it.id || '')).toLowerCase();
   }
 
   function openRecentFile(item) {
@@ -215,7 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function openRecentFolder(item) {
     if (!item) return;
     chrome.runtime.sendMessage({
-      action: 'openFolder',
+      action: 'showInFolder',
+      chromeId: item.chromeId,
       path: item.filename || item.outputFile || ''
     });
   }

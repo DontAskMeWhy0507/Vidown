@@ -82,6 +82,20 @@ let heartbeatInterval = null;
 
 let fakeIdCounter = 900000;
 const activeDownloads = new Map();
+let configuredDownloadDir = '';
+
+// The native host receives an absolute output directory while Chrome downloads do not.
+// Keep the user's choice in memory so every new native task gets it consistently.
+try {
+  chrome.storage.local.get(['customDownloadDir'], (result) => {
+    configuredDownloadDir = result && result.customDownloadDir || '';
+  });
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === 'local' && changes.customDownloadDir) {
+      configuredDownloadDir = changes.customDownloadDir.newValue || '';
+    }
+  });
+} catch (_) {}
 
 // Bind original Chrome download primitives early
 const _origDownload = (chrome.downloads && chrome.downloads.download) ? chrome.downloads.download.bind(chrome.downloads) : () => {};
@@ -180,13 +194,48 @@ function isSessionProtectedStream(options) {
   );
 }
 
+// Native downloads are not made by the browser renderer, so they do not
+// automatically inherit the user's logged-in cookies.  Collect only cookies
+// that Chrome would expose for the source/media URLs and keep them in memory
+// for this one download request (never in downloadHistory).
+function getCookieHeader(urls, callback) {
+  const uniqueUrls = [...new Set((urls || []).filter(url => typeof url === 'string' && /^https?:\/\//i.test(url)))];
+  if (!uniqueUrls.length || !chrome.cookies || !chrome.cookies.getAll) {
+    callback('');
+    return;
+  }
+
+  const byName = new Map();
+  let pending = uniqueUrls.length;
+  const done = () => {
+    pending -= 1;
+    if (pending === 0) {
+      callback([...byName.values()].map(cookie => `${cookie.name}=${cookie.value}`).join('; '));
+    }
+  };
+
+  uniqueUrls.forEach(url => {
+    try {
+      chrome.cookies.getAll({ url }, (cookies) => {
+        if (!chrome.runtime.lastError) {
+          (cookies || []).forEach(cookie => byName.set(`${cookie.domain}|${cookie.path}|${cookie.name}`, cookie));
+        }
+        done();
+      });
+    } catch (_) {
+      done();
+    }
+  });
+}
+
 function trackBrowserDownload(chromeId, options, filename, url) {
   if (!chromeId) return;
   const safeFilename = filename || (options.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
   const mediaType = (options.convertToMp3 || options.soundOnly) ? 'audio' : 'video';
   const targetUrl = url || options.videoUrl || options.url || '';
+  const historyId = options.taskId || chromeId;
   const task = {
-    id: chromeId,
+    id: historyId,
     chromeId: chromeId,
     isBrowserDownload: true,
     title: safeFilename.replace(/\.[^.]+$/, ''),
@@ -208,7 +257,7 @@ function trackBrowserDownload(chromeId, options, filename, url) {
   activeDownloads.set(chromeId, task);
 
   updateDownloadHistory({
-    id: chromeId,
+    id: historyId,
     chromeId: chromeId,
     title: task.title,
     filename: safeFilename,
@@ -224,12 +273,11 @@ function trackBrowserDownload(chromeId, options, filename, url) {
   setActionBadge('1%', '#10b981');
   broadcastTaskEvent({
     action: 'nativeProgress',
-    taskId: chromeId,
+    taskId: historyId,
     percent: '1%',
     speed: 'Đang tải (Trình duyệt)...',
     size: '0 B'
   });
-  openOrFocusDownloadsManager();
 }
 
 function startBrowserDownload(options, callback) {
@@ -290,6 +338,77 @@ function startBrowserDownload(options, callback) {
     return true;
   } catch (err) {
     console.error('[Savior] Exception in startBrowserDownload:', err);
+    if (typeof callback === 'function') callback(null);
+    return false;
+  }
+}
+
+// Keep session-protected streams on Cốc Cốc's own download API.  The original
+// extension calls this API directly; its downloader has access to the active
+// browser session, unlike a native process or a reconstructed HTTP request.
+function startCocCocSessionDownload(options, callback) {
+  const targetUrl = options && (options.videoUrl || options.url);
+  if (!targetUrl) {
+    if (typeof callback === 'function') callback(null);
+    return false;
+  }
+
+  const safeFilename = (options.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
+  const nativeOptions = {
+    ...options,
+    url: options.url || targetUrl,
+    filename: safeFilename,
+    conflictAction: options.conflictAction || 'uniquify',
+    saveAs: false
+  };
+
+  const reportStartError = (error) => {
+    const taskId = options.taskId || `start_error_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const errorText = String(error && (error.message || error) || 'Cốc Cốc không thể bắt đầu tải tệp');
+    updateDownloadHistory({
+      id: taskId,
+      title: safeFilename.replace(/\.[^.]+$/, ''),
+      filename: safeFilename,
+      url: targetUrl,
+      videoUrl: options.videoUrl || targetUrl,
+      referer: options.referrer || options.pageUrl || '',
+      pageUrl: options.pageUrl || options.referrer || '',
+      type: options.soundOnly ? 'audio' : 'video',
+      state: 'error',
+      error: errorText,
+      startTime: Date.now()
+    });
+    broadcastTaskEvent({ action: 'nativeError', taskId, error: errorText });
+  };
+
+  try {
+    let finished = false;
+    const finish = (chromeId, error) => {
+      if (finished) return;
+      finished = true;
+      if (error || chrome.runtime.lastError || !chromeId) {
+        const reason = error || chrome.runtime.lastError || 'Cốc Cốc không trả về mã tải xuống';
+        console.warn('[Savior] Cốc Cốc session download failed:', reason && (reason.message || reason));
+        reportStartError(reason);
+        if (typeof callback === 'function') callback(null);
+        return;
+      }
+      trackBrowserDownload(chromeId, options, safeFilename, targetUrl);
+      if (typeof callback === 'function') callback(chromeId);
+    };
+    const result = _origDownload(nativeOptions, (chromeId) => {
+      finish(chromeId, null);
+    });
+    if (result && typeof result.then === 'function') {
+      result.then((chromeId) => finish(chromeId, null)).catch(error => finish(null, error));
+    }
+    setTimeout(() => {
+      finish(null, 'Cốc Cốc không phản hồi yêu cầu tải trong 10 giây');
+    }, 10000);
+    return true;
+  } catch (err) {
+    console.warn('[Savior] Cốc Cốc session download exception:', err);
+    reportStartError(err);
     if (typeof callback === 'function') callback(null);
     return false;
   }
@@ -363,7 +482,7 @@ try {
         }, 4000);
 
         updateDownloadHistory({
-          id: delta.id,
+          id: task.id,
           chromeId: delta.id,
           state: 'completed',
           percent: '100%',
@@ -375,7 +494,7 @@ try {
 
         broadcastTaskEvent({
           action: 'nativeComplete',
-          taskId: delta.id,
+          taskId: task.id,
           outputFile: task.outputPath || task.filename
         });
         return;
@@ -387,7 +506,7 @@ try {
         if (activeDownloads.size === 0) setActionBadge('');
 
         updateDownloadHistory({
-          id: delta.id,
+          id: task.id,
           chromeId: delta.id,
           state: task.state,
           error: err,
@@ -396,7 +515,7 @@ try {
 
         broadcastTaskEvent({
           action: (err === 'USER_CANCELED') ? 'nativeCanceled' : 'nativeError',
-          taskId: delta.id,
+          taskId: task.id,
           error: err
         });
         return;
@@ -405,14 +524,14 @@ try {
 
     if (updated) {
       updateDownloadHistory({
-        id: delta.id,
+        id: task.id,
         percent: task.percent,
         speed: task.speed,
         size: task.size
       });
       broadcastTaskEvent({
         action: 'nativeProgress',
-        taskId: delta.id,
+        taskId: task.id,
         percent: task.percent,
         speed: task.speed,
         size: task.size
@@ -546,6 +665,20 @@ function getOrCreateNativePort() {
   }
 }
 
+const nativeDownloadQueue = [];
+
+function processNextQueuedNativeDownload() {
+  if (nativeDownloadQueue.length === 0) return;
+  const hasNativeJob = Array.from(activeDownloads.values()).some(t => !t.isBrowserDownload && t.state === 'downloading');
+  if (hasNativeJob) return;
+
+  const next = nativeDownloadQueue.shift();
+  if (next) {
+    console.log('[Savior] Starting queued native download:', next.params);
+    startNativeDownload(next.params, next.callback);
+  }
+}
+
 function startNativeDownload(downloadParams, callback) {
   if (!nativeHelperAvailable) {
     console.warn('[Savior] Native helper not available, bypassing native download');
@@ -559,6 +692,79 @@ function startNativeDownload(downloadParams, callback) {
 
   const targetUrl = downloadParams.videoUrl || downloadParams.url || '';
 
+  // native/host.js is intentionally a single-job host.
+  // If a native job is already running, queue DASH muxing and MP3 conversion tasks
+  // so they are not forced into browser download which lacks ffmpeg and would lose audio!
+  const hasNativeJob = Array.from(activeDownloads.values()).some(t => !t.isBrowserDownload && t.state === 'downloading');
+  if (hasNativeJob) {
+    if (requiresNativeHelper(downloadParams)) {
+      console.log('[Savior] Native helper busy; queueing DASH/conversion task for execution after current job finishes.');
+      const fakeId = downloadParams.taskId || ++fakeIdCounter;
+      const safeFilename = (downloadParams.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
+      const mediaType = (downloadParams.convertToMp3 || downloadParams.soundOnly) ? 'audio' : 'video';
+
+      const task = {
+        id: fakeId,
+        title: safeFilename.replace(/\.[^.]+$/, ''),
+        filename: safeFilename,
+        url: targetUrl,
+        videoUrl: downloadParams.videoUrl || targetUrl,
+        audioUrl: downloadParams.audioUrl || '',
+        referer: downloadParams.referrer || downloadParams.pageUrl || '',
+        pageUrl: downloadParams.pageUrl || downloadParams.referrer || '',
+        outputDir: downloadParams.outputDir || configuredDownloadDir || '',
+        quality: downloadParams.quality || 'best',
+        soundOnly: Boolean(downloadParams.convertToMp3 || downloadParams.soundOnly),
+        type: mediaType,
+        params: downloadParams,
+        state: 'downloading',
+        percent: '0%',
+        speed: 'Đang xếp hàng chờ...',
+        size: '0 B',
+        startTime: Date.now(),
+        complete: false
+      };
+      activeDownloads.set(fakeId, task);
+
+      updateDownloadHistory({
+        id: fakeId,
+        title: task.title,
+        filename: safeFilename,
+        url: targetUrl,
+        videoUrl: task.videoUrl,
+        audioUrl: task.audioUrl,
+        referer: task.referer,
+        pageUrl: task.pageUrl,
+        outputDir: task.outputDir,
+        quality: task.quality,
+        soundOnly: task.soundOnly,
+        type: mediaType,
+        state: 'downloading',
+        percent: '0%',
+        speed: 'Đang xếp hàng chờ...',
+        size: '0 B',
+        startTime: task.startTime
+      });
+
+      broadcastTaskEvent({
+        action: 'nativeProgress',
+        taskId: fakeId,
+        percent: '0%',
+        speed: 'Đang xếp hàng chờ...',
+        size: '0 B'
+      });
+
+      nativeDownloadQueue.push({
+        params: { ...downloadParams, taskId: fakeId },
+        callback
+      });
+      if (typeof callback === 'function') callback(fakeId);
+      return true;
+    }
+    console.warn('[Savior] Native download already in progress; using browser fallback for the next progressive task.');
+    return false;
+  }
+
   // Deduplicate: if an active download already exists for this URL, return existing task
   for (const [id, t] of activeDownloads.entries()) {
     if (t.url === targetUrl && (t.state === 'in_progress' || t.state === 'downloading')) {
@@ -568,7 +774,7 @@ function startNativeDownload(downloadParams, callback) {
     }
   }
 
-  const fakeId = ++fakeIdCounter;
+  const fakeId = downloadParams.taskId || ++fakeIdCounter;
   const safeFilename = (downloadParams.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
   const mediaType = (downloadParams.convertToMp3 || downloadParams.soundOnly) ? 'audio' : 'video';
 
@@ -577,6 +783,13 @@ function startNativeDownload(downloadParams, callback) {
     title: safeFilename.replace(/\.[^.]+$/, ''),
     filename: safeFilename,
     url: targetUrl,
+    videoUrl: downloadParams.videoUrl || targetUrl,
+    audioUrl: downloadParams.audioUrl || '',
+    referer: downloadParams.referrer || downloadParams.pageUrl || '',
+    pageUrl: downloadParams.pageUrl || downloadParams.referrer || '',
+    outputDir: downloadParams.outputDir || configuredDownloadDir || '',
+    quality: downloadParams.quality || 'best',
+    soundOnly: Boolean(downloadParams.convertToMp3 || downloadParams.soundOnly),
     type: mediaType,
     params: downloadParams,
     state: 'downloading',
@@ -594,6 +807,13 @@ function startNativeDownload(downloadParams, callback) {
     title: task.title,
     filename: safeFilename,
     url: targetUrl,
+    videoUrl: task.videoUrl,
+    audioUrl: task.audioUrl,
+    referer: task.referer,
+    pageUrl: task.pageUrl,
+    outputDir: task.outputDir,
+    quality: task.quality,
+    soundOnly: task.soundOnly,
     type: mediaType,
     state: 'downloading',
     percent: '1%',
@@ -610,7 +830,6 @@ function startNativeDownload(downloadParams, callback) {
     speed: 'Bắt đầu kết nối...',
     size: '0 B'
   });
-  openOrFocusDownloadsManager();
 
   let lastStorageUpdate = 0;
 
@@ -654,7 +873,7 @@ function startNativeDownload(downloadParams, callback) {
         percent: '100%',
         speed: 'Hoàn thành',
         endTime: Date.now(),
-        outputPath: msg.outputFile || safeFilename,
+          outputPath: msg.downloadsDir && msg.outputFile ? `${msg.downloadsDir}\\${msg.outputFile}` : (msg.outputFile || safeFilename),
         outputFile: msg.outputFile || safeFilename
       });
 
@@ -673,6 +892,7 @@ function startNativeDownload(downloadParams, callback) {
         taskId: fakeId,
         outputFile: msg.outputFile || safeFilename
       });
+      setTimeout(processNextQueuedNativeDownload, 200);
     } else if (msg.action === 'error') {
       task.state = 'error';
       activeDownloads.delete(fakeId);
@@ -699,26 +919,33 @@ function startNativeDownload(downloadParams, callback) {
         taskId: fakeId,
         error: msg.error || 'SERVER_BAD_CONTENT'
       });
+      setTimeout(processNextQueuedNativeDownload, 200);
     }
   };
 
   port.onMessage.addListener(messageHandler);
 
-  // Send download request to native host
+  // Send download request to native host. A private/friends-only stream needs
+  // the same authenticated session as the tab that discovered it.
   const resolvedPageUrl = downloadParams.pageUrl || downloadParams.referrer || currentActiveTabUrl || '';
-  port.postMessage({
-    action: 'download',
-    url: downloadParams.url || '',
-    videoUrl: downloadParams.videoUrl || downloadParams.url || '',
-    audioUrl: downloadParams.audioUrl || '',
-    title: safeFilename.replace(/\.[^.]+$/, ''),
-    filename: safeFilename,
-    referer: downloadParams.referrer || resolvedPageUrl,
-    pageUrl: resolvedPageUrl,
-    quality: downloadParams.convertToMp3 || downloadParams.soundOnly ? 'audio' : (downloadParams.quality || 'best'),
-    soundOnly: Boolean(downloadParams.soundOnly),
-    cookie: downloadParams.cookie || ''
-  });
+  const postDownload = (sessionCookie) => {
+    port.postMessage({
+      action: 'download',
+      url: downloadParams.url || '',
+      videoUrl: downloadParams.videoUrl || downloadParams.url || '',
+      audioUrl: downloadParams.audioUrl || '',
+      title: safeFilename.replace(/\.[^.]+$/, ''),
+      filename: safeFilename,
+      referer: downloadParams.referrer || resolvedPageUrl,
+      pageUrl: resolvedPageUrl,
+      quality: downloadParams.convertToMp3 || downloadParams.soundOnly ? 'audio' : (downloadParams.quality || 'best'),
+      soundOnly: Boolean(downloadParams.soundOnly),
+      cookie: downloadParams.cookie || sessionCookie || '',
+      outputDir: downloadParams.outputDir || configuredDownloadDir || '',
+      taskId: fakeId
+    });
+  };
+  getCookieHeader([resolvedPageUrl, targetUrl], postDownload);
 
   if (typeof callback === 'function') {
     callback(fakeId);
@@ -755,6 +982,10 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
     case 'cancelDownload': {
       const targetId = req.taskId || req.id;
+      const qIdx = nativeDownloadQueue.findIndex(q => q.params && (q.params.taskId === targetId || q.params.id === targetId));
+      if (qIdx !== -1) {
+        nativeDownloadQueue.splice(qIdx, 1);
+      }
       if (targetId && activeDownloads.has(targetId)) {
         const t = activeDownloads.get(targetId);
         activeDownloads.delete(targetId);
@@ -763,6 +994,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         } else {
           const port = getOrCreateNativePort();
           if (port) port.postMessage({ action: 'cancel' });
+          setTimeout(processNextQueuedNativeDownload, 200);
         }
         updateDownloadHistory({ id: targetId, state: 'canceled', error: 'Người dùng đã hủy' });
       }
@@ -816,8 +1048,23 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     case 'openFile': {
       const port = getOrCreateNativePort();
       if (port) {
+        let responded = false;
+        const handler = (msg) => {
+          if (!msg || msg.action !== 'openFileResult' || responded) return;
+          responded = true;
+          port.onMessage.removeListener(handler);
+          sendResponse({ success: Boolean(msg.success), error: msg.error || '' });
+        };
+        port.onMessage.addListener(handler);
         port.postMessage({ action: 'openFile', filename: req.filename, path: req.path });
-        sendResponse({ success: true });
+        setTimeout(() => {
+          if (!responded) {
+            responded = true;
+            port.onMessage.removeListener(handler);
+            sendResponse({ success: false, error: 'Không nhận được phản hồi khi mở tệp' });
+          }
+        }, 10000);
+        return true;
       } else {
         sendResponse({ success: false });
       }
@@ -825,6 +1072,13 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'showInFolder': {
+      if (req.chromeId && chrome.downloads && chrome.downloads.show) {
+        try {
+          chrome.downloads.show(req.chromeId);
+          sendResponse({ success: true });
+          return false;
+        } catch (_) {}
+      }
       const port = getOrCreateNativePort();
       if (port) {
         port.postMessage({ action: 'showInFolder', path: req.path });
@@ -859,15 +1113,28 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         filename: req.title ? `${req.title}.mp4` : 'video.mp4',
         referrer: req.referer || req.pageUrl,
         pageUrl: req.pageUrl,
-        soundOnly: req.quality === 'audio'
+        taskId: req.taskId,
+        outputDir: req.outputDir || configuredDownloadDir || '',
+        quality: req.quality || 'best',
+        soundOnly: Boolean(req.soundOnly || req.quality === 'audio')
       };
-      if (isSessionProtectedStream(opts) || !requiresNativeHelper(opts)) {
-        startBrowserDownload(opts);
-      } else {
-        const started = startNativeDownload(opts);
-        if (!started) startBrowserDownload(opts);
-      }
+      // Match the original Cốc Cốc extension for session-protected streams.
+      // Its browser downloader keeps the authenticated session attached.
+      const started = isSessionProtectedStream(opts)
+        ? startCocCocSessionDownload(opts)
+        : startNativeDownload(opts);
+      if (!started) startBrowserDownload(opts);
       sendResponse({ success: true });
+      return false;
+    }
+
+    case 'openSourcePage': {
+      if (typeof req.url === 'string' && /^https?:\/\//i.test(req.url)) {
+        chrome.tabs.create({ url: req.url });
+        sendResponse({ success: true });
+      } else {
+        sendResponse({ success: false, error: 'Không có trang nguồn hợp lệ để lấy lại luồng' });
+      }
       return false;
     }
 
@@ -941,6 +1208,13 @@ chrome.downloads.download = function(options, callback) {
         return;
       }
     }
+  }
+
+  // Do not replace Cốc Cốc's session-aware downloader for TikTok/Douyin.
+  // It is the path used by the original extension for private/login-required
+  // videos and preserves the browser's authenticated context.
+  if (isSessionProtectedStream(options)) {
+    return startCocCocSessionDownload(options, callback);
   }
 
   // 1. Prefer Native Helper whenever available so all downloads save directly to disk

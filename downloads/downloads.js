@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return 'Video không khả dụng hoặc đã bị gỡ';
     }
     if (str.includes('403') || str.includes('Forbidden') || str.includes('SERVER_FORBIDDEN')) {
-      return 'Máy chủ từ chối kết nối (HTTP 403 - Hết hạn token)';
+      return 'Máy chủ từ chối kết nối (HTTP 403). Liên kết tải có thể đã hết hạn.';
     }
     if (str.includes('NETWORK_FAILED') || str.includes('ECONNREFUSED') || str.includes('ENOTFOUND')) {
       return 'Lỗi kết nối mạng Internet';
@@ -140,8 +140,13 @@ document.addEventListener('DOMContentLoaded', () => {
         chromeDownloads = await chrome.downloads.search({ orderBy: ['-startTime'], limit: 50 });
       } catch (e) {}
 
-      // Normalize chrome downloads (all browser downloads matching Cốc Cốc manager)
+      // Only show browser downloads that this extension itself created. Without
+      // this filter, the manager leaks in unrelated Chrome download history.
+      const managedChromeIds = new Set(nativeHistory
+        .filter(item => item && (item.chromeId || item.isBrowserDownload))
+        .map(item => String(item.chromeId || item.id)));
       const normalizedChrome = chromeDownloads
+        .filter(cd => managedChromeIds.has(String(cd.id)))
         .map(cd => {
           const fn = cd.filename || '';
           const isAudio = /\.(mp3|m4a|aac|flac|wav)$/i.test(fn);
@@ -154,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cd.error === 'USER_CANCELED') {
               state = 'canceled';
             } else {
-              state = 'deleted';
+              state = 'error';
             }
             errorMessage = formatErrorMessage(cd.error || 'Gián đoạn');
           }
@@ -164,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const pct = totalBytes > 0 ? Math.round((receivedBytes / totalBytes) * 100) : 0;
 
           return {
-            id: `chrome_${cd.id}`,
+            id: cd.id,
             chromeId: cd.id,
             title: (cd.filename ? cd.filename.split(/[\\/]/).pop() : 'download'),
             filename: cd.filename || '',
@@ -210,7 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Combine and deduplicate
       map.clear();
       const now = Date.now();
-      const seenActiveTitles = new Set();
       for (const item of nativeHistory) {
         // Normalize state strings from background
         if (item.state === 'in_progress') item.state = 'downloading';
@@ -222,12 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
           item.state = 'completed';
         }
         if (item.state === 'downloading') {
-          if (item.title && seenActiveTitles.has(item.title)) {
-            item.state = 'canceled';
-            item.errorMessage = 'Tác vụ trùng lặp đã hủy';
-          } else if (item.title) {
-            seenActiveTitles.add(item.title);
-          }
           const isTaskActive = activeIds.has(item.id) || (activeItem && activeItem.id === item.id);
           // If task is not active in the background engine
           if (!isTaskActive) {
@@ -596,8 +594,9 @@ document.addEventListener('DOMContentLoaded', () => {
     urlRow.title = item.url || '';
     urlRow.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (item.url && item.url.startsWith('http')) {
-        window.open(item.url, '_blank');
+      const sourceUrl = item.pageUrl || item.referer || item.url;
+      if (sourceUrl && sourceUrl.startsWith('http')) {
+        window.open(sourceUrl, '_blank');
       }
     });
 
@@ -642,10 +641,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnRetry = document.createElement('button');
       btnRetry.type = 'button';
       btnRetry.className = 'btn-retry-download';
-      btnRetry.textContent = 'Thử lại';
+      const mustRefresh = needsFreshMediaUrl(item);
+      btnRetry.textContent = mustRefresh ? 'Lấy lại luồng' : 'Thử lại';
       btnRetry.addEventListener('click', (e) => {
         e.stopPropagation();
-        retryDownload(item);
+        if (mustRefresh) refreshMediaUrl(item); else retryDownload(item);
       });
 
       actionsRow.append(progTrack, btnRetry);
@@ -653,10 +653,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnRetry = document.createElement('button');
       btnRetry.type = 'button';
       btnRetry.className = 'btn-retry-download';
-      btnRetry.textContent = 'Thử lại';
+      const mustRefresh = needsFreshMediaUrl(item);
+      btnRetry.textContent = mustRefresh ? 'Lấy lại luồng' : 'Thử lại';
       btnRetry.addEventListener('click', (e) => {
         e.stopPropagation();
-        retryDownload(item);
+        if (mustRefresh) refreshMediaUrl(item); else retryDownload(item);
       });
       actionsRow.appendChild(btnRetry);
     } else if (isDownloading) {
@@ -842,7 +843,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function retryDownload(item) {
     if (!item) return;
-    const retryTaskId = `retry_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+    // Preserve the existing history ID so retry progress updates the same card.
+    const retryTaskId = item.id;
     item.state = 'downloading';
     item.speed = 'Đang kết nối lại...';
     delete item.error;
@@ -870,12 +872,37 @@ document.addEventListener('DOMContentLoaded', () => {
       audioUrl: item.audioUrl || '',
       isYouTubeDash: Boolean(item.isYouTubeDash),
       title: item.title,
-      quality: item.format || '1080p',
+      quality: item.quality || (item.type === 'audio' ? 'audio' : 'best'),
+      soundOnly: Boolean(item.soundOnly || item.type === 'audio'),
       referer: item.referer || item.pageUrl || item.url,
       pageUrl: item.pageUrl || item.url,
       outputDir: item.outputDir || '',
       duration: item.duration || 0,
       size: item.totalBytes || item.size || 0
+    });
+  }
+
+  function needsFreshMediaUrl(item) {
+    if (!item || !item.error) return false;
+    const error = String(item.error);
+    const url = String(item.videoUrl || item.url || '');
+    const isForbidden = /403|forbidden|server_forbidden/i.test(error);
+    const isExpiringCdn = /tiktok|byteoversea|ibytedtos|googlevideo|fbcdn|cdninstagram/i.test(url);
+    return isForbidden && isExpiringCdn;
+  }
+
+  function refreshMediaUrl(item) {
+    const sourceUrl = item.pageUrl || item.referer;
+    if (!sourceUrl || !/^https?:\/\//i.test(sourceUrl)) {
+      showToast('Không còn trang nguồn để lấy lại luồng. Hãy mở lại video và tải lại từ đó.');
+      return;
+    }
+    safeSendMessage({ action: 'openSourcePage', url: sourceUrl }, (res) => {
+      if (res && res.success) {
+        showToast('Đã mở video nguồn. Hãy phát video vài giây rồi bấm tải lại.');
+      } else {
+        showToast((res && res.error) || 'Không thể mở trang nguồn.');
+      }
     });
   }
 
@@ -1054,11 +1081,6 @@ document.addEventListener('DOMContentLoaded', () => {
           safeSendMessage({ action: 'cancelDownload', taskId: it.id, chromeId: it.chromeId });
         }
       }
-      try {
-        if (chrome.downloads && chrome.downloads.erase) {
-          chrome.downloads.erase({ query: [''] }, () => {});
-        }
-      } catch (_) {}
       allItems = [];
       await chrome.storage.local.set({ downloadHistory: [] });
       updateCounts();

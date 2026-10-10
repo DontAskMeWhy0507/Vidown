@@ -16,6 +16,18 @@ const FFMPEG_PATH = path.join(BIN_DIR, 'ffmpeg.exe');
 const YTDLP_PATH = path.join(BIN_DIR, 'yt-dlp.exe');
 const DOWNLOADS_DIR = path.join(os.homedir(), 'Downloads');
 
+function resolveTargetDir(outputDir) {
+  if (outputDir && typeof outputDir === 'string') {
+    try {
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
+      if (fs.existsSync(outputDir)) return outputDir;
+    } catch (_) {}
+  }
+  return DOWNLOADS_DIR;
+}
+
 // Ensure PATH contains our bin directory for ffmpeg
 process.env.PATH = BIN_DIR + path.delimiter + path.dirname(process.execPath) + path.delimiter + process.env.PATH;
 
@@ -148,7 +160,18 @@ function handleMessage(msg) {
     }
 
     case 'openFolder': {
-      const folderPath = msg.path || DOWNLOADS_DIR;
+      let folderPath = msg.path || DOWNLOADS_DIR;
+      try {
+        if (folderPath && fs.existsSync(folderPath)) {
+          if (fs.statSync(folderPath).isFile()) {
+            folderPath = path.dirname(folderPath);
+          }
+        } else if (folderPath && !path.isAbsolute(folderPath)) {
+          folderPath = DOWNLOADS_DIR;
+        }
+      } catch (_) {
+        folderPath = DOWNLOADS_DIR;
+      }
       exec(`explorer.exe "${folderPath}"`, (err) => {
         sendMessage({ action: 'openFolderResult', success: !err });
       });
@@ -208,7 +231,10 @@ function handleMessage(msg) {
     }
 
     case 'showInFolder': {
-      const filePath = msg.path;
+      let filePath = msg.path || '';
+      if (filePath && !path.isAbsolute(filePath)) {
+        filePath = path.join(DOWNLOADS_DIR, filePath);
+      }
       if (filePath && fs.existsSync(filePath)) {
         exec(`explorer.exe /select,"${filePath}"`);
       } else {
@@ -624,7 +650,7 @@ function startFfmpegMux(req) {
   let safeTitle = (req.title || 'video').replace(/[<>:"/\\|?*]/g, '_').replace(/[\s.]+$/, '').trim().slice(0, 150).replace(/[\s.]+$/, '');
   if (!safeTitle) safeTitle = `Video_${Date.now()}`;
 
-  const targetDir = (req.outputDir && fs.existsSync(req.outputDir)) ? req.outputDir : DOWNLOADS_DIR;
+  const targetDir = resolveTargetDir(req.outputDir);
   const finalFilename = `${safeTitle}.mp4`;
   const outPath = path.join(targetDir, finalFilename);
 
@@ -653,7 +679,6 @@ function startFfmpegMux(req) {
     '-reconnect_streamed', '1',
     '-reconnect_delay_max', '5',
     '-multiple_requests', '1',
-    '-buffer_size', '16M',
     '-rw_timeout', '15000000'
   ];
 
@@ -866,7 +891,7 @@ async function startFfmpegDirectStream(req) {
   let safeTitle = (req.title || 'video').replace(/[<>:"/\\|?*]/g, '_').replace(/[\s.]+$/, '').trim().slice(0, 150).replace(/[\s.]+$/, '');
   if (!safeTitle) safeTitle = `Video_${Date.now()}`;
 
-  const targetDir = (req.outputDir && fs.existsSync(req.outputDir)) ? req.outputDir : DOWNLOADS_DIR;
+  const targetDir = resolveTargetDir(req.outputDir);
   const finalFilename = `${safeTitle}.${ext}`;
   const outPath = path.join(targetDir, finalFilename);
 
@@ -1007,7 +1032,6 @@ async function startFfmpegDirectStream(req) {
   args.push('-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data');
   if (typeof ffmpegInput === 'string' && ffmpegInput.startsWith('http')) {
     args.push(
-      '-buffer_size', '16M',
       '-reconnect', '1',
       '-reconnect_at_eof', '1',
       '-reconnect_streamed', '1',
@@ -1146,7 +1170,16 @@ async function startFfmpegDirectStream(req) {
 
   // For non-HLS direct media streams, try multi-thread download first
   if (!isHls && !isAudio && targetUrl.startsWith('http')) {
-    startMultiThreadDownload(req, targetUrl, outPath, referer, origin, () => {
+    startMultiThreadDownload(req, targetUrl, outPath, referer, origin, (err) => {
+      // Retrying a signed CDN URL through FFmpeg cannot recover 401/403/404
+      // responses; it only turns a clear server error into a misleading FFmpeg one.
+      if (err && /HTTP\s+(401|403|404)\b/i.test(String(err.message || err))) {
+        sendMessage({
+          action: 'error',
+          error: `${err.message}. Liên kết tải có thể đã hết hạn; hãy mở lại video và lấy luồng mới.`
+        });
+        return;
+      }
       activeProcess = spawn(FFMPEG_PATH, args, {
         cwd: tempSessionDir || process.cwd(),
         windowsHide: true
@@ -1277,7 +1310,7 @@ function startYtDlpDownload(req, targetUrl) {
     else safeTitle = `Video_${Date.now()}`;
   }
 
-  const targetDir = (req.outputDir && fs.existsSync(req.outputDir)) ? req.outputDir : DOWNLOADS_DIR;
+  const targetDir = resolveTargetDir(req.outputDir);
   const outTemplate = path.join(targetDir, `${safeTitle}.%(ext)s`);
 
   const isYouTube = checkIsYouTube(targetUrl) || checkIsYouTube(req.referer) || checkIsYouTube(req.pageUrl);

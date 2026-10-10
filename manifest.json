@@ -10,7 +10,7 @@
    "content_scripts": [ {
       "all_frames": true,
       "exclude_matches": [ "file://*", "*://*.g.doubleclick.net/*" ],
-      "js": [ "common.js", "content-script.js", "downloads-nav.js" ],
+      "js": [ "context-guard.js", "common.js", "content-script.js", "downloads-nav.js" ],
       "matches": [ "<all_urls>" ],
       "run_at": "document_idle"
    } ],
