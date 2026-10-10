@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const isTaskActive = activeIds.has(item.id) || (activeItem && activeItem.id === item.id);
           // If task is not active in the background engine
           if (!isTaskActive) {
-            if (item.outputFile || item.percent === '100%') {
+            if (item.outputFile || item.outputPath || item.percent === '100%') {
               item.state = 'completed';
               item.percent = '100%';
             } else if (now - (item.startTime || 0) > 300000) {
@@ -487,8 +487,8 @@ document.addEventListener('DOMContentLoaded', () => {
       action: 'openFile',
       id: item.id,
       chromeId: item.chromeId,
-      path: item.filename || item.outputFile || '',
-      filename: item.filename || item.outputFile || item.title || '',
+      path: item.filename || item.outputFile || item.outputPath || '',
+      filename: item.filename || item.outputFile || item.outputPath || item.title || '',
       title: item.title || ''
     }, (res) => {
       if (res && res.success) {
@@ -611,7 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
         safeSendMessage({
           action: 'showInFolder',
           chromeId: item.chromeId,
-          path: item.filename || item.outputFile || ''
+          path: item.filename || item.outputFile || item.outputPath || ''
         });
       });
       actionsRow.appendChild(btnFolder);

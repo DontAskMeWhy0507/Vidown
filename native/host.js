@@ -209,6 +209,7 @@ function handleMessage(msg) {
         activeMultiThreadJob = null;
       }
       if (activeProcess) {
+        activeProcess.isKilledByHost = true;
         try { activeProcess.kill(); } catch (e) {}
         activeProcess = null;
       }
@@ -659,6 +660,7 @@ function startFfmpegMux(req) {
   );
 
   activeProcess = spawn(FFMPEG_PATH, args, { windowsHide: true });
+  const proc = activeProcess; // capture before any async callbacks
 
   const totalSizeEstimated = req.size || req.totalSize || 0;
   const totalDuration = parseFloat(req.duration) || 0;
@@ -666,7 +668,7 @@ function startFfmpegMux(req) {
   let lastSpeedBytes = 0;
   let computedSpeed = '';
 
-  activeProcess.stdout.on('data', (data) => {
+  proc.stdout.on('data', (data) => {
     const text = data.toString('utf8');
     const lines = text.split(/\r?\n/);
     let speed = '';
@@ -716,16 +718,16 @@ function startFfmpegMux(req) {
   });
 
   let errOutput = '';
-  activeProcess.stderr.on('data', (data) => {
+  proc.stderr.on('data', (data) => {
     errOutput += data.toString('utf8');
   });
 
-  activeProcess.on('close', (code) => {
-    if (activeProcess && activeProcess.isKilledByHost) {
-      activeProcess = null;
+  proc.on('close', (code) => {
+    if (proc && proc.isKilledByHost) {
+      if (activeProcess === proc) activeProcess = null;
       return;
     }
-    activeProcess = null;
+    if (activeProcess === proc) activeProcess = null;
     if (code === 0 && fs.existsSync(outPath) && fs.statSync(outPath).size > 1000) {
       sendMessage({
         action: 'progress',
@@ -749,8 +751,8 @@ function startFfmpegMux(req) {
     }
   });
 
-  activeProcess.on('error', (err) => {
-    activeProcess = null;
+  proc.on('error', (err) => {
+    if (activeProcess === proc) activeProcess = null;
     sendMessage({ action: 'error', error: err.message });
   });
 }
@@ -1049,10 +1051,10 @@ async function startFfmpegDirectStream(req) {
 
     proc.on('close', (code) => {
       if (proc && proc.isKilledByHost) {
-        activeProcess = null;
+        if (activeProcess === proc) activeProcess = null;
         return;
       }
-      activeProcess = null;
+      if (activeProcess === proc) activeProcess = null;
       if (tempSessionDir && fs.existsSync(tempSessionDir)) {
         try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
       }
@@ -1071,7 +1073,8 @@ async function startFfmpegDirectStream(req) {
           downloadsDir: targetDir
         });
       } else {
-        const shortErr = errOutput.split('\n').filter(Boolean).slice(-3).join(' ') || `FFmpeg code ${code}`;
+        const errLines = errOutput.split('\n').filter(l => l.trim() && !l.startsWith('ffmpeg version') && !l.startsWith('  built with') && !l.startsWith('  configuration:'));
+        const shortErr = errLines.slice(-3).join(' ').trim() || `FFmpeg code ${code}`;
         sendMessage({
           action: 'error',
           error: `Lỗi tải luồng: ${shortErr.slice(0, 150)}`
@@ -1080,7 +1083,7 @@ async function startFfmpegDirectStream(req) {
     });
 
     proc.on('error', (err) => {
-      activeProcess = null;
+      if (activeProcess === proc) activeProcess = null;
       if (tempSessionDir && fs.existsSync(tempSessionDir)) {
         try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
       }

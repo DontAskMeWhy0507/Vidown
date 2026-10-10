@@ -253,6 +253,8 @@ function startNativeDownload(downloadParams, callback) {
       } catch (e) {}
     } else if (msg.action === 'complete') {
       task.complete = true;
+      task.state = 'completed';
+      activeDownloads.delete(fakeId);
       port.onMessage.removeListener(messageHandler);
 
       updateDownloadHistory({
@@ -261,7 +263,8 @@ function startNativeDownload(downloadParams, callback) {
         percent: '100%',
         speed: 'Hoàn thành',
         endTime: Date.now(),
-        outputPath: msg.outputFile || safeFilename
+        outputPath: msg.outputFile || safeFilename,
+        outputFile: msg.outputFile || safeFilename
       });
 
       if (chrome.action && chrome.action.setBadgeText) {
@@ -283,6 +286,8 @@ function startNativeDownload(downloadParams, callback) {
         }).catch(() => {});
       } catch (e) {}
     } else if (msg.action === 'error') {
+      task.state = 'error';
+      activeDownloads.delete(fakeId);
       port.onMessage.removeListener(messageHandler);
 
       updateDownloadHistory({
@@ -550,12 +555,20 @@ chrome.downloads.play = function(downloadId) {
   const task = activeDownloads.get(downloadId);
   const port = getOrCreateNativePort();
   if (port) {
-    if (task && task.filename) {
-      port.postMessage({ action: 'openFile', filename: task.filename });
+    if (task && (task.filename || task.outputPath || task.outputFile)) {
+      port.postMessage({ action: 'openFile', filename: task.filename || task.outputPath || task.outputFile });
     } else {
-      chrome.downloads.search({ id: downloadId }, (results) => {
-        if (results && results[0] && results[0].filename) {
-          port.postMessage({ action: 'openFile', path: results[0].filename });
+      chrome.storage.local.get(['downloadHistory'], (res) => {
+        const hist = res.downloadHistory || [];
+        const found = hist.find(h => h.id === downloadId || h.chromeId === downloadId);
+        if (found && (found.outputFile || found.outputPath || found.filename)) {
+          port.postMessage({ action: 'openFile', path: found.outputFile || found.outputPath || found.filename });
+        } else {
+          chrome.downloads.search({ id: downloadId }, (results) => {
+            if (results && results[0] && results[0].filename) {
+              port.postMessage({ action: 'openFile', path: results[0].filename });
+            }
+          });
         }
       });
     }
