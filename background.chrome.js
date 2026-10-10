@@ -256,7 +256,7 @@ function startBrowserDownload(options, callback) {
     url: targetUrl,
     filename: safeFilename,
     conflictAction: options.conflictAction || 'uniquify',
-    saveAs: Boolean(options.saveAs)
+    saveAs: false
   };
 
   const ref = options.referrer || options.pageUrl || currentActiveTabUrl;
@@ -943,29 +943,14 @@ chrome.downloads.download = function(options, callback) {
     }
   }
 
-  // 1. Session-protected CDN streams (TikTok, Douyin) MUST use the browser download engine
-  // to avoid Slardar WAF / Cloudflare bot blocking and Akamai TLS fingerprint checks
-  if (isSessionProtectedStream(options)) {
-    console.log('[Savior] Protected CDN stream detected (TikTok/Douyin). Routing directly to browser download engine.');
-    startBrowserDownload(options, callback);
-    return;
-  }
-
-  // 2. Streams requiring native helper (audio extraction to MP3, HLS m3u8 playlists, YouTube DASH muxing)
-  if (requiresNativeHelper(options)) {
-    if (nativeHelperAvailable) {
-      const started = startNativeDownload(options, callback);
-      if (started) return;
-    }
-  }
-
-  // 3. If native helper is available for standard progressive downloads, use it for desktop notifications/speed
-  if (nativeHelperAvailable && !isSessionProtectedStream(options)) {
+  // 1. Prefer Native Helper whenever available so all downloads save directly to disk
+  // without any Chrome Save As prompt, with real-time speed, progress, and automatic audio track muxing
+  if (nativeHelperAvailable) {
     const started = startNativeDownload(options, callback);
     if (started) return;
   }
 
-  // 4. Default: Standard Chrome download engine
+  // 2. Fallback: Standard Chrome download engine
   startBrowserDownload(options, callback);
 };
 

@@ -171,11 +171,22 @@ function handleMessage(msg) {
         if (fs.existsSync(directCandidate)) {
           resolvedFile = directCandidate;
         } else {
-          for (const ext of ['.mp4', '.mkv', '.webm', '.mp3', '.m4a']) {
-            const withExt = fn.toLowerCase().endsWith(ext) ? directCandidate : `${directCandidate}${ext}`;
-            if (fs.existsSync(withExt)) {
-              resolvedFile = withExt;
-              break;
+          const baseNameWithoutExt = fn.replace(/\.[^.]+$/, '');
+          try {
+            const files = fs.readdirSync(DOWNLOADS_DIR);
+            const match = files.find(f => f.startsWith(baseNameWithoutExt) && !f.endsWith('.part') && !f.endsWith('.tmp') && !f.endsWith('.crdownload'));
+            if (match) {
+              resolvedFile = path.join(DOWNLOADS_DIR, match);
+            }
+          } catch (_) {}
+
+          if (!resolvedFile) {
+            for (const ext of ['.mp4', '.mkv', '.webm', '.mp3', '.m4a']) {
+              const withExt = fn.toLowerCase().endsWith(ext) ? directCandidate : `${directCandidate}${ext}`;
+              if (fs.existsSync(withExt)) {
+                resolvedFile = withExt;
+                break;
+              }
             }
           }
         }
@@ -1457,17 +1468,19 @@ function startDownload(req) {
     else if (req.referer && (req.referer.includes('facebook.com') || req.referer.includes('fb.watch'))) targetUrl = req.referer;
   }
 
-  // Fast Path 1: If yt-dlp is available and this is YouTube, use high-speed yt-dlp
+  // Fast Path 1: Separate DASH video and audio streams via accelerated FFmpeg mux
+  // Prioritize this over yt-dlp so that user-selected audio tracks (e.g. dubbed language, alternate audio)
+  // are muxed faithfully rather than overridden by yt-dlp's default language track!
+  if (req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl) {
+    logHost('Routing to startFfmpegMux (separate video + audio streams)');
+    return startFfmpegMux(req);
+  }
+
+  // Fast Path 2: If yt-dlp is available and this is YouTube, use high-speed yt-dlp
   // (TikTok MUST NOT use yt-dlp because TikTok CLI scraping triggers WAF/Cloudflare bot blocking)
   if (fs.existsSync(YTDLP_PATH) && isYouTube) {
     logHost(`Routing to startYtDlpDownload: targetUrl=${targetUrl}`);
     return startYtDlpDownload(req, targetUrl);
-  }
-
-  // Fast Path 2: Separate DASH video and audio streams via accelerated FFmpeg mux
-  if (req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl) {
-    logHost('Routing to startFfmpegMux (separate video + audio streams)');
-    return startFfmpegMux(req);
   }
 
   // Direct progressive file, HLS stream, or audio conversion
