@@ -265,6 +265,13 @@ function startNativeDownload(downloadParams, callback) {
         state: { current: 'complete', previous: 'in_progress' },
         filename: { current: msg.outputFile || safeFilename }
       });
+      try {
+        chrome.runtime.sendMessage({
+          action: 'nativeComplete',
+          taskId: fakeId,
+          outputFile: msg.outputFile || safeFilename
+        }).catch(() => {});
+      } catch (e) {}
     } else if (msg.action === 'error') {
       port.onMessage.removeListener(messageHandler);
 
@@ -285,6 +292,13 @@ function startNativeDownload(downloadParams, callback) {
         error: { current: msg.error || 'SERVER_BAD_CONTENT' },
         state: { current: 'interrupted' }
       });
+      try {
+        chrome.runtime.sendMessage({
+          action: 'nativeError',
+          taskId: fakeId,
+          error: msg.error || 'SERVER_BAD_CONTENT'
+        }).catch(() => {});
+      } catch (e) {}
     }
   };
 
