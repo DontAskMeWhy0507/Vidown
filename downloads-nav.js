@@ -63,18 +63,18 @@
 
       const downloadsUrl = chrome.runtime.getURL('downloads/downloads.html');
 
-      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
-        chrome.runtime.sendMessage({ action: 'openDownloadsPage' }, function (res) {
-          if (chrome.runtime.lastError || !res) {
-            if (chrome.tabs && chrome.tabs.create) {
-              chrome.tabs.create({ url: downloadsUrl });
-            } else {
+      if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
+        chrome.tabs.create({ url: downloadsUrl });
+      } else if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+        try {
+          chrome.runtime.sendMessage({ action: 'openDownloadsPage' }, () => {
+            if (chrome.runtime.lastError) {
               window.open(downloadsUrl, '_blank');
             }
-          }
-        });
-      } else if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
-        chrome.tabs.create({ url: downloadsUrl });
+          });
+        } catch (_) {
+          window.open(downloadsUrl, '_blank');
+        }
       } else {
         window.open(downloadsUrl, '_blank');
       }

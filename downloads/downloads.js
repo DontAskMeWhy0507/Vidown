@@ -28,6 +28,22 @@ document.addEventListener('DOMContentLoaded', () => {
   let searchQuery = '';
   let allItems = []; // merged list of download records
 
+  function safeSendMessage(msg, callback) {
+    try {
+      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+        chrome.runtime.sendMessage(msg, (res) => {
+          if (chrome.runtime.lastError) {
+            if (typeof callback === 'function') callback(null);
+            return;
+          }
+          if (typeof callback === 'function') callback(res);
+        });
+      }
+    } catch (_) {
+      if (typeof callback === 'function') callback(null);
+    }
+  }
+
   function showToast(msg) {
     if (!toast) return;
     toast.textContent = msg;
@@ -169,7 +185,15 @@ document.addEventListener('DOMContentLoaded', () => {
       let activeItem = null;
       let activeIds = new Set();
       try {
-        const statusRes = await chrome.runtime.sendMessage({ action: 'getDownloadStatus' });
+        const statusRes = await new Promise((resolve) => {
+          chrome.runtime.sendMessage({ action: 'getDownloadStatus' }, (res) => {
+            if (chrome.runtime.lastError) {
+              resolve(null);
+            } else {
+              resolve(res);
+            }
+          });
+        });
         if (statusRes) {
           if (statusRes.item) activeItem = statusRes.item;
           if (Array.isArray(statusRes.activeTaskIds)) {
@@ -577,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnFolder.textContent = 'Mở trong thư mục';
       btnFolder.addEventListener('click', (e) => {
         e.stopPropagation();
-        chrome.runtime.sendMessage({
+        safeSendMessage({
           action: 'showInFolder',
           chromeId: item.chromeId,
           path: item.filename || item.outputFile || ''
@@ -641,7 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item.chromeId) {
           chrome.downloads.cancel(item.chromeId);
         }
-        chrome.runtime.sendMessage({
+        safeSendMessage({
           action: 'cancelDownload',
           taskId: item.id,
           chromeId: item.chromeId
@@ -827,7 +851,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderList();
     showToast('Đang kết nối tải lại video...');
 
-    chrome.runtime.sendMessage({
+    safeSendMessage({
       action: 'downloadNative',
       taskId: retryTaskId,
       url: item.url,
@@ -848,7 +872,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const target = allItems.find(it => it.id === id);
     if (target && target.state === 'downloading') {
       if (target.chromeId) chrome.downloads.cancel(target.chromeId);
-      chrome.runtime.sendMessage({
+      safeSendMessage({
         action: 'cancelDownload',
         taskId: target.id,
         chromeId: target.chromeId
@@ -895,12 +919,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Open Downloads folder
   btnOpenFolder.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ action: 'openDownloadsFolder' });
+    safeSendMessage({ action: 'openDownloadsFolder' });
   });
 
   // Change folder
   btnChangeFolder.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ action: 'browseFolder' }, (res) => {
+    safeSendMessage({ action: 'browseFolder' }, (res) => {
       const selectedPath = (res && res.path) || (res && res.success && res.path);
       if (selectedPath) {
         sidebarFolderPath.textContent = selectedPath;
@@ -917,7 +941,7 @@ document.addEventListener('DOMContentLoaded', () => {
       for (const it of allItems) {
         if (it.state === 'downloading') {
           if (it.chromeId) chrome.downloads.cancel(it.chromeId);
-          chrome.runtime.sendMessage({ action: 'cancelDownload', taskId: it.id, chromeId: it.chromeId });
+          safeSendMessage({ action: 'cancelDownload', taskId: it.id, chromeId: it.chromeId });
         }
       }
       try {

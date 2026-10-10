@@ -335,7 +335,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     case 'openDownloadsPage': {
       chrome.tabs.create({ url: chrome.runtime.getURL('downloads/downloads.html') });
       sendResponse({ success: true });
-      return true;
+      return false;
     }
 
     case 'openDownloadsFolder':
@@ -347,7 +347,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       } else {
         sendResponse({ success: false, error: 'Native helper not available' });
       }
-      return true;
+      return false;
     }
 
     case 'cancelDownload': {
@@ -358,34 +358,46 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         updateDownloadHistory({ id: req.taskId, state: 'interrupted', error: 'Người dùng đã hủy' });
       }
       sendResponse({ success: true });
-      return true;
+      return false;
     }
 
     case 'getDownloadStatus': {
       const activeList = Array.from(activeDownloads.values());
       sendResponse({ success: true, activeDownloads: activeList });
-      return true;
+      return false;
     }
 
     case 'browseFolder': {
       const port = getOrCreateNativePort();
       if (port) {
+        let responded = false;
         const handler = (msg) => {
           if (msg && msg.action === 'browseFolderResult') {
             port.onMessage.removeListener(handler);
-            if (msg.path) {
-              chrome.storage.local.set({ customDownloadDir: msg.path });
+            if (!responded) {
+              responded = true;
+              if (msg.path) {
+                chrome.storage.local.set({ customDownloadDir: msg.path });
+              }
+              try { sendResponse({ path: msg.path }); } catch (e) {}
             }
-            sendResponse({ path: msg.path });
           }
         };
         port.onMessage.addListener(handler);
         port.postMessage({ action: 'browseFolder' });
+        // Guarantee sendResponse is always called before channel closes
+        setTimeout(() => {
+          if (!responded) {
+            responded = true;
+            port.onMessage.removeListener(handler);
+            try { sendResponse({ path: '' }); } catch (e) {}
+          }
+        }, 15000);
         return true;
       } else {
         sendResponse({ error: 'Native helper not available' });
+        return false;
       }
-      return true;
     }
 
     case 'openFile': {
@@ -396,7 +408,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       } else {
         sendResponse({ success: false });
       }
-      return true;
+      return false;
     }
 
     case 'showInFolder': {
@@ -407,26 +419,40 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       } else {
         sendResponse({ success: false });
       }
-      return true;
+      return false;
     }
 
     case 'clearHistory': {
-      chrome.storage.local.set({ downloadHistory: [] }, () => {
-        sendResponse({ success: true });
-      });
-      return true;
+      chrome.storage.local.set({ downloadHistory: [] });
+      sendResponse({ success: true });
+      return false;
     }
 
     case 'removeDownload': {
       chrome.storage.local.get(['downloadHistory'], (res) => {
         const history = Array.isArray(res.downloadHistory) ? res.downloadHistory : [];
         const updated = history.filter(item => item.id !== req.id);
-        chrome.storage.local.set({ downloadHistory: updated }, () => {
-          sendResponse({ success: true });
-        });
+        chrome.storage.local.set({ downloadHistory: updated });
       });
-      return true;
+      sendResponse({ success: true });
+      return false;
     }
+
+    case 'downloadNative': {
+      startNativeDownload({
+        url: req.url,
+        videoUrl: req.videoUrl,
+        audioUrl: req.audioUrl,
+        filename: req.title ? `${req.title}.mp4` : 'video.mp4',
+        referrer: req.referer || req.pageUrl,
+        soundOnly: req.quality === 'audio'
+      });
+      sendResponse({ success: true });
+      return false;
+    }
+
+    default:
+      return false;
   }
 });
 
