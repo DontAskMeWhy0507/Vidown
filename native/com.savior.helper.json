@@ -1,0 +1,9 @@
+{
+  "name": "com.savior.helper",
+  "description": "Savior Native Download Helper",
+  "path": "F:\\downloadcodex\\2.4.65_0\\native\\host.exe",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://jdfkmiabjpfjacifcmihfdjhpnjpiick/"
+  ]
+}

@@ -1,0 +1,7 @@
+# Binaries
+native/bin/ffmpeg.exe
+native/bin/yt-dlp.exe
+native/host.exe
+*.log
+native/*.log
+.superpowers/
