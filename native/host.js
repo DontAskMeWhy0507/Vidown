@@ -540,7 +540,7 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
   });
 }
 
-async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin, onFallback) {
+async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin, onFallback, onComplete) {
   const signal = { onAbort: null };
   activeMultiThreadJob = {
     cancel: () => {
@@ -602,6 +602,10 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
 
     activeMultiThreadJob = null;
     logHost(`Multi-thread download completed successfully: "${outPath}"`);
+    if (typeof onComplete === 'function') {
+      onComplete(probe);
+      return;
+    }
     sendMessage({
       action: 'progress',
       percent: '100%',
@@ -641,34 +645,7 @@ function cleanFbCdnUrl(rawUrl) {
   }
 }
 
-function startFfmpegMux(req) {
-  if (activeProcess) {
-    activeProcess.isKilledByHost = true;
-    try { activeProcess.kill(); } catch (e) {}
-    activeProcess = null;
-  }
-  let videoUrl = cleanFbCdnUrl(req.videoUrl || req.url);
-  let audioUrl = cleanFbCdnUrl(req.audioUrl);
-
-  let safeTitle = (req.title || 'video').replace(/[<>:"/\\|?*]/g, '_').replace(/[\s.]+$/, '').trim().slice(0, 150).replace(/[\s.]+$/, '');
-  if (!safeTitle) safeTitle = `Video_${Date.now()}`;
-
-  const targetDir = resolveTargetDir(req.outputDir);
-  const finalFilename = `${safeTitle}.mp4`;
-  const outPath = path.join(targetDir, finalFilename);
-
-  let referer = resolveDefaultReferer(videoUrl, req.referer, req.pageUrl);
-  let origin = '';
-  if (referer) {
-    try { origin = new URL(referer).origin; } catch (e) {}
-  }
-
-  const headers = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\r\n' +
-    (referer ? `Referer: ${referer}\r\n` : '') +
-    (origin ? `Origin: ${origin}\r\n` : '') +
-    (req.cookie ? `Cookie: ${req.cookie}\r\n` : '') +
-    'Accept: */*\r\n';
-
+function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilename, targetDir, headers) {
   const netInputFlags = [
     '-reconnect', '1',
     '-reconnect_at_eof', '1',
@@ -707,7 +684,7 @@ function startFfmpegMux(req) {
   );
 
   activeProcess = spawn(FFMPEG_PATH, args, { windowsHide: true });
-  const proc = activeProcess; // capture before any async callbacks
+  const proc = activeProcess;
 
   const totalSizeEstimated = req.size || req.totalSize || 0;
   let totalDuration = parseFloat(req.duration) || 0;
@@ -810,6 +787,245 @@ function startFfmpegMux(req) {
     if (activeProcess === proc) activeProcess = null;
     sendMessage({ action: 'error', error: err.message });
   });
+}
+
+async function startFfmpegMux(req) {
+  if (activeProcess) {
+    activeProcess.isKilledByHost = true;
+    try { activeProcess.kill(); } catch (e) {}
+    activeProcess = null;
+  }
+  if (activeMultiThreadJob) {
+    try { activeMultiThreadJob.cancel(); } catch (e) {}
+    activeMultiThreadJob = null;
+  }
+
+  let videoUrl = cleanFbCdnUrl(req.videoUrl || req.url);
+  let audioUrl = cleanFbCdnUrl(req.audioUrl);
+
+  let safeTitle = (req.title || 'video').replace(/[<>:"/\\|?*]/g, '_').replace(/[\s.]+$/, '').trim().slice(0, 150).replace(/[\s.]+$/, '');
+  if (!safeTitle) safeTitle = `Video_${Date.now()}`;
+
+  const targetDir = resolveTargetDir(req.outputDir);
+  const finalFilename = `${safeTitle}.mp4`;
+  const outPath = path.join(targetDir, finalFilename);
+
+  let referer = resolveDefaultReferer(videoUrl, req.referer, req.pageUrl);
+  let origin = '';
+  if (referer) {
+    try { origin = new URL(referer).origin; } catch (e) {}
+  }
+
+  const rawHeadersStr = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\r\n' +
+    (referer ? `Referer: ${referer}\r\n` : '') +
+    (origin ? `Origin: ${origin}\r\n` : '') +
+    (req.cookie ? `Cookie: ${req.cookie}\r\n` : '') +
+    'Accept: */*\r\n';
+
+  const reqHeadersObj = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'Accept': '*/*'
+  };
+  if (referer) reqHeadersObj['Referer'] = referer;
+  if (origin) reqHeadersObj['Origin'] = origin;
+  if (req.cookie) reqHeadersObj['Cookie'] = req.cookie;
+
+  const tempSessionDir = path.join(os.tmpdir(), `savior_mux_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`);
+  try {
+    fs.mkdirSync(tempSessionDir, { recursive: true });
+  } catch (e) {
+    return fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilename, targetDir, rawHeadersStr);
+  }
+
+  const tempVideoPath = path.join(tempSessionDir, 'video.mp4');
+  const tempAudioPath = path.join(tempSessionDir, 'audio.mp4');
+
+  const signal = { onAbort: null };
+  activeMultiThreadJob = {
+    cancel: () => {
+      if (signal.onAbort) signal.onAbort();
+      try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
+    }
+  };
+
+  sendMessage({
+    action: 'progress',
+    percent: '1%',
+    speed: 'Đang kết nối đa luồng (Video + Audio)...',
+    eta: '',
+    size: ''
+  });
+
+  try {
+    const [probeVideo, probeAudio] = await Promise.all([
+      probeHttpRange(videoUrl, reqHeadersObj),
+      (audioUrl && audioUrl !== videoUrl) ? probeHttpRange(audioUrl, reqHeadersObj) : Promise.resolve({ supported: false, size: 0, url: '' })
+    ]);
+
+    logHost(`Mux Range probe: Video size=${probeVideo.size}, Audio size=${probeAudio.size}`);
+
+    let videoDownloaded = 0;
+    let audioDownloaded = 0;
+    const totalVideo = probeVideo.size || 0;
+    const totalAudio = probeAudio.size || 0;
+    const totalCombined = totalVideo + totalAudio;
+
+    let lastProgressTime = Date.now();
+    let lastProgressBytes = 0;
+
+    const onProgressCombined = () => {
+      const currentDownloaded = videoDownloaded + audioDownloaded;
+      const now = Date.now();
+      const dt = (now - lastProgressTime) / 1000;
+      let speedStr = '';
+      if (dt >= 0.25) {
+        const speed = (currentDownloaded - lastProgressBytes) / dt;
+        speedStr = formatSpeed(speed);
+        lastProgressTime = now;
+        lastProgressBytes = currentDownloaded;
+      }
+      const pct = totalCombined > 0 ? `${Math.min(98, Math.floor((currentDownloaded / totalCombined) * 100))}%` : '';
+      sendMessage({
+        action: 'progress',
+        percent: pct,
+        speed: speedStr || (pct ? '' : 'Đang tải đa luồng...'),
+        eta: '',
+        size: totalCombined > 0 ? `${formatBytes(currentDownloaded)} / ${formatBytes(totalCombined)}` : formatBytes(currentDownloaded)
+      });
+    };
+
+    const downloadVideo = async () => {
+      if (probeVideo.supported && probeVideo.size > 512 * 1024) {
+        await downloadFileMultiThread({
+          url: probeVideo.url || videoUrl,
+          outPath: tempVideoPath,
+          headers: reqHeadersObj,
+          totalSize: probeVideo.size,
+          concurrency: 8,
+          onProgress: (p) => {
+            videoDownloaded = p.downloadedBytes;
+            onProgressCombined();
+          },
+          signal
+        });
+      } else {
+        await downloadFileSingleStream({
+          url: probeVideo.url || videoUrl,
+          outPath: tempVideoPath,
+          headers: reqHeadersObj,
+          onProgress: (p) => {
+            videoDownloaded = p.downloadedBytes || 0;
+            onProgressCombined();
+          },
+          signal
+        });
+      }
+    };
+
+    const downloadAudio = async () => {
+      if (!audioUrl || audioUrl === videoUrl) return;
+      if (probeAudio.supported && probeAudio.size > 512 * 1024) {
+        await downloadFileMultiThread({
+          url: probeAudio.url || audioUrl,
+          outPath: tempAudioPath,
+          headers: reqHeadersObj,
+          totalSize: probeAudio.size,
+          concurrency: 4,
+          onProgress: (p) => {
+            audioDownloaded = p.downloadedBytes;
+            onProgressCombined();
+          },
+          signal
+        });
+      } else {
+        await downloadFileSingleStream({
+          url: probeAudio.url || audioUrl,
+          outPath: tempAudioPath,
+          headers: reqHeadersObj,
+          onProgress: (p) => {
+            audioDownloaded = p.downloadedBytes || 0;
+            onProgressCombined();
+          },
+          signal
+        });
+      }
+    };
+
+    // Execute Video and Audio downloads in parallel for maximum speed
+    await Promise.all([downloadVideo(), downloadAudio()]);
+
+    activeMultiThreadJob = null;
+
+    sendMessage({
+      action: 'progress',
+      percent: '99%',
+      speed: 'Đang ghép luồng cục bộ...',
+      eta: '',
+      size: formatBytes(totalCombined || (fs.statSync(tempVideoPath).size + (fs.existsSync(tempAudioPath) ? fs.statSync(tempAudioPath).size : 0)))
+    });
+
+    const muxArgs = [
+      '-y',
+      '-fflags', '+genpts+igndts+discardcorrupt+sortdts',
+      '-i', tempVideoPath
+    ];
+
+    if (fs.existsSync(tempAudioPath) && fs.statSync(tempAudioPath).size > 100) {
+      muxArgs.push('-i', tempAudioPath, '-c', 'copy', '-strict', '-2');
+    } else {
+      muxArgs.push('-c', 'copy');
+    }
+
+    muxArgs.push(
+      '-avoid_negative_ts', 'make_zero',
+      '-movflags', '+faststart',
+      outPath
+    );
+
+    activeProcess = spawn(FFMPEG_PATH, muxArgs, { windowsHide: true });
+    const proc = activeProcess;
+
+    let muxErr = '';
+    proc.stderr.on('data', (d) => { muxErr += d.toString('utf8'); });
+
+    proc.on('close', (code) => {
+      try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
+      if (activeProcess === proc) activeProcess = null;
+
+      if (code === 0 && fs.existsSync(outPath) && fs.statSync(outPath).size > 1000) {
+        sendMessage({
+          action: 'progress',
+          percent: '100%',
+          speed: 'Hoàn thành',
+          eta: '',
+          size: formatBytes(fs.statSync(outPath).size)
+        });
+        sendMessage({
+          action: 'complete',
+          outputFile: finalFilename,
+          downloadsDir: targetDir
+        });
+      } else {
+        const shortErr = muxErr.split('\n').filter(l => l.trim() && !l.startsWith('ffmpeg version')).slice(-2).join(' ') || `FFmpeg code ${code}`;
+        sendMessage({
+          action: 'error',
+          error: `Lỗi ghép video/audio: ${shortErr}`
+        });
+      }
+    });
+
+    proc.on('error', (err) => {
+      try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
+      if (activeProcess === proc) activeProcess = null;
+      sendMessage({ action: 'error', error: err.message });
+    });
+
+  } catch (err) {
+    activeMultiThreadJob = null;
+    try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
+    logHost(`Mux Range download failed: ${err.message}. Retrying via direct FFmpeg stream.`);
+    fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilename, targetDir, rawHeadersStr);
+  }
 }
 
 function deobfuscateKingCdnPath(pathStr) {
@@ -1156,7 +1372,57 @@ async function startFfmpegDirectStream(req) {
   }
 
   // For non-HLS direct media streams, try multi-thread download first
-  if (!isHls && !isAudio && targetUrl.startsWith('http')) {
+  if (!isHls && targetUrl.startsWith('http')) {
+    if (isAudio) {
+      // Audio extraction: download source media stream via multi-thread Range first, then convert locally with FFmpeg
+      const tempMediaFile = path.join(os.tmpdir(), `savior_audio_src_${Date.now()}_${Math.random().toString(36).substr(2, 6)}.tmp`);
+      startMultiThreadDownload(req, targetUrl, tempMediaFile, referer, origin, (err) => {
+        // Fallback to direct FFmpeg network streaming if Range fails
+        activeProcess = spawn(FFMPEG_PATH, args, {
+          cwd: tempSessionDir || process.cwd(),
+          windowsHide: true
+        });
+        attachDirectFfmpegHandlers(activeProcess);
+      }, () => {
+        // Source stream downloaded locally! Now convert to MP3 via local FFmpeg in < 1 second
+        sendMessage({
+          action: 'progress',
+          percent: '99%',
+          speed: 'Đang chuyển đổi MP3...',
+          eta: '',
+          size: ''
+        });
+        const convertArgs = [
+          '-y',
+          '-i', tempMediaFile,
+          '-vn',
+          '-acodec', 'libmp3lame',
+          '-q:a', '2',
+          outPath
+        ];
+        activeProcess = spawn(FFMPEG_PATH, convertArgs, { windowsHide: true });
+        const cProc = activeProcess;
+        let cErr = '';
+        cProc.stderr.on('data', (d) => { cErr += d.toString('utf8'); });
+        cProc.on('close', (code) => {
+          try { fs.rmSync(tempMediaFile, { force: true }); } catch (e) {}
+          if (activeProcess === cProc) activeProcess = null;
+          if (code === 0 && fs.existsSync(outPath) && fs.statSync(outPath).size > 100) {
+            sendMessage({ action: 'progress', percent: '100%', speed: 'Hoàn thành', eta: '', size: formatBytes(fs.statSync(outPath).size) });
+            sendMessage({ action: 'complete', outputFile: finalFilename, downloadsDir: targetDir });
+          } else {
+            sendMessage({ action: 'error', error: `Lỗi chuyển đổi MP3 (code ${code})` });
+          }
+        });
+        cProc.on('error', (err) => {
+          try { fs.rmSync(tempMediaFile, { force: true }); } catch (e) {}
+          if (activeProcess === cProc) activeProcess = null;
+          sendMessage({ action: 'error', error: err.message });
+        });
+      });
+      return;
+    }
+
     startMultiThreadDownload(req, targetUrl, outPath, referer, origin, (err) => {
       // Retrying a signed CDN URL through FFmpeg cannot recover 401/403/404
       // responses; it only turns a clear server error into a misleading FFmpeg one.
@@ -1608,19 +1874,14 @@ function startDownload(req) {
   }
 
   // Fast Path 1: Separate DASH video and audio streams via accelerated FFmpeg mux
-  // Prioritize this over yt-dlp so that user-selected audio tracks (e.g. dubbed language, alternate audio)
-  // are muxed faithfully rather than overridden by yt-dlp's default language track!
   if (req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl) {
     logHost('Routing to startFfmpegMux (separate video + audio streams)');
     return startFfmpegMux(req);
   }
 
-  // Fast Path 2: If yt-dlp is available and this is YouTube, use high-speed yt-dlp
-  // (TikTok MUST NOT use yt-dlp because TikTok CLI scraping triggers WAF/Cloudflare bot blocking)
-  if (fs.existsSync(YTDLP_PATH) && isYouTube) {
-    logHost(`Routing to startYtDlpDownload: targetUrl=${targetUrl}`);
-    return startYtDlpDownload(req, targetUrl);
-  }
+  // Note: yt-dlp is intentionally bypassed so that private, member-only, and token-authenticated
+  // videos can be downloaded using the browser session cookies and headers captured by Savior.
+  // All streams route through Savior's accelerated multi-thread Range downloader and local FFmpeg!
 
   // Direct progressive file, HLS stream, or audio conversion
   return startFfmpegDirectStream(req);

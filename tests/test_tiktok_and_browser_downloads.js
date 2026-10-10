@@ -200,9 +200,10 @@ assert.ok(
   !hostCode.includes('if (fs.existsSync(YTDLP_PATH) && (isYouTube || isTikTok'),
   'native/host.js must NOT route TikTok to yt-dlp'
 );
+const startDownloadCode = hostCode.slice(hostCode.indexOf('function startDownload(req)'));
 assert.ok(
-  hostCode.includes('if (fs.existsSync(YTDLP_PATH) && isYouTube)'),
-  'native/host.js must only route YouTube to yt-dlp fast path'
+  !startDownloadCode.includes('startYtDlpDownload('),
+  'native/host.js must bypass yt-dlp in startDownload so private videos and FFmpeg work'
 );
 console.log('✓ Test 5: native/host.js safeguards against TikTok clobbering and yt-dlp blocking verified.\n');
 

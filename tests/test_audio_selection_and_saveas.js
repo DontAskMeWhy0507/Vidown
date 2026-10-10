@@ -4,16 +4,16 @@ const path = require('path');
 
 console.log('=== TEST SUITE: AUDIO TRACK SELECTION & SAVE AS SUPPRESSION ===\n');
 
-// Test 1: Verify host.js prioritizes startFfmpegMux when videoUrl and audioUrl are separate
+// Test 1: Verify host.js prioritizes startFfmpegMux when videoUrl and audioUrl are separate and bypasses yt-dlp
 const hostCode = fs.readFileSync(path.join(__dirname, '../native/host.js'), 'utf8');
 
 const muxIndex = hostCode.indexOf("req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl");
-const ytdlpIndex = hostCode.indexOf("fs.existsSync(YTDLP_PATH) && isYouTube");
+const startDownloadMatch = hostCode.slice(hostCode.indexOf('function startDownload(req)'));
+const ytdlpCallIndex = startDownloadMatch.indexOf('startYtDlpDownload(req, targetUrl)');
 
 assert(muxIndex !== -1, 'Mux condition must exist in host.js');
-assert(ytdlpIndex !== -1, 'YtDlp condition must exist in host.js');
-assert(muxIndex < ytdlpIndex, 'startFfmpegMux MUST appear before startYtDlpDownload in startDownload to preserve custom audio selection');
-console.log('✓ Test 1: host.js correctly prioritizes custom audio muxing (startFfmpegMux) ahead of yt-dlp.');
+assert.strictEqual(ytdlpCallIndex, -1, 'startYtDlpDownload must be bypassed in startDownload so private videos work');
+console.log('✓ Test 1: host.js correctly routes custom audio muxing (startFfmpegMux) and bypasses yt-dlp.');
 
 // Test 2: Verify saveAs is explicitly false in background.chrome.js
 const bgCode = fs.readFileSync(path.join(__dirname, '../background.chrome.js'), 'utf8');
