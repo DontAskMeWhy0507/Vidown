@@ -143,12 +143,37 @@ function getOrCreateNativePort() {
   try {
     activeNativePort = chrome.runtime.connectNative(NATIVE_HOST);
     activeNativePort.onDisconnect.addListener(() => {
-      console.log('[Savior] Native host disconnected');
+      const errorMsg = chrome.runtime.lastError ? chrome.runtime.lastError.message : 'Native host disconnected';
+      console.warn('[Savior] Native host disconnected:', errorMsg);
       activeNativePort = null;
+      nativeHelperAvailable = false;
       if (heartbeatInterval) {
         clearInterval(heartbeatInterval);
         heartbeatInterval = null;
       }
+
+      for (const [id, task] of activeDownloads.entries()) {
+        task.state = 'error';
+        updateDownloadHistory({
+          id: id,
+          state: 'error',
+          error: errorMsg.includes('not found') ? 'NATIVE_HELPER_NOT_FOUND' : errorMsg,
+          speed: 'Mất kết nối'
+        });
+        dispatchDownloadChanged({
+          id: id,
+          error: { current: 'SERVER_BAD_CONTENT' },
+          state: { current: 'interrupted' }
+        });
+        try {
+          chrome.runtime.sendMessage({
+            action: 'nativeError',
+            taskId: id,
+            error: errorMsg
+          }).catch(() => {});
+        } catch (e) {}
+      }
+      activeDownloads.clear();
     });
 
     if (!heartbeatInterval) {
@@ -470,10 +495,28 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       return false;
     }
 
+    case 'ping': {
+      sendResponse({ status: 'ok', version: '2.4.65' });
+      return false;
+    }
+
     default:
       return false;
   }
 });
+
+// Listener for external web pages (e.g. YouTube externally_connectable)
+if (chrome.runtime.onMessageExternal) {
+  chrome.runtime.onMessageExternal.addListener((req, sender, sendResponse) => {
+    if (!req) return false;
+    if (req.action === 'ping' || req.type === 'ping') {
+      sendResponse({ status: 'ok', version: '2.4.65' });
+      return false;
+    }
+    sendResponse({ success: true });
+    return false;
+  });
+}
 
 // ==========================================
 // 4. Download API Polyfills & Interception

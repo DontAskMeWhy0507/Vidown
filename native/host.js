@@ -663,10 +663,23 @@ function startFfmpegMux(req) {
   const proc = activeProcess; // capture before any async callbacks
 
   const totalSizeEstimated = req.size || req.totalSize || 0;
-  const totalDuration = parseFloat(req.duration) || 0;
+  let totalDuration = parseFloat(req.duration) || 0;
   let lastSpeedTime = Date.now();
   let lastSpeedBytes = 0;
   let computedSpeed = '';
+
+  let errOutput = '';
+  proc.stderr.on('data', (data) => {
+    const chunk = data.toString('utf8');
+    errOutput += chunk;
+    if (!totalDuration) {
+      const durMatch = errOutput.match(/Duration:\s*(\d+):(\d+):([0-9.]+)/);
+      if (durMatch) {
+        totalDuration = parseInt(durMatch[1], 10) * 3600 + parseInt(durMatch[2], 10) * 60 + parseFloat(durMatch[3]);
+        logHost(`Parsed video totalDuration from FFmpeg: ${totalDuration}s`);
+      }
+    }
+  });
 
   proc.stdout.on('data', (data) => {
     const text = data.toString('utf8');
@@ -701,25 +714,20 @@ function startFfmpegMux(req) {
 
       let percent = '';
       if (totalSizeEstimated > 0 && totalBytes > 0) {
-        const pct = Math.min(99, Math.round((totalBytes / totalSizeEstimated) * 100));
+        const pct = Math.min(99, Math.max(1, Math.round((totalBytes / totalSizeEstimated) * 100)));
         percent = `${pct}%`;
       } else if (totalDuration > 0 && currentSec > 0) {
-        const pct = Math.min(99, Math.round((currentSec / totalDuration) * 100));
+        const pct = Math.min(99, Math.max(1, Math.round((currentSec / totalDuration) * 100)));
         percent = `${pct}%`;
       }
       sendMessage({
         action: 'progress',
-        percent: percent || '',
+        percent: percent || (totalBytes > 0 ? formatBytes(totalBytes) : '1%'),
         speed: computedSpeed || (percent ? '' : 'Đang ghép luồng (FFmpeg)...'),
         eta: '',
         size: formatBytes(totalBytes)
       });
     }
-  });
-
-  let errOutput = '';
-  proc.stderr.on('data', (data) => {
-    errOutput += data.toString('utf8');
   });
 
   proc.on('close', (code) => {
@@ -990,7 +998,15 @@ async function startFfmpegDirectStream(req) {
   function attachDirectFfmpegHandlers(proc) {
     let errOutput = '';
     proc.stderr.on('data', (data) => {
-      errOutput += data.toString('utf8');
+      const chunk = data.toString('utf8');
+      errOutput += chunk;
+      if (!totalPlaylistDuration) {
+        const durMatch = errOutput.match(/Duration:\s*(\d+):(\d+):([0-9.]+)/);
+        if (durMatch) {
+          totalPlaylistDuration = parseInt(durMatch[1], 10) * 3600 + parseInt(durMatch[2], 10) * 60 + parseFloat(durMatch[3]);
+          logHost(`Parsed direct stream totalDuration: ${totalPlaylistDuration}s`);
+        }
+      }
     });
 
     let lastSent = 0;
