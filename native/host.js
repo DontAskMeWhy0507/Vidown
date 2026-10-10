@@ -72,41 +72,43 @@ function sendMessage(msg) {
 // Read length-prefixed JSON messages from Chrome stdin
 let inputBuffer = Buffer.alloc(0);
 
-process.stdin.on('data', (chunk) => {
-  inputBuffer = Buffer.concat([inputBuffer, chunk]);
+if (require.main === module) {
+  process.stdin.on('data', (chunk) => {
+    inputBuffer = Buffer.concat([inputBuffer, chunk]);
 
-  while (inputBuffer.length >= 4) {
-    const msgLen = inputBuffer.readUInt32LE(0);
-    if (inputBuffer.length < 4 + msgLen) {
-      break; // Wait for full message
+    while (inputBuffer.length >= 4) {
+      const msgLen = inputBuffer.readUInt32LE(0);
+      if (inputBuffer.length < 4 + msgLen) {
+        break; // Wait for full message
+      }
+
+      const bodyBuf = inputBuffer.slice(4, 4 + msgLen);
+      inputBuffer = inputBuffer.slice(4 + msgLen);
+
+      try {
+        const msg = JSON.parse(bodyBuf.toString('utf8'));
+        handleMessage(msg);
+      } catch (err) {
+        sendMessage({ status: 'error', error: 'Invalid JSON message: ' + err.message });
+      }
     }
+  });
 
-    const bodyBuf = inputBuffer.slice(4, 4 + msgLen);
-    inputBuffer = inputBuffer.slice(4 + msgLen);
-
-    try {
-      const msg = JSON.parse(bodyBuf.toString('utf8'));
-      handleMessage(msg);
-    } catch (err) {
-      sendMessage({ status: 'error', error: 'Invalid JSON message: ' + err.message });
-    }
-  }
-});
-
-process.stdin.on('end', () => {
-  logHost('process.stdin closed (Chrome disconnected pipe)');
-  stdoutWritable = false;
-  if (activeProcess || activeMultiThreadJob) {
-    logHost('Process or multi-thread job is still active, giving 30m grace period before termination');
-    setTimeout(() => {
-      try { if (activeMultiThreadJob) activeMultiThreadJob.cancel(); } catch (e) {}
-      try { if (activeProcess) activeProcess.kill(); } catch (e) {}
+  process.stdin.on('end', () => {
+    logHost('process.stdin closed (Chrome disconnected pipe)');
+    stdoutWritable = false;
+    if (activeProcess || activeMultiThreadJob) {
+      logHost('Process or multi-thread job is still active, giving 30m grace period before termination');
+      setTimeout(() => {
+        try { if (activeMultiThreadJob) activeMultiThreadJob.cancel(); } catch (e) {}
+        try { if (activeProcess) activeProcess.kill(); } catch (e) {}
+        process.exit(0);
+      }, 1800000);
+    } else {
       process.exit(0);
-    }, 1800000);
-  } else {
-    process.exit(0);
-  }
-});
+    }
+  });
+}
 
 function handleMessage(msg) {
   logHost(`RECV: ${JSON.stringify(msg)}`);
@@ -992,6 +994,17 @@ async function startFfmpegDirectStream(req) {
   }
 
   args.push('-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data');
+  if (typeof ffmpegInput === 'string' && ffmpegInput.startsWith('http')) {
+    args.push(
+      '-buffer_size', '16M',
+      '-reconnect', '1',
+      '-reconnect_at_eof', '1',
+      '-reconnect_streamed', '1',
+      '-reconnect_delay_max', '5',
+      '-multiple_requests', '1',
+      '-rw_timeout', '15000000'
+    );
+  }
   args.push('-headers', headers);
   args.push('-i', ffmpegInput);
 
@@ -1139,7 +1152,7 @@ async function startFfmpegDirectStream(req) {
   attachDirectFfmpegHandlers(activeProcess);
 }
 
-function detectPlatformName(line, targetUrl) {
+function detectPlatformName(line, targetUrl = '') {
   if (line.includes('youtube') || targetUrl.includes('youtube') || targetUrl.includes('youtu.be')) return 'YouTube';
   if (line.includes('tiktok') || targetUrl.includes('tiktok')) return 'TikTok';
   if (line.includes('facebook') || targetUrl.includes('facebook') || targetUrl.includes('fb.watch')) return 'Facebook';
@@ -1147,14 +1160,47 @@ function detectPlatformName(line, targetUrl) {
   return 'máy chủ';
 }
 
+function checkIsYouTube(u) {
+  if (!u || typeof u !== 'string') return false;
+  return u.includes('youtube.com') || u.includes('youtu.be') || u.includes('googlevideo.com');
+}
+
+function extractYouTubeUrl(candidates) {
+  if (!Array.isArray(candidates)) return null;
+  for (const c of candidates) {
+    if (c && typeof c === 'string') {
+      const vMatch = c.match(/(?:[?&]v=|\/shorts\/|\/embed\/|\/live\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      if (vMatch && vMatch[1]) {
+        return `https://www.youtube.com/watch?v=${vMatch[1]}`;
+      }
+    }
+  }
+  return null;
+}
+
+function checkIsTikTok(u) {
+  if (!u || typeof u !== 'string') return false;
+  return u.includes('tiktok.com') || u.includes('tiktokcdn.com') || u.includes('byteoversea.com') || u.includes('ibytedtos.com');
+}
+
+function checkIsFacebook(u) {
+  if (!u || typeof u !== 'string') return false;
+  return u.includes('facebook.com') || u.includes('fb.watch') || u.includes('fbcdn.net');
+}
+
 function parseProgressLine(line, targetUrl = '') {
-  if (line.startsWith('UVD_PROG::')) {
-    const parts = line.split('::');
+  if (line.includes('UVD_PROG::')) {
+    const raw = line.split('UVD_PROG::')[1] || '';
+    const parts = raw.split('::');
+    const rawPct = (parts[0] || '').trim();
+    const rawSpd = (parts[1] || '').trim();
+    const rawEta = (parts[2] || '').trim();
+    const rawSize = (parts[3] || '').trim();
     return {
-      percent: (parts[1] || '').trim(),
-      speed: (parts[2] || '').trim(),
-      eta: (parts[3] || '').trim(),
-      size: (parts[4] || '').trim()
+      percent: rawPct.includes('NA') ? '' : rawPct,
+      speed: rawSpd.includes('NA') ? '' : rawSpd,
+      eta: rawEta.includes('NA') ? '' : rawEta,
+      size: rawSize.includes('NA') ? '' : rawSize
     };
   }
 
@@ -1223,10 +1269,6 @@ function startYtDlpDownload(req, targetUrl) {
   const targetDir = (req.outputDir && fs.existsSync(req.outputDir)) ? req.outputDir : DOWNLOADS_DIR;
   const outTemplate = path.join(targetDir, `${safeTitle}.%(ext)s`);
 
-  const checkIsYouTube = (u) => {
-    if (!u || typeof u !== 'string') return false;
-    return u.includes('youtube.com') || u.includes('youtu.be') || u.includes('googlevideo.com');
-  };
   const isYouTube = checkIsYouTube(targetUrl) || checkIsYouTube(req.referer) || checkIsYouTube(req.pageUrl);
 
   const args = [
@@ -1291,6 +1333,18 @@ function startYtDlpDownload(req, targetUrl) {
 
   let finalFilename = '';
   let lastSentTime = 0;
+  let fallbackInitiated = false;
+
+  function triggerFallback(reason) {
+    if (fallbackInitiated) return;
+    fallbackInitiated = true;
+    logHost(`yt-dlp fallback triggered (${reason}). Routing to FFmpeg.`);
+    if (req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl) {
+      startFfmpegMux(req);
+    } else {
+      startFfmpegDirectStream(req);
+    }
+  }
 
   function processOutput(text) {
     const lines = text.split(/\r?\n/);
@@ -1366,23 +1420,13 @@ function startYtDlpDownload(req, targetUrl) {
         downloadsDir: targetDir
       });
     } else {
-      logHost(`yt-dlp exited with code ${code}. Falling back to FFmpeg.`);
-      if (req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl) {
-        startFfmpegMux(req);
-      } else {
-        startFfmpegDirectStream(req);
-      }
+      triggerFallback(`exit code ${code}`);
     }
   });
 
   proc.on('error', (err) => {
-    logHost(`yt-dlp spawn error: ${err.message}. Falling back to FFmpeg.`);
     if (activeProcess === proc) activeProcess = null;
-    if (req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl) {
-      startFfmpegMux(req);
-    } else {
-      startFfmpegDirectStream(req);
-    }
+    triggerFallback(`spawn error: ${err.message}`);
   });
 }
 
@@ -1390,30 +1434,24 @@ function startDownload(req) {
   logHost(`startDownload: ${JSON.stringify({ url: req.url, videoUrl: req.videoUrl, audioUrl: req.audioUrl, title: req.title, quality: req.quality })}`);
 
   let targetUrl = req.videoUrl || req.url || '';
-
-  const checkIsYouTube = (u) => {
-    if (!u || typeof u !== 'string') return false;
-    return u.includes('youtube.com') || u.includes('youtu.be') || u.includes('googlevideo.com');
-  };
-
   const isYouTube = checkIsYouTube(targetUrl) || checkIsYouTube(req.referer) || checkIsYouTube(req.pageUrl);
+  const isTikTok = checkIsTikTok(targetUrl) || checkIsTikTok(req.referer) || checkIsTikTok(req.pageUrl);
+  const isFacebook = checkIsFacebook(targetUrl) || checkIsFacebook(req.referer) || checkIsFacebook(req.pageUrl);
 
-  // If YouTube is detected, resolve canonical watch URL from candidates
+  // Canonicalize platform URL
   if (isYouTube) {
-    const candidates = [req.pageUrl, req.referer, targetUrl, req.url];
-    for (const c of candidates) {
-      if (c && typeof c === 'string') {
-        const vMatch = c.match(/(?:[?&]v=|\/shorts\/|\/embed\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-        if (vMatch && vMatch[1]) {
-          targetUrl = `https://www.youtube.com/watch?v=${vMatch[1]}`;
-          break;
-        }
-      }
-    }
+    const canonicalYt = extractYouTubeUrl([req.pageUrl, req.referer, targetUrl, req.url]);
+    if (canonicalYt) targetUrl = canonicalYt;
+  } else if (isTikTok) {
+    if (req.pageUrl && req.pageUrl.includes('tiktok.com')) targetUrl = req.pageUrl;
+    else if (req.referer && req.referer.includes('tiktok.com')) targetUrl = req.referer;
+  } else if (isFacebook) {
+    if (req.pageUrl && (req.pageUrl.includes('facebook.com') || req.pageUrl.includes('fb.watch'))) targetUrl = req.pageUrl;
+    else if (req.referer && (req.referer.includes('facebook.com') || req.referer.includes('fb.watch'))) targetUrl = req.referer;
   }
 
   // Fast Path 1: If yt-dlp is available and this is YouTube (or mainstream platform), use high-speed yt-dlp
-  if (fs.existsSync(YTDLP_PATH) && (isYouTube || targetUrl.includes('tiktok.com') || targetUrl.includes('facebook.com'))) {
+  if (fs.existsSync(YTDLP_PATH) && (isYouTube || isTikTok || isFacebook)) {
     logHost(`Routing to startYtDlpDownload: targetUrl=${targetUrl}`);
     return startYtDlpDownload(req, targetUrl);
   }
@@ -1426,4 +1464,15 @@ function startDownload(req) {
 
   // Direct progressive file, HLS stream, or audio conversion
   return startFfmpegDirectStream(req);
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = {
+    detectPlatformName,
+    checkIsYouTube,
+    checkIsTikTok,
+    checkIsFacebook,
+    extractYouTubeUrl,
+    parseProgressLine
+  };
 }
