@@ -328,7 +328,10 @@ function calculateChunks(totalSize, concurrency = 8, minChunkSize = 512 * 1024) 
   return chunks;
 }
 
-function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency = 8, onProgress, signal }) {
+const httpKeepAliveAgent = new http.Agent({ keepAlive: true, maxSockets: 32, maxFreeSockets: 16 });
+const httpsKeepAliveAgent = new https.Agent({ keepAlive: true, maxSockets: 32, maxFreeSockets: 16 });
+
+function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency = 10, onProgress, signal }) {
   return new Promise((resolve, reject) => {
     let fd = null;
     try {
@@ -340,10 +343,19 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
       return reject(e);
     }
 
-    const chunks = calculateChunks(totalSize, concurrency);
-    const numChunks = chunks.length;
+    // Dynamic Chunk Work Queue: split file into uniform 1 MB blocks
+    const BLOCK_SIZE = 1024 * 1024;
+    const totalBlocks = Math.max(1, Math.ceil(totalSize / BLOCK_SIZE));
+    const queue = [];
+    for (let i = 0; i < totalBlocks; i++) {
+      const start = i * BLOCK_SIZE;
+      const end = Math.min(totalSize - 1, (i + 1) * BLOCK_SIZE - 1);
+      queue.push({ blockIdx: i, start, end });
+    }
+
     let totalDownloaded = 0;
-    let completedChunks = 0;
+    let completedBlocks = 0;
+    let pendingWrites = 0;
     let isAborted = false;
     let hasError = false;
     const activeReqs = new Set();
@@ -388,99 +400,117 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
       }
     }, 200);
 
-    for (let i = 0; i < numChunks; i++) {
-      downloadChunk(i, chunks[i].start, chunks[i].end, 0);
-    }
-
-    function downloadChunk(chunkIdx, start, end, retryCount) {
-      if (isAborted || hasError) return;
-      if (start > end) {
-        checkDone();
-        return;
-      }
-
-      let currentWritePos = start;
-      const u = new URL(url);
-      const client = u.protocol === 'https:' ? https : http;
-      const reqHeaders = { ...headers, Range: `bytes=${currentWritePos}-${end}` };
-
-      const req = client.get(u, { headers: reqHeaders }, (res) => {
-        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-          activeReqs.delete(req);
-          res.destroy();
-          url = new URL(res.headers.location, url).href;
-          return downloadChunk(chunkIdx, currentWritePos, end, retryCount);
-        }
-
-        if (res.statusCode !== 206 && res.statusCode !== 200) {
-          activeReqs.delete(req);
-          res.destroy();
-          if (retryCount < 4 && !isAborted) {
-            return setTimeout(() => downloadChunk(chunkIdx, currentWritePos, end, retryCount + 1), 600);
-          }
-          hasError = true;
-          cleanup();
-          return reject(new Error(`HTTP ${res.statusCode} on chunk ${chunkIdx}`));
-        }
-
-        res.on('data', (chunk) => {
-          if (isAborted || hasError) return;
-          const writeOffset = currentWritePos;
-          currentWritePos += chunk.length;
-          totalDownloaded += chunk.length;
-          try {
-            fs.writeSync(fd, chunk, 0, chunk.length, writeOffset);
-          } catch (err) {
-            if (!hasError && !isAborted) {
-              hasError = true;
-              cleanup();
-              reject(err);
-            }
-          }
-        });
-
-        res.on('end', () => {
-          activeReqs.delete(req);
-          if (isAborted || hasError) return;
-          if (currentWritePos <= end && retryCount < 4) {
-            return setTimeout(() => downloadChunk(chunkIdx, currentWritePos, end, retryCount + 1), 500);
-          }
-          checkDone();
-        });
-
-        res.on('error', (err) => {
-          activeReqs.delete(req);
-          if (retryCount < 4 && !isAborted && !hasError) {
-            setTimeout(() => downloadChunk(chunkIdx, currentWritePos, end, retryCount + 1), 600);
-          } else if (!hasError && !isAborted) {
-            hasError = true;
-            cleanup();
-            reject(err);
-          }
-        });
-      });
-
-      req.on('error', (err) => {
-        activeReqs.delete(req);
-        if (retryCount < 4 && !isAborted && !hasError) {
-          setTimeout(() => downloadChunk(chunkIdx, currentWritePos, end, retryCount + 1), 600);
-        } else if (!hasError && !isAborted) {
-          hasError = true;
-          cleanup();
-          reject(err);
-        }
-      });
-
-      activeReqs.add(req);
-    }
-
     function checkDone() {
-      completedChunks++;
-      if (completedChunks >= numChunks && !isAborted && !hasError) {
+      if (completedBlocks >= totalBlocks && pendingWrites === 0 && !isAborted && !hasError) {
         clearInterval(progressInterval);
         cleanup();
         resolve();
       }
+    }
+
+    function fetchBlock(block, retryCount) {
+      return new Promise((blockResolve) => {
+        if (isAborted || hasError) return blockResolve();
+
+        let currentWritePos = block.start;
+        const u = new URL(url);
+        const client = u.protocol === 'https:' ? https : http;
+        const agent = u.protocol === 'https:' ? httpsKeepAliveAgent : httpKeepAliveAgent;
+        const reqHeaders = { ...headers, Range: `bytes=${currentWritePos}-${block.end}` };
+
+        const blockChunks = [];
+
+        const req = client.get(u, { headers: reqHeaders, agent }, (res) => {
+          if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+            activeReqs.delete(req);
+            res.destroy();
+            url = new URL(res.headers.location, url).href;
+            return fetchBlock(block, retryCount).then(blockResolve);
+          }
+
+          if (res.statusCode !== 206 && res.statusCode !== 200) {
+            activeReqs.delete(req);
+            res.destroy();
+            if (retryCount < 4 && !isAborted) {
+              return setTimeout(() => fetchBlock(block, retryCount + 1).then(blockResolve), 600);
+            }
+            hasError = true;
+            cleanup();
+            return reject(new Error(`HTTP ${res.statusCode} on block ${block.blockIdx}`));
+          }
+
+          res.on('data', (chunk) => {
+            if (isAborted || hasError) return;
+            blockChunks.push(chunk);
+            currentWritePos += chunk.length;
+            totalDownloaded += chunk.length;
+          });
+
+          res.on('end', () => {
+            activeReqs.delete(req);
+            if (isAborted || hasError) return blockResolve();
+
+            if (currentWritePos <= block.end && retryCount < 4) {
+              return setTimeout(() => fetchBlock(block, retryCount + 1).then(blockResolve), 500);
+            }
+
+            // Write full 1 MB block asynchronously to disk in a single I/O call
+            const fullBuf = Buffer.concat(blockChunks);
+            pendingWrites++;
+            fs.write(fd, fullBuf, 0, fullBuf.length, block.start, (writeErr) => {
+              pendingWrites--;
+              if (writeErr && !hasError && !isAborted) {
+                hasError = true;
+                cleanup();
+                return reject(writeErr);
+              }
+              completedBlocks++;
+              checkDone();
+              blockResolve();
+            });
+          });
+
+          res.on('error', (err) => {
+            activeReqs.delete(req);
+            if (retryCount < 4 && !isAborted && !hasError) {
+              setTimeout(() => fetchBlock(block, retryCount + 1).then(blockResolve), 600);
+            } else if (!hasError && !isAborted) {
+              hasError = true;
+              cleanup();
+              reject(err);
+            } else {
+              blockResolve();
+            }
+          });
+        });
+
+        req.on('error', (err) => {
+          activeReqs.delete(req);
+          if (retryCount < 4 && !isAborted && !hasError) {
+            setTimeout(() => fetchBlock(block, retryCount + 1).then(blockResolve), 600);
+          } else if (!hasError && !isAborted) {
+            hasError = true;
+            cleanup();
+            reject(err);
+          } else {
+            blockResolve();
+          }
+        });
+
+        activeReqs.add(req);
+      });
+    }
+
+    // Spawn concurrent workers (8-12 range) that continuously pull from the queue
+    const numWorkers = Math.min(concurrency, Math.max(1, queue.length));
+    for (let w = 0; w < numWorkers; w++) {
+      (async function workerLoop() {
+        while (queue.length > 0 && !isAborted && !hasError) {
+          const nextBlock = queue.shift();
+          if (!nextBlock) break;
+          await fetchBlock(nextBlock, 0);
+        }
+      })();
     }
   });
 }
@@ -579,13 +609,13 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
     };
 
     if (probe.supported && probe.size > 512 * 1024) {
-      logHost(`Starting 8-thread Range download for ${outPath} (${probe.size} bytes)`);
+      logHost(`Starting 10-thread Range download for ${outPath} (${probe.size} bytes)`);
       await downloadFileMultiThread({
         url: probe.url || targetUrl,
         outPath,
         headers: reqHeaders,
         totalSize: probe.size,
-        concurrency: 8,
+        concurrency: 10,
         onProgress,
         signal
       });
@@ -901,7 +931,7 @@ async function startFfmpegMux(req) {
           outPath: tempVideoPath,
           headers: reqHeadersObj,
           totalSize: probeVideo.size,
-          concurrency: 8,
+          concurrency: 10,
           onProgress: (p) => {
             videoDownloaded = p.downloadedBytes;
             onProgressCombined();
