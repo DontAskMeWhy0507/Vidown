@@ -232,6 +232,15 @@ function startNativeDownload(downloadParams, callback) {
           size: msg.size || ''
         });
       }
+      try {
+        chrome.runtime.sendMessage({
+          action: 'nativeProgress',
+          taskId: fakeId,
+          percent: msg.percent || '',
+          speed: msg.speed || '',
+          size: msg.size || ''
+        }).catch(() => {});
+      } catch (e) {}
     } else if (msg.action === 'complete') {
       task.complete = true;
       port.onMessage.removeListener(messageHandler);
@@ -315,6 +324,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       return true;
     }
 
+    case 'openDownloadsFolder':
     case 'openFolder': {
       const port = getOrCreateNativePort();
       if (port) {
@@ -323,6 +333,23 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       } else {
         sendResponse({ success: false, error: 'Native helper not available' });
       }
+      return true;
+    }
+
+    case 'cancelDownload': {
+      if (req.taskId && activeDownloads.has(req.taskId)) {
+        activeDownloads.delete(req.taskId);
+        const port = getOrCreateNativePort();
+        if (port) port.postMessage({ action: 'cancel' });
+        updateDownloadHistory({ id: req.taskId, state: 'interrupted', error: 'Người dùng đã hủy' });
+      }
+      sendResponse({ success: true });
+      return true;
+    }
+
+    case 'getDownloadStatus': {
+      const activeList = Array.from(activeDownloads.values());
+      sendResponse({ success: true, activeDownloads: activeList });
       return true;
     }
 

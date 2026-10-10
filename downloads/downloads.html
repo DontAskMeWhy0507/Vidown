@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tệp đã tải xuống - Savior</title>
+  <link rel="stylesheet" href="downloads.css">
+  <link rel="icon" type="image/png" href="../images/savior_logo.png">
+</head>
+<body>
+  <div class="coccoc-dl-app">
+    <!-- Top Header matching Chromium / Cốc Cốc Downloads -->
+    <header class="top-nav">
+      <div class="brand">
+        <div class="brand-text">
+          <span class="brand-title">Tệp đã tải xuống</span>
+        </div>
+      </div>
+
+      <div class="search-box-wrap">
+        <div class="search-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+        <input type="text" id="search-input" placeholder="Tìm kiếm trong tệp tải xuống..." autocomplete="off">
+        <button id="btn-clear-search" class="btn-clear-search" style="display: none;">✕</button>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-open-folder" class="header-btn" title="Mở thư mục Downloads trong máy tính">
+          <span>Mở thư mục</span>
+        </button>
+
+        <button id="btn-clear-all" class="header-btn secondary" title="Xoá lịch sử tải xuống">
+          <span>Xoá lịch sử</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+      <!-- Main Download List Area: Centered column -->
+      <main class="content-panel">
+        <div class="content-header" style="display: none;">
+          <h2 id="section-title">Tất cả tệp tải xuống</h2>
+          <span class="section-stats" id="section-stats">0 tệp</span>
+        </div>
+
+        <!-- Download Folder Setting Bar -->
+        <div class="folder-setting-bar">
+          <div class="folder-setting-info">
+            <span class="folder-setting-label">Thư mục tải về:</span>
+            <span class="folder-path-display" id="sidebar-folder-path" title="Thư mục lưu trữ Downloads">Downloads</span>
+          </div>
+          <button type="button" id="btn-change-folder" class="btn-change-folder" title="Đổi thư mục lưu trữ tải xuống">
+            Đổi thư mục...
+          </button>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#10b981" stroke-width="1.8">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </div>
+          <h3>Không có tệp tải xuống nào</h3>
+          <p id="empty-subtitle">Các tệp bạn tải về sẽ xuất hiện tại đây.</p>
+        </div>
+
+        <!-- Download Items Container (Grouped by date) -->
+        <div id="downloads-container" class="downloads-container">
+          <!-- Dynamically populated -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
+
+  <script src="downloads.js"></script>
+</body>
+</html>
