@@ -1051,7 +1051,7 @@ async function startFfmpegDirectStream(req) {
             const pct = Math.min(99, Math.max(1, Math.round((currentSec / totalPlaylistDuration) * 100)));
             pctStr = `${pct}%`;
           } else {
-            pctStr = formatBytes(totalBytes);
+            pctStr = '';
           }
 
           sendMessage({

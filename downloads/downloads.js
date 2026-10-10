@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load downloads from local storage and chrome.downloads
   async function loadDownloads() {
+    let map = new Map();
     try {
       const storageData = await chrome.storage.local.get(['downloadHistory', 'customDownloadDir']);
       const nativeHistory = Array.isArray(storageData.downloadHistory) ? storageData.downloadHistory : [];
@@ -207,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (e) {}
 
       // Combine and deduplicate
-      const map = new Map();
+      map.clear();
       const now = Date.now();
       const seenActiveTitles = new Set();
       for (const item of nativeHistory) {

@@ -135,20 +135,6 @@ function broadcastTaskEvent(payload) {
   try {
     chrome.runtime.sendMessage(payload).catch(() => {});
   } catch (_) {}
-  try {
-    if (chrome.tabs && chrome.tabs.query) {
-      chrome.tabs.query({}, (tabs) => {
-        if (chrome.runtime.lastError || !tabs) return;
-        for (const tab of tabs) {
-          if (tab.id && tab.id > 0) {
-            try {
-              chrome.tabs.sendMessage(tab.id, payload).catch(() => {});
-            } catch (_) {}
-          }
-        }
-      });
-    }
-  } catch (_) {}
 }
 
 // Probe native helper availability on startup
@@ -335,7 +321,7 @@ function startNativeDownload(downloadParams, callback) {
 
       setActionBadge('✓', '#10b981');
       setTimeout(() => {
-        setActionBadge('');
+        if (activeDownloads.size === 0) setActionBadge('');
       }, 4000);
 
       dispatchDownloadChanged({
@@ -361,7 +347,7 @@ function startNativeDownload(downloadParams, callback) {
 
       setActionBadge('!', '#ef4444');
       setTimeout(() => {
-        setActionBadge('');
+        if (activeDownloads.size === 0) setActionBadge('');
       }, 4000);
 
       dispatchDownloadChanged({
