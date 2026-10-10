@@ -1,6 +1,7 @@
 /**
  * Savior - Chrome Service Worker Shim & Native Messaging Bridge
- * Polyfills Cốc Cốc browser APIs and routes downloads through FFmpeg Native Messaging Host.
+ * Polyfills Cốc Cốc browser APIs, routes downloads through FFmpeg Native Messaging Host,
+ * and manages real-time download history for the Downloads Manager.
  */
 
 // ==========================================
@@ -71,7 +72,7 @@ if (!chrome.pageAction) {
 }
 
 // ==========================================
-// 2. Native Messaging Host Integration
+// 2. Native Messaging Host Integration & History
 // ==========================================
 
 const NATIVE_HOST = 'com.savior.helper';
@@ -81,6 +82,25 @@ let heartbeatInterval = null;
 
 let fakeIdCounter = 900000;
 const activeDownloads = new Map();
+
+// Helper to update persistent download history in chrome.storage.local
+function updateDownloadHistory(record) {
+  try {
+    chrome.storage.local.get(['downloadHistory'], (result) => {
+      const history = Array.isArray(result.downloadHistory) ? result.downloadHistory : [];
+      const idx = history.findIndex(item => item.id === record.id);
+      if (idx >= 0) {
+        history[idx] = { ...history[idx], ...record };
+      } else {
+        history.unshift(record);
+      }
+      if (history.length > 200) history.length = 200;
+      chrome.storage.local.set({ downloadHistory: history });
+    });
+  } catch (e) {
+    console.warn('[Savior] updateDownloadHistory error:', e);
+  }
+}
 
 // Hook chrome.downloads.onChanged listeners so we can synthesize events for native downloads
 const _onChangedListeners = new Set();
@@ -159,13 +179,40 @@ function startNativeDownload(downloadParams, callback) {
 
   const fakeId = ++fakeIdCounter;
   const safeFilename = (downloadParams.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
+  const targetUrl = downloadParams.videoUrl || downloadParams.url || '';
+  const mediaType = (downloadParams.convertToMp3 || downloadParams.soundOnly) ? 'audio' : 'video';
+
   const task = {
     id: fakeId,
-    params: downloadParams,
+    title: safeFilename.replace(/\.[^.]+$/, ''),
     filename: safeFilename,
+    url: targetUrl,
+    type: mediaType,
+    params: downloadParams,
+    state: 'in_progress',
+    percent: '1%',
+    speed: 'Bắt đầu kết nối...',
+    size: '0 B',
+    startTime: Date.now(),
     complete: false
   };
   activeDownloads.set(fakeId, task);
+
+  // Initial record entry in persistent storage
+  updateDownloadHistory({
+    id: fakeId,
+    title: task.title,
+    filename: safeFilename,
+    url: targetUrl,
+    type: mediaType,
+    state: 'in_progress',
+    percent: '1%',
+    speed: 'Bắt đầu kết nối...',
+    size: '0 B',
+    startTime: task.startTime
+  });
+
+  let lastStorageUpdate = 0;
 
   const messageHandler = (msg) => {
     if (!msg) return;
@@ -174,9 +221,30 @@ function startNativeDownload(downloadParams, callback) {
       if (msg.percent && chrome.action && chrome.action.setBadgeText) {
         chrome.action.setBadgeText({ text: msg.percent });
       }
+
+      const now = Date.now();
+      if (now - lastStorageUpdate > 400) {
+        lastStorageUpdate = now;
+        updateDownloadHistory({
+          id: fakeId,
+          percent: msg.percent || '',
+          speed: msg.speed || '',
+          size: msg.size || ''
+        });
+      }
     } else if (msg.action === 'complete') {
       task.complete = true;
       port.onMessage.removeListener(messageHandler);
+
+      updateDownloadHistory({
+        id: fakeId,
+        state: 'complete',
+        percent: '100%',
+        speed: 'Hoàn thành',
+        endTime: Date.now(),
+        outputPath: msg.outputFile || safeFilename
+      });
+
       if (chrome.action && chrome.action.setBadgeText) {
         chrome.action.setBadgeText({ text: '✓' });
         setTimeout(() => {
@@ -190,6 +258,13 @@ function startNativeDownload(downloadParams, callback) {
       });
     } else if (msg.action === 'error') {
       port.onMessage.removeListener(messageHandler);
+
+      updateDownloadHistory({
+        id: fakeId,
+        state: 'interrupted',
+        error: msg.error || 'SERVER_BAD_CONTENT'
+      });
+
       if (chrome.action && chrome.action.setBadgeText) {
         chrome.action.setBadgeText({ text: '!' });
         setTimeout(() => {
@@ -206,6 +281,7 @@ function startNativeDownload(downloadParams, callback) {
 
   port.onMessage.addListener(messageHandler);
 
+  // Send download request to native host
   port.postMessage({
     action: 'download',
     url: downloadParams.url || '',
@@ -226,7 +302,95 @@ function startNativeDownload(downloadParams, callback) {
 }
 
 // ==========================================
-// 3. Download API Polyfills & Interception
+// 3. Downloads Manager IPC Message Routing
+// ==========================================
+
+chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
+  if (!req || !req.action) return false;
+
+  switch (req.action) {
+    case 'openDownloadsPage': {
+      chrome.tabs.create({ url: chrome.runtime.getURL('downloads/downloads.html') });
+      sendResponse({ success: true });
+      return true;
+    }
+
+    case 'openFolder': {
+      const port = getOrCreateNativePort();
+      if (port) {
+        port.postMessage({ action: 'openFolder', path: req.path });
+        sendResponse({ success: true });
+      } else {
+        sendResponse({ success: false, error: 'Native helper not available' });
+      }
+      return true;
+    }
+
+    case 'browseFolder': {
+      const port = getOrCreateNativePort();
+      if (port) {
+        const handler = (msg) => {
+          if (msg && msg.action === 'browseFolderResult') {
+            port.onMessage.removeListener(handler);
+            if (msg.path) {
+              chrome.storage.local.set({ customDownloadDir: msg.path });
+            }
+            sendResponse({ path: msg.path });
+          }
+        };
+        port.onMessage.addListener(handler);
+        port.postMessage({ action: 'browseFolder' });
+        return true;
+      } else {
+        sendResponse({ error: 'Native helper not available' });
+      }
+      return true;
+    }
+
+    case 'openFile': {
+      const port = getOrCreateNativePort();
+      if (port) {
+        port.postMessage({ action: 'openFile', filename: req.filename, path: req.path });
+        sendResponse({ success: true });
+      } else {
+        sendResponse({ success: false });
+      }
+      return true;
+    }
+
+    case 'showInFolder': {
+      const port = getOrCreateNativePort();
+      if (port) {
+        port.postMessage({ action: 'showInFolder', path: req.path });
+        sendResponse({ success: true });
+      } else {
+        sendResponse({ success: false });
+      }
+      return true;
+    }
+
+    case 'clearHistory': {
+      chrome.storage.local.set({ downloadHistory: [] }, () => {
+        sendResponse({ success: true });
+      });
+      return true;
+    }
+
+    case 'removeDownload': {
+      chrome.storage.local.get(['downloadHistory'], (res) => {
+        const history = Array.isArray(res.downloadHistory) ? res.downloadHistory : [];
+        const updated = history.filter(item => item.id !== req.id);
+        chrome.storage.local.set({ downloadHistory: updated }, () => {
+          sendResponse({ success: true });
+        });
+      });
+      return true;
+    }
+  }
+});
+
+// ==========================================
+// 4. Download API Polyfills & Interception
 // ==========================================
 
 // Polyfill chrome.downloads.combineStreams (YouTube 1080p+, Facebook DASH)
@@ -332,6 +496,6 @@ chrome.downloads.erase = function(query, callback) {
 };
 
 // ==========================================
-// 4. Load Core Background Script
+// 5. Load Core Background Script
 // ==========================================
 importScripts("background.js");
