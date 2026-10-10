@@ -216,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
       filename: item.filename || item.outputFile || item.title || '',
       title: item.title || ''
     }, (res) => {
+      if (chrome.runtime?.lastError) return;
       if (res && res.success) {
         showToast(`Đang phát: ${item.title || 'video'}`);
       } else {

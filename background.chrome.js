@@ -670,6 +670,11 @@ function getOrCreateNativePort() {
   if (activeNativePort) return activeNativePort;
   try {
     activeNativePort = chrome.runtime.connectNative(NATIVE_HOST);
+    activeNativePort.onMessage.addListener((msg) => {
+      if (msg && msg.action === 'browseFolderResult' && msg.path) {
+        chrome.storage.local.set({ customDownloadDir: msg.path });
+      }
+    });
     activeNativePort.onDisconnect.addListener(() => {
       const errorMsg = chrome.runtime.lastError ? chrome.runtime.lastError.message : 'Native host disconnected';
       console.warn('[Savior] Native host disconnected:', errorMsg);
@@ -1073,34 +1078,12 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     case 'browseFolder': {
       const port = getOrCreateNativePort();
       if (port) {
-        let responded = false;
-        const handler = (msg) => {
-          if (msg && msg.action === 'browseFolderResult') {
-            port.onMessage.removeListener(handler);
-            if (!responded) {
-              responded = true;
-              if (msg.path) {
-                chrome.storage.local.set({ customDownloadDir: msg.path });
-              }
-              try { sendResponse({ path: msg.path }); } catch (e) {}
-            }
-          }
-        };
-        port.onMessage.addListener(handler);
         port.postMessage({ action: 'browseFolder' });
-        // Guarantee sendResponse is always called before channel closes
-        setTimeout(() => {
-          if (!responded) {
-            responded = true;
-            port.onMessage.removeListener(handler);
-            try { sendResponse({ path: '' }); } catch (e) {}
-          }
-        }, 15000);
-        return true;
+        sendResponse({ success: true, pending: true });
       } else {
-        sendResponse({ error: 'Native helper not available' });
-        return false;
+        sendResponse({ success: false, error: 'Native helper not available' });
       }
+      return false;
     }
 
     case 'openFile': {
@@ -1114,14 +1097,6 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       }
       const port = getOrCreateNativePort();
       if (port) {
-        let responded = false;
-        const handler = (msg) => {
-          if (!msg || msg.action !== 'openFileResult' || responded) return;
-          responded = true;
-          port.onMessage.removeListener(handler);
-          sendResponse({ success: Boolean(msg.success), error: msg.error || '' });
-        };
-        port.onMessage.addListener(handler);
         if (cId && chrome.downloads && chrome.downloads.search) {
           chrome.downloads.search({ id: cId }, (results) => {
             const realPath = (results && results[0] && results[0].filename) ? results[0].filename : req.path;
@@ -1130,16 +1105,9 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         } else {
           port.postMessage({ action: 'openFile', filename: req.filename, path: req.path });
         }
-        setTimeout(() => {
-          if (!responded) {
-            responded = true;
-            port.onMessage.removeListener(handler);
-            sendResponse({ success: false, error: 'Không nhận được phản hồi khi mở tệp' });
-          }
-        }, 10000);
-        return true;
+        sendResponse({ success: true });
       } else {
-        sendResponse({ success: false });
+        sendResponse({ success: false, error: 'Native helper not available' });
       }
       return false;
     }
@@ -1237,6 +1205,9 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     default:
+      if (typeof sendResponse === 'function') {
+        sendResponse({ success: false, error: `Unhandled action: ${req.action}` });
+      }
       return false;
   }
 });
