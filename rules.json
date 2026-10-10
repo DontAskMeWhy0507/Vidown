@@ -1,0 +1,29 @@
+[
+	{
+		"id": 5,
+		"priority": 1,
+		"action": {
+			"type": "modifyHeaders",
+			"requestHeaders": [
+				{
+					"header": "Referer",
+					"operation": "set",
+					"value": "https://coccoc.com/search"
+				}
+			]
+		},
+		"condition": {
+			"regexFilter ": "coccoc.com\\/composer?",
+			"resourceTypes": [
+				"main_frame"
+			],
+			"domains": ["coccoc.com"]
+		}
+	},
+	{
+	  "id": 13,
+	  "priority": 1,
+	  "action": { "type": "redirect", "redirect": { "extensionPath": "/app.js" } },
+	  "condition": { "urlFilter": "js/jwplayer.js", "resourceTypes": ["script"] }
+	}
+]

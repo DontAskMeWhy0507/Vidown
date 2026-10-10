@@ -1,0 +1,1 @@
+var r;(r=document.querySelectorAll("video"))&&Array.from(r).filter(r=>r).forEach(r=>{var e=(r=>{try{var e=r.parentElement.player;if(e&&e.lastSource_&&e.lastSource_.player)return e.lastSource_.player}catch(r){return null}})(r);e&&r.setAttribute("savior-manifest-url",e)});

@@ -1,0 +1,1 @@
+{let a=0,r=null;r=setInterval(()=>{try{var e,t=document.body.getAttribute("savior-ytb-data-android-solution");t&&(clearInterval(r),e=JSON.parse(t),chrome.runtime.sendMessage(null,{type:"script_executed",data:{url:e,data:e}})),20<a?clearInterval(r):a++}catch(e){clearInterval(r),chrome.runtime.sendMessage(null,{type:"script_executed"})}},300)}

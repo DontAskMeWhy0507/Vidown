@@ -1,0 +1,1 @@
+var e;e=location.href,chrome.runtime.sendMessage(null,{type:"script_executed",data:{data:{origin:"linkedin.com",url:e}}}).catch(()=>{});

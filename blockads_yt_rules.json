@@ -1,0 +1,42 @@
+[
+    {
+        "id" : 1,
+        "priority": 1,
+        "action" : { "type" : "block" },
+        "condition" : {
+            "urlFilter" : "||g.doubleclick.net^",
+            "resourceTypes" : ["xmlhttprequest"],
+            "initiatorDomains": ["youtube.com", "music.youtube.com"]
+        }
+    },
+    {
+        "id" : 2,
+        "priority": 2,
+        "action" : { "type" : "block" },
+        "condition" : {
+            "urlFilter" : "||youtube.com/pagead/",
+            "resourceTypes" : ["xmlhttprequest"],
+            "initiatorDomains": ["youtube.com", "music.youtube.com"]
+        }
+    },
+    {
+        "id" : 3,
+        "priority": 3,
+        "action" : { "type" : "block" },
+        "condition" : {
+            "urlFilter" : "||google.*/pagead/lvz?",
+            "resourceTypes" : ["image"],
+            "initiatorDomains": ["youtube.com", "music.youtube.com"]
+        }
+    },
+    {
+        "id" : 4,
+        "priority": 4,
+        "action" : { "type" : "block" },
+        "condition" : {
+            "urlFilter" : "/pagead/1p-user-list/*$image",
+            "resourceTypes" : ["image"],
+            "initiatorDomains": ["youtube.com", "music.youtube.com"]
+        }
+    }
+]

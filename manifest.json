@@ -1,0 +1,74 @@
+{
+   "action": {
+      "default_icon": "images/savior_logo.png",
+      "default_title": "__MSG_page_action_title__"
+   },
+   "background": {
+      "service_worker": "background.chrome.js"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "exclude_matches": [ "http://coccoc.com/webhp*", "https://coccoc.com/webhp*", "file://*", "https://fireant.vn/*", "https://fiintrade.vn/*", "https://accounts.fireant.vn/*", "*://*.g.doubleclick.net/*" ],
+      "js": [ "common.js", "content-script.js" ],
+      "matches": [ "\u003Call_urls>" ],
+      "run_at": "document_idle"
+   }, {
+      "all_frames": true,
+      "js": [ "yserp-scrapper.js" ],
+      "matches": [ "*://*.youtube.com/*" ],
+      "run_at": "document_idle"
+   }, {
+      "all_frames": true,
+      "js": [ "fb-scrapper.js" ],
+      "matches": [ "*://*.facebook.com/*", "*://*.fb.com/*" ],
+      "run_at": "document_idle"
+   }, {
+      "all_frames": true,
+      "js": [ "gserp-scrapper.js" ],
+      "matches": [ "*://*.google.com/*", "*://search.coccoc.com/*", "*://coccoc.com/search" ],
+      "run_at": "document_idle"
+   }, {
+      "all_frames": true,
+      "exclude_matches": [ "http://coccoc.com/webhp*", "https://coccoc.com/webhp*", "*://www.google.com/", "*://accounts.google.com/*", "*://ogs.google.com/*", "*://google.com/", "*://www.google.com/search*", "*://google.com/search*", "file://*" ],
+      "js": [ "gads-scrapper.js" ],
+      "match_about_blank": false,
+      "matches": [ "\u003Call_urls>" ],
+      "run_at": "document_idle"
+   }, {
+      "all_frames": true,
+      "js": [ "promote-ccserp.js" ],
+      "matches": [ "*://*.google.com/*" ],
+      "run_at": "document_idle"
+   }, {
+      "all_frames": false,
+      "exclude_matches": [ "http://coccoc.com/webhp*", "https://coccoc.com/webhp*", "file://*" ],
+      "js": [ "onboarding.js" ],
+      "matches": [ "\u003Call_urls>" ],
+      "run_at": "document_idle"
+   } ],
+   "default_locale": "en",
+   "description": "__MSG_appDescription__",
+   "externally_connectable": {
+      "matches": [ "https://*.coccoc.com/*", "http://*.coccoc.com/*", "http://localhost/*", "https://*.youtube.com/*" ]
+   },
+   "host_permissions": [ "http://*/*", "https://*/*" ],
+   "icons": {
+      "128": "images/savior_logo.png",
+      "48": "images/action_cc.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDN4c7XRYXzpvahEEqCGsfZPXsl5kWXuv14AkytPEG4ok42OVda9wNV/GeZqYUO4IvW/3erMWGcnb+wyt2K9nds9aC+cKDf+eUU4vPAI8i/aWdPYe0G5tBlwitHJouftu9G5i6auE91IaXVbXkW5//zVHiB1v/MFunh4EkwfV9ONwIDAQAB",
+   "manifest_version": 3,
+   "minimum_chrome_version": "114",
+   "name": "__MSG_appName__",
+   "options_page": "options.html",
+   "permissions": [ "tabs", "webNavigation", "downloads", "downloads.open", "storage", "cookies", "scripting", "offscreen", "favicon", "sidePanel", "declarativeNetRequest", "declarativeNetRequestWithHostAccess", "webRequest", "alarms" ],
+   "side_panel": {
+      "default_icon": "images/savior_logo.png",
+      "default_path": "sidepanel.html"
+   },
+   "version": "2.4.65",
+   "web_accessible_resources": [ {
+      "matches": [ "\u003Call_urls>" ],
+      "resources": [ "app.js", "css/content-script.css", "images/*.*", "/features.json", "adsblockScript.js" ]
+   } ]
+}
