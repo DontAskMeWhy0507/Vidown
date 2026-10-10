@@ -654,14 +654,7 @@ function startFfmpegMux(req) {
   const finalFilename = `${safeTitle}.mp4`;
   const outPath = path.join(targetDir, finalFilename);
 
-  let referer = req.referer || '';
-  if (!referer) {
-    if (videoUrl.includes('facebook') || videoUrl.includes('fbcdn')) {
-      referer = 'https://www.facebook.com/';
-    } else if (videoUrl.includes('youtube') || videoUrl.includes('googlevideo')) {
-      referer = 'https://www.youtube.com/';
-    }
-  }
+  let referer = resolveDefaultReferer(videoUrl, req.referer, req.pageUrl);
   let origin = '';
   if (referer) {
     try { origin = new URL(referer).origin; } catch (e) {}
@@ -895,16 +888,7 @@ async function startFfmpegDirectStream(req) {
   const finalFilename = `${safeTitle}.${ext}`;
   const outPath = path.join(targetDir, finalFilename);
 
-  let referer = req.referer || '';
-  if (!referer) {
-    if (targetUrl.includes('tiktok') || targetUrl.includes('byteoversea')) {
-      referer = 'https://www.tiktok.com/';
-    } else if (targetUrl.includes('facebook') || targetUrl.includes('fbcdn')) {
-      referer = 'https://www.facebook.com/';
-    } else if (targetUrl.includes('instagram') || targetUrl.includes('cdninstagram')) {
-      referer = 'https://www.instagram.com/';
-    }
-  }
+  let referer = resolveDefaultReferer(targetUrl, req.referer, req.pageUrl);
 
   let origin = '';
   if (referer) {
@@ -1227,6 +1211,77 @@ function checkIsTikTok(u) {
   return u.includes('tiktok.com') || u.includes('tiktokcdn.com') || u.includes('byteoversea.com') || u.includes('ibytedtos.com');
 }
 
+function resolveDefaultReferer(targetUrl = '', reqReferer = '', pageUrl = '') {
+  if (reqReferer && typeof reqReferer === 'string' && reqReferer.trim()) {
+    return reqReferer.trim();
+  }
+  const u = String(targetUrl || '').toLowerCase();
+  const p = String(pageUrl || '').toLowerCase();
+
+  if (u.includes('tiktok.com') || u.includes('tiktokcdn.com') || u.includes('byteoversea.com') || u.includes('ibytedtos.com') || p.includes('tiktok.com')) {
+    return 'https://www.tiktok.com/';
+  }
+  if (u.includes('youtube.com') || u.includes('googlevideo.com') || u.includes('youtu.be') || p.includes('youtube.com')) {
+    return 'https://www.youtube.com/';
+  }
+  if (u.includes('facebook.com') || u.includes('fbcdn.net') || u.includes('fb.watch') || p.includes('facebook.com')) {
+    return 'https://www.facebook.com/';
+  }
+  if (p.includes('threads.net') || u.includes('threads.net')) {
+    return 'https://www.threads.net/';
+  }
+  if (u.includes('instagram.com') || u.includes('cdninstagram.com') || p.includes('instagram.com')) {
+    return 'https://www.instagram.com/';
+  }
+  if (u.includes('twimg.com') || u.includes('twitter.com') || u.includes('x.com') || p.includes('x.com') || p.includes('twitter.com')) {
+    return 'https://x.com/';
+  }
+  if (u.includes('bilivideo.com') || u.includes('bilibili.com') || p.includes('bilibili.com')) {
+    return 'https://www.bilibili.com/';
+  }
+  if (u.includes('douyin.com') || u.includes('iesdouyin.com') || p.includes('douyin.com')) {
+    return 'https://www.douyin.com/';
+  }
+  if (u.includes('v.redd.it') || u.includes('reddit.com') || p.includes('reddit.com')) {
+    return 'https://www.reddit.com/';
+  }
+  if (u.includes('vimeocdn.com') || u.includes('vimeo.com') || p.includes('vimeo.com')) {
+    return 'https://vimeo.com/';
+  }
+  if (u.includes('twitch.tv') || u.includes('twitchcdn.net') || u.includes('ttvnw.net') || p.includes('twitch.tv')) {
+    return 'https://www.twitch.tv/';
+  }
+  if (u.includes('dailymotion.com') || u.includes('dmcdn.net') || p.includes('dailymotion.com')) {
+    return 'https://www.dailymotion.com/';
+  }
+  if (u.includes('pinimg.com') || u.includes('pinterest.com') || p.includes('pinterest.com')) {
+    return 'https://www.pinterest.com/';
+  }
+  if (u.includes('zadn.vn') || u.includes('zingmp3.vn') || p.includes('zingmp3.vn')) {
+    return 'https://zingmp3.vn/';
+  }
+  if (u.includes('nhaccuatui.com') || p.includes('nhaccuatui.com')) {
+    return 'https://www.nhaccuatui.com/';
+  }
+  if (u.includes('sndcdn.com') || u.includes('soundcloud.com') || p.includes('soundcloud.com')) {
+    return 'https://soundcloud.com/';
+  }
+
+  if (pageUrl && /^https?:\/\//i.test(pageUrl)) {
+    try {
+      const parsed = new URL(pageUrl);
+      return `${parsed.origin}/`;
+    } catch (_) {}
+  }
+  if (targetUrl && /^https?:\/\//i.test(targetUrl)) {
+    try {
+      const parsed = new URL(targetUrl);
+      return `${parsed.origin}/`;
+    } catch (_) {}
+  }
+  return '';
+}
+
 function checkIsFacebook(u) {
   if (!u || typeof u !== 'string') return false;
   return u.includes('facebook.com') || u.includes('fb.watch') || u.includes('fbcdn.net');
@@ -1527,6 +1582,7 @@ if (typeof module !== 'undefined') {
     checkIsTikTok,
     checkIsFacebook,
     extractYouTubeUrl,
-    parseProgressLine
+    parseProgressLine,
+    resolveDefaultReferer
   };
 }

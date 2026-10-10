@@ -353,27 +353,54 @@ function startCocCocSessionDownload(options, callback) {
     return false;
   }
 
-  const safeFilename = (options.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
+  // 1. Avoid duplicate active download for the exact same target URL
+  for (const [id, t] of activeDownloads.entries()) {
+    if (t.url === targetUrl && (t.state === 'in_progress' || t.state === 'downloading')) {
+      console.log('[Savior] Session download already active for this URL, returning task:', id);
+      if (typeof callback === 'function') callback(id);
+      return true;
+    }
+  }
+
+  // 2. Format safe filename and determine correct media extension
+  const isAudio = Boolean(options.soundOnly || options.quality === 'audio');
+  const targetExt = isAudio ? 'mp3' : 'mp4';
+  let rawFilename = options.filename || 'video.mp4';
+  let baseName = rawFilename
+    .replace(/\.[a-zA-Z0-9]+$/, '')
+    .replace(/[<>:"/\\|?*]/g, '_')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 150)
+    .replace(/[\s.]+$/, '');
+  if (!baseName) baseName = `video_${Date.now()}`;
+  const safeFilename = `${baseName}.${targetExt}`;
+
+  // 3. Clean options with only valid chrome.downloads.DownloadOptions properties
   const nativeOptions = {
-    ...options,
-    url: options.url || targetUrl,
+    url: targetUrl,
     filename: safeFilename,
     conflictAction: options.conflictAction || 'uniquify',
     saveAs: false
   };
+
+  const ref = options.referrer || options.pageUrl || currentActiveTabUrl;
+  if (ref && !targetUrl.includes('googlevideo.com')) {
+    nativeOptions.headers = [{ name: 'Referer', value: ref }];
+  }
 
   const reportStartError = (error) => {
     const taskId = options.taskId || `start_error_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     const errorText = String(error && (error.message || error) || 'Cốc Cốc không thể bắt đầu tải tệp');
     updateDownloadHistory({
       id: taskId,
-      title: safeFilename.replace(/\.[^.]+$/, ''),
+      title: baseName,
       filename: safeFilename,
       url: targetUrl,
       videoUrl: options.videoUrl || targetUrl,
       referer: options.referrer || options.pageUrl || '',
       pageUrl: options.pageUrl || options.referrer || '',
-      type: options.soundOnly ? 'audio' : 'video',
+      type: isAudio ? 'audio' : 'video',
       state: 'error',
       error: errorText,
       startTime: Date.now()
@@ -383,10 +410,30 @@ function startCocCocSessionDownload(options, callback) {
 
   try {
     let finished = false;
+    let timer = null;
+
     const finish = (chromeId, error) => {
       if (finished) return;
       finished = true;
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
       if (error || chrome.runtime.lastError || !chromeId) {
+        // Fallback: If headers failed, retry without headers
+        if (nativeOptions.headers) {
+          console.warn('[Savior] Session download with headers failed, retrying without headers...');
+          delete nativeOptions.headers;
+          finished = false;
+          executeDownload();
+          return;
+        }
+        // Fallback: If browser session download failed entirely and Native Helper is available, try Native Helper
+        if (nativeHelperAvailable) {
+          console.log('[Savior] Browser session download failed, falling back to Native Helper...');
+          const nativeStarted = startNativeDownload(options, callback);
+          if (nativeStarted) return;
+        }
         const reason = error || chrome.runtime.lastError || 'Cốc Cốc không trả về mã tải xuống';
         console.warn('[Savior] Cốc Cốc session download failed:', reason && (reason.message || reason));
         reportStartError(reason);
@@ -396,18 +443,29 @@ function startCocCocSessionDownload(options, callback) {
       trackBrowserDownload(chromeId, options, safeFilename, targetUrl);
       if (typeof callback === 'function') callback(chromeId);
     };
-    const result = _origDownload(nativeOptions, (chromeId) => {
-      finish(chromeId, null);
-    });
-    if (result && typeof result.then === 'function') {
-      result.then((chromeId) => finish(chromeId, null)).catch(error => finish(null, error));
+
+    function executeDownload() {
+      timer = setTimeout(() => {
+        finish(null, 'Cốc Cốc không phản hồi yêu cầu tải trong 10 giây');
+      }, 10000);
+
+      const result = _origDownload(nativeOptions, (chromeId) => {
+        finish(chromeId, null);
+      });
+      if (result && typeof result.then === 'function') {
+        result.then((chromeId) => finish(chromeId, null)).catch(err => finish(null, err));
+      }
     }
-    setTimeout(() => {
-      finish(null, 'Cốc Cốc không phản hồi yêu cầu tải trong 10 giây');
-    }, 10000);
+
+    executeDownload();
     return true;
   } catch (err) {
     console.warn('[Savior] Cốc Cốc session download exception:', err);
+    if (nativeHelperAvailable) {
+      console.log('[Savior] Exception in session download, falling back to Native Helper...');
+      const nativeStarted = startNativeDownload(options, callback);
+      if (nativeStarted) return nativeStarted;
+    }
     reportStartError(err);
     if (typeof callback === 'function') callback(null);
     return false;
@@ -1106,17 +1164,26 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'downloadNative': {
+      const isAudio = Boolean(req.soundOnly || req.quality === 'audio');
+      const ext = isAudio ? 'mp3' : 'mp4';
+      const baseTitle = (req.title || 'video')
+        .replace(/\.[a-zA-Z0-9]+$/, '')
+        .replace(/[<>:"/\\|?*]/g, '_')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 150)
+        .replace(/[\s.]+$/, '');
       const opts = {
-        url: req.url,
-        videoUrl: req.videoUrl,
+        url: req.videoUrl || req.url,
+        videoUrl: req.videoUrl || req.url,
         audioUrl: req.audioUrl,
-        filename: req.title ? `${req.title}.mp4` : 'video.mp4',
+        filename: `${baseTitle || 'video'}.${ext}`,
         referrer: req.referer || req.pageUrl,
         pageUrl: req.pageUrl,
         taskId: req.taskId,
         outputDir: req.outputDir || configuredDownloadDir || '',
-        quality: req.quality || 'best',
-        soundOnly: Boolean(req.soundOnly || req.quality === 'audio')
+        quality: req.quality || (isAudio ? 'audio' : 'best'),
+        soundOnly: isAudio
       };
       // Match the original Cốc Cốc extension for session-protected streams.
       // Its browser downloader keeps the authenticated session attached.
