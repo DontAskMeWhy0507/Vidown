@@ -51,6 +51,6 @@
    "version": "2.4.65",
    "web_accessible_resources": [ {
       "matches": [ "<all_urls>" ],
-      "resources": [ "css/content-script.css", "images/*.*", "/features.json" ]
+      "resources": [ "css/content-script.css", "images/*.*", "/features.json", "downloads/*" ]
    } ]
 }
