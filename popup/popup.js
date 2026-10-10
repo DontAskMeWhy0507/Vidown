@@ -68,7 +68,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (btnOpenManager) btnOpenManager.addEventListener('click', openDownloadsManager);
-  if (btnHeaderManager) btnHeaderManager.addEventListener('click', openDownloadsManager);
+  if (btnHeaderManager) {
+    btnHeaderManager.addEventListener('click', openDownloadsManager);
+    btnHeaderManager.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openDownloadsManager();
+      }
+    });
+  }
   if (btnFooterManager) btnFooterManager.addEventListener('click', openDownloadsManager);
 
   // Notify background that user opened popup
@@ -150,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
 
-        const key = (item.title || item.filename || item.outputFile || item.id || '').toLowerCase();
+        const key = (item.filename || item.outputFile || item.id || item.title || '').toLowerCase();
         if (key && !mergedMap.has(key)) {
           mergedMap.set(key, {
             ...item,
@@ -166,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       for (const item of mediaDownloads) {
-        const key = (item.title || item.filename || item.id || '').toLowerCase();
+        const key = (item.filename || item.outputFile || item.id || item.title || '').toLowerCase();
         if (key && !mergedMap.has(key)) {
           mergedMap.set(key, item);
         }
@@ -327,7 +335,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
     chrome.runtime.onMessage.addListener((msg) => {
-      if (msg && (msg.action === 'progress' || msg.action === 'complete' || msg.action === 'error')) {
+      if (msg && (
+        msg.action === 'progress' || msg.action === 'complete' || msg.action === 'error' ||
+        msg.action === 'nativeProgress' || msg.action === 'nativeComplete' || msg.action === 'nativeError'
+      )) {
         loadRecentDownloads();
       }
     });

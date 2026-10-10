@@ -969,7 +969,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'preferredQuality',
       'preferLastQuality'
     ], (data) => {
-      const currentDir = data.customDownloadDir || sidebarFolderPath.textContent || 'Downloads';
+      const currentDir = data.customDownloadDir || (sidebarFolderPath ? sidebarFolderPath.textContent : '') || 'Downloads';
       if (modalFolderPath) {
         modalFolderPath.textContent = currentDir;
         modalFolderPath.title = currentDir;
