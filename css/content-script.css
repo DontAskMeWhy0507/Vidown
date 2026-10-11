@@ -2978,3 +2978,12 @@ toast-closer {
     background-color: rgba(249,249,252,0.239);
   }
 }
+
+/* Hide unsupported PiP, cinema light switch, and mobile sync from on-page video toolbar */
+#open-pip,
+#switch-light,
+#open-mobile,
+.pip-btn,
+[data-svg-control="pip"] {
+  display: none !important;
+}

@@ -12,11 +12,9 @@ assert.ok(manifest.content_scripts.some(cs => cs.js.includes('downloads-nav.js')
 assert.ok(manifest.web_accessible_resources.some(war => war.resources.includes('popup/*')), 'manifest.json must make popup/* web accessible');
 console.log('✓ 1. manifest.json correctly configures default_popup, content_scripts and web_accessible_resources');
 
-// 2. Verify popup.html structure
+// 2. Verify popup.html structure (Single clean Download Manager button)
 const popupHtml = fs.readFileSync('popup/popup.html', 'utf8');
 const requiredPopupIds = [
-  'btn-open-manager',
-  'btn-header-manager',
   'section-recent',
   'recent-total-badge',
   'recent-media-list',
@@ -28,7 +26,10 @@ const requiredPopupIds = [
 for (const id of requiredPopupIds) {
   assert.ok(popupHtml.includes(`id="${id}"`), `popup.html must contain id="${id}"`);
 }
-console.log('✓ 2. popup.html contains all 8 required elements for Download Manager shortcut & Recent Downloads');
+// Ensure no duplicate manager buttons clutter the popup
+assert.ok(!popupHtml.includes('id="btn-header-manager"'), 'popup.html must not contain redundant card button');
+assert.ok(!popupHtml.includes('id="btn-open-manager"'), 'popup.html must not contain redundant header icon button');
+console.log('✓ 2. popup.html contains a single clear Download Manager button & Recent Downloads without redundant duplicates');
 
 // 3. Verify popup.js logic
 const popupJs = fs.readFileSync('popup/popup.js', 'utf8');
@@ -39,7 +40,7 @@ assert.ok(popupJs.includes('openRecentFolder'), 'popup.js must implement openRec
 assert.ok(popupJs.includes('chrome.storage.onChanged'), 'popup.js must listen to chrome.storage.onChanged');
 console.log('✓ 3. popup.js implements complete lifecycle, deduplication, and actions');
 
-// 4. Verify downloads.html Settings integration
+// 4. Verify downloads.html Settings integration (Cleaned up, no dead PiP setting)
 const dlHtml = fs.readFileSync('downloads/downloads.html', 'utf8');
 const requiredSettingsIds = [
   'btn-settings',
@@ -49,7 +50,6 @@ const requiredSettingsIds = [
   'modal-folder-path',
   'btn-modal-change-folder',
   'setting-onpage-buttons',
-  'setting-detach-button',
   'setting-one-click',
   'setting-preferred-quality',
   'setting-remember-quality'
@@ -58,7 +58,8 @@ const requiredSettingsIds = [
 for (const id of requiredSettingsIds) {
   assert.ok(dlHtml.includes(`id="${id}"`), `downloads.html must contain id="${id}"`);
 }
-console.log('✓ 4. downloads.html contains Settings button and complete Settings Modal dialog');
+assert.ok(!dlHtml.includes('setting-detach-button'), 'downloads.html must not contain dead PiP setting');
+console.log('✓ 4. downloads.html contains Settings button and clean Settings Modal dialog without dead features');
 
 // 5. Verify downloads.js Settings handling
 const dlJs = fs.readFileSync('downloads/downloads.js', 'utf8');
