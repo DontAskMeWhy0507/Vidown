@@ -265,6 +265,16 @@ body {
   color: #dc2626;
 }
 
+.status-badge.canceled {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.status-badge.paused {
+  background: #fefce8;
+  color: #ca8a04;
+}
+
 /* Progress bar for downloading */
 .progress-bar-wrap {
   width: 100%;
@@ -320,6 +330,12 @@ body {
 
 .btn-card-action.primary:hover {
   background: #d1fae5;
+}
+
+.btn-card-action.danger:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
 }
 
 /* Empty State */

@@ -1147,7 +1147,8 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     case 'removeDownload': {
       chrome.storage.local.get(['downloadHistory'], (res) => {
         const history = Array.isArray(res.downloadHistory) ? res.downloadHistory : [];
-        const updated = history.filter(item => item.id !== req.id);
+        const targetId = String(req.id || '');
+        const updated = history.filter(item => String(item.id || '') !== targetId && String(item.chromeId || '') !== targetId);
         chrome.storage.local.set({ downloadHistory: updated });
       });
       sendResponse({ success: true });
