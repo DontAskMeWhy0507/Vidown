@@ -9,7 +9,8 @@ const bgCode = fs.readFileSync(bgPath, 'utf8');
 
 // Test 1: Verify onMessage listener in background.chrome.js never returns true for openFile
 const onMessageIndex = bgCode.indexOf('chrome.runtime.onMessage.addListener');
-const listenerCode = bgCode.slice(onMessageIndex, onMessageIndex + 4000);
+// The switch below grew well past any fixed window — slice to end of file.
+const listenerCode = bgCode.slice(onMessageIndex);
 
 const openFileIndex = listenerCode.indexOf("case 'openFile':");
 const openFileEnd = listenerCode.indexOf("case 'showInFolder':");

@@ -7,28 +7,49 @@
    "background": {
       "service_worker": "background.chrome.js"
    },
-   "content_scripts": [ {
-      "all_frames": true,
-      "exclude_matches": [ "file://*", "*://*.g.doubleclick.net/*" ],
-      "js": [ "context-guard.js", "common.js", "content-script.js", "downloads-nav.js" ],
-      "matches": [ "<all_urls>" ],
-      "run_at": "document_idle"
-   } ],
+   "content_scripts": [
+      {
+         "all_frames": true,
+         "exclude_matches": [
+            "file://*",
+            "*://*.g.doubleclick.net/*",
+            "*://*.challenges.cloudflare.com/*",
+            "*://*.recaptcha.net/*",
+            "*://*.google.com/recaptcha/*",
+            "*://*.hcaptcha.com/*",
+            "*://*.youtube.com/live_chat*"
+         ],
+         "js": [
+            "context-guard.js",
+            "common.js",
+            "content-script.js",
+            "downloads-nav.js"
+         ],
+         "matches": [
+            "<all_urls>"
+         ],
+         "run_at": "document_idle"
+      }
+   ],
    "default_locale": "en",
    "description": "__MSG_appDescription__",
    "externally_connectable": {
-      "matches": [ "http://localhost/*", "https://*.youtube.com/*" ]
+      "matches": [
+         "https://*.youtube.com/*"
+      ]
    },
-   "host_permissions": [ "http://*/*", "https://*/*" ],
+   "host_permissions": [
+      "http://*/*",
+      "https://*/*"
+   ],
    "icons": {
-      "128": "images/savior_logo.png",
-      "48": "images/action_cc.png"
+      "48": "images/savior_logo.png",
+      "128": "images/savior_logo.png"
    },
    "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDN4c7XRYXzpvahEEqCGsfZPXsl5kWXuv14AkytPEG4ok42OVda9wNV/GeZqYUO4IvW/3erMWGcnb+wyt2K9nds9aC+cKDf+eUU4vPAI8i/aWdPYe0G5tBlwitHJouftu9G5i6auE91IaXVbXkW5//zVHiB1v/MFunh4EkwfV9ONwIDAQAB",
    "manifest_version": 3,
-   "minimum_chrome_version": "114",
+   "minimum_chrome_version": "116",
    "name": "__MSG_appName__",
-   "options_page": "options.html",
    "permissions": [
       "tabs",
       "webNavigation",
@@ -37,21 +58,25 @@
       "storage",
       "cookies",
       "scripting",
-      "offscreen",
-      "sidePanel",
       "declarativeNetRequest",
       "declarativeNetRequestWithHostAccess",
       "webRequest",
       "alarms",
       "nativeMessaging"
    ],
-   "side_panel": {
-      "default_icon": "images/savior_logo.png",
-      "default_path": "sidepanel.html"
-   },
    "version": "2.4.65",
-   "web_accessible_resources": [ {
-      "matches": [ "<all_urls>" ],
-      "resources": [ "css/content-script.css", "images/*.*", "/features.json", "downloads/*", "popup/*" ]
-   } ]
+   "web_accessible_resources": [
+      {
+         "matches": [
+            "https://*/*",
+            "http://*/*"
+         ],
+         "resources": [
+            "css/*",
+            "css/content-script.css",
+            "images/*",
+            "images/*.*"
+         ]
+      }
+   ]
 }

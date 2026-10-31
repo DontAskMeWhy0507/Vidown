@@ -5,3 +5,5 @@ native/host.exe
 *.log
 native/*.log
 .superpowers/
+.zcode/
+*.part

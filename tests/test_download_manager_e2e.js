@@ -16,7 +16,9 @@ function testFilesAndStructure() {
   const jsPath = path.join(ROOT_DIR, 'downloads', 'downloads.js');
   const navPath = path.join(ROOT_DIR, 'downloads-nav.js');
   const manifestPath = path.join(ROOT_DIR, 'manifest.json');
-  const popupHtmlPath = path.join(ROOT_DIR, 'popup.html');
+  const popupHtmlPath = fs.existsSync(path.join(ROOT_DIR, 'popup', 'popup.html'))
+    ? path.join(ROOT_DIR, 'popup', 'popup.html')
+    : path.join(ROOT_DIR, 'popup.html');
   const sidepanelHtmlPath = path.join(ROOT_DIR, 'sidepanel.html');
 
   assert.ok(fs.existsSync(htmlPath), 'downloads.html must exist');
@@ -36,15 +38,24 @@ function testFilesAndStructure() {
 
   const manifestContent = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   const webAcc = manifestContent.web_accessible_resources[0].resources;
-  assert.ok(webAcc.includes('downloads/*'), 'manifest.json must expose downloads/*');
+  assert.ok(!webAcc.includes('downloads/*'), 'manifest.json must not expose downloads/* to external websites');
 
   const popupHtml = fs.readFileSync(popupHtmlPath, 'utf8');
-  assert.ok(popupHtml.includes('id="btn-open-downloads-manager"'), 'popup.html must have btn-open-downloads-manager');
-  assert.ok(popupHtml.includes('downloads-nav.js'), 'popup.html must include downloads-nav.js');
+  assert.ok(
+    popupHtml.includes('id="btn-open-downloads-manager"') || popupHtml.includes('id="btn-footer-manager"'),
+    'popup.html must have a download manager button'
+  );
+  if (popupHtmlPath.includes('popup' + path.sep + 'popup.html')) {
+    assert.ok(popupHtml.includes('popup.js'), 'popup/popup.html must include popup.js');
+  } else {
+    assert.ok(popupHtml.includes('downloads-nav.js'), 'popup.html must include downloads-nav.js');
+  }
 
-  const sidepanelHtml = fs.readFileSync(sidepanelHtmlPath, 'utf8');
-  assert.ok(sidepanelHtml.includes('id="btn-sidepanel-downloads"'), 'sidepanel.html must have btn-sidepanel-downloads');
-  assert.ok(sidepanelHtml.includes('downloads-nav.js'), 'sidepanel.html must include downloads-nav.js');
+  // The Cốc Cốc sidepanel page was removed (strangler cleanup): verify it is gone
+  // and that no page references its button styles anymore.
+  assert.strictEqual(fs.existsSync(sidepanelHtmlPath), false, 'sidepanel.html must be removed from the build');
+  const navJs = fs.readFileSync(path.join(ROOT_DIR, 'downloads-nav.js'), 'utf8');
+  assert.ok(!navJs.includes('btn-sidepanel-downloads'), 'downloads-nav.js must not style the removed sidepanel button');
 
   console.log('✓ Files and structure verified successfully.');
 }

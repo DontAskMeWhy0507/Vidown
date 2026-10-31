@@ -51,7 +51,7 @@ assert.strictEqual(requiresNativeHelper({ convertToMp4: true, url: 'https://exam
 assert.strictEqual(requiresNativeHelper({ streamsNumber: -42, url: 'https://example.com/video.mp4' }), true, 'Special streamsNumber -42 requires helper');
 assert.strictEqual(requiresNativeHelper({ videoUrl: 'https://example.com/v.mp4', audioUrl: 'https://example.com/a.m4a' }), true, 'DASH separate streams require helper');
 assert.strictEqual(requiresNativeHelper({ url: 'https://example.com/live/playlist.m3u8' }), true, 'HLS playlist requires helper');
-assert.strictEqual(requiresNativeHelper({ url: 'https://kingcdn.xyz/stream/123' }), true, 'KingCDN requires helper');
+assert.strictEqual(requiresNativeHelper({ url: 'https://example.com/stream/playlist.m3u8' }), true, 'M3U8 requires helper');
 assert.strictEqual(requiresNativeHelper({ url: 'https://rr1---sn.googlevideo.com/videoplayback' }), true, 'YouTube googlevideo requires helper');
 
 // Native helper is NOT required for:

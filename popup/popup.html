@@ -3,17 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Savior Video Downloader</title>
+  <title>VidManager - Video Downloader</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div class="popup-container">
-    <!-- Header: Clean Minimal Title -->
+    <!-- Header: Clean Minimal Title & On-Page Toolbar Toggle -->
     <header class="popup-header">
       <div class="brand">
-        <img src="../images/savior_logo.png" alt="Logo" class="brand-icon">
+        <img src="../images/logo_cc.svg" alt="VidManager Logo" class="brand-icon">
         <div class="brand-text">
-          <h1>Savior Downloader</h1>
+          <h1>VidManager</h1>
+        </div>
+      </div>
+      <div class="header-toggles-container">
+        <div class="header-toggle-wrap" title="Bật hoặc tắt thanh công cụ tải nổi trên video">
+          <span class="header-toggle-label" id="label-toggle-toolbar">Video</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-onpage-bar" checked aria-labelledby="label-toggle-toolbar">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="header-toggle-wrap" title="Bật hoặc tắt nút tải nổi trên hình ảnh">
+          <span class="header-toggle-label" id="label-toggle-image">Ảnh</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-image-bar" checked aria-labelledby="label-toggle-image">
+            <span class="toggle-slider"></span>
+          </label>
         </div>
       </div>
     </header>

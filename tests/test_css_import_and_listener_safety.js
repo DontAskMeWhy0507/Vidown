@@ -1,5 +1,6 @@
 const fs = require('fs');
 const assert = require('assert');
+const path = require('path');
 
 console.log('--- Testing CSS Injection & Message Listener Safety ---');
 
@@ -12,12 +13,24 @@ assert.strictEqual(
 );
 console.log('PASS: No @import statements found in content-script.js');
 
-// 2. Verify <link rel="stylesheet"> injection is used for CSS resources
+// 2. Verify inline style caching & fallback for CSS resources
 assert.ok(
-  contentScript.includes('l.rel="stylesheet"') || contentScript.includes("l.rel = 'stylesheet'"),
-  'content-script.js must inject <link rel="stylesheet"> for CSS in shadow DOM'
+  contentScript.includes('_saviorCssCache') && contentScript.includes('_injectSaviorCss'),
+  'content-script.js must implement CSS prefetching and inline <style> injection to prevent cross-origin CSP violations'
 );
-console.log('PASS: content-script.js uses <link rel="stylesheet"> for shadow DOM styles');
+assert.ok(
+  contentScript.includes('l.rel = \'stylesheet\'') || contentScript.includes('l.rel="stylesheet"') || contentScript.includes('r.rel="stylesheet"'),
+  'content-script.js must maintain fallback stylesheet injection'
+);
+console.log('PASS: content-script.js uses inline CSS prefetch & caching to prevent cross-origin errors');
+
+// 2b. Verify manifest.json web_accessible_resources conforms strictly to MV3
+const manifestObj = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
+const warMatches = manifestObj.web_accessible_resources[0].matches;
+assert.ok(!warMatches.includes('<all_urls>'), 'web_accessible_resources matches must not include <all_urls> in MV3');
+assert.ok(!warMatches.includes('*://*/*'), 'web_accessible_resources matches must not include *://*/* in MV3');
+assert.ok(warMatches.includes('https://*/*') && warMatches.includes('http://*/*'), 'web_accessible_resources must match standard http and https origins');
+console.log('PASS: manifest.json web_accessible_resources matches are strictly MV3 compliant');
 
 // 3. Verify onMessage listener in content-script.js does not return true unconditionally
 assert.strictEqual(
@@ -31,18 +44,21 @@ assert.ok(
 );
 console.log('PASS: content-script.js onMessage listener only returns true when an async response is expected');
 
-// 4. Verify offscreen.js listener returns false after synchronous response
-const offscreen = fs.readFileSync('offscreen.js', 'utf8');
+// 4. offscreen.html/offscreen.js were removed entirely: they only tracked
+//    adguard onboarding flag states, and adguard is disabled in this build.
+//    The bundle guards its chrome.offscreen usage behind an availability check,
+//    so removing the permission skips that path cleanly.
 assert.strictEqual(
-  offscreen.includes('d({isAdguardEnabled:r})),!0'),
+  fs.existsSync(path.join(__dirname, '..', 'offscreen.js')),
   false,
-  'offscreen.js listener must not return true after synchronous dispatch'
+  'offscreen.js must be removed (dead adguard flag tracker)'
 );
-assert.ok(
-  offscreen.includes('d({isAdguardEnabled:r})),!1'),
-  'offscreen.js listener correctly returns false'
+assert.strictEqual(
+  fs.existsSync(path.join(__dirname, '..', 'offscreen.html')),
+  false,
+  'offscreen.html must be removed'
 );
-console.log('PASS: offscreen.js onMessage listener returns false');
+console.log('PASS: dead offscreen document removed');
 
 // 5. Verify background.chrome.js has clean listeners returning false
 const bgChrome = fs.readFileSync('background.chrome.js', 'utf8');

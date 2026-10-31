@@ -1,893 +1,763 @@
 {
-   "1_messenger_text": {
-      "description": "facebook first time description",
-      "message": "\u003Cb>More than one feature... It is the Sidebar. \u003C/b>\u003Cbr>Facebook Messenger, Telegram, Skype and Zalo are all integrated on the sidebar for your extra convenience. Go chat now!"
-   },
-   "1_skype_text": {
-      "description": "skype first time description",
-      "message": "\u003Cb>More than one feature... It is the Sidebar. \u003C/b>\u003Cbr>Facebook Messenger, Telegram, Skype and Zalo are all integrated on the sidebar for your extra convenience. Go chat now!"
-   },
-   "1_tele_text": {
-      "description": "tele first time description",
-      "message": "\u003Cb>More than one feature... It is the Sidebar. \u003C/b>\u003Cbr>Facebook Messenger, Telegram, Skype and Zalo are all integrated on the sidebar for your extra convenience. Go chat now!"
-   },
-   "1_translate_text": {
-      "description": "translate first time description",
-      "message": "\u003Cb>Find languages hard? Let sidebar help you\u003C/b> \u003Cbr>Open Google Translate in sidebar window to translate languages 2x faster. Just one click to access, no need to switch between multiple tabs."
-   },
-   "1_youtube_text": {
-      "description": "youtube first time description",
-      "message": "\u003Cb>Smooth like sidebar - Stay groovy with music\u003C/b> \u003Cbr>Add YouTube to the sidebar to find and play your favorite music videos right away! "
-   },
-   "1_zalo_text": {
-      "description": "zalo first time description",
-      "message": "\u003Cb>More than one feature... It is the Sidebar. \u003C/b>\u003Cbr>Facebook Messenger, Telegram, Skype and Zalo are all integrated on the sidebar for your extra convenience. Go chat now!"
-   },
-   "accept_vi": {
-      "message": "Đồng ý"
-   },
-   "agree_button": {
-      "description": "onboarding agree button text",
-      "message": "Agree"
-   },
-   "agree_vi_button": {
-      "description": "onboarding agree button text",
-      "message": "Đồng ý"
-   },
-   "appDescription": {
-      "message": "Savior - Helps you download video and audio files instantly from any website."
-   },
-   "appName": {
-      "message": "Savior"
-   },
-   "cancel_button_text": {
-      "description": "onboarding cancel button text",
-      "message": "Skip"
-   },
-   "cancel_vi": {
-      "message": "Bỏ qua"
-   },
-   "chatgpt_desc_text": {
-      "message": "\u003Cb>Catch up with the AI trend with Cốc Cốc Sidebar and ChatGPT\u003C/b>\u003Cbr>With a click, you can immediately meet the intelligent virtual chatbot in the Sidebar. Not only that, you can surf the web and chat with ChatGPT at the same time."
-   },
-   "chatgpt_title_text": {
-      "message": ""
-   },
-   "download_all_images": {
-      "description": "Download all images",
-      "message": "All $number$ images",
-      "placeholders": {
-         "number": {
-            "content": "$1",
-            "example": 42
-         }
+  "1_messenger_text": {
+    "description": "facebook first time description",
+    "message": "<b>More than one feature... It is the Sidebar. </b><br>Facebook Messenger, Telegram, Skype and Zalo are all integrated on the sidebar for your extra convenience. Go chat now!"
+  },
+  "1_skype_text": {
+    "description": "skype first time description",
+    "message": "<b>More than one feature... It is the Sidebar. </b><br>Facebook Messenger, Telegram, Skype and Zalo are all integrated on the sidebar for your extra convenience. Go chat now!"
+  },
+  "1_tele_text": {
+    "description": "tele first time description",
+    "message": "<b>More than one feature... It is the Sidebar. </b><br>Facebook Messenger, Telegram, Skype and Zalo are all integrated on the sidebar for your extra convenience. Go chat now!"
+  },
+  "1_translate_text": {
+    "description": "translate first time description",
+    "message": "<b>Find languages hard? Let sidebar help you</b> <br>Open Google Translate in sidebar window to translate languages 2x faster. Just one click to access, no need to switch between multiple tabs."
+  },
+  "1_youtube_text": {
+    "description": "youtube first time description",
+    "message": "<b>Smooth like sidebar - Stay groovy with music</b> <br>Add YouTube to the sidebar to find and play your favorite music videos right away! "
+  },
+  "1_zalo_text": {
+    "description": "zalo first time description",
+    "message": "<b>More than one feature... It is the Sidebar. </b><br>Facebook Messenger, Telegram, Skype and Zalo are all integrated on the sidebar for your extra convenience. Go chat now!"
+  },
+  "accept_vi": {
+    "message": "Đồng ý"
+  },
+  "agree_button": {
+    "description": "onboarding agree button text",
+    "message": "Agree"
+  },
+  "agree_vi_button": {
+    "description": "onboarding agree button text",
+    "message": "Đồng ý"
+  },
+  "appDescription": {
+    "message": "VidManager - Helps you download video and audio files instantly from any website."
+  },
+  "appName": {
+    "message": "VidManager"
+  },
+  "cancel_button_text": {
+    "description": "onboarding cancel button text",
+    "message": "Skip"
+  },
+  "cancel_vi": {
+    "message": "Bỏ qua"
+  },
+  "chatgpt_desc_text": {
+    "message": "<b>Catch up with the AI trend with VidManager Sidebar and ChatGPT</b><br>With a click, you can immediately meet the intelligent virtual chatbot in the Sidebar. Not only that, you can surf the web and chat with ChatGPT at the same time."
+  },
+  "chatgpt_title_text": {
+    "message": ""
+  },
+  "download_all_images": {
+    "description": "Download all images",
+    "message": "All $number$ images",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": 42
       }
-   },
-   "download_current_image": {
-      "description": "Download current image",
-      "message": "Current image"
-   },
-   "downloading_word": {
-      "description": "Just a single word",
-      "message": "Downloading"
-   },
-   "error_text": {
-      "message": "Error"
-   },
-   "explore_vi_button": {
-      "description": "onboarding agree button text",
-      "message": "Khám phá"
-   },
-   "image_tab": {
-      "description": "Title of the image tab",
-      "message": "Image"
-   },
-   "instant_actions_download_options": {
-      "description": "Options text for instant download button",
-      "message": "Show Download button for YouTube on search engine result pages"
-   },
-   "instant_actions_download_tooltip": {
-      "description": "Tooltip for download in one click button",
-      "message": "Download YouTube video in one click"
-   },
-   "later_button": {
-      "description": "onboarding later button text",
-      "message": "Later"
-   },
-   "later_vi_button": {
-      "description": "onboarding later button text",
-      "message": "Để sau"
-   },
-   "loading_image": {
-      "message": "Searching for Image..."
-   },
-   "loading_video_audio": {
-      "message": "Searching for Video/Audio..."
-   },
-   "login_button": {
-      "message": "Đăng nhập"
-   },
-   "media_fields_type_audio": {
-      "description": "Audio media type",
-      "message": "Audio"
-   },
-   "media_fields_type_audio_channel": {
-      "description": "Video audio channel",
-      "message": "Audio channel"
-   },
-   "media_fields_type_image": {
-      "description": "Image",
-      "message": "Image"
-   },
-   "media_fields_type_no_watermark_video": {
-      "description": "No watermark video media type",
-      "message": "Video (no watermark)"
-   },
-   "media_fields_type_stream": {
-      "description": "Stream media type",
-      "message": "Stream"
-   },
-   "media_fields_type_subtitles": {
-      "description": "Subtitles media title",
-      "message": "Subtitles"
-   },
-   "media_fields_type_video": {
-      "description": "Video media type",
-      "message": "Video"
-   },
-   "mobile_button": {
-      "description": "Mobile button text",
-      "message": "Download file to your phone"
-   },
-   "mobile_error_text": {
-      "description": "Text for error in mobile transfer panel",
-      "message": "Media is not available."
-   },
-   "mobile_instruction_1": {
-      "description": "Text 2 in mobile panel",
-      "message": "Step 1: Open Cốc Cốc Mobile"
-   },
-   "mobile_instruction_2": {
-      "description": "Text 3 in mobile panel",
-      "message": "Step 2: Scan the QR Code"
-   },
-   "mobile_panel_footer": {
-      "description": "Text 4 in mobile panel",
-      "message": "You haven't downloaded Cốc Cốc Mobile yet?"
-   },
-   "mobile_panel_header": {
-      "description": "Text 1 in mobile panel",
-      "message": "Download instructions"
-   },
-   "not_show_again": {
-      "description": "onboarding do not show again checkbox text",
-      "message": "Do not show again"
-   },
-   "onboard_account_desc_A": {
-      "message": "Để đồng bộ dữ liệu đã lưu trên Google và dấu trang, mật khẩu trên mọi thiết bị"
-   },
-   "onboard_account_desc_C": {
-      "message": "Để đồng bộ dấu trang và mật khẩu trên mọi thiết bị"
-   },
-   "onboard_account_title_A": {
-      "message": "Bạn có muốn đăng nhập luôn tài khoản Cốc Cốc?"
-   },
-   "onboard_account_title_B": {
-      "message": "Đăng nhập tài khoản Cốc Cốc để lưu các dữ liệu của bạn"
-   },
-   "onboard_account_title_C": {
-      "message": "Dùng tài khoản Google đăng nhập Cốc Cốc?"
-   },
-   "onboard_account_title_D": {
-      "message": "Đăng nhập tài khoản Cốc Cốc và đồng bộ dữ liệu giữa mọi thiết bị"
-   },
-   "onboard_coccoc_adult_QR_desc": {
-      "message": "\u003Ch5>Quét để tải Cốc Cốc trên điện thoại và tiếp tục \u003Cspan>Chặn quảng cáo?\u003C/span>\u003C/h5>"
-   },
-   "onboard_coccoc_adult_image_desc": {
-      "message": "\u003Ch5>Tải Cốc Cốc trên điện thoại để tiếp tục \u003Cspan>Chặn quảng cáo?\u003C/span>\u003C/h5>\u003Cp>Tải app Cốc Cốc và tiếp tục lướt web không quảng cáo miễn phí\u003C/p>"
-   },
-   "onboard_coccoc_anime_adblock": {
-      "message": "\u003Ch5>Chặn quảng cáo trên cả điện thoại\u003C/h5>\u003Cp>Tải app Cốc Cốc và xem phim không quảng cáo miễn phí\u003C/p>"
-   },
-   "onboard_coccoc_anime_cinema": {
-      "message": "\u003Ch5>Tối ưu trải nghiệm xem video trên điện thoại\u003C/h5>\u003Cp>Xem phim \"đã\" hơn với Chế độ phim ảnh từ Cốc Cốc Mobile\u003C/p>"
-   },
-   "onboard_coccoc_football_adblock": {
-      "message": "\u003Ch5>Chặn quảng cáo trên cả điện thoại\u003C/h5>\u003Cp>Tải app Cốc Cốc và xem bóng đá không quảng cáo miễn phí\u003C/p>"
-   },
-   "onboard_coccoc_football_cinema": {
-      "message": "\u003Ch5>Tối ưu trải nghiệm xem video trên điện thoại\u003C/h5>\u003Cp>Xem phim \"đã\" hơn với Chế độ phim ảnh từ Cốc Cốc Mobile\u003C/p>"
-   },
-   "onboard_coccoc_manga_adblock_1": {
-      "message": "\u003Ch5>Đọc truyện không quảng cáo trên điện thoại\u003C/h5>\u003Cp>Chặn quảng cáo popup khi đọc truyện với Cốc Cốc Mobile\u003C/p>"
-   },
-   "onboard_coccoc_manga_adblock_2": {
-      "message": "\u003Ch5>Chặn quảng cáo trên cả điện thoại\u003C/h5>\u003Cp>Tải app Cốc Cốc và đọc truyện không quảng cáo miễn phí\u003C/p>"
-   },
-   "onboard_coccoc_mobile_base_1": {
-      "message": "\u003Ch5>Dùng Cốc Cốc trên điện thoại?\u003C/h5>\u003Cp>Chặn quảng cáo, Nghe nhạc YouTube tắt màn hình, Tải video và đồng bộ dữ liệu với máy tính\u003C/p>"
-   },
-   "onboard_coccoc_mobile_base_2": {
-      "message": "\u003Ch5>Tải Cốc Cốc trên điện thoại?\u003C/h5>\u003Cp>Chặn quảng cáo, Nghe nhạc YouTube tắt màn hình, Tải video và đồng bộ dữ liệu với máy tính\u003C/p>"
-   },
-   "onboard_coccoc_mobile_base_title_1": {
-      "message": "Tải Cốc Cốc trên điện thoại?"
-   },
-   "onboard_coccoc_mobile_base_title_2": {
-      "message": "Dùng Cốc Cốc trên điện thoại?"
-   },
-   "onboard_en_to_vi_desc_1": {
-      "message": "Dịch mọi loại văn bản bằng cách bôi đen và nhấn biểu tượng Dịch để xem kết quả"
-   },
-   "onboard_en_to_vi_desc_2": {
-      "message": "Cốc Cốc giúp bạn dịch tiếng Anh, Trung, Hàn, Nhật và hơn 100 ngôn ngữ khác"
-   },
-   "onboard_en_to_vi_desc_3": {
-      "message": "Bôi đen đoạn văn cần dịch và nhấn biểu tượng Dịch để xem kết quả. Siêu dễ!"
-   },
-   "onboard_en_to_vi_desc_4": {
-      "message": "Ngôn ngữ nào cũng chơi tuốt - Cốc Cốc giúp bạn dịch tiếng Anh, Trung, Hàn, Nhật và hơn 100 ngôn ngữ khác"
-   },
-   "onboard_en_to_vi_title_1": {
-      "message": "Chỉ cần bôi đen, Cốc Cốc dịch ngay"
-   },
-   "onboard_en_to_vi_title_2": {
-      "message": "Chỉ cần bôi đen, Cốc Cốc dịch ngay"
-   },
-   "onboard_en_to_vi_title_3": {
-      "message": "Bôi đen nhanh tay - dịch ngay lập tức"
-   },
-   "onboard_en_to_vi_title_4": {
-      "message": "Bôi đen nhanh tay - dịch ngay lập tức"
-   },
-   "onboard_import_data_desc_1": {
-      "message": "Transfer important data - bookmarks, passwords, and browsing history from other browsers to Cốc Cốc"
-   },
-   "onboard_import_data_desc_2": {
-      "message": "Keep all your bookmarks, passwords, and saved data from Chrome for easier web access"
-   },
-   "onboard_import_data_desc_3": {
-      "message": "Keep all your bookmarks, passwords, and browsing history from other browsers for easier web access"
-   },
-   "onboard_import_data_title_1": {
-      "description": "Onboarding import data title",
-      "message": "Import bookmarks and saved passwords from other browsers"
-   },
-   "onboard_import_data_title_2": {
-      "description": "Onboarding import data title",
-      "message": "Move your \"house\" from Chrome to Cốc Cốc"
-   },
-   "onboard_import_data_title_3": {
-      "description": "Onboarding import data title",
-      "message": "Move your \"house\" to Cốc Cốc"
-   },
-   "onboard_mobile_base_tile_2": {
-      "message": "Dùng Cốc Cốc trên điện thoại?"
-   },
-   "onboard_mobile_base_title_1": {
-      "message": "Tải Cốc Cốc trên điện thoại?"
-   },
-   "onboard_set_default_br_desc_1": {
-      "description": "Onboarding set default browser tittle",
-      "message": "Automatically block ads. Browse faster and more securely."
-   },
-   "onboard_set_default_br_desc_2": {
-      "description": "Onboarding set default browser tittle",
-      "message": "Experience advanced features: Adblock, Sidebar, Download video, and more"
-   },
-   "onboard_set_default_br_desc_3": {
-      "description": "Onboarding set default browser tittle",
-      "message": "Set Cốc Cốc as your default browser to enjoy Adblock, Sidebar, Download video, and more features!"
-   },
-   "onboard_set_default_br_title_1": {
-      "description": "Onboarding set default browser tittle",
-      "message": "Want to try Cốc Cốc as your default browser?"
-   },
-   "onboard_set_default_br_title_2": {
-      "description": "Onboarding set default browser tittle",
-      "message": "Ad-free browsing with Cốc Cốc as your default browser"
-   },
-   "onboard_set_default_br_title_3": {
-      "description": "Onboarding set default browser tittle",
-      "message": "Better multitasking, more optimized than Chrome"
-   },
-   "onboard_set_default_br_title_4": {
-      "description": "Onboarding set default browser tittle",
-      "message": "Benefits of setting Cốc Cốc as your default browser"
-   },
-   "onboard_sidepanel_big_description": {
-      "message": "Easily download videos, music, and photos"
-   },
-   "onboard_sidepanel_later": {
-      "message": "Remind me later"
-   },
-   "onboard_sidepanel_small_description_1": {
-      "message": "Easily download videos, audio, and photos with just one click. Get started!"
-   },
-   "onboard_sidepanel_small_description_1_no_image": {
-      "message": "Easily download videos, and audio with just one click. Get started!"
-   },
-   "onboard_sidepanel_small_description_2": {
-      "message": "Experience the new video and audio download interface - now with bulk image downloads!"
-   },
-   "onboard_sidepanel_small_description_2_no_image": {
-      "message": "Experience the new video and audio download interface. Get started!"
-   },
-   "onboard_sidepanel_title": {
-      "message": "Suggested by Cốc Cốc"
-   },
-   "onboard_sidepanel_try": {
-      "message": "Try it"
-   },
-   "onboard_title": {
-      "description": "Onboarding title",
-      "message": "Suggestion from Cốc Cốc"
-   },
-   "onboard_youtube_antiadblocker_desc": {
-      "message": "Currently, YouTube does not allow the use of adblockers. In order to watch videos, please try \u003Cb>pausing our adblocker\u003C/b> by following the instructions below:"
-   },
-   "onboard_youtube_antiadblocker_title": {
-      "message": "Cannot see this video?"
-   },
-   "onboarding_ccmobile_movie_descText_adblock": {
-      "message": "\u003Ch5>Chặn quảng cáo trên cả điện thoại\u003C/h5>\u003Cp>Tải app Cốc Cốc và tiếp tục xem phim không quảng cáo miễn phí\u003C/p>"
-   },
-   "onboarding_ccmobile_movie_descText_watch": {
-      "message": "\u003Ch5>Tối ưu trải nghiệm xem video trên điện thoại\u003C/h5>\u003Cp>Xem phim ‘đã’ hơn với Chế độ phim ảnh từ Cốc Cốc Mobile\u003C/p>"
-   },
-   "onboarding_coccoctv_actionText": {
-      "message": "Tìm hiểu thêm"
-   },
-   "onboarding_coccoctv_title": {
-      "message": "Đề xuất từ Cốc Cốc"
-   },
-   "onboarding_new_mp_abort": {
-      "message": "Skip"
-   },
-   "onboarding_new_mp_complete": {
-      "message": "Got it"
-   },
-   "onboarding_new_mp_desc_1": {
-      "message": "You can download those files for free, 8 times faster than other browsers"
-   },
-   "onboarding_new_mp_desc_2": {
-      "message": "You can watch the video and use other apps at the same time"
-   },
-   "onboarding_new_mp_desc_3": {
-      "message": "Thanks to Cốc Cốc's automatic adblock, you can enjoy videos without being disturbed "
-   },
-   "onboarding_new_mp_next": {
-      "message": "Next"
-   },
-   "onboarding_new_mp_title_1": {
-      "message": "Download videos, audio or subtitles"
-   },
-   "onboarding_new_mp_title_2": {
-      "message": "Pin video in a floating window"
-   },
-   "onboarding_new_mp_title_3": {
-      "message": "Watch videos without ads"
-   },
-   "onboarding_ytb_mobile_actionText": {
-      "description": "onboarding try button default text",
-      "message": "Thử ngay"
-   },
-   "onboarding_ytb_mobile_descText_adblock": {
-      "message": "\u003Ch5>Chặn quảng cáo YouTube trên cả điện thoại\u003C/h5>\u003Cp>Tải app Cốc Cốc và tiếp tục xem YouTube không quảng cáo miễn phí.\u003C/p>"
-   },
-   "onboarding_ytb_mobile_descText_playmusic": {
-      "message": "\u003Ch5>Nghe YouTube tắt màn hình trên điện thoại\u003C/h5>\u003Cp>Dễ dàng nghe nhạc khi tắt màn hình với Cốc Cốc Mobile.\u003C/p>"
-   },
-   "options_automatic_download_quality": {
-      "description": "Automatic download quality setting title",
-      "message": "Automatic download quality"
-   },
-   "options_automatic_download_quality_desc": {
-      "description": "Automatic download quality setting description",
-      "message": "If you do not choose a quality before downloading a video in the Sidebar, Cốc Cốc will automatically download according to the following criteria:"
-   },
-   "options_close": {
-      "description": "Close button",
-      "message": "Close"
-   },
-   "options_dark_theme": {
-      "description": "Enable dark theme",
-      "message": "Enable dark theme for Savior"
-   },
-   "options_enable_image_download": {
-      "message": "Display media panel alongside downloadable images on Instagram and TikTok"
-   },
-   "options_min_stream_size": {
-      "description": "Min stream size label",
-      "message": "Ignore files smaller than"
-   },
-   "options_one_click": {
-      "description": "Download in one click checkbox label",
-      "message": "Download in one click"
-   },
-   "options_prefer_last_quality": {
-      "description": "Prefer last quality as initial quality selector checkbox label",
-      "message": "Remember last chosen media quality"
-   },
-   "options_save": {
-      "description": "Save button",
-      "message": "Save"
-   },
-   "options_save_and_close": {
-      "description": "Save and close button",
-      "message": "Save and close"
-   },
-   "options_show_3gp": {
-      "description": "Show 3gp checkbox in options",
-      "message": "Show 3gp format"
-   },
-   "options_show_detach_button": {
-      "description": "Show detach button",
-      "message": "Show Pin video button on media panel"
-   },
-   "options_show_on_page_buttons": {
-      "description": "Show on page controls label",
-      "message": "Show media panel next to downloadable media files"
-   },
-   "options_show_skip_video_button": {
-      "description": "Show skip video button",
-      "message": "Show the “Skip Video” button"
-   },
-   "options_show_skip_video_button_description": {
-      "description": "Show skip video button description",
-      "message": "If a video ad cannot be blocked, you can manually click this button to skip the ad without waiting for it to finish playing"
-   },
-   "options_site_hide_widget_list_button_add": {
-      "message": "Add"
-   },
-   "options_site_hide_widget_list_empty": {
-      "message": "No website added"
-   },
-   "options_site_hide_widget_list_title": {
-      "message": "Websites that do not show Media panel"
-   },
-   "options_site_popup_desc": {
-      "message": "The media panel will not show on these websites"
-   },
-   "options_site_popup_input_helper": {
-      "message": "Please enter a valid domain"
-   },
-   "options_site_popup_input_helper_error_duplicate": {
-      "message": "This domain is already in the list"
-   },
-   "options_site_popup_input_label": {
-      "message": "Domain"
-   },
-   "options_site_popup_input_placeholder": {
-      "message": "example.com"
-   },
-   "options_site_popup_primary_button": {
-      "message": "Add"
-   },
-   "options_site_popup_secondary_button": {
-      "message": "Cancel"
-   },
-   "options_site_popup_title": {
-      "message": "Add website"
-   },
-   "options_skip_ads": {
-      "description": "Auto skip ads title",
-      "message": "Automatically skip ads when playing videos"
-   },
-   "options_skip_ads_desc": {
-      "description": "Auto skip ads description",
-      "message": "Cốc Cốc will helps you automatically click the Skip ads button on Youtube videos that allow skipping"
-   },
-   "options_title": {
-      "description": "Options page title",
-      "message": "Download video & audio tool's Settings"
-   },
-   "page_action_title": {
-      "description": "Tooltip on pageAction hover",
-      "message": "Download video & audio"
-   },
-   "pip_failed_to_find": {
-      "description": "Notice to show when we failed to locate player on the page.",
-      "message": "Could not detach this video"
-   },
-   "pip_please_wait": {
-      "description": "When PiP doing it's magic",
-      "message": "Detaching..."
-   },
-   "pip_tour_content": {
-      "description": "PiP tour text - ask the user to try our product",
-      "message": "You can download audio files into an \u003Cstrong>mp3\u003C/strong> separately from the video."
-   },
-   "pip_tour_title": {
-      "description": "PiP tour title",
-      "message": "Download mp3 in just one click"
-   },
-   "pip_tour_try_btn": {
-      "description": "PiP tour try now button",
-      "message": "Got it, let's try"
-   },
-   "play_now_click_to_play": {
-      "description": "Promote text in a tooltip",
-      "message": "Click \u003Ca>Play now\u003C/a> to watch downloaded video in a floating window, even when you close the tab."
-   },
-   "play_now_do_not_show": {
-      "description": "Do not show tooltip again text",
-      "message": "Do not show again"
-   },
-   "play_now_per_second": {
-      "description": "A 'second' name",
-      "message": "sec"
-   },
-   "play_now_play_now": {
-      "description": "Play now button title",
-      "message": "Play now"
-   },
-   "play_now_received_from": {
-      "description": "A 'from' word",
-      "message": "from"
-   },
-   "popup_audio_channel_label": {
-      "description": "Video audio channel",
-      "message": "Channel"
-   },
-   "popup_check_all": {
-      "description": "Text for check all",
-      "message": "all"
-   },
-   "popup_check_label": {
-      "description": "Label to check all or none",
-      "message": "Check:"
-   },
-   "popup_check_none": {
-      "description": "Text for check none",
-      "message": "none"
-   },
-   "popup_download": {
-      "description": "Download button text",
-      "message": "Download"
-   },
-   "popup_download_failed": {
-      "description": "Message is shown if download could not be started.",
-      "message": "Download has failed to start. Try with different format or quality."
-   },
-   "popup_download_selected": {
-      "description": "Download selected button text",
-      "message": "DOWNLOAD SELECTED"
-   },
-   "popup_download_starting": {
-      "description": "Wait for download button text",
-      "message": "Please wait..."
-   },
-   "popup_how_many_media_found": {
-      "description": "Text saying how many media was found.",
-      "message": "$number$ media found",
-      "placeholders": {
-         "number": {
-            "content": "$1",
-            "example": 42
-         }
+    }
+  },
+  "download_current_image": {
+    "description": "Download current image",
+    "message": "Current image"
+  },
+  "downloading_word": {
+    "description": "Just a single word",
+    "message": "Downloading"
+  },
+  "error_text": {
+    "message": "Error"
+  },
+  "explore_vi_button": {
+    "description": "onboarding agree button text",
+    "message": "Khám phá"
+  },
+  "image_tab": {
+    "description": "Title of the image tab",
+    "message": "Image"
+  },
+  "instant_actions_download_options": {
+    "description": "Options text for instant download button",
+    "message": "Show Download button for YouTube on search engine result pages"
+  },
+  "instant_actions_download_tooltip": {
+    "description": "Tooltip for download in one click button",
+    "message": "Download YouTube video in one click"
+  },
+  "later_button": {
+    "description": "onboarding later button text",
+    "message": "Later"
+  },
+  "later_vi_button": {
+    "description": "onboarding later button text",
+    "message": "Để sau"
+  },
+  "loading_image": {
+    "message": "Searching for Image..."
+  },
+  "loading_video_audio": {
+    "message": "Searching for Video/Audio..."
+  },
+  "login_button": {
+    "message": "Đăng nhập"
+  },
+  "media_fields_type_audio": {
+    "description": "Audio media type",
+    "message": "Audio"
+  },
+  "media_fields_type_audio_channel": {
+    "description": "Video audio channel",
+    "message": "Audio channel"
+  },
+  "media_fields_type_image": {
+    "description": "Image",
+    "message": "Image"
+  },
+  "media_fields_type_no_watermark_video": {
+    "description": "No watermark video media type",
+    "message": "Video (no watermark)"
+  },
+  "media_fields_type_stream": {
+    "description": "Stream media type",
+    "message": "Stream"
+  },
+  "media_fields_type_subtitles": {
+    "description": "Subtitles media title",
+    "message": "Subtitles"
+  },
+  "media_fields_type_video": {
+    "description": "Video media type",
+    "message": "Video"
+  },
+  "mobile_button": {
+    "description": "Mobile button text",
+    "message": "Download file to your phone"
+  },
+  "mobile_error_text": {
+    "description": "Text for error in mobile transfer panel",
+    "message": "Media is not available."
+  },
+  "mobile_instruction_1": {
+    "description": "Text 2 in mobile panel",
+    "message": "Step 1: Open VidManager Mobile"
+  },
+  "mobile_instruction_2": {
+    "description": "Text 3 in mobile panel",
+    "message": "Step 2: Scan the QR Code"
+  },
+  "mobile_panel_footer": {
+    "description": "Text 4 in mobile panel",
+    "message": "You haven't downloaded VidManager Mobile yet?"
+  },
+  "mobile_panel_header": {
+    "description": "Text 1 in mobile panel",
+    "message": "Download instructions"
+  },
+  "not_show_again": {
+    "description": "onboarding do not show again checkbox text",
+    "message": "Do not show again"
+  },
+  "onboard_account_desc_A": {
+    "message": "Để đồng bộ dữ liệu đã lưu trên Google và dấu trang, mật khẩu trên mọi thiết bị"
+  },
+  "onboard_account_desc_C": {
+    "message": "Để đồng bộ dấu trang và mật khẩu trên mọi thiết bị"
+  },
+  "onboard_account_title_A": {
+    "message": "Bạn có muốn đăng nhập luôn tài khoản VidManager?"
+  },
+  "onboard_account_title_B": {
+    "message": "Đăng nhập tài khoản VidManager để lưu các dữ liệu của bạn"
+  },
+  "onboard_account_title_C": {
+    "message": "Dùng tài khoản Google đăng nhập VidManager?"
+  },
+  "onboard_account_title_D": {
+    "message": "Đăng nhập tài khoản VidManager và đồng bộ dữ liệu giữa mọi thiết bị"
+  },
+  "onboard_en_to_vi_desc_1": {
+    "message": "Dịch mọi loại văn bản bằng cách bôi đen và nhấn biểu tượng Dịch để xem kết quả"
+  },
+  "onboard_en_to_vi_desc_2": {
+    "message": "VidManager giúp bạn dịch tiếng Anh, Trung, Hàn, Nhật và hơn 100 ngôn ngữ khác"
+  },
+  "onboard_en_to_vi_desc_3": {
+    "message": "Bôi đen đoạn văn cần dịch và nhấn biểu tượng Dịch để xem kết quả. Siêu dễ!"
+  },
+  "onboard_en_to_vi_desc_4": {
+    "message": "Ngôn ngữ nào cũng chơi tuốt - VidManager giúp bạn dịch tiếng Anh, Trung, Hàn, Nhật và hơn 100 ngôn ngữ khác"
+  },
+  "onboard_en_to_vi_title_1": {
+    "message": "Chỉ cần bôi đen, VidManager dịch ngay"
+  },
+  "onboard_en_to_vi_title_2": {
+    "message": "Chỉ cần bôi đen, VidManager dịch ngay"
+  },
+  "onboard_en_to_vi_title_3": {
+    "message": "Bôi đen nhanh tay - dịch ngay lập tức"
+  },
+  "onboard_en_to_vi_title_4": {
+    "message": "Bôi đen nhanh tay - dịch ngay lập tức"
+  },
+  "onboard_import_data_desc_1": {
+    "message": "Transfer important data - bookmarks, passwords, and browsing history from other browsers to VidManager"
+  },
+  "onboard_import_data_desc_2": {
+    "message": "Keep all your bookmarks, passwords, and saved data from Chrome for easier web access"
+  },
+  "onboard_import_data_desc_3": {
+    "message": "Keep all your bookmarks, passwords, and browsing history from other browsers for easier web access"
+  },
+  "onboard_import_data_title_1": {
+    "description": "Onboarding import data title",
+    "message": "Import bookmarks and saved passwords from other browsers"
+  },
+  "onboard_import_data_title_2": {
+    "description": "Onboarding import data title",
+    "message": "Move your \"house\" from Chrome to VidManager"
+  },
+  "onboard_import_data_title_3": {
+    "description": "Onboarding import data title",
+    "message": "Move your \"house\" to VidManager"
+  },
+  "onboard_set_default_br_desc_1": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Automatically block ads. Browse faster and more securely."
+  },
+  "onboard_set_default_br_desc_2": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Experience advanced features: Adblock, Sidebar, Download video, and more"
+  },
+  "onboard_set_default_br_desc_3": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Set VidManager as your default browser to enjoy Adblock, Sidebar, Download video, and more features!"
+  },
+  "onboard_set_default_br_title_1": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Want to try VidManager as your default browser?"
+  },
+  "onboard_set_default_br_title_2": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Ad-free browsing with VidManager as your default browser"
+  },
+  "onboard_set_default_br_title_3": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Better multitasking, more optimized than Chrome"
+  },
+  "onboard_set_default_br_title_4": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Benefits of setting VidManager as your default browser"
+  },
+  "onboard_sidepanel_big_description": {
+    "message": "Easily download videos, music, and photos"
+  },
+  "onboard_sidepanel_later": {
+    "message": "Remind me later"
+  },
+  "onboard_sidepanel_small_description_1": {
+    "message": "Easily download videos, audio, and photos with just one click. Get started!"
+  },
+  "onboard_sidepanel_small_description_1_no_image": {
+    "message": "Easily download videos, and audio with just one click. Get started!"
+  },
+  "onboard_sidepanel_small_description_2": {
+    "message": "Experience the new video and audio download interface - now with bulk image downloads!"
+  },
+  "onboard_sidepanel_small_description_2_no_image": {
+    "message": "Experience the new video and audio download interface. Get started!"
+  },
+  "onboard_sidepanel_title": {
+    "message": "Suggested by VidManager"
+  },
+  "onboard_sidepanel_try": {
+    "message": "Try it"
+  },
+  "onboard_title": {
+    "description": "Onboarding title",
+    "message": "Suggestion from VidManager"
+  },
+  "onboarding_ccmobile_movie_descText_adblock": {
+    "message": "<h5>Chặn quảng cáo trên cả điện thoại</h5><p>Tải app VidManager và tiếp tục xem phim không quảng cáo miễn phí</p>"
+  },
+  "onboarding_ccmobile_movie_descText_watch": {
+    "message": "<h5>Tối ưu trải nghiệm xem video trên điện thoại</h5><p>Xem phim ‘đã’ hơn với Chế độ phim ảnh từ VidManager Mobile</p>"
+  },
+  "onboarding_coccoctv_actionText": {
+    "message": "Tìm hiểu thêm"
+  },
+  "onboarding_coccoctv_title": {
+    "message": "Đề xuất từ VidManager"
+  },
+  "onboarding_new_mp_abort": {
+    "message": "Skip"
+  },
+  "onboarding_new_mp_complete": {
+    "message": "Got it"
+  },
+  "onboarding_new_mp_desc_1": {
+    "message": "You can download those files for free, 8 times faster than other browsers"
+  },
+  "onboarding_new_mp_desc_2": {
+    "message": "You can watch the video and use other apps at the same time"
+  },
+  "onboarding_new_mp_desc_3": {
+    "message": "Thanks to VidManager's automatic adblock, you can enjoy videos without being disturbed "
+  },
+  "onboarding_new_mp_next": {
+    "message": "Next"
+  },
+  "onboarding_new_mp_title_1": {
+    "message": "Download videos, audio or subtitles"
+  },
+  "onboarding_new_mp_title_2": {
+    "message": "Pin video in a floating window"
+  },
+  "onboarding_new_mp_title_3": {
+    "message": "Watch videos without ads"
+  },
+  "onboarding_ytb_mobile_actionText": {
+    "description": "onboarding try button default text",
+    "message": "Thử ngay"
+  },
+  "onboarding_ytb_mobile_descText_adblock": {
+    "message": "<h5>Chặn quảng cáo YouTube trên cả điện thoại</h5><p>Tải app VidManager và tiếp tục xem YouTube không quảng cáo miễn phí.</p>"
+  },
+  "onboarding_ytb_mobile_descText_playmusic": {
+    "message": "<h5>Nghe YouTube tắt màn hình trên điện thoại</h5><p>Dễ dàng nghe nhạc khi tắt màn hình với VidManager Mobile.</p>"
+  },
+  "options_automatic_download_quality": {
+    "description": "Automatic download quality setting title",
+    "message": "Automatic download quality"
+  },
+  "options_automatic_download_quality_desc": {
+    "description": "Automatic download quality setting description",
+    "message": "If you do not choose a quality before downloading a video in the Sidebar, VidManager will automatically download according to the following criteria:"
+  },
+  "options_close": {
+    "description": "Close button",
+    "message": "Close"
+  },
+  "options_dark_theme": {
+    "description": "Enable dark theme",
+    "message": "Enable dark theme for VidManager"
+  },
+  "options_enable_image_download": {
+    "message": "Display media panel alongside downloadable images on Instagram and TikTok"
+  },
+  "options_min_stream_size": {
+    "description": "Min stream size label",
+    "message": "Ignore files smaller than"
+  },
+  "options_one_click": {
+    "description": "Download in one click checkbox label",
+    "message": "Download in one click"
+  },
+  "options_prefer_last_quality": {
+    "description": "Prefer last quality as initial quality selector checkbox label",
+    "message": "Remember last chosen media quality"
+  },
+  "options_save": {
+    "description": "Save button",
+    "message": "Save"
+  },
+  "options_save_and_close": {
+    "description": "Save and close button",
+    "message": "Save and close"
+  },
+  "options_show_3gp": {
+    "description": "Show 3gp checkbox in options",
+    "message": "Show 3gp format"
+  },
+  "options_show_detach_button": {
+    "description": "Show detach button",
+    "message": "Show Pin video button on media panel"
+  },
+  "options_show_on_page_buttons": {
+    "description": "Show on page controls label",
+    "message": "Show media panel next to downloadable media files"
+  },
+  "options_show_skip_video_button": {
+    "description": "Show skip video button",
+    "message": "Show the “Skip Video” button"
+  },
+  "options_show_skip_video_button_description": {
+    "description": "Show skip video button description",
+    "message": "If a video ad cannot be blocked, you can manually click this button to skip the ad without waiting for it to finish playing"
+  },
+  "options_site_hide_widget_list_button_add": {
+    "message": "Add"
+  },
+  "options_site_hide_widget_list_empty": {
+    "message": "No website added"
+  },
+  "options_site_hide_widget_list_title": {
+    "message": "Websites that do not show Media panel"
+  },
+  "options_site_popup_desc": {
+    "message": "The media panel will not show on these websites"
+  },
+  "options_site_popup_input_helper": {
+    "message": "Please enter a valid domain"
+  },
+  "options_site_popup_input_helper_error_duplicate": {
+    "message": "This domain is already in the list"
+  },
+  "options_site_popup_input_label": {
+    "message": "Domain"
+  },
+  "options_site_popup_input_placeholder": {
+    "message": "example.com"
+  },
+  "options_site_popup_primary_button": {
+    "message": "Add"
+  },
+  "options_site_popup_secondary_button": {
+    "message": "Cancel"
+  },
+  "options_site_popup_title": {
+    "message": "Add website"
+  },
+  "options_skip_ads": {
+    "description": "Auto skip ads title",
+    "message": "Automatically skip ads when playing videos"
+  },
+  "options_skip_ads_desc": {
+    "description": "Auto skip ads description",
+    "message": "VidManager will helps you automatically click the Skip ads button on Youtube videos that allow skipping"
+  },
+  "options_title": {
+    "description": "Options page title",
+    "message": "Download video & audio tool's Settings"
+  },
+  "page_action_title": {
+    "description": "Tooltip on pageAction hover",
+    "message": "Download video & audio"
+  },
+  "pip_failed_to_find": {
+    "description": "Notice to show when we failed to locate player on the page.",
+    "message": "Could not detach this video"
+  },
+  "pip_please_wait": {
+    "description": "When PiP doing it's magic",
+    "message": "Detaching..."
+  },
+  "pip_tour_content": {
+    "description": "PiP tour text - ask the user to try our product",
+    "message": "You can download audio files into an <strong>mp3</strong> separately from the video."
+  },
+  "pip_tour_title": {
+    "description": "PiP tour title",
+    "message": "Download mp3 in just one click"
+  },
+  "pip_tour_try_btn": {
+    "description": "PiP tour try now button",
+    "message": "Got it, let's try"
+  },
+  "play_now_click_to_play": {
+    "description": "Promote text in a tooltip",
+    "message": "Click <a>Play now</a> to watch downloaded video in a floating window, even when you close the tab."
+  },
+  "play_now_do_not_show": {
+    "description": "Do not show tooltip again text",
+    "message": "Do not show again"
+  },
+  "play_now_per_second": {
+    "description": "A 'second' name",
+    "message": "sec"
+  },
+  "play_now_play_now": {
+    "description": "Play now button title",
+    "message": "Play now"
+  },
+  "play_now_received_from": {
+    "description": "A 'from' word",
+    "message": "from"
+  },
+  "popup_audio_channel_label": {
+    "description": "Video audio channel",
+    "message": "Channel"
+  },
+  "popup_check_all": {
+    "description": "Text for check all",
+    "message": "all"
+  },
+  "popup_check_label": {
+    "description": "Label to check all or none",
+    "message": "Check:"
+  },
+  "popup_check_none": {
+    "description": "Text for check none",
+    "message": "none"
+  },
+  "popup_download": {
+    "description": "Download button text",
+    "message": "Download"
+  },
+  "popup_download_failed": {
+    "description": "Message is shown if download could not be started.",
+    "message": "Download has failed to start. Try with different format or quality."
+  },
+  "popup_download_selected": {
+    "description": "Download selected button text",
+    "message": "DOWNLOAD SELECTED"
+  },
+  "popup_download_starting": {
+    "description": "Wait for download button text",
+    "message": "Please wait..."
+  },
+  "popup_how_many_media_found": {
+    "description": "Text saying how many media was found.",
+    "message": "$number$ media found",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": 42
       }
-   },
-   "popup_no_media_found": {
-      "description": "Message shows in popup if there is no media to display.",
-      "message": "No media was found, sorry."
-   },
-   "popup_one_click": {
-      "description": "Download in one click checkbox label",
-      "message": "Download in one click"
-   },
-   "popup_pip_button": {
-      "description": "Pip button text",
-      "message": "Pin video"
-   },
-   "popup_preferred_quality": {
-      "description": "Preferred media quality select label",
-      "message": "Preferred media quality"
-   },
-   "popup_preferred_quality_hint": {
-      "description": "Preferred media quality as a hint for automatic download.",
-      "message": "Quality:"
-   },
-   "popup_sound_only": {
-      "description": "Sound only text for quality selection",
-      "message": "(sound only)"
-   },
-   "popup_starting_download": {
-      "description": "Starting one-click download text",
-      "message": "Starting download"
-   },
-   "popup_title": {
-      "description": "Title of the omnibox popup",
-      "message": "Download media files"
-   },
-   "popup_unpip_button": {
-      "description": "Unpip button text",
-      "message": "Unpin video"
-   },
-   "popup_welcome_button": {
-      "description": "Try it now button text",
-      "message": "Try it now!"
-   },
-   "popup_welcome_text": {
-      "description": "Welcome popup text",
-      "message": "If you see this icon in the address-bar, this means that there is media content on the page (like music, video clips or movies), which can be downloaded."
-   },
-   "popup_welcome_title": {
-      "description": "Welcome popup title",
-      "message": "Downloadable media found!"
-   },
-   "promote_serp_btn_check_result": {
-      "description": "Button check results",
-      "message": "Check results in Cốc Cốc"
-   },
-   "promote_serp_btn_settings": {
-      "description": "Button browser settings",
-      "message": "Search engine settings"
-   },
-   "promote_serp_desc": {
-      "description": "SERP promotion description text",
-      "message": "Dear CocCoc-er, please try to use our search engine for this query and report problems if any – it will be a great help in improving our search quality."
-   },
-   "ql_high": {
-      "description": "High automatic download quality",
-      "message": "High"
-   },
-   "ql_high_desc": {
-      "description": "High automatic download quality description",
-      "message": "Automatically select the best resolution from 1080p and above"
-   },
-   "ql_low": {
-      "description": "Low automatic download quality",
-      "message": "Low"
-   },
-   "ql_low_desc": {
-      "description": "Low automatic download quality description",
-      "message": "Automatically select the best resolution below 360p"
-   },
-   "ql_medium": {
-      "description": "Legacy medium preference label",
-      "message": "Medium"
-   },
-   "ql_standard": {
-      "description": "Standard automatic download quality",
-      "message": "Standard"
-   },
-   "ql_standard_desc": {
-      "description": "Standard automatic download quality description",
-      "message": "Automatically select the best resolution from 360p to below 1080p"
-   },
-   "quality_4k_qfhd": {
-      "message": "4K QFHD"
-   },
-   "quality_4k_uhd": {
-      "message": "4K UHD"
-   },
-   "quality_8k_uhd": {
-      "message": "8K UHD"
-   },
-   "quality_fhd": {
-      "message": "Full HD"
-   },
-   "quality_hd": {
-      "message": "HD"
-   },
-   "quality_medium": {
-      "message": "Medium"
-   },
-   "quality_mobile": {
-      "message": "Mobile"
-   },
-   "quality_qhd": {
-      "message": "Quad HD"
-   },
-   "quality_small": {
-      "message": "Small"
-   },
-   "quality_standard": {
-      "message": "Standard"
-   },
-   "select_audio_channel_title": {
-      "description": "",
-      "message": "Select audio channel"
-   },
-   "set_as_default": {
-      "description": "onboarding set as default button text",
-      "message": "Set as default"
-   },
-   "sidepanel_all_sizes": {
-      "message": "All sizes"
-   },
-   "sidepanel_auto_quality_hint_high": {
-      "description": "Side panel footer hint for High",
-      "message": "Cốc Cốc is automatically selecting the highest video quality when downloading. To change, go to Settings."
-   },
-   "sidepanel_auto_quality_hint_low": {
-      "description": "Side panel footer hint for Low",
-      "message": "Cốc Cốc is automatically selecting low video quality when downloading. To change, go to Settings."
-   },
-   "sidepanel_auto_quality_hint_standard": {
-      "description": "Side panel footer hint for Standard",
-      "message": "Cốc Cốc is automatically selecting standard video quality when downloading. To change, go to Settings."
-   },
-   "sidepanel_clear": {
-      "message": "Clear"
-   },
-   "sidepanel_download": {
-      "message": "Download"
-   },
-   "sidepanel_download_audio": {
-      "message": "Download audio"
-   },
-   "sidepanel_download_image": {
-      "message": "Download photo"
-   },
-   "sidepanel_download_subtitle": {
-      "message": "Download subtitle"
-   },
-   "sidepanel_download_video": {
-      "message": "Download video"
-   },
-   "sidepanel_file_not_found_to_download": {
-      "description": "Dialog when quality retrieval fails",
-      "message": "No file found to download"
-   },
-   "sidepanel_found": {
-      "message": "Found"
-   },
-   "sidepanel_large": {
-      "message": "Large"
-   },
-   "sidepanel_loading_data": {
-      "description": "Dialog while retrieving quality",
-      "message": "Loading data"
-   },
-   "sidepanel_medium": {
-      "message": "Medium"
-   },
-   "sidepanel_no_media_found": {
-      "message": "No files found to download"
-   },
-   "sidepanel_photos": {
-      "message": "photos"
-   },
-   "sidepanel_quality_auto": {
-      "description": "Default quality label before retrieval",
-      "message": "Quality (Auto)"
-   },
-   "sidepanel_quality_not_found": {
-      "description": "Error quality label when retrieval fails",
-      "message": "File not found"
-   },
-   "sidepanel_select_all": {
-      "message": "Select all"
-   },
-   "sidepanel_selected": {
-      "message": "Selected"
-   },
-   "sidepanel_settings_link": {
-      "description": "Link to Savior settings from side panel footer",
-      "message": "Settings"
-   },
-   "sidepanel_small": {
-      "message": "Small"
-   },
-   "sidepanel_tooltip_refresh": {
-      "message": "Reload the page to update the list of files to download"
-   },
-   "sidepanel_tooltip_setting": {
-      "message": "Download tool settings"
-   },
-   "sidepanel_videos_audios": {
-      "message": "Videos/Audios"
-   },
-   "skip_video": {
-      "description": "Skip video",
-      "message": "Skip video"
-   },
-   "skip_video_description": {
-      "description": "Skip video description",
-      "message": "If this video is an ad, this feature lets you skip it instantly without waiting"
-   },
-   "subtitles_auto_translated": {
-      "description": "Auto translated subtitles",
-      "message": "(auto translated)"
-   },
-   "subtitles_lang_de": {
-      "description": "German",
-      "message": "German"
-   },
-   "subtitles_lang_en": {
-      "description": "English",
-      "message": "English"
-   },
-   "subtitles_lang_fr": {
-      "description": "French",
-      "message": "French"
-   },
-   "subtitles_lang_ja": {
-      "description": "Japanese",
-      "message": "Japanese"
-   },
-   "subtitles_lang_ko": {
-      "description": "Korean",
-      "message": "Korean"
-   },
-   "subtitles_lang_ru": {
-      "description": "Russian",
-      "message": "Russian"
-   },
-   "subtitles_lang_vi": {
-      "description": "Vietnamese",
-      "message": "Vietnamese"
-   },
-   "subtitles_lang_zh_Hans": {
-      "description": "Chinese",
-      "message": "Chinese"
-   },
-   "try_now_button_text": {
-      "description": "onboarding try button default text",
-      "message": "Try now"
-   },
-   "turn_off_light": {
-      "description": "Button turn light off",
-      "message": "Lights off"
-   },
-   "turn_on_light": {
-      "description": "Button turn light on",
-      "message": "Lights on"
-   },
-   "video_audio_tab": {
-      "description": "Title of the video audio tab",
-      "message": "Video/Audio"
-   },
-   "widget_btn_gotit": {
-      "message": "Got it"
-   },
-   "widget_btn_learnmore": {
-      "message": "Learn more"
-   },
-   "widget_download_box_title": {
-      "description": "",
-      "message": "Select to download"
-   },
-   "widget_download_tooltip": {
-      "description": "Download button text",
-      "message": "Download videos, audio or subtitles"
-   },
-   "widget_download_tooltip_image_and_vid": {
-      "description": "Download button text but both image and video",
-      "message": "Download videos, audio, subtitles or images"
-   },
-   "widget_download_tooltip_only_image": {
-      "description": "Download button text but only image",
-      "message": "Download images"
-   },
-   "widget_downloading_media": {
-      "description": "Message shows in widget when media is downloading",
-      "message": "Media Downloading"
-   },
-   "widget_go_to_settings": {
-      "message": "Settings"
-   },
-   "widget_hide_panel": {
-      "message": "Hide this panel"
-   },
-   "widget_hide_panel_on_site": {
-      "message": "Don't show again on $1"
-   },
-   "widget_no_media_found": {
-      "description": "Message shows in popup if there is no media to display.",
-      "message": "No media found"
-   },
-   "widget_other_options": {
-      "description": "Message shows in widget when user hover on three dots button",
-      "message": "Downloads Manager"
-   },
-   "widget_panel_hidden": {
-      "message": "Panel hidden (Reload page to show this panel)"
-   },
-   "widget_panel_hidden_on_site": {
-      "message": "The media panel will not reappear on $1. Please go to \u003Cb data-action='openSettings'>Settings\u003C/b> to enable it again."
-   }
+    }
+  },
+  "popup_no_media_found": {
+    "description": "Message shows in popup if there is no media to display.",
+    "message": "No media was found, sorry."
+  },
+  "popup_one_click": {
+    "description": "Download in one click checkbox label",
+    "message": "Download in one click"
+  },
+  "popup_pip_button": {
+    "description": "Pip button text",
+    "message": "Pin video"
+  },
+  "popup_preferred_quality": {
+    "description": "Preferred media quality select label",
+    "message": "Preferred media quality"
+  },
+  "popup_preferred_quality_hint": {
+    "description": "Preferred media quality as a hint for automatic download.",
+    "message": "Quality:"
+  },
+  "popup_sound_only": {
+    "description": "Sound only text for quality selection",
+    "message": "(sound only)"
+  },
+  "popup_starting_download": {
+    "description": "Starting one-click download text",
+    "message": "Starting download"
+  },
+  "popup_title": {
+    "description": "Title of the omnibox popup",
+    "message": "Download media files"
+  },
+  "popup_unpip_button": {
+    "description": "Unpip button text",
+    "message": "Unpin video"
+  },
+  "popup_welcome_button": {
+    "description": "Try it now button text",
+    "message": "Try it now!"
+  },
+  "popup_welcome_text": {
+    "description": "Welcome popup text",
+    "message": "If you see this icon in the address-bar, this means that there is media content on the page (like music, video clips or movies), which can be downloaded."
+  },
+  "popup_welcome_title": {
+    "description": "Welcome popup title",
+    "message": "Downloadable media found!"
+  },
+  "promote_serp_btn_check_result": {
+    "description": "Button check results",
+    "message": "Check results in VidManager"
+  },
+  "promote_serp_btn_settings": {
+    "description": "Button browser settings",
+    "message": "Search engine settings"
+  },
+  "promote_serp_desc": {
+    "description": "SERP promotion description text",
+    "message": "Dear VidManager user, please try to use our search engine for this query and report problems if any – it will be a great help in improving our search quality."
+  },
+  "ql_high": {
+    "description": "High automatic download quality",
+    "message": "High"
+  },
+  "ql_high_desc": {
+    "description": "High automatic download quality description",
+    "message": "Automatically select the best resolution from 1080p and above"
+  },
+  "ql_low": {
+    "description": "Low automatic download quality",
+    "message": "Low"
+  },
+  "ql_low_desc": {
+    "description": "Low automatic download quality description",
+    "message": "Automatically select the best resolution below 360p"
+  },
+  "ql_medium": {
+    "description": "Legacy medium preference label",
+    "message": "Medium"
+  },
+  "ql_standard": {
+    "description": "Standard automatic download quality",
+    "message": "Standard"
+  },
+  "ql_standard_desc": {
+    "description": "Standard automatic download quality description",
+    "message": "Automatically select the best resolution from 360p to below 1080p"
+  },
+  "quality_4k_qfhd": {
+    "message": "4K QFHD"
+  },
+  "quality_4k_uhd": {
+    "message": "4K UHD"
+  },
+  "quality_8k_uhd": {
+    "message": "8K UHD"
+  },
+  "quality_fhd": {
+    "message": "Full HD"
+  },
+  "quality_hd": {
+    "message": "HD"
+  },
+  "quality_medium": {
+    "message": "Medium"
+  },
+  "quality_mobile": {
+    "message": "Mobile"
+  },
+  "quality_qhd": {
+    "message": "Quad HD"
+  },
+  "quality_small": {
+    "message": "Small"
+  },
+  "quality_standard": {
+    "message": "Standard"
+  },
+  "select_audio_channel_title": {
+    "description": "",
+    "message": "Select audio channel"
+  },
+  "set_as_default": {
+    "description": "onboarding set as default button text",
+    "message": "Set as default"
+  },
+  "sidepanel_quality_auto": {
+    "description": "Default quality label before retrieval",
+    "message": "Quality (Auto)"
+  },
+  "skip_video": {
+    "description": "Skip video",
+    "message": "Skip video"
+  },
+  "skip_video_description": {
+    "description": "Skip video description",
+    "message": "If this video is an ad, this feature lets you skip it instantly without waiting"
+  },
+  "subtitles_auto_translated": {
+    "description": "Auto translated subtitles",
+    "message": "(auto translated)"
+  },
+  "subtitles_lang_de": {
+    "description": "German",
+    "message": "German"
+  },
+  "subtitles_lang_en": {
+    "description": "English",
+    "message": "English"
+  },
+  "subtitles_lang_fr": {
+    "description": "French",
+    "message": "French"
+  },
+  "subtitles_lang_ja": {
+    "description": "Japanese",
+    "message": "Japanese"
+  },
+  "subtitles_lang_ko": {
+    "description": "Korean",
+    "message": "Korean"
+  },
+  "subtitles_lang_ru": {
+    "description": "Russian",
+    "message": "Russian"
+  },
+  "subtitles_lang_vi": {
+    "description": "Vietnamese",
+    "message": "Vietnamese"
+  },
+  "subtitles_lang_zh_Hans": {
+    "description": "Chinese",
+    "message": "Chinese"
+  },
+  "try_now_button_text": {
+    "description": "onboarding try button default text",
+    "message": "Try now"
+  },
+  "turn_off_light": {
+    "description": "Button turn light off",
+    "message": "Lights off"
+  },
+  "turn_on_light": {
+    "description": "Button turn light on",
+    "message": "Lights on"
+  },
+  "video_audio_tab": {
+    "description": "Title of the video audio tab",
+    "message": "Video/Audio"
+  },
+  "widget_btn_gotit": {
+    "message": "Got it"
+  },
+  "widget_btn_learnmore": {
+    "message": "Learn more"
+  },
+  "widget_download_box_title": {
+    "description": "",
+    "message": "Select to download"
+  },
+  "widget_download_tooltip": {
+    "description": "Download button text",
+    "message": "Download videos, audio or subtitles"
+  },
+  "widget_download_tooltip_image_and_vid": {
+    "description": "Download button text but both image and video",
+    "message": "Download videos, audio, subtitles or images"
+  },
+  "widget_download_tooltip_only_image": {
+    "description": "Download button text but only image",
+    "message": "Download images"
+  },
+  "widget_downloading_media": {
+    "description": "Message shows in widget when media is downloading",
+    "message": "Media Downloading"
+  },
+  "widget_go_to_settings": {
+    "message": "Settings"
+  },
+  "widget_hide_panel": {
+    "message": "Hide this panel"
+  },
+  "widget_hide_panel_on_site": {
+    "message": "Don't show again on $1"
+  },
+  "widget_no_media_found": {
+    "description": "Message shows in popup if there is no media to display.",
+    "message": "No media found"
+  },
+  "widget_other_options": {
+    "description": "Message shows in widget when user hover on three dots button",
+    "message": "Downloads Manager"
+  },
+  "widget_panel_hidden": {
+    "message": "Panel hidden (Reload page to show this panel)"
+  },
+  "widget_panel_hidden_on_site": {
+    "message": "The media panel will not reappear on $1. Please go to <b data-action='openSettings'>Settings</b> to enable it again."
+  }
 }

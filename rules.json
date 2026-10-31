@@ -1,8 +1,0 @@
-[
-	{
-		"id": 13,
-		"priority": 1,
-		"action": { "type": "redirect", "redirect": { "extensionPath": "/app.js" } },
-		"condition": { "urlFilter": "js/jwplayer.js", "resourceTypes": ["script"] }
-	}
-]

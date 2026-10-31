@@ -1,5 +1,5 @@
 /**
- * Universal Video Downloader - Cốc Cốc Savior Style Downloads Manager
+ * Universal Video Downloader - VidManager Downloads Manager
  * Handles real-time download tracking, filtering, searching, and Explorer actions.
  */
 
@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentFilter = 'all';
   let searchQuery = '';
   let allItems = []; // merged list of download records
+  const recentlyDeletedIds = new Set();
 
   function safeSendMessage(msg, callback) {
     try {
@@ -130,8 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const storageData = await chrome.storage.local.get(['downloadHistory', 'customDownloadDir']);
       const nativeHistory = Array.isArray(storageData.downloadHistory) ? storageData.downloadHistory : [];
       if (storageData.customDownloadDir) {
-        sidebarFolderPath.textContent = storageData.customDownloadDir;
-        sidebarFolderPath.title = storageData.customDownloadDir;
+        if (sidebarFolderPath) {
+          sidebarFolderPath.textContent = storageData.customDownloadDir;
+          sidebarFolderPath.title = storageData.customDownloadDir;
+        }
+        if (modalFolderPath) {
+          modalFolderPath.textContent = storageData.customDownloadDir;
+          modalFolderPath.title = storageData.customDownloadDir;
+        }
       }
 
       // Query browser downloads
@@ -146,7 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
         .filter(item => item && (item.chromeId || item.isBrowserDownload))
         .map(item => String(item.chromeId || item.id)));
       const normalizedChrome = chromeDownloads
-        .filter(cd => managedChromeIds.has(String(cd.id)))
+        .filter(cd => {
+          const myExtId = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) ? chrome.runtime.id : '';
+          const strId = String(cd.id);
+          if (recentlyDeletedIds.has(strId)) return false;
+          if (managedChromeIds.has(strId)) return true;
+          if (myExtId && cd.byExtensionId === myExtId) return true;
+          return false;
+        })
         .map(cd => {
           const fn = cd.filename || '';
           const isAudio = /\.(mp3|m4a|aac|flac|wav)$/i.test(fn);
@@ -154,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
           let state = 'downloading';
           let errorMessage = '';
           if (cd.state === 'complete') {
-            state = (cd.exists === false) ? 'deleted' : 'completed';
+            state = 'completed';
           } else if (cd.state === 'interrupted') {
             if (cd.error === 'USER_CANCELED') {
               state = 'canceled';
@@ -216,6 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
       map.clear();
       const now = Date.now();
       for (const item of nativeHistory) {
+        if (!item) continue;
+        item.fromHistory = true;
+        const strId = String(item.id || '');
+        const strChromeId = item.chromeId ? String(item.chromeId) : '';
+        if (recentlyDeletedIds.has(strId) || (strChromeId && recentlyDeletedIds.has(strChromeId))) {
+          continue;
+        }
+
         // Normalize state strings from background
         if (item.state === 'in_progress') item.state = 'downloading';
         if (item.state === 'complete') item.state = 'completed';
@@ -245,8 +267,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         map.set(item.id || item.filename || item.url, item);
       }
+
       for (const item of normalizedChrome) {
-        if (!map.has(item.id) && !map.has(item.filename)) {
+        const strId = String(item.id || '');
+        const strChromeId = item.chromeId ? String(item.chromeId) : '';
+        if (recentlyDeletedIds.has(strId) || (strChromeId && recentlyDeletedIds.has(strChromeId))) {
+          continue;
+        }
+
+        // Deduplicate against existing items in map by chromeId, id, url, or filename
+        let existingMatch = null;
+        for (const existing of map.values()) {
+          if (item.chromeId && (String(existing.chromeId || '') === String(item.chromeId) || String(existing.id || '') === String(item.chromeId))) {
+            existingMatch = existing;
+            break;
+          }
+          if (item.id && String(existing.id || '') === String(item.id)) {
+            existingMatch = existing;
+            break;
+          }
+          if (item.url && existing.url && item.url === existing.url) {
+            existingMatch = existing;
+            break;
+          }
+          if (item.filename && existing.filename && item.filename === existing.filename) {
+            existingMatch = existing;
+            break;
+          }
+        }
+
+        if (existingMatch) {
+          existingMatch.fromHistory = true;
+          if (!existingMatch.chromeId && item.chromeId) existingMatch.chromeId = item.chromeId;
+          if (!existingMatch.filename && item.filename) existingMatch.filename = item.filename;
+          if ((!existingMatch.title || existingMatch.title === 'download') && item.title && item.title !== 'download') {
+            existingMatch.title = item.title;
+          }
+          if (existingMatch.state === 'downloading' && item.state !== 'downloading') {
+            existingMatch.state = item.state;
+          }
+        } else {
+          item.isChromeOnly = true;
           map.set(item.id, item);
         }
       }
@@ -297,12 +358,24 @@ document.addEventListener('DOMContentLoaded', () => {
     return '0%';
   }
 
+  function isAudioItem(it) {
+    if (!it) return false;
+    const fn = (it.filename || it.outputPath || it.outputFile || it.title || '').toLowerCase();
+    return it.type === 'audio' || /\.(mp3|m4a|aac|flac|wav|ogg)$/i.test(fn);
+  }
+
+  function isVideoItem(it) {
+    if (!it) return false;
+    if (it.type === 'image' || isAudioItem(it)) return false;
+    return true;
+  }
+
   function updateCounts() {
     const total = allItems.length;
     const downloading = allItems.filter(it => it.state === 'downloading').length;
     const completed = allItems.filter(it => it.state === 'completed').length;
-    const video = allItems.filter(it => it.type !== 'audio').length;
-    const audio = allItems.filter(it => it.type === 'audio').length;
+    const video = allItems.filter(it => isVideoItem(it)).length;
+    const audio = allItems.filter(it => isAudioItem(it)).length;
 
     if (countAll) countAll.textContent = total;
     if (countDownloading) countDownloading.textContent = downloading;
@@ -316,8 +389,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Filter by category
       if (currentFilter === 'downloading' && item.state !== 'downloading') return false;
       if (currentFilter === 'completed' && item.state !== 'completed') return false;
-      if (currentFilter === 'video' && item.type === 'audio') return false;
-      if (currentFilter === 'audio' && item.type !== 'audio') return false;
+      if (currentFilter === 'video' && !isVideoItem(item)) return false;
+      if (currentFilter === 'audio' && !isAudioItem(item)) return false;
 
       // Filter by search query
       if (searchQuery) {
@@ -332,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getDateGroupHeading(timestamp) {
-    if (!timestamp) return 'Gần đây';
+    if (!timestamp || isNaN(new Date(timestamp).getTime())) return 'Gần đây';
     const d = new Date(timestamp);
     const now = new Date();
 
@@ -446,17 +519,23 @@ document.addEventListener('DOMContentLoaded', () => {
       e.stopPropagation();
       menu.remove();
       if (item.url) {
-        navigator.clipboard.writeText(item.url).then(() => showToast('Đã sao chép liên kết!'));
+        navigator.clipboard.writeText(item.url).then(() => showToast('Đã sao chép liên kết!')).catch(() => {});
       }
     });
 
     const itemDel = document.createElement('div');
     itemDel.className = 'menu-dropdown-item danger';
-    itemDel.textContent = 'Xoá khỏi danh sách';
+    itemDel.textContent = item.state === 'downloading' ? 'Hủy tải xuống' : 'Xoá khỏi danh sách';
     itemDel.addEventListener('click', (e) => {
       e.stopPropagation();
       menu.remove();
-      deleteItem(item.id);
+      if (item.state === 'downloading') {
+        if (confirm('Bạn có muốn hủy tải xuống video này không?')) {
+          cancelDownloadItem(item);
+        }
+      } else {
+        deleteItem(item.id);
+      }
     });
 
     menu.append(itemCopy, itemDel);
@@ -477,8 +556,12 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast(`Tệp đang được tải (${item.percent || '0%'}), vui lòng chờ...`);
       return;
     }
-    if (item.state === 'deleted' || item.state === 'canceled') {
-      showToast('Tệp đã bị xóa hoặc hủy. Bấm Thử lại để tải lại.');
+    if (item.state === 'canceled') {
+      showToast('Tệp đã bị hủy. Bấm Thử lại để tải lại.');
+      return;
+    }
+    if (item.state === 'deleted') {
+      showToast('Tệp không còn trên đĩa. Bấm Thử lại để tải lại.');
       return;
     }
 
@@ -493,11 +576,15 @@ document.addEventListener('DOMContentLoaded', () => {
       filename: item.filename || item.outputFile || item.outputPath || item.title || '',
       title: item.title || ''
     }, (res) => {
+      if (chrome.runtime?.lastError) return;
       if (res && res.success) {
         showToast(`Đang mở: ${title}`);
-      } else {
-        const errMsg = res && res.error ? res.error : 'Không tìm thấy tệp trên đĩa';
-        showToast(errMsg);
+      } else if (res && (res.fileNotFound || (res.error && res.error.includes('Không tìm thấy')))) {
+        item.state = 'deleted';
+        renderList();
+        showToast('Tệp không còn trên đĩa. Bấm Thử lại để tải lại.');
+      } else if (res && res.error) {
+        showToast(res.error);
       }
     });
   }
@@ -509,12 +596,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const isDownloading = item.state === 'downloading' || item.state === 'in_progress';
     const isError = item.state === 'error' || (item.state === 'interrupted' && item.error !== 'USER_CANCELED');
-    const isDeleted = item.state === 'deleted';
+    const isDeleted = item.state === 'deleted' || item.fileMissing;
     const isCanceled = item.state === 'canceled' || item.state === 'cancelled' || item.error === 'USER_CANCELED';
     const isCompleted = (item.state === 'completed' || item.state === 'complete') && !isDeleted && !isCanceled && !isError;
     const fn = (item.filename || item.title || '').toLowerCase();
     const isAudio = item.type === 'audio' || /\.(mp3|m4a|aac|flac|wav)$/i.test(fn);
     const isVideo = !isAudio && !/\.(exe|msi|zip|rar|7z|tar|gz)$/i.test(fn);
+
+    if (isDeleted) {
+      card.classList.add('card-missing-file');
+    }
 
     // 1. Icon Box
     const iconBox = createCardIcon(item);
@@ -555,10 +646,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const titleMuted = document.createElement('span');
       titleMuted.className = 'item-title-muted';
       titleMuted.textContent = item.title || 'video.mp4';
-      titleMuted.title = item.title || '';
+      titleMuted.title = (item.title || '') + ' (Tệp không còn trên đĩa)';
 
       const statusTag = document.createElement('span');
-      statusTag.className = 'item-status-tag';
+      statusTag.className = 'item-status-tag error';
       statusTag.textContent = 'Đã xóa';
 
       topRow.append(titleMuted, statusTag);
@@ -668,28 +759,10 @@ document.addEventListener('DOMContentLoaded', () => {
       progFill.style.width = formatPercentWidth(item.percent);
       progTrack.appendChild(progFill);
 
-      const btnCancel = document.createElement('button');
-      btnCancel.type = 'button';
-      btnCancel.className = 'action-link-btn btn-cancel-download';
-      btnCancel.textContent = 'Hủy';
-      btnCancel.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (item.chromeId) {
-          chrome.downloads.cancel(item.chromeId);
-        }
-        safeSendMessage({
-          action: 'cancelDownload',
-          taskId: item.id,
-          chromeId: item.chromeId
-        });
-        item.state = 'canceled';
-        renderList();
-      });
-
-      actionsRow.append(progTrack, btnCancel);
+      actionsRow.appendChild(progTrack);
     }
 
-    if (isDeleted || isCanceled || isError) {
+    if (isCanceled || isError) {
       const errRow = document.createElement('div');
       errRow.className = 'item-error-row';
       const errIcon = document.createElement('span');
@@ -761,11 +834,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnRemove = document.createElement('button');
     btnRemove.type = 'button';
     btnRemove.className = 'btn-card-remove';
-    btnRemove.title = 'Xóa khỏi danh sách';
+    btnRemove.title = isDownloading ? 'Hủy tải xuống' : 'Xóa khỏi danh sách';
     btnRemove.appendChild(createRemoveSvg(12, 12, 'currentColor'));
     btnRemove.addEventListener('click', (e) => {
       e.stopPropagation();
-      deleteItem(item.id);
+      if (isDownloading) {
+        if (confirm('Bạn có muốn hủy tải xuống video này không?')) {
+          cancelDownloadItem(item);
+        }
+      } else {
+        deleteItem(item.id);
+      }
     });
 
     tools.append(btnMore, btnRemove);
@@ -906,21 +985,96 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  async function deleteItem(id) {
-    const target = allItems.find(it => it.id === id);
-    if (target && target.state === 'downloading') {
-      if (target.chromeId) chrome.downloads.cancel(target.chromeId);
-      safeSendMessage({
-        action: 'cancelDownload',
-        taskId: target.id,
-        chromeId: target.chromeId
-      });
+  function cancelDownloadItem(item) {
+    if (!item) return;
+    if (item.chromeId && typeof chrome !== 'undefined' && chrome.downloads) {
+      try {
+        const numId = Number(item.chromeId);
+        chrome.downloads.cancel(!isNaN(numId) ? numId : item.chromeId, () => {});
+      } catch (_) {}
     }
-    allItems = allItems.filter(it => it.id !== id);
-    const nativeHistory = allItems.filter(it => !it.id.startsWith('chrome_'));
-    await chrome.storage.local.set({ downloadHistory: nativeHistory });
+    safeSendMessage({
+      action: 'cancelDownload',
+      taskId: item.id,
+      chromeId: item.chromeId
+    });
+    item.state = 'canceled';
+    item.error = 'Người dùng đã hủy';
+    item.errorMessage = 'Người dùng đã hủy';
+    item.speed = 'Đã hủy';
+
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.get(['downloadHistory']).then(res => {
+        const history = Array.isArray(res && res.downloadHistory) ? res.downloadHistory : [];
+        const entry = history.find(h => String(h.id) === String(item.id) || (h.chromeId && String(h.chromeId) === String(item.chromeId)));
+        if (entry) {
+          entry.state = 'canceled';
+          entry.error = 'Người dùng đã hủy';
+          entry.errorMessage = 'Người dùng đã hủy';
+          entry.speed = 'Đã hủy';
+          chrome.storage.local.set({ downloadHistory: history });
+        }
+      }).catch(() => {});
+    }
+
+    renderList();
+    showToast('Đã hủy tải xuống');
+  }
+
+  async function deleteItem(id) {
+    const target = allItems.find(it => String(it.id) === String(id) || String(it.chromeId) === String(id));
+    const targetId = target ? target.id : id;
+    const strTargetId = String(targetId);
+    const chromeId = target ? target.chromeId : (String(id).startsWith('chrome_') ? id.replace('chrome_', '') : (Number.isInteger(Number(id)) ? Number(id) : null));
+    const strChromeId = chromeId ? String(chromeId) : '';
+
+    if (strTargetId) recentlyDeletedIds.add(strTargetId);
+    if (strChromeId) recentlyDeletedIds.add(strChromeId);
+
+    // 1. Immediately remove from memory and update UI
+    allItems = allItems.filter(it => {
+      const itId = String(it.id || '');
+      const itChromeId = it.chromeId ? String(it.chromeId) : '';
+      if (strTargetId && (itId === strTargetId || itChromeId === strTargetId)) return false;
+      if (strChromeId && (itId === strChromeId || itChromeId === strChromeId)) return false;
+      return true;
+    });
     updateCounts();
     renderList();
+
+    // 2. Erase from browser download shelf if applicable
+    const numChromeId = Number(chromeId);
+    if (!isNaN(numChromeId) && numChromeId > 0 && typeof chrome !== 'undefined' && chrome.downloads) {
+      try {
+        chrome.downloads.cancel(numChromeId, () => {
+          try { chrome.downloads.erase({ id: chromeId }, () => {}); } catch (_) {}
+        });
+      } catch (_) {
+        try { chrome.downloads.erase({ id: chromeId }, () => {}); } catch (_) {}
+      }
+    }
+
+    // 3. Notify background to cancel (if active) and purge permanently
+    safeSendMessage({
+      action: 'removeDownload',
+      id: strTargetId,
+      chromeId: strChromeId
+    });
+
+    // 4. Directly update local storage
+    try {
+      const storageData = await chrome.storage.local.get(['downloadHistory']);
+      const currentHist = Array.isArray(storageData.downloadHistory) ? storageData.downloadHistory : [];
+      const sanitized = currentHist.filter(it => {
+        const itId = String(it.id || '');
+        const itChromeId = it.chromeId ? String(it.chromeId) : '';
+        if (strTargetId && (itId === strTargetId || itChromeId === strTargetId)) return false;
+        if (strChromeId && (itId === strChromeId || itChromeId === strChromeId)) return false;
+        return true;
+      });
+      await chrome.storage.local.set({ downloadHistory: sanitized });
+    } catch (_) {}
+
     showToast('Đã xoá mục tải xuống!');
   }
 
@@ -967,6 +1121,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (selectedPath) {
         sidebarFolderPath.textContent = selectedPath;
         sidebarFolderPath.title = selectedPath;
+        if (modalFolderPath) {
+          modalFolderPath.textContent = selectedPath;
+          modalFolderPath.title = selectedPath;
+        }
         chrome.storage.local.set({ customDownloadDir: selectedPath });
         showToast('Đã đổi thư mục lưu!');
       }
@@ -974,70 +1132,215 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Settings Modal Elements
-  const btnSettings = document.getElementById('btn-settings');
+  const btnSettings = null; /* settings panel is always visible now */
   const settingsModal = document.getElementById('settings-modal');
-  const btnCloseSettings = document.getElementById('btn-close-settings');
-  const btnSaveSettings = document.getElementById('btn-save-settings');
+  const btnSaveSettings = null; /* settings auto-save on change */
   const modalFolderPath = document.getElementById('modal-folder-path');
   const btnModalChangeFolder = document.getElementById('btn-modal-change-folder');
   const settingOnpageButtons = document.getElementById('setting-onpage-buttons');
-  const settingDetachButton = document.getElementById('setting-detach-button');
-  const settingOneClick = document.getElementById('setting-one-click');
-  const settingPreferredQuality = document.getElementById('setting-preferred-quality');
-  const settingRememberQuality = document.getElementById('setting-remember-quality');
+  const settingImageButtons = document.getElementById('setting-image-buttons');
+  const settingDetachButton = null; /* dead feature removed */
+  let cachedDetachEnabled = undefined;
+  let cachedDetachButtonEnabled = undefined;
+  const settingOneClick = null; /* 1-Click removed per product decision */
+  const setting3gp = null; /* 3GP removed — desktop product */
+  const settingPreferredQuality = null; /* default-quality setting removed per product decision */
+  const settingRememberQuality = null; /* remember-quality setting removed per product decision */
+  // Advanced settings (merged from the retired options page)
+  const settingMinSize = document.getElementById('setting-min-size');
+  const settingMinSizeValue = document.getElementById('setting-min-size-value');
+  const settingSiteInput = document.getElementById('setting-site-input');
+  const btnAddSite = document.getElementById('btn-add-site');
+  const settingsSiteList = document.getElementById('settings-site-list');
 
-  function openSettingsModal() {
-    if (!settingsModal) return;
+  function beautifySize(bytes) {
+    const b = Number(bytes) || 0;
+    if (b >= 1024 * 1024) return (b / (1024 * 1024)).toFixed(1).replace(/\.0$/, '') + ' MB';
+    if (b >= 1024) return Math.round(b / 1024) + ' KB';
+    return b + ' B';
+  }
+
+  function renderSettingsSiteList(sites) {
+    if (!settingsSiteList) return;
+    const items = Array.isArray(sites) ? sites : [];
+    settingsSiteList.replaceChildren();
+    if (items.length === 0) {
+      const empty = document.createElement('span');
+      empty.style.cssText = 'font-size:12.5px;color:#9ca3af;';
+      empty.textContent = 'Chưa có website nào trong danh sách';
+      settingsSiteList.appendChild(empty);
+      return;
+    }
+    for (const domain of items) {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #e5e7eb;border-radius:8px;';
+
+      const avatar = document.createElement('span');
+      avatar.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:4px;background:#10b981;color:#fff;font-size:11px;font-weight:600;text-transform:uppercase;flex:0 0 20px;';
+      avatar.textContent = String(domain).charAt(0) || '?';
+      row.appendChild(avatar);
+
+      const name = document.createElement('span');
+      name.style.cssText = 'flex:1;font-size:13px;word-break:break-all;';
+      name.textContent = domain;
+      row.appendChild(name);
+
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.title = 'Xoá';
+      del.textContent = '✕';
+      del.style.cssText = 'border:none;background:none;cursor:pointer;color:#ef4444;font-size:13px;padding:2px 6px;';
+      del.addEventListener('click', () => {
+        chrome.storage.local.get(['disable_savior_sites'], (s) => {
+          const list = Array.isArray(s.disable_savior_sites) ? s.disable_savior_sites : [];
+          const next = list.filter((d) => d !== domain);
+          chrome.storage.local.set({ disable_savior_sites: next }, () => {
+            renderSettingsSiteList(next);
+            showToast('Đã xoá ' + domain + ' khỏi danh sách');
+          });
+        });
+      });
+      row.appendChild(del);
+      settingsSiteList.appendChild(row);
+    }
+  }
+
+  function addSiteFromInput() {
+    if (!settingSiteInput) return;
+    const raw = String(settingSiteInput.value || '').trim().toLowerCase()
+      .replace(/^https?:\/\//, '')
+      .replace(/^www\./, '')
+      .replace(/\/.*$/, '');
+    if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(raw)) {
+      showToast('Tên miền không hợp lệ. Ví dụ: example.com');
+      return;
+    }
+    chrome.storage.local.get(['disable_savior_sites'], (s) => {
+      const list = Array.isArray(s.disable_savior_sites) ? s.disable_savior_sites : [];
+      if (list.includes(raw)) {
+        showToast(raw + ' đã có trong danh sách');
+        return;
+      }
+      const next = list.concat(raw);
+      chrome.storage.local.set({ disable_savior_sites: next }, () => {
+        settingSiteInput.value = '';
+        renderSettingsSiteList(next);
+        showToast('Đã thêm ' + raw + ' — thanh tải nổi sẽ ẩn trên trang này');
+      });
+    });
+  }
+
+  function loadSettingsIntoUI() {
     chrome.storage.local.get([
       'customDownloadDir',
       'onPageButtonsEnabled',
+      'on_page_buttons',
+      'image_download_enabled',
+      'imageDownloadEnabled',
       'detachButtonEnabled',
+      'detach_enabled',
+      'one_click',
       'isOneClickEnabled',
-      'preferredQuality',
-      'preferLastQuality'
+      'one_click_download',
+      'preferLastQuality',
+      'prefer_last_quality',
+      'show_3gp_ext',
+      'min_stream_size',
+      'disable_savior_sites'
     ], (data) => {
       const currentDir = data.customDownloadDir || (sidebarFolderPath ? sidebarFolderPath.textContent : '') || 'Downloads';
       if (modalFolderPath) {
         modalFolderPath.textContent = currentDir;
         modalFolderPath.title = currentDir;
       }
-      if (settingOnpageButtons) settingOnpageButtons.checked = data.onPageButtonsEnabled !== false;
-      if (settingDetachButton) settingDetachButton.checked = data.detachButtonEnabled !== false;
-      if (settingOneClick) settingOneClick.checked = Boolean(data.isOneClickEnabled);
-      if (settingPreferredQuality) settingPreferredQuality.value = data.preferredQuality || 'best';
-      if (settingRememberQuality) settingRememberQuality.checked = data.preferLastQuality !== false;
+      if (sidebarFolderPath) {
+        sidebarFolderPath.textContent = currentDir;
+        sidebarFolderPath.title = currentDir;
+      }
+      cachedDetachEnabled = data.detach_enabled;
+      cachedDetachButtonEnabled = data.detachButtonEnabled;
+      const onPageVal = data.on_page_buttons !== undefined ? data.on_page_buttons : data.onPageButtonsEnabled;
+      const imageVal = data.image_download_enabled !== undefined ? data.image_download_enabled : data.imageDownloadEnabled;
+      const detachVal = data.detach_enabled !== undefined ? data.detach_enabled : data.detachButtonEnabled;
+      const oneClickVal = data.one_click !== undefined ? data.one_click : (data.one_click_download !== undefined ? data.one_click_download : data.isOneClickEnabled);
+      const rememberVal = data.prefer_last_quality !== undefined ? data.prefer_last_quality : data.preferLastQuality;
 
-      settingsModal.style.display = 'flex';
+      if (settingOnpageButtons) settingOnpageButtons.checked = onPageVal !== false;
+      if (settingImageButtons) settingImageButtons.checked = imageVal !== false;
+      if (settingDetachButton) settingDetachButton.checked = detachVal !== false;
+      if (settingOneClick) settingOneClick.checked = Boolean(oneClickVal);
+      if (settingRememberQuality) settingRememberQuality.checked = rememberVal !== false;
+      if (setting3gp) setting3gp.checked = data.show_3gp_ext === true;
+      if (settingMinSize) {
+        settingMinSize.value = Number(data.min_stream_size) > 0 ? Number(data.min_stream_size) : 0;
+        if (settingMinSizeValue) settingMinSizeValue.textContent = beautifySize(settingMinSize.value);
+      }
+      renderSettingsSiteList(data.disable_savior_sites);
     });
   }
 
-  function closeSettingsModal() {
-    if (settingsModal) settingsModal.style.display = 'none';
-  }
+  function saveSettings(showSuccessToast = true) {
+    const onPage = settingOnpageButtons ? settingOnpageButtons.checked : true;
+    const imageEnabled = settingImageButtons ? settingImageButtons.checked : true;
+    const oneClick = settingOneClick ? settingOneClick.checked : false;
+    const rememberQuality = settingRememberQuality ? settingRememberQuality.checked : true;
 
-  if (btnSettings) {
-    btnSettings.addEventListener('click', openSettingsModal);
-  }
+    const detach = settingDetachButton ? settingDetachButton.checked : (cachedDetachEnabled !== undefined ? cachedDetachEnabled : false);
+    const detachBtn = settingDetachButton ? settingDetachButton.checked : (cachedDetachButtonEnabled !== undefined ? cachedDetachButtonEnabled : detach);
 
-  if (btnCloseSettings) {
-    btnCloseSettings.addEventListener('click', closeSettingsModal);
-  }
+    const settingsToSave = {
+      // camelCase format (for downloads manager UI)
+      onPageButtonsEnabled: onPage,
+      imageDownloadEnabled: imageEnabled,
+      detachButtonEnabled: detachBtn,
+      isOneClickEnabled: oneClick,
+      preferLastQuality: rememberQuality,
+      // snake_case format (for content-script.js & options engine)
+      on_page_buttons: onPage,
+      image_download_enabled: imageEnabled,
+      detach_enabled: detach,
+      one_click: oneClick,
+      one_click_download: oneClick,
+      prefer_last_quality: rememberQuality,
+      show_3gp_ext: setting3gp ? setting3gp.checked : false,
+      min_stream_size: settingMinSize ? (Number(settingMinSize.value) || 0) : 30720
+    };
 
-  if (settingsModal) {
-    settingsModal.addEventListener('click', (e) => {
-      if (e.target === settingsModal) closeSettingsModal();
+    chrome.storage.local.set(settingsToSave, () => {
+      if (showSuccessToast) {
+        showToast('Đã lưu cài đặt thành công!');
+      }
     });
   }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && settingsModal && settingsModal.style.display === 'flex') {
-      closeSettingsModal();
-    }
-  });
+  // The settings panel is a permanent right sidebar — no open/close modal flow.
+  // Settings load once on start and every change saves immediately.
+  loadSettingsIntoUI();
+
+  // Auto-save when user toggles or changes any setting directly
+  if (settingOnpageButtons) settingOnpageButtons.addEventListener('change', () => saveSettings(true));
+  if (settingImageButtons) settingImageButtons.addEventListener('change', () => saveSettings(true));
+  if (settingRememberQuality) settingRememberQuality.addEventListener('change', () => saveSettings(true));
+  if (settingMinSize) {
+    settingMinSize.addEventListener('input', () => {
+      if (settingMinSizeValue) settingMinSizeValue.textContent = beautifySize(settingMinSize.value);
+    });
+    settingMinSize.addEventListener('change', () => saveSettings(true));
+  }
+  if (btnAddSite) btnAddSite.addEventListener('click', addSiteFromInput);
+  if (settingSiteInput) {
+    settingSiteInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addSiteFromInput();
+      }
+    });
+  }
 
   if (btnModalChangeFolder) {
     btnModalChangeFolder.addEventListener('click', () => {
       safeSendMessage({ action: 'browseFolder' }, (res) => {
+        if (!res || res.canceled) return;
         const selectedPath = (res && res.path) || (res && res.success && res.path);
         if (selectedPath) {
           if (modalFolderPath) {
@@ -1057,18 +1360,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnSaveSettings) {
     btnSaveSettings.addEventListener('click', () => {
-      const settingsToSave = {
-        onPageButtonsEnabled: settingOnpageButtons ? settingOnpageButtons.checked : true,
-        detachButtonEnabled: settingDetachButton ? settingDetachButton.checked : true,
-        isOneClickEnabled: settingOneClick ? settingOneClick.checked : false,
-        preferredQuality: settingPreferredQuality ? settingPreferredQuality.value : 'best',
-        preferLastQuality: settingRememberQuality ? settingRememberQuality.checked : true
-      };
-
-      chrome.storage.local.set(settingsToSave, () => {
-        showToast('Đã lưu cài đặt thành công!');
-        closeSettingsModal();
-      });
+      saveSettings(true);
     });
   }
 
@@ -1076,12 +1368,22 @@ document.addEventListener('DOMContentLoaded', () => {
   btnClearAll.addEventListener('click', async () => {
     if (confirm('Bạn có chắc muốn xoá toàn bộ lịch sử tải xuống không?')) {
       for (const it of allItems) {
+        const strId = String(it.id || '');
+        const strChromeId = it.chromeId ? String(it.chromeId) : '';
+        if (strId) recentlyDeletedIds.add(strId);
+        if (strChromeId) recentlyDeletedIds.add(strChromeId);
+
         if (it.state === 'downloading') {
-          if (it.chromeId) chrome.downloads.cancel(it.chromeId);
-          safeSendMessage({ action: 'cancelDownload', taskId: it.id, chromeId: it.chromeId });
+          if (it.chromeId && typeof chrome !== 'undefined' && chrome.downloads) {
+            try { chrome.downloads.cancel(it.chromeId); } catch (_) {}
+          }
+        }
+        if (it.chromeId && typeof chrome !== 'undefined' && chrome.downloads && chrome.downloads.erase) {
+          try { chrome.downloads.erase({ id: it.chromeId }, () => {}); } catch (_) {}
         }
       }
       allItems = [];
+      safeSendMessage({ action: 'clearHistory' });
       await chrome.storage.local.set({ downloadHistory: [] });
       updateCounts();
       renderList();
@@ -1089,10 +1391,184 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  function syncHistoryUpdatesInPlace(newHistory) {
+    if (!Array.isArray(newHistory)) return;
+
+    const normalizedNew = [];
+    const newHistoryMap = new Map();
+
+    for (const raw of newHistory) {
+      if (!raw) continue;
+      const strId = String(raw.id || '');
+      const strChromeId = raw.chromeId ? String(raw.chromeId) : '';
+      if (recentlyDeletedIds.has(strId) || (strChromeId && recentlyDeletedIds.has(strChromeId))) {
+        continue;
+      }
+
+      const item = { ...raw, fromHistory: true };
+      if (item.state === 'in_progress') item.state = 'downloading';
+      if (item.state === 'complete') item.state = 'completed';
+      if (item.state === 'interrupted' && item.error !== 'USER_CANCELED') item.state = 'error';
+      if (item.state === 'cancelled' || item.error === 'USER_CANCELED') item.state = 'canceled';
+
+      const isFinished = item.percent === '100%' || item.speed === 'Hoàn thành';
+      if (isFinished && item.state !== 'canceled' && item.state !== 'deleted' && item.state !== 'error') {
+        item.state = 'completed';
+      }
+      if (!item.errorMessage && item.error) {
+        item.errorMessage = formatErrorMessage(item.error);
+      }
+
+      normalizedNew.push(item);
+      if (strId) newHistoryMap.set(strId, item);
+      if (strChromeId) newHistoryMap.set(strChromeId, item);
+    }
+
+    if (allItems.length === 0 && downloadsContainer && downloadsContainer.children.length === 0) {
+      allItems = [...normalizedNew].sort((a, b) => (b.startTime || 0) - (a.startTime || 0));
+      updateCounts();
+      renderList();
+      return;
+    }
+
+    for (const newItem of normalizedNew) {
+      const strId = String(newItem.id || '');
+      const strChromeId = newItem.chromeId ? String(newItem.chromeId) : '';
+
+      let existing = allItems.find(it => {
+        const itId = String(it.id || '');
+        const itChromeId = it.chromeId ? String(it.chromeId) : '';
+        if (strId && (itId === strId || itChromeId === strId)) return true;
+        if (strChromeId && (itChromeId === strChromeId || itId === strChromeId)) return true;
+        return false;
+      });
+
+      if (existing) {
+        const stateChanged = existing.state !== newItem.state;
+        Object.assign(existing, newItem);
+
+        const card = document.getElementById(`card_${existing.id}`) ||
+          (existing.chromeId ? document.getElementById(`card_${existing.chromeId}`) : null);
+
+        if (card) {
+          if (stateChanged) {
+            const newCard = createDownloadCard(existing);
+            card.replaceWith(newCard);
+          } else if (existing.state === 'downloading') {
+            const progFill = card.querySelector('.item-progress-fill');
+            if (progFill) {
+              progFill.style.width = formatPercentWidth(existing.percent);
+            }
+            const stats = card.querySelector('.item-downloading-stats');
+            if (stats) {
+              const spd = existing.speed ? ` • ${existing.speed}` : '';
+              const displayPct = (existing.percent && existing.percent.includes('%'))
+                ? existing.percent
+                : (existing.speed ? 'Đang tải...' : '0%');
+              stats.textContent = `${displayPct}${spd}`;
+            }
+          } else if (existing.state === 'error') {
+            const errDesc = card.querySelector('.error-badge-text');
+            if (errDesc && existing.errorMessage) {
+              errDesc.textContent = existing.errorMessage;
+              errDesc.title = existing.errorMessage;
+            }
+          }
+        }
+      } else {
+        // New item added to history
+        allItems.unshift(newItem);
+        const filtered = getFilteredItems();
+        if (filtered.includes(newItem)) {
+          if (emptyState) emptyState.style.display = 'none';
+          const headingText = getDateGroupHeading(newItem.startTime);
+          let targetGroup = null;
+          const groups = downloadsContainer ? downloadsContainer.querySelectorAll('.date-group') : [];
+          for (const grp of groups) {
+            const hdr = grp.querySelector('.date-group-heading');
+            if (hdr && hdr.textContent === headingText) {
+              targetGroup = grp;
+              break;
+            }
+          }
+          const card = createDownloadCard(newItem);
+          if (targetGroup) {
+            const headingEl = targetGroup.querySelector('.date-group-heading');
+            if (headingEl) {
+              headingEl.after(card);
+            } else {
+              targetGroup.prepend(card);
+            }
+          } else if (downloadsContainer) {
+            const newGroup = document.createElement('div');
+            newGroup.className = 'date-group';
+            const newHeader = document.createElement('div');
+            newHeader.className = 'date-group-heading';
+            newHeader.textContent = headingText;
+            newGroup.appendChild(newHeader);
+            newGroup.appendChild(card);
+            downloadsContainer.prepend(newGroup);
+          }
+        }
+      }
+    }
+
+    // Remove pruned items
+    const toRemove = [];
+    for (const item of allItems) {
+      if (item.isChromeOnly) continue;
+      const strId = String(item.id || '');
+      const strChromeId = item.chromeId ? String(item.chromeId) : '';
+      const inNew = (strId && newHistoryMap.has(strId)) || (strChromeId && newHistoryMap.has(strChromeId));
+      if (!inNew) {
+        toRemove.push(item);
+      }
+    }
+
+    for (const item of toRemove) {
+      const idx = allItems.indexOf(item);
+      if (idx !== -1) allItems.splice(idx, 1);
+      const card = document.getElementById(`card_${item.id}`) ||
+        (item.chromeId ? document.getElementById(`card_${item.chromeId}`) : null);
+      if (card) {
+        const parentGroup = card.closest('.date-group');
+        card.remove();
+        if (parentGroup && !parentGroup.querySelector('.download-card')) {
+          parentGroup.remove();
+        }
+      }
+    }
+
+    if (downloadsContainer && downloadsContainer.querySelectorAll('.download-card').length === 0) {
+      if (emptyState) emptyState.style.display = 'block';
+    }
+
+    updateCounts();
+    if (sectionStats) {
+      sectionStats.textContent = `${getFilteredItems().length} tệp`;
+    }
+  }
+
   // Auto-Sync 1: Listen to storage changes directly (zero latency cross-tab sync)
   chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName === 'local' && (changes.downloadHistory || changes.customDownloadDir)) {
-      loadDownloads();
+    if (areaName === 'local') {
+      if (changes.customDownloadDir) {
+        const newPath = changes.customDownloadDir.newValue;
+        if (newPath) {
+          if (sidebarFolderPath) {
+            sidebarFolderPath.textContent = newPath;
+            sidebarFolderPath.title = newPath;
+          }
+          if (modalFolderPath) {
+            modalFolderPath.textContent = newPath;
+            modalFolderPath.title = newPath;
+          }
+          showToast('Đã đổi thư mục lưu!');
+        }
+      }
+      if (changes.downloadHistory) {
+        syncHistoryUpdatesInPlace(changes.downloadHistory.newValue);
+      }
     }
   });
 
@@ -1110,14 +1586,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else if (msg.action === 'nativeComplete' || msg.action === 'nativeError' || msg.action === 'nativeCanceled') {
       loadDownloads();
+    } else if (msg.action === 'openFileResult' && !msg.success && msg.fileNotFound) {
+      const missingId = msg.id || msg.taskId;
+      const target = missingId
+        ? allItems.find(it => String(it.id) === String(missingId) || String(it.chromeId) === String(missingId))
+        : null;
+      if (target) {
+        target.state = 'deleted';
+        renderList();
+      } else {
+        loadDownloads();
+      }
+      showToast('Tệp không còn trên đĩa. Bấm Thử lại để tải lại.');
     }
   });
 
   // Auto-Sync 3: Heartbeat interval (syncs every 800ms while any download is running)
-  setInterval(() => {
+  setInterval(async () => {
     const hasActive = allItems.some(it => it.state === 'downloading');
     if (hasActive) {
-      loadDownloads();
+      try {
+        const data = await chrome.storage.local.get(['downloadHistory']);
+        if (data && Array.isArray(data.downloadHistory)) {
+          syncHistoryUpdatesInPlace(data.downloadHistory);
+        }
+      } catch (_) {}
     }
   }, 800);
 

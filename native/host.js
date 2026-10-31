@@ -11,9 +11,30 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 
+const isWin = process.platform === 'win32';
+const isMac = process.platform === 'darwin';
+
 const BIN_DIR = path.join(__dirname, 'bin');
-const FFMPEG_PATH = path.join(BIN_DIR, 'ffmpeg.exe');
-const YTDLP_PATH = path.join(BIN_DIR, 'yt-dlp.exe');
+
+function resolveBinary(binName) {
+  const exeName = isWin ? `${binName}.exe` : binName;
+  const localBin = path.join(BIN_DIR, exeName);
+  if (fs.existsSync(localBin)) return localBin;
+  if (isMac) {
+    const macPaths = [
+      `/opt/homebrew/bin/${binName}`,
+      `/usr/local/bin/${binName}`,
+      `/usr/bin/${binName}`
+    ];
+    for (const p of macPaths) {
+      if (fs.existsSync(p)) return p;
+    }
+  }
+  return exeName;
+}
+
+const FFMPEG_PATH = resolveBinary('ffmpeg');
+const YTDLP_PATH = resolveBinary('yt-dlp');
 const DOWNLOADS_DIR = path.join(os.homedir(), 'Downloads');
 
 function resolveTargetDir(outputDir) {
@@ -31,22 +52,59 @@ function resolveTargetDir(outputDir) {
 // Ensure PATH contains our bin directory for ffmpeg
 process.env.PATH = BIN_DIR + path.delimiter + path.dirname(process.execPath) + path.delimiter + process.env.PATH;
 
+// Background process & thread optimization:
+// Cap FFmpeg threads and set background priority so foreground video playback in the browser
+// (e.g. YouTube, HLS movie streams) is never starved of CPU or dropped frames.
+const FFMPEG_THREAD_LIMIT = String(Math.min(4, Math.max(1, Math.floor((os.cpus() || []).length / 2) || 2)));
+
+function setBackgroundPriority(proc) {
+  if (!proc || !proc.pid) return;
+  try {
+    if (os.constants && os.constants.priority && typeof os.setPriority === 'function') {
+      os.setPriority(proc.pid, os.constants.priority.PRIORITY_BELOW_NORMAL);
+    }
+  } catch (_) {}
+}
+
 let activeProcess = null;
 let activeMultiThreadJob = null;
 let stdoutWritable = true;
+const DISCONNECT_GRACE_MS = 5000;
 
-process.stdout.on('error', (err) => {
-  stdoutWritable = false;
-  logHost(`[stdoutError] ${err.code || err.message}`);
-});
-
-process.on('uncaughtException', (err) => {
-  logHost(`[uncaughtException] ${err.message}`);
-  if (err.code === 'EPIPE') {
+if (require.main === module) {
+  process.stdout.on('error', (err) => {
     stdoutWritable = false;
-    return;
-  }
-});
+    logHost(`[stdoutError] ${err.code || err.message}`);
+  });
+
+  process.on('uncaughtException', (err) => {
+    logHost(`[uncaughtException] ${err.message}`);
+    if (err.code === 'EPIPE') {
+      stdoutWritable = false;
+      return;
+    }
+    // Anything else leaves the process in an undefined state: tell the
+    // extension its job failed, let the message flush, then exit so a clean
+    // host process replaces this one on the next connectNative.
+    try {
+      sendMessage({ action: 'error', error: `HOST_CRASH: ${err.message || 'uncaught exception'}` });
+    } catch (_) {}
+    setTimeout(() => process.exit(1), 100);
+  });
+
+  process.on('unhandledRejection', (reason) => {
+    const desc = reason ? (reason.stack || reason) : 'unknown rejection';
+    logHost('[unhandledRejection] ' + desc);
+    // Notify once per minute at most so a recurring rejection cannot flood the pipe.
+    const now = Date.now();
+    if (!process._lastRejectionNotify || now - process._lastRejectionNotify > 60000) {
+      process._lastRejectionNotify = now;
+      try {
+        sendMessage({ action: 'error', error: `HOST_REJECTION: ${String(reason && reason.message || desc).slice(0, 200)}` });
+      } catch (_) {}
+    }
+  });
+}
 
 const LOG_FILE = path.join(__dirname, 'host_activity.log');
 function logHost(txt) {
@@ -60,11 +118,35 @@ function logHost(txt) {
 
 logHost(`Savior Host started PID=${process.pid}`);
 
+// Redact credentials before anything reaches host_activity.log: session cookies
+// and signed-URL tokens must never be persisted next to the host binary.
+function sanitizeForLog(value) {
+  try {
+    let s = typeof value === 'string' ? value : JSON.stringify(value);
+    if (!s) return s;
+    s = s.replace(/"cookie"\s*:\s*"(?:[^"\\]|\\.)*"/gi, '"cookie":"<redacted>"');
+    s = s.replace(/"set-cookie"\s*:\s*"(?:[^"\\]|\\.)*"/gi, '"set-cookie":"<redacted>"');
+    s = s.replace(/((?:signature|sig|token|auth|key|exp|nonce|n|rand)=[A-Za-z0-9_%\-\.]{8,})/gi, '$1=<redacted>');
+    return s;
+  } catch (_) {
+    return '<unloggable>';
+  }
+}
+
+let testMessageHook = null;
+function setMessageHook(fn) {
+  testMessageHook = fn;
+}
+
 // Send length-prefixed JSON message to Chrome
 function sendMessage(msg) {
+  if (testMessageHook) {
+    try { testMessageHook(msg); } catch (_) {}
+    if (require.main !== module) return;
+  }
   if (!stdoutWritable) return;
   try {
-    logHost(`SEND: ${JSON.stringify(msg)}`);
+    logHost(`SEND: ${sanitizeForLog(msg)}`);
     const jsonStr = JSON.stringify(msg);
     const bodyBuf = Buffer.from(jsonStr, 'utf8');
     const headerBuf = Buffer.alloc(4);
@@ -110,20 +192,140 @@ if (require.main === module) {
     logHost('process.stdin closed (Chrome disconnected pipe)');
     stdoutWritable = false;
     if (activeProcess || activeMultiThreadJob) {
-      logHost('Process or multi-thread job is still active, giving 30m grace period before termination');
+      logHost('Process or multi-thread job is still active, giving 5s grace period before termination');
       setTimeout(() => {
+        try { if (activeStreamJob) cleanupStreamJob(true); } catch (e) {}
         try { if (activeMultiThreadJob) activeMultiThreadJob.cancel(); } catch (e) {}
         try { if (activeProcess) activeProcess.kill(); } catch (e) {}
         process.exit(0);
-      }, 1800000);
+      }, DISCONNECT_GRACE_MS);
     } else {
       process.exit(0);
     }
   });
 }
 
+function isExecutableFile(filePath) {
+  if (!filePath || typeof filePath !== 'string') return false;
+  // Windows launchers + macOS equivalents: .command/.sh execute in Terminal,
+  // .dmg mounts, .pkg runs an installer, .app/.workflow launch — none of these
+  // may be opened through the download manager's file launcher.
+  return /\.(exe|bat|cmd|msi|ps1|command|sh|dmg|pkg|app|jar|scpt|workflow)$/i.test(filePath.trim());
+}
+
+// TaskId of the most recent download job — used to notify the extension when a
+// job is superseded (killed because a newer job arrived).
+let activeTaskId = null;
+
+function notifySuperseded() {
+  try {
+    sendMessage({ action: 'cancelled', taskId: activeTaskId, reason: 'superseded' });
+  } catch (_) {}
+}
+
+// ==========================================
+// Stream relay job (Chrome fetches, host writes) — see handleMessage cases.
+// ==========================================
+let activeStreamJob = null;
+
+function startStreamRelayJob(msg) {
+  if (activeStreamJob) {
+    // A previous relay still holds the pipe: drop it cleanly first.
+    try { cleanupStreamJob(true); } catch (e) {}
+  }
+  let safeTitle = (msg.title || 'video').replace(/[<>:"/\\|?*]/g, '_').replace(/[\s.]+$/, '').trim().slice(0, 150).replace(/[\s.]+$/, '');
+  if (!safeTitle) safeTitle = `Video_${Date.now()}`;
+  const finalFilename = msg.filename || `${safeTitle}.mp4`;
+  const targetDir = resolveTargetDir(msg.outputDir);
+  const outPath = path.join(targetDir, finalFilename);
+  const part = partPathFor(outPath);
+  try {
+    const fd = fs.openSync(part, 'w');
+    activeStreamJob = { taskId: msg.taskId, fd, outPath, partPath: part, bytesWritten: 0, total: 0 };
+    if (msg.taskId) activeTaskId = msg.taskId;
+    logHost(`Stream relay started (task ${msg.taskId}) → "${part}"`);
+    sendMessage({ action: 'streamReady', taskId: msg.taskId, ok: true });
+  } catch (e) {
+    sendMessage({ action: 'error', taskId: msg.taskId, error: 'HOST_STREAM_OPEN: ' + e.message });
+  }
+}
+
+function cleanupStreamJob(unlinkPart) {
+  if (!activeStreamJob) return;
+  try { if (activeStreamJob.fd !== null) fs.closeSync(activeStreamJob.fd); } catch (e) {}
+  if (unlinkPart) {
+    try { if (fs.existsSync(activeStreamJob.partPath)) fs.unlinkSync(activeStreamJob.partPath); } catch (e) {}
+  }
+  activeStreamJob = null;
+}
+
+function handleStreamChunk(msg) {
+  if (!activeStreamJob || String(activeStreamJob.taskId) !== String(msg.taskId)) return;
+  try {
+    const buf = Buffer.from(msg.data || '', 'base64');
+    // Multi-threaded relays send each batch at an explicit file offset so
+    // parallel workers may land out of order; positional writes handle both.
+    const off = Number(msg.offset);
+    if (Number.isFinite(off) && off >= 0) {
+      fs.writeSync(activeStreamJob.fd, buf, 0, buf.length, off);
+    } else {
+      fs.writeSync(activeStreamJob.fd, buf);
+    }
+    activeStreamJob.bytesWritten += buf.length;
+    if (msg.total) activeStreamJob.total = msg.total;
+    // The ack doubles as a service-worker keepalive signal.
+    sendMessage({
+      action: 'streamAck',
+      taskId: msg.taskId,
+      seq: msg.seq,
+      bytes: activeStreamJob.bytesWritten,
+      total: activeStreamJob.total
+    });
+    const pct = activeStreamJob.total > 0
+      ? Math.min(99, Math.floor((activeStreamJob.bytesWritten / activeStreamJob.total) * 100)) + '%'
+      : '';
+    sendMessage({
+      action: 'progress',
+      taskId: msg.taskId,
+      percent: pct,
+      speed: 'Đang tải qua Chrome...',
+      eta: '',
+      size: activeStreamJob.total > 0
+        ? `${formatBytes(activeStreamJob.bytesWritten)} / ${formatBytes(activeStreamJob.total)}`
+        : formatBytes(activeStreamJob.bytesWritten)
+    });
+  } catch (e) {
+    cleanupStreamJob(true);
+    sendMessage({ action: 'error', taskId: msg.taskId, error: 'HOST_STREAM_WRITE: ' + e.message });
+  }
+}
+
+function finishStreamJob(msg) {
+  if (!activeStreamJob || String(activeStreamJob.taskId) !== String(msg.taskId)) return;
+  const job = activeStreamJob;
+  activeStreamJob = null;
+  try {
+    fs.closeSync(job.fd);
+    job.fd = null;
+    // Segmented transfers must be complete before promotion: a short worker
+    // would otherwise finalize a file with zero-filled holes.
+    if (job.total > 0) {
+      const written = fs.statSync(job.partPath).size;
+      if (written !== job.total) throw new Error(`size mismatch: wrote ${written} of ${job.total} bytes`);
+    }
+    if (!finalizePartFile(job.outPath)) throw new Error('rename failed');
+    logHost(`Stream relay completed: "${job.outPath}" (${job.bytesWritten} bytes)`);
+    sendMessage({ action: 'progress', taskId: msg.taskId, percent: '100%', speed: 'Hoàn thành', eta: '', size: formatBytes(job.bytesWritten) });
+    sendMessage({ action: 'complete', taskId: msg.taskId, outputFile: path.basename(job.outPath), downloadsDir: path.dirname(job.outPath) });
+  } catch (e) {
+    try { if (job.fd !== null) fs.closeSync(job.fd); } catch (_) {}
+    try { if (fs.existsSync(job.partPath)) fs.unlinkSync(job.partPath); } catch (_) {}
+    sendMessage({ action: 'error', taskId: msg.taskId, error: 'HOST_STREAM_FINALIZE: ' + e.message });
+  }
+}
+
 function handleMessage(msg) {
-  logHost(`RECV: ${JSON.stringify(msg)}`);
+  logHost(`RECV: ${sanitizeForLog(msg)}`);
   if (!msg || !msg.action) {
     sendMessage({ status: 'error', error: 'Missing action' });
     return;
@@ -143,24 +345,72 @@ function handleMessage(msg) {
     }
 
     case 'download': {
+      if (msg.taskId) activeTaskId = msg.taskId;
       startDownload(msg);
       break;
     }
 
+    // ---- Stream relay: Chrome fetches, host writes ----
+    // TikTok-style CDNs block non-browser TLS fingerprints, so node's own
+    // requests get an HTML challenge page even with perfect cookies. For those
+    // streams the EXTENSION fetches with Chrome's real network stack and pipes
+    // the bytes here in base64 chunks; the file is assembled on disk exactly
+    // like any native download (.part staging + atomic rename).
+    case 'streamDownload': {
+      startStreamRelayJob(msg);
+      break;
+    }
+
+    case 'streamChunk': {
+      handleStreamChunk(msg);
+      break;
+    }
+
+    case 'streamEnd': {
+      finishStreamJob(msg);
+      break;
+    }
+
+    case 'streamAbort': {
+      logHost(`Stream relay aborted by extension (task ${msg.taskId}).`);
+      cleanupStreamJob(true);
+      sendMessage({ action: 'cancelled', taskId: msg.taskId });
+      break;
+    }
+
     case 'browseFolder': {
-      const psScript = `Add-Type -AssemblyName System.Windows.Forms; $f = New-Object System.Windows.Forms.FolderBrowserDialog; $f.Description = 'Chọn thư mục để lưu video tải về'; if ($f.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { Write-Output $f.SelectedPath }`;
-      exec(`powershell -NoProfile -Command "${psScript}"`, (err, stdout) => {
-        const selected = (stdout || '').trim();
+      if (isWin) {
+        const psScript = `Add-Type -AssemblyName System.Windows.Forms; $f = New-Object System.Windows.Forms.FolderBrowserDialog; $f.Description = 'Chọn thư mục để lưu video tải về'; if ($f.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { Write-Output $f.SelectedPath }`;
+        exec(`powershell -NoProfile -Command "${psScript}"`, (err, stdout) => {
+          const selected = (stdout || '').trim();
+          sendMessage({
+            action: 'browseFolderResult',
+            path: selected,
+            canceled: !selected
+          });
+        });
+      } else if (isMac) {
+        const osaCmd = `osascript -e 'try' -e 'set folderPath to POSIX path of (choose folder with prompt "Chọn thư mục để lưu video tải về")' -e 'return folderPath' -e 'on error' -e 'return ""' -e 'end try'`;
+        exec(osaCmd, (err, stdout) => {
+          const selected = (stdout || '').trim();
+          sendMessage({
+            action: 'browseFolderResult',
+            path: selected,
+            canceled: !selected
+          });
+        });
+      } else {
         sendMessage({
           action: 'browseFolderResult',
-          path: selected || DOWNLOADS_DIR
+          path: DOWNLOADS_DIR,
+          canceled: false
         });
-      });
+      }
       break;
     }
 
     case 'openFolder': {
-      let folderPath = msg.path || DOWNLOADS_DIR;
+      let folderPath = msg.path || msg.downloadDir || msg.outputDir || DOWNLOADS_DIR;
       try {
         if (folderPath && fs.existsSync(folderPath)) {
           if (fs.statSync(folderPath).isFile()) {
@@ -172,7 +422,8 @@ function handleMessage(msg) {
       } catch (_) {
         folderPath = DOWNLOADS_DIR;
       }
-      exec(`explorer.exe "${folderPath}"`, (err) => {
+      const openCmd = isWin ? `explorer.exe "${folderPath}"` : (isMac ? `open "${folderPath}"` : `xdg-open "${folderPath}"`);
+      exec(openCmd, (err) => {
         sendMessage({ action: 'openFolderResult', success: !err });
       });
       break;
@@ -180,70 +431,247 @@ function handleMessage(msg) {
 
     case 'openFile': {
       let targetPath = msg.path || '';
-      const filename = msg.filename || '';
-      logHost(`openFile requested: path="${targetPath}", filename="${filename}"`);
+      let filename = msg.filename || '';
+      const taskId = msg.id || msg.taskId || null;
+      const baseDir = msg.downloadDir || msg.outputDir || DOWNLOADS_DIR;
+      logHost(`openFile requested: id="${taskId}", path="${targetPath}", filename="${filename}", baseDir="${baseDir}"`);
+
+      // 1. Sanitize & clean quotes or URI encoding
+      if (targetPath) {
+        targetPath = targetPath.replace(/^["']|["']$/g, '').trim();
+        try { targetPath = decodeURIComponent(targetPath); } catch (_) {}
+      }
+      if (filename) {
+        filename = filename.replace(/^["']|["']$/g, '').trim();
+        try { filename = decodeURIComponent(filename); } catch (_) {}
+      }
+
+      // 2. Build search directories list
+      const searchDirs = [];
+      if (baseDir && !searchDirs.includes(baseDir)) searchDirs.push(baseDir);
+      if (DOWNLOADS_DIR && !searchDirs.includes(DOWNLOADS_DIR)) searchDirs.push(DOWNLOADS_DIR);
+      if (targetPath && path.isAbsolute(targetPath)) {
+        const pDir = path.dirname(targetPath);
+        if (fs.existsSync(pDir) && !searchDirs.includes(pDir)) searchDirs.push(pDir);
+      }
 
       let resolvedFile = '';
-      if (targetPath && path.isAbsolute(targetPath) && fs.existsSync(targetPath)) {
+
+      // Direct check: absolute path
+      if (targetPath && path.isAbsolute(targetPath) && fs.existsSync(targetPath) && fs.statSync(targetPath).isFile()) {
         resolvedFile = targetPath;
-      } else if (targetPath && fs.existsSync(path.join(DOWNLOADS_DIR, targetPath))) {
-        resolvedFile = path.join(DOWNLOADS_DIR, targetPath);
-      } else {
-        const candidateName = filename || targetPath || '';
-        const fn = path.basename(candidateName);
-        const baseNameWithoutExt = fn.replace(/\.[^.]+$/, '');
-        try {
-          const files = fs.readdirSync(DOWNLOADS_DIR);
-          const match = findBestFileMatch(candidateName, files) ||
-            files.find(f => f.startsWith(baseNameWithoutExt) && !f.endsWith('.part') && !f.endsWith('.tmp') && !f.endsWith('.crdownload'));
-          if (match) {
-            resolvedFile = path.join(DOWNLOADS_DIR, match);
+      }
+
+      // Build candidate names list
+      const rawCandidates = [];
+      if (targetPath) rawCandidates.push(path.basename(targetPath));
+      if (filename) rawCandidates.push(path.basename(filename));
+
+      const candidates = [];
+      for (const cand of rawCandidates) {
+        if (!cand) continue;
+        if (!candidates.includes(cand)) candidates.push(cand);
+        const c1 = cand.replace(/[<>:"/\\|?*]/g, '_');
+        const c2 = cand.replace(/[<>:"/\\|?*]/g, '-');
+        const c3 = cand.replace(/[<>:"/\\|?*]/g, ' ');
+        if (!candidates.includes(c1)) candidates.push(c1);
+        if (!candidates.includes(c2)) candidates.push(c2);
+        if (!candidates.includes(c3)) candidates.push(c3);
+      }
+
+      // Direct check: candidates relative to search directories
+      if (!resolvedFile) {
+        for (const cand of candidates) {
+          for (const dir of searchDirs) {
+            const candPath = path.join(dir, cand);
+            if (fs.existsSync(candPath) && fs.statSync(candPath).isFile()) {
+              resolvedFile = candPath;
+              break;
+            }
           }
-        } catch (_) {}
+          if (resolvedFile) break;
+        }
+      }
+
+      // Extension variations check (.mp4, .webm, .mkv, .mov, .ts, .m4a, .mp3)
+      if (!resolvedFile) {
+        const mediaExts = ['.mp4', '.webm', '.mkv', '.mov', '.ts', '.m4a', '.mp3'];
+        for (const cand of candidates) {
+          const rawBase = cand.replace(/\.[^.]+$/, '').trim();
+          if (!rawBase) continue;
+          for (const ext of mediaExts) {
+            for (const dir of searchDirs) {
+              const candPath = path.join(dir, `${rawBase}${ext}`);
+              if (fs.existsSync(candPath) && fs.statSync(candPath).isFile()) {
+                resolvedFile = candPath;
+                break;
+              }
+            }
+            if (resolvedFile) break;
+          }
+          if (resolvedFile) break;
+        }
+      }
+
+      // Fuzzy check: search best match in directories
+      if (!resolvedFile) {
+        for (const dir of searchDirs) {
+          try {
+            if (fs.existsSync(dir)) {
+              const files = fs.readdirSync(dir);
+              for (const cand of candidates) {
+                const match = findBestFileMatch(cand, files);
+                if (match) {
+                  resolvedFile = path.join(dir, match);
+                  break;
+                }
+              }
+              if (resolvedFile) break;
+
+              for (const cand of candidates) {
+                const baseNameWithoutExt = cand.replace(/\.[^.]+$/, '').trim().slice(0, 60);
+                if (baseNameWithoutExt.length >= 3) {
+                  const match = files.find(f => {
+                    if (f.endsWith('.part') || f.endsWith('.tmp') || f.endsWith('.crdownload') || f.endsWith('.ytdl')) return false;
+                    return f.startsWith(baseNameWithoutExt) || f.includes(baseNameWithoutExt) || f.startsWith(baseNameWithoutExt.slice(0, 20));
+                  });
+                  if (match) {
+                    resolvedFile = path.join(dir, match);
+                    break;
+                  }
+                }
+              }
+              if (resolvedFile) break;
+            }
+          } catch (_) {}
+        }
       }
 
       if (resolvedFile && fs.existsSync(resolvedFile)) {
+        if (isExecutableFile(resolvedFile)) {
+          logHost(`openFile blocked executable launch: "${resolvedFile}"`);
+          const fallbackDir = path.dirname(resolvedFile);
+          if (isWin) {
+            spawn('explorer.exe', [`/select,${resolvedFile}`], { windowsHide: true, detached: true });
+          } else if (isMac) {
+            spawn('open', ['-R', resolvedFile], { detached: true });
+          } else {
+            spawn('xdg-open', [fallbackDir], { detached: true });
+          }
+          sendMessage({
+            action: 'openFileResult',
+            id: taskId,
+            taskId,
+            filename: filename || (targetPath ? path.basename(targetPath) : ''),
+            success: false,
+            openedFolder: true,
+            path: fallbackDir,
+            error: 'Direct execution of executable files is blocked for safety'
+          });
+          break;
+        }
+
         logHost(`openFile launching: "${resolvedFile}"`);
-        spawn('explorer.exe', [resolvedFile], { windowsHide: true, detached: true });
-        sendMessage({ action: 'openFileResult', success: true, path: resolvedFile });
+        if (isWin) {
+          spawn('cmd.exe', ['/c', 'start', '""', resolvedFile], { windowsHide: true, detached: true });
+        } else if (isMac) {
+          spawn('open', [resolvedFile], { detached: true });
+        } else {
+          spawn('xdg-open', [resolvedFile], { detached: true });
+        }
+        sendMessage({ action: 'openFileResult', id: taskId, taskId, success: true, path: resolvedFile });
       } else {
-        spawn('explorer.exe', [DOWNLOADS_DIR], { windowsHide: true, detached: true });
-        sendMessage({ action: 'openFileResult', success: false, error: 'Không tìm thấy tệp. Đã mở thư mục Downloads.' });
+        const fallbackDir = fs.existsSync(baseDir) ? baseDir : DOWNLOADS_DIR;
+        logHost(`openFile fallback: opening folder "${fallbackDir}"`);
+        if (isWin) {
+          spawn('explorer.exe', [fallbackDir], { windowsHide: true, detached: true });
+        } else if (isMac) {
+          spawn('open', [fallbackDir], { detached: true });
+        } else {
+          spawn('xdg-open', [fallbackDir], { detached: true });
+        }
+        sendMessage({
+          action: 'openFileResult',
+          id: taskId,
+          taskId,
+          filename: filename || (targetPath ? path.basename(targetPath) : ''),
+          success: false,
+          openedFolder: true,
+          fileNotFound: true,
+          path: fallbackDir,
+          error: 'File not found'
+        });
       }
       break;
     }
 
     case 'showInFolder': {
+      const baseDir = msg.downloadDir || msg.outputDir || DOWNLOADS_DIR;
       let filePath = msg.path || '';
+      if (filePath) {
+        filePath = filePath.replace(/^["']|["']$/g, '').trim();
+        try { filePath = decodeURIComponent(filePath); } catch (_) {}
+      }
       if (filePath && !path.isAbsolute(filePath)) {
-        filePath = path.join(DOWNLOADS_DIR, filePath);
+        filePath = path.join(baseDir, filePath);
       }
       if (!fs.existsSync(filePath)) {
-        try {
-          const files = fs.readdirSync(DOWNLOADS_DIR);
-          const match = findBestFileMatch(msg.path || '', files);
-          if (match) {
-            filePath = path.join(DOWNLOADS_DIR, match);
-          }
-        } catch (_) {}
+        const searchDirs = [baseDir];
+        if (baseDir !== DOWNLOADS_DIR) searchDirs.push(DOWNLOADS_DIR);
+
+        for (const dir of searchDirs) {
+          try {
+            if (fs.existsSync(dir)) {
+              const files = fs.readdirSync(dir);
+              const match = findBestFileMatch(msg.path || '', files);
+              if (match) {
+                filePath = path.join(dir, match);
+                break;
+              }
+            }
+          } catch (_) {}
+        }
       }
       if (filePath && fs.existsSync(filePath)) {
-        spawn('explorer.exe', [`/select,${filePath}`], { windowsHide: true, detached: true });
+        if (isWin) {
+          spawn('explorer.exe', [`/select,${filePath}`], { windowsHide: true, detached: true });
+        } else if (isMac) {
+          spawn('open', ['-R', filePath], { detached: true });
+        } else {
+          spawn('xdg-open', [baseDir], { detached: true });
+        }
       } else {
-        spawn('explorer.exe', [DOWNLOADS_DIR], { windowsHide: true, detached: true });
+        const fallbackDir = fs.existsSync(baseDir) ? baseDir : DOWNLOADS_DIR;
+        if (isWin) {
+          spawn('explorer.exe', [fallbackDir], { windowsHide: true, detached: true });
+        } else if (isMac) {
+          spawn('open', [fallbackDir], { detached: true });
+        } else {
+          spawn('xdg-open', [fallbackDir], { detached: true });
+        }
       }
       sendMessage({ action: 'showInFolderResult', success: true });
       break;
     }
 
     case 'cancel': {
+      logHost(`Received cancel command from extension.`);
+      if (activeStreamJob) {
+        try { cleanupStreamJob(true); } catch (e) {}
+      }
       if (activeMultiThreadJob) {
         try { activeMultiThreadJob.cancel(); } catch (e) {}
         activeMultiThreadJob = null;
       }
       if (activeProcess) {
         activeProcess.isKilledByHost = true;
-        try { activeProcess.kill(); } catch (e) {}
+        const pid = activeProcess.pid;
+        try {
+          if (isWin && pid) {
+            exec(`taskkill /F /T /PID ${pid}`, () => {});
+          }
+          activeProcess.kill('SIGKILL');
+        } catch (e) {}
         activeProcess = null;
       }
       sendMessage({ action: 'cancelled' });
@@ -331,11 +759,34 @@ function calculateChunks(totalSize, concurrency = 8, minChunkSize = 512 * 1024) 
 const httpKeepAliveAgent = new http.Agent({ keepAlive: true, maxSockets: 32, maxFreeSockets: 16 });
 const httpsKeepAliveAgent = new https.Agent({ keepAlive: true, maxSockets: 32, maxFreeSockets: 16 });
 
+// Downloads stage into `<final>.part` and rename atomically on success, so a
+// crash, kill, or second host process retrying the same title can never leave a
+// corrupt file that looks complete to the user and the openFile matcher.
+function partPathFor(outPath) {
+  return `${outPath}.part`;
+}
+
+function finalizePartFile(outPath) {
+  const part = partPathFor(outPath);
+  try {
+    if (fs.existsSync(part)) fs.renameSync(part, outPath);
+    return fs.existsSync(outPath);
+  } catch (e) {
+    logHost(`finalizePartFile failed for "${outPath}": ${e.message}`);
+    return false;
+  }
+}
+
+function cleanupPartialFiles(outPath) {
+  try { if (fs.existsSync(partPathFor(outPath))) fs.unlinkSync(partPathFor(outPath)); } catch (_) {}
+}
+
 function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency = 10, onProgress, signal }) {
   return new Promise((resolve, reject) => {
     let fd = null;
+    const partPath = partPathFor(outPath);
     try {
-      fd = fs.openSync(outPath, 'w');
+      fd = fs.openSync(partPath, 'w');
       if (totalSize > 0) {
         try { fs.ftruncateSync(fd, totalSize); } catch (e) {}
       }
@@ -371,7 +822,10 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
     };
 
     if (signal) {
-      signal.onAbort = cleanup;
+      signal.onAbort = () => {
+        cleanup();
+        reject(new Error('USER_CANCELED'));
+      };
     }
 
     let lastTime = Date.now();
@@ -404,6 +858,23 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
       if (completedBlocks >= totalBlocks && pendingWrites === 0 && !isAborted && !hasError) {
         clearInterval(progressInterval);
         cleanup();
+        if (totalSize > 0) {
+          try {
+            const actualSize = fs.existsSync(partPath) ? fs.statSync(partPath).size : -1;
+            if (actualSize !== totalSize) {
+              hasError = true;
+              cleanupPartialFiles(outPath);
+              return reject(new Error('Downloaded size mismatch'));
+            }
+          } catch (err) {
+            hasError = true;
+            return reject(err);
+          }
+        }
+        if (!finalizePartFile(outPath)) {
+          hasError = true;
+          return reject(new Error('Failed to finalize downloaded file'));
+        }
         resolve();
       }
     }
@@ -428,6 +899,14 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
             return fetchBlock(block, retryCount).then(blockResolve);
           }
 
+          if (res.statusCode === 200 && block.blockIdx > 0) {
+            activeReqs.delete(req);
+            res.destroy();
+            hasError = true;
+            cleanup();
+            return reject(new Error(`Server does not support HTTP Range requests (returned 200 on block ${block.blockIdx})`));
+          }
+
           if (res.statusCode !== 206 && res.statusCode !== 200) {
             activeReqs.delete(req);
             res.destroy();
@@ -450,8 +929,13 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
             activeReqs.delete(req);
             if (isAborted || hasError) return blockResolve();
 
-            if (currentWritePos <= block.end && retryCount < 4) {
-              return setTimeout(() => fetchBlock(block, retryCount + 1).then(blockResolve), 500);
+            if (currentWritePos <= block.end) {
+              if (retryCount < 4) {
+                return setTimeout(() => fetchBlock(block, retryCount + 1).then(blockResolve), 500);
+              }
+              hasError = true;
+              cleanup();
+              return reject(new Error('Incomplete block ' + block.blockIdx + ' after max retries'));
             }
 
             // Write full 1 MB block asynchronously to disk in a single I/O call
@@ -519,7 +1003,8 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
   return new Promise((resolve, reject) => {
     const u = new URL(url);
     const client = u.protocol === 'https:' ? https : http;
-    const fileStream = fs.createWriteStream(outPath);
+    const partPath = partPathFor(outPath);
+    const fileStream = fs.createWriteStream(partPath);
     let totalBytes = 0;
     let downloadedBytes = 0;
     let lastTime = Date.now();
@@ -528,16 +1013,36 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
     const req = client.get(u, { headers }, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         fileStream.close();
-        try { fs.unlinkSync(outPath); } catch (e) {}
+        try { fs.unlinkSync(partPath); } catch (e) {}
         const nextUrl = new URL(res.headers.location, url).href;
         return downloadFileSingleStream({ url: nextUrl, outPath, headers, onProgress, signal }).then(resolve).catch(reject);
       }
       if (res.statusCode < 200 || res.statusCode >= 300) {
         fileStream.close();
+        try { fs.unlinkSync(partPath); } catch (e) {}
         return reject(new Error(`HTTP ${res.statusCode}`));
       }
       totalBytes = parseInt(res.headers['content-length'] || 0, 10) || 0;
+      let firstChunkChecked = false;
       res.on('data', (c) => {
+        if (!firstChunkChecked) {
+          firstChunkChecked = true;
+          const headStr = c.slice(0, 100).toString('utf8');
+          if (headStr.includes('#EXTM3U')) {
+            try { fileStream.close(); } catch (_) {}
+            try { fs.unlinkSync(partPath); } catch (_) {}
+            try { req.destroy(); } catch (_) {}
+            return reject(new Error('Phát hiện luồng HLS m3u8 (cần FFmpeg giải mã)'));
+          }
+          const cType = String(res.headers['content-type'] || '').toLowerCase();
+          if ((headStr.startsWith('<!DOCTYPE') || headStr.startsWith('<html') || headStr.startsWith('{"status_code"')) &&
+              (cType.includes('text/html') || cType.includes('application/json'))) {
+            try { fileStream.close(); } catch (_) {}
+            try { fs.unlinkSync(partPath); } catch (_) {}
+            try { req.destroy(); } catch (_) {}
+            return reject(new Error('Tệp tải về không phải video (máy chủ trả về trang HTML/Lỗi API)'));
+          }
+        }
         downloadedBytes += c.length;
         const now = Date.now();
         const dt = (now - lastTime) / 1000;
@@ -556,17 +1061,29 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
         }
       });
       res.pipe(fileStream);
-      fileStream.on('finish', () => resolve());
-      fileStream.on('error', reject);
+      fileStream.on('finish', () => {
+        // Stream fully flushed: promote .part to the final name atomically.
+        if (finalizePartFile(outPath)) return resolve();
+        reject(new Error('Failed to finalize downloaded file'));
+      });
+      fileStream.on('error', (err) => {
+        cleanupPartialFiles(outPath);
+        reject(err);
+      });
     });
 
     if (signal) {
       signal.onAbort = () => {
         try { req.destroy(); } catch (e) {}
         try { fileStream.close(); } catch (e) {}
+        cleanupPartialFiles(outPath);
+        reject(new Error('USER_CANCELED'));
       };
     }
-    req.on('error', reject);
+    req.on('error', (err) => {
+      cleanupPartialFiles(outPath);
+      reject(err);
+    });
   });
 }
 
@@ -583,8 +1100,24 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
     'Accept': '*/*'
   };
   if (referer) reqHeaders['Referer'] = referer;
-  if (origin) reqHeaders['Origin'] = origin;
-  if (req.cookie) reqHeaders['Cookie'] = req.cookie;
+  if (origin) {
+    try {
+      const uHost = new URL(targetUrl).hostname.toLowerCase();
+      const oHost = new URL(origin).hostname.toLowerCase();
+      if (uHost === oHost || uHost.endsWith('.' + oHost) || oHost.endsWith('.' + uHost)) {
+        reqHeaders['Origin'] = origin;
+      }
+    } catch (_) {}
+  }
+  if (req.cookie) {
+    try {
+      const uHost = new URL(targetUrl).hostname.toLowerCase();
+      const pHost = req.pageUrl ? new URL(req.pageUrl).hostname.toLowerCase() : '';
+      if (pHost && (uHost === pHost || uHost.endsWith('.' + pHost) || pHost.endsWith('.' + uHost) || (uHost.includes('tiktok') && pHost.includes('tiktok')))) {
+        reqHeaders['Cookie'] = req.cookie;
+      }
+    } catch (_) {}
+  }
 
   sendMessage({
     action: 'progress',
@@ -651,7 +1184,15 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
     });
   } catch (err) {
     activeMultiThreadJob = null;
+    if (err && err.message === 'USER_CANCELED') {
+      logHost(`Multi-thread download canceled by user: "${outPath}"`);
+      cleanupPartialFiles(outPath);
+      try { if (fs.existsSync(outPath)) fs.unlinkSync(outPath); } catch (_) {}
+      sendMessage({ action: 'cancelled' });
+      return;
+    }
     logHost(`Multi-thread download error: ${err.message}. Triggering fallback.`);
+    cleanupPartialFiles(outPath);
     if (typeof onFallback === 'function') {
       onFallback(err);
     } else {
@@ -687,20 +1228,35 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
 
   const args = [
     '-y',
+    '-threads', FFMPEG_THREAD_LIMIT,
     '-fflags', '+genpts+igndts+discardcorrupt+sortdts',
     '-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data'
   ];
-  if (videoUrl.startsWith('http')) args.push(...netInputFlags);
-  args.push('-headers', headers, '-i', videoUrl);
+  if (videoUrl.startsWith('http')) {
+    args.push(...netInputFlags, '-headers', headers);
+  }
+  args.push('-i', videoUrl);
 
   if (audioUrl && audioUrl !== videoUrl) {
-    if (audioUrl.startsWith('http')) args.push(...netInputFlags);
-    args.push(
-      '-headers', headers,
-      '-i', audioUrl,
-      '-c', 'copy',
-      '-strict', '-2'
-    );
+    if (audioUrl.startsWith('http')) {
+      args.push(...netInputFlags, '-headers', headers);
+    }
+    const isOpusOrWebm = audioUrl.includes('mime=audio%2Fwebm') || audioUrl.includes('opus') || (req && req.audioCodec === 'opus');
+    if (isOpusOrWebm && outPath.endsWith('.mp4')) {
+      args.push(
+        '-i', audioUrl,
+        '-c:v', 'copy',
+        '-c:a', 'aac',
+        '-b:a', '192k',
+        '-strict', '-2'
+      );
+    } else {
+      args.push(
+        '-i', audioUrl,
+        '-c', 'copy',
+        '-strict', '-2'
+      );
+    }
   } else {
     args.push('-c', 'copy');
   }
@@ -709,11 +1265,14 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
     '-avoid_negative_ts', 'make_zero',
     '-max_muxing_queue_size', '1024',
     '-movflags', '+faststart',
+    // .part output hides the extension ffmpeg uses to pick its muxer — state it.
+    '-f', 'mp4',
     '-progress', 'pipe:1',
-    outPath
+    partPathFor(outPath)
   );
 
   activeProcess = spawn(FFMPEG_PATH, args, { windowsHide: true });
+  setBackgroundPriority(activeProcess);
   const proc = activeProcess;
 
   const totalSizeEstimated = req.size || req.totalSize || 0;
@@ -787,10 +1346,12 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
   proc.on('close', (code) => {
     if (proc && proc.isKilledByHost) {
       if (activeProcess === proc) activeProcess = null;
+      cleanupPartialFiles(outPath);
+      notifySuperseded();
       return;
     }
     if (activeProcess === proc) activeProcess = null;
-    if (code === 0 && fs.existsSync(outPath) && fs.statSync(outPath).size > 1000) {
+    if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 1000 && finalizePartFile(outPath)) {
       sendMessage({
         action: 'progress',
         percent: '100%',
@@ -817,6 +1378,23 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
     if (activeProcess === proc) activeProcess = null;
     sendMessage({ action: 'error', error: err.message });
   });
+}
+
+function isSameOriginOrSubdomain(baseHost, targetHost) {
+  if (!baseHost || !targetHost) return false;
+  try {
+    if (baseHost.includes('://')) baseHost = new URL(baseHost).hostname;
+    if (targetHost.includes('://')) targetHost = new URL(targetHost).hostname;
+  } catch (_) {}
+  const b = String(baseHost).toLowerCase().replace(/:\d+$/, '');
+  const t = String(targetHost).toLowerCase().replace(/:\d+$/, '');
+  if (b === t) return true;
+  if (t.endsWith('.' + b) || b.endsWith('.' + t)) return true;
+  const bClean = b.replace(/^www\./, '');
+  const tClean = t.replace(/^www\./, '');
+  if (bClean === tClean) return true;
+  if (t.endsWith('.' + bClean) || b.endsWith('.' + tClean)) return true;
+  return false;
 }
 
 async function startFfmpegMux(req) {
@@ -846,10 +1424,25 @@ async function startFfmpegMux(req) {
     try { origin = new URL(referer).origin; } catch (e) {}
   }
 
+  let allowCookie = false;
+  const refOrPage = req.referer || req.pageUrl || '';
+  if (req.cookie && refOrPage) {
+    try {
+      const baseHost = new URL(refOrPage).hostname;
+      const vHost = videoUrl ? new URL(videoUrl).hostname : '';
+      const aHost = audioUrl ? new URL(audioUrl).hostname : '';
+      const vMatch = isSameOriginOrSubdomain(baseHost, vHost);
+      const aMatch = !audioUrl || isSameOriginOrSubdomain(baseHost, aHost);
+      if (vMatch && aMatch) {
+        allowCookie = true;
+      }
+    } catch (_) {}
+  }
+
   const rawHeadersStr = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\r\n' +
     (referer ? `Referer: ${referer}\r\n` : '') +
     (origin ? `Origin: ${origin}\r\n` : '') +
-    (req.cookie ? `Cookie: ${req.cookie}\r\n` : '') +
+    (allowCookie && req.cookie ? `Cookie: ${req.cookie}\r\n` : '') +
     'Accept: */*\r\n';
 
   const reqHeadersObj = {
@@ -858,7 +1451,7 @@ async function startFfmpegMux(req) {
   };
   if (referer) reqHeadersObj['Referer'] = referer;
   if (origin) reqHeadersObj['Origin'] = origin;
-  if (req.cookie) reqHeadersObj['Cookie'] = req.cookie;
+  if (allowCookie && req.cookie) reqHeadersObj['Cookie'] = req.cookie;
 
   const tempSessionDir = path.join(os.tmpdir(), `savior_mux_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`);
   try {
@@ -870,10 +1463,25 @@ async function startFfmpegMux(req) {
   const tempVideoPath = path.join(tempSessionDir, 'video.mp4');
   const tempAudioPath = path.join(tempSessionDir, 'audio.mp4');
 
-  const signal = { onAbort: null };
+  const abortCallbacks = new Set();
+  const signal = {
+    set onAbort(fn) {
+      if (typeof fn === 'function') abortCallbacks.add(fn);
+    },
+    get onAbort() {
+      return () => {
+        for (const cb of abortCallbacks) {
+          try { cb(); } catch (e) {}
+        }
+      };
+    }
+  };
   activeMultiThreadJob = {
     cancel: () => {
-      if (signal.onAbort) signal.onAbort();
+      for (const cb of abortCallbacks) {
+        try { cb(); } catch (e) {}
+      }
+      abortCallbacks.clear();
       try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
     }
   };
@@ -996,12 +1604,18 @@ async function startFfmpegMux(req) {
 
     const muxArgs = [
       '-y',
+      '-threads', FFMPEG_THREAD_LIMIT,
       '-fflags', '+genpts+igndts+discardcorrupt+sortdts',
       '-i', tempVideoPath
     ];
 
     if (fs.existsSync(tempAudioPath) && fs.statSync(tempAudioPath).size > 100) {
-      muxArgs.push('-i', tempAudioPath, '-c', 'copy', '-strict', '-2');
+      const isOpusOrWebm = audioUrl.includes('mime=audio%2Fwebm') || audioUrl.includes('opus') || (req && req.audioCodec === 'opus');
+      if (isOpusOrWebm && outPath.endsWith('.mp4')) {
+        muxArgs.push('-i', tempAudioPath, '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-strict', '-2');
+      } else {
+        muxArgs.push('-i', tempAudioPath, '-c', 'copy', '-strict', '-2');
+      }
     } else {
       muxArgs.push('-c', 'copy');
     }
@@ -1009,10 +1623,12 @@ async function startFfmpegMux(req) {
     muxArgs.push(
       '-avoid_negative_ts', 'make_zero',
       '-movflags', '+faststart',
-      outPath
+      '-f', 'mp4',
+      partPathFor(outPath)
     );
 
     activeProcess = spawn(FFMPEG_PATH, muxArgs, { windowsHide: true });
+    setBackgroundPriority(activeProcess);
     const proc = activeProcess;
 
     let muxErr = '';
@@ -1021,8 +1637,14 @@ async function startFfmpegMux(req) {
     proc.on('close', (code) => {
       try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
       if (activeProcess === proc) activeProcess = null;
+      if (proc && proc.isKilledByHost) {
+        logHost(`FFmpeg mux killed by host/cancel.`);
+        cleanupPartialFiles(outPath);
+        notifySuperseded();
+        return;
+      }
 
-      if (code === 0 && fs.existsSync(outPath) && fs.statSync(outPath).size > 1000) {
+      if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 1000 && finalizePartFile(outPath)) {
         sendMessage({
           action: 'progress',
           percent: '100%',
@@ -1053,41 +1675,16 @@ async function startFfmpegMux(req) {
   } catch (err) {
     activeMultiThreadJob = null;
     try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
+    if (err && err.message === 'USER_CANCELED') {
+      logHost(`Mux Range download canceled by user.`);
+      sendMessage({ action: 'cancelled' });
+      return;
+    }
     logHost(`Mux Range download failed: ${err.message}. Retrying via direct FFmpeg stream.`);
     fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilename, targetDir, rawHeadersStr);
   }
 }
 
-function deobfuscateKingCdnPath(pathStr) {
-  if (!pathStr || typeof pathStr !== 'string') return pathStr;
-  try {
-    const qt = (e, t = 6) => e.replace(/[a-zA-Z]/g, c => String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + t) ? c : c - 26));
-    return Buffer.from(qt(pathStr, 6), 'base64').toString('utf8');
-  } catch (e) {
-    return pathStr;
-  }
-}
-
-function resolveKingCdnUrl(rawUrl, isKey = false) {
-  if (!rawUrl || typeof rawUrl !== 'string') return rawUrl;
-  if (rawUrl.includes('kingcdn.xyz') || rawUrl.includes('buiduyanh.online')) {
-    try {
-      const u = new URL(rawUrl);
-      const filename = u.pathname.replace(/^\/+/, '');
-      const extMatch = filename.match(/\.([a-zA-Z0-9]+)$/);
-      const baseName = extMatch ? filename.slice(0, -extMatch[0].length) : filename;
-
-      if (baseName.length > 30 && !baseName.includes('-')) {
-        const deobf = deobfuscateKingCdnPath(baseName);
-        if (deobf && deobf.includes('-')) {
-          u.pathname = '/' + deobf + (isKey ? '.key' : (extMatch ? extMatch[0] : ''));
-          return u.href;
-        }
-      }
-    } catch (e) {}
-  }
-  return rawUrl;
-}
 
 function fetchHttpResource(urlStr, referer = '', isBin = false) {
   return new Promise((resolve, reject) => {
@@ -1096,7 +1693,12 @@ function fetchHttpResource(urlStr, referer = '', isBin = false) {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
       'Accept': '*/*'
     };
-    if (referer) reqHeaders['Referer'] = referer;
+    if (referer) {
+      reqHeaders['Referer'] = referer;
+      try {
+        reqHeaders['Origin'] = new URL(referer).origin;
+      } catch (_) {}
+    }
 
     client.get(urlStr, { headers: reqHeaders }, res => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
@@ -1122,7 +1724,28 @@ async function startFfmpegDirectStream(req) {
     try { activeProcess.kill(); } catch (e) {}
     activeProcess = null;
   }
-  let targetUrl = cleanFbCdnUrl(req.videoUrl || req.url);
+  // Prefer a direct media/CDN URL over a watch-page URL: TikTok flows can
+  // deliver videoUrl = the tiktok.com/@user/video/... PAGE while url holds the
+  // actual signed stream. Opening the page in FFmpeg is always an I/O error.
+  const looksLikeWatchPage = (u) => {
+    try {
+      const url = new URL(u);
+      const h = url.hostname.toLowerCase();
+      const p = url.pathname.toLowerCase();
+      if (!(h.includes('tiktok.com') || h.includes('douyin.com'))) return false;
+      if (/\/(video|photo|reel|embed)\//.test(p)) return true;          // @user/video/... page
+      if (/\.(mp4|m3u8|mpd|webm|mov|mp3|bin)(\?|$)/i.test(p)) return false; // direct media file
+      return false;                                                       // signed CDN path (no ext) — treat as stream
+    } catch (e) {
+      return false;
+    }
+  };
+  let targetUrl;
+  {
+    const candidates = [req.videoUrl, req.url].filter(Boolean);
+    const direct = candidates.find(u => !looksLikeWatchPage(u));
+    targetUrl = cleanFbCdnUrl(direct || candidates[0] || '');
+  }
   if (!targetUrl) {
     sendMessage({ action: 'error', error: 'Không tìm thấy URL tải video' });
     return;
@@ -1144,10 +1767,32 @@ async function startFfmpegDirectStream(req) {
     try { origin = new URL(referer).origin; } catch (e) {}
   }
 
+  let safeOrigin = '';
+  if (origin) {
+    try {
+      const uHost = new URL(targetUrl).hostname.toLowerCase();
+      const oHost = new URL(origin).hostname.toLowerCase();
+      const isKnownCrossCdn = uHost.includes('fbcdn.net') || uHost.includes('tiktokcdn.com');
+      if (uHost === oHost || uHost.endsWith('.' + oHost) || oHost.endsWith('.' + uHost) || isKnownCrossCdn) {
+        safeOrigin = origin;
+      }
+    } catch (_) {}
+  }
+  let safeCookie = '';
+  if (req.cookie) {
+    try {
+      const uHost = new URL(targetUrl).hostname.toLowerCase();
+      const pHost = req.pageUrl ? new URL(req.pageUrl).hostname.toLowerCase() : '';
+      if (pHost && (uHost === pHost || uHost.endsWith('.' + pHost) || pHost.endsWith('.' + uHost) || (uHost.includes('tiktok') && pHost.includes('tiktok')))) {
+        safeCookie = req.cookie;
+      }
+    } catch (_) {}
+  }
+
   const headers = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\r\n' +
     (referer ? `Referer: ${referer}\r\n` : '') +
-    (origin ? `Origin: ${origin}\r\n` : '') +
-    (req.cookie ? `Cookie: ${req.cookie}\r\n` : '') +
+    (safeOrigin ? `Origin: ${safeOrigin}\r\n` : '') +
+    (safeCookie ? `Cookie: ${safeCookie}\r\n` : '') +
     'Accept: */*\r\n';
 
   sendMessage({
@@ -1162,7 +1807,11 @@ async function startFfmpegDirectStream(req) {
   let tempSessionDir = null;
   let totalPlaylistDuration = 0;
 
-  const isHls = targetUrl.toLowerCase().includes('.m3u8') || targetUrl.includes('kingcdn.xyz') || targetUrl.includes('buiduyanh.online');
+  const isHls = targetUrl.toLowerCase().includes('.m3u8') ||
+    targetUrl.includes('/hls/') ||
+    targetUrl.includes('format=m3u8') ||
+    targetUrl.includes('type=m3u8') ||
+    targetUrl.includes('playlist');
   if (isHls && targetUrl.startsWith('http')) {
     try {
       tempSessionDir = path.join(os.tmpdir(), `savior_stream_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`);
@@ -1170,6 +1819,13 @@ async function startFfmpegDirectStream(req) {
 
       logHost(`Fetching HLS playlist: ${targetUrl}`);
       let playlistText = await fetchHttpResource(targetUrl, referer, false);
+
+      // Verify that the response is actually an HLS playlist (#EXTM3U)
+      if (!playlistText || !playlistText.includes('#EXTM3U')) {
+        logHost(`Invalid playlist response: Does not contain #EXTM3U`);
+        sendMessage({ action: 'error', error: 'Máy chủ trả về luồng không hợp lệ (không phải định dạng HLS playlist).' });
+        return;
+      }
 
       // Handle Master Playlist
       if (playlistText.includes('#EXT-X-STREAM-INF')) {
@@ -1206,10 +1862,11 @@ async function startFfmpegDirectStream(req) {
         if (!isNaN(d)) totalPlaylistDuration += d;
       }
 
-      // Deobfuscate KingCDN / HLS segments and handle AES-128 keys
+      // Handle AES-128 keys, fMP4 init maps (#EXT-X-MAP), and relative segment paths
       const pLines = playlistText.split(/\r?\n/);
       const sanitizedLines = [];
       let keyCount = 0;
+      const hasEncryptionKey = playlistText.includes('#EXT-X-KEY');
 
       for (let i = 0; i < pLines.length; i++) {
         let line = pLines[i];
@@ -1218,10 +1875,9 @@ async function startFfmpegDirectStream(req) {
           if (uriMatch) {
             const rawKeyUri = uriMatch[1];
             const absKeyUrl = new URL(rawKeyUri, targetUrl).href;
-            const resolvedKeyUrl = resolveKingCdnUrl(absKeyUrl, true);
             try {
-              logHost(`Fetching AES-128 key: ${resolvedKeyUrl}`);
-              const keyBytes = await fetchHttpResource(resolvedKeyUrl, referer, true);
+              logHost(`Fetching AES-128 key: ${absKeyUrl}`);
+              const keyBytes = await fetchHttpResource(absKeyUrl, referer, true);
               const keyFilename = `key_${++keyCount}.key`;
               const localKeyPath = path.join(tempSessionDir, keyFilename);
               fs.writeFileSync(localKeyPath, keyBytes);
@@ -1231,18 +1887,45 @@ async function startFfmpegDirectStream(req) {
             }
           }
           sanitizedLines.push(line);
+        } else if (line.startsWith('#EXT-X-MAP')) {
+          const uriMatch = line.match(/URI=\"([^\"]+)\"/);
+          if (uriMatch) {
+            const rawMapUri = uriMatch[1];
+            const absMapUrl = new URL(rawMapUri, targetUrl).href;
+            if (hasEncryptionKey) {
+              try {
+                logHost(`Fetching fMP4 initialization segment: ${absMapUrl}`);
+                const mapBytes = await fetchHttpResource(absMapUrl, referer, true);
+                const mapFilename = `init_${Date.now()}.mp4`;
+                const localMapPath = path.join(tempSessionDir, mapFilename);
+                fs.writeFileSync(localMapPath, mapBytes);
+                line = line.replace(rawMapUri, mapFilename);
+              } catch (mErr) {
+                logHost(`Failed to fetch init segment locally, using absolute URL: ${mErr.message}`);
+                line = line.replace(rawMapUri, absMapUrl);
+              }
+            } else {
+              line = line.replace(rawMapUri, absMapUrl);
+            }
+          }
+          sanitizedLines.push(line);
         } else if (line.trim().length > 0 && !line.startsWith('#')) {
           const rawSegUrl = new URL(line.trim(), targetUrl).href;
-          const resolvedSegUrl = resolveKingCdnUrl(rawSegUrl, false);
-          sanitizedLines.push(resolvedSegUrl);
+          sanitizedLines.push(rawSegUrl);
         } else {
           sanitizedLines.push(line);
         }
       }
 
-      const localM3u8Path = path.join(tempSessionDir, 'playlist.m3u8');
-      fs.writeFileSync(localM3u8Path, sanitizedLines.join('\n'), 'utf8');
-      ffmpegInput = localM3u8Path;
+      if (hasEncryptionKey) {
+        const localM3u8Path = path.join(tempSessionDir, 'playlist.m3u8');
+        fs.writeFileSync(localM3u8Path, sanitizedLines.join('\n'), 'utf8');
+        ffmpegInput = localM3u8Path;
+      } else {
+        // Direct remote stream: let FFmpeg fetch the playlist directly over HTTP
+        // with full -headers (including Referer/User-Agent) and -reconnect flags!
+        ffmpegInput = targetUrl;
+      }
     } catch (prepErr) {
       logHost(`HLS prep error: ${prepErr.message}`);
       ffmpegInput = targetUrl;
@@ -1251,6 +1934,7 @@ async function startFfmpegDirectStream(req) {
 
   const args = [
     '-y',
+    '-threads', FFMPEG_THREAD_LIMIT,
     '-fflags', '+genpts+igndts+discardcorrupt+sortdts'
   ];
 
@@ -1270,10 +1954,10 @@ async function startFfmpegDirectStream(req) {
       '-reconnect_streamed', '1',
       '-reconnect_delay_max', '5',
       '-multiple_requests', '1',
-      '-rw_timeout', '15000000'
+      '-rw_timeout', '15000000',
+      '-headers', headers
     );
   }
-  args.push('-headers', headers);
   args.push('-i', ffmpegInput);
 
   if (isAudio) {
@@ -1287,9 +1971,10 @@ async function startFfmpegDirectStream(req) {
     );
   }
 
-  args.push('-progress', 'pipe:1', outPath);
+  args.push('-f', isAudio ? 'mp3' : 'mp4', '-progress', 'pipe:1', partPathFor(outPath));
 
   function attachDirectFfmpegHandlers(proc) {
+    setBackgroundPriority(proc);
     let errOutput = '';
     proc.stderr.on('data', (data) => {
       const chunk = data.toString('utf8');
@@ -1362,6 +2047,8 @@ async function startFfmpegDirectStream(req) {
     proc.on('close', (code) => {
       if (proc && proc.isKilledByHost) {
         if (activeProcess === proc) activeProcess = null;
+        cleanupPartialFiles(outPath);
+        notifySuperseded();
         return;
       }
       if (activeProcess === proc) activeProcess = null;
@@ -1369,7 +2056,7 @@ async function startFfmpegDirectStream(req) {
         try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
       }
 
-      if (code === 0 && fs.existsSync(outPath) && fs.statSync(outPath).size > 1000) {
+      if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 1000 && finalizePartFile(outPath)) {
         sendMessage({
           action: 'progress',
           percent: '100%',
@@ -1383,11 +2070,20 @@ async function startFfmpegDirectStream(req) {
           downloadsDir: targetDir
         });
       } else {
+        cleanupPartialFiles(outPath);
+        try {
+          if (fs.existsSync(outPath) && fs.statSync(outPath).size <= 1000) {
+            fs.unlinkSync(outPath);
+          }
+        } catch (_) {}
+        const is403 = /403|Forbidden|Access Denied/i.test(errOutput);
         const errLines = errOutput.split('\n').filter(l => l.trim() && !l.startsWith('ffmpeg version') && !l.startsWith('  built with') && !l.startsWith('  configuration:'));
-        const shortErr = errLines.slice(-3).join(' ').trim() || `FFmpeg code ${code}`;
+        const shortErr = is403
+          ? 'Token luồng phim đã hết hạn hoặc bị từ chối truy cập (HTTP 403). Vui lòng tải lại trang để lấy luồng mới.'
+          : `Lỗi tải luồng: ${(errLines.slice(-3).join(' ').trim() || `FFmpeg code ${code}`).slice(0, 150)}`;
         sendMessage({
           action: 'error',
-          error: `Lỗi tải luồng: ${shortErr.slice(0, 150)}`
+          error: shortErr
         });
       }
     });
@@ -1424,23 +2120,27 @@ async function startFfmpegDirectStream(req) {
         });
         const convertArgs = [
           '-y',
+          '-threads', FFMPEG_THREAD_LIMIT,
           '-i', tempMediaFile,
           '-vn',
           '-acodec', 'libmp3lame',
           '-q:a', '2',
-          outPath
+          '-f', 'mp3',
+          partPathFor(outPath)
         ];
         activeProcess = spawn(FFMPEG_PATH, convertArgs, { windowsHide: true });
+        setBackgroundPriority(activeProcess);
         const cProc = activeProcess;
         let cErr = '';
         cProc.stderr.on('data', (d) => { cErr += d.toString('utf8'); });
         cProc.on('close', (code) => {
           try { fs.rmSync(tempMediaFile, { force: true }); } catch (e) {}
           if (activeProcess === cProc) activeProcess = null;
-          if (code === 0 && fs.existsSync(outPath) && fs.statSync(outPath).size > 100) {
+          if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 100 && finalizePartFile(outPath)) {
             sendMessage({ action: 'progress', percent: '100%', speed: 'Hoàn thành', eta: '', size: formatBytes(fs.statSync(outPath).size) });
             sendMessage({ action: 'complete', outputFile: finalFilename, downloadsDir: targetDir });
           } else {
+            cleanupPartialFiles(outPath);
             sendMessage({ action: 'error', error: `Lỗi chuyển đổi MP3 (code ${code})` });
           }
         });
@@ -1511,58 +2211,112 @@ function checkIsTikTok(u) {
 }
 
 function resolveDefaultReferer(targetUrl = '', reqReferer = '', pageUrl = '') {
-  if (reqReferer && typeof reqReferer === 'string' && reqReferer.trim()) {
-    return reqReferer.trim();
-  }
   const u = String(targetUrl || '').toLowerCase();
   const p = String(pageUrl || '').toLowerCase();
 
-  if (u.includes('tiktok.com') || u.includes('tiktokcdn.com') || u.includes('byteoversea.com') || u.includes('ibytedtos.com') || p.includes('tiktok.com')) {
+  // Strict CDN Referrer Rules:
+  // These CDNs actively block 3rd-party embedder referers with HTTP 403 Forbidden.
+  // Their standard referer MUST take precedence over any 3rd-party reqReferer.
+  if (u.includes('twimg.com') || u.includes('twitter.com') || u.includes('x.com')) {
+    return 'https://x.com/';
+  }
+  if (u.includes('tiktok.com') || u.includes('tiktokcdn.com') || u.includes('byteoversea.com') || u.includes('ibytedtos.com')) {
     return 'https://www.tiktok.com/';
   }
-  if (u.includes('youtube.com') || u.includes('googlevideo.com') || u.includes('youtu.be') || p.includes('youtube.com')) {
-    return 'https://www.youtube.com/';
-  }
-  if (u.includes('facebook.com') || u.includes('fbcdn.net') || u.includes('fb.watch') || p.includes('facebook.com')) {
+  if (u.includes('facebook.com') || u.includes('fbcdn.net') || u.includes('fb.watch')) {
     return 'https://www.facebook.com/';
   }
   if (p.includes('threads.net') || u.includes('threads.net')) {
     return 'https://www.threads.net/';
   }
-  if (u.includes('instagram.com') || u.includes('cdninstagram.com') || p.includes('instagram.com')) {
+  if (u.includes('instagram.com') || u.includes('cdninstagram.com')) {
     return 'https://www.instagram.com/';
   }
-  if (u.includes('twimg.com') || u.includes('twitter.com') || u.includes('x.com') || p.includes('x.com') || p.includes('twitter.com')) {
-    return 'https://x.com/';
+  if (u.includes('googlevideo.com') || u.includes('youtube.com') || u.includes('youtu.be')) {
+    return 'https://www.youtube.com/';
   }
-  if (u.includes('bilivideo.com') || u.includes('bilibili.com') || p.includes('bilibili.com')) {
+  if (u.includes('bilivideo.com') || u.includes('bilibili.com')) {
     return 'https://www.bilibili.com/';
   }
-  if (u.includes('douyin.com') || u.includes('iesdouyin.com') || p.includes('douyin.com')) {
+  if (u.includes('douyin.com') || u.includes('iesdouyin.com')) {
     return 'https://www.douyin.com/';
   }
-  if (u.includes('v.redd.it') || u.includes('reddit.com') || p.includes('reddit.com')) {
+  if (u.includes('v.redd.it') || u.includes('reddit.com')) {
     return 'https://www.reddit.com/';
   }
-  if (u.includes('vimeocdn.com') || u.includes('vimeo.com') || p.includes('vimeo.com')) {
-    return 'https://vimeo.com/';
-  }
-  if (u.includes('twitch.tv') || u.includes('twitchcdn.net') || u.includes('ttvnw.net') || p.includes('twitch.tv')) {
+  if (u.includes('twitch.tv') || u.includes('twitchcdn.net') || u.includes('ttvnw.net')) {
     return 'https://www.twitch.tv/';
   }
-  if (u.includes('dailymotion.com') || u.includes('dmcdn.net') || p.includes('dailymotion.com')) {
+  if (u.includes('vimeocdn.com') || u.includes('vimeo.com')) {
+    return 'https://vimeo.com/';
+  }
+  if (u.includes('dailymotion.com') || u.includes('dmcdn.net')) {
     return 'https://www.dailymotion.com/';
   }
-  if (u.includes('pinimg.com') || u.includes('pinterest.com') || p.includes('pinterest.com')) {
+  if (u.includes('pinimg.com') || u.includes('pinterest.com')) {
     return 'https://www.pinterest.com/';
   }
-  if (u.includes('zadn.vn') || u.includes('zingmp3.vn') || p.includes('zingmp3.vn')) {
+  if (u.includes('zadn.vn') || u.includes('zingmp3.vn')) {
     return 'https://zingmp3.vn/';
   }
-  if (u.includes('nhaccuatui.com') || p.includes('nhaccuatui.com')) {
+  if (u.includes('nhaccuatui.com')) {
     return 'https://www.nhaccuatui.com/';
   }
-  if (u.includes('sndcdn.com') || u.includes('soundcloud.com') || p.includes('soundcloud.com')) {
+  if (u.includes('sndcdn.com') || u.includes('soundcloud.com')) {
+    return 'https://soundcloud.com/';
+  }
+
+  // If a specific reqReferer was provided and not forbidden by target CDN rules, use it
+  if (reqReferer && typeof reqReferer === 'string' && reqReferer.trim()) {
+    return reqReferer.trim();
+  }
+
+  if (p.includes('threads.net') || u.includes('threads.net')) {
+    return 'https://www.threads.net/';
+  }
+  if (p.includes('tiktok.com')) {
+    return 'https://www.tiktok.com/';
+  }
+  if (p.includes('youtube.com')) {
+    return 'https://www.youtube.com/';
+  }
+  if (p.includes('facebook.com')) {
+    return 'https://www.facebook.com/';
+  }
+  if (p.includes('instagram.com')) {
+    return 'https://www.instagram.com/';
+  }
+  if (p.includes('x.com') || p.includes('twitter.com')) {
+    return 'https://x.com/';
+  }
+  if (p.includes('bilibili.com')) {
+    return 'https://www.bilibili.com/';
+  }
+  if (p.includes('douyin.com')) {
+    return 'https://www.douyin.com/';
+  }
+  if (p.includes('reddit.com')) {
+    return 'https://www.reddit.com/';
+  }
+  if (p.includes('vimeo.com')) {
+    return 'https://vimeo.com/';
+  }
+  if (p.includes('twitch.tv')) {
+    return 'https://www.twitch.tv/';
+  }
+  if (p.includes('dailymotion.com')) {
+    return 'https://www.dailymotion.com/';
+  }
+  if (p.includes('pinterest.com')) {
+    return 'https://www.pinterest.com/';
+  }
+  if (p.includes('zingmp3.vn')) {
+    return 'https://zingmp3.vn/';
+  }
+  if (p.includes('nhaccuatui.com')) {
+    return 'https://www.nhaccuatui.com/';
+  }
+  if (p.includes('soundcloud.com')) {
     return 'https://soundcloud.com/';
   }
 
@@ -1583,7 +2337,11 @@ function resolveDefaultReferer(targetUrl = '', reqReferer = '', pageUrl = '') {
 
 function findBestFileMatch(query, files) {
   if (!query || !Array.isArray(files) || !files.length) return null;
-  const rawQ = path.basename(query).trim();
+  let decodedQuery = query;
+  try {
+    decodedQuery = decodeURIComponent(query);
+  } catch (_) {}
+  const rawQ = path.basename(decodedQuery).trim();
   const exact = files.find(f => f === rawQ);
   if (exact) return exact;
 
@@ -1728,7 +2486,7 @@ function startYtDlpDownload(req, targetUrl) {
     '--socket-timeout', '20',
     '--extractor-retries', '3',
     '--http-chunk-size', '10M',
-    '--concurrent-fragments', '8',
+    '--concurrent-fragments', '4',
     '--throttled-rate', '100K',
     '-f', formatArg,
     '--format-sort', 'res,vcodec:h264,acodec:m4a,proto:https',
@@ -1814,6 +2572,7 @@ function startYtDlpDownload(req, targetUrl) {
   }
 
   activeProcess = spawn(YTDLP_PATH, args, { windowsHide: true });
+  setBackgroundPriority(activeProcess);
   const proc = activeProcess;
 
   let errOutput = '';
@@ -1832,6 +2591,7 @@ function startYtDlpDownload(req, targetUrl) {
   proc.on('close', (code) => {
     if (proc && proc.isKilledByHost) {
       if (activeProcess === proc) activeProcess = null;
+      notifySuperseded();
       return;
     }
     if (activeProcess === proc) activeProcess = null;
@@ -1880,27 +2640,17 @@ function startDownload(req) {
   logHost(`startDownload: ${JSON.stringify({ url: req.url, videoUrl: req.videoUrl, audioUrl: req.audioUrl, title: req.title, quality: req.quality })}`);
 
   let targetUrl = req.videoUrl || req.url || '';
-  const isYouTube = checkIsYouTube(targetUrl) || checkIsYouTube(req.referer) || checkIsYouTube(req.pageUrl);
   const isTikTok = checkIsTikTok(targetUrl) || checkIsTikTok(req.referer) || checkIsTikTok(req.pageUrl);
-  const isFacebook = checkIsFacebook(targetUrl) || checkIsFacebook(req.referer) || checkIsFacebook(req.pageUrl);
-
-  // Canonicalize platform URL
-  if (isYouTube) {
-    const canonicalYt = extractYouTubeUrl([req.pageUrl, req.referer, targetUrl, req.url]);
-    if (canonicalYt) targetUrl = canonicalYt;
-  } else if (isTikTok) {
+  if (isTikTok) {
     // If targetUrl is already a direct media stream URL, DO NOT overwrite with pageUrl!
     const isDirectCdn = targetUrl.includes('tiktokcdn.com') ||
       targetUrl.includes('byteoversea.com') ||
       targetUrl.includes('ibytedtos.com') ||
       targetUrl.includes('video/tos/');
     if (!isDirectCdn) {
-      if (req.pageUrl && req.pageUrl.includes('tiktok.com')) targetUrl = req.pageUrl;
-      else if (req.referer && req.referer.includes('tiktok.com')) targetUrl = req.referer;
+      if (req.pageUrl && req.pageUrl.includes('tiktok.com')) req.videoUrl = req.pageUrl;
+      else if (req.referer && req.referer.includes('tiktok.com')) req.videoUrl = req.referer;
     }
-  } else if (isFacebook) {
-    if (req.pageUrl && (req.pageUrl.includes('facebook.com') || req.pageUrl.includes('fb.watch'))) targetUrl = req.pageUrl;
-    else if (req.referer && (req.referer.includes('facebook.com') || req.referer.includes('fb.watch'))) targetUrl = req.referer;
   }
 
   // Fast Path 1: Separate DASH video and audio streams via accelerated FFmpeg mux
@@ -1927,6 +2677,13 @@ if (typeof module !== 'undefined') {
     parseProgressLine,
     resolveDefaultReferer,
     findBestFileMatch,
-    calculateChunks
+    calculateChunks,
+    isSameOriginOrSubdomain,
+    isExecutableFile,
+    downloadFileMultiThread,
+    handleMessage,
+    setMessageHook,
+    startDownload,
+    DISCONNECT_GRACE_MS
   };
 }
