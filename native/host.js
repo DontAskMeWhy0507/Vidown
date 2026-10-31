@@ -1226,11 +1226,16 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
     '-rw_timeout', '15000000'
   ];
 
+  const hasLocalInput = !videoUrl.startsWith('http') || (audioUrl && !audioUrl.startsWith('http'));
+  const protoWhitelist = hasLocalInput
+    ? 'file,http,https,tcp,tls,crypto,data'
+    : 'http,https,tcp,tls,crypto,data';
+
   const args = [
     '-y',
     '-threads', FFMPEG_THREAD_LIMIT,
     '-fflags', '+genpts+igndts+discardcorrupt+sortdts',
-    '-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data'
+    '-protocol_whitelist', protoWhitelist
   ];
   if (videoUrl.startsWith('http')) {
     args.push(...netInputFlags, '-headers', headers);
@@ -1946,7 +1951,11 @@ async function startFfmpegDirectStream(req) {
     );
   }
 
-  args.push('-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data');
+  const isRemoteFfmpegInput = typeof ffmpegInput === 'string' && ffmpegInput.startsWith('http');
+  const ffmpegProtoWhitelist = isRemoteFfmpegInput
+    ? 'http,https,tcp,tls,crypto,data'
+    : 'file,http,https,tcp,tls,crypto,data';
+  args.push('-protocol_whitelist', ffmpegProtoWhitelist);
   if (typeof ffmpegInput === 'string' && ffmpegInput.startsWith('http')) {
     args.push(
       '-reconnect', '1',
@@ -2518,14 +2527,21 @@ function startYtDlpDownload(req, targetUrl) {
     } catch (_) {}
   }
 
+  let tempConfigFile = null;
   if (req.cookie && !isYouTube) {
-    args.push('--add-header', `Cookie: ${req.cookie}`);
+    try {
+      tempConfigFile = path.join(os.tmpdir(), `vidown_cfg_${Date.now()}_${Math.random().toString(36).substr(2, 6)}.conf`);
+      fs.writeFileSync(tempConfigFile, `--add-header "Cookie: ${req.cookie}"\n`, { mode: 0o600, encoding: 'utf8' });
+      args.push('--config-location', tempConfigFile);
+    } catch (_) {
+      args.push('--add-header', `Cookie: ${req.cookie}`);
+    }
   }
 
-  args.push('--downloader-args', 'ffmpeg:-protocol_whitelist file,http,https,tcp,tls,crypto,data');
+  args.push('--downloader-args', 'ffmpeg:-protocol_whitelist http,https,tcp,tls,crypto,data');
   args.push('--postprocessor-args', 'ffmpeg:-avoid_negative_ts make_zero -max_muxing_queue_size 1024');
 
-  args.push(targetUrl);
+  args.push('--', targetUrl);
 
   sendMessage({
     action: 'progress',
@@ -2539,7 +2555,17 @@ function startYtDlpDownload(req, targetUrl) {
   let lastSentTime = 0;
   let fallbackInitiated = false;
 
+  const cleanupConfig = () => {
+    if (tempConfigFile) {
+      try {
+        if (fs.existsSync(tempConfigFile)) fs.unlinkSync(tempConfigFile);
+      } catch (_) {}
+      tempConfigFile = null;
+    }
+  };
+
   function triggerFallback(reason) {
+    cleanupConfig();
     if (fallbackInitiated) return;
     fallbackInitiated = true;
     logHost(`yt-dlp fallback triggered (${reason}). Routing to FFmpeg.`);
@@ -2589,6 +2615,7 @@ function startYtDlpDownload(req, targetUrl) {
   });
 
   proc.on('close', (code) => {
+    cleanupConfig();
     if (proc && proc.isKilledByHost) {
       if (activeProcess === proc) activeProcess = null;
       notifySuperseded();
@@ -2597,6 +2624,7 @@ function startYtDlpDownload(req, targetUrl) {
     if (activeProcess === proc) activeProcess = null;
 
     if (code === 0) {
+      cleanupConfig();
       let savedFile = finalFilename;
       try {
         const completedFiles = fs.readdirSync(targetDir)
