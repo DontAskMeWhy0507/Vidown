@@ -259,16 +259,39 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-// Initialize network observer if chrome.webRequest is available
-if (typeof chrome.webRequest !== 'undefined' && NetworkObserver && typeof NetworkObserver.init === 'function') {
-  NetworkObserver.init({
-    onMediaDetected: (tabId, mediaCandidate) => {
-      if (MediaRegistry) {
-        MediaRegistry.registerMedia(tabId, mediaCandidate);
-        updateTabBadge(tabId);
-      }
-    }
-  });
+// Initialize network observer on chrome.webRequest
+if (typeof chrome.webRequest !== 'undefined' && NetworkObserver && typeof NetworkObserver.handleHeadersReceived === 'function') {
+  try {
+    chrome.webRequest.onHeadersReceived.addListener(
+      (details) => {
+        if (!details || details.tabId < 0) return;
+        try {
+          const res = NetworkObserver.handleHeadersReceived(details);
+          if (res && res.handled && res.record) {
+            updateTabBadge(details.tabId);
+          }
+        } catch (_) {}
+      },
+      { urls: ['<all_urls>'] },
+      ['responseHeaders', 'extraHeaders']
+    );
+  } catch (err) {
+    try {
+      chrome.webRequest.onHeadersReceived.addListener(
+        (details) => {
+          if (!details || details.tabId < 0) return;
+          try {
+            const res = NetworkObserver.handleHeadersReceived(details);
+            if (res && res.handled && res.record) {
+              updateTabBadge(details.tabId);
+            }
+          } catch (_) {}
+        },
+        { urls: ['<all_urls>'] },
+        ['responseHeaders']
+      );
+    } catch (_) {}
+  }
 }
 
 // Initial connection attempt to native helper

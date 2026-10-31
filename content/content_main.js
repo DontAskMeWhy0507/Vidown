@@ -12,8 +12,27 @@
   if (window.__VIDOWN_CONTENT_INITIALIZED__) return;
   window.__VIDOWN_CONTENT_INITIALIZED__ = true;
 
-  // 1. Inject runtime_hook.js into the Main World at document start
+  // Sensitive SPA players with strict React Virtual DOM ownership and gesture controls
+  // Mutating their player DOM containers causes React reconciliation invariant crashes (e.g. IG stories)
+  // or forced layout reflows (e.g. TikTok video lag). All detection on these sites is handled
+  // cleanly in the background via chrome.webRequest.
+  function isSensitiveSite() {
+    const host = (window.location && window.location.hostname) ? window.location.hostname.toLowerCase() : '';
+    return (
+      host.includes('instagram.com') ||
+      host.includes('tiktok.com') ||
+      host.includes('youtube.com') ||
+      host.includes('facebook.com') ||
+      host.includes('fb.com') ||
+      host.includes('twitter.com') ||
+      host.includes('x.com') ||
+      host.includes('netflix.com')
+    );
+  }
+
+  // 1. Inject runtime_hook.js into the Main World at document start (only on non-sensitive sites)
   function injectMainWorldHook() {
+    if (isSensitiveSite()) return;
     try {
       const script = document.createElement('script');
       script.src = chrome.runtime.getURL('core/runtime_hook.js');
@@ -84,8 +103,10 @@
     attachFloatingPill(video);
   }
 
-  // 4. Attach sleek, floating download pill to player container
+  // 4. Attach sleek, floating download pill to player container (only on standard sites)
   function attachFloatingPill(video) {
+    if (isSensitiveSite()) return; // Never tamper with sensitive SPA player DOM!
+
     // Avoid double attaching
     if (video.parentElement && video.parentElement.querySelector('.vidown-floating-pill')) {
       return;
@@ -94,9 +115,8 @@
     const container = video.parentElement;
     if (!container) return;
 
-    // Ensure container has relative/absolute positioning so overlay stays pinned
-    const style = window.getComputedStyle(container);
-    if (style.position === 'static') {
+    // Zero forced reflow: avoid synchronous style computation
+    if (!container.style.position) {
       container.style.position = 'relative';
     }
 
