@@ -64,7 +64,7 @@
       "alarms",
       "nativeMessaging"
    ],
-   "version": "2.4.65",
+   "version": "2.4.66",
    "web_accessible_resources": [
       {
          "matches": [
