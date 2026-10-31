@@ -215,7 +215,7 @@ function setupAnti403Rules() {
   if (!chrome.declarativeNetRequest || !chrome.declarativeNetRequest.updateSessionRules) return;
   try {
     chrome.declarativeNetRequest.updateSessionRules({
-      removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006],
+      removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008],
       addRules: [
         {
           id: 1001,
@@ -275,6 +275,36 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*ibytedtos.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1007,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.douyin.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.douyin.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*douyin.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1008,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.douyin.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.douyin.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*iesdouyin.com/*',
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         }
@@ -1482,6 +1512,17 @@ function startNativeDownload(downloadParams, callback) {
     return false;
   }
 
+  // Session-protected streams (TikTok, Douyin, etc.): Native FFmpeg direct stream fetch
+  // lacks Chrome's TLS fingerprint and session cookies, triggering CDN 403 Forbidden.
+  // Delegate directly to Stream Relay: Chrome's service worker fetches with valid browser TLS
+  // and pipes binary chunks to Native Helper to write directly to disk, completely bypassing
+  // chrome.downloads.download and preventing Chrome's "Save As" file dialog!
+  if (isSessionProtectedStream(downloadParams) && !downloadParams._relayFailed && !downloadParams.audioUrl && !downloadParams.convertToMp3 && !downloadParams.soundOnly) {
+    console.log('[Savior] Session-protected stream detected (TikTok/Douyin); routing directly to Stream Relay');
+    const relayStarted = startStreamRelayDownload(downloadParams, callback);
+    if (relayStarted) return true;
+  }
+
   // Duplicate guard (runs BEFORE the busy-queue so a stream that is already
   // being downloaded as part of an active task is never queued again). The
   // bundle sometimes fires an AUDIO-ONLY request right after the DASH
@@ -1885,7 +1926,18 @@ function startStreamRelayDownload(downloadParams, callback) {
   if (nativeProbeSettled && !nativeHelperAvailable) return false;
   const port = getOrCreateNativePort();
   if (!port) return false;
-  const targetUrl = downloadParams.videoUrl || downloadParams.url || '';
+  let targetUrl = downloadParams.videoUrl || downloadParams.url || '';
+  const effectivePage = (downloadParams.pageUrl && !downloadParams.pageUrl.startsWith('chrome-extension:') && !downloadParams.pageUrl.startsWith('about:'))
+    ? downloadParams.pageUrl
+    : (downloadParams.referrer && !downloadParams.referrer.startsWith('chrome-extension:')
+        ? downloadParams.referrer
+        : currentActiveTabUrl);
+  const resolvedTarget = resolveRealStreamForDownload(targetUrl, effectivePage, downloadParams.tabId);
+  if (resolvedTarget && resolvedTarget !== targetUrl) {
+    targetUrl = resolvedTarget;
+    downloadParams.url = resolvedTarget;
+    downloadParams.videoUrl = resolvedTarget;
+  }
   if (!targetUrl || !/^https?:\/\//i.test(targetUrl)) return false;
   // Playlists need FFmpeg to demux — relaying one would save the playlist
   // text as the output file. Those keep their existing fallback path.
@@ -2194,7 +2246,13 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         soundOnly: isAudio,
         tabId: (sender && sender.tab && sender.tab.id) || undefined
       };
-      const started = startNativeDownload(opts);
+      let started = false;
+      if (isSessionProtectedStream(opts) && nativeHelperAvailable && !opts._relayFailed && !opts.audioUrl && !opts.convertToMp3 && !opts.soundOnly) {
+        started = startStreamRelayDownload(opts);
+      }
+      if (!started) {
+        started = startNativeDownload(opts);
+      }
       if (!started) {
         if (isSessionProtectedStream(opts)) startCocCocSessionDownload(opts);
         else if (!opts._relayFailed && startStreamRelayDownload(opts)) { opts._relayFailed = true; }
@@ -2603,8 +2661,8 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         quality: req.quality || (isAudio ? 'audio' : 'best'),
         soundOnly: isAudio
       };
-      // Prioritize Native Helper directly so all downloads save directly to disk
-      // with multi-threaded speed, eliminating Chrome's Save As prompt!
+      // Prioritize Stream Relay for session-protected streams (TikTok/Douyin) so Chrome fetches
+      // and Native Helper writes directly to disk, completely bypassing Chrome's Save As prompt!
       const started = nativeHelperAvailable
         ? startNativeDownload(opts)
         : (isSessionProtectedStream(opts) ? startCocCocSessionDownload(opts) : startBrowserDownload(opts));
@@ -2759,7 +2817,13 @@ if (chrome.runtime.onMessageExternal) {
         return false;
       }
 
-      const started = startNativeDownload(req);
+      let started = false;
+      if (isSessionProtectedStream(req) && nativeHelperAvailable && !req._relayFailed && !req.audioUrl && !req.convertToMp3 && !req.soundOnly) {
+        started = startStreamRelayDownload(req);
+      }
+      if (!started) {
+        started = startNativeDownload(req);
+      }
       if (!started) {
         if (isSessionProtectedStream(req)) startCocCocSessionDownload(req);
         else if (!req._relayFailed && startStreamRelayDownload(req)) { req._relayFailed = true; }
@@ -2847,7 +2911,16 @@ chrome.downloads.download = function(options, callback) {
     }
   }
 
-  // 1. Prefer Native Helper whenever available so all downloads save directly to disk
+  // 1. Session-protected streams (TikTok, Douyin): route directly to Stream Relay
+  // so Chrome's network stack fetches the authenticated stream and Native Helper
+  // writes it straight to disk — completely bypassing chrome.downloads.download
+  // and eliminating Chrome's "Save As" popup!
+  if (isSessionProtectedStream(options) && nativeHelperAvailable && !options._relayFailed && !options.audioUrl && !options.convertToMp3 && !options.soundOnly) {
+    const relayStarted = startStreamRelayDownload(options, callback);
+    if (relayStarted) return;
+  }
+
+  // 2. Prefer Native Helper whenever available so all downloads save directly to disk
   // without any Chrome Save As prompt, with real-time speed, progress, and automatic audio track muxing
   if (nativeHelperAvailable) {
     const started = startNativeDownload(options, callback);
