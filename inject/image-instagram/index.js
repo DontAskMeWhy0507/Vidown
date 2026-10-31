@@ -1,1 +1,0 @@
-var a;a=location.href,chrome.runtime.sendMessage(null,{type:"script_executed",data:{data:{origin:"instagram.com",url:a}}}).catch(()=>{});
