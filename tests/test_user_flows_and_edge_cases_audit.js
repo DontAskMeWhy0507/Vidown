@@ -45,7 +45,7 @@ console.log('✓ Test 3 Passed: openDownloadsFolder gracefully falls back to Chr
 
 // 4. downloads.js modalFolderPath synchronization
 const dlPath = path.join(__dirname, '..', 'downloads', 'downloads.js');
-const dlCode = fs.readFileSync(dlPath, 'utf8');
+const dlCode = fs.readFileSync(dlPath, 'utf8').replace(/\r\n/g, '\n');
 
 assert.ok(
   dlCode.includes('if (modalFolderPath) {\n          modalFolderPath.textContent = storageData.customDownloadDir;'),
