@@ -161,7 +161,7 @@ for (const entry of entries) {
 // Required entries
 const requiredEntries = [
   'manifest.json',
-  'background.chrome.js',
+  'service_worker.js',
   'popup/popup.html',
   'popup/popup.js',
   'downloads/downloads.html',

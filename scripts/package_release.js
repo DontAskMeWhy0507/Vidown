@@ -57,7 +57,6 @@ const EXCLUDED_DIRS = new Set([
   'dist',
   'scripts',
   'bin', // matches native/bin
-  'core', // experimental Universal Media Core — unwired, excluded from build per release plan
   'native', // native messaging helper ships separately (host.js, installers, manifests)
   '.zcode' // local agent session data
 ]);
@@ -306,7 +305,7 @@ function validateZip(zipPath) {
   }
 
   // Check required files
-  const required = ['manifest.json', 'background.chrome.js', 'popup/popup.html', 'popup/popup.js'];
+  const required = ['manifest.json', 'service_worker.js', 'content/content_main.js', 'popup/popup.html', 'popup/popup.js'];
   for (const req of required) {
     if (!entryNames.includes(req)) {
       throw new Error(`Packaging validation failed: missing critical file ${req}`);

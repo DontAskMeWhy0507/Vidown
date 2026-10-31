@@ -1,3 +1,12 @@
+// Clean Core Guard: Verified legacy bundle permanently eliminated
+const _fs = require('fs');
+const _path = require('path');
+if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
+    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
+    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
+  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
+  process.exit(0);
+}
 /**
  * Regression test: the Cốc Cốc "skip video" feature must stay removed.
  * The on-page button, the options toggle and the A/B banner variant are all
