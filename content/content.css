@@ -1,0 +1,72 @@
+/* Vidown Floating Video Download Pill Overlay */
+.vidown-floating-pill {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  opacity: 0.85;
+}
+
+.vidown-floating-pill:hover {
+  opacity: 1;
+  background: rgba(30, 41, 59, 0.95);
+  transform: translateY(-1px);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+}
+
+.vidown-pill-icon {
+  width: 14px;
+  height: 14px;
+  fill: #38bdf8;
+}
+
+.vidown-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 4px;
+  display: none;
+  flex-direction: column;
+  min-width: 120px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.vidown-dropdown-menu.visible {
+  display: flex;
+}
+
+.vidown-menu-item {
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.vidown-menu-item:hover {
+  background: #1e293b;
+  color: #38bdf8;
+}
