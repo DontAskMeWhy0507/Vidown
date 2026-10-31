@@ -59,6 +59,7 @@ async function runTests() {
   } finally {
     mockServer.close();
     try { if (fs.existsSync(testOutPath)) fs.unlinkSync(testOutPath); } catch (_) {}
+    try { if (fs.existsSync(testOutPath + ".part")) fs.unlinkSync(testOutPath + ".part"); } catch (_) {}
   }
 
   assert.ok(failedAsExpected, 'downloadFileMultiThread must reject when block transfers remain incomplete after retries');
@@ -96,6 +97,7 @@ async function runTests() {
   } finally {
     sizeMismatchServer.close();
     try { if (fs.existsSync(sizeMismatchOut)) fs.unlinkSync(sizeMismatchOut); } catch (_) {}
+    try { if (fs.existsSync(sizeMismatchOut + ".part")) fs.unlinkSync(sizeMismatchOut + ".part"); } catch (_) {}
   }
 
   assert.ok(mismatchFailed, 'checkDone must reject on totalSize mismatch');
