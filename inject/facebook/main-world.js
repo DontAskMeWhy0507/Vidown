@@ -1,1 +1,97 @@
-function a(e){let r="";var t=Object.keys(e);for(let e=0;e<t.length;e++)if(-1!=t[e].indexOf("__reactFiber")){r=t[e].split("__reactFiber")[1];break}return r}var t=document.querySelectorAll("video");for(let e=0,r=t.length;e<r;e++){var n=t[e];{p=void 0;l=void 0;var p=n;var l="__reactProps"+a(p);let r=p.parentElement?.[l].children?.props?.manifestUrl,t=p.parentElement?.[l].children?.props?.videoFBID;if(!r){let e=p;for(;e&&e.parentElement&&"BODY"!=e.parentElement.tagName&&"HTML"!=e.parentElement.tagName;){if(e?.[l]?.children?.props?.videoFBID){t=e[l].children.props.videoFBID;break}if(e?.[l]?.children?.props?.manifestUrl){r=e[l].children.props.manifestUrl;break}e=e.parentElement}}t&&p.setAttribute("savior-vid",t),r&&p.setAttribute("savior-manifest-url",r)}try{var i=(r=>{try{var t=a(r),e=r.parentElement,n=e["__reactProps"+t]?.children[0]?.props?.post||e["__reactProps"+t]?.children?.props?.dashInfo||r?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.["__reactProps"+t]?.children?.props?.dashInfo;if(!n){let e=r;for(;e&&e.parentElement&&"BODY"!=e.parentElement.tagName&&"HTML"!=e.parentElement.tagName;){if(e?.["__reactProps"+t]?.children?.props?.manifestUrl)return e["__reactProps"+t].children.props;e=e.parentElement}for(e=r;e&&e.parentElement&&"BODY"!=e.parentElement.tagName&&"HTML"!=e.parentElement.tagName;){if(e?.["__reactProps"+t]?.children?.props?.hdSrc||e?.["__reactProps"+t]?.children?.props?.sdSrc)return e["__reactProps"+t].children.props;e=e.parentElement}}return n}catch(e){return null}})(n);i&&n.setAttribute("savior-video-detail",JSON.stringify(i))}catch(e){}}
+/**
+ * Facebook Video Metadata Extractor (Main World)
+ * Traverses React Fiber internals to extract Facebook video FBID, DASH manifest URL,
+ * and video details (HD/SD sources and DASH info).
+ */
+
+function getReactFiberSuffix(element) {
+  let suffix = '';
+  const keys = Object.keys(element);
+  for (let i = 0; i < keys.length; i++) {
+    if (keys[i].indexOf('__reactFiber') !== -1) {
+      suffix = keys[i].split('__reactFiber')[1];
+      break;
+    }
+  }
+  return suffix;
+}
+
+function extractFacebookVideoIds(videoElement) {
+  const fiberSuffix = getReactFiberSuffix(videoElement);
+  const propsKey = '__reactProps' + fiberSuffix;
+
+  let manifestUrl = videoElement.parentElement?.[propsKey]?.children?.props?.manifestUrl;
+  let videoFBID = videoElement.parentElement?.[propsKey]?.children?.props?.videoFBID;
+
+  if (!manifestUrl) {
+    let current = videoElement;
+    while (current && current.parentElement && current.parentElement.tagName !== 'BODY' && current.parentElement.tagName !== 'HTML') {
+      if (current?.[propsKey]?.children?.props?.videoFBID) {
+        videoFBID = current[propsKey].children.props.videoFBID;
+        break;
+      }
+      if (current?.[propsKey]?.children?.props?.manifestUrl) {
+        manifestUrl = current[propsKey].children.props.manifestUrl;
+        break;
+      }
+      current = current.parentElement;
+    }
+  }
+
+  if (videoFBID) {
+    videoElement.setAttribute('savior-vid', videoFBID);
+  }
+  if (manifestUrl) {
+    videoElement.setAttribute('savior-manifest-url', manifestUrl);
+  }
+}
+
+function extractFacebookVideoDetails(videoElement) {
+  try {
+    const fiberSuffix = getReactFiberSuffix(videoElement);
+    const parent = videoElement.parentElement;
+    const parentProps = parent?.['__reactProps' + fiberSuffix];
+
+    let details = parentProps?.children?.[0]?.props?.post ||
+      parentProps?.children?.props?.dashInfo ||
+      videoElement.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.['__reactProps' + fiberSuffix]?.children?.props?.dashInfo;
+
+    if (!details) {
+      let current = videoElement;
+      while (current && current.parentElement && current.parentElement.tagName !== 'BODY' && current.parentElement.tagName !== 'HTML') {
+        const props = current?.['__reactProps' + fiberSuffix]?.children?.props;
+        if (props?.manifestUrl) {
+          return props;
+        }
+        current = current.parentElement;
+      }
+
+      current = videoElement;
+      while (current && current.parentElement && current.parentElement.tagName !== 'BODY' && current.parentElement.tagName !== 'HTML') {
+        const props = current?.['__reactProps' + fiberSuffix]?.children?.props;
+        if (props?.hdSrc || props?.sdSrc) {
+          return props;
+        }
+        current = current.parentElement;
+      }
+    }
+
+    return details || null;
+  } catch {
+    return null;
+  }
+}
+
+const videos = document.querySelectorAll('video');
+for (let i = 0; i < videos.length; i++) {
+  const video = videos[i];
+  extractFacebookVideoIds(video);
+  try {
+    const details = extractFacebookVideoDetails(video);
+    if (details) {
+      video.setAttribute('savior-video-detail', JSON.stringify(details));
+    }
+  } catch {
+    // Ignore extraction errors
+  }
+}

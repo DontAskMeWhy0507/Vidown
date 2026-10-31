@@ -1,1 +1,56 @@
-async function r(e,t){var a;window.postMessage({type:"facebook-messenger-audio",url:t,contentType:e.type,contentLength:e.size,contentDuration:(a=t,await new Promise((o,e)=>{let r=new Audio;r.onloadedmetadata=()=>{var e=Math.round(r.duration),t=Math.floor(e/60),e=Math.floor(e%60);o(String(t).padStart(2,"0")+":"+String(e).padStart(2,"0"))},r.onerror=()=>{e(new Error("Cannot load audio"))},r.src=a}))})}try{let o=URL.createObjectURL,t=URL.revokeObjectURL;URL.createObjectURL=function(e){var t=o.call(this,e);return e?.type?.includes("audio")&&r(e,t),t},URL.revokeObjectURL=function(e){return window.postMessage({type:"facebook-messenger-audio-revoked",url:e}),t.call(this,e)}}catch(e){console.error(e)}
+/**
+ * Facebook Messenger Voice Message Interceptor (Main World)
+ * Hooks URL.createObjectURL and URL.revokeObjectURL to capture audio blobs and durations.
+ */
+
+async function notifyMessengerAudio(blob, blobUrl) {
+  let duration = '';
+  try {
+    duration = await new Promise((resolve, reject) => {
+      const audio = new Audio();
+      audio.onloadedmetadata = () => {
+        const totalSecs = Math.round(audio.duration);
+        const mins = Math.floor(totalSecs / 60);
+        const secs = Math.floor(totalSecs % 60);
+        resolve(String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0'));
+      };
+      audio.onerror = () => {
+        reject(new Error('Cannot load audio'));
+      };
+      audio.src = blobUrl;
+    });
+  } catch {
+    duration = '00:00';
+  }
+
+  window.postMessage({
+    type: 'facebook-messenger-audio',
+    url: blobUrl,
+    contentType: blob.type,
+    contentLength: blob.size,
+    contentDuration: duration
+  });
+}
+
+try {
+  const originalCreateObjectURL = URL.createObjectURL;
+  const originalRevokeObjectURL = URL.revokeObjectURL;
+
+  URL.createObjectURL = function (blob) {
+    const blobUrl = originalCreateObjectURL.call(this, blob);
+    if (blob?.type?.includes('audio')) {
+      notifyMessengerAudio(blob, blobUrl);
+    }
+    return blobUrl;
+  };
+
+  URL.revokeObjectURL = function (blobUrl) {
+    window.postMessage({
+      type: 'facebook-messenger-audio-revoked',
+      url: blobUrl
+    });
+    return originalRevokeObjectURL.call(this, blobUrl);
+  };
+} catch (error) {
+  console.error('[Vidown] Messenger audio hook error:', error);
+}

@@ -1,1 +1,1 @@
-document.querySelector("video").setAttribute("savior-video-detail",window.videoHash);
+document.querySelector("video").setAttribute("savior-video-detail", window.videoHash);

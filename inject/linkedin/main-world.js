@@ -1,1 +1,19 @@
-var r;(r=document.querySelectorAll("video"))&&Array.from(r).filter(r=>r).forEach(r=>{var e=(r=>{try{var e=r.parentElement.player;if(e&&e.lastSource_&&e.lastSource_.player)return e.lastSource_.player}catch(r){return null}})(r);e&&r.setAttribute("savior-manifest-url",e)});
+/**
+ * LinkedIn Video Manifest Extractor (Main World)
+ * Inspects parent element's videojs/player instance for HLS manifest URL.
+ */
+
+const videos = document.querySelectorAll('video');
+if (videos) {
+  Array.from(videos).filter(Boolean).forEach((video) => {
+    try {
+      const player = video.parentElement?.player;
+      const manifestUrl = player?.lastSource_?.player;
+      if (manifestUrl) {
+        video.setAttribute('savior-manifest-url', manifestUrl);
+      }
+    } catch {
+      // Ignore errors when traversing host DOM
+    }
+  });
+}
