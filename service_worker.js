@@ -146,6 +146,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     }
 
+    case 'openDownloadsPage':
+    case 'openDownloadManager': {
+      if (typeof chrome.tabs !== 'undefined' && chrome.tabs.create) {
+        chrome.tabs.create({ url: chrome.runtime.getURL('downloads/downloads.html') });
+      }
+      sendResponse({ success: true });
+      return true;
+    }
+
+    case 'getDownloadStatus': {
+      sendResponse({ success: true, downloads: Array.from(activeDownloads.values()) });
+      return true;
+    }
+
+    case 'popupOpened': {
+      sendResponse({ success: true });
+      return true;
+    }
+
+    case 'downloadNative':
     case 'startDownload': {
       const downloadPayload = {
         action: 'download',
@@ -161,7 +181,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
       const nativeSent = sendToNativeHost(downloadPayload);
       if (!nativeSent) {
-        // Fallback to browser downloads API if native host not running
         if (typeof chrome.downloads !== 'undefined' && request.url) {
           chrome.downloads.download({
             url: request.url,
@@ -179,6 +198,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     case 'cancelDownload': {
       sendToNativeHost({ action: 'cancel', downloadId: request.downloadId });
+      if (request.downloadId) activeDownloads.delete(request.downloadId);
+      sendResponse({ success: true });
+      return true;
+    }
+
+    case 'removeDownload': {
+      sendToNativeHost({ action: 'cancel', downloadId: request.downloadId });
+      if (request.downloadId) activeDownloads.delete(request.downloadId);
       sendResponse({ success: true });
       return true;
     }
@@ -189,8 +216,35 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     }
 
+    case 'showInFolder':
     case 'openFolder': {
-      sendToNativeHost({ action: 'openFolder', filePath: request.filePath });
+      sendToNativeHost({ action: 'openFolder', filePath: request.filePath || request.targetPath || '' });
+      sendResponse({ success: true });
+      return true;
+    }
+
+    case 'openDownloadsFolder': {
+      sendToNativeHost({ action: 'openFolder', filePath: '' });
+      sendResponse({ success: true });
+      return true;
+    }
+
+    case 'browseFolder': {
+      sendToNativeHost({ action: 'browseFolder' });
+      sendResponse({ success: true });
+      return true;
+    }
+
+    case 'clearHistory': {
+      activeDownloads.clear();
+      sendResponse({ success: true });
+      return true;
+    }
+
+    case 'openSourcePage': {
+      if (request.url && typeof chrome.tabs !== 'undefined' && chrome.tabs.create) {
+        chrome.tabs.create({ url: request.url });
+      }
       sendResponse({ success: true });
       return true;
     }
