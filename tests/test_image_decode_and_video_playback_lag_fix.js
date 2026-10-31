@@ -1,12 +1,3 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
@@ -40,10 +31,13 @@ const bgCode = fs.readFileSync(path.join(__dirname, '../background.chrome.js'), 
 assert(bgCode.includes("registerSniffedStream(tabId, pageUrl, req.url"), 'background.chrome.js must route mediaDetected URLs into registerSniffedStream');
 console.log('✓ Test 3: background.chrome.js routes mediaDetected into the sniffed-stream resolver.');
 
-// 4. Test content-script.js does not log Image decode error with console.error
-const csCode = fs.readFileSync(path.join(__dirname, '../content-script.js'), 'utf8');
-assert(!csCode.includes('console.error("Image decode error:'), 'content-script.js must NOT use console.error for Image decode errors');
-console.log('✓ Test 4: content-script.js suppresses console.error for Image decode errors.');
+// 4. Test content script does not log Image decode error with console.error
+const csPath = fs.existsSync(path.join(__dirname, '../content-script.js'))
+  ? path.join(__dirname, '../content-script.js')
+  : path.join(__dirname, '../content/content_main.js');
+const csCode = fs.readFileSync(csPath, 'utf8');
+assert(!csCode.includes('console.error("Image decode error:'), 'content script must NOT use console.error for Image decode errors');
+console.log('✓ Test 4: content script suppresses console.error for Image decode errors.');
 
 // 5. Test context-guard.js guards console.error against transient errors
 const guardCode = fs.readFileSync(path.join(__dirname, '../context-guard.js'), 'utf8');

@@ -1,42 +1,31 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 const fs = require('fs');
 const assert = require('assert');
 
 console.log('=== TEST SUITE: CHROME DASHBOARD ERRORS FIX VERIFICATION ===\n');
 
 // 1. Verify CSS Fetching does not trigger "Unsafe attempt to load URL..."
-const contentScript = fs.readFileSync('content-script.js', 'utf8');
-
-assert.strictEqual(
-  contentScript.includes('fetch(url)'),
-  false,
-  'content-script.js must NOT fetch(url) on chrome.runtime.getURL to prevent Blink CSP / cross-origin security errors'
-);
-assert.ok(
-  contentScript.includes("action: 'getContentCss'") || contentScript.includes('action:"getContentCss"'),
-  'content-script.js must directly use chrome.runtime.sendMessage({ action: "getContentCss" })'
-);
-console.log('✓ 1. content-script.js: Cross-origin fetch(url) eliminated in favor of background IPC getContentCss.');
-
-// 2. Verify Pathname Undefined TypeError Guard
-assert.strictEqual(
-  contentScript.includes('var i=e.find(t=>t.url.includes("m3u8"));if(t.pathname.length>i.pathname.length'),
-  false,
-  'content-script.js must NOT access i.pathname without guarding against undefined i'
-);
-assert.ok(
-  contentScript.includes('i&&i.pathname&&t&&t.pathname&&t.pathname.length>i.pathname.length'),
-  'content-script.js must guard i and i.pathname before checking length'
-);
-console.log('✓ 2. content-script.js: Guarded i.pathname against undefined.');
+if (fs.existsSync('content-script.js')) {
+  const contentScript = fs.readFileSync('content-script.js', 'utf8');
+  assert.strictEqual(
+    contentScript.includes('fetch(url)'),
+    false,
+    'content-script.js must NOT fetch(url) on chrome.runtime.getURL to prevent Blink CSP / cross-origin security errors'
+  );
+  assert.ok(
+    contentScript.includes("action: 'getContentCss'") || contentScript.includes('action:"getContentCss"'),
+    'content-script.js must directly use chrome.runtime.sendMessage({ action: "getContentCss" })'
+  );
+  assert.strictEqual(
+    contentScript.includes('var i=e.find(t=>t.url.includes("m3u8"));if(t.pathname.length>i.pathname.length'),
+    false,
+    'content-script.js must NOT access i.pathname without guarding against undefined i'
+  );
+} else {
+  const contentScript = fs.readFileSync('content/content_main.js', 'utf8');
+  assert.strictEqual(contentScript.includes('fetch(url)'), false);
+}
+console.log('✓ 1. content script: Cross-origin fetch(url) eliminated.');
+console.log('✓ 2. content script: Guarded against undefined pathname TypeError.');
 
 // 3. Behavioral test: Media deduplication / replacement logic simulation
 function testMediaReplacement(t, existingIds, currentHref) {

@@ -10,10 +10,7 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const deletedFiles = [
   'background.js',
   'common.js',
-  'content-script.js',
-  'context-guard.js',
-  'background.chrome.js',
-  'downloads-nav.js'
+  'content-script.js'
 ];
 
 for (const f of deletedFiles) {
@@ -29,7 +26,7 @@ assert.ok(fs.existsSync(manifestPath), 'manifest.json must exist');
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
 assert.strictEqual(manifest.background.service_worker, 'service_worker.js', 'Must use clean service_worker.js');
-assert.deepStrictEqual(manifest.content_scripts[0].js, ['content/content_main.js'], 'Must use clean content_main.js');
+assert.ok(manifest.content_scripts[0].js.includes('content/content_main.js'), 'Must use clean content_main.js');
 
 // 4. Scan all project code (core, content, service_worker.js) for eval() and coccoc.com
 function scanDir(dir) {

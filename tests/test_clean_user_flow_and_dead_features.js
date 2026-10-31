@@ -1,12 +1,3 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 const fs = require('fs');
 const assert = require('assert');
 
@@ -31,10 +22,15 @@ assert.ok(contentCss.includes('#open-mobile'), 'content-script.css must target #
 assert.ok(contentCss.includes('display: none !important;'), 'content-script.css must hide dead features with display: none !important');
 console.log('✓ 2. content-script.css completely hides dead on-page buttons (#open-pip, #switch-light, #open-mobile).');
 
-// 3. Verify content-script.js defaults detach_enabled to false
-const contentJs = fs.readFileSync('content-script.js', 'utf8');
-assert.ok(contentJs.includes('detach_enabled:!1'), 'content-script.js must default detach_enabled to false');
-console.log('✓ 3. content-script.js defaults detach_enabled to false (disabling PiP templates).');
+// 3. Verify content-script.js defaults detach_enabled to false or clean core has no PiP
+if (fs.existsSync('content-script.js')) {
+  const contentJs = fs.readFileSync('content-script.js', 'utf8');
+  assert.ok(contentJs.includes('detach_enabled:!1'), 'content-script.js must default detach_enabled to false');
+} else {
+  const contentJs = fs.readFileSync('content/content_main.js', 'utf8');
+  assert.ok(!contentJs.includes('detach_enabled'), 'content_main.js must not contain dead PiP detach logic');
+}
+console.log('✓ 3. content script defaults detach_enabled to false / removes dead PiP templates.');
 
 // 4. Verify downloads.html Settings modal has no dead PiP setting
 const dlHtml = fs.readFileSync('downloads/downloads.html', 'utf8');

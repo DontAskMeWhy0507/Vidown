@@ -1,12 +1,3 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 /**
  * Regression test: media detection latency on video pages.
  *
@@ -23,19 +14,27 @@ const assert = require('assert');
 console.log('=== TEST SUITE: MEDIA DETECTION SPEED ===\n');
 
 const read = (p) => fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
-const cs = read('content-script.js');
+const csPath = fs.existsSync(path.join(__dirname, '..', 'content-script.js'))
+  ? 'content-script.js'
+  : 'content/content_main.js';
+const cs = read(csPath);
 const nav = read('downloads-nav.js');
 
-// 1. Widget scrape: first run + interval at 1s (was 5s)
-assert.ok(
-  cs.includes('this.repeatWhileEnabled(()=>{Object(vt.b)(document,this.parent.$node)},1e3)'),
-  'widget media scrape must run first at 1s with a 1s poll interval'
-);
-assert.ok(
-  !cs.includes('this.repeatWhileEnabled(()=>{Object(vt.b)(document,this.parent.$node)},5e3)'),
-  'the 5-second first-scrape delay must be gone'
-);
-console.log('PASS: widget scrapes media at 1s instead of 5s.');
+// 1. Widget scrape: first run + interval at ~0-1s (was 5s)
+if (cs.includes('this.repeatWhileEnabled')) {
+  assert.ok(
+    cs.includes('this.repeatWhileEnabled(()=>{Object(vt.b)(document,this.parent.$node)},1e3)'),
+    'widget media scrape must run first at 1s with a 1s poll interval'
+  );
+  assert.ok(
+    !cs.includes('this.repeatWhileEnabled(()=>{Object(vt.b)(document,this.parent.$node)},5e3)'),
+    'the 5-second first-scrape delay must be gone'
+  );
+} else {
+  assert.ok(cs.includes("document.querySelectorAll('video').forEach(processVideoElement)"), 'Immediate scrape at 0ms');
+  assert.ok(!cs.includes('5e3'), 'No 5s artificial delay');
+}
+console.log('PASS: widget scrapes media at ~0-1s instead of 5s.');
 
 // 2. Sniffer: immediate scan at script start + load-event pass + catch-ups
 assert.ok(nav.includes('scanBufferedEntries();'), 'sniffer scans immediately at init');

@@ -1,12 +1,3 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 /**
  * Test Suite: 20 Websites Video Download Engine Verification & Edge Cases
  * Verifies routing, referer resolution, filename sanitization, audio extension handling,

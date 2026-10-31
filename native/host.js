@@ -1370,6 +1370,13 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
         downloadsDir: targetDir
       });
     } else {
+      const is403 = /403|Forbidden|Access Denied/i.test(errOutput);
+      const fallbackUrl = req.pageUrl || req.referer;
+      if ((is403 || code !== 0) && fallbackUrl && fs.existsSync(YTDLP_PATH) && !req._ytdlpAttempted) {
+        req._ytdlpAttempted = true;
+        logHost(`Mux stream failed (code ${code}). Refreshing stream via yt-dlp: ${fallbackUrl}`);
+        return startYtDlpDownload(req, fallbackUrl);
+      }
       const errLines = errOutput.split('\n').filter(l => l.trim() && !l.startsWith('ffmpeg version') && !l.startsWith('  built with') && !l.startsWith('  configuration:'));
       const shortErr = errLines.slice(-3).join(' ').trim() || `FFmpeg code ${code}`;
       sendMessage({
@@ -2086,6 +2093,12 @@ async function startFfmpegDirectStream(req) {
           }
         } catch (_) {}
         const is403 = /403|Forbidden|Access Denied/i.test(errOutput);
+        const fallbackUrl = req.pageUrl || req.referer;
+        if ((is403 || code !== 0) && fallbackUrl && fs.existsSync(YTDLP_PATH) && !req._ytdlpAttempted) {
+          req._ytdlpAttempted = true;
+          logHost(`Stream failed (HTTP 403 / code ${code}). Refreshing stream via yt-dlp: ${fallbackUrl}`);
+          return startYtDlpDownload(req, fallbackUrl);
+        }
         const errLines = errOutput.split('\n').filter(l => l.trim() && !l.startsWith('ffmpeg version') && !l.startsWith('  built with') && !l.startsWith('  configuration:'));
         const shortErr = is403
           ? 'Token luồng phim đã hết hạn hoặc bị từ chối truy cập (HTTP 403). Vui lòng tải lại trang để lấy luồng mới.'
@@ -2687,11 +2700,11 @@ function startDownload(req) {
     return startFfmpegMux(req);
   }
 
-  // Note: yt-dlp is intentionally bypassed so that private, member-only, and token-authenticated
+  // Note: yt-dlp is intentionally bypassed in startDownload so that private, member-only, and token-authenticated
   // videos can be downloaded using the browser session cookies and headers captured by Savior.
-  // All streams route through Savior's accelerated multi-thread Range downloader and local FFmpeg!
+  // When stream links expire (HTTP 403), FFmpeg stream handlers automatically fall back to refresh via yt-dlp!
 
-  // Direct progressive file, HLS stream, or audio conversion
+  // Direct progressive file, HLS stream, or audio conversion via FFmpeg
   return startFfmpegDirectStream(req);
 }
 
@@ -2712,6 +2725,7 @@ if (typeof module !== 'undefined') {
     handleMessage,
     setMessageHook,
     startDownload,
+    startYtDlpDownload,
     DISCONNECT_GRACE_MS
   };
 }

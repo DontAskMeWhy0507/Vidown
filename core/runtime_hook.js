@@ -160,6 +160,24 @@
       if (typeof dispatchTarget.dispatchEvent === 'function') {
         dispatchTarget.dispatchEvent(event);
       }
+
+      // Relay via window.postMessage for cross-world and isolated context bridge
+      try {
+        if (typeof targetWindow.postMessage === 'function') {
+          targetWindow.postMessage({
+            source: 'VIDOWN_HOOK',
+            payload: {
+              requestUrl: payload.streamUrl,
+              streamUrl: payload.streamUrl,
+              mimeType: payload.mimeType,
+              detectedType: payload.detectedType,
+              initiatorType: payload.initiatorType,
+              title: payload.title,
+              timestamp: payload.timestamp
+            }
+          }, '*');
+        }
+      } catch (_) {}
     } catch (_) {
       // Zero disruption: ignore any dispatch error in untrusted host page
     }
@@ -408,6 +426,54 @@
     return null;
   }
 
+  function probeInstagramMedia(video, win) {
+    if (!video) return null;
+    const fiberKey = getReactFiberKey(video);
+    const propsKey = '__reactProps' + fiberKey;
+
+    let streamUrl = video.currentSrc || video.src || '';
+    let title = '';
+
+    const path = win.location ? win.location.pathname : '';
+    if (path.includes('/stories/')) {
+      const match = path.match(/\/stories\/([^\/]+)(?:\/(\d+))?/);
+      const user = match ? match[1] : 'user';
+      const id = match && match[2] ? match[2] : Date.now();
+      title = `Instagram_Story_${user}_${id}`;
+    } else {
+      const match = path.match(/\/(reel|p)\/([^\/]+)/);
+      title = match ? `Instagram_${match[1]}_${match[2]}` : (win.document?.title || 'Instagram_Video');
+    }
+
+    try {
+      let curr = video;
+      for (let depth = 0; depth < 10 && curr; depth++) {
+        const pObj = curr[propsKey];
+        if (pObj) {
+          const vList = pObj.video_versions || pObj.item?.video_versions || pObj.children?.props?.video_versions;
+          if (Array.isArray(vList) && vList.length > 0 && vList[0].url) {
+            streamUrl = vList[0].url;
+            break;
+          }
+        }
+        curr = curr.parentElement;
+      }
+    } catch (_) {}
+
+    if (streamUrl && (streamUrl.includes('cdninstagram.com') || streamUrl.includes('fbcdn.net') || !streamUrl.startsWith('blob:'))) {
+      dispatchStreamEvent(win, {
+        streamUrl: streamUrl,
+        mimeType: 'video/mp4',
+        detectedType: 'DIRECT_MEDIA',
+        initiatorType: path.includes('/stories/') ? 'instagram_story' : 'instagram_fiber',
+        title: title,
+        pageUrl: win.location ? win.location.href : ''
+      });
+      return { streamUrl, title };
+    }
+    return null;
+  }
+
   function probePageMediaContext(targetWindow = (typeof window !== 'undefined' ? window : null)) {
     if (!targetWindow || !targetWindow.document) return;
     try {
@@ -419,6 +485,8 @@
           probeFacebookReactMedia(v, targetWindow);
         } else if (href.includes('tiktok.com')) {
           probeTikTokReactMedia(v, targetWindow);
+        } else if (href.includes('instagram.com')) {
+          probeInstagramMedia(v, targetWindow);
         }
       }
     } catch (_) {}
@@ -462,6 +530,7 @@
     probePageMediaContext,
     probeFacebookReactMedia,
     probeTikTokReactMedia,
+    probeInstagramMedia,
     isHooked: () => _isHooked
   };
 });

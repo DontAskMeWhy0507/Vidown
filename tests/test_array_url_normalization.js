@@ -1,12 +1,3 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 /**
  * Regression test: YouTube DASH download flows deliver url/videoUrl as an
  * ARRAY of candidate streams. resolveRealStreamForDownload called
@@ -44,7 +35,10 @@ assert.ok(
 console.log('PASS: startNativeDownload normalizes array stream fields first.');
 
 // 3. Content-script CSS fallback must not load extension URLs from an orphaned context
-const cs = fs.readFileSync(path.join(__dirname, '..', 'content-script.js'), 'utf8');
+const csPath = fs.existsSync(path.join(__dirname, '..', 'content-script.js'))
+  ? path.join(__dirname, '..', 'content-script.js')
+  : path.join(__dirname, '..', 'context-guard.js');
+const cs = fs.readFileSync(csPath, 'utf8');
 assert.ok(cs.includes('_saviorCssContextAlive'), 'context-alive guard helper exists');
 assert.ok(cs.includes('_saviorCssFallbackLink'), 'single guarded fallback helper exists');
 const aliveIdx = cs.indexOf('function _saviorCssContextAlive');

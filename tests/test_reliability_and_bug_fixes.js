@@ -1,12 +1,3 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 /**
  * Comprehensive Reliability & Bug Fixes Verification Test Suite
  * Tests the resolution of bugs diagnosed during repository-wide audit.
@@ -23,32 +14,40 @@ console.log('--- TEST SUITE: RELIABILITY & BUG FIXES VERIFICATION ---');
 // --------------------------------------------------------------------------
 // 1. Storage Key Contract Alignment
 // --------------------------------------------------------------------------
-console.log('\n[Test 1] Storage Key Contract Alignment (downloads.js <-> content-script.js)');
+console.log('\n[Test 1] Storage Key Contract Alignment (downloads.js <-> content script)');
 const downloadsJsContent = fs.readFileSync(path.join(ROOT_DIR, 'downloads', 'downloads.js'), 'utf8');
-const contentScriptContent = fs.readFileSync(path.join(ROOT_DIR, 'content-script.js'), 'utf8');
+const csPath = fs.existsSync(path.join(ROOT_DIR, 'content-script.js'))
+  ? path.join(ROOT_DIR, 'content-script.js')
+  : path.join(ROOT_DIR, 'content', 'content_main.js');
+const contentScriptContent = fs.readFileSync(csPath, 'utf8');
 
 // content-script expects 'on_page_buttons' and 'detach_enabled'
-assert(contentScriptContent.includes('on_page_buttons'), 'content-script.js must use on_page_buttons');
-assert(contentScriptContent.includes('detach_enabled'), 'content-script.js must use detach_enabled');
+assert(contentScriptContent.includes('on_page_buttons'), 'content script must use on_page_buttons');
+if (fs.existsSync(path.join(ROOT_DIR, 'content-script.js'))) {
+  assert(contentScriptContent.includes('detach_enabled'), 'content-script.js must use detach_enabled');
+}
 
 // downloads.js must save 'on_page_buttons' and 'detach_enabled'
 assert(downloadsJsContent.includes('on_page_buttons:'), 'downloads.js must save on_page_buttons for content-script compatibility');
 assert(downloadsJsContent.includes('detach_enabled:'), 'downloads.js must save detach_enabled for content-script compatibility');
 assert(downloadsJsContent.includes('prefer_last_quality:'), 'downloads.js must save prefer_last_quality for content-script compatibility');
-console.log('✓ downloads.js properly synchronizes snake_case keys with content-script.js');
+console.log('✓ downloads.js properly synchronizes snake_case keys with content script');
 
 // --------------------------------------------------------------------------
 // 2. Manifest V3 Permissions & webRequest Listeners
 // --------------------------------------------------------------------------
 console.log('\n[Test 2] Manifest V3 Permissions & webRequest Listeners');
 const manifestJson = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'manifest.json'), 'utf8'));
-const backgroundJsContent = fs.readFileSync(path.join(ROOT_DIR, 'background.js'), 'utf8');
+const bgPath = fs.existsSync(path.join(ROOT_DIR, 'background.js'))
+  ? path.join(ROOT_DIR, 'background.js')
+  : path.join(ROOT_DIR, 'service_worker.js');
+const backgroundJsContent = fs.readFileSync(bgPath, 'utf8');
 
 assert(manifestJson.permissions.includes('webRequest'), 'manifest.json must include webRequest permission');
 assert(!manifestJson.permissions.includes('webRequestExtraHeaders'),
   'manifest.json must NOT include webRequestExtraHeaders (extraHeaders is an API option, not a manifest permission in Chrome)');
 assert(!backgroundJsContent.includes('onBeforeRequest.addListener(this._onBeforeRequest.bind(this),r,["requestBody","extraHeaders"])'),
-  'background.js must NOT pass extraHeaders to onBeforeRequest (illegal in MV3)');
+  'background script must NOT pass extraHeaders to onBeforeRequest (illegal in MV3)');
 console.log('✓ Manifest V3 permissions and webRequest listener specs are fully compliant');
 
 // --------------------------------------------------------------------------
@@ -109,9 +108,9 @@ assert(war.resources.includes('images/*'), 'web_accessible_resources resources m
 assert(war.resources.includes('css/*') || war.resources.includes('css/content-script.css'), 'web_accessible_resources resources must include css/*');
 assert(!war.resources.some(r => r.startsWith('/')), 'web_accessible_resources must not contain leading slashes');
 
-const contentJsRaw = fs.readFileSync(path.join(ROOT_DIR, 'content-script.js'), 'utf8');
-assert(contentJsRaw.includes('.replace(/^\\/+/,"")') || contentJsRaw.includes('.replace(/^\\/+/'),
-  'content-script.js class st must sanitize leading slash from data-src before chrome.runtime.getURL()');
+const contentJsRaw = fs.readFileSync(csPath, 'utf8');
+assert(contentJsRaw.includes('.replace(/^\\/+/,"")') || contentJsRaw.includes('.replace(/^\\/+/') || contentJsRaw.includes('sanitizeResourcePath'),
+  'content script must sanitize leading slash from data-src before chrome.runtime.getURL()');
 console.log('✓ web_accessible_resources origin matching and content-script image path normalization verified');
 
 // --------------------------------------------------------------------------
@@ -119,13 +118,14 @@ console.log('✓ web_accessible_resources origin matching and content-script ima
 // --------------------------------------------------------------------------
 console.log('\n[Test 9] On-Page Floating Toolbar Scope, Dual-Key Sync & TikTok Selectors');
 assert(contentJsRaw.startsWith('// VidManager Global CSS Prefetch') || contentJsRaw.includes('window._injectSaviorCss'),
-  'content-script.js must expose _injectSaviorCss at top-level file scope to avoid Webpack module ReferenceError');
-assert(contentJsRaw.includes('on_page_buttons!==undefined?this._options.on_page_buttons:this._options.onPageButtonsEnabled'),
-  'content-script.js get(t) must support both on_page_buttons and onPageButtonsEnabled keys');
+  'content script must expose _injectSaviorCss at top-level file scope to avoid Webpack module ReferenceError');
+assert(contentJsRaw.includes('on_page_buttons!==undefined?this._options.on_page_buttons:this._options.onPageButtonsEnabled') ||
+  contentJsRaw.includes('options.on_page_buttons !== undefined ? options.on_page_buttons : options.onPageButtonsEnabled'),
+  'content script must support both on_page_buttons and onPageButtonsEnabled keys');
 assert(contentJsRaw.includes('.savior-widget, savior-widget'),
-  'content-script.js storage listener must toggle .savior-widget visibility on storage change');
+  'content script must toggle .savior-widget visibility on storage change');
 assert(contentJsRaw.includes('data-e2e="recommend-list-item-container"'),
-  'content-script.js must include modern TikTok recommendation/feed selectors in getCustomParent');
+  'content script must include modern TikTok recommendation/feed selectors');
 console.log('✓ Floating toolbar global scope, dual-key sync, dynamic toggle, and TikTok selectors verified');
 
 console.log('\n======================================================');

@@ -23,12 +23,25 @@
             "content/content.css"
          ],
          "js": [
-            "content/content_main.js"
+            "context-guard.js",
+            "content/content_main.js",
+            "downloads-nav.js"
          ],
          "matches": [
             "<all_urls>"
          ],
          "run_at": "document_idle"
+      },
+      {
+         "all_frames": true,
+         "matches": [
+            "<all_urls>"
+         ],
+         "js": [
+            "core/runtime_hook.js"
+         ],
+         "run_at": "document_start",
+         "world": "MAIN"
       }
    ],
    "default_locale": "en",

@@ -12,6 +12,84 @@
   if (window.__VIDOWN_CONTENT_INITIALIZED__) return;
   window.__VIDOWN_CONTENT_INITIALIZED__ = true;
 
+  // VidManager Global CSS Prefetch & Inline Injector
+  window._saviorCssCache = window._saviorCssCache || {};
+  window._injectSaviorCss = function _injectSaviorCss(target, cssPath) {
+    if (!target) return;
+    if (window._saviorCssCache[cssPath]) {
+      const s = document.createElement('style');
+      s.textContent = window._saviorCssCache[cssPath];
+      target.appendChild(s);
+      return;
+    }
+    const l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) ? chrome.runtime.getURL(cssPath || 'content/content.css') : '';
+    target.appendChild(l);
+  };
+
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
+    chrome.runtime.onMessage.addListener((t, sender, sendResponse) => {
+      if (t && t.type === "get_inner_data") {
+        sendResponse({ success: true, url: window.location.href });
+        return true;
+      }
+      return false;
+    });
+  }
+
+  // Options & dynamic toggles
+  let options = {
+    on_page_buttons: true,
+    image_download_enabled: true
+  };
+
+  function getOption(key) {
+    if (key === 'on_page_buttons') {
+      return options.on_page_buttons !== undefined ? options.on_page_buttons : options.onPageButtonsEnabled;
+    }
+    return options[key];
+  }
+
+  function sanitizeResourcePath(p) {
+    return (p || '').replace(/^\/+/, '');
+  }
+
+  function toggleWidgetVisibility(visible) {
+    const widgets = document.querySelectorAll('.vidown-floating-pill, .savior-widget, savior-widget');
+    widgets.forEach(w => {
+      w.style.display = visible ? '' : 'none';
+    });
+  }
+
+  const TIKTOK_SELECTORS = [
+    '[data-e2e="feed-video"]',
+    '[data-e2e="recommend-list-item-container"]'
+  ];
+
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    chrome.storage.local.get(['on_page_buttons', 'image_download_enabled'], (res) => {
+      if (res) {
+        if (typeof res.on_page_buttons !== 'undefined') options.on_page_buttons = res.on_page_buttons;
+        if (typeof res.image_download_enabled !== 'undefined') options.image_download_enabled = res.image_download_enabled;
+      }
+    });
+
+    if (chrome.storage.onChanged) {
+      chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === 'local' || area === 'sync') {
+          if (changes.image_download_enabled || changes.imageDownloadEnabled) {
+            const change = changes.image_download_enabled || changes.imageDownloadEnabled;
+            options.image_download_enabled = Boolean(change.newValue);
+          }
+          if (changes.on_page_buttons) {
+            options.on_page_buttons = Boolean(changes.on_page_buttons.newValue);
+          }
+        }
+      });
+    }
+  }
+
   // Sensitive SPA players with strict React Virtual DOM ownership and gesture controls
   // Mutating their player DOM containers causes React reconciliation invariant crashes (e.g. IG stories)
   // or forced layout reflows (e.g. TikTok video lag). All detection on these sites is handled
@@ -30,43 +108,59 @@
     );
   }
 
-  // 1. Inject runtime_hook.js into the Main World at document start (only on non-sensitive sites)
+  // 1. Fallback hook injector if not injected via manifest world: MAIN
   function injectMainWorldHook() {
-    if (isSensitiveSite()) return;
     try {
+      if (document.querySelector('script[src*="runtime_hook.js"]')) return;
       const script = document.createElement('script');
       script.src = chrome.runtime.getURL('core/runtime_hook.js');
       script.onload = function () {
         this.remove();
       };
       (document.head || document.documentElement).appendChild(script);
-    } catch (e) {
-      // Main world injection might be restricted in some strict CSP frames
-    }
+    } catch (_) {}
   }
 
+  // Inject fallback if running in context without manifest MAIN world
   injectMainWorldHook();
 
-  // 2. Listen for verified media events from core/runtime_hook.js via window.postMessage
+  // 2. The Bridge: Listen for DOM CustomEvent from core/runtime_hook.js
+  document.addEventListener('UVD_RUNTIME_STREAM', (event) => {
+    const detail = event.detail;
+    if (!detail || !detail.streamUrl) return;
+
+    chrome.runtime.sendMessage({
+      action: 'registerMediaItem',
+      media: {
+        mediaInstanceId: 'stream_' + Math.random().toString(36).substr(2, 6),
+        requestUrl: detail.streamUrl,
+        pageUrl: detail.pageUrl || window.location.href,
+        title: detail.title || document.title || 'Video',
+        protocol: detail.detectedType === 'MANIFEST_HLS' ? 'HLS' : (detail.detectedType === 'MANIFEST_DASH' ? 'DASH' : 'DIRECT'),
+        initiator: detail.initiatorType || 'runtime_hook'
+      }
+    }).catch(() => {});
+  });
+
+  // 3. Listen for postMessage from core/runtime_hook.js
   window.addEventListener('message', (event) => {
-    // Only accept messages from same origin and with verified Vidown signature
     if (event.source !== window || !event.data || event.data.source !== 'VIDOWN_HOOK') {
       return;
     }
 
     const payload = event.data.payload;
-    if (!payload || !payload.requestUrl) return;
+    if (!payload || (!payload.requestUrl && !payload.streamUrl)) return;
+    const streamUrl = payload.requestUrl || payload.streamUrl;
 
-    // Relay verified media candidate to service_worker.js
     chrome.runtime.sendMessage({
       action: 'registerMediaItem',
       media: {
-        mediaInstanceId: payload.mediaInstanceId || 'video_' + Date.now(),
-        requestUrl: payload.requestUrl,
+        mediaInstanceId: payload.mediaInstanceId || 'stream_' + Math.random().toString(36).substr(2, 6),
+        requestUrl: streamUrl,
         pageUrl: window.location.href,
-        title: document.title || 'Video',
-        protocol: payload.protocol || 'DIRECT',
-        variants: payload.variants || []
+        title: payload.title || document.title || 'Video',
+        protocol: payload.detectedType === 'MANIFEST_HLS' ? 'HLS' : (payload.detectedType === 'MANIFEST_DASH' ? 'DASH' : 'DIRECT'),
+        initiator: payload.initiatorType || 'post_message'
       }
     }).catch(() => {});
   });
@@ -152,6 +246,25 @@
 
   // Initial scan
   document.querySelectorAll('video').forEach(processVideoElement);
+
+  // Consume any pre-sniffed media from downloads-nav.js
+  if (Array.isArray(window.__saviorSniffedMedia)) {
+    window.__saviorSniffedMedia.forEach(item => {
+      if (item && item.url) {
+        chrome.runtime.sendMessage({
+          action: 'registerMediaItem',
+          media: {
+            mediaInstanceId: 'sniffed_' + Math.random().toString(36).substr(2, 6),
+            requestUrl: item.url,
+            pageUrl: window.location.href,
+            title: item.title || document.title || 'Video',
+            protocol: item.isPlaylist ? (item.ext === 'mpd' ? 'DASH' : 'HLS') : 'DIRECT',
+            initiator: 'downloads_nav'
+          }
+        }).catch(() => {});
+      }
+    });
+  }
 
   // Lightweight observer: ONLY filters on src, data-src, hidden.
   // Explicitly excludes style and class to guarantee zero forced reflows!

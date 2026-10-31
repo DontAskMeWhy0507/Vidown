@@ -1,12 +1,3 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 /**
  * Regression test: the Stream Relay bridge (Chrome fetches, native writes).
  *
@@ -24,7 +15,7 @@ console.log('=== TEST SUITE: STREAM RELAY (CHROME FETCH → NATIVE WRITE) ===\n'
 
 const ROOT = path.join(__dirname, '..');
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
-const bg = read('background.chrome.js');
+const bg = read('service_worker.js');
 const host = read('native/host.js');
 
 // 1. Extension side: relay function + fallback chain position

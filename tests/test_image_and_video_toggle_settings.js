@@ -1,12 +1,3 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 const fs = require('fs');
 const assert = require('assert');
 
@@ -41,11 +32,18 @@ assert.ok(popupJs.includes('image_download_enabled: isEnabled'), 'popup.js must 
 assert.ok(popupJs.includes('changes.image_download_enabled'), 'popup.js must listen for image_download_enabled storage changes');
 console.log('✓ 4. popup.js synchronizes image toggle state bidirectionally with storage.');
 
-// 5. Verify content-script.js supports default and runtime dynamic toggle for images
-const contentScript = fs.readFileSync('content-script.js', 'utf8');
-assert.ok(contentScript.includes('image_download_enabled:!0'), 'content-script.js must default image_download_enabled to true');
-assert.ok(contentScript.includes('e.image_download_enabled||e.imageDownloadEnabled'), 'content-script.js must dynamically respond to image_download_enabled changes');
-console.log('✓ 5. content-script.js default and dynamic runtime observer for images verified.');
+// 5. Verify content script supports default and runtime dynamic toggle for images
+const csPath = fs.existsSync('content-script.js') ? 'content-script.js' : 'content/content_main.js';
+const contentScript = fs.readFileSync(csPath, 'utf8');
+assert.ok(
+  contentScript.includes('image_download_enabled:!0') || contentScript.includes('image_download_enabled: true'),
+  'content script must default image_download_enabled to true'
+);
+assert.ok(
+  contentScript.includes('e.image_download_enabled||e.imageDownloadEnabled') || contentScript.includes('changes.image_download_enabled || changes.imageDownloadEnabled'),
+  'content script must dynamically respond to image_download_enabled changes'
+);
+console.log('✓ 5. content script default and dynamic runtime observer for images verified.');
 
 console.log('\n================================================================');
 console.log('ALL INDEPENDENT VIDEO & IMAGE SETTINGS TESTS PASSED! 🎉');

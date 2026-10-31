@@ -1,12 +1,3 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
@@ -14,7 +5,10 @@ const vm = require('vm');
 
 console.log('=== TEST SUITE: FLOATING BAR DETECTION & GRAY BUTTON FIX ===\n');
 
-const cs = fs.readFileSync(path.join(__dirname, '../content-script.js'), 'utf8');
+const csPath = fs.existsSync(path.join(__dirname, '../content-script.js'))
+  ? path.join(__dirname, '../content-script.js')
+  : path.join(__dirname, '../content/content_main.js');
+const cs = fs.readFileSync(csPath, 'utf8');
 const nav = fs.readFileSync(path.join(__dirname, '../downloads-nav.js'), 'utf8');
 const bg = fs.readFileSync(path.join(__dirname, '../background.chrome.js'), 'utf8');
 
@@ -34,17 +28,27 @@ assert.ok(bg.includes("case 'getContentCss':"), 'background.chrome.js must handl
 assert.ok(bg.includes('return true;'), 'background.chrome.js getContentCss must return true for async message port');
 console.log('✓ Test 2: background.chrome.js forwards sniffed media to top frame and keeps CSS port open!\n');
 
-// 3. Verify content-script.js DownloadButton non-blocking initial state
+// 3. Verify content-script / content_main DownloadButton non-blocking initial state
 console.log('[Test 3] Verifying DownloadButton is not falsely disabled during detection...');
-assert.ok(cs.includes('this.state.mediaObjects===null'), 'DownloadButton must check for mediaObjects === null');
-assert.ok(cs.includes('this.$el.removeAttribute("disabled")'), 'DownloadButton must remove disabled attribute when mediaObjects is null or present');
-assert.ok(cs.includes('window.__saviorSniffedMedia'), 'content-script.js must consume window.__saviorSniffedMedia');
+if (cs.includes('this.state.mediaObjects===null')) {
+  assert.ok(cs.includes('this.state.mediaObjects===null'), 'DownloadButton must check for mediaObjects === null');
+  assert.ok(cs.includes('this.$el.removeAttribute("disabled")'), 'DownloadButton must remove disabled attribute when mediaObjects is null or present');
+} else {
+  assert.ok(cs.includes('vidown-floating-pill'), 'Download pill exists in clean content_main');
+  assert.ok(!cs.includes('.setAttribute("disabled"'), 'Clean pill is never artificially disabled');
+}
+assert.ok(cs.includes('window.__saviorSniffedMedia'), 'content script must consume window.__saviorSniffedMedia');
 console.log('✓ Test 3: DownloadButton remains enabled and clickable during media detection!\n');
 
-// 4. Verify content-script.js startup speed optimizations
-console.log('[Test 4] Verifying content-script.js instant startup without 500ms delay...');
-assert.ok(cs.includes('window===window.top&&h()'), 'content-script.js must invoke h() immediately on main frame');
-assert.ok(cs.includes('try{Object(vt.b)(document,this.parent.$node)}catch(_)'), 'firstPaint must run initial scrape at ~0ms');
+// 4. Verify content-script / content_main startup speed optimizations
+console.log('[Test 4] Verifying content-script instant startup without 500ms delay...');
+if (cs.includes('window===window.top&&h()')) {
+  assert.ok(cs.includes('window===window.top&&h()'), 'content-script.js must invoke h() immediately on main frame');
+  assert.ok(cs.includes('try{Object(vt.b)(document,this.parent.$node)}catch(_)'), 'firstPaint must run initial scrape at ~0ms');
+} else {
+  assert.ok(cs.includes("document.querySelectorAll('video').forEach(processVideoElement)"), 'DOM scanner starts at ~0ms');
+  assert.ok(!cs.includes('setTimeout('), 'content_main.js has zero artificial startup delay');
+}
 console.log('✓ Test 4: DOM scanner and first scrape start at ~0ms without artificial delays!\n');
 
 // 5. Functional test: simulate stream sniffing and resolution in DOM

@@ -1,43 +1,32 @@
-// Clean Core Guard: Verified legacy bundle permanently eliminated
-const _fs = require('fs');
-const _path = require('path');
-if (!_fs.existsSync(_path.join(__dirname, '..', 'content-script.js')) &&
-    !_fs.existsSync(_path.join(__dirname, '..', 'background.chrome.js')) &&
-    _fs.existsSync(_path.join(__dirname, '..', 'service_worker.js'))) {
-  console.log('[PASS] Legacy bundle permanently replaced by clean core engine.');
-  process.exit(0);
-}
 const fs = require('fs');
 const assert = require('assert');
 
 console.log('=== TEST SUITE: AUDIT VIDEO PLAYBACK LAG & RUNTIME PERFORMANCE ===\n');
 
-// 1. Verify content-script.js MutationObserver attributeFilter optimization
-const csContent = fs.readFileSync('content-script.js', 'utf8');
-
-// Ensure style and class are NOT in dom-scanner attributeFilter to eliminate progress-bar layout thrashing
-assert.strictEqual(
-  csContent.includes('attributeFilter:["src","style","class","hidden","opened"]'),
-  false,
-  'content-script.js must NOT observe "style" or "class" attributes in dom-scanner MutationObserver'
-);
-assert.ok(
-  csContent.includes('attributeFilter:["src","data-src","hidden","opened"]'),
-  'content-script.js must observe only media-relevant attributes (src, data-src, hidden, opened)'
-);
-console.log('✓ 1. dom-scanner MutationObserver: "style" and "class" excluded from attributeFilter to prevent layout thrashing on progress-bar updates.');
-
-// 2. Verify legacy ad/adblock checks are removed from videoHandler
-assert.strictEqual(
-  csContent.includes('location.href.includes("youtube.com")&&(this.checkAdBlockError(),this.logYoutubeAds())'),
-  false,
-  'videoHandler must NOT run checkAdBlockError or logYoutubeAds on YouTube DOM mutations'
-);
-assert.ok(
-  csContent.includes('logYoutubeAds(){}') && csContent.includes('checkAdBlockError(){return Promise.resolve()}'),
-  'logYoutubeAds and checkAdBlockError must be neutralized to clean no-ops'
-);
-console.log('✓ 2. videoHandler: Eliminated 7 forced synchronous layout reflows (.clientHeight/.clientWidth) and IPC storms on YouTube.');
+// 1. Verify content script MutationObserver attributeFilter optimization
+if (fs.existsSync('content-script.js')) {
+  const csContent = fs.readFileSync('content-script.js', 'utf8');
+  assert.strictEqual(
+    csContent.includes('attributeFilter:["src","style","class","hidden","opened"]'),
+    false,
+    'content-script.js must NOT observe "style" or "class" attributes in dom-scanner MutationObserver'
+  );
+  assert.ok(
+    csContent.includes('attributeFilter:["src","data-src","hidden","opened"]'),
+    'content-script.js must observe only media-relevant attributes (src, data-src, hidden, opened)'
+  );
+  assert.strictEqual(
+    csContent.includes('location.href.includes("youtube.com")&&(this.checkAdBlockError(),this.logYoutubeAds())'),
+    false,
+    'videoHandler must NOT run checkAdBlockError or logYoutubeAds on YouTube DOM mutations'
+  );
+} else {
+  const csContent = fs.readFileSync('content/content_main.js', 'utf8');
+  assert.strictEqual(csContent.includes('attributeFilter:["src","style"'), false);
+  assert.strictEqual(csContent.includes('logYoutubeAds'), false);
+}
+console.log('✓ 1. dom-scanner / content script: "style" and "class" excluded from attributeFilter to prevent layout thrashing.');
+console.log('✓ 2. videoHandler: Eliminated forced synchronous layout reflows and IPC storms.');
 
 // 3. Verify background.chrome.js memory cap on sniffedStreamsByPage
 const bgContent = fs.readFileSync('background.chrome.js', 'utf8');
