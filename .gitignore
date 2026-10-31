@@ -7,3 +7,7 @@ native/*.log
 .superpowers/
 .zcode/
 *.part
+node_modules/
+dist/unpacked_bg/
+dist/unpacked_cs/
+
