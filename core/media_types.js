@@ -366,6 +366,7 @@
       title: typeof input.title === 'string' ? input.title : null,
       thumbnailUrl: typeof input.thumbnailUrl === 'string' ? input.thumbnailUrl : null,
       headers: input.headers && typeof input.headers === 'object' ? { ...input.headers } : {},
+      variants: Array.isArray(input.variants) ? [...input.variants] : [],
       resolutionDetails: input.resolutionDetails && typeof input.resolutionDetails === 'object' ? { ...input.resolutionDetails } : null,
       detectedAt,
       updatedAt
