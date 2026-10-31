@@ -1,35 +1,36 @@
 /* Vidown Floating Video Download Pill Overlay */
 .vidown-floating-pill {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 2147483647;
-  display: flex;
+  top: 14px;
+  right: 14px;
+  z-index: 2147483647 !important;
+  display: flex !important;
   align-items: center;
   gap: 6px;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.92) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: #ffffff;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  color: #ffffff !important;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: none;
-  opacity: 0.85;
+  user-select: none !important;
+  opacity: 0.92;
+  pointer-events: auto !important;
 }
 
 .vidown-floating-pill:hover {
-  opacity: 1;
-  background: rgba(30, 41, 59, 0.95);
-  transform: translateY(-1px);
-  border-color: rgba(59, 130, 246, 0.5);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+  opacity: 1 !important;
+  background: #2563eb !important;
+  transform: translateY(-1px) scale(1.03) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45) !important;
 }
 
 .vidown-pill-icon {

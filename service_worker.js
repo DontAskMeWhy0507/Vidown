@@ -672,16 +672,13 @@ if (typeof chrome.downloads !== 'undefined' && chrome.downloads.onChanged) {
 function updateTabBadge(tabId) {
   if (!tabId || typeof chrome.action === 'undefined') return;
   try {
-    const list = MediaRegistry ? MediaRegistry.getTabMedia(tabId) : [];
-    const count = list.length;
-    chrome.action.setBadgeText({
-      text: count > 0 ? String(count) : '',
-      tabId: tabId
-    });
-    chrome.action.setBadgeBackgroundColor({
-      color: '#2563EB',
-      tabId: tabId
-    });
+    // Only display download progress badges, not detection count numbers
+    if (activeDownloads.size === 0) {
+      chrome.action.setBadgeText({
+        text: '',
+        tabId: tabId
+      });
+    }
   } catch (_) {}
 }
 

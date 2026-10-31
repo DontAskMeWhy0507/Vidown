@@ -92,20 +92,10 @@
 
   // Sensitive SPA players with strict React Virtual DOM ownership and gesture controls
   // Mutating their player DOM containers causes React reconciliation invariant crashes (e.g. IG stories)
-  // or forced layout reflows (e.g. TikTok video lag). All detection on these sites is handled
-  // cleanly in the background via chrome.webRequest.
+  // or forced layout reflows (e.g. TikTok video lag).
   function isSensitiveSite() {
     const host = (window.location && window.location.hostname) ? window.location.hostname.toLowerCase() : '';
-    return (
-      host.includes('instagram.com') ||
-      host.includes('tiktok.com') ||
-      host.includes('youtube.com') ||
-      host.includes('facebook.com') ||
-      host.includes('fb.com') ||
-      host.includes('twitter.com') ||
-      host.includes('x.com') ||
-      host.includes('netflix.com')
-    );
+    return host.includes('instagram.com') || host.includes('tiktok.com');
   }
 
   // 1. Fallback hook injector if not injected via manifest world: MAIN
@@ -197,25 +187,50 @@
     attachFloatingPill(video);
   }
 
-  // 4. Attach sleek, floating download pill to player container (only on standard sites)
-  function attachFloatingPill(video) {
-    if (isSensitiveSite()) return; // Never tamper with sensitive SPA player DOM!
+  // Find visible player container while protecting fragile SPA DOM nodes
+  function findVideoContainer(video) {
+    if (!video) return null;
+    const host = (window.location && window.location.hostname) ? window.location.hostname.toLowerCase() : '';
 
-    // Avoid double attaching
-    if (video.parentElement && video.parentElement.querySelector('.vidown-floating-pill')) {
+    if (host.includes('youtube.com')) {
+      return video.closest('#movie_player, .html5-video-player, ytd-player, #player') || video.parentElement;
+    }
+    if (host.includes('tiktok.com')) {
+      return video.closest('[data-e2e="feed-video"], .xgplayer, [class*="DivBasicPlayerWrapper"], [class*="DivVideoFeed"]') || video.parentElement;
+    }
+    if (host.includes('facebook.com') || host.includes('fb.com')) {
+      return video.closest('[data-pagelet*="Video"], [role="article"], .x1y1aw1k') || video.parentElement;
+    }
+    if (host.includes('instagram.com')) {
+      if (window.location.pathname.startsWith('/stories/')) {
+        return video.closest('section, [role="dialog"], ._aatg, ._aatk') || document.body;
+      }
+      return video.closest('article, [role="presentation"]') || video.parentElement;
+    }
+
+    return video.closest('.video-js, .jwplayer, .plyr, [class*="player"]') || video.parentElement;
+  }
+
+  // 4. Attach sleek, floating download pill to player container
+  function attachFloatingPill(video) {
+    if (!options.on_page_buttons) return;
+
+    const container = findVideoContainer(video);
+    if (!container) return;
+
+    // Avoid double attaching on the container
+    if (container.querySelector && container.querySelector('.vidown-floating-pill')) {
       return;
     }
 
-    const container = video.parentElement;
-    if (!container) return;
-
     // Zero forced reflow: avoid synchronous style computation
-    if (!container.style.position) {
+    if (!container.style.position && container !== document.body) {
       container.style.position = 'relative';
     }
 
     const pill = document.createElement('div');
     pill.className = 'vidown-floating-pill';
+    pill.setAttribute('title', 'Tải video với Vidown');
     pill.innerHTML = `
       <svg class="vidown-pill-icon" viewBox="0 0 24 24">
         <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
@@ -228,17 +243,33 @@
       e.preventDefault();
 
       const src = video.currentSrc || video.src;
-      if (src) {
+      if (src && !src.startsWith('blob:') && !src.startsWith('data:')) {
         chrome.runtime.sendMessage({
           action: 'startDownload',
           url: src,
           title: document.title || 'video',
           pageUrl: window.location.href
         }).catch(() => {});
-      } else {
-        // Open popup or download manager
-        chrome.runtime.sendMessage({ action: 'openDownloadManager' }).catch(() => {});
+        return;
       }
+
+      // Stream / blob video (YouTube, TikTok, Facebook, HLS, DASH)
+      chrome.runtime.sendMessage({
+        action: 'getMediaForCurrentTab'
+      }, (response) => {
+        if (response && response.success && response.media && response.media.length > 0) {
+          const bestMedia = response.media[0];
+          chrome.runtime.sendMessage({
+            action: 'startDownload',
+            url: bestMedia.requestUrl || bestMedia.canonicalUrl,
+            title: bestMedia.title || document.title || 'video',
+            quality: bestMedia.quality || 'highest',
+            pageUrl: window.location.href
+          }).catch(() => {});
+        } else {
+          chrome.runtime.sendMessage({ action: 'openDownloadManager' }).catch(() => {});
+        }
+      });
     });
 
     container.appendChild(pill);
