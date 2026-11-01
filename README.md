@@ -2,10 +2,14 @@
 
 Vidown is a media detection and downloader browser extension for Chrome Manifest V3 (`minimum_chrome_version: 116`).
 
-> **Architecture & Development Status Notice:**
-> The shipped production bundle `content-script.js` (1,974,882 bytes) is compiled via `scripts/build_content_script.js` by assembling the 649 mechanically split modules in `src/content/` (mapped through `src/content/module-registry.js` across 776 slots) with `esbuild.transformSync` minification.
-> 
-> The directory `src/experimental/content-next/` contains an **unwired architectural prototype layer** (~26 KB across 4 platform families). It is **not** connected to the build pipeline and is **not** loaded in the browser. A full semantic replacement of the 649 modules remains pending architectural design and stakeholder direction.
+> **Architecture & Production Source Notice:**  
+> All shipped extension scripts (`content-script.js`, `background.js`, `common.js`, and `inject/*`) are compiled from readable, structured sources under `src/` via the unified `npm run build` pipeline:
+> - `src/content/`: Modular content script (649 modules mapped across 776 slots in `module-registry.js` & `slots.js`).
+> - `src/background/`: Background service worker modules partitioned by subsystem (`entry`, `messaging`, `downloads`, `native-host`, `dnr`, `tabs`, `storage`, `events`, `utilities`).
+> - `src/common/`: Shared runtime library and global context helpers.
+> - `src/inject/`: Main-world site extractors for modern web platforms (TikTok, Douyin, YouTube, Facebook, Twitter/X, LinkedIn, etc.).
+>
+> The directory `src/experimental/content-next/` contains an **unwired architectural prototype layer** (~26 KB across 4 platform families). It is **not** connected to the build pipeline and is **not** loaded in the browser. Its disposition (keep as architectural reference or prune) is reserved as an explicit decision item for project owner Trung.
 
 ---
 
@@ -17,31 +21,36 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
 - **Vendor Optimizations (Milestone 2)**:
   - `bn.js` 6-to-1 deduplication: canonical `src/content/vendor/elliptic/module-126.js` (43,355 B committed git blob) preserved; 5 duplicate instances replaced with 103 B alias stubs, saving 216,015 B raw.
   - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates all 163 inlined generator copies in `content-script.js`, saving 342,202 B raw.
-  - AST Parser (`module-37.js`, 119,694 B) and Generator (`module-89.js`, 45,562 B): verified load-bearing for YouTube player response deciphering; isolated in `src/content/vendor/parser/`.
-- **Release Package**: `dist/savior-extension-v2.4.65.zip` is ~1.03 MB (strictly $\le 1.15$ MB ceiling) containing 0 `node_modules` and 0 executables.
+  - Third-party libraries cleanly isolated in `src/content/vendor/` (`cryptojs`, `qrcode`, `stream`, `fast-xml-parser`, `mustache`, `eventemitter3`, `buffer`, `shims`, `parser`, `elliptic`).
+- **Release Package**: `dist/savior-extension-v2.4.65.zip` is ~1.04 MB (1,092,994 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
 
 ---
 
 ## Getting Started
 
-### Prerequisites & Testing
+### Prerequisites & Building from Source
+
+A clean clone reproduces all shipped artifacts byte-identically:
 
 ```bash
 # Clone repository
 git clone https://github.com/DontAskMeWhy0507/Vidown.git
 cd Vidown
 
-# Run automated test suites (68 suites)
+# Install development dependencies
+npm install
+
+# Full build: compiles common.js, background.js, content-script.js, inject/, and packages release zip
+npm run build
+
+# Development build with unminified output and inline sourcemaps
+npm run build:dev
+
+# Run automated test suites
 npm test
 
 # Run golden characterization tests on real DOM fixtures
 node tests/test_golden_behavior.js
-
-# Build production content script
-npm run build:content
-
-# Package extension zip for distribution
-npm run package
 ```
 
 ### Loading in Chrome
@@ -55,27 +64,41 @@ npm run package
 
 ```
 ├── manifest.json                 # Chrome Manifest V3 manifest
-├── content-script.js             # Shipped production content script bundle (1,974,882 B)
+├── content-script.js             # Shipped production content script bundle (1,997,616 B)
+├── background.js                 # Shipped background service worker bundle (1,154,528 B)
+├── common.js                     # Shipped common runtime utility bundle (518,794 B)
+├── inject/                       # Shipped main-world site extractors
 ├── src/
-│   ├── content/                  # Shipped build source (649 modules)
-│   │   ├── entry/                # CSS prefetcher header
-│   │   ├── crypto/               # Modules 0, 16, 61, etc. (stream decryption)
-│   │   ├── detector/             # Modules 1, 5, 11, etc. (DOM detection engine)
-│   │   ├── platform/             # Platform handlers (356 modules)
-│   │   ├── providers/            # Modules 43, 368, 389, 565, 566
-│   │   ├── vendor/               # Canonical elliptic (126), parser (37, 89), regenerator-core
-│   │   ├── widget/               # settings-manager.js, dom-constants.js, overlay-styles.js, download-list.js, widget-manager.js (Modules 7, 21, 138, 164, 541)
+│   ├── content/                  # Modular content script sources (649 modules)
+│   │   ├── core/                 # dom-utils.js, media-sniffer.js, format-resolver.js, etc.
+│   │   ├── detector/             # media-constants.js, url-utils.js, dom-scanner.js, content-entry.js, etc.
+│   │   ├── platform/             # tiktok.js, facebook.js, youtube.js, specialized extractors
+│   │   ├── providers/            # ab-test-provider.js, media providers
+│   │   ├── widget/               # settings-manager.js, dom-constants.js, overlay-styles.js, download-list.js, widget-manager.js, floating-bar-manager.js
+│   │   ├── vendor/               # cryptojs, qrcode, stream, fast-xml-parser, mustache, eventemitter3, buffer, shims, parser, elliptic
 │   │   ├── module-registry.js    # 649 active module path mappings
 │   │   └── slots.js              # 776-slot Webpack array mapping (127 null holes)
+│   ├── background/               # Modular background service worker sources
+│   │   ├── entry/                # Service worker main entry point (module-178.js)
+│   │   ├── messaging/            # Runtime message routers
+│   │   ├── downloads/            # Chrome downloads API managers
+│   │   ├── storage/              # Extension storage accessors
+│   │   ├── tabs/                 # Tab state trackers
+│   │   ├── events/               # Background event broadcasters
+│   │   ├── crypto/               # Cryptographic helpers
+│   │   ├── utilities/            # Helper functions
+│   │   └── module-registry.js    # Background module mappings
+│   ├── common/                   # Modular common runtime sources
+│   │   ├── core-utils/           # Core DOM and event utilities
+│   │   ├── entry/                # Entry initialization (module-736.js)
+│   │   ├── crypto/               # Cryptographic routines
+│   │   ├── utilities/            # General helpers
+│   │   └── module-registry.js    # Common module mappings
+│   ├── inject/                   # Source main-world extractors (synced to inject/ via build:inject)
 │   └── experimental/
 │       └── content-next/         # UNWIRED draft ES module prototype (~26 KB)
-│           ├── core/             # constants.js, events.js, utils.js
-│           ├── crypto/           # crypto-rollup.js
-│           ├── detector/         # attribute-stamper.js, dom-scanner.js
-│           ├── providers/        # facebook.js, hls-dash.js, index.js, tiktok.js, youtube.js
-│           └── index.js          # Draft ESM entry point
-├── tests/                        # 68 automated regression & golden characterization suites
-├── types/                        # TypeScript declaration contracts (types/content.d.ts)
+├── tests/                        # Automated regression, golden characterization & oracle suites
+├── scripts/                      # Build pipelines (build_content_script, build_background, build_common, build_inject, package_release)
 └── dist/                         # Release packages (savior-extension-v2.4.65.zip)
 ```
 
@@ -85,4 +108,4 @@ npm run package
 
 Vidown is licensed under the [MIT License](LICENSE) © 2026 Vu Tien Tuan Trung.
 
-Please see [NOTICE.md](NOTICE.md) for full attribution of the underlying Cốc Cốc Savior origin and third-party vendored components (bn.js, elliptic, regenerator-runtime, CryptoJS, Acorn).
+Please see [NOTICE.md](NOTICE.md) for full attribution of the underlying Cốc Cốc Savior origin and third-party vendored components (bn.js, elliptic, regenerator-runtime, CryptoJS, Acorn, node-qrcode, readable-stream, fast-xml-parser, mustache.js, eventemitter3).
