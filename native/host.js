@@ -2684,6 +2684,7 @@ if (typeof module !== 'undefined') {
     handleMessage,
     setMessageHook,
     startDownload,
+    startYtDlpDownload,
     DISCONNECT_GRACE_MS
   };
 }

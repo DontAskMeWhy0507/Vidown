@@ -215,7 +215,7 @@ function setupAnti403Rules() {
   if (!chrome.declarativeNetRequest || !chrome.declarativeNetRequest.updateSessionRules) return;
   try {
     chrome.declarativeNetRequest.updateSessionRules({
-      removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008],
+      removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008].concat([1009, 1010]),
       addRules: [
         {
           id: 1001,
@@ -305,6 +305,35 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*iesdouyin.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1009,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.instagram.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.instagram.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*cdninstagram.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1010,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.instagram.com/' }
+            ]
+          },
+          condition: {
+            urlFilter: '*instagram.com/*',
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         }
