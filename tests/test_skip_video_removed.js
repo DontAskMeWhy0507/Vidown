@@ -27,8 +27,8 @@ console.log('PASS: no options bundle remains; no skip-video anywhere.');
 
 // 3. content-script.js on-page button gate forced off
 const cs = read('content-script.js');
-assert.ok(cs.includes('this.isSkipVideoEnabled=!1'), 'content-script.js must force isSkipVideoEnabled to false');
-assert.ok(!cs.includes('this.isSkipVideoEnabled=!!t.groupName&&u.a.get("skip_video_enabled")'), 'content-script.js must not enable the button from A/B + settings');
+assert.ok(/this\.isSkipVideoEnabled\s*=\s*(!1|false)/.test(cs), 'content-script.js must force isSkipVideoEnabled to false');
+assert.ok(!/this\.isSkipVideoEnabled\s*=\s*!![a-zA-Z_$][\w$]*\.groupName/.test(cs), 'content-script.js must not enable the button from A/B + settings');
 console.log('PASS: content-script.js never mounts the #skip-video button.');
 
 // 4. The skip-video banner asset must not ship in the release package

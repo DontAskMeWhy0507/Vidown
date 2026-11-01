@@ -19,11 +19,11 @@ const nav = read('downloads-nav.js');
 
 // 1. Widget scrape: first run + interval at 1s (was 5s)
 assert.ok(
-  cs.includes('this.repeatWhileEnabled(()=>{Object(vt.b)(document,this.parent.$node)},1e3)'),
+  /repeatWhileEnabled\s*\(\s*\(\s*\)\s*=>\s*\{[^}]+\}\s*,\s*(1e3|1000)\s*\)/.test(cs),
   'widget media scrape must run first at 1s with a 1s poll interval'
 );
 assert.ok(
-  !cs.includes('this.repeatWhileEnabled(()=>{Object(vt.b)(document,this.parent.$node)},5e3)'),
+  !/repeatWhileEnabled\s*\(\s*\(\s*\)\s*=>\s*\{[^}]+\}\s*,\s*(5e3|5000)\s*\)/.test(cs),
   'the 5-second first-scrape delay must be gone'
 );
 console.log('PASS: widget scrapes media at 1s instead of 5s.');

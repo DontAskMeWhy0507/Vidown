@@ -39,7 +39,9 @@ assert.strictEqual(
   'content-script.js onMessage listener must not unconditionally return true'
 );
 assert.ok(
-  contentScript.includes('if(t&&t.type==="get_inner_data"') && contentScript.includes('return!0') && contentScript.includes('return!1'),
+  /if\s*\(\s*[a-zA-Z_$][\w$]*\s*&&\s*[a-zA-Z_$][\w$]*\.type\s*===\s*["']get_inner_data["']/.test(contentScript) &&
+  /return\s*(!0|true)/.test(contentScript) &&
+  /return\s*(!1|false)/.test(contentScript),
   'content-script.js onMessage listener must only return true for asynchronous actions and return false otherwise'
 );
 console.log('PASS: content-script.js onMessage listener only returns true when an async response is expected');

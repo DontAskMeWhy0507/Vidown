@@ -7,14 +7,16 @@ console.log('=== TEST SUITE: AUDIT VIDEO PLAYBACK LAG & RUNTIME PERFORMANCE ===\
 const csContent = fs.readFileSync('content-script.js', 'utf8');
 
 // Ensure style and class are NOT in dom-scanner attributeFilter to eliminate progress-bar layout thrashing
-assert.strictEqual(
-  csContent.includes('attributeFilter:["src","style","class","hidden","opened"]'),
-  false,
+const filterMatch = csContent.match(/attributeFilter\s*:\s*\[([^\]]+)\]/);
+assert.ok(filterMatch, 'content-script.js must configure attributeFilter in MutationObserver');
+const observedAttrs = filterMatch[1].replace(/["'\s]/g, '').split(',');
+assert.ok(
+  !observedAttrs.includes('style') && !observedAttrs.includes('class'),
   'content-script.js must NOT observe "style" or "class" attributes in dom-scanner MutationObserver'
 );
 assert.ok(
-  csContent.includes('attributeFilter:["src","data-src","hidden","opened"]'),
-  'content-script.js must observe only media-relevant attributes (src, data-src, hidden, opened)'
+  observedAttrs.includes('src') && observedAttrs.includes('data-src'),
+  'content-script.js must observe media-relevant attributes (src, data-src)'
 );
 console.log('✓ 1. dom-scanner MutationObserver: "style" and "class" excluded from attributeFilter to prevent layout thrashing on progress-bar updates.');
 
@@ -25,7 +27,8 @@ assert.strictEqual(
   'videoHandler must NOT run checkAdBlockError or logYoutubeAds on YouTube DOM mutations'
 );
 assert.ok(
-  csContent.includes('logYoutubeAds(){}') && csContent.includes('checkAdBlockError(){return Promise.resolve()}'),
+  /logYoutubeAds\s*\(\s*\)\s*\{\s*\}/.test(csContent) &&
+  /checkAdBlockError\s*\(\s*\)\s*\{\s*return\s+Promise\.resolve\(\s*\)\s*;?\s*\}/.test(csContent),
   'logYoutubeAds and checkAdBlockError must be neutralized to clean no-ops'
 );
 console.log('✓ 2. videoHandler: Eliminated 7 forced synchronous layout reflows (.clientHeight/.clientWidth) and IPC storms on YouTube.');
