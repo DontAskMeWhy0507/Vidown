@@ -16,7 +16,7 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
 - **Net Raw Code Reduction**: 430,043 bytes (shortfall of 19,957 B vs Gate 5 target of $\ge 450,000$ B due to semantic identifier expansion; accepted per owner decision recorded 2026-11-01).
 - **Vendor Optimizations (Milestone 2)**:
   - `bn.js` 6-to-1 deduplication: canonical `src/content/vendor/elliptic/module-126.js` (43,355 B committed git blob) preserved; 5 duplicate instances replaced with 103 B alias stubs, saving 216,015 B raw.
-  - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates all 164 inlined generator copies in `content-script.js`, saving 342,202 B raw.
+  - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates all 163 inlined generator copies in `content-script.js`, saving 342,202 B raw.
   - AST Parser (`module-37.js`, 119,694 B) and Generator (`module-89.js`, 45,562 B): verified load-bearing for YouTube player response deciphering; isolated in `src/content/vendor/parser/`.
 - **Release Package**: `dist/savior-extension-v2.4.65.zip` is ~1.03 MB (strictly $\le 1.15$ MB ceiling) containing 0 `node_modules` and 0 executables.
 
