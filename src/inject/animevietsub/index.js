@@ -1,0 +1,16 @@
+{
+  let t = null;
+  t = setInterval(() => {
+    var e = document.body.getAttribute("savior-decoded-content");
+    document.body.removeAttribute("savior-decoded-content");
+    if (e) {
+      chrome.runtime.sendMessage(null, {
+        type: "script_executed",
+        data: {
+          data: e
+        }
+      });
+      clearInterval(t);
+    }
+  }, 300);
+}
