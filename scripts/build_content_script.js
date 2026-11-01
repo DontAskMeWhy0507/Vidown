@@ -34,6 +34,9 @@ const prefetcherCode = entrySource.slice(0, section2Idx).trim();
 
 // 2. Read each module
 const slotCodes = [];
+const regenPattern = /function\s+([a-zA-Z0-9_$]+)\s*\(\)\s*\{\/\*!\s*regenerator-runtime[\s\S]*?\(\1\s*=\s*function\(\)\s*\{return\s*\{w:\s*[a-zA-Z0-9_$]+,\s*m:\s*[a-zA-Z0-9_$]+\}\}\)\(\)\}/g;
+let deduplicatedRegenCount = 0;
+
 for (let i = 0; i < 776; i++) {
   if (!registry.modules[i]) {
     slotCodes.push('null');
@@ -42,14 +45,23 @@ for (let i = 0; i < 776; i++) {
     let c = fs.readFileSync(p, 'utf8');
     c = c.replace(/^export default\s+/m, '').replace(/^module\.exports\s*=\s*/m, '').trim();
     if (c.endsWith(';')) c = c.slice(0, -1);
+    if (regenPattern.test(c)) {
+      c = c.replace(regenPattern, 'var $1 = _saviorRegen;');
+      deduplicatedRegenCount++;
+    }
     slotCodes.push(c);
   }
 }
+console.log(`Deduplicated inlined regenerator-runtime in ${deduplicatedRegenCount} modules.`);
 
 const arrayCode = '[' + slotCodes.join(',') + ']';
 
-// 3. Webpack bootstrap
-const bootstrap = `!function(t){var e={};function r(n){if(e[n])return e[n].exports;var i=e[n]={i:n,l:!1,exports:{}};return t[n].call(i.exports,i,i.exports,r),i.l=!0,i.exports}r.m=t,r.c=e,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)r.d(n,i,function(e){return t[e]}.bind(null,i));return n},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="./",r(r.s=543)}(${arrayCode});`;
+// 3. Webpack bootstrap with canonical shared regenerator-core
+const regenCorePath = path.join(CONTENT_DIR, 'vendor', 'regenerator-core.js');
+const regenCoreCode = fs.readFileSync(regenCorePath, 'utf8').replace('module.exports =', 'return');
+const sharedRegenDeclaration = `var _saviorRegen = (function(){${regenCoreCode}})();`;
+
+const bootstrap = `${sharedRegenDeclaration}\n!function(t){var e={};function r(n){if(e[n])return e[n].exports;var i=e[n]={i:n,l:!1,exports:{}};return t[n].call(i.exports,i,i.exports,r),i.l=!0,i.exports}r.m=t,r.c=e,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)r.d(n,i,function(e){return t[e]}.bind(null,i));return n},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="./",r(r.s=543)}(${arrayCode});`;
 
 // 4. Transform / Minify using esbuild
 const unminified = prefetcherCode + '\n\n' + bootstrap;

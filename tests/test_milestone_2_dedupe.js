@@ -67,3 +67,23 @@ for (const id of stubIds) {
 }
 
 console.log('PASS: Gate 2A mechanical deduplication and runtime functional delegation verified! ✅\n');
+
+// 3. Gate 2B: Native Async/Await Re-emission & Regenerator Tracking
+console.log('Testing Gate 2B: Regenerator deduplication and bundling...');
+const bundlePath = path.resolve(__dirname, '../content-script.js');
+const bundleCode = fs.readFileSync(bundlePath, 'utf8');
+
+const regenMatches = bundleCode.match(/regenerator-runtime/g);
+assert.strictEqual(regenMatches, null, 'Built bundle must contain zero instances of regenerator-runtime boilerplate');
+assert.ok(bundleCode.includes('_saviorRegen'), 'Built bundle must declare shared _saviorRegen helper');
+
+const baselineBundleSize = 2404925;
+const currentBundleSize = fs.statSync(bundlePath).size;
+const netRawSavings = baselineBundleSize - currentBundleSize;
+
+console.log(`Gate 2B Bundle size: ${currentBundleSize} bytes (Baseline: ${baselineBundleSize} bytes)`);
+console.log(`Total Net Raw Savings: ${netRawSavings} bytes (Gate 5 target: >= 450,000 bytes)`);
+
+assert.ok(netRawSavings >= 450000, `Gate 5: Net raw reduction must be >= 450,000 bytes (got ${netRawSavings})`);
+console.log('PASS: Gate 2B and Gate 5 net code reduction verified! ✅\n');
+
