@@ -637,7 +637,7 @@
       "start": 106541,
       "end": 108861,
       "size": 2320,
-      "fileSize": 2358,
+      "fileSize": 4077,
       "requires": [
         1,
         9
@@ -653,7 +653,8 @@
         541,
         543
       ],
-      "reachableFromEntry": true
+      "reachableFromEntry": true,
+      "file": "widget/settings-manager.js"
     },
     "8": {
       "id": 8,
@@ -1086,7 +1087,7 @@
       "start": 163288,
       "end": 165920,
       "size": 2632,
-      "fileSize": 2671,
+      "fileSize": 3938,
       "requires": [],
       "hasRegenerator": false,
       "isBnCopy": false,
@@ -1094,7 +1095,8 @@
         176,
         541
       ],
-      "reachableFromEntry": true
+      "reachableFromEntry": true,
+      "file": "widget/dom-constants.js"
     },
     "22": {
       "id": 22,
@@ -3425,7 +3427,7 @@
       "start": 691531,
       "end": 697360,
       "size": 5829,
-      "fileSize": 5869,
+      "fileSize": 5965,
       "requires": [
         148
       ],
@@ -3435,7 +3437,8 @@
         119,
         541
       ],
-      "reachableFromEntry": true
+      "reachableFromEntry": true,
+      "file": "widget/overlay-styles.js"
     },
     "139": {
       "id": 139,
@@ -3942,7 +3945,7 @@
       "start": 848495,
       "end": 868682,
       "size": 20187,
-      "fileSize": 20227,
+      "fileSize": 34545,
       "requires": [
         0,
         1,
@@ -3963,7 +3966,8 @@
       "callers": [
         541
       ],
-      "reachableFromEntry": true
+      "reachableFromEntry": true,
+      "file": "widget/download-list.js"
     },
     "165": {
       "id": 165,
@@ -9899,7 +9903,7 @@
       "start": 1882978,
       "end": 1993549,
       "size": 110571,
-      "fileSize": 110611,
+      "fileSize": 110983,
       "requires": [
         0,
         1,
@@ -9934,7 +9938,8 @@
       "callers": [
         543
       ],
-      "reachableFromEntry": true
+      "reachableFromEntry": true,
+      "file": "widget/widget-manager.js"
     },
     "542": {
       "id": 542,

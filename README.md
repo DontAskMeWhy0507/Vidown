@@ -55,16 +55,16 @@ npm run package
 
 ```
 ├── manifest.json                 # Chrome Manifest V3 manifest
-├── content-script.js             # Shipped production content script bundle (1,949,390 B)
+├── content-script.js             # Shipped production content script bundle (1,954,777 B)
 ├── src/
-│   ├── content/                  # Shipped build source (649 numeric modules)
+│   ├── content/                  # Shipped build source (649 modules)
 │   │   ├── entry/                # CSS prefetcher header
 │   │   ├── crypto/               # Modules 0, 16, 61, etc. (stream decryption)
 │   │   ├── detector/             # Modules 1, 5, 11, etc. (DOM detection engine)
 │   │   ├── platform/             # Platform handlers (356 modules)
 │   │   ├── providers/            # Modules 43, 368, 389, 565, 566
 │   │   ├── vendor/               # Canonical elliptic (126), parser (37, 89), regenerator-core
-│   │   ├── widget/               # Modules 7, 21, 138, 164, 541
+│   │   ├── widget/               # settings-manager.js, dom-constants.js, overlay-styles.js, download-list.js, widget-manager.js (Modules 7, 21, 138, 164, 541)
 │   │   ├── module-registry.js    # 649 active module path mappings
 │   │   └── slots.js              # 776-slot Webpack array mapping (127 null holes)
 │   └── experimental/
