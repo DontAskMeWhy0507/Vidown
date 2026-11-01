@@ -81,6 +81,8 @@ npm run package
 
 ---
 
-## Licensing Notice
+## Licensing & Notice
 
-Licensing decision is currently pending stakeholder review (Trung) due to the proprietary origin of the decompiled Cốc Cốc Savior codebase. No open-source license grant is established until a formal decision is approved.
+Vidown is licensed under the [MIT License](LICENSE) © 2026 Vu Tien Tuan Trung.
+
+Please see [NOTICE.md](NOTICE.md) for full attribution of the underlying Cốc Cốc Savior origin and third-party vendored components (bn.js, elliptic, regenerator-runtime, CryptoJS, Acorn).

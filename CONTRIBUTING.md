@@ -61,4 +61,5 @@ npm run package
 
 ## Licensing & Intellectual Property
 
-The Vidown codebase originates from decompiled components of Cốc Cốc's Savior media downloader. All licensing and public release decisions reside with the project stakeholder (Trung). Do not assert open-source licensing grants (such as MIT) without formal authorization.
+Vidown is licensed under the MIT License © 2026 Vu Tien Tuan Trung (see `LICENSE`).
+The project incorporates and builds upon code originating from Cốc Cốc's Savior media downloader alongside several vendored open-source libraries. Contributors must adhere to all attributions and constraints outlined in `NOTICE.md`.
