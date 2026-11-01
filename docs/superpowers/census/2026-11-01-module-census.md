@@ -2,7 +2,7 @@
 
 - Date: 2026-11-01
 - Baseline original bundle size: 2,404,925 bytes (630 B CSS prefetcher + 2,404,295 B Webpack IIFE)
-- Current built bundle size: 1954753 bytes
+- Current built bundle size: 1832616 bytes
 - Total Webpack slots: 776
 - Real function modules: 649
 - Holes (null slots): 127
@@ -100,7 +100,7 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 | 618 | 43306 | 103 | No | No | Yes | 1 |
 | 652 | 43306 | 103 | No | No | Yes | 1 |
 | 668 | 43306 | 103 | No | No | Yes | 1 |
-| 24 | 40290 | 40331 | Yes | Yes | No | 2 |
+| 24 | 40290 | 56523 | Yes | No | No | 2 |
 | 442 | 39532 | 39574 | No | Yes | No | 0 |
 | 6 | 39279 | 39315 | Yes | Yes | No | 80 |
 | 0 | 27593 | 27855 | Yes | Yes | No | 117 |
