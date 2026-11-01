@@ -115,7 +115,7 @@ import m116 from './platform/module-116.js';
 import m117 from './platform/module-117.js';
 import m118 from './platform/module-118.js';
 import m119 from './detector/module-119.js';
-import m120 from './detector/module-120.js';
+import m120 from './platform/youtube.js';
 import m121 from './platform/module-121.js';
 import m122 from './platform/module-122.js';
 import m123 from './platform/module-123.js';
