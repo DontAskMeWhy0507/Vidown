@@ -39,7 +39,7 @@ import m39 from './platform/module-39.js';
 import m40 from './platform/module-40.js';
 import m41 from './platform/module-41.js';
 import m42 from './platform/module-42.js';
-import m43 from './providers/module-43.js';
+import m43 from './providers/ab-test-provider.js';
 import m44 from './platform/module-44.js';
 import m45 from './crypto/module-45.js';
 import m46 from './crypto/module-46.js';

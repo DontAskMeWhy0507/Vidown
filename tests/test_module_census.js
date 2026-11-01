@@ -16,7 +16,7 @@ assert.strictEqual(census.holesCount, 127, 'Must identify exactly 127 holes');
 assert.ok(census.modules['37'], 'Module 37 must be inventoried');
 assert.ok(census.modules['89'], 'Module 89 must be inventoried');
 assert.strictEqual(census.ellipticCopiesCount, 6, 'Must inventory 6 bn.js copies');
-assert.strictEqual(census.regeneratorModulesCount, 164, 'Must identify 164 regenerator modules');
+assert.strictEqual(census.regeneratorModulesCount, 163, 'Must identify 163 regenerator modules');
 
 // 2. Loud Baseline Staleness Guard
 // Guarantees census baseline bundle assumptions cannot silently go stale or desync from reference

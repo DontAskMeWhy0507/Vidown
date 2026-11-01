@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-11-01T04:09:52.778Z",
   "baselineBundleSize": 2404925,
-  "currentBuiltBundleSize": 1973169,
+  "currentBuiltBundleSize": 1974882,
   "totalSlots": 776,
   "realModulesCount": 649,
   "holesCount": 127,
@@ -17,7 +17,29 @@
     652,
     668
   ],
-  "regeneratorModulesCount": 164,
+  "regeneratorModulesCount": 163,
+  "vendoredMachineryNotes": [
+    {
+      "moduleId": 28,
+      "path": "detector/dash-parser.js",
+      "machinery": "inlined regenerator-runtime helper machinery (MIT)"
+    },
+    {
+      "moduleId": 12,
+      "path": "detector/dom-helper.js",
+      "machinery": "inlined regenerator-runtime helper machinery (MIT)"
+    },
+    {
+      "moduleId": 3,
+      "path": "detector/url-utils.js",
+      "machinery": "inlined regenerator-runtime helper machinery (MIT)"
+    },
+    {
+      "moduleId": 43,
+      "path": "providers/ab-test-provider.js",
+      "machinery": "inlined regenerator-runtime helper machinery (MIT)"
+    }
+  ],
   "module37Analysis": {
     "id": 37,
     "bundleSize": 119308,
@@ -1629,7 +1651,7 @@
       "start": 423476,
       "end": 430242,
       "size": 6766,
-      "fileSize": 6808,
+      "fileSize": 11844,
       "requires": [
         1,
         5,

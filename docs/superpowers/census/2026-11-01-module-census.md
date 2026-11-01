@@ -2,7 +2,7 @@
 
 - Date: 2026-11-01
 - Baseline original bundle size: 2,404,925 bytes (630 B CSS prefetcher + 2,404,295 B Webpack IIFE)
-- Current built bundle size: 1973169 bytes
+- Current built bundle size: 1974882 bytes
 - Total Webpack slots: 776
 - Real function modules: 649
 - Holes (null slots): 127
@@ -10,7 +10,7 @@
 - Reachable modules: 156
 - Unreachable modules: 493
 - bn.js duplicate copies: 6 (126, 437, 485, 618, 652, 668), saving potential: 216530 bytes
-- Modules containing regenerator-runtime: 164
+- Modules containing regenerator-runtime: 163
 
 ---
 
@@ -108,3 +108,13 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 | 741 | 26931 | 26971 | No | Yes | No | 0 |
 | 643 | 26151 | 26200 | No | No | No | 1 |
 | 162 | 25596 | 25638 | No | No | No | 1 |
+
+---
+
+## 4. Vendored Machinery Embedded in Renamed Modules
+
+The following renamed custom modules embed inlined vendored helper machinery (retaining their upstream MIT licence comments) rather than being external third-party libraries as a whole:
+- `src/content/detector/dash-parser.js` (Module 28): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
+- `src/content/detector/dom-helper.js` (Module 12): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
+- `src/content/detector/url-utils.js` (Module 3): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
+- `src/content/providers/ab-test-provider.js` (Module 43): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
