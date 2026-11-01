@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-11-01T04:09:52.778Z",
   "baselineBundleSize": 2404925,
-  "currentBuiltBundleSize": 1974882,
+  "currentBuiltBundleSize": 1974558,
   "totalSlots": 776,
   "realModulesCount": 649,
   "holesCount": 127,
@@ -38,6 +38,11 @@
       "moduleId": 43,
       "path": "providers/ab-test-provider.js",
       "machinery": "inlined regenerator-runtime helper machinery (MIT)"
+    },
+    {
+      "moduleId": 442,
+      "path": "platform/tiktok-douyin.js",
+      "machinery": "inlined regenerator-runtime helper machinery (MIT) (3 copies c, w, V deduplicated to _saviorRegen in content-script.js)"
     }
   ],
   "module37Analysis": {
@@ -8380,7 +8385,7 @@
       "start": 1619236,
       "end": 1658768,
       "size": 39532,
-      "fileSize": 39574,
+      "fileSize": 59154,
       "requires": [
         0,
         1,

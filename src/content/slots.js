@@ -423,7 +423,7 @@ import m434 from './platform/module-434.js';
 import m435 from './platform/module-435.js';
 import m436 from './platform/module-436.js';
 import m437 from './vendor/elliptic/module-437.js';
-import m442 from './detector/module-442.js';
+import m442 from './platform/tiktok-douyin.js';
 import m443 from './vendor/elliptic/module-443.js';
 import m444 from './detector/module-444.js';
 import m445 from './vendor/module-445.js';

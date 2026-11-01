@@ -101,7 +101,7 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 | 652 | 43306 | 103 | No | No | Yes | 1 |
 | 668 | 43306 | 103 | No | No | Yes | 1 |
 | 24 | 40290 | 56523 | Yes | No | No | 2 |
-| 442 | 39532 | 39574 | No | Yes | No | 0 |
+| 442 | 39532 | 59154 | No | Yes | No | 0 |
 | 6 | 39279 | 39315 | Yes | Yes | No | 80 |
 | 0 | 27593 | 27855 | Yes | Yes | No | 117 |
 | 163 | 27190 | 27230 | No | No | No | 1 |
@@ -118,3 +118,4 @@ The following renamed custom modules embed inlined vendored helper machinery (re
 - `src/content/detector/dom-helper.js` (Module 12): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
 - `src/content/detector/url-utils.js` (Module 3): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
 - `src/content/providers/ab-test-provider.js` (Module 43): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
+- `src/content/platform/tiktok-douyin.js` (Module 442): Inlined `regenerator-runtime` helper machinery (3 copies `c`, `w`, `V`) with MIT licence header, deduplicated to `_saviorRegen` in `content-script.js`.
