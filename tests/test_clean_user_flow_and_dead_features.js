@@ -24,7 +24,7 @@ console.log('✓ 2. content-script.css completely hides dead on-page buttons (#o
 
 // 3. Verify content-script.js defaults detach_enabled to false
 const contentJs = fs.readFileSync('content-script.js', 'utf8');
-assert.ok(contentJs.includes('detach_enabled:!1'), 'content-script.js must default detach_enabled to false');
+assert.ok(/detach_enabled\s*:\s*(!1|false)/.test(contentJs), 'content-script.js must default detach_enabled to false');
 console.log('✓ 3. content-script.js defaults detach_enabled to false (disabling PiP templates).');
 
 // 4. Verify downloads.html Settings modal has no dead PiP setting

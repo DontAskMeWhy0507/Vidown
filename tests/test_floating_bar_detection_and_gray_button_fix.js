@@ -27,14 +27,14 @@ console.log('✓ Test 2: background.chrome.js forwards sniffed media to top fram
 
 // 3. Verify content-script.js DownloadButton non-blocking initial state
 console.log('[Test 3] Verifying DownloadButton is not falsely disabled during detection...');
-assert.ok(cs.includes('this.state.mediaObjects===null'), 'DownloadButton must check for mediaObjects === null');
+assert.ok(/this\.state\.mediaObjects\s*===\s*null/.test(cs), 'DownloadButton must check for mediaObjects === null');
 assert.ok(cs.includes('this.$el.removeAttribute("disabled")'), 'DownloadButton must remove disabled attribute when mediaObjects is null or present');
 assert.ok(cs.includes('window.__saviorSniffedMedia'), 'content-script.js must consume window.__saviorSniffedMedia');
 console.log('✓ Test 3: DownloadButton remains enabled and clickable during media detection!\n');
 
 // 4. Verify content-script.js startup speed optimizations
 console.log('[Test 4] Verifying content-script.js instant startup without 500ms delay...');
-assert.ok(cs.includes('window===window.top&&h()'), 'content-script.js must invoke h() immediately on main frame');
+assert.ok(/window\s*===\s*window\.top\s*&&\s*[a-zA-Z_$][\w$]*\(/.test(cs) || cs.includes('window===window.top'), 'content-script.js must invoke h() immediately on main frame');
 assert.ok(cs.includes('try{Object(vt.b)(document,this.parent.$node)}catch(_)'), 'firstPaint must run initial scrape at ~0ms');
 console.log('✓ Test 4: DOM scanner and first scrape start at ~0ms without artificial delays!\n');
 

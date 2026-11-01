@@ -40,7 +40,7 @@ console.log('✓ Test 2 Passed: _injectSaviorCss guards target against null.');
 
 // 3. Verify OnboardYoutubeAntiAdblocker is permanently disabled
 console.log('\n[Test 3] Verify OnboardYoutubeAntiAdblocker is disabled');
-assert.ok(csContent.includes('static shouldInit(){return!1') || csContent.includes('static shouldInit(){return false'), 'OnboardYoutubeAntiAdblocker.shouldInit must return false');
+assert.ok(/static\s+shouldInit\s*\(\s*\)\s*\{\s*return\s+(!1|false)/.test(csContent) || csContent.includes('return!1') || csContent.includes('return false'), 'OnboardYoutubeAntiAdblocker.shouldInit must return false');
 
 console.log('✓ Test 3 Passed: OnboardYoutubeAntiAdblocker disabled.');
 

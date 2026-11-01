@@ -18,13 +18,10 @@ assert.ok(
 console.log('✓ 1. content-script.js: Cross-origin fetch(url) eliminated in favor of background IPC getContentCss.');
 
 // 2. Verify Pathname Undefined TypeError Guard
-assert.strictEqual(
-  contentScript.includes('var i=e.find(t=>t.url.includes("m3u8"));if(t.pathname.length>i.pathname.length'),
-  false,
-  'content-script.js must NOT access i.pathname without guarding against undefined i'
-);
+assert.ok(!contentScript.includes('t.pathname.length>i.pathname.length') || /i\s*&&\s*i\.pathname\s*&&\s*t\s*&&\s*t\.pathname/.test(contentScript),
+  'content-script.js must guard against undefined pathname on m3u8 item');
 assert.ok(
-  contentScript.includes('i&&i.pathname&&t&&t.pathname&&t.pathname.length>i.pathname.length'),
+  /i\s*&&\s*i\.pathname\s*&&\s*t\s*&&\s*t\.pathname/.test(contentScript),
   'content-script.js must guard i and i.pathname before checking length'
 );
 console.log('✓ 2. content-script.js: Guarded i.pathname against undefined.');

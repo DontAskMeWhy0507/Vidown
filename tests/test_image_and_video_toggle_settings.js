@@ -34,8 +34,8 @@ console.log('✓ 4. popup.js synchronizes image toggle state bidirectionally wit
 
 // 5. Verify content-script.js supports default and runtime dynamic toggle for images
 const contentScript = fs.readFileSync('content-script.js', 'utf8');
-assert.ok(contentScript.includes('image_download_enabled:!0'), 'content-script.js must default image_download_enabled to true');
-assert.ok(contentScript.includes('e.image_download_enabled||e.imageDownloadEnabled'), 'content-script.js must dynamically respond to image_download_enabled changes');
+assert.ok(/image_download_enabled\s*:\s*(!0|true)/.test(contentScript), 'content-script.js must default image_download_enabled to true');
+assert.ok(/[a-zA-Z_$][\w$]*\.image_download_enabled\s*\|\|\s*[a-zA-Z_$][\w$]*\.imageDownloadEnabled/.test(contentScript), 'content-script.js must dynamically respond to image_download_enabled changes');
 console.log('✓ 5. content-script.js default and dynamic runtime observer for images verified.');
 
 console.log('\n================================================================');
