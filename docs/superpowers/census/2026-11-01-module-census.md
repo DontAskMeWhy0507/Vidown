@@ -2,7 +2,7 @@
 
 - Date: 2026-11-01
 - Baseline original bundle size: 2,404,925 bytes (630 B CSS prefetcher + 2,404,295 B Webpack IIFE)
-- Current built bundle size: 1832616 bytes
+- Current built bundle size: 1973169 bytes
 - Total Webpack slots: 776
 - Real function modules: 649
 - Holes (null slots): 127
@@ -56,7 +56,7 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
   - Trigger: StreamFree main-world player decrypts `#ENC-AESGCM` streams and writes the resolved m3u8 playlist to the DOM.
 - **Consumer Code Site:** `inject/stream_free/index.js` (line 4)
   - Code: `var e = document.body.getAttribute("savior-m3u8");`
-  - Relay: Relayed via `chrome.runtime.sendMessage({ type: "script_executed", data: { origin: "streamfree", m3u8: e } })` to StreamFree detector adapters (`src/content/detector/module-94.js` and `src/content/detector/module-564.js`).
+  - Relay: Relayed via `chrome.runtime.sendMessage({ type: "script_executed", data: { origin: "streamfree", m3u8: e } })` to StreamFree detector adapters (`src/content/detector/module-94.js` and `src/content/detector/extractor-registry-2.js`).
 
 ### 2. `savior-decoded-content`
 - **Constructor Code Site:** `inject/animevietsub/main-world.js` (line 8)

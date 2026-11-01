@@ -3,7 +3,7 @@
 Vidown is a media detection and downloader browser extension for Chrome Manifest V3 (`minimum_chrome_version: 116`).
 
 > **Architecture & Development Status Notice:**
-> The shipped production bundle `content-script.js` (1,832,616 bytes) is compiled via `scripts/build_content_script.js` by assembling the 649 mechanically split modules in `src/content/` (mapped through `src/content/module-registry.js` across 776 slots) with `esbuild.transformSync` minification.
+> The shipped production bundle `content-script.js` (1,973,169 bytes) is compiled via `scripts/build_content_script.js` by assembling the 649 mechanically split modules in `src/content/` (mapped through `src/content/module-registry.js` across 776 slots) with `esbuild.transformSync` minification.
 > 
 > The directory `src/experimental/content-next/` contains an **unwired architectural prototype layer** (~26 KB across 4 platform families). It is **not** connected to the build pipeline and is **not** loaded in the browser. A full semantic replacement of the 649 modules remains pending architectural design and stakeholder direction.
 
@@ -12,8 +12,8 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
 ## Build Pipeline & Artifact Invariants
 
 - **Original Baseline Bundle**: 2,404,925 bytes (630 B CSS + 2,404,295 B Webpack IIFE).
-- **Current Shipped Built Bundle**: 1,832,616 bytes.
-- **Net Raw Code Reduction**: 572,309 bytes (achieving the Gate 5 requirement of $\ge 450,000$ B).
+- **Current Shipped Built Bundle**: 1,973,169 bytes.
+- **Net Raw Code Reduction**: 431,756 bytes (shortfall of 18,244 B vs Gate 5 target of $\ge 450,000$ B due to semantic identifier expansion; pending stakeholder decision).
 - **Vendor Optimizations (Milestone 2)**:
   - `bn.js` 6-to-1 deduplication: canonical `src/content/vendor/elliptic/module-126.js` (43,355 B committed git blob) preserved; 5 duplicate instances replaced with 103 B alias stubs, saving 216,015 B raw.
   - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates all 164 inlined generator copies in `content-script.js`, saving 342,202 B raw.
@@ -55,7 +55,7 @@ npm run package
 
 ```
 ├── manifest.json                 # Chrome Manifest V3 manifest
-├── content-script.js             # Shipped production content script bundle (1,832,616 B)
+├── content-script.js             # Shipped production content script bundle (1,973,169 B)
 ├── src/
 │   ├── content/                  # Shipped build source (649 modules)
 │   │   ├── entry/                # CSS prefetcher header

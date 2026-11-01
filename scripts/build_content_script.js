@@ -73,12 +73,12 @@ const minPrefetcher = esbuild.transformSync(prefetcherCode, {
   legalComments: 'none'
 }).code;
 
-// Section 2: Minify bootstrap & module array with identifier minification for Gate 5 code reduction
+// Section 2: Bootstrap & module array with unmangled identifiers (preserves readable debuggability)
 const minBootstrap = esbuild.transformSync(bootstrap, {
   target: 'chrome116',
   minifyWhitespace: true,
   minifySyntax: true,
-  minifyIdentifiers: true,
+  minifyIdentifiers: false,
   legalComments: 'none'
 }).code;
 
