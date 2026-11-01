@@ -1,0 +1,36 @@
+name: Vidown Continuous Integration
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: Build & Verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build extension from sources
+        run: npm run build
+
+      - name: Run verification test suites
+        run: |
+          node tests/test_unpacked_module_integrity.js
+          node tests/test_module_census.js
+          node tests/test_golden_behavior.js
+          node tests/test_tiktok_floating_bar_detection.js
+          node tests/test_crypto_consolidation.js
+          node tests/test_background_common_messaging.js

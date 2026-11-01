@@ -56,6 +56,7 @@ const EXCLUDED_DIRS = new Set([
   'docs',
   '.superpowers',
   '.git',
+  '.github',
   'dist',
   'scripts',
   'bin', // matches native/bin
