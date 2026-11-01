@@ -50,6 +50,7 @@ if (!fs.existsSync(DIST_DIR)) {
 
 // Exclusion rules
 const EXCLUDED_DIRS = new Set([
+  'src',
   'node_modules',
   'tests',
   'docs',

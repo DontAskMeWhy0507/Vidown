@@ -111,7 +111,7 @@ console.log('✓ web_accessible_resources origin matching and content-script ima
 console.log('\n[Test 9] On-Page Floating Toolbar Scope, Dual-Key Sync & TikTok Selectors');
 assert(contentJsRaw.startsWith('// VidManager Global CSS Prefetch') || contentJsRaw.includes('window._injectSaviorCss'),
   'content-script.js must expose _injectSaviorCss at top-level file scope to avoid Webpack module ReferenceError');
-assert(contentJsRaw.includes('on_page_buttons!==undefined?this._options.on_page_buttons:this._options.onPageButtonsEnabled'),
+assert(/on_page_buttons\s*!==\s*(?:undefined|void 0)\s*\?\s*this\._options\.on_page_buttons\s*:\s*this\._options\.onPageButtonsEnabled/.test(contentJsRaw),
   'content-script.js get(t) must support both on_page_buttons and onPageButtonsEnabled keys');
 assert(contentJsRaw.includes('.savior-widget, savior-widget'),
   'content-script.js storage listener must toggle .savior-widget visibility on storage change');

@@ -1,5 +1,5 @@
 // Module 39 [platform]
-module.exports = function(t,e,r){t.exports=function(){"use strict";
+export default function(t,e,r){t.exports=function(){"use strict";
 /*!
    * mustache.js - Logic-less {{mustache}} templates with JavaScript
    * http://github.com/janl/mustache.js

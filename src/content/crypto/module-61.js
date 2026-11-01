@@ -1,5 +1,5 @@
 // Module 61 [crypto]
-module.exports = function(t,e,r){var n;t.exports=(n=r(4),r(8),
+export default function(t,e,r){var n;t.exports=(n=r(4),r(8),
 /** @preserve
    * Counter block mode compatible with  Dr Brian Gladman fileenc.c
    * derived from CryptoJS.mode.CTR

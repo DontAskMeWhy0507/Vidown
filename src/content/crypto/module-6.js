@@ -1,5 +1,5 @@
 // Module 6 [crypto]
-module.exports = function(t,e,r) {
+export default function(t,e,r) {
   "use strict";
 r.d(e,"a",(function(){return q})),r.d(e,"c",(function(){return R})),r.d(e,"e",(function(){return F})),r.d(e,"f",(function(){return G})),r.d(e,"g",(function(){return Q})),r.d(e,"d",(function(){return z})),r.d(e,"b",(function(){return L}));var n=function(){function t(){this.listeners={}}var e=t.prototype;return e.on=function(t,e){this.listeners[t]||(this.listeners[t]=[]),this.listeners[t].push(e)},e.off=function(t,e){if(!this.listeners[t])return!1;var r=this.listeners[t].indexOf(e);return this.listeners[t]=this.listeners[t].slice(0),this.listeners[t].splice(r,1),r>-1},e.trigger=function(t){var e=this.listeners[t];if(e)if(2===arguments.length)for(var r=e.length,n=0;n<r;++n)e[n].call(this,arguments[1]);else for(var i=Array.prototype.slice.call(arguments,1),o=e.length,a=0;a<o;++a)e[a].apply(this,i)},e.dispose=function(){this.listeners={}},e.pipe=function(t){this.on("data",(function(e){t.push(e)}))},t}(),i=r(77),o=r.n(i),a=r(118);
 /*! @name m3u8-parser @version 7.2.0 @license Apache-2.0 */

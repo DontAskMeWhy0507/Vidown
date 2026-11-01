@@ -1,4 +1,4 @@
 // Module 191 [platform]
-module.exports = function(t,e,r) {
+export default function(t,e,r) {
   "use strict";
 const n=r(88),i=function(t,e,r){const o={};if(!e.alwaysCreateTextNode&&(!t.child||n.isEmptyObject(t.child))&&(!t.attrsMap||n.isEmptyObject(t.attrsMap)))return n.isExist(t.val)?t.val:"";if(n.isExist(t.val)&&("string"!=typeof t.val||""!==t.val&&t.val!==e.cdataPositionChar)){const i=n.isTagNameInArrayMode(t.tagname,e.arrayMode,r);o[e.textNodeName]=i?[t.val]:t.val}n.merge(o,t.attrsMap,e.arrayMode);const a=Object.keys(t.child);for(let s=0;s<a.length;s++){const u=a[s];if(t.child[u]&&t.child[u].length>1){o[u]=[];for(let r in t.child[u])t.child[u].hasOwnProperty(r)&&o[u].push(i(t.child[u][r],e,u))}else{const a=i(t.child[u][0],e,u),s=!0===e.arrayMode&&"object"==typeof a||n.isTagNameInArrayMode(u,e.arrayMode,r);o[u]=s?[a]:a}}return o};e.convertToJson=i};

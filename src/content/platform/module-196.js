@@ -1,4 +1,4 @@
 // Module 196 [platform]
-module.exports = function(t,e,r) {
+export default function(t,e,r) {
   "use strict";
 const n=r(88),i=r(88).buildOptions,o=r(125),a=function(t,e,r){let i="{";const o=Object.keys(t.child);for(let r=0;r<o.length;r++){const n=o[r];if(t.child[n]&&t.child[n].length>1){i+='"'+n+'" : [ ';for(let r in t.child[n])i+=a(t.child[n][r],e)+" , ";i=i.substr(0,i.length-1)+" ] "}else i+='"'+n+'" : '+a(t.child[n][0],e)+" ,"}return n.merge(i,t.attrsMap),n.isEmptyObject(i)?n.isExist(t.val)?t.val:"":(n.isExist(t.val)&&("string"!=typeof t.val||""!==t.val&&t.val!==e.cdataPositionChar)&&(i+='"'+e.textNodeName+'" : '+(!0!==(s=t.val)&&!1!==s&&isNaN(s)?'"'+s+'"':s)),","===i[i.length-1]&&(i=i.substr(0,i.length-2)),i+"}");var s};e.convertToJsonString=function(t,e){return(e=i(e,o.defaultOptions,o.props)).indentBy=e.indentBy||"",a(t,e,0)}};

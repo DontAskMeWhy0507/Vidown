@@ -35,7 +35,7 @@ console.log('✓ Test 3: DownloadButton remains enabled and clickable during med
 // 4. Verify content-script.js startup speed optimizations
 console.log('[Test 4] Verifying content-script.js instant startup without 500ms delay...');
 assert.ok(/window\s*===\s*window\.top\s*&&\s*[a-zA-Z_$][\w$]*\(/.test(cs) || cs.includes('window===window.top'), 'content-script.js must invoke h() immediately on main frame');
-assert.ok(cs.includes('try{Object(vt.b)(document,this.parent.$node)}catch(_)'), 'firstPaint must run initial scrape at ~0ms');
+assert.ok(/try\s*\{\s*Object\([a-zA-Z_$][\w$]*\.[a-zA-Z_$][\w$]*\)\(document,\s*this\.parent\.\$node\)\s*\}\s*catch/.test(cs), 'firstPaint must run initial scrape at ~0ms');
 console.log('✓ Test 4: DOM scanner and first scrape start at ~0ms without artificial delays!\n');
 
 // 5. Functional test: simulate stream sniffing and resolution in DOM

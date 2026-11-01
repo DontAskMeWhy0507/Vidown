@@ -1,2 +1,2 @@
 // Module 75 [crypto]
-module.exports = function(t,e,r){};
+export default function(t,e,r){};

@@ -11,7 +11,7 @@ const csCode = fs.readFileSync(csPath, 'utf8');
 console.log('[Test 1] Verifying isValidVideoNode on modern TikTok (tiktok.com & www.tiktok.com)...');
 
 // Extract the isValidVideoNode function from TikTok module in content-script.js
-const isValidVideoNodeMatch = csCode.match(/isValidVideoNode:(t=>\{var e,r;return Boolean\([^}]+\)\})/);
+const isValidVideoNodeMatch = csCode.match(/isValidVideoNode:([a-zA-Z_$][\w$]*=>\{[^}]*(?:tiktok|douyin)[^}]*\})/);
 assert.ok(isValidVideoNodeMatch, 'isValidVideoNode definition must exist in content-script.js');
 
 const isValidVideoNodeFn = new Function('return (' + isValidVideoNodeMatch[1] + ')')();

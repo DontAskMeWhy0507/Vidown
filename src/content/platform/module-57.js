@@ -1,5 +1,5 @@
 // Module 57 [platform]
-module.exports = function(t,e,r){var n;t.exports=(n=r(4),
+export default function(t,e,r){var n;t.exports=(n=r(4),
 /** @preserve
   (c) 2012 by Cédric Mesnil. All rights reserved.
   	Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

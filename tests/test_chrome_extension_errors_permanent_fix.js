@@ -25,7 +25,7 @@ const csContent = fs.readFileSync(csPath, 'utf8');
 const fallbackLinkIdx = csContent.indexOf('function _saviorCssFallbackLink');
 assert.ok(fallbackLinkIdx !== -1, '_saviorCssFallbackLink function must exist');
 const fallbackFnSnippet = csContent.slice(fallbackLinkIdx, fallbackLinkIdx + 600);
-assert.ok(fallbackFnSnippet.includes("location.protocol !== 'chrome-extension:'"), '_saviorCssFallbackLink must check location.protocol to prevent cross-origin links on web pages');
+assert.ok(/location\.protocol\s*!==\s*["']chrome-extension:['"]/.test(fallbackFnSnippet), '_saviorCssFallbackLink must check location.protocol to prevent cross-origin links on web pages');
 
 console.log('✓ Test 1 Passed: _saviorCssFallbackLink does not create unsafe <link> elements.');
 

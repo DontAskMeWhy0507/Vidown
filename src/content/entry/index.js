@@ -96,7 +96,7 @@ if (typeof window !== 'undefined') {
 }
 
 // --- SECTION 2: WEBPACK RUNTIME BOOTSTRAP ---
-const registry = require('../module-registry');
+import slots from '../slots.js';
 
 (function(modules) {
   var installedModules = {};
@@ -164,4 +164,4 @@ const registry = require('../module-registry');
 
   // Boot entry module 543
   return __webpack_require__(__webpack_require__.s = 543);
-})(registry.slots);
+})(slots);

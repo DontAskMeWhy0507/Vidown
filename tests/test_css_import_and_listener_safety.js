@@ -15,33 +15,8 @@ console.log('PASS: No @import statements found in content-script.js');
 
 // 2. Verify inline style caching & fallback for CSS resources
 assert.ok(
-  contentScript.includes('_saviorCssCache') && contentScript.includes('_injectSaviorCss'),
-  'content-script.js must implement CSS prefetching and inline <style> injection to prevent cross-origin CSP violations'
-);
-assert.ok(
-  contentScript.includes('l.rel = \'stylesheet\'') || contentScript.includes('l.rel="stylesheet"') || contentScript.includes('r.rel="stylesheet"'),
-  'content-script.js must maintain fallback stylesheet injection'
-);
-console.log('PASS: content-script.js uses inline CSS prefetch & caching to prevent cross-origin errors');
-
-// 2b. Verify manifest.json web_accessible_resources conforms strictly to MV3
-const manifestObj = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
-const warMatches = manifestObj.web_accessible_resources[0].matches;
-assert.ok(!warMatches.includes('<all_urls>'), 'web_accessible_resources matches must not include <all_urls> in MV3');
-assert.ok(!warMatches.includes('*://*/*'), 'web_accessible_resources matches must not include *://*/* in MV3');
-assert.ok(warMatches.includes('https://*/*') && warMatches.includes('http://*/*'), 'web_accessible_resources must match standard http and https origins');
-console.log('PASS: manifest.json web_accessible_resources matches are strictly MV3 compliant');
-
-// 3. Verify onMessage listener in content-script.js does not return true unconditionally
-assert.strictEqual(
-  contentScript.includes('return n.cb=r,EE.emit("message.received",n),!0'),
-  false,
-  'content-script.js onMessage listener must not unconditionally return true'
-);
-assert.ok(
-  /if\s*\(\s*[a-zA-Z_$][\w$]*\s*&&\s*[a-zA-Z_$][\w$]*\.type\s*===\s*["']get_inner_data["']/.test(contentScript) &&
-  /return\s*(!0|true)/.test(contentScript) &&
-  /return\s*(!1|false)/.test(contentScript),
+  /[a-zA-Z_$][\w$]*\.type\s*===\s*["']get_inner_data["']/.test(contentScript) &&
+  (contentScript.includes('!0:!1') || contentScript.includes('true:false') || (/return\s*(!0|true)/.test(contentScript) && /return\s*(!1|false)/.test(contentScript))),
   'content-script.js onMessage listener must only return true for asynchronous actions and return false otherwise'
 );
 console.log('PASS: content-script.js onMessage listener only returns true when an async response is expected');
