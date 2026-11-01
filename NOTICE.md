@@ -10,7 +10,7 @@ The MIT License covering this project applies to the original structural modific
 
 ## Third-Party Vendored Components
 
-This project vendors or incorporates code from the following third-party open-source libraries:
+This project vendors or incorporates code from the following 12 third-party open-source libraries (Sections 1–12), alongside underlying Cốc Cốc Savior components (Section 13):
 
 1. **bn.js / elliptic**
    - Location: `src/content/vendor/elliptic/` (Module 126 and deduplicated alias stubs 437, 485, 618, 652, 668)
@@ -22,8 +22,8 @@ This project vendors or incorporates code from the following third-party open-so
    - Original Authors: Facebook, Inc. / Babel team
    - Upstream License: MIT License
 
-3. **CryptoJS**
-   - Location: `src/content/vendor/cryptojs/` (Modules 4, 8, 16, 17, 18, 19, 26, 34, 35, 40, 41, 51-75)
+3. **CryptoJS (36 modules)**
+   - Location: `src/content/vendor/cryptojs/` (Modules 4, 8, 16, 17, 18, 19, 26, 34, 35, 40, 41, and 51–75)
    - Original Author: Jeff Mott and CryptoJS contributors
    - Upstream License: MIT License / New BSD License
 

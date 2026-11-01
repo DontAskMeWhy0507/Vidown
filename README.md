@@ -5,7 +5,7 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
 > **Architecture & Production Source Notice:**  
 > All shipped extension scripts (`content-script.js`, `background.js`, `common.js`, and `inject/*`) are compiled from readable, structured sources under `src/` via the unified `npm run build` pipeline:
 > - `src/content/`: Modular content script (649 modules mapped across 776 slots in `module-registry.js` & `slots.js`).
-> - `src/background/`: Background service worker modules partitioned by subsystem (`entry`, `messaging`, `downloads`, `native-host`, `dnr`, `tabs`, `storage`, `events`, `utilities`).
+> - `src/background/`: Background service worker modules partitioned by subsystem (`entry`, `messaging`, `downloads`, `storage`, `tabs`, `events`, `crypto`, `utilities`).
 > - `src/common/`: Shared runtime library and global context helpers.
 > - `src/inject/`: Main-world site extractors for modern web platforms (TikTok, Douyin, YouTube, Facebook, Twitter/X, LinkedIn, etc.).
 >
@@ -22,7 +22,7 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
   - `bn.js` 6-to-1 deduplication: canonical `src/content/vendor/elliptic/module-126.js` (43,355 B committed git blob) preserved; 5 duplicate instances replaced with 103 B alias stubs, saving 216,015 B raw.
   - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates all 163 inlined generator copies in `content-script.js`, saving 342,202 B raw.
   - Third-party libraries cleanly isolated in `src/content/vendor/` (`cryptojs`, `qrcode`, `stream`, `fast-xml-parser`, `mustache`, `eventemitter3`, `buffer`, `shims`, `parser`, `elliptic`).
-- **Release Package**: `dist/savior-extension-v2.4.65.zip` is ~1.04 MB (1,092,994 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
+- **Release Package**: `dist/savior-extension-v2.4.65.zip` is ~1.05 MB (1,096,609 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
 
 ---
 
@@ -72,7 +72,7 @@ node tests/test_golden_behavior.js
 │   ├── content/                  # Modular content script sources (649 modules)
 │   │   ├── core/                 # dom-utils.js, media-sniffer.js, format-resolver.js, etc.
 │   │   ├── detector/             # media-constants.js, url-utils.js, dom-scanner.js, content-entry.js, etc.
-│   │   ├── platform/             # tiktok.js, facebook.js, youtube.js, specialized extractors
+│   │   ├── platform/             # tiktok-douyin.js, facebook.js, youtube.js, specialized extractors
 │   │   ├── providers/            # ab-test-provider.js, media providers
 │   │   ├── widget/               # settings-manager.js, dom-constants.js, overlay-styles.js, download-list.js, widget-manager.js, floating-bar-manager.js
 │   │   ├── vendor/               # cryptojs, qrcode, stream, fast-xml-parser, mustache, eventemitter3, buffer, shims, parser, elliptic

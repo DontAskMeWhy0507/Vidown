@@ -1,11 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const esbuild = require('esbuild');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const BG_DIR = path.join(ROOT_DIR, 'src', 'background');
 const registry = require(path.join(BG_DIR, 'module-registry.js'));
 
-console.log('=== BUILDING BACKGROUND SCRIPT ===\n');
+const isDev = process.argv.includes('--dev');
+console.log(`=== BUILDING BACKGROUND SCRIPT (${isDev ? 'DEVELOPMENT MODE' : 'RELEASE MODE'}) ===\n`);
 
 // Webpack array assembly
 const slotCodes = [];
@@ -98,7 +100,19 @@ const bootstrap = `(function (e) {
   r(r.s = ${registry.entry});
 })([${slotCodes.join(',\n')}]);\n`;
 
+let finalCode = bootstrap;
+if (isDev) {
+  finalCode = esbuild.transformSync(bootstrap, {
+    target: 'chrome116',
+    minifyWhitespace: false,
+    minifySyntax: false,
+    minifyIdentifiers: false,
+    sourcemap: 'inline',
+    legalComments: 'none'
+  }).code;
+}
+
 const outPath = path.join(ROOT_DIR, 'background.js');
-fs.writeFileSync(outPath, bootstrap, 'utf8');
-console.log(`Generated background.js: ${Buffer.byteLength(bootstrap, 'utf8')} bytes raw.`);
+fs.writeFileSync(outPath, finalCode, 'utf8');
+console.log(`Generated background.js: ${Buffer.byteLength(finalCode, 'utf8')} bytes raw.`);
 console.log('✓ Background build completed successfully!\n');

@@ -7,30 +7,47 @@ console.log('=== TEST SUITE: CRYPTOJS AES DECRYPTION CONSOLIDATION ===\n');
 const reg = require('../src/content/module-registry');
 const installed = {};
 
-function mockRequire(id) {
-  if (installed[id]) return installed[id].exports;
-  const mod = installed[id] = { i: id, l: false, exports: {} };
-  const relPath = reg.modules[id];
-  if (!relPath) throw new Error(`Missing module ${id} in module-registry`);
-  
+function webpackRequire(moduleId) {
+  if (installed[moduleId]) return installed[moduleId].exports;
+  const mod = (installed[moduleId] = { i: moduleId, l: false, exports: {} });
+  const relPath = reg.modules[moduleId];
+  if (!relPath) throw new Error(`Missing module ${moduleId} in module-registry`);
+
   const fullPath = path.resolve(__dirname, '../src/content', relPath);
-  const code = fs.readFileSync(fullPath, 'utf8')
+  let code = fs.readFileSync(fullPath, 'utf8')
     .replace(/^\/\/[^\n]*\n/, '')
-    .replace(/^export default /, 'return ');
-    
-  const fn = new Function('module', 'exports', 'r', code);
-  mockRequire.d = (e, k, v) => Object.defineProperty(e, k, { enumerable: true, get: v });
-  mockRequire.r = (e) => Object.defineProperty(e, Symbol.toStringTag, { value: 'Module' });
-  mockRequire.n = (m) => () => (m && m.__esModule ? m.default : m);
-  
-  fn().call(mod.exports, mod, mod.exports, mockRequire);
+    .replace(/^export default\s+/, '')
+    .trim();
+  if (code.endsWith(';')) code = code.slice(0, -1);
+
+  const fn = new Function('module', 'exports', '__webpack_require__', `(${code})(module, exports, __webpack_require__)`);
+  fn(mod, mod.exports, webpackRequire);
   mod.l = true;
   return mod.exports;
 }
 
-// 1. Verify CryptoJS Rollup Export
+webpackRequire.d = (exports, name, getter) => {
+  if (!webpackRequire.o(exports, name)) {
+    Object.defineProperty(exports, name, { enumerable: true, get: getter });
+  }
+};
+webpackRequire.r = (exports) => {
+  if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+    Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+  }
+  Object.defineProperty(exports, '__esModule', { value: true });
+};
+webpackRequire.n = (module) => {
+  const getter = module && module.__esModule ? () => module['default'] : () => module;
+  webpackRequire.d(getter, 'a', getter);
+  return getter;
+};
+webpackRequire.o = (object, property) => Object.prototype.hasOwnProperty.call(object, property);
+webpackRequire.p = './';
+
+// 1. Verify CryptoJS Rollup Export (module 16)
 console.log('Testing CryptoJS rollup export (module 16)...');
-const cryptoJS = mockRequire(16);
+const cryptoJS = webpackRequire(16);
 assert.ok(cryptoJS, 'CryptoJS module must export an object');
 assert.ok(typeof cryptoJS.AES === 'object', 'CryptoJS must export AES cipher object');
 assert.ok(typeof cryptoJS.AES.encrypt === 'function', 'CryptoJS.AES.encrypt must be a function');
@@ -40,31 +57,33 @@ assert.ok(typeof cryptoJS.enc.Base64 === 'object', 'CryptoJS.enc.Base64 must be 
 assert.ok(typeof cryptoJS.enc.Utf8 === 'object', 'CryptoJS.enc.Utf8 must be available');
 console.log('PASS: CryptoJS rollup structure verified! ✅\n');
 
-// 2. Verify AES-128 / AES-256 Symmetric Encryption/Decryption
-console.log('Testing AES symmetric encryption and decryption...');
-const samplePayload = 'https://stream.example.org/hls/vidown-session-token-42.m3u8';
-const secretPassphrase = 'sHqvxUbI3HRHqHNdluQ5thFw5e8DCglJ';
+// 2. Load Actual Module 0 (core/dom-utils.js) and Verify parseLinkPhimmoiChillee
+console.log('Testing actual Module 0 (core/dom-utils.js) parseLinkPhimmoiChillee export...');
+const domUtils = webpackRequire(0);
+assert.ok(domUtils, 'Module 0 must export functions');
+assert.strictEqual(
+  typeof domUtils.parseLinkPhimmoiChillee,
+  'function',
+  'Module 0 must export parseLinkPhimmoiChillee function'
+);
 
-const encrypted = cryptoJS.AES.encrypt(samplePayload, secretPassphrase);
-assert.ok(encrypted.toString().length > 0, 'Encrypted string must not be empty');
+// 3. Golden Deterministic HLS Decrypt Vector on Actual Module 0
+// Deterministic OpenSSL salted ciphertext hex for sample HLS stream URL:
+// Stream URL: https://m3u8-play-01.playstreamz.site/m3u8/phimmoi/stream-1080p.m3u8
+// Key: sHqvxUbI3HRHqHNdluQ5thFw5e8DCglJ
+const goldenHexVector =
+  '53616c7465645f5f1a2b3c4d5e6f7a8b43642a776c51761a1a22aedd464c521d14c856642e60743e654259ef524a3916444cd717dab1935ad6e5893d1665e679b6a5baa6f98f3c9b838a12f6469db880b9002c751931959fd84dea79476434ae';
+const expectedHlsUrl =
+  'https://m3u8-play-01.playstreamz.site/m3u8/phimmoi/stream-1080p.m3u8';
 
-const decrypted = cryptoJS.AES.decrypt(encrypted.toString(), secretPassphrase).toString(cryptoJS.enc.Utf8);
-assert.strictEqual(decrypted, samplePayload, 'Decrypted payload must match original sample exactly');
-console.log('PASS: AES encryption/decryption vector verified! ✅\n');
-
-// 3. Verify module-0 parseLinkPhimmoiChillee (Ot) Hex Stream Decryption
-console.log('Testing module-0 parseLinkPhimmoiChillee (Ot) live stream URL decryption...');
-const rawWords = cryptoJS.enc.Base64.parse(encrypted.toString());
-const hexCiphertext = cryptoJS.enc.Hex.stringify(rawWords);
-
-function parseLinkPhimmoiChillee(t) {
-  const e = cryptoJS.enc.Hex.parse(t).toString(cryptoJS.enc.Base64);
-  return cryptoJS.AES.decrypt(e, secretPassphrase).toString(cryptoJS.enc.Utf8);
-}
-
-const recoveredUrl = parseLinkPhimmoiChillee(hexCiphertext);
-assert.strictEqual(recoveredUrl, samplePayload, 'parseLinkPhimmoiChillee must recover stream URL from hex ciphertext');
-console.log('PASS: parseLinkPhimmoiChillee hex stream decryption verified! ✅\n');
+console.log('Executing parseLinkPhimmoiChillee on golden HLS test vector...');
+const recoveredUrl = domUtils.parseLinkPhimmoiChillee(goldenHexVector);
+assert.strictEqual(
+  recoveredUrl,
+  expectedHlsUrl,
+  'Real Module 0 parseLinkPhimmoiChillee must recover exact HLS stream URL from golden ciphertext'
+);
+console.log(`PASS: Real Module 0 decrypted golden vector -> ${recoveredUrl} ✅\n`);
 
 // 4. Verify Built Bundle Retains parseLinkPhimmoiChillee and AES Functionality
 console.log('Verifying content-script.js bundle exports and AES symbols...');

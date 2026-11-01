@@ -86,7 +86,7 @@ node tests/test_package_release_cleanliness.js
   - `data-target`: 4 sites
   - `removeAttribute`: 32 sites
   - Batch 1–4 identifiers present (`settingsManager`, `urlMatcher`, `OnboardingABTestProvider`, `facebookProvider`, etc.)
-- **Bundle & Package Limits**: Release zip `dist/savior-extension-v2.4.65.zip` must remain $\le 1.15\text{ MB}$ (currently ~1.04 MB / 1,092,994 B) with 66 entries, 0 `node_modules`, and 0 executables.
+- **Bundle & Package Limits**: Release zip `dist/savior-extension-v2.4.65.zip` must remain $\le 1.15\text{ MB}$ (currently ~1.05 MB / 1,096,609 B) with 66 entries, 0 `node_modules`, and 0 executables.
 - **Target Platform**: Chrome Manifest V3 (`minimum_chrome_version: 116`).
 - **Private Repository**: The repository remains strictly private until an explicit decision by Trung.
 

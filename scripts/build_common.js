@@ -1,11 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const esbuild = require('esbuild');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const COMMON_DIR = path.join(ROOT_DIR, 'src', 'common');
 const registry = require(path.join(COMMON_DIR, 'module-registry.js'));
 
-console.log('=== BUILDING COMMON SCRIPT ===\n');
+const isDev = process.argv.includes('--dev');
+console.log(`=== BUILDING COMMON SCRIPT (${isDev ? 'DEVELOPMENT MODE' : 'RELEASE MODE'}) ===\n`);
 
 // Webpack object map assembly
 const propCodes = [];
@@ -91,9 +93,23 @@ const bootstrap = `(function (e) {
   };
   n.p = "./";
   n(n.s = ${registry.entry});
-})({\n${propCodes.join(',\n')}\n});\n`;
+})({
+${propCodes.join(',\n')}
+});\n`;
+
+let finalCode = bootstrap;
+if (isDev) {
+  finalCode = esbuild.transformSync(bootstrap, {
+    target: 'chrome116',
+    minifyWhitespace: false,
+    minifySyntax: false,
+    minifyIdentifiers: false,
+    sourcemap: 'inline',
+    legalComments: 'none'
+  }).code;
+}
 
 const outPath = path.join(ROOT_DIR, 'common.js');
-fs.writeFileSync(outPath, bootstrap, 'utf8');
-console.log(`Generated common.js: ${Buffer.byteLength(bootstrap, 'utf8')} bytes raw.`);
+fs.writeFileSync(outPath, finalCode, 'utf8');
+console.log(`Generated common.js: ${Buffer.byteLength(finalCode, 'utf8')} bytes raw.`);
 console.log('✓ Common build completed successfully!\n');

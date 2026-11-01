@@ -8,7 +8,7 @@
     "build:background": "node scripts/build_background.js",
     "build:content": "node scripts/build_content_script.js",
     "build:inject": "node scripts/build_inject.js",
-    "build:dev": "node scripts/build_common.js && node scripts/build_background.js && node scripts/build_content_script.js --dev && node scripts/build_inject.js",
+    "build:dev": "node scripts/build_common.js --dev && node scripts/build_background.js --dev && node scripts/build_content_script.js --dev && node scripts/build_inject.js",
     "build": "npm run build:common && npm run build:background && npm run build:content && npm run build:inject && npm run package",
     "test": "node -e \"const fs = require('fs'); const cp = require('child_process'); const files = fs.readdirSync('tests').filter(f => f.startsWith('test_') && f.endsWith('.js')); let passed = 0, failed = 0; for (const f of files) { try { cp.execSync('node tests/' + f, { stdio: 'pipe' }); passed++; } catch (err) { console.error('FAIL: ' + f); failed++; } } console.log('\\nFINAL TEST RESULTS: ' + passed + ' passed, ' + failed + ' failed.'); if (failed > 0) process.exit(1);\"",
     "package": "node scripts/package_release.js"
