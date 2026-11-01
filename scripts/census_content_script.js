@@ -20,6 +20,16 @@ const rawBase = cp.execSync('git show 3f1879b:docs/superpowers/census/2026-11-01
 }).toString('utf8');
 const baseCensus = JSON.parse(rawBase);
 
+// Query exact committed file sizes from git tree to eliminate Windows CRLF discrepancies
+const lsTreeOutput = cp.execSync('git ls-tree -r -l HEAD src/content', { cwd: ROOT_DIR }).toString('utf8');
+const committedSizes = {};
+for (const line of lsTreeOutput.split(/\r?\n/)) {
+  const m = line.match(/^\d+\s+blob\s+[0-9a-f]+\s+(\d+)\s+(.+)$/);
+  if (m) {
+    committedSizes[m[2].replace(/\\/g, '/')] = parseInt(m[1], 10);
+  }
+}
+
 const totalSlots = 776;
 const modules = {};
 let realModulesCount = 0;
@@ -47,7 +57,15 @@ for (let i = 0; i < totalSlots; i++) {
   realModulesCount++;
   const srcRelPath = registry.modules[i];
   const srcFullPath = path.join(ROOT_DIR, 'src', 'content', srcRelPath);
-  const fileSize = fs.statSync(srcFullPath).size;
+  const gitKey = ('src/content/' + srcRelPath).replace(/\\/g, '/');
+  
+  // Committed byte size (LF normalized) - guarantees exact match across platforms
+  let fileSize = committedSizes[gitKey];
+  if (fileSize === undefined) {
+    const rawContent = fs.readFileSync(srcFullPath, 'utf8').replace(/\r\n/g, '\n');
+    fileSize = Buffer.byteLength(rawContent, 'utf8');
+  }
+
   const srcCode = fs.readFileSync(srcFullPath, 'utf8');
 
   const hasRegen = srcCode.includes('regenerator-runtime');
@@ -188,7 +206,23 @@ let md = `# Scope-Aware Module Census of content-script.js
 
 ---
 
-## 1. Critical Modules Analysis
+## 1. Technical Explanation of the 592-Row Regeneration Drift
+
+In commit \`646c557\`, re-running \`scripts/census_content_script.js\` caused 592 of 776 module size values to change. The technical mechanism of this drift was as follows:
+1. **Target Artifact Difference:** The initial census (commit \`3f1879b\`) parsed the baseline monolithic unminified bundle (2,404,925 bytes), where all 6 \`bn.js\` module copies were present verbatim (43,306 bytes each).
+2. **Minification and Deduplication Effects:** Prior to re-running the census in \`646c557\`, \`npm run build:content\` was executed. The build pipeline (\`scripts/build_content_script.js\`) assembled the split modules and applied \`esbuild.transformSync\`. This transform:
+   - Serialized statements into top-level \`SequenceExpression\` nodes.
+   - Stripped internal whitespace and re-compacted expressions.
+   - Substituted 5 duplicate 43,306-byte \`bn.js\` modules (slots 437, 485, 618, 652, 668) with 103-byte alias stubs (\`module.exports = r(126);\`), removing 216,530 bytes from the middle of the array.
+3. **AST Slice Offset Shift:** Because the generator measured module size via AST start/end slice offsets (\`el.end - el.start\`) on \`content-script.js\`, measuring against the minified build artifact yielded minified slice lengths rather than original unminified boundaries. Furthermore, replacing the five 43 KB modules shifted the byte positions of all subsequent modules backwards in the bundle text.
+4. **Resolution & Dual Metrics:** The census schema now formally tracks two distinct, non-conflated metrics:
+   - \`size\`: The canonical baseline reference bundle size (2,404,925 B).
+   - \`fileSize\`: The exact committed source file size in \`src/content/\`, measured as git blob byte length (LF normalized to ensure exact cross-platform equality on Windows and POSIX).
+   Stale baseline data is prevented by an automated assertion guard in \`tests/test_module_census.js\`.
+
+---
+
+## 2. Critical Modules Analysis
 
 ### Module 37 (AST Parser)
 - Baseline bundle size: ${modules[37].size} bytes
@@ -204,7 +238,7 @@ let md = `# Scope-Aware Module Census of content-script.js
 
 ---
 
-## 2. Dynamic Attribute Code-Site Trace
+## 3. Dynamic Attribute Code-Site Trace
 
 The 4 dynamic bridge attributes connect main-world page script injectors with isolated-world extension receivers:
 
@@ -242,7 +276,7 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 
 ---
 
-## 3. Top 20 Largest Modules
+## 4. Top 20 Largest Modules
 
 | Module ID | Baseline Size (Bytes) | Split File Size (Bytes) | Reachable | Regenerator | bn.js Copy | Direct Callers Count |
 |:---|:---|:---|:---|:---|:---|:---|

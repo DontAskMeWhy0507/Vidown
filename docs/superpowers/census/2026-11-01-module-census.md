@@ -14,7 +14,23 @@
 
 ---
 
-## 1. Critical Modules Analysis
+## 1. Technical Explanation of the 592-Row Regeneration Drift
+
+In commit `646c557`, re-running `scripts/census_content_script.js` caused 592 of 776 module size values to change. The technical mechanism of this drift was as follows:
+1. **Target Artifact Difference:** The initial census (commit `3f1879b`) parsed the baseline monolithic unminified bundle (2,404,925 bytes), where all 6 `bn.js` module copies were present verbatim (43,306 bytes each).
+2. **Minification and Deduplication Effects:** Prior to re-running the census in `646c557`, `npm run build:content` was executed. The build pipeline (`scripts/build_content_script.js`) assembled the split modules and applied `esbuild.transformSync`. This transform:
+   - Serialized statements into top-level `SequenceExpression` nodes.
+   - Stripped internal whitespace and re-compacted expressions.
+   - Substituted 5 duplicate 43,306-byte `bn.js` modules (slots 437, 485, 618, 652, 668) with 103-byte alias stubs (`module.exports = r(126);`), removing 216,530 bytes from the middle of the array.
+3. **AST Slice Offset Shift:** Because the generator measured module size via AST start/end slice offsets (`el.end - el.start`) on `content-script.js`, measuring against the minified build artifact yielded minified slice lengths rather than original unminified boundaries. Furthermore, replacing the five 43 KB modules shifted the byte positions of all subsequent modules backwards in the bundle text.
+4. **Resolution & Dual Metrics:** The census schema now formally tracks two distinct, non-conflated metrics:
+   - `size`: The canonical baseline reference bundle size (2,404,925 B).
+   - `fileSize`: The exact committed source file size in `src/content/`, measured as git blob byte length (LF normalized to ensure exact cross-platform equality on Windows and POSIX).
+   Stale baseline data is prevented by an automated assertion guard in `tests/test_module_census.js`.
+
+---
+
+## 2. Critical Modules Analysis
 
 ### Module 37 (AST Parser)
 - Baseline bundle size: 119308 bytes
@@ -30,7 +46,7 @@
 
 ---
 
-## 2. Dynamic Attribute Code-Site Trace
+## 3. Dynamic Attribute Code-Site Trace
 
 The 4 dynamic bridge attributes connect main-world page script injectors with isolated-world extension receivers:
 
@@ -68,13 +84,13 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 
 ---
 
-## 3. Top 20 Largest Modules
+## 4. Top 20 Largest Modules
 
 | Module ID | Baseline Size (Bytes) | Split File Size (Bytes) | Reachable | Regenerator | bn.js Copy | Direct Callers Count |
 |:---|:---|:---|:---|:---|:---|:---|
 | 37 | 119308 | 119694 | Yes | No | No | 2 |
 | 541 | 110571 | 110611 | Yes | Yes | No | 1 |
-| 161 | 77663 | 77703 | No | No | No | 1 |
+| 161 | 77663 | 77687 | No | No | No | 1 |
 | 89 | 45516 | 45562 | Yes | Yes | No | 4 |
 | 433 | 44315 | 44364 | No | No | No | 3 |
 | 443 | 43900 | 43949 | No | Yes | No | 0 |
@@ -86,7 +102,7 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 | 668 | 43306 | 103 | No | No | Yes | 1 |
 | 24 | 40290 | 40331 | Yes | Yes | No | 2 |
 | 442 | 39532 | 39574 | No | Yes | No | 0 |
-| 6 | 39279 | 39317 | Yes | Yes | No | 80 |
+| 6 | 39279 | 39315 | Yes | Yes | No | 80 |
 | 0 | 27593 | 27855 | Yes | Yes | No | 117 |
 | 163 | 27190 | 27230 | No | No | No | 1 |
 | 741 | 26931 | 26971 | No | Yes | No | 0 |

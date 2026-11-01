@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-01T03:17:55.675Z",
+  "generatedAt": "2026-11-01T03:48:18.362Z",
   "baselineBundleSize": 2404925,
   "currentBuiltBundleSize": 2291592,
   "totalSlots": 776,
@@ -535,7 +535,7 @@
       "start": 67261,
       "end": 106540,
       "size": 39279,
-      "fileSize": 39317,
+      "fileSize": 39315,
       "requires": [
         0,
         1,
@@ -1168,7 +1168,7 @@
       "start": 227157,
       "end": 228015,
       "size": 858,
-      "fileSize": 899,
+      "fileSize": 897,
       "requires": [
         27
       ],
@@ -1246,7 +1246,7 @@
       "start": 228544,
       "end": 248385,
       "size": 19841,
-      "fileSize": 19882,
+      "fileSize": 19875,
       "requires": [
         13,
         99,
@@ -1553,7 +1553,7 @@
       "start": 405789,
       "end": 411773,
       "size": 5984,
-      "fileSize": 6025,
+      "fileSize": 6021,
       "requires": [],
       "hasRegenerator": false,
       "isBnCopy": false,
@@ -1912,7 +1912,7 @@
       "start": 460922,
       "end": 464832,
       "size": 3910,
-      "fileSize": 3952,
+      "fileSize": 3944,
       "requires": [
         4
       ],
@@ -1984,7 +1984,7 @@
       "start": 466426,
       "end": 467207,
       "size": 781,
-      "fileSize": 820,
+      "fileSize": 814,
       "requires": [
         4,
         8
@@ -2705,7 +2705,7 @@
       "start": 565308,
       "end": 566282,
       "size": 974,
-      "fileSize": 1016,
+      "fileSize": 1014,
       "requires": [],
       "hasRegenerator": false,
       "isBnCopy": false,
@@ -3883,7 +3883,7 @@
       "start": 718043,
       "end": 795706,
       "size": 77663,
-      "fileSize": 77703,
+      "fileSize": 77687,
       "requires": [
         13
       ],

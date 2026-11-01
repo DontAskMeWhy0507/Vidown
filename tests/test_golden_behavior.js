@@ -29,10 +29,21 @@ const { runGoldenFixture } = require('./helpers/golden_dom_harness');
   assert.ok(tiktokResult.nodeChangedEmitted, 'TikTok detector must emit widget.node-changed with detected video');
   assert.ok(tiktokResult.widgetCreated, 'TikTok fixture must successfully create savior widget');
   assert.ok(tiktokResult.eeEvents.some(e => e.name === 'dom-scanner.load'), 'TikTok must emit dom-scanner.load on EE');
-  assert.ok(tiktokResult.eeEvents.some(e => e.name === 'widget.node-changed'), 'TikTok must emit widget.node-changed on EE');
+  
+  // Attribute & Payload Value Verification for TikTok:
+  // TikTok detection in content-script.js operates purely by scanning the DOM for <video> elements
+  // and matching tiktok.com URL patterns. It does not rely on an injected companion script to stamp
+  // attributes directly on the <video> element. We assert 0 stamped attributes on <video>, and assert
+  // the detected video node passed to the widget.node-changed event payload.
   assert.ok(Array.isArray(tiktokResult.stampedAttrs), 'TikTok fixture must collect stamped attributes array');
-  assert.strictEqual(tiktokResult.stampedAttrs.length, 0, 'TikTok video element does not receive direct savior-* attributes');
-  console.log('PASS: TikTok golden fixture detection verified (real DOM & EE effects).');
+  assert.strictEqual(tiktokResult.stampedAttrs.length, 0, 
+    'TikTok video element does not receive direct savior-* attributes (pure DOM scanner detection)');
+  const tiktokNodeChanged = tiktokResult.eeEvents.find(e => e.name === 'widget.node-changed');
+  assert.ok(tiktokNodeChanged && tiktokNodeChanged.args[0] && tiktokNodeChanged.args[0].length === 1,
+    'widget.node-changed must carry exactly the detected TikTok video node');
+  assert.ok(tiktokNodeChanged.args[0][0].src.includes('tiktokcdn.com'),
+    'Detected TikTok video node must contain the fixture video source URL');
+  console.log('PASS: TikTok golden fixture detection verified (real DOM & EE effects, exact video node payload).');
 
   // 2. Facebook Reels fixture
   console.log('Testing Facebook Reels detection...');
@@ -42,9 +53,30 @@ const { runGoldenFixture } = require('./helpers/golden_dom_harness');
   assert.ok(fbReelsResult.hostAppended, 'Facebook Reels fixture must mount real <savior-host> DOM element');
   assert.ok(fbReelsResult.nodeChangedEmitted, 'Facebook Reels must detect video node');
   assert.ok(fbReelsResult.widgetCreated, 'Facebook Reels fixture must mount savior widget');
-  assert.ok(fbReelsResult.stampedAttrs.some(a => a.name === 'savior-video-detail' || a.name === 'savior-vid'), 
-    'Facebook Reels video element must receive stamped savior-* metadata (savior-video-detail or savior-vid)');
-  console.log('PASS: Facebook Reels golden fixture detection verified (real DOM, EE effects & stamped savior-* attrs).');
+
+  // Attribute & Payload Value Verification for Facebook Reels:
+  // 1) Verify the bundle emits the inject_script request for the Facebook companion injector
+  const fbInjectMsg = fbReelsResult.messagesSent.find(m => 
+    (m.type === 'inject_script' || m.type === 'scripting.inject') && m.file && m.file.includes('facebook')
+  );
+  assert.ok(fbInjectMsg, 'Bundle must emit inject_script message for facebook companion injector');
+  assert.strictEqual(fbInjectMsg.file, 'facebook/messenger-audio', 
+    'Injected script path must equal facebook/messenger-audio companion');
+
+  // 2) Verify stamped attribute VALUES recorded on the <video> element
+  const vidAttr = fbReelsResult.stampedAttrs.find(a => a.name === 'savior-vid');
+  assert.ok(vidAttr, 'savior-vid attribute must be stamped on Facebook Reels video element');
+  assert.strictEqual(vidAttr.val, '987654321012345', 'savior-vid stamped value must equal expected video ID');
+
+  const detailAttr = fbReelsResult.stampedAttrs.find(a => a.name === 'savior-video-detail');
+  assert.ok(detailAttr, 'savior-video-detail attribute must be stamped on Facebook Reels video element');
+  const parsedDetail = JSON.parse(detailAttr.val);
+  assert.strictEqual(parsedDetail.title, 'Facebook Reel Sample', 
+    'savior-video-detail parsed title must equal Facebook Reel Sample');
+  assert.ok(parsedDetail.url.includes('fbcdn.net'), 
+    'savior-video-detail parsed url must contain valid Facebook CDN stream URL');
+
+  console.log('PASS: Facebook Reels golden fixture detection verified (real DOM, EE effects, inject payload, & stamped attribute VALUES).');
 
   // 3. YouTube Watch fixture
   console.log('Testing YouTube Watch detection...');
@@ -54,6 +86,8 @@ const { runGoldenFixture } = require('./helpers/golden_dom_harness');
   assert.ok(ytResult.hostAppended, 'YouTube Watch fixture must mount real <savior-host> DOM element');
   assert.ok(ytResult.nodeChangedEmitted, 'YouTube Watch must detect video node');
   assert.ok(ytResult.widgetCreated, 'YouTube Watch fixture must mount savior widget');
+  // Note on YouTube attributes: YouTube BotGuard proof-of-origin tokens (savior-po-token) are stamped
+  // onto document.body by inject/youtube/potoken/main-world.js rather than directly onto <video>.
   assert.ok(Array.isArray(ytResult.stampedAttrs), 'YouTube Watch must collect stamped attributes array');
   console.log('PASS: YouTube Watch golden fixture detection verified (real DOM & EE effects).');
 
@@ -65,6 +99,7 @@ const { runGoldenFixture } = require('./helpers/golden_dom_harness');
   assert.ok(hlsResult.hostAppended, 'Generic HLS fixture must mount real <savior-host> DOM element');
   assert.ok(hlsResult.nodeChangedEmitted, 'Generic HLS must detect video node');
   assert.ok(hlsResult.widgetCreated, 'Generic HLS fixture must mount savior widget');
+  // Note: Generic HLS detection scans direct <video> tags without companion script stamping
   assert.ok(Array.isArray(hlsResult.stampedAttrs), 'Generic HLS must collect stamped attributes array');
   console.log('PASS: Generic HLS golden fixture detection verified (real DOM & EE effects).');
 
