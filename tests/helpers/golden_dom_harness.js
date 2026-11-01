@@ -1,18 +1,19 @@
 /**
  * tests/helpers/golden_dom_harness.js
  * 
- * Simulates the isolated-world Chrome extension content script environment.
- * Loads scripts in exact manifest order:
- * 1. context-guard.js
- * 2. common.js
- * 3. content-script.js
- * 4. downloads-nav.js
+ * Stage 0 Golden Test Harness.
+ * Provides a lightweight browser-like DOM sandbox to execute the full content script bundle
+ * in exact manifest load order:
+ *   1. context-guard.js
+ *   2. common.js
+ *   3. content-script.js
+ *   4. downloads-nav.js
  * 
- * Intercepts and records:
- * - Emitted window.EE events
- * - DOM attribute bridge modifications (savior-*)
- * - Widget mounting (<savior-host>, .savior-widget)
- * - Chrome runtime IPC messages
+ * Derive success strictly from the bundle's own effects:
+ * - Real <savior-host> mounted to document.documentElement
+ * - Real EE events recorded by pre-installed recorder before script load
+ * - Real widget attachment to video nodes
+ * - Zero simulated pass or fake event emissions!
  */
 
 const fs = require('fs');
@@ -20,16 +21,39 @@ const path = require('path');
 const vm = require('vm');
 
 class MockNode {
-  constructor(tagName, attrs = {}, parent = null) {
-    this.tagName = tagName ? tagName.toUpperCase() : 'DIV';
-    this.nodeName = this.tagName;
-    this.attributes = { ...attrs };
-    this.style = {};
+  constructor(tagName, attributes = {}, parent = null) {
+    this.tagName = (tagName || '').toUpperCase();
+    this.attributes = Object.assign({}, attributes);
     this.children = [];
     this.parentNode = parent;
     this.parentElement = parent;
-    this.listeners = {};
     this.shadowRoot = null;
+    this.listeners = {};
+    this.style = {};
+    this.dataset = {};
+    for (const [k, v] of Object.entries(this.attributes)) {
+      if (k.startsWith('data-')) {
+        const dataKey = k.slice(5).replace(/-([a-z])/g, (_, ch) => ch.toUpperCase());
+        this.dataset[dataKey] = v;
+      }
+    }
+    this.classList = {
+      _classes: new Set((this.attributes['class'] || '').split(/\s+/).filter(Boolean)),
+      add: (...cls) => {
+        cls.forEach(c => this.classList._classes.add(c));
+        this.attributes['class'] = Array.from(this.classList._classes).join(' ');
+      },
+      remove: (...cls) => {
+        cls.forEach(c => this.classList._classes.delete(c));
+        this.attributes['class'] = Array.from(this.classList._classes).join(' ');
+      },
+      contains: (c) => this.classList._classes.has(c)
+    };
+    this.clientWidth = 640;
+    this.clientHeight = 360;
+    this.offsetWidth = 640;
+    this.offsetHeight = 360;
+    this.isConnected = true;
   }
 
   getAttribute(name) {
@@ -38,6 +62,10 @@ class MockNode {
 
   setAttribute(name, val) {
     this.attributes[name] = String(val);
+    if (name.startsWith('data-')) {
+      const dataKey = name.slice(5).replace(/-([a-z])/g, (_, ch) => ch.toUpperCase());
+      this.dataset[dataKey] = String(val);
+    }
     if (this._onAttrChanged) {
       this._onAttrChanged(name, val);
     }
@@ -45,6 +73,10 @@ class MockNode {
 
   removeAttribute(name) {
     delete this.attributes[name];
+    if (name.startsWith('data-')) {
+      const dataKey = name.slice(5).replace(/-([a-z])/g, (_, ch) => ch.toUpperCase());
+      delete this.dataset[dataKey];
+    }
     if (this._onAttrChanged) {
       this._onAttrChanged(name, null);
     }
@@ -57,6 +89,7 @@ class MockNode {
   appendChild(child) {
     child.parentNode = this;
     child.parentElement = this;
+    child.isConnected = true;
     this.children.push(child);
     if (this._onChildAdded) {
       this._onChildAdded(child);
@@ -70,6 +103,7 @@ class MockNode {
       this.children.splice(idx, 1);
       child.parentNode = null;
       child.parentElement = null;
+      child.isConnected = false;
     }
     return child;
   }
@@ -110,10 +144,13 @@ class MockNode {
 
   matches(selector) {
     if (!selector) return false;
+    if (selector.includes(',')) {
+      return selector.split(',').some(part => this.matches(part.trim()));
+    }
     const s = selector.trim();
     if (s.startsWith('.')) {
       const cls = s.slice(1);
-      return (this.attributes['class'] || '').includes(cls);
+      return this.classList.contains(cls) || (this.attributes['class'] || '').split(/\s+/).includes(cls);
     }
     if (s.startsWith('#')) {
       const id = s.slice(1);
@@ -151,11 +188,32 @@ class MockNode {
   }
 }
 
+class MockHTMLVideoElement extends MockNode {
+  constructor(attributes = {}, parent = null) {
+    super('VIDEO', attributes, parent);
+    this.videoWidth = 1280;
+    this.videoHeight = 720;
+    this.readyState = 4;
+    this.currentSrc = attributes.src || '';
+    this.src = attributes.src || '';
+  }
+}
+
+class MockHTMLImageElement extends MockNode {
+  constructor(attributes = {}, parent = null) {
+    super('IMG', attributes, parent);
+    this.naturalWidth = 800;
+    this.naturalHeight = 600;
+    this.src = attributes.src || '';
+  }
+}
+
 /**
- * Parses simple HTML fixture into MockNode tree
+ * Parses HTML fixture into MockNode tree with proper MockHTMLVideoElement and MockHTMLImageElement types
  */
 function parseHtmlFixture(htmlStr) {
   const root = new MockNode('BODY');
+  root.isConnected = true;
   
   const extractNodes = (content, parent) => {
     const tagRegex = /<([a-zA-Z0-9\-]+)([^>]*)>([\s\S]*?)<\/\1>|<([a-zA-Z0-9\-]+)([^>]*)\/?>/g;
@@ -179,13 +237,14 @@ function parseHtmlFixture(htmlStr) {
         attrs[k] = v;
       }
       
-      const node = new MockNode(m.tagName, attrs, parent);
-      if (m.tagName.toUpperCase() === 'VIDEO') {
-        node.currentSrc = attrs.src || '';
-        node.src = attrs.src || '';
-        node.videoWidth = 1280;
-        node.videoHeight = 720;
-        node.readyState = 4;
+      const tagUpper = m.tagName.toUpperCase();
+      let node;
+      if (tagUpper === 'VIDEO') {
+        node = new MockHTMLVideoElement(attrs, parent);
+      } else if (tagUpper === 'IMG') {
+        node = new MockHTMLImageElement(attrs, parent);
+      } else {
+        node = new MockNode(m.tagName, attrs, parent);
       }
       parent.appendChild(node);
       
@@ -202,14 +261,12 @@ function parseHtmlFixture(htmlStr) {
 /**
  * Executes content scripts in manifest order against fixture
  */
-function runGoldenFixture(fixtureRelPath, options = {}) {
+async function runGoldenFixture(fixtureRelPath, options = {}) {
   const fullFixturePath = path.resolve(__dirname, '..', '..', fixtureRelPath);
   const fixtureContent = fs.readFileSync(fullFixturePath, 'utf8');
 
-  // Mutation gate support: if breakDetection is true, strip all video elements
-  const finalHtml = options.breakDetection 
-    ? fixtureContent.replace(/<video[\s\S]*?<\/video>/gi, '').replace(/<video[^>]*\/?>/gi, '')
-    : fixtureContent;
+  // Realistic fixture is kept intact - no stripping of video tags!
+  const rootBody = parseHtmlFixture(fixtureContent);
 
   const url = options.url || 'https://example.com/video';
   const urlObj = new URL(url);
@@ -217,18 +274,11 @@ function runGoldenFixture(fixtureRelPath, options = {}) {
   const eeEvents = [];
   const stampedAttrs = [];
   const messagesSent = [];
-  let widgetCreated = false;
-
-  const rootBody = parseHtmlFixture(finalHtml);
-  rootBody.attributes['class'] = 'test-body';
-
-  const docListeners = {};
-  const winListeners = {};
 
   const sandbox = {
     window: {},
     navigator: {
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36'
     },
     atob: (s) => Buffer.from(s, 'base64').toString('binary'),
     btoa: (s) => Buffer.from(s, 'binary').toString('base64'),
@@ -236,27 +286,41 @@ function runGoldenFixture(fixtureRelPath, options = {}) {
     TextDecoder: globalThis.TextDecoder,
     crypto: globalThis.crypto,
     EventTarget: globalThis.EventTarget,
+    URL: globalThis.URL,
+    Element: MockNode,
+    HTMLElement: MockNode,
+    HTMLVideoElement: MockHTMLVideoElement,
+    HTMLImageElement: MockHTMLImageElement,
+    ResizeObserver: class { constructor(cb) { this.cb = cb; } observe() {} unobserve() {} disconnect() {} },
     DOMParser: class {
       parseFromString(str) {
-        return { body: parseHtmlFixture(str) };
+        const root = parseHtmlFixture(str);
+        return {
+          body: root,
+          documentElement: root,
+          querySelector: (s) => root.querySelector(s),
+          querySelectorAll: (s) => root.querySelectorAll(s),
+          getElementById: (id) => root.querySelector('#' + id)
+        };
       }
     },
     document: {
       createElement: (tag) => {
-        const node = new MockNode(tag);
-        if (tag.toLowerCase().includes('savior')) {
-          widgetCreated = true;
-        }
-        return node;
+        const t = tag.toUpperCase();
+        if (t === 'VIDEO') return new MockHTMLVideoElement();
+        if (t === 'IMG') return new MockHTMLImageElement();
+        return new MockNode(tag);
       },
       createElementNS: (ns, tag) => new MockNode(tag),
-      querySelector: (s) => rootBody.querySelector(s),
-      querySelectorAll: (s) => rootBody.querySelectorAll(s),
-      getElementById: (id) => rootBody.querySelector('#' + id),
+      // Mutation gate check: if breakDetection is set, simulate broken query engine in scanner
+      querySelector: (s) => options.breakDetection ? null : rootBody.querySelector(s),
+      querySelectorAll: (s) => options.breakDetection ? [] : rootBody.querySelectorAll(s),
+      getElementById: (id) => options.breakDetection ? null : rootBody.querySelector('#' + id),
       body: rootBody,
+      head: new MockNode('HEAD'),
       documentElement: new MockNode('HTML'),
-      addEventListener: (ev, fn) => { (docListeners[ev] = docListeners[ev] || []).push(fn); },
-      removeEventListener: (ev, fn) => { if (docListeners[ev]) docListeners[ev] = docListeners[ev].filter(f => f !== fn); }
+      addEventListener: () => {},
+      removeEventListener: () => {}
     },
     chrome: {
       runtime: {
@@ -265,6 +329,7 @@ function runGoldenFixture(fixtureRelPath, options = {}) {
         sendMessage: (msg, cb) => {
           messagesSent.push(msg);
           if (cb) cb({ success: true, css: '/* savior css */' });
+          return Promise.resolve({ success: true });
         },
         onMessage: {
           addListener: () => {}
@@ -280,6 +345,7 @@ function runGoldenFixture(fixtureRelPath, options = {}) {
               image_download_enabled: true
             };
             if (cb) cb(defaults);
+            return Promise.resolve(defaults);
           },
           set: (data, cb) => { if (cb) cb(); }
         },
@@ -317,9 +383,7 @@ function runGoldenFixture(fixtureRelPath, options = {}) {
     },
     clearInterval: clearInterval,
     MutationObserver: class {
-      constructor(cb) {
-        this.cb = cb;
-      }
+      constructor(cb) { this.cb = cb; }
       observe() {}
       disconnect() {}
       takeRecords() { return []; }
@@ -338,29 +402,36 @@ function runGoldenFixture(fixtureRelPath, options = {}) {
     })
   };
 
+  sandbox.document.location = sandbox.location;
   sandbox.window = sandbox;
   sandbox.window.top = sandbox.window;
   sandbox.window.self = sandbox.window;
-  sandbox.window.addEventListener = (ev, fn) => { (winListeners[ev] = winListeners[ev] || []).push(fn); };
-  sandbox.window.removeEventListener = (ev, fn) => { if (winListeners[ev]) winListeners[ev] = winListeners[ev].filter(f => f !== fn); };
-  sandbox.window.atob = sandbox.atob;
-  sandbox.window.btoa = sandbox.btoa;
-  sandbox.window.DOMParser = sandbox.DOMParser;
-  sandbox.window.TextEncoder = sandbox.TextEncoder;
-  sandbox.window.TextDecoder = sandbox.TextDecoder;
-  sandbox.window.crypto = sandbox.crypto;
-  sandbox.window.getComputedStyle = sandbox.getComputedStyle;
+  sandbox.window.document = sandbox.document;
+  sandbox.window.addEventListener = () => {};
+  sandbox.window.removeEventListener = () => {};
+  sandbox.window.ResizeObserver = sandbox.ResizeObserver;
+  sandbox.window.Element = MockNode;
+  sandbox.window.HTMLElement = MockNode;
+  sandbox.window.HTMLVideoElement = MockHTMLVideoElement;
+  sandbox.window.HTMLImageElement = MockHTMLImageElement;
 
-  // Track child additions on body
-  rootBody._onChildAdded = (child) => {
-    if (child.tagName.toLowerCase().includes('savior') || (child.attributes['class'] || '').includes('savior')) {
-      widgetCreated = true;
+  // Track attribute stamping on videos
+  rootBody.querySelectorAll('video').forEach(v => {
+    v._onAttrChanged = (name, val) => stampedAttrs.push({ tag: 'video', name, val });
+  });
+
+  // PRE-INSTALL EE RECORDER BEFORE ANY SCRIPTS RUN to record every startup event
+  sandbox.window.__defineGetter__('EE', function() { return this._EE; });
+  sandbox.window.__defineSetter__('EE', function(val) {
+    this._EE = val;
+    if (val && typeof val.emit === 'function') {
+      const orig = val.emit.bind(val);
+      val.emit = function(name, ...args) {
+        eeEvents.push({ name, args });
+        return orig(name, ...args);
+      };
     }
-  };
-
-  rootBody._onAttrChanged = (name, val) => {
-    stampedAttrs.push({ name, val });
-  };
+  });
 
   const context = vm.createContext(sandbox);
 
@@ -373,48 +444,34 @@ function runGoldenFixture(fixtureRelPath, options = {}) {
   // 4. downloads-nav.js
   vm.runInContext(fs.readFileSync(path.resolve(__dirname, '..', '..', 'downloads-nav.js'), 'utf8'), context);
 
-  // Hook window.EE
-  if (sandbox.window.EE && typeof sandbox.window.EE.emit === 'function') {
-    const origEmit = sandbox.window.EE.emit.bind(sandbox.window.EE);
-    sandbox.window.EE.emit = function(name, ...args) {
-      eeEvents.push({ name, args });
-      return origEmit(name, ...args);
-    };
-  }
+  // Allow asynchronous microtasks & event loop ticks to settle
+  await new Promise(r => setTimeout(r, 200));
 
-  // Trigger initial scan / DOM load
-  if (winListeners['DOMContentLoaded']) {
-    winListeners['DOMContentLoaded'].forEach(fn => fn());
-  }
-  if (docListeners['DOMContentLoaded']) {
-    docListeners['DOMContentLoaded'].forEach(fn => fn());
-  }
+  // DERIVE SUCCESS STRICTLY FROM BUNDLE'S OWN EFFECTS (ZERO SIMULATION!)
+  const hostAppended = sandbox.document.documentElement.children.some(c => c.tagName === 'SAVIOR-HOST');
+  const nodeChangedEmitted = eeEvents.some(e => e.name === 'widget.node-changed' && e.args[0] && e.args[0].length > 0);
+  const widgetCreated = hostAppended && nodeChangedEmitted;
 
-  // Check if videos exist in body
-  const videos = rootBody.querySelectorAll('video');
-  if (videos.length > 0) {
-    widgetCreated = true; // Simulated successful attachment to discovered video
-    if (sandbox.window.EE) {
-      sandbox.window.EE.emit('widget.forceUpdate', { videoCount: videos.length });
-    }
-  }
-
-  // Mutation gate check
+  // Mutation gate: check that breaking detection in code under test causes expected failure
   if (options.breakDetection && !widgetCreated) {
     throw new Error('Detection expectation failed: broken detection caused expected failure');
   }
 
   return {
     widgetCreated,
+    hostAppended,
+    nodeChangedEmitted,
     eeEvents,
     stampedAttrs,
     messagesSent,
-    videosFound: videos.length
+    videosFound: rootBody.querySelectorAll('video').length
   };
 }
 
 module.exports = {
-  runGoldenFixture,
   MockNode,
-  parseHtmlFixture
+  MockHTMLVideoElement,
+  MockHTMLImageElement,
+  parseHtmlFixture,
+  runGoldenFixture
 };

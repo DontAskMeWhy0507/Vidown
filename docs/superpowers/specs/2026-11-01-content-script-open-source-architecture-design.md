@@ -190,7 +190,7 @@ sequenceDiagram
   - `src/content/crypto/` (AES, base64)
   - `src/content/vendor/` (bn.js, parser/generator, unchanged)
 - Preserve numeric module ID mapping table in `src/content/module-registry.js`.
-- Configure `esbuild` in `package.json` / `scripts/build.js` to emit root `content-script.js`.
+- Configure build pipeline in `scripts/build_content_script.js` (module slot assembly from `src/content/` + `esbuild.transformSync` minification) triggered via `npm run build:content` to emit root `content-script.js`.
 - **Exit Gates:**
   - 100% pass on Golden Tests.
   - 100% pass across all 60 test suites.

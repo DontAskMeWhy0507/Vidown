@@ -1,3 +1,17 @@
+/**
+ * scripts/build_content_script.js
+ * 
+ * Production Build Pipeline: Module Slot Assembly + esbuild.transformSync Minification
+ * 
+ * Pipeline mechanism:
+ * 1. Reads the hand-written CSS prefetcher header from src/content/entry/index.js (Section 1).
+ * 2. Assembles the 776-slot module array (649 extracted modules from src/content/ + 127 null holes)
+ *    mapped via src/content/module-registry.js.
+ * 3. Wraps the module array into the classic Webpack IIFE bootstrap (entry module 543).
+ * 4. Minifies the complete assembled bundle using esbuild.transformSync (target: 'chrome116',
+ *    minifyWhitespace: true, minifySyntax: true, legalComments: 'none') into root content-script.js.
+ */
+
 const fs = require('fs');
 const path = require('path');
 const esbuild = require('esbuild');

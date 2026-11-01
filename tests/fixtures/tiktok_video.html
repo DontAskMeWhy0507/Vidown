@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html>
-<head><title>TikTok Video</title></head>
-<body>
-  <div class="tiktok-web-player" data-e2e="feed-video">
-    <div class="DivBasicPlayerWrapper" data-e2e="feed-item">
-      <video src="https://v16-webapp-prime.tiktokcdn.com/video/mp4/test.mp4" controls autoplay></video>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TikTok Video</title>
+</head>
+<body class="tiktok-web-player-body">
+  <div id="app">
+    <div class="tiktok-web-player" data-e2e="browse-video">
+      <div class="DivBasicPlayerWrapper" data-e2e="feed-video">
+        <div class="DivVideoContainer">
+          <video 
+            playsinline 
+            webkit-playsinline 
+            src="https://v16-webapp-prime.tiktokcdn.com/video/tos/useast2a/tos-useast2a-ve-0068c001-euttp/o4EBeGf7AIBGg/?mime_type=video_mp4" 
+            preload="auto" 
+            controls="false" 
+            autoplay>
+          </video>
+        </div>
+        <div class="DivPlayerControlsRoot">
+          <div class="DivControlsWrapper">
+            <div class="DivPlayIcon"></div>
+            <div class="DivSeekBar"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </body>

@@ -1,9 +1,20 @@
 <!DOCTYPE html>
-<html>
-<head><title>Generic HLS Player</title></head>
-<body>
-  <div class="player-container">
-    <video src="https://stream.example.com/live/playlist.m3u8" controls autoplay></video>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generic HLS Player</title>
+</head>
+<body class="hls-player-body">
+  <div class="video-player-container vjs-fluid video-js">
+    <video 
+      id="player_vjs" 
+      class="vjs-tech" 
+      playsinline 
+      controls 
+      preload="metadata" 
+      src="https://stream.example.com/live/playlist.m3u8">
+      <source src="https://stream.example.com/live/playlist.m3u8" type="application/x-mpegURL">
+    </video>
   </div>
 </body>
 </html>

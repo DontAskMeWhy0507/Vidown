@@ -1,9 +1,36 @@
 <!DOCTYPE html>
-<html>
-<head><title>YouTube Watch</title></head>
-<body>
-  <div id="movie_player" class="html5-video-player">
-    <video class="video-stream html5-main-video" src="blob:https://www.youtube.com/test-stream-blob"></video>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Watch</title>
+</head>
+<body class="ytd-page-body">
+  <div id="player" class="style-scope ytd-watch-flexy">
+    <div id="movie_player" class="html5-video-player ytp-fit-cover-video ytp-autohide">
+      <div class="html5-video-container" data-layer="0">
+        <video 
+          tabindex="-1" 
+          class="video-stream html5-main-video" 
+          controlslist="nodownload" 
+          style="width: 1280px; height: 720px; left: 0px; top: 0px;" 
+          src="blob:https://www.youtube.com/8394a123-bc45-67de-8901-abcdef234567">
+        </video>
+      </div>
+      <div class="ytp-chrome-bottom" style="width: 1280px; left: 12px;">
+        <div class="ytp-progress-bar-container"></div>
+        <div class="ytp-chrome-controls">
+          <div class="ytp-left-controls">
+            <button class="ytp-play-button ytp-button" aria-label="Play"></button>
+            <div class="ytp-time-display notranslate">
+              <span class="ytp-time-current">0:00</span> / <span class="ytp-time-duration">3:45</span>
+            </div>
+          </div>
+          <div class="ytp-right-controls">
+            <button class="ytp-fullscreen-button ytp-button" aria-label="Full screen"></button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>
