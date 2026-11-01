@@ -12,8 +12,8 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
 ## Build Pipeline & Artifact Invariants
 
 - **Original Baseline Bundle**: 2,404,925 bytes (630 B CSS + 2,404,295 B Webpack IIFE).
-- **Current Shipped Built Bundle**: 1,991,587 bytes.
-- **Net Raw Code Reduction**: 413,338 bytes (shortfall of 36,662 B vs Gate 5 target of $\ge 450,000$ B due to semantic identifier expansion; accepted per owner decision recorded 2026-11-01).
+- **Current Shipped Built Bundle**: 1,997,616 bytes.
+- **Net Raw Code Reduction**: 407,309 bytes (shortfall of 42,691 B vs Gate 5 target of $\ge 450,000$ B due to semantic identifier expansion; accepted per owner decision recorded 2026-11-01).
 - **Vendor Optimizations (Milestone 2)**:
   - `bn.js` 6-to-1 deduplication: canonical `src/content/vendor/elliptic/module-126.js` (43,355 B committed git blob) preserved; 5 duplicate instances replaced with 103 B alias stubs, saving 216,015 B raw.
   - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates all 163 inlined generator copies in `content-script.js`, saving 342,202 B raw.
