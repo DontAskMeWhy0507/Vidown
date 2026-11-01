@@ -16,7 +16,7 @@ let cryptoInstance = null;
 function loadCryptoJS() {
   if (cryptoInstance) return cryptoInstance;
 
-  const reg = require('../module-registry');
+  const reg = require('../../../content/module-registry');
   const installed = {};
 
   function req(id) {
@@ -25,7 +25,7 @@ function loadCryptoJS() {
     const relPath = reg.modules[id];
     if (!relPath) throw new Error(`Missing module ${id} in module-registry`);
     
-    const fullPath = path.resolve(__dirname, '..', relPath);
+    const fullPath = path.resolve(__dirname, '../../../content', relPath);
     const code = fs.readFileSync(fullPath, 'utf8')
       .replace(/^\/\/[^\n]*\n/, '')
       .replace(/^export default /, 'return ');

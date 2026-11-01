@@ -1,7 +1,7 @@
 const assert = require('assert');
 const path = require('path');
 
-console.log('=== TEST SUITE: MILESTONE 3 PLATFORM EXTRACTORS & DETECTOR ===\n');
+console.log('=== TEST SUITE: EXPERIMENTAL CONTENT-NEXT PLATFORM EXTRACTORS & DETECTOR ===\n');
 
 // Mock a lightweight DOM element
 function createMockElement(tagName = 'video', attrs = {}) {
@@ -29,7 +29,7 @@ function createMockElement(tagName = 'video', attrs = {}) {
 
 // 1. Attribute Stamper
 console.log('1. Testing Attribute Stamper...');
-const { stampMediaAttributes, readMediaAttributes } = require('../src/content/detector/attribute-stamper');
+const { stampMediaAttributes, readMediaAttributes } = require('../src/experimental/content-next/detector/attribute-stamper');
 
 const testEl = createMockElement('video');
 stampMediaAttributes(testEl, {
@@ -45,7 +45,7 @@ console.log('PASS: Attribute Stamper verified! ✅\n');
 
 // 2. TikTok Extractor
 console.log('2. Testing TikTok Extractor...');
-const TikTokMod = require('../src/content/providers/tiktok');
+const TikTokMod = require('../src/experimental/content-next/providers/tiktok');
 const TikTokExtractor = TikTokMod.default || TikTokMod;
 
 assert.strictEqual(TikTokExtractor.match('https://www.tiktok.com/@user/video/1234567890'), true);
@@ -61,7 +61,7 @@ console.log('PASS: TikTok Extractor verified! ✅\n');
 
 // 3. Facebook Extractor
 console.log('3. Testing Facebook Extractor...');
-const FacebookMod = require('../src/content/providers/facebook');
+const FacebookMod = require('../src/experimental/content-next/providers/facebook');
 const FacebookExtractor = FacebookMod.default || FacebookMod;
 
 assert.strictEqual(FacebookExtractor.match('https://www.facebook.com/reel/123456789'), true);
@@ -75,7 +75,7 @@ console.log('PASS: Facebook Extractor verified! ✅\n');
 
 // 4. YouTube Extractor
 console.log('4. Testing YouTube Extractor...');
-const YouTubeMod = require('../src/content/providers/youtube');
+const YouTubeMod = require('../src/experimental/content-next/providers/youtube');
 const YouTubeExtractor = YouTubeMod.default || YouTubeMod;
 
 assert.strictEqual(YouTubeExtractor.match('https://www.youtube.com/watch?v=dQw4w9WgXcQ'), true);
@@ -87,7 +87,7 @@ console.log('PASS: YouTube Extractor verified! ✅\n');
 
 // 5. Provider Registry
 console.log('5. Testing Provider Registry...');
-const { getProviderForUrl, registerProvider } = require('../src/content/providers/index');
+const { getProviderForUrl, registerProvider } = require('../src/experimental/content-next/providers/index');
 
 const matchedTikTok = getProviderForUrl('https://www.tiktok.com/@user/video/123');
 assert.strictEqual(matchedTikTok.name, 'tiktok');

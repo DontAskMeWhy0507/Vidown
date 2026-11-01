@@ -1,61 +1,86 @@
 # Vidown (VidManager Media Downloader Extension)
 
-Vidown is an open-source, high-efficiency media detection and download browser extension for Chrome Manifest V3.
+Vidown is a media detection and downloader browser extension for Chrome Manifest V3 (`minimum_chrome_version: 116`).
 
-## Features
+> **Architecture & Development Status Notice:**
+> The shipped production bundle `content-script.js` (1,949,390 bytes) is compiled via `scripts/build_content_script.js` by assembling the 649 mechanically split modules in `src/content/` (mapped through `src/content/module-registry.js` across 776 slots) with `esbuild.transformSync` minification.
+> 
+> The directory `src/experimental/content-next/` contains an **unwired architectural prototype layer** (~26 KB across 4 platform families). It is **not** connected to the build pipeline and is **not** loaded in the browser. A full semantic replacement of the 649 modules remains pending architectural design and stakeholder direction.
 
-- **Universal Platform Support**: Native media detection for TikTok, Facebook Reels & Stories, YouTube (Watch & Shorts), Instagram, Douyin, X, and generic HLS/DASH streams (`.m3u8`, `.mpd`).
-- **High-Performance Architecture**: Modular ES module structure with deduplicated vendor dependencies (consolidated `bn.js`, isolated AST parser/generator, shared Babel regenerator runtime core).
-- **Chrome MV3 Ready**: Designed for modern Chrome environments (`minimum_chrome_version: 116`) with declarative service workers and secure isolated content scripts.
-- **Privacy & Security First**: Zero tracking, zero telemetry, local AES stream decryption, and strict sandboxed execution.
+---
+
+## Build Pipeline & Artifact Invariants
+
+- **Original Baseline Bundle**: 2,404,925 bytes (630 B CSS + 2,404,295 B Webpack IIFE).
+- **Current Shipped Built Bundle**: 1,949,390 bytes.
+- **Net Raw Code Reduction**: 455,535 bytes (achieving the Gate 5 requirement of $\ge 450,000$ B).
+- **Vendor Optimizations (Milestone 2)**:
+  - `bn.js` 6-to-1 deduplication: canonical `src/content/vendor/elliptic/module-126.js` (43,355 B committed git blob) preserved; 5 duplicate instances replaced with 103 B alias stubs, saving 216,015 B raw.
+  - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates all 164 inlined generator copies in `content-script.js`, saving 342,202 B raw.
+  - AST Parser (`module-37.js`, 119,694 B) and Generator (`module-89.js`, 45,562 B): verified load-bearing for YouTube player response deciphering; isolated in `src/content/vendor/parser/`.
+- **Release Package**: `dist/savior-extension-v2.4.65.zip` is ~1.03 MB (strictly $\le 1.15$ MB ceiling) containing 0 `node_modules` and 0 executables.
+
+---
 
 ## Getting Started
 
-### Installation & Development
+### Prerequisites & Testing
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/DontAskMeWhy0507/Vidown.git
 cd Vidown
 
-# Install dev dependencies
-npm install
-
-# Run the automated test suite
+# Run automated test suites (68 suites)
 npm test
 
-# Build content script
+# Run golden characterization tests on real DOM fixtures
+node tests/test_golden_behavior.js
+
+# Build production content script
 npm run build:content
 
-# Package extension for Chrome Web Store
+# Package extension zip for distribution
 npm run package
 ```
 
 ### Loading in Chrome
 1. Navigate to `chrome://extensions/` in Google Chrome.
 2. Enable **Developer mode** in the upper right corner.
-3. Click **Load unpacked** and select the repository root folder.
+3. Click **Load unpacked** and select the repository root directory.
 
-## Project Structure
+---
+
+## Repository Structure
 
 ```
-├── manifest.json                # Chrome Manifest V3 configuration
-├── content-script.js            # Compiled production content script bundle
-├── src/content/                 # Modular ES module source files
-│   ├── core/                    # Core utilities, constants, and event bus
-│   ├── crypto/                  # Stream deciphering & CryptoJS rollup
-│   ├── detector/                # DOM scanner and companion attribute stamper
-│   ├── providers/               # Platform-specific extractors (TikTok, Facebook, YouTube, HLS)
-│   └── vendor/                  # Canonical vendor packages
-├── tests/                       # 68+ automated regression & golden characterization tests
-├── types/                       # TypeScript declaration files
-└── dist/                        # Release packages (savior-extension-v2.4.65.zip)
+├── manifest.json                 # Chrome Manifest V3 manifest
+├── content-script.js             # Shipped production content script bundle (1,949,390 B)
+├── src/
+│   ├── content/                  # Shipped build source (649 numeric modules)
+│   │   ├── entry/                # CSS prefetcher header
+│   │   ├── crypto/               # Modules 0, 16, 61, etc. (stream decryption)
+│   │   ├── detector/             # Modules 1, 5, 11, etc. (DOM detection engine)
+│   │   ├── platform/             # Platform handlers (356 modules)
+│   │   ├── providers/            # Modules 43, 368, 389, 565, 566
+│   │   ├── vendor/               # Canonical elliptic (126), parser (37, 89), regenerator-core
+│   │   ├── widget/               # Modules 21, 23, 27, 49, 137
+│   │   ├── module-registry.js    # 649 active module path mappings
+│   │   └── slots.js              # 776-slot Webpack array mapping (127 null holes)
+│   └── experimental/
+│       └── content-next/         # UNWIRED draft ES module prototype (~26 KB)
+│           ├── core/             # constants.js, events.js, utils.js
+│           ├── crypto/           # crypto-rollup.js
+│           ├── detector/         # attribute-stamper.js, dom-scanner.js
+│           ├── providers/        # facebook.js, hls-dash.js, index.js, tiktok.js, youtube.js
+│           └── index.js          # Draft ESM entry point
+├── tests/                        # 68 automated regression & golden characterization suites
+├── types/                        # TypeScript declaration contracts (types/content.d.ts)
+└── dist/                         # Release packages (savior-extension-v2.4.65.zip)
 ```
 
-## Contributing
+---
 
-See [CONTRIBUTING.md](file:///f:/Vidown/CONTRIBUTING.md) for guidelines on code standards, testing, and adding new media providers.
+## Licensing Notice
 
-## License
-
-MIT License.
+Licensing decision is currently pending stakeholder review (Trung) due to the proprietary origin of the decompiled Cốc Cốc Savior codebase. No open-source license grant is established until a formal decision is approved.

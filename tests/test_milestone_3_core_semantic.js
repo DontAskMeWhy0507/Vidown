@@ -1,11 +1,11 @@
 const assert = require('assert');
 const path = require('path');
 
-console.log('=== TEST SUITE: MILESTONE 3 CORE SEMANTIC LAYER ===\n');
+console.log('=== TEST SUITE: EXPERIMENTAL CONTENT-NEXT CORE SEMANTIC FACADE ===\n');
 
 // 1. Test Constants
 console.log('1. Testing semantic constants...');
-const constants = require('../src/content/core/constants');
+const constants = require('../src/experimental/content-next/core/constants');
 
 assert.ok(constants.MEDIA_TYPES, 'Must export MEDIA_TYPES');
 assert.ok(constants.MEDIA_TYPES.video, 'Must include video media type');
@@ -29,7 +29,7 @@ console.log('PASS: Constants verified! ✅\n');
 
 // 2. Test EventBus
 console.log('2. Testing semantic EventBus...');
-const { getEventBus } = require('../src/content/core/events');
+const { getEventBus } = require('../src/experimental/content-next/core/events');
 const bus = getEventBus();
 
 let eventReceived = null;
@@ -43,7 +43,7 @@ console.log('PASS: EventBus verified! ✅\n');
 
 // 3. Test Core Utilities
 console.log('3. Testing core utilities...');
-const utils = require('../src/content/core/utils');
+const utils = require('../src/experimental/content-next/core/utils');
 
 assert.strictEqual(typeof utils.query, 'function', 'Must export query');
 assert.strictEqual(typeof utils.queryAll, 'function', 'Must export queryAll');
@@ -68,7 +68,7 @@ assert.strictEqual(item1.ext, 'm3u8', 'Extension must be m3u8');
 
 // Test AES decryption via parseLinkPhimmoiChillee
 // Using live test vector with fixed key 'sHqvxUbI3HRHqHNdluQ5thFw5e8DCglJ'
-const cryptoRollup = require('../src/content/crypto/crypto-rollup');
+const cryptoRollup = require('../src/experimental/content-next/crypto/crypto-rollup');
 const secretKey = 'sHqvxUbI3HRHqHNdluQ5thFw5e8DCglJ';
 const rawTestUrl = 'https://vidown.org/hls/sample-stream.m3u8';
 const encrypted = cryptoRollup.AES.encrypt(rawTestUrl, secretKey);
