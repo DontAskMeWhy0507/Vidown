@@ -217,7 +217,7 @@ import m228 from './detector/module-228.js';
 import m229 from './detector/module-229.js';
 import m230 from './detector/module-230.js';
 import m231 from './detector/module-231.js';
-import m232 from './detector/module-232.js';
+import m232 from './platform/facebook.js';
 import m233 from './detector/module-233.js';
 import m234 from './detector/module-234.js';
 import m235 from './detector/module-235.js';
