@@ -1,15 +1,13 @@
 /**
  * scripts/build_content_script.js
  * 
- * Production Build Pipeline: Module Slot Assembly + esbuild.transformSync Minification
+ * Production & Dev Build Pipeline using esbuild
  * 
  * Pipeline mechanism:
- * 1. Reads the hand-written CSS prefetcher header from src/content/entry/index.js (Section 1).
- * 2. Assembles the 776-slot module array (649 extracted modules from src/content/ + 127 null holes)
- *    mapped via src/content/module-registry.js.
+ * 1. Reads the CSS prefetcher header from src/content/entry/index.js.
+ * 2. Assembles the 776-slot module array mapped via src/content/module-registry.js.
  * 3. Wraps the module array into the classic Webpack IIFE bootstrap (entry module 543).
- * 4. Minifies the complete assembled bundle using esbuild.transformSync (target: 'chrome116',
- *    minifyWhitespace: true, minifySyntax: true, legalComments: 'none') into root content-script.js.
+ * 4. Compiles using esbuild (supports --dev for unminified output + sourcemaps).
  */
 
 const fs = require('fs');
@@ -17,7 +15,8 @@ const path = require('path');
 const esbuild = require('esbuild');
 const zlib = require('zlib');
 
-console.log('=== BUILDING CONTENT SCRIPT PIPELINE ===\n');
+const isDev = process.argv.includes('--dev');
+console.log(`=== BUILDING CONTENT SCRIPT PIPELINE (${isDev ? 'DEVELOPMENT MODE' : 'RELEASE MODE'}) ===\n`);
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const CONTENT_DIR = path.join(ROOT_DIR, 'src', 'content');
@@ -63,22 +62,22 @@ const sharedRegenDeclaration = `var _saviorRegen = (function(){${regenCoreCode}}
 
 const bootstrap = `${sharedRegenDeclaration}\n!function(t){var e={};function r(n){if(e[n])return e[n].exports;var i=e[n]={i:n,l:!1,exports:{}};return t[n].call(i.exports,i,i.exports,r),i.l=!0,i.exports}r.m=t,r.c=e,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)r.d(n,i,function(e){return t[e]}.bind(null,i));return n},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="./",r(r.s=543)}(${arrayCode});`;
 
-// 4. Transform / Minify using esbuild
-// Section 1: Keep prefetcher header variable names intact for Chrome error tests and CSP compliance
+// 4. Transform using esbuild
 const minPrefetcher = esbuild.transformSync(prefetcherCode, {
   target: 'chrome116',
-  minifyWhitespace: true,
+  minifyWhitespace: !isDev,
   minifySyntax: false,
   minifyIdentifiers: false,
+  sourcemap: isDev ? 'inline' : false,
   legalComments: 'none'
 }).code;
 
-// Section 2: Bootstrap & module array with unmangled identifiers (preserves readable debuggability)
 const minBootstrap = esbuild.transformSync(bootstrap, {
   target: 'chrome116',
-  minifyWhitespace: true,
-  minifySyntax: true,
+  minifyWhitespace: !isDev,
+  minifySyntax: !isDev,
   minifyIdentifiers: false,
+  sourcemap: isDev ? 'inline' : false,
   legalComments: 'none'
 }).code;
 
