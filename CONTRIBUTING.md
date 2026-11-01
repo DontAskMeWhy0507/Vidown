@@ -52,8 +52,8 @@ npm run package
 - **Bundle & Package Limits**: Release zip `dist/savior-extension-v2.4.65.zip` must remain $\le 1.15\text{ MB}$ with 0 `node_modules` and 0 executables.
 - **Target Platform**: Chrome Manifest V3 (`minimum_chrome_version: 116`).
 - **Committed Figures**:
-  - Shipped built bundle: 1,954,607 bytes (M3 Batch 1; baseline M2: 1,949,390 bytes).
-  - Net raw code reduction: 450,318 bytes (Gate 5 target: >= 450,000 bytes).
+  - Shipped built bundle: 1,954,753 bytes (M3 Batch 1; baseline M2: 1,949,390 bytes).
+  - Net raw code reduction: 450,172 bytes (Gate 5 target: >= 450,000 bytes).
   - Canonical module 126: 43,355 bytes.
   - Shared regenerator core: 2,564 bytes.
 

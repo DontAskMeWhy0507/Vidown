@@ -55,7 +55,7 @@ npm run package
 
 ```
 ├── manifest.json                 # Chrome Manifest V3 manifest
-├── content-script.js             # Shipped production content script bundle (1,954,607 B)
+├── content-script.js             # Shipped production content script bundle (1,954,753 B)
 ├── src/
 │   ├── content/                  # Shipped build source (649 modules)
 │   │   ├── entry/                # CSS prefetcher header
