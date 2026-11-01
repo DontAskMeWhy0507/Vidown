@@ -1,0 +1,81 @@
+// Module 685 - Savior Player Asianfans Net Host
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(0);
+  function i(t,e){
+  var r="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];
+  if(!r){
+  if(Array.isArray(t)||(r=function(t,e){
+  if(t){
+  if("string"==typeof t)return o(t,e);
+  var r={
+  }
+  .toString.call(t).slice(8,-1);
+  return"Object"===r&&t.constructor&&(r=t.constructor.name),"Map"===r||"Set"===r?Array.from(t):"Arguments"===r||
+  /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?o(t,e):void 0}
+  }
+  (t))||e&&t&&"number"==typeof t.length){
+  r&&(t=r);
+  var n=0,i=function(){
+  };
+  return{
+  s:i,n:function(){
+  return n>=t.length?{
+  done:!0}
+  :{
+  done:!1,value:t[n++]}
+  }
+  ,e:function(t){
+  throw t}
+  ,f:i}
+  }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}
+  var a,s=!0,u=!1;
+  return{
+  s:function(){
+  r=r.call(t)}
+  ,n:function(){
+  var t=r.next();
+  return s=t.done,t}
+  ,e:function(t){
+  u=!0,a=t}
+  ,f:function(){
+  try{
+  s||null==r.return||r.return()}
+  finally{
+  if(u)throw a}
+  }
+  }
+  }
+  function o(t,e){
+  (null==e||e>t.length)&&(e=t.length);
+  for(var r=0,n=Array(e);
+  r<e;
+  r++)n[r]=t[r];
+  return n}
+  e.default={
+  index:110,getUrl(t,e,r,o){
+  if(t.includes("player.asianfans.net")){
+  var a,s=i(Object(n.queryAll)("script").filter(t=>t.innerHTML));
+  try{
+  for(s.s();
+  !(a=s.n()).done;
+  ){
+  var u=a.value.innerHTML,c=/src="([^"]*)"/.exec(u);
+  c&&Object(n.sendMessage)({
+  requestType:"save_url",params:{
+  url:c[1]}
+  }
+  )}
+  }
+  catch(t){
+  s.e(t)}
+  finally{
+  s.f()}
+  }
+  return{
+  return:!1,data:null}
+  }
+  }
+  };

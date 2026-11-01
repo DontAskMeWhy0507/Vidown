@@ -1,0 +1,337 @@
+// Module 243 - Savior Hh3dhay_pro Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(6),i=r(0),o=r(1),a=r(20),s=r(127),u=r(28),c=r(3);
+  function l(t,e){
+  var r="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];
+  if(!r){
+  if(Array.isArray(t)||(r=function(t,e){
+  if(t){
+  if("string"==typeof t)return f(t,e);
+  var r={
+  }
+  .toString.call(t).slice(8,-1);
+  return"Object"===r&&t.constructor&&(r=t.constructor.name),"Map"===r||"Set"===r?Array.from(t):"Arguments"===r||
+  /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?f(t,e):void 0}
+  }
+  (t))||e&&t&&"number"==typeof t.length){
+  r&&(t=r);
+  var n=0,i=function(){
+  };
+  return{
+  s:i,n:function(){
+  return n>=t.length?{
+  done:!0}
+  :{
+  done:!1,value:t[n++]}
+  }
+  ,e:function(t){
+  throw t}
+  ,f:i}
+  }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}
+  var o,a=!0,s=!1;
+  return{
+  s:function(){
+  r=r.call(t)}
+  ,n:function(){
+  var t=r.next();
+  return a=t.done,t}
+  ,e:function(t){
+  s=!0,o=t}
+  ,f:function(){
+  try{
+  a||null==r.return||r.return()}
+  finally{
+  if(s)throw o}
+  }
+  }
+  }
+  function f(t,e){
+  (null==e||e>t.length)&&(e=t.length);
+  for(var r=0,n=Array(e);
+  r<e;
+  r++)n[r]=t[r];
+  return n}
+  function d(){
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
+  e,r="function"==typeof Symbol?Symbol:{
+  }
+  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
+  function o(r,n,i,o){
+  var u=n&&n.prototype instanceof s?n:s,c=Object.create(u.prototype);
+  return h(c,"_invoke",function(r,n,i){
+  var o,s,u,c=0,l=i||[],f=!1,d={
+  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
+  return o=e,s=0,u=t,d.n=r,a}
+  };
+  function h(r,n){
+  for(s=r,u=n,e=0;
+  !f&&c&&!i&&e<l.length;
+  e++){
+  var i,o=l[e],h=d.p,p=o[2];
+  r>3?(i=p===n)&&(u=o[(s=o[4])?5:(s=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(s=0,d.v=n,d.n=o[1]):
+  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,s=0))}
+  if(i||r>1)return a;
+  throw f=!0,n}
+  return function(i,l,p){
+  if(c>1)throw TypeError("Generator is already running");
+  for(f&&1===l&&h(l,p),s=l,u=p;
+  (e=s<2?t:u)||!f;
+  ){
+  o||(s?s<3?(s>1&&(d.n=-1),h(s,u)):d.n=u:d.v=u);
+  try{
+  if(c=2,o){
+  if(s||(i="next"),e=o[i]){
+  if(!(e=e.call(o,u)))throw TypeError("iterator result is not an object");
+  if(!e.done)return e;
+  u=e.value,s<2&&(s=0)}
+  else 1===s&&(e=o.return)&&e.call(o),s<2&&(u=TypeError("The iterator does not provide a '"+i+"' method"),
+  s=1);
+  o=t}
+  else if((e=(f=d.n<0)?u:r.call(n,d))!==a)break}
+  catch(e){
+  o=t,s=1,u=e}
+  finally{
+  c=1}
+  }
+  return{
+  value:e,done:f}
+  }
+  }
+  (r,i,o),!0),c}
+  var a={
+  };
+  function s(){
+  }
+  function u(){
+  }
+  function c(){
+  }
+  e=Object.getPrototypeOf;
+  var l=[][n]?e(e([][n]())):(h(e={
+  }
+  ,n,(function(){
+  return this}
+  )),e),f=c.prototype=s.prototype=Object.create(l);
+  function p(t){
+  return Object.setPrototypeOf?Object.setPrototypeOf(t,c):(t.__proto__=c,h(t,i,"GeneratorFunction")),
+  t.prototype=Object.create(f),t}
+  return u.prototype=c,h(f,"constructor",c),h(c,"constructor",u),u.displayName="GeneratorFunction",h(c,
+  i,"GeneratorFunction"),h(f),h(f,i,"Generator"),h(f,n,(function(){
+  return this}
+  )),h(f,"toString",(function(){
+  return"[object Generator]"}
+  )),(d=function(){
+  return{
+  w:o,m:p}
+  }
+  )()}
+  function h(t,e,r,n){
+  var i=Object.defineProperty;
+  try{
+  i({
+  }
+  ,"",{
+  }
+  )}
+  catch(t){
+  i=0}
+  (h=function(t,e,r,n){
+  function o(e,r){
+  h(t,e,(function(t){
+  return this._invoke(e,r,t)}
+  ))}
+  e?i?i(t,e,{
+  value:r,enumerable:!n,configurable:!n,writable:!n}
+  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
+  )(t,e,r,n)}
+  var p,v=function(t,e,r,n){
+  return new(r||(r=Promise))((function(i,o){
+  function a(t){
+  try{
+  u(n.next(t))}
+  catch(t){
+  o(t)}
+  }
+  function s(t){
+  try{
+  u(n.throw(t))}
+  catch(t){
+  o(t)}
+  }
+  function u(t){
+  var e;
+  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
+  t(e)}
+  ))).then(a,s)}
+  u((n=n.apply(t,e||[])).next())}
+  ))}
+  ,m={
+  getDomains:()=>["hh3dhay.","hhhtq.","hhtqvietsub."],parse:{
+  sources:[...(null===(p=a.a.parse)||void 0===p?void 0:p.sources)||[],{
+  checkSource:t=>{
+  var e=t.url;
+  return/dailymotion\.com\/player/i.test(e)}
+  ,parse:s.default.parse.default}
+  ,{
+  checkSource:t=>{
+  var e=t.url;
+  return Boolean(Object(i.getVideoId)(e))}
+  ,parse:t=>{
+  var e=t.media;
+  return u.a.parse(Object(i.getVideoId)(e.url))}
+  }
+  ,{
+  checkSource:t=>{
+  var e=t.url;
+  return/playhh3dhay.xyz\/cdn\/hls\/.+\/master\.txt/i.test(e)}
+  ,parse:t=>{
+  var e=t.media,r=t.response;
+  return v(void 0,void 0,void 0,d().m((function t(){
+  var a,s;
+  return d().w((function(t){
+  for(;;
+  )switch(t.p=t.n){
+  case 0:return t.p=0,t.n=1,Object(n.e)(r,e);
+  case 1:return a=t.v,t.n=2,Promise.allSettled(a.map(t=>Object(i.sendMessage)({
+  type:o.b.GET_URL,params:{
+  url:t.url}
+  }
+  ).then(t=>t.url)));
+  case 2:return s=t.v,a.forEach((t,e)=>{
+  "fulfilled"==s[e].status&&(t.play_list=s[e].value)}
+  ),t.a(2,a);
+  case 3:return t.p=3,t.v,t.a(2,[])}
+  }
+  ),t,null,[[0,3]])}
+  )))}
+  }
+  ,{
+  checkSource:t=>{
+  var e=t.url;
+  return/([a-z0-9\-_]+\.)?cliphub\.[a-z0-9\.\-]+\/videos/i.test(e)}
+  ,parse(t){
+  var e=t.media,r=t.response;
+  return v(this,void 0,void 0,d().m((function t(){
+  var n,i,o;
+  return d().w((function(t){
+  for(;;
+  )switch(t.p=t.n){
+  case 0:if(t.p=0,r){
+  t.n=2;
+  break}
+  return t.n=1,fetch(e.url).then(t=>t.text());
+  case 1:r=t.v;
+  case 2:t.n=4;
+  break;
+  case 3:return t.p=3,t.v,t.a(2,[]);
+  case 4:if(t.p=4,n=JSON.parse(r),i=atob(n.pl[0]+n.pl.slice(1).split("").reverse().join(""))){
+  t.n=5;
+  break}
+  throw new Error("");
+  case 5:return o=Object.assign(Object.assign({
+  }
+  ,e),{
+  url:e.url,filename:e.fixName,play_list:i}
+  ),t.a(2,[o]);
+  case 6:return t.p=6,t.v,t.a(2,[])}
+  }
+  ),t,null,[[4,6],[0,3]])}
+  )))}
+  }
+  ,{
+  checkSource:t=>t.url.includes("syntheticvideo.xyz/players/sources"),parse:t=>{
+  var e,r=t.media,n=t.response;
+  try{
+  var i=JSON.parse(n,(t,e)=>{
+  if("source"==t){
+  console.log({
+  key:t,value:e}
+  );
+  try{
+  return JSON.parse(e)}
+  catch(t){
+  return e}
+  }
+  return e}
+  ),o=(null===(e=null==i?void 0:i.message)||void 0===e?void 0:e.source)||(null==i?void 0:i.source);
+  if(!o)return[];
+  if("string"==typeof o){
+  var a=Object(c.f)(o);
+  return a.filename=r.filename,a.type="video",[a]}
+  return o.map(t=>{
+  var e=t.file,n=t.label;
+  return Object.assign(Object.assign({
+  }
+  ,r),{
+  url:e,quality:n,i18n_quality:n,type:"video"}
+  )}
+  )}
+  catch(t){
+  return[]}
+  }
+  }
+  ]}
+  ,urls:[...a.a.urls||[],...s.default.urls||[],{
+  checkUrl:t=>{
+  var e=t.node,r=t.url;
+  return"IFRAME"==e.nodeName&&r.includes("scontent-sin2")}
+  ,getUrl:t=>{
+  t.node;
+  var e,r=l(t.ids);
+  try{
+  for(r.s();
+  !(e=r.n()).done;
+  ){
+  var n=e.value;
+  if(n.url.includes("/stream"))return n.url}
+  }
+  catch(t){
+  r.e(t)}
+  finally{
+  r.f()}
+  return[]}
+  ,mediaObjectChange:t=>(t.mediaObject.filename=document.title,"video")}
+  ,{
+  checkUrl:t=>{
+  var e=t.node,r=t.url;
+  return"IFRAME"==e.nodeName&&/([a-z0-9\-_]+\.)?cliphub\./i.test(r)}
+  ,getUrl(t){
+  var e,r,n,i,o,a=t.node,s=t.ids.find(t=>/([a-z0-9\-_]+\.)?cliphub\.[a-z0-9\.\-]+\/videos/i.test(t.url));
+  if(!s)return[];
+  var u=a.closest(".myui-player__item")||document.querySelector(".myui-player__item"),c=(null===(r=null===(e=null==u?
+  void 0:u.querySelector("h3.title"))||void 0===e?void 0:e.innerText)||void 0===r?void 0:r.trim())||
+  document.title,l=null===(o=null===(i=null===(n=document.querySelector("#playlist, ul.playlist"))||
+  void 0===n?void 0:n.querySelector("li.active"))||void 0===i?void 0:i.innerText)||void 0===o?void 0:
+  o.trim();
+  return s.fixName=`${c}
+   - ${l||Date.now()}
+  `,s.ext="m3u8",s.exts=["m3u8"],s.type="video",[s]}
+  }
+  ,{
+  checkUrl:t=>{
+  var e=t.node,r=t.url;
+  return"IFRAME"==e.nodeName&&/([a-z0-9\-_]+\.)?syntheticvideo\./i.test(r)}
+  ,getUrl(t){
+  var e,r=null===(e=t.url.match(/syntheticvideo\.[a-z0-9\.\-]+\/v\/[a-z0-9\-_]{15}(\d+)/i))||void 0===e?
+  void 0:e[1];
+  return r?"https://syntheticvideo.xyz/players/sources?videoId="+r:[]}
+  ,mediaObjectChange(t){
+  var e=t.mediaObject;
+  e.ext="m3u8",e.exts=["m3u8"],e.type="video",e.filename=document.title,e.requestMethod="POST"}
+  }
+  ,{
+  checkUrl:t=>{
+  var e=t.node,r=t.url;
+  return"IFRAME"==e.nodeName&&/([a-z0-9\-_]+\.)?hh3dhay\..+\/play-hls-v2\/play\/[a-z0-9\-_]+\.m3u8/i.test(r)}
+  ,getUrl(t){
+  var e=t.url,r=new URL(e),n=r.pathname.split("/");
+  return n[2]="read",r.pathname=n.join("/"),r.toString()}
+  ,mediaObjectChange(t){
+  var e=t.mediaObject;
+  e.ext="m3u8",e.exts=["m3u8"],e.type="video"}
+  }
+  ]};
+  e.default=m};

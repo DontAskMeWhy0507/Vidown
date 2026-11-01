@@ -1,0 +1,62 @@
+// Module 297 - Savior Ok_ru Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n,i,o=r(20),a=[];
+  var s={
+  getDomains:()=>["ok.ru"],getCustomPipControlElement(t){
+  var e;
+  if("vk-video-player"===t.nodeName.toLowerCase()){
+  var r=t.shadowRootContainer||(null===(e=t.querySelector(".shadow-root-container"))||void 0===e?void 0:
+  e.shadowRoot),n=null==r?void 0:r.querySelector("video");
+  if(n)return n}
+  return t}
+  ,isValidVideoNode:t=>!!["vk-video-player","wm-player","video","iframe"].includes(t.nodeName.toLowerCase()),
+  parse:{
+  sources:[...(null===(n=o.a.parse)||void 0===n?void 0:n.sources)||[]]}
+  ,isMiniPlayerNode:t=>"WM-PLAYER"==t.nodeName,urls:[{
+  checkUrl:t=>"WM-PLAYER"==t.node.nodeName,getUrl:t=>{
+  var e=t.node;
+  if(i){
+  var r=function(t){
+  var e,r,n,i,o=t.querySelector("wm-player-play-item"),a=null===(r=null===(e=null==o?void 0:o.querySelector('wm-card-details [slot="title"]'))||
+  void 0===e?void 0:e.innerText)||void 0===r?void 0:r.trim(),s=null===(i=null===(n=null==o?void 0:o.querySelector('wm-card-details [slot="info"] .artists, wm-card-details [slot="info"] [data-tsid="artist"]'))||
+  void 0===n?void 0:n.innerText)||void 0===i?void 0:i.trim();
+  if(a&&s)return`${a}
+   - ${s}
+  `}
+  (e);
+  return"stream"!==i.filename&&i.filename!=r?(i=void 0,"live"):(r=r||i.fixName||i.filename,[Object.assign(Object.assign({
+  }
+  ,i),{
+  filename:r}
+  )])}
+  return"live"}
+  }
+  ,{
+  checkUrl:t=>{
+  var e,r=t.node;
+  return/ok\.ru\/live\//i.test(location.href)||Boolean(null===(e=r.closest('[data-module="OKVideo"'))||
+  void 0===e?void 0:e.querySelector(".html5-vpl_live"))}
+  ,getUrl:()=>"live",mediaObjectChange:()=>"live"}
+  ,...o.a.urls||[]],addNode:()=>["wm-player","vk-video-player"],processRequestIds(t){
+  var e,r,n,o;
+  if(/(musicd\.mycdn\.me)|(musicd\.okcdn\.ru\/)/i.test(t.url)){
+  a.push(t);
+  var s=document.querySelector("wm-player wm-card-details"),u=`${null===(r=null===(e=null==s?void 0:
+  s.querySelector('[slot="title"] .name'))||void 0===e?void 0:e.innerText)||void 0===r?void 0:r.trim()}
+   - ${null===(o=null===(n=null==s?void 0:s.querySelector(".artists"))||void 0===n?void 0:n.innerText)||
+  void 0===o?void 0:o.trim()}
+  `;
+  t.fixName=u,i=t,EE.emit("widget.forceUpdate")}
+  return!0}
+  ,toggleLight:{
+  turnOff:{
+  parentUpdate(){
+  var t,e=document.querySelector("#hook_Block_MainContainer"),r=document.querySelector("savior-backdrop");
+  e&&r&&(null===(t=r.parentElement)||void 0===t||t.classList.add("--savior-overlay-z-index-reset"),null==e||
+  e.setAttribute("style","position: relative"))}
+  }
+  }
+  };
+  e.default=s};

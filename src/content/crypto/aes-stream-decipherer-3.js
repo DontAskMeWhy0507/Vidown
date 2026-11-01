@@ -1,0 +1,11 @@
+// Module 483 - Savior Aes Stream Decipherer 3
+export default function(t,e,r){
+  var n=r(170),i=r(25).Buffer,o=r(130);
+  function a(t,e,r,a){
+  o.call(this),this._cipher=new n.AES(e),this._prev=i.from(r),this._cache=i.allocUnsafe(0),this._secCache=i.allocUnsafe(0),
+  this._decrypt=a,this._mode=t}
+  r(15)(a,o),a.prototype._update=function(t){
+  return this._mode.encrypt(this,t,this._decrypt)}
+  ,a.prototype._final=function(){
+  this._cipher.scrub()}
+  ,t.exports=a};

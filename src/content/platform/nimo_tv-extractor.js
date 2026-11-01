@@ -1,0 +1,314 @@
+// Module 295 - Savior Nimo_tv Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(0),i=r(6),o=r(9),a=r(12),s=r(3);
+  function u(){
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
+  e,r="function"==typeof Symbol?Symbol:{
+  }
+  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
+  function o(r,n,i,o){
+  var u=n&&n.prototype instanceof s?n:s,l=Object.create(u.prototype);
+  return c(l,"_invoke",function(r,n,i){
+  var o,s,u,c=0,l=i||[],f=!1,d={
+  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
+  return o=e,s=0,u=t,d.n=r,a}
+  };
+  function h(r,n){
+  for(s=r,u=n,e=0;
+  !f&&c&&!i&&e<l.length;
+  e++){
+  var i,o=l[e],h=d.p,p=o[2];
+  r>3?(i=p===n)&&(u=o[(s=o[4])?5:(s=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(s=0,d.v=n,d.n=o[1]):
+  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,s=0))}
+  if(i||r>1)return a;
+  throw f=!0,n}
+  return function(i,l,p){
+  if(c>1)throw TypeError("Generator is already running");
+  for(f&&1===l&&h(l,p),s=l,u=p;
+  (e=s<2?t:u)||!f;
+  ){
+  o||(s?s<3?(s>1&&(d.n=-1),h(s,u)):d.n=u:d.v=u);
+  try{
+  if(c=2,o){
+  if(s||(i="next"),e=o[i]){
+  if(!(e=e.call(o,u)))throw TypeError("iterator result is not an object");
+  if(!e.done)return e;
+  u=e.value,s<2&&(s=0)}
+  else 1===s&&(e=o.return)&&e.call(o),s<2&&(u=TypeError("The iterator does not provide a '"+i+"' method"),
+  s=1);
+  o=t}
+  else if((e=(f=d.n<0)?u:r.call(n,d))!==a)break}
+  catch(e){
+  o=t,s=1,u=e}
+  finally{
+  c=1}
+  }
+  return{
+  value:e,done:f}
+  }
+  }
+  (r,i,o),!0),l}
+  var a={
+  };
+  function s(){
+  }
+  function l(){
+  }
+  function f(){
+  }
+  e=Object.getPrototypeOf;
+  var d=[][n]?e(e([][n]())):(c(e={
+  }
+  ,n,(function(){
+  return this}
+  )),e),h=f.prototype=s.prototype=Object.create(d);
+  function p(t){
+  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,c(t,i,"GeneratorFunction")),
+  t.prototype=Object.create(h),t}
+  return l.prototype=f,c(h,"constructor",f),c(f,"constructor",l),l.displayName="GeneratorFunction",c(f,
+  i,"GeneratorFunction"),c(h),c(h,i,"Generator"),c(h,n,(function(){
+  return this}
+  )),c(h,"toString",(function(){
+  return"[object Generator]"}
+  )),(u=function(){
+  return{
+  w:o,m:p}
+  }
+  )()}
+  function c(t,e,r,n){
+  var i=Object.defineProperty;
+  try{
+  i({
+  }
+  ,"",{
+  }
+  )}
+  catch(t){
+  i=0}
+  (c=function(t,e,r,n){
+  function o(e,r){
+  c(t,e,(function(t){
+  return this._invoke(e,r,t)}
+  ))}
+  e?i?i(t,e,{
+  value:r,enumerable:!n,configurable:!n,writable:!n}
+  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
+  )(t,e,r,n)}
+  var l,f,d,h=function(t,e,r,n){
+  return new(r||(r=Promise))((function(i,o){
+  function a(t){
+  try{
+  u(n.next(t))}
+  catch(t){
+  o(t)}
+  }
+  function s(t){
+  try{
+  u(n.throw(t))}
+  catch(t){
+  o(t)}
+  }
+  function u(t){
+  var e;
+  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
+  t(e)}
+  ))).then(a,s)}
+  u((n=n.apply(t,e||[])).next())}
+  ))}
+  ,p={
+  2:"720p",3:"480p",4:"360p",5:"240p",6:"1080p"}
+  ,v=location.href,m=[""],y=[];
+  function g(t){
+  var e=t.indexOf("?");
+  -1!=e&&(t=t.slice(0,e));
+  for(var r=0,n=y;
+  r<n.length;
+  r++){
+  var i=n[r];
+  if(i.some(e=>e.url.includes(t)))return i}
+  }
+  function b(t){
+  for(var e=new Uint8Array(t),r=new TextDecoder("utf-8"),n=[],i=Array.from((new TextEncoder).encode("https://")),
+  o=0;
+  o<e.length;
+  ){
+  for(var a=!0,s=0;
+  s<i.length;
+  s++)if(e[o+s]!==i[s]){
+  a=!1;
+  break}
+  if(a){
+  for(var u=o,c=o;
+  c<e.length&&28!==e[c];
+  )c++;
+  var l=e.slice(u,c),f=r.decode(l),d=c+2;
+  if(d<e.length){
+  var h=e[d];
+  n.push({
+  url:f,resolutionIndex:h}
+  )}
+  o=d+1}
+  else o++}
+  return n}
+  function w(t,e){
+  var r="&"+(null==t?void 0:t.slice(1));
+  return e.split("\n").map(t=>t.trim().startsWith("#")||!t.trim()?t:t+r).join("\n")}
+  e.default={
+  getDomains:()=>["nimo.tv"],forceUpdate(){
+  location.href!==v&&(v=location.href,l=null,f=null)}
+  ,isValidVideoNode:t=>{
+  var e,r;
+  return"live"!=(null===(r=null===(e=null==t?void 0:t.closest(".nimo-player"))||void 0===e?void 0:e.querySelector(".controls"))||
+  void 0===r?void 0:r.getAttribute("type"))&&Object(a.m)(t)}
+  ,parse:{
+  sources:[{
+  checkSource:()=>location.href.includes("https://www.nimo.tv/v/")||location.href.includes("https://www.nimo.tv/clip/"),
+  parse:t=>h(void 0,void 0,void 0,u().m((function e(){
+  var r,a,c,p,v,m,y;
+  return u().w((function(e){
+  for(;;
+  )switch(e.n){
+  case 0:if(l&&l.requestBody){
+  e.n=7;
+  break}
+  if(!(r=g(f||t.media.url.toString()))){
+  e.n=6;
+  break}
+  a=[],c=0;
+  case 1:if(!(c<r.length)){
+  e.n=5;
+  break}
+  return e.n=2,fetch(r[c].url).then(t=>t.text());
+  case 2:return p=e.v,v=new URL(d||""),e.n=3,Object(i.e)(p,t.media);
+  case 3:(m=e.v[0]).resolution=r[c].resolution+"p",y=(new o.a).getQualityNameByResolution(m.resolution),
+  m.quality=y||"Standard",m.url=r[c].url,m.play_list=w(v.search,m.play_list||""),m.host="hs-vod.nimo.tv",
+  m.referrer="https://www.nimo.tv",m.url.includes("playlist")||(m.ext="mp4",m.exts=["mp4"],delete m.play_list,
+  delete m._hls,m.url=m.url.replace(".m3u8",".ts")),a.push(m);
+  case 4:c++,e.n=1;
+  break;
+  case 5:return e.a(2,a);
+  case 6:return e.a(2,Object(i.e)(t.response,t.media));
+  case 7:return e.a(2,fetch(l.url.toString(),{
+  method:"POST",referrer:"https://www.nimo.tv",body:Object(n.base64ToArrayBuffer)(l.requestBody)}
+  ).then(t=>t.arrayBuffer()).then(e=>h(void 0,void 0,void 0,u().m((function r(){
+  var n,a,c,l,h,p,v,m,y,g,b,A,_,E;
+  return u().w((function(r){
+  for(;;
+  )switch(r.n){
+  case 0:for(n=(new TextDecoder).decode(e),a=/(\d{3,4})P.*?(https:[^\s!]+)/g,c=[];
+  null!==(l=a.exec(n));
+  )h=l[1]+"p",p=l[2],c.push({
+  resolution:h,url:p}
+  );
+  v=[],m=0;
+  case 1:if(!(m<c.length)){
+  r.n=5;
+  break}
+  return r.n=2,fetch(c[m].url).then(t=>t.text());
+  case 2:return y=r.v,g=new URL(d||""),t.media.url=c[m].url,r.n=3,Object(i.e)(y,t.media);
+  case 3:(b=r.v[0]).resolution=c[m].resolution,A=(new o.a).getQualityNameByResolution(b.resolution),
+  b.quality=A||"Standard",b.url=c[m].url,b.host="hs-vod.nimo.tv",b.referrer="https://www.nimo.tv",b.play_list=w(g.search,
+  b.play_list||""),b.url.includes("playlist")||(b.ext="mp4",b.exts=["mp4"],delete b.play_list,delete b._hls,
+  b.url=b.url.replace(".m3u8",".ts")),v.push(b);
+  case 4:m++,r.n=1;
+  break;
+  case 5:if(c.length||!f){
+  r.n=7;
+  break}
+  return _=Object(s.f)(f),r.n=6,Object(i.a)(f,_.search.slice(1));
+  case 6:return E=r.v,_.play_list=E,_.type="video",_.filename=t.media.filename,r.a(2,[_]);
+  case 7:return r.a(2,v)}
+  }
+  ),r)}
+  )))))}
+  }
+  ),e)}
+  )))}
+  ,{
+  checkSource:()=>location.href.includes("https://www.nimo.tv/"),parse:t=>h(void 0,void 0,void 0,u().m((function e(){
+  return u().w((function(e){
+  for(;;
+  )switch(e.n){
+  case 0:if(l&&l.requestBody){
+  e.n=1;
+  break}
+  return e.a(2,[]);
+  case 1:return e.a(2,fetch(l.url.toString(),{
+  method:"POST",referrer:"https://www.nimo.tv",body:Object(n.base64ToArrayBuffer)(l.requestBody)}
+  ).then(t=>t.arrayBuffer()).then(e=>h(void 0,void 0,void 0,u().m((function r(){
+  var n,a,s,c,l,f,h;
+  return u().w((function(r){
+  for(;;
+  )switch(r.n){
+  case 0:n=b(e),a=[],s=0;
+  case 1:if(!(s<n.length)){
+  r.n=5;
+  break}
+  return r.n=2,fetch(n[s].url).then(t=>t.text());
+  case 2:return c=r.v,l=new URL(d||""),t.media.url=n[s].url,r.n=3,Object(i.e)(c,t.media);
+  case 3:(f=r.v[0]).resolution=p[n[s].resolutionIndex],h=(new o.a).getQualityNameByResolution(f.resolution),
+  f.quality=h||"Standard",f.url=n[s].url,f.host="hs-vod.nimo.tv",f.referrer="https://www.nimo.tv",f.play_list=w(l.search,
+  f.play_list||""),a.push(f);
+  case 4:s++,r.n=1;
+  break;
+  case 5:return r.a(2,a)}
+  }
+  ),r)}
+  )))))}
+  }
+  ),e)}
+  )))}
+  ]}
+  ,processRequestIds:t=>{
+  var e,r=t.url.toString();
+  if(r.includes("https://hs-vod2.nimo.tv/"))if(r.includes(".m3u8")){
+  if(!f)return f=t.url.toString(),!0}
+  else d||(d=r);
+  if(r.includes("https://wsapi.nimo.tv/")&&!l)return l=t,!0;
+  if(t.url.toString().includes("https://video.nimo.tv/v1/liveVideo/aggregateVideos")){
+  if(-1!=m.indexOf(t.url.toString()))return!1;
+  m.push(t.url.toString());
+  var n=new FormData;
+  return null===(e=t.requestBodyFormData)||void 0===e||e.forEach(t=>n.append(t[0],t[1])),fetch(t.url.toString(),
+  {
+  method:"POST",referrer:"https://www.nimo.tv",body:n}
+  ).then(t=>t.text()).then(t=>{
+  JSON.parse(t).data.result.aggregateVideoLists.forEach(t=>{
+  t.liveVideoViewList.forEach(t=>{
+  var e=[];
+  t.multiResolutionVideoUrl.forEach(t=>{
+  var r={
+  resolution:t.iresolution,url:t.videoUrl};
+  e.push(r)}
+  ),y.push(e)}
+  )}
+  )}
+  ),!0}
+  }
+  ,default:{
+  getUrl:t=>{
+  t.url;
+  return h(void 0,void 0,void 0,u().m((function t(){
+  return u().w((function(t){
+  for(;;
+  )switch(t.n){
+  case 0:if(!f||!g(f)){
+  t.n=1;
+  break}
+  return t.a(2,f);
+  case 1:if(!(null==l?void 0:l.url)){
+  t.n=2;
+  break}
+  return t.a(2,"https://google.com");
+  case 2:return t.a(2,[])}
+  }
+  ),t)}
+  )))}
+  ,mediaObjectChange:t=>{
+  var e=t.mediaObject;
+  e.ext="m3u8",e.exts=["m3u8"]}
+  }
+  }
+  };

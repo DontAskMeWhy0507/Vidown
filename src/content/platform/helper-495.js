@@ -1,0 +1,35 @@
+// Module 495 - Savior Helper 495
+export default function(t,e,r) {
+  "use strict";
+  var n=r(122),i=r(156),o=r(494),a=r(116),s=n.sum32,u=n.sum32_4,c=n.sum32_5,l=o.ch32,f=o.maj32,d=o.s0_256,
+  h=o.s1_256,p=o.g0_256,v=o.g1_256,m=i.BlockHash,y=[1116352408,1899447441,3049323471,3921009573,961987163,
+  1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,
+  3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,
+  2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,
+  1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,
+  3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,
+  1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,
+  3329325298];
+  function g(){
+  if(!(this instanceof g))return new g;
+  m.call(this),this.h=[1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225],
+  this.k=y,this.W=new Array(64)}
+  n.inherits(g,m),t.exports=g,g.blockSize=512,g.outSize=256,g.hmacStrength=192,g.padLength=64,g.prototype._update=function(t,
+  e){
+  for(var r=this.W,n=0;
+  n<16;
+  n++)r[n]=t[e+n];
+  for(;
+  n<r.length;
+  n++)r[n]=u(v(r[n-2]),r[n-7],p(r[n-15]),r[n-16]);
+  var i=this.h[0],o=this.h[1],m=this.h[2],y=this.h[3],g=this.h[4],b=this.h[5],w=this.h[6],A=this.h[7];
+  for(a(this.k.length===r.length),n=0;
+  n<r.length;
+  n++){
+  var _=c(A,h(g),l(g,b,w),this.k[n],r[n]),E=s(d(i),f(i,o,m));
+  A=w,w=b,b=g,g=s(y,_),y=m,m=o,o=i,i=s(_,E)}
+  this.h[0]=s(this.h[0],i),this.h[1]=s(this.h[1],o),this.h[2]=s(this.h[2],m),this.h[3]=s(this.h[3],y),
+  this.h[4]=s(this.h[4],g),this.h[5]=s(this.h[5],b),this.h[6]=s(this.h[6],w),this.h[7]=s(this.h[7],A)}
+  ,g.prototype._digest=function(t){
+  return"hex"===t?n.toHex32(this.h,"big"):n.split32(this.h,"big")}
+  };

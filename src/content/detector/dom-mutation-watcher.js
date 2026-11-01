@@ -1,0 +1,316 @@
+// Module 128 - Savior Dom Mutation Watcher
+export default function(t,e,r) {
+  "use strict";
+  r.d(e,"b",(function(){
+  return d}
+  ));
+  var n=r(1),i=r(0),o=r(6);
+  function a(){
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
+  e,r="function"==typeof Symbol?Symbol:{
+  }
+  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
+  function o(r,n,i,o){
+  var a=n&&n.prototype instanceof c?n:c,l=Object.create(a.prototype);
+  return s(l,"_invoke",function(r,n,i){
+  var o,a,s,c=0,l=i||[],f=!1,d={
+  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
+  return o=e,a=0,s=t,d.n=r,u}
+  };
+  function h(r,n){
+  for(a=r,s=n,e=0;
+  !f&&c&&!i&&e<l.length;
+  e++){
+  var i,o=l[e],h=d.p,p=o[2];
+  r>3?(i=p===n)&&(s=o[(a=o[4])?5:(a=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(a=0,d.v=n,d.n=o[1]):
+  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,a=0))}
+  if(i||r>1)return u;
+  throw f=!0,n}
+  return function(i,l,p){
+  if(c>1)throw TypeError("Generator is already running");
+  for(f&&1===l&&h(l,p),a=l,s=p;
+  (e=a<2?t:s)||!f;
+  ){
+  o||(a?a<3?(a>1&&(d.n=-1),h(a,s)):d.n=s:d.v=s);
+  try{
+  if(c=2,o){
+  if(a||(i="next"),e=o[i]){
+  if(!(e=e.call(o,s)))throw TypeError("iterator result is not an object");
+  if(!e.done)return e;
+  s=e.value,a<2&&(a=0)}
+  else 1===a&&(e=o.return)&&e.call(o),a<2&&(s=TypeError("The iterator does not provide a '"+i+"' method"),
+  a=1);
+  o=t}
+  else if((e=(f=d.n<0)?s:r.call(n,d))!==u)break}
+  catch(e){
+  o=t,a=1,s=e}
+  finally{
+  c=1}
+  }
+  return{
+  value:e,done:f}
+  }
+  }
+  (r,i,o),!0),l}
+  var u={
+  };
+  function c(){
+  }
+  function l(){
+  }
+  function f(){
+  }
+  e=Object.getPrototypeOf;
+  var d=[][n]?e(e([][n]())):(s(e={
+  }
+  ,n,(function(){
+  return this}
+  )),e),h=f.prototype=c.prototype=Object.create(d);
+  function p(t){
+  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,s(t,i,"GeneratorFunction")),
+  t.prototype=Object.create(h),t}
+  return l.prototype=f,s(h,"constructor",f),s(f,"constructor",l),l.displayName="GeneratorFunction",s(f,
+  i,"GeneratorFunction"),s(h),s(h,i,"Generator"),s(h,n,(function(){
+  return this}
+  )),s(h,"toString",(function(){
+  return"[object Generator]"}
+  )),(a=function(){
+  return{
+  w:o,m:p}
+  }
+  )()}
+  function s(t,e,r,n){
+  var i=Object.defineProperty;
+  try{
+  i({
+  }
+  ,"",{
+  }
+  )}
+  catch(t){
+  i=0}
+  (s=function(t,e,r,n){
+  function o(e,r){
+  s(t,e,(function(t){
+  return this._invoke(e,r,t)}
+  ))}
+  e?i?i(t,e,{
+  value:r,enumerable:!n,configurable:!n,writable:!n}
+  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
+  )(t,e,r,n)}
+  var u=function(t,e,r,n){
+  return new(r||(r=Promise))((function(i,o){
+  function a(t){
+  try{
+  u(n.next(t))}
+  catch(t){
+  o(t)}
+  }
+  function s(t){
+  try{
+  u(n.throw(t))}
+  catch(t){
+  o(t)}
+  }
+  function u(t){
+  var e;
+  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
+  t(e)}
+  ))).then(a,s)}
+  u((n=n.apply(t,e||[])).next())}
+  ))}
+  ,c={
+  }
+  ,l={
+  }
+  ,f={
+  };
+  function d(t,e,r,a){
+  return new Promise((s,u)=>{
+  var l,f=null===(l=Array.from(document.querySelectorAll("script")).find(t=>{
+  var e;
+  return null===(e=t.textContent)||void 0===e?void 0:e.match("const cdnforvip")}
+  ))||void 0===l?void 0:l.innerText,d=null==f?void 0:f.split(";"),h=null==d?void 0:d.filter(t=>t&&t.length).reduce((t,
+  e)=>{
+  var r=(e=e.replace("const ","")).split(/ *=\ */);
+  try{
+  t[r[0]]=JSON.parse(r[1])}
+  catch(e){
+  ["'",'"'].includes(r[1][0])?t[r[0]]=r[1].slice(1,-1):t[r[0]]=r[1]}
+  return t}
+  ,{
+  }
+  );
+  if(h)switch(Number.parseInt(e||"")){
+  case 0:var p=window.location.origin+"/embed/"+t;
+  return void fetch(p,{
+  method:"POST",headers:{
+  "X-CSRF-TOKEN":a,referer:p}
+  }
+  ).then(t=>t.json()).then(t=>{
+  var e={
+  type:"video",ext:t.type,exts:[t.type]};
+  if(Array.isArray(t.data)){
+  var r=t.data.map(t=>{
+  var r;
+  return Object.assign(Object.assign({
+  }
+  ,e),{
+  url:t.src,referrer:location.href,resolution:t.label,quality:(null===(r=n.r[t.label])||void 0===r?void 0:
+  r.label)||n.r["480p"].label}
+  )}
+  );
+  s(r)}
+  }
+  ).catch(t=>{
+  u({
+  error:t,reason:"Can't fetch"}
+  )}
+  );
+  case 1:return s({
+  }
+  ),{
+  };
+  case 4:case 5:case 6:case 7:case 8:case 9:case 10:case 11:case 12:var v=function(t,e,r){
+  switch(Number.parseInt(e)){
+  case 4:return{
+  data:location.origin+"/m3u8/"+t+"/playlist.m3u8",videoId:t,serverType:e,type:"stream"};
+  case 5:return{
+  data:"https://meta.goodhub.xyz/stream/"+t+"/playlist.m3u8",videoId:t,serverType:e,type:"stream"};
+  case 6:return{
+  data:"https://meta.goodhub.xyz/verse/"+t+"/playlist.m3u8",videoId:t,serverType:e,type:"stream"};
+  case 7:case 8:case 9:return{
+  data:"https://meta.goodhub.xyz/verse/"+t+"/ghcdn.m3u8",videoId:t,serverType:e,type:"stream"};
+  case 10:return{
+  data:"https://meta.goodhub.xyz/sync/"+t.charAt(0)+"/"+t.charAt(1)+"/"+t+"/ghcdn.m3u8",videoId:t,serverType:
+  e,type:"stream"};
+  case 11:return{
+  data:"https://meta.goodhub.xyz/"+r.cdnforbox+"/sync/"+t.charAt(0)+"/"+t.charAt(1)+"/"+t+"/playlist.m3u8",
+  videoId:t,serverType:e,type:"stream"};
+  case 12:return{
+  data:"https://meta.goodhub.xyz/mark/"+t.charAt(0)+"/"+t.charAt(1)+"/"+t+"/playlist.m3u8",videoId:t,
+  serverType:e,type:"stream"};
+  default:return null}
+  }
+  (t,e||"",h),m={
+  ext:"m3u8",exts:["m3u8"],url:v.data,type:"video",videoId:null==v?void 0:v.videoId};
+  return void fetch(v.data,{
+  headers:{
+  referer:location.href}
+  }
+  ).then(t=>t.text()).then(u=>{
+  var l=Object(o.c)(u,m,!0),f=new URL(v.data),d=l.map(o=>{
+  var s,u=Object(i.getBestFitResolution)(o.attributes.RESOLUTION.height)+"p",c=o.uri;
+  c.match(/^https?:\/\//)||(c=f.origin+c),c=c.replace("sync",h.cdnforbox+"sync");
+  var l={
+  videoId:t,serverType:parseInt(e||""),backup:r,token:a};
+  return Object.assign(Object.assign({
+  }
+  ,m),{
+  url:c,resolution:u,keep:!0,cdnMap:h,referrer:location.origin,config:l,promise:fetch(c,{
+  headers:{
+  referer:location.href}
+  }
+  ).then(t=>t.text()),quality:(null===(s=n.r[u])||void 0===s?void 0:s.label)||n.r["480p"].label}
+  )}
+  );
+  l[Number(t)]=d,Promise.allSettled(d.map(t=>t.promise)).then(t=>{
+  var e=t.map((t,e)=>(c[d[e].url]=t.value,Object.assign(Object.assign({
+  }
+  ,d[e]),{
+  realRes:t.value}
+  )));
+  s(e)}
+  )}
+  );
+  default:return null}
+  else u({
+  id:t,serverType:e,backup:r,token:a,cdns:d,script:f,scripts:Array.from(document.querySelectorAll("script")).map(t=>t.innerText),
+  reason:"no cdnList"}
+  )}
+  )}
+  function h(t){
+  return"undefined"===(t=t.match(/(\d+).png/i))[1]?0:parseInt(t[1])}
+  var p=(t,e,r,n,i)=>{
+  var o=parseInt(t.port),a=n.cdnforhls,s=n.cdnforvip,u=n.cdnforbox;
+  switch(o){
+  case 8e3:var c=h(t.pathname)%s.length;
+  return t.protocol+"//"+s[c]+t.pathname;
+  case 444:var l=h(t.pathname)%a.length;
+  return t.protocol+"//"+a[l]+t.pathname.replace("file/images","verse/"+e);
+  case 1080:var f=h(t.pathname)%a.length;
+  return t.protocol+"//"+a[f]+t.pathname.replace("file/images",u+"sync");
+  case 1081:var d=h(t.pathname)%a.length;
+  return t.protocol+"//"+a[d]+t.pathname.replace("file/images",u+"mark");
+  case 445:return 7===r||10===r?"https://cloud-"+(h(t.pathname)%3+1)+".movmaster.xyz/html/"+t.username+"/"+e+"/"+t.pathname.replace("/file/images/",
+  ""):8===r?"https://cdn.statically.io/gh/"+t.username+"/"+e+"/main/"+t.pathname.replace("/file/images/",
+  ""):9===r?"https://raw.githubusercontent.com/"+t.username+"/"+e+"/main/"+t.pathname.replace("/file/images/",
+  ""):null;
+  case 6969:return t.protocol+"//vip.goodhub.xyz"+t.pathname;
+  default:if(t.host.indexOf("localhost")>-1){
+  var p=h(t.pathname)%s.length;
+  return t.protocol+"//"+s[p]+t.pathname.replace("file/images","stream/"+e)}
+  }
+  return""};
+  function v(){
+  var t=location.href;
+  return f[t]||(f[t]=0),f[t]++,f[t]}
+  var m={
+  forceUpdate(){
+  }
+  ,urls:[{
+  checkUrl:t=>t.url.includes("stream.goodhub.xyz"),getUrl:t=>{
+  var e=t.url;
+  return u(void 0,void 0,void 0,a().m((function t(){
+  var r,o;
+  return a().w((function(t){
+  for(;;
+  )switch(t.n){
+  case 0:if(!l[e]){
+  t.n=1;
+  break}
+  return t.a(2,l[e]);
+  case 1:return r=v(),t.n=2,Object(i.sendMessage)({
+  type:n.b.GET_URL}
+  );
+  case 2:if(!(o=t.v)||!o.url){
+  t.n=3;
+  break}
+  return l[e]=o.url,t.a(2,o.url);
+  case 3:r<20&&EE.emit("widget.forceUpdate");
+  case 4:return t.a(2)}
+  }
+  ),t)}
+  )))}
+  ,mediaObjectChange:t=>{
+  var e,r,i=t.mediaObject,o=t.node;
+  if(l[o.src]){
+  var a=null===(e=l[o.src])||void 0===e?void 0:e[0];
+  return i.url!==a.url&&Object.keys(a).forEach(t=>{
+  var e=t;
+  i[e]=a[e]}
+  ),i.quality=null===(r=n.r[i.resolution])||void 0===r?void 0:r.label,i.ext="m3u8","video"}
+  }
+  }
+  ],parse:{
+  sources:[{
+  checkSource:t=>t.url.includes(".goodhub.xyz"),parse:t=>{
+  var e,r=t.media,i=t.response,o=r;
+  (null==i?void 0:i.includes("#EXTM3U"))||(i=o.realRes);
+  var a=document.title.replace(/phim/i,"").trim(),s=o.config,u=o.cdnMap;
+  if(s&&u){
+  for(var c=s.videoId,l=s.serverType,f=i.split("\n"),d=[],h=0;
+  h<f.length;
+  h++){
+  var v=f[h];
+  if("string"==typeof v&&v.startsWith("https://")){
+  var m=new URL(v);
+  v=p(m,c,l,u)}
+  d.push(v)}
+  return o.filename=a,o.play_list=d.join("\n"),o.quality=null===(e=n.r[o.resolution])||void 0===e?void 0:
+  e.label,[o]}
+  return[]}
+  }
+  ]}
+  };
+  e.a=m};

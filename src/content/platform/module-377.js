@@ -1,4 +1,0 @@
-// Module 377 [platform]
-export default function(t,e,r) {
-  "use strict";
-r.r(e);var n,i=location.href;function o(t,e){var r,n,i=null===(n=null===(r=e.closest("#mv_box"))||void 0===r?void 0:r.querySelector("#mv_info .vkuiHeader, .mv_info .vkuiHeader"))||void 0===n?void 0:n.innerText;if(i)return t.filename=i,t.fixName=i,i}e.default={getDomains:()=>["vk.com"],forceUpdate(){location.href!==i&&(EE.emit("widget.forceUpdate"),i=location.href,n=void 0)},urls:[{checkUrl:t=>t.url.startsWith("blob:"),getUrl(t){var e=t.node;if(n)return o(n,e),[n]}}],default:{mediaObjectChange:t=>{var e=t.mediaObject;return o(e,t.node),e.type}},processRequestIds(t){var e;if(/(vkvd\d*\.mycdn\.me|vk[a-z0-9\-]+\.vkuser\.net)/i.test(t.url)){if(6==Number((null===(e=t.url.match(/(vkvd\d*\.mycdn\.me|vk[a-z0-9\-]+\.vkuser\.net)\/.*&ct=(\d+)/i))||void 0===e?void 0:e[2])||"0"))return n=t,!0}}}};

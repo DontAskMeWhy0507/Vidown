@@ -1,0 +1,34 @@
+// Module 663 - Savior Helper 663
+export default function(t,e,r) {
+  "use strict";
+  var n=r(157),i=n.define("Time",(function(){
+  this.choice({
+  utcTime:this.utctime(),generalTime:this.gentime()}
+  )}
+  )),o=n.define("AttributeTypeValue",(function(){
+  this.seq().obj(this.key("type").objid(),this.key("value").any())}
+  )),a=n.define("AlgorithmIdentifier",(function(){
+  this.seq().obj(this.key("algorithm").objid(),this.key("parameters").optional(),this.key("curve").objid().optional())}
+  )),s=n.define("SubjectPublicKeyInfo",(function(){
+  this.seq().obj(this.key("algorithm").use(a),this.key("subjectPublicKey").bitstr())}
+  )),u=n.define("RelativeDistinguishedName",(function(){
+  this.setof(o)}
+  )),c=n.define("RDNSequence",(function(){
+  this.seqof(u)}
+  )),l=n.define("Name",(function(){
+  this.choice({
+  rdnSequence:this.use(c)}
+  )}
+  )),f=n.define("Validity",(function(){
+  this.seq().obj(this.key("notBefore").use(i),this.key("notAfter").use(i))}
+  )),d=n.define("Extension",(function(){
+  this.seq().obj(this.key("extnID").objid(),this.key("critical").bool().def(!1),this.key("extnValue").octstr())}
+  )),h=n.define("TBSCertificate",(function(){
+  this.seq().obj(this.key("version").explicit(0).int().optional(),this.key("serialNumber").int(),this.key("signature").use(a),
+  this.key("issuer").use(l),this.key("validity").use(f),this.key("subject").use(l),this.key("subjectPublicKeyInfo").use(s),
+  this.key("issuerUniqueID").implicit(1).bitstr().optional(),this.key("subjectUniqueID").implicit(2).bitstr().optional(),
+  this.key("extensions").explicit(3).seqof(d).optional())}
+  )),p=n.define("X509Certificate",(function(){
+  this.seq().obj(this.key("tbsCertificate").use(h),this.key("signatureAlgorithm").use(a),this.key("signatureValue").bitstr())}
+  ));
+  t.exports=p};

@@ -1,0 +1,20 @@
+// Module 602 - Savior Helper 602
+export default function(t,e,r){
+  var n=r(130),i=r(603),o=r(15),a=r(25).Buffer,s={
+  "des-ede3-cbc":i.CBC.instantiate(i.EDE),"des-ede3":i.EDE,"des-ede-cbc":i.CBC.instantiate(i.EDE),"des-ede":
+  i.EDE,"des-cbc":i.CBC.instantiate(i.DES),"des-ecb":i.DES};
+  function u(t){
+  n.call(this);
+  var e,r=t.mode.toLowerCase(),i=s[r];
+  e=t.decrypt?"decrypt":"encrypt";
+  var o=t.key;
+  a.isBuffer(o)||(o=a.from(o)),"des-ede"!==r&&"des-ede-cbc"!==r||(o=a.concat([o,o.slice(0,8)]));
+  var u=t.iv;
+  a.isBuffer(u)||(u=a.from(u)),this._des=i.create({
+  key:o,iv:u,type:e}
+  )}
+  s.des=s["des-cbc"],s.des3=s["des-ede3-cbc"],t.exports=u,o(u,n),u.prototype._update=function(t){
+  return a.from(this._des.update(t))}
+  ,u.prototype._final=function(){
+  return a.from(this._des.final())}
+  };

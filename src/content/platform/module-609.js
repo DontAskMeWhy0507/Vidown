@@ -1,2 +1,0 @@
-// Module 609 [platform]
-export default function(t,e,r){var n=r(25).Buffer,i=r(155);function o(t,e,r){var o=e.length,a=i(e,t._cache);return t._cache=t._cache.slice(o),t._prev=n.concat([t._prev,r?e:a]),a}e.encrypt=function(t,e,r){for(var i,a=n.allocUnsafe(0);e.length;){if(0===t._cache.length&&(t._cache=t._cipher.encryptBlock(t._prev),t._prev=n.allocUnsafe(0)),!(t._cache.length<=e.length)){a=n.concat([a,o(t,e,r)]);break}i=t._cache.length,a=n.concat([a,o(t,e.slice(0,i),r)]),e=e.slice(i)}return a}};

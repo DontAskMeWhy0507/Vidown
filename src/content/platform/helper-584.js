@@ -1,0 +1,22 @@
+// Module 584 - Savior Helper 584
+export default function(t,e,r) {
+  "use strict";
+  var n=r(136),i=r(166),o=r(115),a=r(129);
+  t.exports=function(t,e,r){
+  if(!t||"object"!=typeof t&&"function"!=typeof t)throw new o("`obj` must be an object or a function`");
+  if("string"!=typeof e&&"symbol"!=typeof e)throw new o("`property` must be a string or a symbol`");
+  if(arguments.length>3&&"boolean"!=typeof arguments[3]&&null!==arguments[3])throw new o("`nonEnumerable`, if provided, must be a boolean or null");
+  if(arguments.length>4&&"boolean"!=typeof arguments[4]&&null!==arguments[4])throw new o("`nonWritable`, if provided, must be a boolean or null");
+  if(arguments.length>5&&"boolean"!=typeof arguments[5]&&null!==arguments[5])throw new o("`nonConfigurable`, if provided, must be a boolean or null");
+  if(arguments.length>6&&"boolean"!=typeof arguments[6])throw new o("`loose`, if provided, must be a boolean");
+  var s=arguments.length>3?arguments[3]:null,u=arguments.length>4?arguments[4]:null,c=arguments.length>5?
+  arguments[5]:null,l=arguments.length>6&&arguments[6],f=!!a&&a(t,e);
+  if(n)n(t,e,{
+  configurable:null===c&&f?f.configurable:!c,enumerable:null===s&&f?f.enumerable:!s,value:r,writable:
+  null===u&&f?f.writable:!u}
+  );
+  else{
+  if(!l&&(s||u||c))throw new i("This environment does not support defining a property as non-configurable, non-writable, or non-enumerable.");
+  t[e]=r}
+  }
+  };

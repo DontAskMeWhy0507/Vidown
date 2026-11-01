@@ -1,0 +1,30 @@
+// Module 605 - Savior Helper 605
+export default function(t,e,r) {
+  "use strict";
+  var n=r(116),i=r(15),o=r(427),a=r(478);
+  function s(t,e){
+  n.equal(e.length,24,"Invalid key length");
+  var r=e.slice(0,8),i=e.slice(8,16),o=e.slice(16,24);
+  this.ciphers="encrypt"===t?[a.create({
+  type:"encrypt",key:r}
+  ),a.create({
+  type:"decrypt",key:i}
+  ),a.create({
+  type:"encrypt",key:o}
+  )]:[a.create({
+  type:"decrypt",key:o}
+  ),a.create({
+  type:"encrypt",key:i}
+  ),a.create({
+  type:"decrypt",key:r}
+  )]}
+  function u(t){
+  o.call(this,t);
+  var e=new s(this.type,this.options.key);
+  this._edeState=e}
+  i(u,o),t.exports=u,u.create=function(t){
+  return new u(t)}
+  ,u.prototype._update=function(t,e,r,n){
+  var i=this._edeState;
+  i.ciphers[0]._update(t,e,r,n),i.ciphers[1]._update(r,n,r,n),i.ciphers[2]._update(r,n,r,n)}
+  ,u.prototype._pad=a.prototype._pad,u.prototype._unpad=a.prototype._unpad};

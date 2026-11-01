@@ -1,0 +1,58 @@
+// Module 207 - Savior Artstation_com Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(44),i=r(14),o=r(9),a=r(1),s=r(0),u={
+  getDomains:()=>["www.artstation.com"],parse:{
+  default:t=>{
+  var e,r=t.response,u={
+  filename:document.title,i18n_quality:""}
+  ,c=Object(n.parse)(r,{
+  attributeNamePrefix:"",attrNodeName:"@",textNodeName:"#text",ignoreAttributes:!1,cdataTagName:"__cdata"}
+  );
+  try{
+  var l=c.MPD.Period.AdaptationSet,f=null===(e=c.MPD.Period["@"])||void 0===e?void 0:e.duration,d=Object(i.i)(f),
+  h=Object.keys(l).find(t=>l[t]["@"].mimeType.includes("video")),p=Object.keys(l).find(t=>l[t]["@"].mimeType.includes("audio")),
+  v=l[h].Representation,m=l[p].Representation,y=m.SegmentTemplate["@"];
+  return v.map(t=>{
+  var e,r=t.SegmentTemplate["@"],n=Math.ceil(d/(r.duration/r.timescale)),c=r.initialization.replace(/\$RepresentationID\$/,
+  t["@"].id),l=[i.h];
+  l.push(`<Initialization sourceURL="${c}
+  "/>`);
+  for(var f=0;
+  f<n;
+  f++){
+  var h=new Array(8-f.toString().length+1).join("0")+f,p=t.BaseURL+r.media.replace(/\$RepresentationID\$\$Number%08d\$/,
+  `${t["@"].id}
+  ${h}
+  `);
+  l.push(`<SegmentURL media="${p}
+  "/>`)}
+  l.push('</SegmentList>\n\t\t\t\t\t\t\t</Representation>\n\t\t\t\t\t</AdaptationSet>\n\t\t\t\t\t<AdaptationSet lang="en" mimeType="audio/mp4" codecs="mp4a.40.2" bitmovin:label="English stereo">\n\t\t\t\t\t\t<Representation id="4" mimeType="audio/mp4" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="98414">\n\t\t\t\t\t\t\t<SegmentList duration="10">'),
+  l.push(`<Initialization sourceURL="${y.initialization}
+  "/>`);
+  for(var v=0;
+  v<n;
+  v++){
+  var g=new Array(8-v.toString().length+1).join("0")+v,b=m.BaseURL+y.media.replace(/\$Number%08d\$/,
+  g);
+  l.push(`<SegmentURL media="${b}
+  "/>`)}
+  l.push("</SegmentList>\n\t\t\t\t\t\t\t</Representation>\n\t\t\t\t\t\t</AdaptationSet>\n\t\t\t\t\t</Period>\n\t\t\t\t</MPD>");
+  var w,A=t["@"].height+"p",_=o.b.getQualityBySize(parseInt(A));
+  try{
+  w=u.i18n_quality||Object(s.i18n)(null===(e=a.r[A])||void 0===e?void 0:e.i18n_label)||_}
+  catch(t){
+  w=_}
+  return Object.assign({
+  }
+  ,u,{
+  url:c,resolution:A,quality:_,i18nQuality:w,play_list:l.join("\n"),type:"video",ext:"mp4",dashMPD:!0}
+  )}
+  )}
+  catch(t){
+  return console.warn(t),Promise.resolve(null)}
+  }
+  }
+  };
+  e.default=u};

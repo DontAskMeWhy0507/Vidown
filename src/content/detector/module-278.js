@@ -1,4 +1,0 @@
-// Module 278 [detector]
-export default function(t,e,r) {
-  "use strict";
-r.r(e);var n={getDomains:()=>["monfansubvn."],toggleLight:{turnOff:()=>{var t=document.querySelector("#MainScreenScrollableContent video")?document.querySelector("#root > .MuiBox-root"):document.querySelector("#root > div > div");null==t||t.style.setProperty("background-color","rgba(0, 0, 0, 0.9)","important")},turnOn:()=>{var t=document.querySelector("#MainScreenScrollableContent video")?document.querySelector("#root > .MuiBox-root"):document.querySelector("#root > div > div");null==t||t.style.removeProperty("background-color")}},urls:[{checkUrl:t=>{var e=t.url;return/m3u8/.test(e)},getUrl:t=>t.url,mediaObjectChange(t){var e=t.mediaObject;return e.filename=document.title,e.fixName=document.title,e.ext="m3u8",e.exts=["m3u8"],"video"}}]};e.default=n};

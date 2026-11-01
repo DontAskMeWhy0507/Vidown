@@ -1,0 +1,108 @@
+// Module 231 - Savior Ephimmoi_net Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(1),i=r(3),o=r(0);
+  function a(t,e){
+  var r="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];
+  if(!r){
+  if(Array.isArray(t)||(r=function(t,e){
+  if(t){
+  if("string"==typeof t)return s(t,e);
+  var r={
+  }
+  .toString.call(t).slice(8,-1);
+  return"Object"===r&&t.constructor&&(r=t.constructor.name),"Map"===r||"Set"===r?Array.from(t):"Arguments"===r||
+  /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?s(t,e):void 0}
+  }
+  (t))||e&&t&&"number"==typeof t.length){
+  r&&(t=r);
+  var n=0,i=function(){
+  };
+  return{
+  s:i,n:function(){
+  return n>=t.length?{
+  done:!0}
+  :{
+  done:!1,value:t[n++]}
+  }
+  ,e:function(t){
+  throw t}
+  ,f:i}
+  }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}
+  var o,a=!0,u=!1;
+  return{
+  s:function(){
+  r=r.call(t)}
+  ,n:function(){
+  var t=r.next();
+  return a=t.done,t}
+  ,e:function(t){
+  u=!0,o=t}
+  ,f:function(){
+  try{
+  a||null==r.return||r.return()}
+  finally{
+  if(u)throw o}
+  }
+  }
+  }
+  function s(t,e){
+  (null==e||e>t.length)&&(e=t.length);
+  for(var r=0,n=Array(e);
+  r<e;
+  r++)n[r]=t[r];
+  return n}
+  var u={
+  getDomains:()=>["ephimmoi","ezphimmoi","bphimmoi.net","phimmoipro2.net"],parse:{
+  sources:[{
+  checkSource:t=>{
+  var e;
+  return(null===(e=t.cacheUrl)||void 0===e?void 0:e.includes("blob:https://ezphimmoi"))||!1}
+  ,parse:t=>{
+  var e=t.media,r=t.response,s=/sources\s*:\s*(.+?]),/.exec(r);
+  if(s){
+  var u,c=JSON.parse(s[1]),l=[],f=a(c);
+  try{
+  var d=function(){
+  var t=u.value,r=Object(i.f)(t.file);
+  r.resolution=Object.keys(n.r).find(e=>n.r[e].label.toLowerCase()==t.label.toLowerCase()),r.quality=Object(o.i18n)(n.r[r.resolution].i18n_label),
+  r.filename=e.filename,r.ext="m3u8",r.type="video",l.push(r)};
+  for(f.s();
+  !(u=f.n()).done;
+  )d()}
+  catch(t){
+  f.e(t)}
+  finally{
+  f.f()}
+  return l}
+  return[]}
+  }
+  ]}
+  ,urls:[{
+  checkUrl:t=>{
+  var e=t.url,r=t.node;
+  if(e.match(/(hls\.streamphim\.xyz)/))return!0;
+  var n=r.closest("#media-player-box");
+  return!!(null==n?void 0:n.querySelector("script"))}
+  ,getUrl:t=>{
+  var e,r=t.url,n=t.node;
+  if(r.match(/(hls\.streamphim\.xyz)/))return r;
+  var i=n.closest("#media-player-box"),o=null==i?void 0:i.querySelector("script");
+  if(o){
+  var a=(null===(e=o.textContent)||void 0===e?void 0:e.trim().replace(/[\n\t]/g,""))||"";
+  try{
+  a=a.substring(a.indexOf("playerInstance.setup(")+"playerInstance.setup(".length,a.indexOf("});")+1);
+  var s=a.match(/("|')*file("|')*\s*:\s*("|')(.+?(m3u8|cdn).+?)("|')/);
+  if(s&&s[4])return s[4].replace(/\\/g,"")}
+  catch(t){
+  return r}
+  }
+  return r}
+  ,mediaObjectChange:t=>{
+  var e=t.mediaObject;
+  return""==e.ext&&(e.ext="m3u8",e.exts=["m3u8"]),"video"}
+  }
+  ]};
+  e.default=u};

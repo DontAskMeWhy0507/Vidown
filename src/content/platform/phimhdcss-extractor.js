@@ -1,0 +1,181 @@
+// Module 309 - Savior Phimhdcss Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(23),i=r(31),o=r(0),a=r(1);
+  function s(){
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
+  e,r="function"==typeof Symbol?Symbol:{
+  }
+  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
+  function o(r,n,i,o){
+  var s=n&&n.prototype instanceof c?n:c,l=Object.create(s.prototype);
+  return u(l,"_invoke",function(r,n,i){
+  var o,s,u,c=0,l=i||[],f=!1,d={
+  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
+  return o=e,s=0,u=t,d.n=r,a}
+  };
+  function h(r,n){
+  for(s=r,u=n,e=0;
+  !f&&c&&!i&&e<l.length;
+  e++){
+  var i,o=l[e],h=d.p,p=o[2];
+  r>3?(i=p===n)&&(u=o[(s=o[4])?5:(s=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(s=0,d.v=n,d.n=o[1]):
+  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,s=0))}
+  if(i||r>1)return a;
+  throw f=!0,n}
+  return function(i,l,p){
+  if(c>1)throw TypeError("Generator is already running");
+  for(f&&1===l&&h(l,p),s=l,u=p;
+  (e=s<2?t:u)||!f;
+  ){
+  o||(s?s<3?(s>1&&(d.n=-1),h(s,u)):d.n=u:d.v=u);
+  try{
+  if(c=2,o){
+  if(s||(i="next"),e=o[i]){
+  if(!(e=e.call(o,u)))throw TypeError("iterator result is not an object");
+  if(!e.done)return e;
+  u=e.value,s<2&&(s=0)}
+  else 1===s&&(e=o.return)&&e.call(o),s<2&&(u=TypeError("The iterator does not provide a '"+i+"' method"),
+  s=1);
+  o=t}
+  else if((e=(f=d.n<0)?u:r.call(n,d))!==a)break}
+  catch(e){
+  o=t,s=1,u=e}
+  finally{
+  c=1}
+  }
+  return{
+  value:e,done:f}
+  }
+  }
+  (r,i,o),!0),l}
+  var a={
+  };
+  function c(){
+  }
+  function l(){
+  }
+  function f(){
+  }
+  e=Object.getPrototypeOf;
+  var d=[][n]?e(e([][n]())):(u(e={
+  }
+  ,n,(function(){
+  return this}
+  )),e),h=f.prototype=c.prototype=Object.create(d);
+  function p(t){
+  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,u(t,i,"GeneratorFunction")),
+  t.prototype=Object.create(h),t}
+  return l.prototype=f,u(h,"constructor",f),u(f,"constructor",l),l.displayName="GeneratorFunction",u(f,
+  i,"GeneratorFunction"),u(h),u(h,i,"Generator"),u(h,n,(function(){
+  return this}
+  )),u(h,"toString",(function(){
+  return"[object Generator]"}
+  )),(s=function(){
+  return{
+  w:o,m:p}
+  }
+  )()}
+  function u(t,e,r,n){
+  var i=Object.defineProperty;
+  try{
+  i({
+  }
+  ,"",{
+  }
+  )}
+  catch(t){
+  i=0}
+  (u=function(t,e,r,n){
+  function o(e,r){
+  u(t,e,(function(t){
+  return this._invoke(e,r,t)}
+  ))}
+  e?i?i(t,e,{
+  value:r,enumerable:!n,configurable:!n,writable:!n}
+  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
+  )(t,e,r,n)}
+  var c=function(t,e,r,n){
+  return new(r||(r=Promise))((function(i,o){
+  function a(t){
+  try{
+  u(n.next(t))}
+  catch(t){
+  o(t)}
+  }
+  function s(t){
+  try{
+  u(n.throw(t))}
+  catch(t){
+  o(t)}
+  }
+  function u(t){
+  var e;
+  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
+  t(e)}
+  ))).then(a,s)}
+  u((n=n.apply(t,e||[])).next())}
+  ))}
+  ,l={
+  getDomains:()=>["phimhdcss."],urls:[{
+  checkUrl:t=>{
+  var e=t.url;
+  return/tiktok\.phimhdc\.com\/embed\/[\w-]+/.test(e)}
+  ,getUrl:t=>{
+  var e=t.ids;
+  return c(void 0,void 0,void 0,s().m((function t(){
+  var r;
+  return s().w((function(t){
+  for(;;
+  )switch(t.n){
+  case 0:return t.a(2,(null===(r=e.find(t=>/tiktok\.phimhdc\.com\/edgeplayer\.html/.test(String(t.url))))||
+  void 0===r?void 0:r.url)||[])}
+  }
+  ),t)}
+  )))}
+  ,mediaObjectChange:t=>{
+  var e=t.mediaObject;
+  return e.ext="m3u8",e.exts=["m3u8"],e.filename=document.title,"video"}
+  }
+  ],parse:{
+  sources:[{
+  checkSource:t=>{
+  var e=t.url;
+  return/tiktok\.phimhdc\.com\/edgeplayer\.html/.test(e)}
+  ,parse:t=>{
+  var e=t.media;
+  return c(void 0,void 0,void 0,s().m((function t(){
+  var r,n,i,u,c;
+  return s().w((function(t){
+  for(;;
+  )switch(t.n){
+  case 0:return r=new URLSearchParams(String(e.search)),n=r.get("key"),i=r.get("delivery"),t.n=1,Object(o.sendMessage)({
+  type:a.b.GET_URL,params:{
+  targetUrl:e.url,url:"https://tiktok.phimhdc.com/api/master-inline",config:{
+  method:"POST",headers:{
+  "X-Requested-With":"XMLHttpRequest","Content-Type":"application/json"}
+  ,body:JSON.stringify({
+  jobId:n,delivery:i}
+  )}
+  }
+  }
+  );
+  case 1:if(u=t.v,null==(c=JSON.parse(u.url))?void 0:c.manifest){
+  t.n=2;
+  break}
+  return t.a(2,[]);
+  case 2:return t.a(2,[Object.assign(Object.assign({
+  }
+  ,e),{
+  url:"https://google.com",play_list:c.manifest}
+  )])}
+  }
+  ),t)}
+  )))}
+  }
+  ]}
+  ,default:{
+  getUrl:t=>t.ids.filter(t=>!String(t.url).includes(".mp4"))}
+  };
+  e.default=Object(n.a)(i.a,["parse","urls"])(l)};

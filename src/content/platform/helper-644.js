@@ -1,0 +1,102 @@
+// Module 644 - Savior Helper 644
+export default function(t,e,r) {
+  "use strict";
+  var n=r(126),i=r(645),o=r(117),a=r(435),s=r(430),u=o.assert,c=r(646),l=r(647);
+  function f(t){
+  if(!(this instanceof f))return new f(t);
+  "string"==typeof t&&(u(Object.prototype.hasOwnProperty.call(a,t),"Unknown curve "+t),t=a[t]),t instanceof a.PresetCurve&&
+  (t={
+  curve:t}
+  ),this.curve=t.curve.curve,this.n=this.curve.n,this.nh=this.n.ushrn(1),this.g=this.curve.g,this.g=t.curve.g,
+  this.g.precompute(t.curve.n.bitLength()+1),this.hash=t.hash||t.curve.hash}
+  t.exports=f,f.prototype.keyPair=function(t){
+  return new c(this,t)}
+  ,f.prototype.keyFromPrivate=function(t,e){
+  return c.fromPrivate(this,t,e)}
+  ,f.prototype.keyFromPublic=function(t,e){
+  return c.fromPublic(this,t,e)}
+  ,f.prototype.genKeyPair=function(t){
+  t||(t={
+  }
+  );
+  for(var e=new i({
+  hash:this.hash,pers:t.pers,persEnc:t.persEnc||"utf8",entropy:t.entropy||s(this.hash.hmacStrength),
+  entropyEnc:t.entropy&&t.entropyEnc||"utf8",nonce:this.n.toArray()}
+  ),r=this.n.byteLength(),o=this.n.sub(new n(2));;
+  ){
+  var a=new n(e.generate(r));
+  if(!(a.cmp(o)>0))return a.iaddn(1),this.keyFromPrivate(a)}
+  }
+  ,f.prototype._truncateToN=function(t,e,r){
+  var i;
+  if(n.isBN(t)||"number"==typeof t)i=(t=new n(t,16)).byteLength();
+  else if("object"==typeof t)i=t.length,t=new n(t,16);
+  else{
+  var o=t.toString();
+  i=o.length+1>>>1,t=new n(o,16)}
+  "number"!=typeof r&&(r=8*i);
+  var a=r-this.n.bitLength();
+  return a>0&&(t=t.ushrn(a)),!e&&t.cmp(this.n)>=0?t.sub(this.n):t}
+  ,f.prototype.sign=function(t,e,r,o){
+  if("object"==typeof r&&(o=r,r=null),o||(o={
+  }
+  ),"string"!=typeof t&&"number"!=typeof t&&!n.isBN(t)){
+  u("object"==typeof t&&t&&"number"==typeof t.length,"Expected message to be an array-like, a hex string, or a BN instance"),
+  u(t.length>>>0===t.length);
+  for(var a=0;
+  a<t.length;
+  a++)u((255&t[a])===t[a])}
+  e=this.keyFromPrivate(e,r),t=this._truncateToN(t,!1,o.msgBitLength),u(!t.isNeg(),"Can not sign a negative message");
+  var s=this.n.byteLength(),c=e.getPrivate().toArray("be",s),f=t.toArray("be",s);
+  u(new n(f).eq(t),"Can not sign message");
+  for(var d=new i({
+  hash:this.hash,entropy:c,nonce:f,pers:o.pers,persEnc:o.persEnc||"utf8"}
+  ),h=this.n.sub(new n(1)),p=0;;
+  p++){
+  var v=o.k?o.k(p):new n(d.generate(this.n.byteLength()));
+  if(!((v=this._truncateToN(v,!0)).cmpn(1)<=0||v.cmp(h)>=0)){
+  var m=this.g.mul(v);
+  if(!m.isInfinity()){
+  var y=m.getX(),g=y.umod(this.n);
+  if(0!==g.cmpn(0)){
+  var b=v.invm(this.n).mul(g.mul(e.getPrivate()).iadd(t));
+  if(0!==(b=b.umod(this.n)).cmpn(0)){
+  var w=(m.getY().isOdd()?1:0)|(0!==y.cmp(g)?2:0);
+  return o.canonical&&b.cmp(this.nh)>0&&(b=this.n.sub(b),w^=1),new l({
+  r:g,s:b,recoveryParam:w}
+  )}
+  }
+  }
+  }
+  }
+  }
+  ,f.prototype.verify=function(t,e,r,n,i){
+  i||(i={
+  }
+  ),t=this._truncateToN(t,!1,i.msgBitLength),r=this.keyFromPublic(r,n);
+  var o=(e=new l(e,"hex")).r,a=e.s;
+  if(o.cmpn(1)<0||o.cmp(this.n)>=0)return!1;
+  if(a.cmpn(1)<0||a.cmp(this.n)>=0)return!1;
+  var s,u=a.invm(this.n),c=u.mul(t).umod(this.n),f=u.mul(o).umod(this.n);
+  return this.curve._maxwellTrick?!(s=this.g.jmulAdd(c,r.getPublic(),f)).isInfinity()&&s.eqXToP(o):!(s=this.g.mulAdd(c,
+  r.getPublic(),f)).isInfinity()&&0===s.getX().umod(this.n).cmp(o)}
+  ,f.prototype.recoverPubKey=function(t,e,r,i){
+  u((3&r)===r,"The recovery param is more than two bits"),e=new l(e,i);
+  var o=this.n,a=new n(t),s=e.r,c=e.s,f=1&r,d=r>>1;
+  if(s.cmp(this.curve.p.umod(this.curve.n))>=0&&d)throw new Error("Unable to find sencond key candinate");
+  s=d?this.curve.pointFromX(s.add(this.curve.n),f):this.curve.pointFromX(s,f);
+  var h=e.r.invm(o),p=o.sub(a).mul(h).umod(o),v=c.mul(h).umod(o);
+  return this.g.mulAdd(p,s,v)}
+  ,f.prototype.getKeyRecoveryParam=function(t,e,r,n){
+  if(null!==(e=new l(e,n)).recoveryParam)return e.recoveryParam;
+  for(var i=0;
+  i<4;
+  i++){
+  var o;
+  try{
+  o=this.recoverPubKey(t,e,i)}
+  catch(t){
+  continue}
+  if(o.eq(r))return i}
+  throw new Error("Unable to find valid recovery factor")}
+  };

@@ -1,0 +1,30 @@
+// Module 81 - Savior Url Filter
+export default function(t,e,r) {
+  "use strict";
+  r.d(e,"b",(function(){
+  return a}
+  )),r.d(e,"a",(function(){
+  return s}
+  ));
+  r(0);
+  var n=r(3),i=r(1);
+  var o=[/\/\/(?:player\.)?vimeo\.com(?:\/video)?\/([0-9]+)/i,/\/\/vimeo.com\/couchmode\/.*\/([0-9]+)/i,
+  /\/\/player.vimeo.com\/v[0-9]\/video\/([0-9]+)/i,/\/\/player.vimeo.com\/moog\/([0-9]+)/i,/\/\/vimeo\.com\/channels\/[a-z0-9\-_]+\/(\d+)/i];
+  function a(t){
+  for(var e,r=0;
+  r<o.length;
+  ++r)if((e=t.match(o[r]))&&e[1])return e[1];
+  return null}
+  function s(t,e){
+  if(t.config.request&&t.config.request.files){
+  var r=t.config.request.files;
+  if(r.hls){
+  var o=r.hls.cdns[r.hls.default_cdn];
+  if(o)return o.url}
+  if(r.progressive&&r.progressive.length)return r.progressive.map(t=>{
+  var r,o=Object(n.f)(t.url);
+  return o.resolution=t.quality,o.quality=null===(r=i.r[t.quality])||void 0===r?void 0:r.label,o.noAudio=!0,
+  null==e||e(o,t),o}
+  )}
+  }
+  };

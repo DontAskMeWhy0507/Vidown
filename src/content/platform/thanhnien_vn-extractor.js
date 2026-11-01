@@ -1,0 +1,235 @@
+// Module 351 - Savior Thanhnien_vn Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(6),i=r(1),o=r(3);
+  function a(){
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
+  e,r="function"==typeof Symbol?Symbol:{
+  }
+  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
+  function o(r,n,i,o){
+  var a=n&&n.prototype instanceof c?n:c,l=Object.create(a.prototype);
+  return s(l,"_invoke",function(r,n,i){
+  var o,a,s,c=0,l=i||[],f=!1,d={
+  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
+  return o=e,a=0,s=t,d.n=r,u}
+  };
+  function h(r,n){
+  for(a=r,s=n,e=0;
+  !f&&c&&!i&&e<l.length;
+  e++){
+  var i,o=l[e],h=d.p,p=o[2];
+  r>3?(i=p===n)&&(s=o[(a=o[4])?5:(a=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(a=0,d.v=n,d.n=o[1]):
+  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,a=0))}
+  if(i||r>1)return u;
+  throw f=!0,n}
+  return function(i,l,p){
+  if(c>1)throw TypeError("Generator is already running");
+  for(f&&1===l&&h(l,p),a=l,s=p;
+  (e=a<2?t:s)||!f;
+  ){
+  o||(a?a<3?(a>1&&(d.n=-1),h(a,s)):d.n=s:d.v=s);
+  try{
+  if(c=2,o){
+  if(a||(i="next"),e=o[i]){
+  if(!(e=e.call(o,s)))throw TypeError("iterator result is not an object");
+  if(!e.done)return e;
+  s=e.value,a<2&&(a=0)}
+  else 1===a&&(e=o.return)&&e.call(o),a<2&&(s=TypeError("The iterator does not provide a '"+i+"' method"),
+  a=1);
+  o=t}
+  else if((e=(f=d.n<0)?s:r.call(n,d))!==u)break}
+  catch(e){
+  o=t,a=1,s=e}
+  finally{
+  c=1}
+  }
+  return{
+  value:e,done:f}
+  }
+  }
+  (r,i,o),!0),l}
+  var u={
+  };
+  function c(){
+  }
+  function l(){
+  }
+  function f(){
+  }
+  e=Object.getPrototypeOf;
+  var d=[][n]?e(e([][n]())):(s(e={
+  }
+  ,n,(function(){
+  return this}
+  )),e),h=f.prototype=c.prototype=Object.create(d);
+  function p(t){
+  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,s(t,i,"GeneratorFunction")),
+  t.prototype=Object.create(h),t}
+  return l.prototype=f,s(h,"constructor",f),s(f,"constructor",l),l.displayName="GeneratorFunction",s(f,
+  i,"GeneratorFunction"),s(h),s(h,i,"Generator"),s(h,n,(function(){
+  return this}
+  )),s(h,"toString",(function(){
+  return"[object Generator]"}
+  )),(a=function(){
+  return{
+  w:o,m:p}
+  }
+  )()}
+  function s(t,e,r,n){
+  var i=Object.defineProperty;
+  try{
+  i({
+  }
+  ,"",{
+  }
+  )}
+  catch(t){
+  i=0}
+  (s=function(t,e,r,n){
+  function o(e,r){
+  s(t,e,(function(t){
+  return this._invoke(e,r,t)}
+  ))}
+  e?i?i(t,e,{
+  value:r,enumerable:!n,configurable:!n,writable:!n}
+  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
+  )(t,e,r,n)}
+  var u=function(t,e,r,n){
+  return new(r||(r=Promise))((function(i,o){
+  function a(t){
+  try{
+  u(n.next(t))}
+  catch(t){
+  o(t)}
+  }
+  function s(t){
+  try{
+  u(n.throw(t))}
+  catch(t){
+  o(t)}
+  }
+  function u(t){
+  var e;
+  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
+  t(e)}
+  ))).then(a,s)}
+  u((n=n.apply(t,e||[])).next())}
+  ))}
+  ,c={
+  }
+  ,l=[],f={
+  getDomains:()=>["thanhnien.vn","tuoitre.vn"],isMiniPlayerNode:t=>!!t.closest("div.HoverMiniPlayer-hover-slot"),
+  parse:{
+  sources:[{
+  checkSource:t=>t.url.includes(".json"),parse:t=>{
+  var e=t.media,r=t.response;
+  return u(void 0,void 0,void 0,a().m((function t(){
+  var s,u,l,f,d,h,p;
+  return a().w((function(t){
+  for(;;
+  )switch(t.p=t.n){
+  case 0:if(!Array.isArray(r)){
+  t.n=1;
+  break}
+  return t.a(2,r);
+  case 1:if(t.p=1,u=JSON.parse(r),!(null===(s=u.html5||u.mp4_qualities)||void 0===s?void 0:s.length)){
+  t.n=2;
+  break}
+  return l=/\.(\d+p)\./i,u.html5&&(l=/_(\d+p)\./i),t.a(2,(u.html5||u.mp4_qualities).map(t=>{
+  var r,n=Object.assign(Object.assign({
+  }
+  ,Object(o.f)(t)),{
+  filename:e.filename,type:"video"}
+  ),a=null===(r=t.match(l))||void 0===r?void 0:r[1];
+  return a&&(n.resolution=a,n.quality=i.r[n.resolution].label),n}
+  ));
+  case 2:if(!u.hls&&!u.mhls){
+  t.n=7;
+  break}
+  return f=u.hls||u.mhls,t.p=3,t.n=4,fetch(f).then(t=>t.text());
+  case 4:if(!(d=t.v)){
+  t.n=5;
+  break}
+  return c[f]=d,t.a(2,Object(n.e)(d,e));
+  case 5:t.n=7;
+  break;
+  case 6:t.p=6,p=t.v,console.warn(p);
+  case 7:if(!u.mp4){
+  t.n=8;
+  break}
+  return h=Object.assign(Object.assign({
+  }
+  ,Object(o.f)(u.mp4)),{
+  filename:e.filename,type:"video"}
+  ),t.a(2,[h]);
+  case 8:return t.a(2,[]);
+  case 9:return t.p=9,t.v,t.a(2,Object(n.e)(r,e))}
+  }
+  ),t,null,[[3,6],[1,9]])}
+  )))}
+  }
+  ,{
+  checkSource:t=>"audio"==t.type,parse:t=>{
+  var e,r=t.media;
+  return!1===(null===(e=r.filename)||void 0===e?void 0:e.startsWith("audio_"))&&(r.filename="audio_"+r.filename),
+  [r]}
+  }
+  ,{
+  checkSource:t=>t.url.includes(".m3u8"),parse:t=>{
+  var e=t.media,r=t.response;
+  return u(void 0,void 0,void 0,a().m((function t(){
+  var i;
+  return a().w((function(t){
+  for(;;
+  )switch(t.n){
+  case 0:return t.n=1,Object(n.e)(r,e);
+  case 1:return(i=t.v).forEach(t=>{
+  t.filename=e.filename,t.title=e.filename}
+  ),t.a(2,i)}
+  }
+  ),t)}
+  )))}
+  }
+  ]}
+  ,urls:[{
+  checkUrl:t=>{
+  var e=t.url;
+  return"VIDEO"==t.node.nodeName&&e.startsWith("blob:")}
+  ,getUrl:t=>{
+  var e,r,n,i=t.node,a=i.closest('[type="VideoStream"], .VCSortableInPreviewMode'),s=(null===(e=null==a?
+  void 0:a.querySelector(".VideoCMS_Caption"))||void 0===e?void 0:e.innerText)||(null===(n=null===(r=i.closest(".box-video"))||
+  void 0===r?void 0:r.querySelector(".box-video-content .detail-title"))||void 0===n?void 0:n.innerText)||
+  document.title,u=(null==a?void 0:a.getAttribute("data-vid"))||void 0,c=null==u?void 0:u.split(".mp4")[0].split("-").pop();
+  if(c){
+  var f=l.filter(t=>t.url.includes(c));
+  if(f){
+  var d=f.find(t=>t.url.includes(".json"));
+  if(d)return d.filename=s,[d];
+  var h=f.find(t=>t.url.includes("master.m3u8"));
+  if(h)return h.filename=s,[h]}
+  var p=`https://${u}
+  .json`;
+  (null==u?void 0:u.startsWith("tuoitre/"))&&(p=`https://hls.tuoitre.vn/${u}
+  .json`);
+  var v=Object(o.f)(p);
+  return v.filename=s,v.ext="m3u8",v.exts=["m3u8","json"],v.type="video",[v]}
+  }
+  ,mediaObjectChange:t=>{
+  var e,r,n,i=t.mediaObject,o=t.node,a=o.closest('[type="VideoStream"], .VCSortableInPreviewMode'),s=(null===(e=null==a?
+  void 0:a.querySelector(".VideoCMS_Caption"))||void 0===e?void 0:e.innerText)||(null===(n=null===(r=o.closest(".box-video"))||
+  void 0===r?void 0:r.querySelector(".box-video-content .detail-title"))||void 0===n?void 0:n.innerText)||
+  document.title;
+  return s&&(i.filename=s,i.fixName=s),"video"}
+  }
+  ,{
+  checkUrl:t=>{
+  var e=t.url;
+  return/(animated_thumb)|(\.gif\.mp4)/i.test(e)}
+  ,mediaObjectChange(t){
+  var e=t.mediaObject;
+  return e.noAudio=!0,e.type}
+  }
+  ],processRequestIds:t=>(t.url.includes("master.m3u8")&&l.push(t),!0)};
+  e.default=f};

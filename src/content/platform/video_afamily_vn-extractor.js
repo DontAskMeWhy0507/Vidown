@@ -1,0 +1,40 @@
+// Module 370 - Savior Video_afamily_vn Extractor
+export default function(t,e,r) {
+  "use strict";
+  var n,i;
+  r.r(e);
+  var o=null===(i=null===(n=document.querySelector("h2"))||void 0===n?void 0:n.textContent)||void 0===i?
+  void 0:i.trim(),a=[],s={
+  getDomains:()=>["video.afamily.vn"],forceUpdate(){
+  var t,e,r=null===(e=null===(t=document.querySelector("h2"))||void 0===t?void 0:t.textContent)||void 0===e?
+  void 0:e.trim();
+  r!==o&&(EE.emit("widget.forceUpdate"),o=r)}
+  ,default:{
+  getUrl:t=>{
+  var e,r,n=t.node.closest("[data-vid]"),i=null==n?void 0:n.getAttribute("data-vid"),o=null==i?void 0:
+  i.split("/");
+  i=(null==o?void 0:o.pop())||(null==o?void 0:o.pop());
+  var s=a.filter(t=>t.url.includes(i)),u=Array.from(document.querySelectorAll("h2")).map(t=>{
+  var e,r,n,i,o=null===(n=null===(r=null===(e=t.querySelector("a"))||void 0===e?void 0:e.href.split("/").pop())||
+  void 0===r?void 0:r.split("."))||void 0===n?void 0:n[0].split("-").slice(0,-1).join("-");
+  return{
+  title:null===(i=t.textContent)||void 0===i?void 0:i.trim(),idUrl:o||""}
+  }
+  ),c=Array.from(document.querySelectorAll("h3")).map(t=>{
+  var e,r,n,i,o=null===(n=null===(r=null===(e=t.querySelector("a"))||void 0===e?void 0:e.href.split("/").pop())||
+  void 0===r?void 0:r.split("."))||void 0===n?void 0:n[0].split("-").slice(0,-1).join("-");
+  return{
+  title:null===(i=t.textContent)||void 0===i?void 0:i.trim(),idUrl:o||""}
+  }
+  );
+  if(s.length){
+  var l=(null===(e=u.find(t=>i.includes(t.idUrl)))||void 0===e?void 0:e.title)||(null===(r=c.find(t=>i.includes(t.idUrl)))||
+  void 0===r?void 0:r.title)||"";
+  s[0].fixName=l}
+  return s}
+  }
+  ,processRequestIds:t=>{
+  var e;
+  if(null===(e=t.pathname)||void 0===e?void 0:e.includes("master.m3u8"))return a.push(t),!0}
+  };
+  e.default=s};

@@ -1,0 +1,268 @@
+// Module 133 - Savior Phephim_net Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e),r.d(e,"SourceType",(function(){
+  return v}
+  )),r.d(e,"getPlaylists",(function(){
+  return m}
+  )),r.d(e,"getPlaylistV2",(function(){
+  return y}
+  ));
+  var n=r(0),i=r(161),o=r(16),a=r.n(o),s=r(27),u=r(1);
+  function c(){
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
+  e,r="function"==typeof Symbol?Symbol:{
+  }
+  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
+  function o(r,n,i,o){
+  var u=n&&n.prototype instanceof s?n:s,c=Object.create(u.prototype);
+  return l(c,"_invoke",function(r,n,i){
+  var o,s,u,c=0,l=i||[],f=!1,d={
+  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
+  return o=e,s=0,u=t,d.n=r,a}
+  };
+  function h(r,n){
+  for(s=r,u=n,e=0;
+  !f&&c&&!i&&e<l.length;
+  e++){
+  var i,o=l[e],h=d.p,p=o[2];
+  r>3?(i=p===n)&&(u=o[(s=o[4])?5:(s=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(s=0,d.v=n,d.n=o[1]):
+  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,s=0))}
+  if(i||r>1)return a;
+  throw f=!0,n}
+  return function(i,l,p){
+  if(c>1)throw TypeError("Generator is already running");
+  for(f&&1===l&&h(l,p),s=l,u=p;
+  (e=s<2?t:u)||!f;
+  ){
+  o||(s?s<3?(s>1&&(d.n=-1),h(s,u)):d.n=u:d.v=u);
+  try{
+  if(c=2,o){
+  if(s||(i="next"),e=o[i]){
+  if(!(e=e.call(o,u)))throw TypeError("iterator result is not an object");
+  if(!e.done)return e;
+  u=e.value,s<2&&(s=0)}
+  else 1===s&&(e=o.return)&&e.call(o),s<2&&(u=TypeError("The iterator does not provide a '"+i+"' method"),
+  s=1);
+  o=t}
+  else if((e=(f=d.n<0)?u:r.call(n,d))!==a)break}
+  catch(e){
+  o=t,s=1,u=e}
+  finally{
+  c=1}
+  }
+  return{
+  value:e,done:f}
+  }
+  }
+  (r,i,o),!0),c}
+  var a={
+  };
+  function s(){
+  }
+  function u(){
+  }
+  function f(){
+  }
+  e=Object.getPrototypeOf;
+  var d=[][n]?e(e([][n]())):(l(e={
+  }
+  ,n,(function(){
+  return this}
+  )),e),h=f.prototype=s.prototype=Object.create(d);
+  function p(t){
+  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,l(t,i,"GeneratorFunction")),
+  t.prototype=Object.create(h),t}
+  return u.prototype=f,l(h,"constructor",f),l(f,"constructor",u),u.displayName="GeneratorFunction",l(f,
+  i,"GeneratorFunction"),l(h),l(h,i,"Generator"),l(h,n,(function(){
+  return this}
+  )),l(h,"toString",(function(){
+  return"[object Generator]"}
+  )),(c=function(){
+  return{
+  w:o,m:p}
+  }
+  )()}
+  function l(t,e,r,n){
+  var i=Object.defineProperty;
+  try{
+  i({
+  }
+  ,"",{
+  }
+  )}
+  catch(t){
+  i=0}
+  (l=function(t,e,r,n){
+  function o(e,r){
+  l(t,e,(function(t){
+  return this._invoke(e,r,t)}
+  ))}
+  e?i?i(t,e,{
+  value:r,enumerable:!n,configurable:!n,writable:!n}
+  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
+  )(t,e,r,n)}
+  var f=function(t,e,r,n){
+  return new(r||(r=Promise))((function(i,o){
+  function a(t){
+  try{
+  u(n.next(t))}
+  catch(t){
+  o(t)}
+  }
+  function s(t){
+  try{
+  u(n.throw(t))}
+  catch(t){
+  o(t)}
+  }
+  function u(t){
+  var e;
+  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
+  t(e)}
+  ))).then(a,s)}
+  u((n=n.apply(t,e||[])).next())}
+  ))}
+  ,d={
+  }
+  ,h={
+  }
+  ,p={
+  };
+  var v={
+  iq:"iq",b2:"b2",wetv:"wetv",hydrax:"hydrax",b2html:"b2html",fptplay:"fptplay"};
+  function m(t){
+  var e=navigator.userAgent.toLowerCase().indexOf("safari/")>-1;
+  return function(t,e){
+  return fetch(`https://playngon.net/api/v2/getvinfo/${t}
+  ?blob=${e}
+  `,{
+  method:"get",headers:{
+  referer:"https://playngon.net/embed/video/"+t}
+  }
+  ).then(t=>t.json())}
+  (t,e).then(e=>{
+  var r=e.data,n=e.signature,o=Object(i.a)(new s.Buffer(r.data)).encrypted,u=a.a.SHA256(t).toString(),
+  c=a.a.AES.decrypt(n,u).toString(a.a.enc.Utf8),l=JSON.parse(a.a.AES.decrypt(o,c).toString(a.a.enc.Utf8)).sources,
+  f=Object.keys(l).map(e=>{
+  var r={
+  id:e,active:e===v.fptplay,sources:[{
+  type:"hls",file:l[e]}
+  ],tracks:[]};
+  return e===v.iq&&r.tracks.push({
+  kind:"captions",file:`https://playngon.net/subtitles/iq/${t}
+  .vtt`,label:"Tiếng Việt",default:!0}
+  ),e===v.wetv&&r.tracks.push({
+  kind:"captions",file:`https://playngon.net//subtitles/wetv/${t}
+  .srt`,label:"Tiếng Việt",default:!0}
+  ),r}
+  ),d=f.findIndex(t=>t.active);
+  return(!d||d<0)&&(f[0].active=!0),f.forEach((t,e)=>{
+  t.active&&(f.splice(e,1),f.unshift(t))}
+  ),f}
+  ).catch(t=>(console.warn({
+  err:t}
+  ),[]))}
+  function y(t){
+  return f(this,void 0,void 0,c().m((function e(){
+  var r,n,i,o,a;
+  return c().w((function(e){
+  for(;;
+  )switch(e.n){
+  case 0:return r={
+  BASE_VIDEO:"/stream/v1/video/",BASE_VIDEO_API:"/api/v2/getvinfo/s/",JWPLAYER_ID_NAME:"jwplayer"}
+  ,e.n=1,fetch(r.BASE_VIDEO_API+t).then(t=>t.json());
+  case 1:if((n=e.v).sources){
+  e.n=2;
+  break}
+  return e.a(2,null);
+  case 2:return i=n.sources.map((function(t){
+  var e=Object.assign(Object.assign({
+  }
+  ,t),{
+  type:"hls",file:(n.hostname||"")+r.BASE_VIDEO+t.id+"/"+t.provider+"/manifest"}
+  );
+  return t.subtitle&&(e.tracks=[{
+  default:!0,file:t.subtitle,kind:"captions",label:"Tiếng Việt"}
+  ]),e}
+  )),o=void 0,(a=n.targetProvider)&&(o=i.find((function(t){
+  return t.provider===a}
+  ))),e.a(2,o)}
+  }
+  ),e)}
+  )))}
+  var g=-1,b={
+  getDomains:()=>["phephimm.net","luotphimzz.com","phephim.org"],siteMatcher:t=>!(!t.startsWith("phephim")||
+  !t.endsWith(".net")),urls:[{
+  checkUrl:t=>{
+  var e=t.url;
+  return Boolean(e.match(/((playhydrax\.com)|(geoip\.redirect-ads\.com)\/[a-zA-Z0-9\-]+)|(storage\.googleapis\.com\/mediastorage)/i))}
+  ,getUrl:t=>{
+  var e=t.url;
+  return f(void 0,void 0,void 0,c().m((function t(){
+  var r;
+  return c().w((function(t){
+  for(;;
+  )switch(t.n){
+  case 0:if(d[e]){
+  t.n=3;
+  break}
+  return t.n=1,Object(n.sendMessage)({
+  type:u.b.GET_URL}
+  );
+  case 1:if(!(r=t.v)||!r.url){
+  t.n=2;
+  break}
+  return d[e]=r.url,p[r.url]=r.realRes,t.a(2,r.url);
+  case 2:t.n=4;
+  break;
+  case 3:return t.a(2,d[e]);
+  case 4:return t.a(2)}
+  }
+  ),t)}
+  )))}
+  ,mediaObjectChange:t=>{
+  var e=t.mediaObject;
+  return e.ext="m3u8",e.exts=["m3u8"],p[e.url]&&(e.realRes=p[e.url]),e.referrer=e.url,"video"}
+  }
+  ,{
+  checkUrl:t=>{
+  var e=t.url;
+  return Boolean(e.match(/(playngon\.net)/i))}
+  ,getUrl:t=>{
+  var e=t.url;
+  return f(void 0,void 0,void 0,c().m((function t(){
+  var r;
+  return c().w((function(t){
+  for(;;
+  )switch(t.n){
+  case 0:if(d[e]){
+  t.n=4;
+  break}
+  return t.n=1,Object(n.sendMessage)({
+  type:u.b.GET_URL}
+  );
+  case 1:if(!(r=t.v)||!r.url){
+  t.n=2;
+  break}
+  return d[e]=r.url,h[r.url]=location.href,t.a(2,r.url);
+  case 2:g=setTimeout(()=>{
+  clearTimeout(g),EE.emit("widget.updateMedia")}
+  ,333);
+  case 3:t.n=5;
+  break;
+  case 4:return t.a(2,d[e]);
+  case 5:return t.a(2)}
+  }
+  ),t)}
+  )))}
+  ,mediaObjectChange:t=>{
+  var e=t.mediaObject;
+  return h[e.url]?(e.ext="m3u8",e.exts=["m3u8"],e.referrer=e.url,"video"):e.type}
+  }
+  ],idsProcess:t=>{
+  var e=t.defaultIds,r=t.id,n=t.index,i=window.location.host.replace(/\./g,"\\."),o=new RegExp(`(${i}
+  /media/[a-z0-9-_]+.mp4)|(videos/tvc.mp4)`,"i");
+  r.url.match(o)&&e.splice(n,1)}
+  };
+  e.default=b};

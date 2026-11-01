@@ -1,0 +1,40 @@
+// Module 422 - Savior Helper 422
+export default function(t,e,r) {
+  "use strict";
+  var n="Function.prototype.bind called on incompatible ",i=Object.prototype.toString,o=Math.max,a=function(t,
+  e){
+  for(var r=[],n=0;
+  n<t.length;
+  n+=1)r[n]=t[n];
+  for(var i=0;
+  i<e.length;
+  i+=1)r[i+t.length]=e[i];
+  return r}
+  ,s=function(t,e){
+  for(var r=[],n=e||0,i=0;
+  n<t.length;
+  n+=1,i+=1)r[i]=t[n];
+  return r}
+  ,u=function(t,e){
+  for(var r="",n=0;
+  n<t.length;
+  n+=1)r+=t[n],n+1<t.length&&(r+=e);
+  return r};
+  t.exports=function(t){
+  var e=this;
+  if("function"!=typeof e||"[object Function]"!==i.apply(e))throw new TypeError(n+e);
+  for(var r,c=s(arguments,1),l=function(){
+  if(this instanceof r){
+  var n=e.apply(this,a(c,arguments));
+  return Object(n)===n?n:this}
+  return e.apply(t,a(c,arguments))}
+  ,f=o(0,e.length-c.length),d=[],h=0;
+  h<f;
+  h++)d[h]="$"+h;
+  if(r=Function("binder","return function ("+u(d,",")+"){ return binder.apply(this,arguments); }")(l),
+  e.prototype){
+  var p=function(){
+  };
+  p.prototype=e.prototype,r.prototype=new p,p.prototype=null}
+  return r}
+  };

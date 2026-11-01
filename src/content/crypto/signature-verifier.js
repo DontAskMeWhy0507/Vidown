@@ -1,0 +1,73 @@
+// Module 170 - Savior Signature Verifier
+export default function(t,e,r){
+  var n=r(25).Buffer;
+  function i(t){
+  n.isBuffer(t)||(t=n.from(t));
+  for(var e=t.length/4|0,r=new Array(e),i=0;
+  i<e;
+  i++)r[i]=t.readUInt32BE(4*i);
+  return r}
+  function o(t){
+  for(;
+  0<t.length;
+  t++)t[0]=0}
+  function a(t,e,r,n,i){
+  for(var o,a,s,u,c=r[0],l=r[1],f=r[2],d=r[3],h=t[0]^e[0],p=t[1]^e[1],v=t[2]^e[2],m=t[3]^e[3],y=4,g=1;
+  g<i;
+  g++)o=c[h>>>24]^l[p>>>16&255]^f[v>>>8&255]^d[255&m]^e[y++],a=c[p>>>24]^l[v>>>16&255]^f[m>>>8&255]^d[255&h]^e[y++],
+  s=c[v>>>24]^l[m>>>16&255]^f[h>>>8&255]^d[255&p]^e[y++],u=c[m>>>24]^l[h>>>16&255]^f[p>>>8&255]^d[255&v]^e[y++],
+  h=o,p=a,v=s,m=u;
+  return o=(n[h>>>24]<<24|n[p>>>16&255]<<16|n[v>>>8&255]<<8|n[255&m])^e[y++],a=(n[p>>>24]<<24|n[v>>>16&255]<<16|n[m>>>8&255]<<8|n[255&h])^e[y++],
+  s=(n[v>>>24]<<24|n[m>>>16&255]<<16|n[h>>>8&255]<<8|n[255&p])^e[y++],u=(n[m>>>24]<<24|n[h>>>16&255]<<16|n[p>>>8&255]<<8|n[255&v])^e[y++],
+  [o>>>=0,a>>>=0,s>>>=0,u>>>=0]}
+  var s=[0,1,2,4,8,16,32,64,128,27,54],u=function(){
+  for(var t=new Array(256),e=0;
+  e<256;
+  e++)t[e]=e<128?e<<1:e<<1^283;
+  for(var r=[],n=[],i=[[],[],[],[]],o=[[],[],[],[]],a=0,s=0,u=0;
+  u<256;
+  ++u){
+  var c=s^s<<1^s<<2^s<<3^s<<4;
+  c=c>>>8^255&c^99,r[a]=c,n[c]=a;
+  var l=t[a],f=t[l],d=t[f],h=257*t[c]^16843008*c;
+  i[0][a]=h<<24|h>>>8,i[1][a]=h<<16|h>>>16,i[2][a]=h<<8|h>>>24,i[3][a]=h,h=16843009*d^65537*f^257*l^16843008*a,
+  o[0][c]=h<<24|h>>>8,o[1][c]=h<<16|h>>>16,o[2][c]=h<<8|h>>>24,o[3][c]=h,0===a?a=s=1:(a=l^t[t[t[d^l]]],
+  s^=t[t[s]])}
+  return{
+  SBOX:r,INV_SBOX:n,SUB_MIX:i,INV_SUB_MIX:o}
+  }
+  ();
+  function c(t){
+  this._key=i(t),this._reset()}
+  c.blockSize=16,c.keySize=32,c.prototype.blockSize=c.blockSize,c.prototype.keySize=c.keySize,c.prototype._reset=function(){
+  for(var t=this._key,e=t.length,r=e+6,n=4*(r+1),i=[],o=0;
+  o<e;
+  o++)i[o]=t[o];
+  for(o=e;
+  o<n;
+  o++){
+  var a=i[o-1];
+  o%e==0?(a=a<<8|a>>>24,a=u.SBOX[a>>>24]<<24|u.SBOX[a>>>16&255]<<16|u.SBOX[a>>>8&255]<<8|u.SBOX[255&a],
+  a^=s[o/e|0]<<24):e>6&&o%e==4&&(a=u.SBOX[a>>>24]<<24|u.SBOX[a>>>16&255]<<16|u.SBOX[a>>>8&255]<<8|u.SBOX[255&a]),
+  i[o]=i[o-e]^a}
+  for(var c=[],l=0;
+  l<n;
+  l++){
+  var f=n-l,d=i[f-(l%4?0:4)];
+  c[l]=l<4||f<=4?d:u.INV_SUB_MIX[0][u.SBOX[d>>>24]]^u.INV_SUB_MIX[1][u.SBOX[d>>>16&255]]^u.INV_SUB_MIX[2][u.SBOX[d>>>8&255]]^u.INV_SUB_MIX[3][u.SBOX[255&d]]}
+  this._nRounds=r,this._keySchedule=i,this._invKeySchedule=c}
+  ,c.prototype.encryptBlockRaw=function(t){
+  return a(t=i(t),this._keySchedule,u.SUB_MIX,u.SBOX,this._nRounds)}
+  ,c.prototype.encryptBlock=function(t){
+  var e=this.encryptBlockRaw(t),r=n.allocUnsafe(16);
+  return r.writeUInt32BE(e[0],0),r.writeUInt32BE(e[1],4),r.writeUInt32BE(e[2],8),r.writeUInt32BE(e[3],
+  12),r}
+  ,c.prototype.decryptBlock=function(t){
+  var e=(t=i(t))[1];
+  t[1]=t[3],t[3]=e;
+  var r=a(t,this._invKeySchedule,u.INV_SUB_MIX,u.INV_SBOX,this._nRounds),o=n.allocUnsafe(16);
+  return o.writeUInt32BE(r[0],0),o.writeUInt32BE(r[3],4),o.writeUInt32BE(r[2],8),o.writeUInt32BE(r[1],
+  12),o}
+  ,c.prototype.scrub=function(){
+  o(this._keySchedule),o(this._invKeySchedule),o(this._key)}
+  ,t.exports.AES=c};

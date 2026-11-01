@@ -1,0 +1,56 @@
+// Module 323 - Savior Riki_edu_vn Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(28),i=r(6),o=/youtube.*.com\/embed\/([a-z0-9\-_]+)/i,a=location.href,s=void 0,u={
+  getDomains:()=>["riki.edu.vn","medium.com","ketcausoft."],forceUpdate(){
+  location.href!==a&&(EE.emit("widget.forceUpdate"),a=location.href)}
+  ,parse:{
+  sources:[{
+  checkSource:t=>{
+  var e=t.url;
+  return Boolean(e.match(o))}
+  ,parse:t=>{
+  var e,r="https://www.youtube.com/watch?v="+(null===(e=t.media.url.match(o))||void 0===e?void 0:e[1]);
+  return n.a.parse(r)}
+  }
+  ,{
+  checkSource:t=>{
+  var e=t.url;
+  return/.+playlist\.m3u8/i.test(e)}
+  ,parse:t=>{
+  var e,r,n,o=t.media,a=t.response,s=null===(e=o.url.match(/\/(a-z0-9\-_]+)\/playlist.m3u8/i))||void 0===e?
+  void 0:e[1];
+  return o.fixName=s||((null===(n=null===(r=document.querySelector("h1.detail_course_header__title"))||
+  void 0===r?void 0:r.innerText)||void 0===n?void 0:n.trim())||document.title),Object(i.e)(a,o)}
+  }
+  ]}
+  ,urls:[{
+  checkUrl:t=>{
+  var e=t.url;
+  return"IFRAME"==t.node.nodeName&&Boolean(e.match(o))}
+  ,getUrl:t=>t.url,mediaObjectChange:t=>{
+  var e=t.mediaObject;
+  return e.ext="mp4",e.exts=["mp4"],"video"}
+  }
+  ,{
+  checkUrl:t=>{
+  var e=t.url;
+  return"IFRAME"==t.node.nodeName&&Boolean(decodeURIComponent(e).match(o))}
+  ,getUrl:t=>{
+  var e=t.url;
+  return e=decodeURIComponent(e),new URL(e).searchParams.get("src")||void 0}
+  ,mediaObjectChange:t=>{
+  var e=t.mediaObject;
+  return e.ext="mp4",e.exts=["mp4"],"video"}
+  }
+  ,{
+  checkUrl:t=>{
+  var e=t.url;
+  return"VIDEO"==t.node.nodeName&&e.startsWith("blob:")||e.includes("mediadelivery.net")}
+  ,getUrl:()=>s?null==s?void 0:s.url:[],mediaObjectChange:t=>{
+  var e=t.mediaObject,r=t.node;
+  return e.filename=r.title,e.type}
+  }
+  ],processRequestIds:t=>(/.+playlist\.m3u8/i.test(t.url)&&(s=t),!0)};
+  e.default=u};

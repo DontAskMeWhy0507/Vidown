@@ -1,0 +1,38 @@
+// Module 117 - Savior Helper 117
+export default function(t,e,r) {
+  "use strict";
+  var n=e,i=r(126),o=r(116),a=r(492);
+  n.assert=o,n.toArray=a.toArray,n.zero2=a.zero2,n.toHex=a.toHex,n.encode=a.encode,n.getNAF=function(t,
+  e,r){
+  var n,i=new Array(Math.max(t.bitLength(),r)+1);
+  for(n=0;
+  n<i.length;
+  n+=1)i[n]=0;
+  var o=1<<e+1,a=t.clone();
+  for(n=0;
+  n<i.length;
+  n++){
+  var s,u=a.andln(o-1);
+  a.isOdd()?(s=u>(o>>1)-1?(o>>1)-u:u,a.isubn(s)):s=0,i[n]=s,a.iushrn(1)}
+  return i}
+  ,n.getJSF=function(t,e){
+  var r=[[],[]];
+  t=t.clone(),e=e.clone();
+  for(var n,i=0,o=0;
+  t.cmpn(-i)>0||e.cmpn(-o)>0;
+  ){
+  var a,s,u=t.andln(3)+i&3,c=e.andln(3)+o&3;
+  3===u&&(u=-1),3===c&&(c=-1),a=0==(1&u)?0:3!==(n=t.andln(7)+i&7)&&5!==n||2!==c?u:-u,r[0].push(a),s=0==(1&c)?
+  0:3!==(n=e.andln(7)+o&7)&&5!==n||2!==u?c:-c,r[1].push(s),2*i===a+1&&(i=1-i),2*o===s+1&&(o=1-o),t.iushrn(1),
+  e.iushrn(1)}
+  return r}
+  ,n.cachedProperty=function(t,e,r){
+  var n="_"+e;
+  t.prototype[e]=function(){
+  return void 0!==this[n]?this[n]:this[n]=r.call(this)}
+  }
+  ,n.parseBytes=function(t){
+  return"string"==typeof t?n.toArray(t,"hex"):t}
+  ,n.intFromLE=function(t){
+  return new i(t,"hex","le")}
+  };

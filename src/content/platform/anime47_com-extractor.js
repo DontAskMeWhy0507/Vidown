@@ -1,0 +1,173 @@
+// Module 190 - Savior Anime47_com Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(0),i=r(28),o=r(1),a=r(6);
+  function s(){
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
+  e,r="function"==typeof Symbol?Symbol:{
+  }
+  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
+  function o(r,n,i,o){
+  var s=n&&n.prototype instanceof c?n:c,l=Object.create(s.prototype);
+  return u(l,"_invoke",function(r,n,i){
+  var o,s,u,c=0,l=i||[],f=!1,d={
+  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
+  return o=e,s=0,u=t,d.n=r,a}
+  };
+  function h(r,n){
+  for(s=r,u=n,e=0;
+  !f&&c&&!i&&e<l.length;
+  e++){
+  var i,o=l[e],h=d.p,p=o[2];
+  r>3?(i=p===n)&&(u=o[(s=o[4])?5:(s=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(s=0,d.v=n,d.n=o[1]):
+  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,s=0))}
+  if(i||r>1)return a;
+  throw f=!0,n}
+  return function(i,l,p){
+  if(c>1)throw TypeError("Generator is already running");
+  for(f&&1===l&&h(l,p),s=l,u=p;
+  (e=s<2?t:u)||!f;
+  ){
+  o||(s?s<3?(s>1&&(d.n=-1),h(s,u)):d.n=u:d.v=u);
+  try{
+  if(c=2,o){
+  if(s||(i="next"),e=o[i]){
+  if(!(e=e.call(o,u)))throw TypeError("iterator result is not an object");
+  if(!e.done)return e;
+  u=e.value,s<2&&(s=0)}
+  else 1===s&&(e=o.return)&&e.call(o),s<2&&(u=TypeError("The iterator does not provide a '"+i+"' method"),
+  s=1);
+  o=t}
+  else if((e=(f=d.n<0)?u:r.call(n,d))!==a)break}
+  catch(e){
+  o=t,s=1,u=e}
+  finally{
+  c=1}
+  }
+  return{
+  value:e,done:f}
+  }
+  }
+  (r,i,o),!0),l}
+  var a={
+  };
+  function c(){
+  }
+  function l(){
+  }
+  function f(){
+  }
+  e=Object.getPrototypeOf;
+  var d=[][n]?e(e([][n]())):(u(e={
+  }
+  ,n,(function(){
+  return this}
+  )),e),h=f.prototype=c.prototype=Object.create(d);
+  function p(t){
+  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,u(t,i,"GeneratorFunction")),
+  t.prototype=Object.create(h),t}
+  return l.prototype=f,u(h,"constructor",f),u(f,"constructor",l),l.displayName="GeneratorFunction",u(f,
+  i,"GeneratorFunction"),u(h),u(h,i,"Generator"),u(h,n,(function(){
+  return this}
+  )),u(h,"toString",(function(){
+  return"[object Generator]"}
+  )),(s=function(){
+  return{
+  w:o,m:p}
+  }
+  )()}
+  function u(t,e,r,n){
+  var i=Object.defineProperty;
+  try{
+  i({
+  }
+  ,"",{
+  }
+  )}
+  catch(t){
+  i=0}
+  (u=function(t,e,r,n){
+  function o(e,r){
+  u(t,e,(function(t){
+  return this._invoke(e,r,t)}
+  ))}
+  e?i?i(t,e,{
+  value:r,enumerable:!n,configurable:!n,writable:!n}
+  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
+  )(t,e,r,n)}
+  var c=function(t,e,r,n){
+  return new(r||(r=Promise))((function(i,o){
+  function a(t){
+  try{
+  u(n.next(t))}
+  catch(t){
+  o(t)}
+  }
+  function s(t){
+  try{
+  u(n.throw(t))}
+  catch(t){
+  o(t)}
+  }
+  function u(t){
+  var e;
+  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
+  t(e)}
+  ))).then(a,s)}
+  u((n=n.apply(t,e||[])).next())}
+  ))}
+  ,l=/youtube\.com\/embed\//i,f={
+  getDomains:()=>["anime47."],parse:{
+  sources:[{
+  checkSource:t=>l.test(t.url),parse:t=>{
+  var e=t.media,r=Object(n.getVideoId)(e.url);
+  return r?i.a.parse(r):[]}
+  }
+  ,{
+  checkSource:t=>{
+  var e=t.url;
+  return/cdn\.animevui\.[a-z]+\/file/i.test(e)}
+  ,parse:t=>{
+  var e=t.media,r=t.response;
+  return e.useTrueRelativeUrl=!0,Object(a.e)(r,e)}
+  }
+  ]}
+  ,urls:[{
+  checkUrl:t=>{
+  var e=t.url;
+  return"IFRAME"==t.node.tagName&&(!e||""==e)}
+  ,getUrl:t=>{
+  t.url,t.node;
+  return c(void 0,void 0,void 0,s().m((function t(){
+  var e;
+  return s().w((function(t){
+  for(;;
+  )switch(t.n){
+  case 0:return t.n=1,Object(n.sendMessage)({
+  type:o.b.GET_URL}
+  );
+  case 1:return e=t.v,t.a(2,null==e?void 0:e.url)}
+  }
+  ),t)}
+  )))}
+  ,mediaObjectChange:t=>{
+  var e=t.mediaObject,r=t.node;
+  return e.ext="mp4",e.exts=["mp4"],e.cacheUrl=r.src,"video"}
+  }
+  ,{
+  checkUrl:t=>{
+  var e=t.url;
+  return/(player\.zphimmoi\.com\/api\/play\/)[a-zA-Z0-9_.-]+/g.test(e)}
+  ,getUrl:t=>{
+  var e,r=t.url,n=null===(e=r.match(/(player\.zphimmoi\.com\/api\/play\/)[a-zA-Z0-9_.-]+/g))||void 0===e?
+  void 0:e[0].split("/");
+  if(n)return r="https://player.zphimmoi.com/api/m3u8/"+n[n.length-1]+"/master.m3u8"}
+  }
+  ],default:{
+  mediaObjectChange:t=>{
+  var e=t.mediaObject;
+  return e.referer||(e.referer=location.href),e.type}
+  }
+  };
+  e.default=f};

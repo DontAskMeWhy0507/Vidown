@@ -1,0 +1,94 @@
+// Module 689 - Savior Pzc Phimmoi Net Host
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(0);
+  function i(t,e){
+  var r="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];
+  if(!r){
+  if(Array.isArray(t)||(r=function(t,e){
+  if(t){
+  if("string"==typeof t)return o(t,e);
+  var r={
+  }
+  .toString.call(t).slice(8,-1);
+  return"Object"===r&&t.constructor&&(r=t.constructor.name),"Map"===r||"Set"===r?Array.from(t):"Arguments"===r||
+  /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?o(t,e):void 0}
+  }
+  (t))||e&&t&&"number"==typeof t.length){
+  r&&(t=r);
+  var n=0,i=function(){
+  };
+  return{
+  s:i,n:function(){
+  return n>=t.length?{
+  done:!0}
+  :{
+  done:!1,value:t[n++]}
+  }
+  ,e:function(t){
+  throw t}
+  ,f:i}
+  }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}
+  var a,s=!0,u=!1;
+  return{
+  s:function(){
+  r=r.call(t)}
+  ,n:function(){
+  var t=r.next();
+  return s=t.done,t}
+  ,e:function(t){
+  u=!0,a=t}
+  ,f:function(){
+  try{
+  s||null==r.return||r.return()}
+  finally{
+  if(u)throw a}
+  }
+  }
+  }
+  function o(t,e){
+  (null==e||e>t.length)&&(e=t.length);
+  for(var r=0,n=Array(e);
+  r<e;
+  r++)n[r]=t[r];
+  return n}
+  var a=[];
+  function s(t){
+  var e;
+  if(a.length<1)return t;
+  var r=a[Math.floor(Math.random()*a.length)],n=null===(e=/:\/\/([^/]+)\//i.exec(t))||void 0===e?void 0:
+  e[1];
+  return t=t.replace(n,r)}
+  e.default={
+  index:100,getUrl(t,e,r,o){
+  var u,c;
+  if(/pzc\.phimmoi.*\.net/.test(t)){
+  var l,f=i(Object(n.queryAll)("script").filter(t=>t.innerHTML));
+  try{
+  for(f.s();
+  !(l=f.n()).done;
+  ){
+  var d=l.value.innerHTML;
+  if(d.includes("VIDEO_URL")){
+  var h=/deliveryServers=\[(^]]*)\]/,p=(null===(u=/VIDEO_URL=swapServer\("([^)]*)"\)/.exec(d))||void 0===u?
+  void 0:u[1])||"";
+  h.test(d)&&(a=(null===(c=h.exec(d))||void 0===c?void 0:c[1].replace(/'/g,"").split(","))||[]),p=s(p),
+  Object(n.sendMessage)({
+  requestType:"save_url",params:{
+  url:p,referrer:location.href}
+  }
+  )}
+  }
+  }
+  catch(t){
+  f.e(t)}
+  finally{
+  f.f()}
+  }
+  return{
+  return:!1,data:null}
+  }
+  }
+  };

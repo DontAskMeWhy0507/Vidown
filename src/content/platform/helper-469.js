@@ -1,0 +1,22 @@
+// Module 469 - Savior Helper 469
+export default function(t,e,r) {
+  "use strict";
+  var n=r(15),i=r(598),o=r(130),a=r(25).Buffer,s=r(470),u=r(405),c=r(426),l=a.alloc(128);
+  function f(t,e){
+  o.call(this,"digest"),"string"==typeof e&&(e=a.from(e));
+  var r="sha512"===t||"sha384"===t?128:64;
+  (this._alg=t,this._key=e,e.length>r)?e=("rmd160"===t?new u:c(t)).update(e).digest():e.length<r&&(e=a.concat([e,
+  l],r));
+  for(var n=this._ipad=a.allocUnsafe(r),i=this._opad=a.allocUnsafe(r),s=0;
+  s<r;
+  s++)n[s]=54^e[s],i[s]=92^e[s];
+  this._hash="rmd160"===t?new u:c(t),this._hash.update(n)}
+  n(f,o),f.prototype._update=function(t){
+  this._hash.update(t)}
+  ,f.prototype._final=function(){
+  var t=this._hash.digest();
+  return("rmd160"===this._alg?new u:c(this._alg)).update(this._opad).update(t).digest()}
+  ,t.exports=function(t,e){
+  return"rmd160"===(t=t.toLowerCase())||"ripemd160"===t?new f("rmd160",e):"md5"===t?new i(s,e):new f(t,
+  e)}
+  };

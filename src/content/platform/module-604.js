@@ -1,4 +1,0 @@
-// Module 604 [platform]
-export default function(t,e,r) {
-  "use strict";
-var n=r(116),i=r(15),o={};function a(t){n.equal(t.length,8,"Invalid IV length"),this.iv=new Array(8);for(var e=0;e<this.iv.length;e++)this.iv[e]=t[e]}e.instantiate=function(t){function e(e){t.call(this,e),this._cbcInit()}i(e,t);for(var r=Object.keys(o),n=0;n<r.length;n++){var a=r[n];e.prototype[a]=o[a]}return e.create=function(t){return new e(t)},e},o._cbcInit=function(){var t=new a(this.options.iv);this._cbcState=t},o._update=function(t,e,r,n){var i=this._cbcState,o=this.constructor.super_.prototype,a=i.iv;if("encrypt"===this.type){for(var s=0;s<this.blockSize;s++)a[s]^=t[e+s];o._update.call(this,a,0,r,n);for(s=0;s<this.blockSize;s++)a[s]=r[n+s]}else{o._update.call(this,t,e,r,n);for(s=0;s<this.blockSize;s++)r[n+s]^=a[s];for(s=0;s<this.blockSize;s++)a[s]=t[e+s]}}};

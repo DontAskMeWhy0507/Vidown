@@ -1,0 +1,256 @@
+// Module 402 - Savior Zingmp3_vn Extractor
+export default function(t,e,r) {
+  "use strict";
+  r.r(e);
+  var n=r(1),i=r(0),o=r(3),a=r(6);
+  function s(){
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
+  e,r="function"==typeof Symbol?Symbol:{
+  }
+  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
+  function o(r,n,i,o){
+  var s=n&&n.prototype instanceof c?n:c,l=Object.create(s.prototype);
+  return u(l,"_invoke",function(r,n,i){
+  var o,s,u,c=0,l=i||[],f=!1,d={
+  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
+  return o=e,s=0,u=t,d.n=r,a}
+  };
+  function h(r,n){
+  for(s=r,u=n,e=0;
+  !f&&c&&!i&&e<l.length;
+  e++){
+  var i,o=l[e],h=d.p,p=o[2];
+  r>3?(i=p===n)&&(u=o[(s=o[4])?5:(s=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(s=0,d.v=n,d.n=o[1]):
+  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,s=0))}
+  if(i||r>1)return a;
+  throw f=!0,n}
+  return function(i,l,p){
+  if(c>1)throw TypeError("Generator is already running");
+  for(f&&1===l&&h(l,p),s=l,u=p;
+  (e=s<2?t:u)||!f;
+  ){
+  o||(s?s<3?(s>1&&(d.n=-1),h(s,u)):d.n=u:d.v=u);
+  try{
+  if(c=2,o){
+  if(s||(i="next"),e=o[i]){
+  if(!(e=e.call(o,u)))throw TypeError("iterator result is not an object");
+  if(!e.done)return e;
+  u=e.value,s<2&&(s=0)}
+  else 1===s&&(e=o.return)&&e.call(o),s<2&&(u=TypeError("The iterator does not provide a '"+i+"' method"),
+  s=1);
+  o=t}
+  else if((e=(f=d.n<0)?u:r.call(n,d))!==a)break}
+  catch(e){
+  o=t,s=1,u=e}
+  finally{
+  c=1}
+  }
+  return{
+  value:e,done:f}
+  }
+  }
+  (r,i,o),!0),l}
+  var a={
+  };
+  function c(){
+  }
+  function l(){
+  }
+  function f(){
+  }
+  e=Object.getPrototypeOf;
+  var d=[][n]?e(e([][n]())):(u(e={
+  }
+  ,n,(function(){
+  return this}
+  )),e),h=f.prototype=c.prototype=Object.create(d);
+  function p(t){
+  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,u(t,i,"GeneratorFunction")),
+  t.prototype=Object.create(h),t}
+  return l.prototype=f,u(h,"constructor",f),u(f,"constructor",l),l.displayName="GeneratorFunction",u(f,
+  i,"GeneratorFunction"),u(h),u(h,i,"Generator"),u(h,n,(function(){
+  return this}
+  )),u(h,"toString",(function(){
+  return"[object Generator]"}
+  )),(s=function(){
+  return{
+  w:o,m:p}
+  }
+  )()}
+  function u(t,e,r,n){
+  var i=Object.defineProperty;
+  try{
+  i({
+  }
+  ,"",{
+  }
+  )}
+  catch(t){
+  i=0}
+  (u=function(t,e,r,n){
+  function o(e,r){
+  u(t,e,(function(t){
+  return this._invoke(e,r,t)}
+  ))}
+  e?i?i(t,e,{
+  value:r,enumerable:!n,configurable:!n,writable:!n}
+  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
+  )(t,e,r,n)}
+  function c(t,e){
+  var r="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];
+  if(!r){
+  if(Array.isArray(t)||(r=function(t,e){
+  if(t){
+  if("string"==typeof t)return l(t,e);
+  var r={
+  }
+  .toString.call(t).slice(8,-1);
+  return"Object"===r&&t.constructor&&(r=t.constructor.name),"Map"===r||"Set"===r?Array.from(t):"Arguments"===r||
+  /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?l(t,e):void 0}
+  }
+  (t))||e&&t&&"number"==typeof t.length){
+  r&&(t=r);
+  var n=0,i=function(){
+  };
+  return{
+  s:i,n:function(){
+  return n>=t.length?{
+  done:!0}
+  :{
+  done:!1,value:t[n++]}
+  }
+  ,e:function(t){
+  throw t}
+  ,f:i}
+  }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}
+  var o,a=!0,s=!1;
+  return{
+  s:function(){
+  r=r.call(t)}
+  ,n:function(){
+  var t=r.next();
+  return a=t.done,t}
+  ,e:function(t){
+  s=!0,o=t}
+  ,f:function(){
+  try{
+  a||null==r.return||r.return()}
+  finally{
+  if(s)throw o}
+  }
+  }
+  }
+  function l(t,e){
+  (null==e||e>t.length)&&(e=t.length);
+  for(var r=0,n=Array(e);
+  r<e;
+  r++)n[r]=t[r];
+  return n}
+  var f,d=function(t,e,r,n){
+  return new(r||(r=Promise))((function(i,o){
+  function a(t){
+  try{
+  u(n.next(t))}
+  catch(t){
+  o(t)}
+  }
+  function s(t){
+  try{
+  u(n.throw(t))}
+  catch(t){
+  o(t)}
+  }
+  function u(t){
+  var e;
+  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
+  t(e)}
+  ))).then(a,s)}
+  u((n=n.apply(t,e||[])).next())}
+  ))}
+  ,h=[],p=[{
+  bitrate:"128kbps",name:"Medium",qualityValue:100}
+  ,{
+  bitrate:"320kbps",name:"High",qualityValue:200}
+  ],v={
+  getDomains:()=>["zingmp3"],processRequestIds:t=>(h.push(t),!0),parse:{
+  default:t=>{
+  var e=t.media,r=t.response;
+  return d(void 0,void 0,void 0,s().m((function t(){
+  var u,l,d,h,v,m,y,g,b,w,A,_,E,S,O,x,k,M,T,I,j,C,B,U;
+  return s().w((function(t){
+  for(;;
+  )switch(t.p=t.n){
+  case 0:if(g=e.url,t.p=1,b=JSON.parse(r),!g.includes("song")){
+  t.n=2;
+  break}
+  return f=null===(u=JSON.parse(window.localStorage.getItem("zmp3_non_logged.v1.1")||"{}"))||void 0===u?
+  void 0:u.recentSongs,w=null==f?void 0:f.find(t=>t&&g.includes(t.encodeId)),A=b.data,_=Object.keys(A),
+  t.a(2,_.map(t=>{
+  if("string"==typeof A[t]&&A[t].includes("https")){
+  var e=Object(o.f)(A[t]),r=p.find(e=>e.bitrate.includes(t));
+  return e.filename=(null==w?void 0:w.title)||(null==w?void 0:w.alias),e.quality=null==r?void 0:r.name,
+  e.resolution=null==r?void 0:r.bitrate,e.type="audio",e.ext="mp3",e}
+  }
+  ).filter(t=>!!t));
+  case 2:E=b.data,S=Object.keys(E.streaming),O=S.map(t=>{
+  var e=E.streaming[t];
+  return Object.keys(e).map(t=>{
+  var r=t;
+  if(e[r].length>0){
+  var a=Object(o.f)(e[r]);
+  a.filename=E.alias,a.quality=n.r[r].label;
+  try{
+  a.i18n_quality=Object(i.i18n)(n.r[r].i18n_label)||a.quality}
+  catch(t){
+  a.i18n_quality=a.quality}
+  return a.resolution=r,a.type="video",a}
+  }
+  ).filter(t=>!!t)}
+  ).flat(1),x=[],k=c(O),t.p=3,k.s();
+  case 4:if((M=k.n()).done){
+  t.n=7;
+  break}
+  return T=M.value,t.n=5,Object(a.e)(r,Object(o.f)(T.url));
+  case 5:(I=t.v)[0].quality=T.quality,x.push(I[0]);
+  case 6:t.n=4;
+  break;
+  case 7:t.n=9;
+  break;
+  case 8:t.p=8,U=t.v,k.e(U);
+  case 9:return t.p=9,k.f(),t.f(9);
+  case 10:return t.a(2,x);
+  case 11:t.n=13;
+  break;
+  case 12:return t.p=12,t.v,f=null===(l=JSON.parse(window.localStorage.getItem("zmp3_non_logged.v1.1")||
+  "{}"))||void 0===l?void 0:l.recentSongs,j=null===(d=document.querySelector(".media-content .item-title"))||
+  void 0===d?void 0:d.textContent,C=null===(h=document.querySelector(".media-content h3"))||void 0===h?
+  void 0:h.textContent,B=`${j}
+   - ${C}
+  `,e.filename=null!==(y=null!==(m=null===(v=null==f?void 0:f.find(t=>t&&g.includes(t.encodeId)))||void 0===v?
+  void 0:v.alias)&&void 0!==m?m:B)&&void 0!==y?y:e.filename,t.a(2,[]);
+  case 13:return t.a(2)}
+  }
+  ),t,null,[[3,8,9,10],[1,12]])}
+  )))}
+  }
+  ,urls:[{
+  checkUrl:t=>"AUDIO"===t.node.tagName,getUrl:t=>{
+  var e,r,n=t.url,i=(f=null===(e=JSON.parse(window.localStorage.getItem("zmp3_non_logged.v1.1")||"{}"))||
+  void 0===e?void 0:e.recentSongs)&&(null===(r=f[0])||void 0===r?void 0:r.encodeId),o=null==h?void 0:
+  h.filter(t=>!t.url.includes("recommend")&&t.url.includes(i));
+  return o.length>0?o:n}
+  ,mediaObjectChange:t=>{
+  var e=t.mediaObject;
+  return e.ext="mp3",e.exts=["mp3"],"audio"}
+  }
+  ,{
+  checkUrl:t=>"VIDEO"===t.node.tagName,getUrl:()=>{
+  var t=/\/([^\/]*)\.html/.exec(location.href);
+  if(t){
+  var e=t[1],r=h.filter(t=>/(get\/video)/i.test(t.url)&&t.url.includes(e));
+  if(r.length>0)return r}
+  }
+  }
+  ]};
+  e.default=v};

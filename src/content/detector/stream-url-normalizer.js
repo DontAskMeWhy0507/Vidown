@@ -1,0 +1,225 @@
+// Module 657 - Savior Stream Url Normalizer
+export default function(t,e,r){
+  var n=r(158).Reporter,i=r(158).EncoderBuffer,o=r(158).DecoderBuffer,a=r(116),s=["seq","seqof","set",
+  "setof","objid","bool","gentime","utctime","null_","enum","int","objDesc","bitstr","bmpstr","charstr",
+  "genstr","graphstr","ia5str","iso646str","numstr","octstr","printstr","t61str","unistr","utf8str",
+  "videostr"],u=["key","obj","use","optional","explicit","implicit","def","choice","any","contains"].concat(s);
+  function c(t,e){
+  var r={
+  };
+  this._baseState=r,r.enc=t,r.parent=e||null,r.children=null,r.tag=null,r.args=null,r.reverseArgs=null,
+  r.choice=null,r.optional=!1,r.any=!1,r.obj=!1,r.use=null,r.useDecoder=null,r.key=null,r.default=null,
+  r.explicit=null,r.implicit=null,r.contains=null,r.parent||(r.children=[],this._wrap())}
+  t.exports=c;
+  var l=["enc","parent","children","tag","args","reverseArgs","choice","optional","any","obj","use",
+  "alteredUse","key","default","explicit","implicit","contains"];
+  c.prototype.clone=function(){
+  var t=this._baseState,e={
+  };
+  l.forEach((function(r){
+  e[r]=t[r]}
+  ));
+  var r=new this.constructor(e.parent);
+  return r._baseState=e,r}
+  ,c.prototype._wrap=function(){
+  var t=this._baseState;
+  u.forEach((function(e){
+  this[e]=function(){
+  var r=new this.constructor(this);
+  return t.children.push(r),r[e].apply(r,arguments)}
+  }
+  ),this)}
+  ,c.prototype._init=function(t){
+  var e=this._baseState;
+  a(null===e.parent),t.call(this),e.children=e.children.filter((function(t){
+  return t._baseState.parent===this}
+  ),this),a.equal(e.children.length,1,"Root node can have only one child")}
+  ,c.prototype._useArgs=function(t){
+  var e=this._baseState,r=t.filter((function(t){
+  return t instanceof this.constructor}
+  ),this);
+  t=t.filter((function(t){
+  return!(t instanceof this.constructor)}
+  ),this),0!==r.length&&(a(null===e.children),e.children=r,r.forEach((function(t){
+  t._baseState.parent=this}
+  ),this)),0!==t.length&&(a(null===e.args),e.args=t,e.reverseArgs=t.map((function(t){
+  if("object"!=typeof t||t.constructor!==Object)return t;
+  var e={
+  };
+  return Object.keys(t).forEach((function(r){
+  r==(0|r)&&(r|=0);
+  var n=t[r];
+  e[n]=r}
+  )),e}
+  )))}
+  ,["_peekTag","_decodeTag","_use","_decodeStr","_decodeObjid","_decodeTime","_decodeNull","_decodeInt",
+  "_decodeBool","_decodeList","_encodeComposite","_encodeStr","_encodeObjid","_encodeTime","_encodeNull",
+  "_encodeInt","_encodeBool"].forEach((function(t){
+  c.prototype[t]=function(){
+  var e=this._baseState;
+  throw new Error(t+" not implemented for encoding: "+e.enc)}
+  }
+  )),s.forEach((function(t){
+  c.prototype[t]=function(){
+  var e=this._baseState,r=Array.prototype.slice.call(arguments);
+  return a(null===e.tag),e.tag=t,this._useArgs(r),this}
+  }
+  )),c.prototype.use=function(t){
+  a(t);
+  var e=this._baseState;
+  return a(null===e.use),e.use=t,this}
+  ,c.prototype.optional=function(){
+  return this._baseState.optional=!0,this}
+  ,c.prototype.def=function(t){
+  var e=this._baseState;
+  return a(null===e.default),e.default=t,e.optional=!0,this}
+  ,c.prototype.explicit=function(t){
+  var e=this._baseState;
+  return a(null===e.explicit&&null===e.implicit),e.explicit=t,this}
+  ,c.prototype.implicit=function(t){
+  var e=this._baseState;
+  return a(null===e.explicit&&null===e.implicit),e.implicit=t,this}
+  ,c.prototype.obj=function(){
+  var t=this._baseState,e=Array.prototype.slice.call(arguments);
+  return t.obj=!0,0!==e.length&&this._useArgs(e),this}
+  ,c.prototype.key=function(t){
+  var e=this._baseState;
+  return a(null===e.key),e.key=t,this}
+  ,c.prototype.any=function(){
+  return this._baseState.any=!0,this}
+  ,c.prototype.choice=function(t){
+  var e=this._baseState;
+  return a(null===e.choice),e.choice=t,this._useArgs(Object.keys(t).map((function(e){
+  return t[e]}
+  ))),this}
+  ,c.prototype.contains=function(t){
+  var e=this._baseState;
+  return a(null===e.use),e.contains=t,this}
+  ,c.prototype._decode=function(t,e){
+  var r=this._baseState;
+  if(null===r.parent)return t.wrapResult(r.children[0]._decode(t,e));
+  var n,i=r.default,a=!0,s=null;
+  if(null!==r.key&&(s=t.enterKey(r.key)),r.optional){
+  var u=null;
+  if(null!==r.explicit?u=r.explicit:null!==r.implicit?u=r.implicit:null!==r.tag&&(u=r.tag),null!==u||
+  r.any){
+  if(a=this._peekTag(t,u,r.any),t.isError(a))return a}
+  else{
+  var c=t.save();
+  try{
+  null===r.choice?this._decodeGeneric(r.tag,t,e):this._decodeChoice(t,e),a=!0}
+  catch(t){
+  a=!1}
+  t.restore(c)}
+  }
+  if(r.obj&&a&&(n=t.enterObject()),a){
+  if(null!==r.explicit){
+  var l=this._decodeTag(t,r.explicit);
+  if(t.isError(l))return l;
+  t=l}
+  var f=t.offset;
+  if(null===r.use&&null===r.choice){
+  if(r.any)c=t.save();
+  var d=this._decodeTag(t,null!==r.implicit?r.implicit:r.tag,r.any);
+  if(t.isError(d))return d;
+  r.any?i=t.raw(c):t=d}
+  if(e&&e.track&&null!==r.tag&&e.track(t.path(),f,t.length,"tagged"),e&&e.track&&null!==r.tag&&e.track(t.path(),
+  t.offset,t.length,"content"),i=r.any?i:null===r.choice?this._decodeGeneric(r.tag,t,e):this._decodeChoice(t,
+  e),t.isError(i))return i;
+  if(r.any||null!==r.choice||null===r.children||r.children.forEach((function(r){
+  r._decode(t,e)}
+  )),r.contains&&("octstr"===r.tag||"bitstr"===r.tag)){
+  var h=new o(i);
+  i=this._getUse(r.contains,t._reporterState.obj)._decode(h,e)}
+  }
+  return r.obj&&a&&(i=t.leaveObject(n)),null===r.key||null===i&&!0!==a?null!==s&&t.exitKey(s):t.leaveKey(s,
+  r.key,i),i}
+  ,c.prototype._decodeGeneric=function(t,e,r){
+  var n=this._baseState;
+  return"seq"===t||"set"===t?null:"seqof"===t||"setof"===t?this._decodeList(e,t,n.args[0],r):/str$/.test(t)?
+  this._decodeStr(e,t,r):"objid"===t&&n.args?this._decodeObjid(e,n.args[0],n.args[1],r):"objid"===t?
+  this._decodeObjid(e,null,null,r):"gentime"===t||"utctime"===t?this._decodeTime(e,t,r):"null_"===t?
+  this._decodeNull(e,r):"bool"===t?this._decodeBool(e,r):"objDesc"===t?this._decodeStr(e,t,r):"int"===t||
+  "enum"===t?this._decodeInt(e,n.args&&n.args[0],r):null!==n.use?this._getUse(n.use,e._reporterState.obj)._decode(e,
+  r):e.error("unknown tag: "+t)}
+  ,c.prototype._getUse=function(t,e){
+  var r=this._baseState;
+  return r.useDecoder=this._use(t,e),a(null===r.useDecoder._baseState.parent),r.useDecoder=r.useDecoder._baseState.children[0],
+  r.implicit!==r.useDecoder._baseState.implicit&&(r.useDecoder=r.useDecoder.clone(),r.useDecoder._baseState.implicit=r.implicit),
+  r.useDecoder}
+  ,c.prototype._decodeChoice=function(t,e){
+  var r=this._baseState,n=null,i=!1;
+  return Object.keys(r.choice).some((function(o){
+  var a=t.save(),s=r.choice[o];
+  try{
+  var u=s._decode(t,e);
+  if(t.isError(u))return!1;
+  n={
+  type:o,value:u}
+  ,i=!0}
+  catch(e){
+  return t.restore(a),!1}
+  return!0}
+  ),this),i?n:t.error("Choice not matched")}
+  ,c.prototype._createEncoderBuffer=function(t){
+  return new i(t,this.reporter)}
+  ,c.prototype._encode=function(t,e,r){
+  var n=this._baseState;
+  if(null===n.default||n.default!==t){
+  var i=this._encodeValue(t,e,r);
+  if(void 0!==i&&!this._skipDefault(i,e,r))return i}
+  }
+  ,c.prototype._encodeValue=function(t,e,r){
+  var i=this._baseState;
+  if(null===i.parent)return i.children[0]._encode(t,e||new n);
+  var o=null;
+  if(this.reporter=e,i.optional&&void 0===t){
+  if(null===i.default)return;
+  t=i.default}
+  var a=null,s=!1;
+  if(i.any)o=this._createEncoderBuffer(t);
+  else if(i.choice)o=this._encodeChoice(t,e);
+  else if(i.contains)a=this._getUse(i.contains,r)._encode(t,e),s=!0;
+  else if(i.children)a=i.children.map((function(r){
+  if("null_"===r._baseState.tag)return r._encode(null,e,t);
+  if(null===r._baseState.key)return e.error("Child should have a key");
+  var n=e.enterKey(r._baseState.key);
+  if("object"!=typeof t)return e.error("Child expected, but input is not object");
+  var i=r._encode(t[r._baseState.key],e,t);
+  return e.leaveKey(n),i}
+  ),this).filter((function(t){
+  return t}
+  )),a=this._createEncoderBuffer(a);
+  else if("seqof"===i.tag||"setof"===i.tag){
+  if(!i.args||1!==i.args.length)return e.error("Too many args for : "+i.tag);
+  if(!Array.isArray(t))return e.error("seqof/setof, but data is not Array");
+  var u=this.clone();
+  u._baseState.implicit=null,a=this._createEncoderBuffer(t.map((function(r){
+  var n=this._baseState;
+  return this._getUse(n.args[0],t)._encode(r,e)}
+  ),u))}
+  else null!==i.use?o=this._getUse(i.use,r)._encode(t,e):(a=this._encodePrimitive(i.tag,t),s=!0);
+  if(!i.any&&null===i.choice){
+  var c=null!==i.implicit?i.implicit:i.tag,l=null===i.implicit?"universal":"context";
+  null===c?null===i.use&&e.error("Tag could be omitted only for .use()"):null===i.use&&(o=this._encodeComposite(c,
+  s,l,a))}
+  return null!==i.explicit&&(o=this._encodeComposite(i.explicit,!1,"context",o)),o}
+  ,c.prototype._encodeChoice=function(t,e){
+  var r=this._baseState,n=r.choice[t.type];
+  return n||a(!1,t.type+" not found in "+JSON.stringify(Object.keys(r.choice))),n._encode(t.value,e)}
+  ,c.prototype._encodePrimitive=function(t,e){
+  var r=this._baseState;
+  if(/str$/.test(t))return this._encodeStr(e,t);
+  if("objid"===t&&r.args)return this._encodeObjid(e,r.reverseArgs[0],r.args[1]);
+  if("objid"===t)return this._encodeObjid(e,null,null);
+  if("gentime"===t||"utctime"===t)return this._encodeTime(e,t);
+  if("null_"===t)return this._encodeNull();
+  if("int"===t||"enum"===t)return this._encodeInt(e,r.args&&r.reverseArgs[0]);
+  if("bool"===t)return this._encodeBool(e);
+  if("objDesc"===t)return this._encodeStr(e,t);
+  throw new Error("Unsupported tag: "+t)}
+  ,c.prototype._isNumstr=function(t){
+  return/^[0-9 ]*$/.test(t)}
+  ,c.prototype._isPrintstr=function(t){
+  return/^[A-Za-z0-9 '\(\)\+,\-\.\/:=\?]*$/.test(t)}
+  };

@@ -1,4 +1,0 @@
-// Module 315 [detector]
-export default function(t,e,r) {
-  "use strict";
-r.r(e);var n={},i={parse:{sources:[],default:t=>{var e=t.media,r=t.response;try{var i=JSON.parse(r),o=n[e.cacheUrl||""],a=o.domainList.length;if(1==i.status&&o){if(1==i.type){var s=Object.assign({},e),u=["#EXTM3U"];u.push("#EXT-X-VERSION:3"),u.push("#EXT-X-TARGETDURATION:"+i.tgdr),u.push("#EXT-X-PLAYLIST-TYPE:VOD");for(var c=0;c<i.data[0].length;c++)0==c&&(s.url=`https://${o.domainList[c%a]}/${o.userId}/${i.data[1][c]}`),u.push(`#EXTINF:${i.data[0][c]},`),u.push(`https://${o.domainList[c%a]}/${o.userId}/${i.data[1][c]}`);return u.push("#EXT-X-ENDLIST"),s.play_list=u.join("\n"),[s]}return 2==i.type?[{url:i.data,ext:"m3u8",exts:["m3u8"],type:"video",filename:document.title}]:[]}return[]}catch(t){return console.log(t),[]}}},urls:[]};e.default=i};

@@ -1,0 +1,15 @@
+// Module 616 - Savior Helper 616
+export default function(t,e,r){
+  (function(t){
+  var n=r(484),i=r(621),o=r(622);
+  var a={
+  binary:!0,hex:!0,base64:!0};
+  e.DiffieHellmanGroup=e.createDiffieHellmanGroup=e.getDiffieHellman=function(e){
+  var r=new t(i[e].prime,"hex"),n=new t(i[e].gen,"hex");
+  return new o(r,n)}
+  ,e.createDiffieHellman=e.DiffieHellman=function e(r,i,s,u){
+  return t.isBuffer(i)||void 0===a[i]?e(r,"binary",i,s):(i=i||"binary",u=u||"binary",s=s||new t([2]),
+  t.isBuffer(s)||(s=new t(s,u)),"number"==typeof r?new o(n(r,s),s,!0):(t.isBuffer(r)||(r=new t(r,i)),
+  new o(r,s,!0)))}
+  }
+  ).call(this,r(27).Buffer)};

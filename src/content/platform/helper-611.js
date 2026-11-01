@@ -1,0 +1,20 @@
+// Module 611 - Savior Helper 611
+export default function(t,e,r){
+  var n=r(25).Buffer;
+  function i(t,e,r){
+  for(var n,i,a=-1,s=0;
+  ++a<8;
+  )n=e&1<<7-a?128:0,s+=(128&(i=t._cipher.encryptBlock(t._prev)[0]^n))>>a%8,t._prev=o(t._prev,r?n:i);
+  return s}
+  function o(t,e){
+  var r=t.length,i=-1,o=n.allocUnsafe(t.length);
+  for(t=n.concat([t,n.from([e])]);
+  ++i<r;
+  )o[i]=t[i]<<1|t[i+1]>>7;
+  return o}
+  e.encrypt=function(t,e,r){
+  for(var o=e.length,a=n.allocUnsafe(o),s=-1;
+  ++s<o;
+  )a[s]=i(t,e[s],r);
+  return a}
+  };
