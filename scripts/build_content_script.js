@@ -80,5 +80,6 @@ const outPath = path.join(ROOT_DIR, 'content-script.js');
 fs.writeFileSync(outPath, finalCode, 'utf8');
 
 const deflatedSize = zlib.deflateRawSync(Buffer.from(finalCode), { level: 9 }).length;
-console.log(`Generated content-script.js: ${finalCode.length} bytes raw, ${deflatedSize} bytes deflated.`);
+const rawByteLength = Buffer.byteLength(finalCode, 'utf8');
+console.log(`Generated content-script.js: ${rawByteLength} bytes raw (${finalCode.length} UTF-16 chars), ${deflatedSize} bytes deflated.`);
 console.log('✓ Build completed successfully!\n');
