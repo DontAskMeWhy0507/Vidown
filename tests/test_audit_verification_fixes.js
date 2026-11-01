@@ -7,7 +7,7 @@
  * 3. Instagram Stories support: /stories/ handling, stale-stamp invalidation, MutationObserver, event listeners.
  * 4. scripts/package_release.js excludes node_modules from release zip.
  * 5. native/com.savior.helper.json has no hardcoded machine drive path.
- * 6. native/host.js wires startYtDlpDownload in startDownload.
+ * 6. native/host.js defines and exports startYtDlpDownload, while startDownload bypasses yt-dlp to preserve browser session cookies.
  */
 
 const fs = require('fs');

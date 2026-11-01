@@ -329,7 +329,8 @@ function setupAnti403Rules() {
           action: {
             type: 'modifyHeaders',
             requestHeaders: [
-              { header: 'Referer', operation: 'set', value: 'https://www.instagram.com/' }
+              { header: 'Referer', operation: 'set', value: 'https://www.instagram.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.instagram.com' }
             ]
           },
           condition: {

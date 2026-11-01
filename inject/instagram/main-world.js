@@ -20,6 +20,7 @@ function extractInstagramVideoDetails(videoElement) {
   try {
     const fiberSuffix = getReactFiberSuffix(videoElement);
     const propsKey = '__reactProps' + fiberSuffix;
+    const fiberKey = '__reactFiber' + fiberSuffix;
 
     // Explore tab
     if (location.href.match(/instagram\.com\/explore/i)) {
@@ -28,6 +29,7 @@ function extractInstagramVideoDetails(videoElement) {
 
     // Stories route handling
     if (location.href.match(/instagram\.com\/stories/i)) {
+      // 1. Walk React props tree
       let current = videoElement;
       while (current && current.parentElement && current.parentElement.tagName !== 'BODY' && current.parentElement.tagName !== 'HTML') {
         const p = current?.[propsKey];
@@ -40,8 +42,43 @@ function extractInstagramVideoDetails(videoElement) {
         current = current.parentElement;
       }
 
-      // Direct fallback for Stories: HTML5 video currentSrc or src
-      const directUrl = videoElement.currentSrc || videoElement.src || (videoElement.querySelector('source') ? videoElement.querySelector('source').src : '');
+      // 2. Walk React Fiber node tree (covers blob/MSE served stories where props are attached to parent fiber)
+      let fiber = videoElement?.[fiberKey];
+      let depth = 0;
+      while (fiber && depth < 25) {
+        const m = fiber.memoizedProps;
+        if (m?.item || m?.media || m?.story || m?.dashInfo) {
+          const item = m.item || m.media || m.story;
+          if (item?.video_versions || item?.dashInfo || item?.video_dash_manifest) {
+            return item;
+          }
+          if (m.dashInfo) return m.dashInfo;
+        }
+        fiber = fiber.return;
+        depth++;
+      }
+
+      // 3. Inspect child <source> elements (when video.currentSrc is a blob)
+      const sources = videoElement.querySelectorAll('source');
+      for (let i = 0; i < sources.length; i++) {
+        const sUrl = sources[i].src || '';
+        if (sUrl && !sUrl.startsWith('blob:') && (sUrl.includes('cdninstagram.com') || sUrl.includes('.mp4') || sUrl.startsWith('http'))) {
+          const match = location.pathname.match(/\/stories\/([^\/]+)(?:\/(\d+))?/i);
+          const username = match ? match[1] : '';
+          const storyId = match && match[2] ? match[2] : '';
+          return {
+            hdSrc: sUrl,
+            sdSrc: sUrl,
+            videoSrc: sUrl,
+            videoUrl: sUrl,
+            videoFBID: storyId || username || 'instagram_story',
+            caption: username ? `Instagram Story - ${username}` : 'Instagram Story'
+          };
+        }
+      }
+
+      // 4. Direct fallback for Stories: HTML5 video currentSrc or src
+      const directUrl = videoElement.currentSrc || videoElement.src || '';
       if (directUrl && (directUrl.includes('cdninstagram.com') || directUrl.includes('.mp4') || directUrl.startsWith('http'))) {
         const match = location.pathname.match(/\/stories\/([^\/]+)(?:\/(\d+))?/i);
         const username = match ? match[1] : '';
@@ -107,17 +144,23 @@ function extractInstagramVideoDetails(videoElement) {
 
 /**
  * Updates a single video element with fresh video details.
- * Invalids stale stamps whenever video source or story changes.
+ * Invalids stale stamps whenever video source, pathname, or story changes.
  */
 function updateVideo(video) {
   try {
     const currentSrc = video.currentSrc || video.src || '';
+    const currentPath = location.pathname;
 
-    // If source changed, immediately invalidate stale stamp
-    if (video._saviorLastSrc && video._saviorLastSrc !== currentSrc) {
+    // If source or story pathname changed, immediately invalidate stale stamp
+    // (covers both source change and slide navigation where blob URL might be reused)
+    const srcChanged = video._saviorLastSrc && video._saviorLastSrc !== currentSrc;
+    const pathChanged = video._saviorLastPath && video._saviorLastPath !== currentPath;
+
+    if (srcChanged || pathChanged) {
       video.removeAttribute('savior-video-detail');
     }
     video._saviorLastSrc = currentSrc;
+    video._saviorLastPath = currentPath;
 
     const details = extractInstagramVideoDetails(video);
     if (details) {
@@ -155,8 +198,19 @@ try {
     if (shouldUpdate) reExtractAll();
   });
 
-  if (document.body) {
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['src', 'class'] });
+  const attachObserver = () => {
+    const target = document.body || document.documentElement;
+    if (target) {
+      observer.observe(target, { childList: true, subtree: true, attributes: true, attributeFilter: ['src', 'class'] });
+    }
+  };
+
+  attachObserver();
+  if (!document.body) {
+    document.addEventListener('DOMContentLoaded', () => {
+      attachObserver();
+      reExtractAll();
+    });
   }
 } catch {}
 
