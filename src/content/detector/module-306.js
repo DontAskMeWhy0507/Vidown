@@ -1,0 +1,4 @@
+// Module 306 [detector]
+module.exports = function(t,e,r) {
+  "use strict";
+r.r(e);var n=r(3);function i(t){var e,r=t.split("/"),n=r.slice(-1)[0],i=n.split(".")[1],a=(e=n.split(".")[0],atob(o(e,6))+"."+i);return r.splice(r.length-1,1,a),r.join("/")}var o=function(t,e){return t.replace(/[a-zA-Z]/g,(function(t){var r=t<="Z"?90:122,n=t.charCodeAt(0)+e;return String.fromCharCode(r>=n?n:n-26)}))},a={getDomains:()=>["phimbro.com"],parse:{sources:[{checkSource:t=>t.url.includes("m.ffvvv.xyz"),parse:t=>{var e=t.media,r=t.response,o=Object(n.f)(e.url),a=r.split("\n").map(t=>{var e;if(t.trim().startsWith("#")&&t.toLowerCase().includes("uri")){var r=i((null===(e=t.match(/URI="([^"]+)"/))||void 0===e?void 0:e[1])||"");return t.replace(/URI="([^"]+)"/,`URI="${r}"`)}return t.trim().startsWith("#")||!t.trim()?t:i(t)}).join("\n");return o.play_list=a,o.type="video",o.removeOrigin=!0,o.filename=document.title,[o]}}]}};e.default=a};

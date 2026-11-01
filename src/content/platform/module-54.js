@@ -1,0 +1,2 @@
+// Module 54 [platform]
+module.exports = function(t,e,r){var n,i,o,a,s,u;t.exports=(u=r(4),r(34),i=(n=u).lib.WordArray,o=n.algo,a=o.SHA256,s=o.SHA224=a.extend({_doReset:function(){this._hash=new i.init([3238371032,914150663,812702999,4144912697,4290775857,1750603025,1694076839,3204075428])},_doFinalize:function(){var t=a._doFinalize.call(this);return t.sigBytes-=4,t}}),n.SHA224=a._createHelper(s),n.HmacSHA224=a._createHmacHelper(s),u.SHA224)};

@@ -1,0 +1,2 @@
+// Module 26 [platform]
+module.exports = function(t,e,r){var n,i,o,a,s,u;t.exports=(u=r(4),i=(n=u).lib,o=i.Base,a=i.WordArray,(s=n.x64={}).Word=o.extend({init:function(t,e){this.high=t,this.low=e}}),s.WordArray=o.extend({init:function(t,e){t=this.words=t||[],this.sigBytes=null!=e?e:8*t.length},toX32:function(){for(var t=this.words,e=t.length,r=[],n=0;n<e;n++){var i=t[n];r.push(i.high),r.push(i.low)}return a.create(r,this.sigBytes)},clone:function(){for(var t=o.clone.call(this),e=t.words=this.words.slice(0),r=e.length,n=0;n<r;n++)e[n]=e[n].clone();return t}}),u)};

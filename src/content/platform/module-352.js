@@ -1,0 +1,4 @@
+// Module 352 [platform]
+module.exports = function(t,e,r) {
+  "use strict";
+r.r(e);var n=r(6);e.default={getDomains:()=>["thaolejp."],parse:{sources:[{checkSource:t=>!t.url.includes("mp3"),parse:t=>{var e=t.media,r=t.response.split("\n"),i=e.protocol+"//"+e.host;return r=r.map(t=>{if(t.startsWith("#EXT-X-KEY")){var e=t.indexOf('URI="')+'URI="'.length;t=t.slice(0,e)+i+t.slice(e)}return t}),Object(n.e)(r.join("\n"),e)}}]},urls:[{checkUrl:t=>t.url.includes("mp3")&&location.href.includes("de-thi"),mediaObjectChange:t=>{var e,r,n,i,o=t.mediaObject,a=t.node,s=null===(r=null===(e=a.closest(".Test_partContainer__lb72X"))||void 0===e?void 0:e.querySelector(".font-bold"))||void 0===r?void 0:r.textContent,u=null===(i=null===(n=a.closest(".Test_partContainer__lb72X"))||void 0===n?void 0:n.querySelector(".text-lg"))||void 0===i?void 0:i.textContent;return o.filename=u||s||o.filename,o.filename="Audio "+o.filename,"audio"}}]}};

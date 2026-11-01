@@ -1,0 +1,2 @@
+// Module 547 [platform]
+module.exports = function(t,e){function r(t){if(!t||t<1)throw new Error("BitMatrix size must be defined and greater than 0");this.size=t,this.data=new Uint8Array(t*t),this.reservedBit=new Uint8Array(t*t)}r.prototype.set=function(t,e,r,n){const i=t*this.size+e;this.data[i]=r,n&&(this.reservedBit[i]=!0)},r.prototype.get=function(t,e){return this.data[t*this.size+e]},r.prototype.xor=function(t,e,r){this.data[t*this.size+e]^=r},r.prototype.isReserved=function(t,e){return this.reservedBit[t*this.size+e]},t.exports=r};
