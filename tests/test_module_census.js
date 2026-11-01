@@ -22,8 +22,9 @@ assert.strictEqual(census.regeneratorModulesCount, 164, 'Must identify 164 regen
 // Guarantees census baseline bundle assumptions cannot silently go stale or desync from reference
 assert.strictEqual(census.baselineBundleSize, 2404925, 
   'LOUD GUARD: Baseline original bundle size must equal 2,404,925 bytes (630 B CSS + 2,404,295 B Webpack IIFE)');
-assert.strictEqual(census.currentBuiltBundleSize, 1949390,
-  'Current built bundle size must match current built artifact size');
+const actualBundleSize = fs.statSync(path.resolve(__dirname, '../content-script.js')).size;
+assert.strictEqual(census.currentBuiltBundleSize, actualBundleSize,
+  `Current built bundle size in census (${census.currentBuiltBundleSize}) must match actual content-script.js size (${actualBundleSize})`);
 assert.strictEqual(census.modules['37'].size, 119308, 'Module 37 baseline bundle size must equal 119,308 B');
 assert.strictEqual(census.modules['89'].size, 45516, 'Module 89 baseline bundle size must equal 45,516 B');
 assert.strictEqual(census.modules['126'].size, 43306, 'Module 126 baseline bundle size must equal 43,306 B');

@@ -1,0 +1,4458 @@
+{
+  "version": "1.0.0",
+  "date": "2026-11-01",
+  "description": "Complete per-module Keep/Drop analysis of 493 unreachable modules in Savior extension",
+  "totalModules": 649,
+  "reachableCount": 156,
+  "unreachableCount": 493,
+  "policy": {
+    "deletionsPermitted": false,
+    "disposition": "All 493 unreachable modules are retained unmodified in src/content/ to preserve historical integrity. No deletions without explicit owner approval."
+  },
+  "categorySummary": {
+    "platform": 246,
+    "detector": 196,
+    "vendor": 31,
+    "crypto": 16,
+    "providers": 4
+  },
+  "modules": [
+    {
+      "id": 20,
+      "path": "detector/module-20.js",
+      "category": "detector",
+      "size": 8738,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 23,
+      "path": "platform/module-23.js",
+      "category": "platform",
+      "size": 1192,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 31,
+      "path": "crypto/module-31.js",
+      "category": "crypto",
+      "size": 6176,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 45,
+      "path": "crypto/module-45.js",
+      "category": "crypto",
+      "size": 12813,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 81,
+      "path": "detector/module-81.js",
+      "category": "detector",
+      "size": 878,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 94,
+      "path": "detector/module-94.js",
+      "category": "detector",
+      "size": 3508,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 96,
+      "path": "platform/module-96.js",
+      "category": "platform",
+      "size": 342,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 113,
+      "path": "detector/module-113.js",
+      "category": "detector",
+      "size": 4039,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 114,
+      "path": "crypto/module-114.js",
+      "category": "crypto",
+      "size": 2074,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 115,
+      "path": "platform/module-115.js",
+      "category": "platform",
+      "size": 96,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 116,
+      "path": "platform/module-116.js",
+      "category": "platform",
+      "size": 214,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 117,
+      "path": "platform/module-117.js",
+      "category": "platform",
+      "size": 1081,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 119,
+      "path": "detector/module-119.js",
+      "category": "detector",
+      "size": 13883,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 120,
+      "path": "detector/module-120.js",
+      "category": "detector",
+      "size": 9347,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 121,
+      "path": "platform/module-121.js",
+      "category": "platform",
+      "size": 126,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 122,
+      "path": "platform/module-122.js",
+      "category": "platform",
+      "size": 2886,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 126,
+      "path": "vendor/elliptic/module-126.js",
+      "category": "vendor",
+      "size": 43355,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 127,
+      "path": "detector/module-127.js",
+      "category": "detector",
+      "size": 10522,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 128,
+      "path": "detector/module-128.js",
+      "category": "detector",
+      "size": 8320,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 129,
+      "path": "platform/module-129.js",
+      "category": "platform",
+      "size": 141,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 130,
+      "path": "platform/module-130.js",
+      "category": "platform",
+      "size": 1409,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 133,
+      "path": "crypto/module-133.js",
+      "category": "crypto",
+      "size": 6280,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 136,
+      "path": "platform/module-136.js",
+      "category": "platform",
+      "size": 163,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 137,
+      "path": "platform/module-137.js",
+      "category": "platform",
+      "size": 110,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 139,
+      "path": "platform/module-139.js",
+      "category": "platform",
+      "size": 634,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 140,
+      "path": "platform/module-140.js",
+      "category": "platform",
+      "size": 8614,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 141,
+      "path": "platform/module-141.js",
+      "category": "platform",
+      "size": 232,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 142,
+      "path": "platform/module-142.js",
+      "category": "platform",
+      "size": 111,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 143,
+      "path": "platform/module-143.js",
+      "category": "platform",
+      "size": 1259,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 144,
+      "path": "platform/module-144.js",
+      "category": "platform",
+      "size": 1007,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 145,
+      "path": "platform/module-145.js",
+      "category": "platform",
+      "size": 1259,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 147,
+      "path": "detector/module-147.js",
+      "category": "detector",
+      "size": 3836,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 149,
+      "path": "detector/module-149.js",
+      "category": "detector",
+      "size": 568,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 150,
+      "path": "platform/module-150.js",
+      "category": "platform",
+      "size": 402,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 151,
+      "path": "platform/module-151.js",
+      "category": "platform",
+      "size": 236,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 152,
+      "path": "platform/module-152.js",
+      "category": "platform",
+      "size": 93,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 153,
+      "path": "platform/module-153.js",
+      "category": "platform",
+      "size": 144,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 154,
+      "path": "platform/module-154.js",
+      "category": "platform",
+      "size": 122,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 155,
+      "path": "platform/module-155.js",
+      "category": "platform",
+      "size": 207,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 156,
+      "path": "platform/module-156.js",
+      "category": "platform",
+      "size": 1441,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 157,
+      "path": "platform/module-157.js",
+      "category": "platform",
+      "size": 174,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 158,
+      "path": "platform/module-158.js",
+      "category": "platform",
+      "size": 181,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 161,
+      "path": "crypto/module-161.js",
+      "category": "crypto",
+      "size": 77687,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 162,
+      "path": "detector/module-162.js",
+      "category": "detector",
+      "size": 25638,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 163,
+      "path": "crypto/module-163.js",
+      "category": "crypto",
+      "size": 27230,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 165,
+      "path": "platform/module-165.js",
+      "category": "platform",
+      "size": 1210,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 166,
+      "path": "platform/module-166.js",
+      "category": "platform",
+      "size": 98,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 167,
+      "path": "platform/module-167.js",
+      "category": "platform",
+      "size": 918,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 168,
+      "path": "platform/module-168.js",
+      "category": "platform",
+      "size": 298,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 169,
+      "path": "platform/module-169.js",
+      "category": "platform",
+      "size": 141,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 170,
+      "path": "crypto/module-170.js",
+      "category": "crypto",
+      "size": 2924,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 171,
+      "path": "platform/module-171.js",
+      "category": "platform",
+      "size": 600,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 172,
+      "path": "platform/module-172.js",
+      "category": "platform",
+      "size": 4723,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 173,
+      "path": "platform/module-173.js",
+      "category": "platform",
+      "size": 2182,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 181,
+      "path": "detector/module-181.js",
+      "category": "detector",
+      "size": 3407,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 182,
+      "path": "detector/module-182.js",
+      "category": "detector",
+      "size": 5042,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 183,
+      "path": "detector/module-183.js",
+      "category": "detector",
+      "size": 549,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 184,
+      "path": "detector/module-184.js",
+      "category": "detector",
+      "size": 4378,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 185,
+      "path": "detector/module-185.js",
+      "category": "detector",
+      "size": 716,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 186,
+      "path": "platform/module-186.js",
+      "category": "platform",
+      "size": 178,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 187,
+      "path": "detector/module-187.js",
+      "category": "detector",
+      "size": 5165,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 188,
+      "path": "detector/module-188.js",
+      "category": "detector",
+      "size": 5211,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 189,
+      "path": "detector/module-189.js",
+      "category": "detector",
+      "size": 3503,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 190,
+      "path": "detector/module-190.js",
+      "category": "detector",
+      "size": 3854,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 198,
+      "path": "detector/module-198.js",
+      "category": "detector",
+      "size": 5147,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 199,
+      "path": "detector/module-199.js",
+      "category": "detector",
+      "size": 1000,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 200,
+      "path": "detector/module-200.js",
+      "category": "detector",
+      "size": 4718,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 201,
+      "path": "detector/module-201.js",
+      "category": "detector",
+      "size": 7469,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 202,
+      "path": "detector/module-202.js",
+      "category": "detector",
+      "size": 3633,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 203,
+      "path": "detector/module-203.js",
+      "category": "detector",
+      "size": 631,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 204,
+      "path": "platform/module-204.js",
+      "category": "platform",
+      "size": 427,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 205,
+      "path": "platform/module-205.js",
+      "category": "platform",
+      "size": 412,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 206,
+      "path": "detector/module-206.js",
+      "category": "detector",
+      "size": 2337,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 207,
+      "path": "detector/module-207.js",
+      "category": "detector",
+      "size": 2169,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 208,
+      "path": "vendor/module-208.js",
+      "category": "vendor",
+      "size": 3161,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 209,
+      "path": "platform/module-209.js",
+      "category": "platform",
+      "size": 724,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 210,
+      "path": "detector/module-210.js",
+      "category": "detector",
+      "size": 628,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 211,
+      "path": "detector/module-211.js",
+      "category": "detector",
+      "size": 498,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 212,
+      "path": "detector/module-212.js",
+      "category": "detector",
+      "size": 6898,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 213,
+      "path": "detector/module-213.js",
+      "category": "detector",
+      "size": 572,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 214,
+      "path": "detector/module-214.js",
+      "category": "detector",
+      "size": 9641,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 215,
+      "path": "detector/module-215.js",
+      "category": "detector",
+      "size": 3490,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 216,
+      "path": "detector/module-216.js",
+      "category": "detector",
+      "size": 4292,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 217,
+      "path": "detector/module-217.js",
+      "category": "detector",
+      "size": 8545,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 218,
+      "path": "detector/module-218.js",
+      "category": "detector",
+      "size": 3388,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 219,
+      "path": "detector/module-219.js",
+      "category": "detector",
+      "size": 690,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 220,
+      "path": "detector/module-220.js",
+      "category": "detector",
+      "size": 3130,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 221,
+      "path": "detector/module-221.js",
+      "category": "detector",
+      "size": 345,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 222,
+      "path": "detector/module-222.js",
+      "category": "detector",
+      "size": 370,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 223,
+      "path": "detector/module-223.js",
+      "category": "detector",
+      "size": 342,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 224,
+      "path": "detector/module-224.js",
+      "category": "detector",
+      "size": 4522,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 225,
+      "path": "detector/module-225.js",
+      "category": "detector",
+      "size": 6203,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 226,
+      "path": "vendor/module-226.js",
+      "category": "vendor",
+      "size": 3188,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 227,
+      "path": "detector/module-227.js",
+      "category": "detector",
+      "size": 259,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 228,
+      "path": "detector/module-228.js",
+      "category": "detector",
+      "size": 3677,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 229,
+      "path": "detector/module-229.js",
+      "category": "detector",
+      "size": 3586,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 230,
+      "path": "detector/module-230.js",
+      "category": "detector",
+      "size": 8454,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 231,
+      "path": "detector/module-231.js",
+      "category": "detector",
+      "size": 2576,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 232,
+      "path": "detector/module-232.js",
+      "category": "detector",
+      "size": 19978,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 233,
+      "path": "detector/module-233.js",
+      "category": "detector",
+      "size": 1292,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 234,
+      "path": "detector/module-234.js",
+      "category": "detector",
+      "size": 1143,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 235,
+      "path": "detector/module-235.js",
+      "category": "detector",
+      "size": 3193,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 236,
+      "path": "detector/module-236.js",
+      "category": "detector",
+      "size": 3343,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 237,
+      "path": "platform/module-237.js",
+      "category": "platform",
+      "size": 229,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 238,
+      "path": "detector/module-238.js",
+      "category": "detector",
+      "size": 421,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 239,
+      "path": "detector/module-239.js",
+      "category": "detector",
+      "size": 480,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 240,
+      "path": "detector/module-240.js",
+      "category": "detector",
+      "size": 310,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 241,
+      "path": "detector/module-241.js",
+      "category": "detector",
+      "size": 3202,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 242,
+      "path": "crypto/module-242.js",
+      "category": "crypto",
+      "size": 11366,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 243,
+      "path": "detector/module-243.js",
+      "category": "detector",
+      "size": 7792,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 244,
+      "path": "detector/module-244.js",
+      "category": "detector",
+      "size": 3238,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 245,
+      "path": "detector/module-245.js",
+      "category": "detector",
+      "size": 5707,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 246,
+      "path": "platform/module-246.js",
+      "category": "platform",
+      "size": 161,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 247,
+      "path": "detector/module-247.js",
+      "category": "detector",
+      "size": 777,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 248,
+      "path": "detector/module-248.js",
+      "category": "detector",
+      "size": 3401,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 249,
+      "path": "detector/module-249.js",
+      "category": "detector",
+      "size": 986,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 250,
+      "path": "platform/module-250.js",
+      "category": "platform",
+      "size": 362,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 251,
+      "path": "detector/module-251.js",
+      "category": "detector",
+      "size": 3051,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 252,
+      "path": "detector/module-252.js",
+      "category": "detector",
+      "size": 3367,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 253,
+      "path": "platform/module-253.js",
+      "category": "platform",
+      "size": 323,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 254,
+      "path": "detector/module-254.js",
+      "category": "detector",
+      "size": 11560,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 255,
+      "path": "detector/module-255.js",
+      "category": "detector",
+      "size": 5153,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 256,
+      "path": "detector/module-256.js",
+      "category": "detector",
+      "size": 268,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 257,
+      "path": "detector/module-257.js",
+      "category": "detector",
+      "size": 199,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 258,
+      "path": "detector/module-258.js",
+      "category": "detector",
+      "size": 4142,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 259,
+      "path": "vendor/module-259.js",
+      "category": "vendor",
+      "size": 2966,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 260,
+      "path": "detector/module-260.js",
+      "category": "detector",
+      "size": 3667,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 261,
+      "path": "detector/module-261.js",
+      "category": "detector",
+      "size": 3162,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 262,
+      "path": "detector/module-262.js",
+      "category": "detector",
+      "size": 5744,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 263,
+      "path": "detector/module-263.js",
+      "category": "detector",
+      "size": 3725,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 264,
+      "path": "detector/module-264.js",
+      "category": "detector",
+      "size": 3912,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 265,
+      "path": "detector/module-265.js",
+      "category": "detector",
+      "size": 276,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 266,
+      "path": "detector/module-266.js",
+      "category": "detector",
+      "size": 3884,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 267,
+      "path": "platform/module-267.js",
+      "category": "platform",
+      "size": 282,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 268,
+      "path": "platform/module-268.js",
+      "category": "platform",
+      "size": 217,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 269,
+      "path": "detector/module-269.js",
+      "category": "detector",
+      "size": 7161,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 270,
+      "path": "vendor/module-270.js",
+      "category": "vendor",
+      "size": 3156,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 271,
+      "path": "platform/module-271.js",
+      "category": "platform",
+      "size": 487,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 272,
+      "path": "detector/module-272.js",
+      "category": "detector",
+      "size": 1036,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 273,
+      "path": "detector/module-273.js",
+      "category": "detector",
+      "size": 3606,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 274,
+      "path": "detector/module-274.js",
+      "category": "detector",
+      "size": 769,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 275,
+      "path": "detector/module-275.js",
+      "category": "detector",
+      "size": 617,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 276,
+      "path": "platform/module-276.js",
+      "category": "platform",
+      "size": 420,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 277,
+      "path": "vendor/module-277.js",
+      "category": "vendor",
+      "size": 3495,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 278,
+      "path": "detector/module-278.js",
+      "category": "detector",
+      "size": 835,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 279,
+      "path": "platform/module-279.js",
+      "category": "platform",
+      "size": 509,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 280,
+      "path": "detector/module-280.js",
+      "category": "detector",
+      "size": 3358,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 281,
+      "path": "detector/module-281.js",
+      "category": "detector",
+      "size": 7670,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 282,
+      "path": "detector/module-282.js",
+      "category": "detector",
+      "size": 315,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 283,
+      "path": "detector/module-283.js",
+      "category": "detector",
+      "size": 559,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 284,
+      "path": "vendor/module-284.js",
+      "category": "vendor",
+      "size": 3952,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 285,
+      "path": "detector/module-285.js",
+      "category": "detector",
+      "size": 594,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 286,
+      "path": "detector/module-286.js",
+      "category": "detector",
+      "size": 4103,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 287,
+      "path": "detector/module-287.js",
+      "category": "detector",
+      "size": 322,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 288,
+      "path": "vendor/module-288.js",
+      "category": "vendor",
+      "size": 2951,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 289,
+      "path": "detector/module-289.js",
+      "category": "detector",
+      "size": 278,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 290,
+      "path": "detector/module-290.js",
+      "category": "detector",
+      "size": 640,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 291,
+      "path": "detector/module-291.js",
+      "category": "detector",
+      "size": 3572,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 292,
+      "path": "detector/module-292.js",
+      "category": "detector",
+      "size": 684,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 293,
+      "path": "detector/module-293.js",
+      "category": "detector",
+      "size": 6395,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 294,
+      "path": "detector/module-294.js",
+      "category": "detector",
+      "size": 7248,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 295,
+      "path": "detector/module-295.js",
+      "category": "detector",
+      "size": 8096,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 296,
+      "path": "detector/module-296.js",
+      "category": "detector",
+      "size": 4891,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 297,
+      "path": "detector/module-297.js",
+      "category": "detector",
+      "size": 2415,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 298,
+      "path": "detector/module-298.js",
+      "category": "detector",
+      "size": 4842,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 299,
+      "path": "platform/module-299.js",
+      "category": "platform",
+      "size": 567,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 300,
+      "path": "detector/module-300.js",
+      "category": "detector",
+      "size": 5884,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 301,
+      "path": "detector/module-301.js",
+      "category": "detector",
+      "size": 866,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 302,
+      "path": "detector/module-302.js",
+      "category": "detector",
+      "size": 3374,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 303,
+      "path": "platform/module-303.js",
+      "category": "platform",
+      "size": 210,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 304,
+      "path": "detector/module-304.js",
+      "category": "detector",
+      "size": 1319,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 305,
+      "path": "detector/module-305.js",
+      "category": "detector",
+      "size": 354,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 306,
+      "path": "detector/module-306.js",
+      "category": "detector",
+      "size": 927,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 307,
+      "path": "detector/module-307.js",
+      "category": "detector",
+      "size": 7264,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 308,
+      "path": "platform/module-308.js",
+      "category": "platform",
+      "size": 492,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 309,
+      "path": "detector/module-309.js",
+      "category": "detector",
+      "size": 4059,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 310,
+      "path": "detector/module-310.js",
+      "category": "detector",
+      "size": 3391,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 311,
+      "path": "detector/module-311.js",
+      "category": "detector",
+      "size": 7325,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 312,
+      "path": "platform/module-312.js",
+      "category": "platform",
+      "size": 372,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 313,
+      "path": "detector/module-313.js",
+      "category": "detector",
+      "size": 3593,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 314,
+      "path": "platform/module-314.js",
+      "category": "platform",
+      "size": 1710,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 315,
+      "path": "detector/module-315.js",
+      "category": "detector",
+      "size": 828,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 316,
+      "path": "detector/module-316.js",
+      "category": "detector",
+      "size": 3785,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 317,
+      "path": "detector/module-317.js",
+      "category": "detector",
+      "size": 3738,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 318,
+      "path": "detector/module-318.js",
+      "category": "detector",
+      "size": 5462,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 319,
+      "path": "detector/module-319.js",
+      "category": "detector",
+      "size": 5683,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 320,
+      "path": "detector/module-320.js",
+      "category": "detector",
+      "size": 610,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 321,
+      "path": "platform/module-321.js",
+      "category": "platform",
+      "size": 548,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 322,
+      "path": "platform/module-322.js",
+      "category": "platform",
+      "size": 320,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 323,
+      "path": "detector/module-323.js",
+      "category": "detector",
+      "size": 1696,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 324,
+      "path": "detector/module-324.js",
+      "category": "detector",
+      "size": 529,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 325,
+      "path": "platform/module-325.js",
+      "category": "platform",
+      "size": 525,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 326,
+      "path": "detector/module-326.js",
+      "category": "detector",
+      "size": 444,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 327,
+      "path": "detector/module-327.js",
+      "category": "detector",
+      "size": 392,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 328,
+      "path": "detector/module-328.js",
+      "category": "detector",
+      "size": 3059,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 329,
+      "path": "detector/module-329.js",
+      "category": "detector",
+      "size": 3887,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 330,
+      "path": "detector/module-330.js",
+      "category": "detector",
+      "size": 6428,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 331,
+      "path": "detector/module-331.js",
+      "category": "detector",
+      "size": 3310,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 332,
+      "path": "platform/module-332.js",
+      "category": "platform",
+      "size": 310,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 333,
+      "path": "detector/module-333.js",
+      "category": "detector",
+      "size": 3870,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 334,
+      "path": "detector/module-334.js",
+      "category": "detector",
+      "size": 5118,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 335,
+      "path": "detector/module-335.js",
+      "category": "detector",
+      "size": 3196,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 336,
+      "path": "detector/module-336.js",
+      "category": "detector",
+      "size": 594,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 337,
+      "path": "platform/module-337.js",
+      "category": "platform",
+      "size": 336,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 338,
+      "path": "detector/module-338.js",
+      "category": "detector",
+      "size": 3791,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 339,
+      "path": "detector/module-339.js",
+      "category": "detector",
+      "size": 3921,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 340,
+      "path": "detector/module-340.js",
+      "category": "detector",
+      "size": 3151,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 341,
+      "path": "platform/module-341.js",
+      "category": "platform",
+      "size": 330,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 342,
+      "path": "detector/module-342.js",
+      "category": "detector",
+      "size": 3236,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 343,
+      "path": "detector/module-343.js",
+      "category": "detector",
+      "size": 3590,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 344,
+      "path": "platform/module-344.js",
+      "category": "platform",
+      "size": 302,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 345,
+      "path": "detector/module-345.js",
+      "category": "detector",
+      "size": 3158,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 346,
+      "path": "detector/module-346.js",
+      "category": "detector",
+      "size": 267,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 347,
+      "path": "detector/module-347.js",
+      "category": "detector",
+      "size": 9372,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 348,
+      "path": "detector/module-348.js",
+      "category": "detector",
+      "size": 214,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 349,
+      "path": "detector/module-349.js",
+      "category": "detector",
+      "size": 318,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 350,
+      "path": "vendor/module-350.js",
+      "category": "vendor",
+      "size": 3122,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 351,
+      "path": "detector/module-351.js",
+      "category": "detector",
+      "size": 5986,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 352,
+      "path": "platform/module-352.js",
+      "category": "platform",
+      "size": 926,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 353,
+      "path": "platform/module-353.js",
+      "category": "platform",
+      "size": 511,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 354,
+      "path": "vendor/module-354.js",
+      "category": "vendor",
+      "size": 2986,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 355,
+      "path": "vendor/module-355.js",
+      "category": "vendor",
+      "size": 3640,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 356,
+      "path": "platform/module-356.js",
+      "category": "platform",
+      "size": 312,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 357,
+      "path": "platform/module-357.js",
+      "category": "platform",
+      "size": 231,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 358,
+      "path": "detector/module-358.js",
+      "category": "detector",
+      "size": 5787,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 359,
+      "path": "detector/module-359.js",
+      "category": "detector",
+      "size": 5519,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 360,
+      "path": "platform/module-360.js",
+      "category": "platform",
+      "size": 177,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 361,
+      "path": "detector/module-361.js",
+      "category": "detector",
+      "size": 1532,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 362,
+      "path": "detector/module-362.js",
+      "category": "detector",
+      "size": 4964,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 363,
+      "path": "platform/module-363.js",
+      "category": "platform",
+      "size": 183,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 364,
+      "path": "detector/module-364.js",
+      "category": "detector",
+      "size": 10852,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 365,
+      "path": "detector/module-365.js",
+      "category": "detector",
+      "size": 1437,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 366,
+      "path": "detector/module-366.js",
+      "category": "detector",
+      "size": 3221,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 367,
+      "path": "platform/module-367.js",
+      "category": "platform",
+      "size": 256,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 368,
+      "path": "providers/module-368.js",
+      "category": "providers",
+      "size": 342,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media provider adapter"
+    },
+    {
+      "id": 369,
+      "path": "detector/module-369.js",
+      "category": "detector",
+      "size": 3614,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 370,
+      "path": "detector/module-370.js",
+      "category": "detector",
+      "size": 1650,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 371,
+      "path": "detector/module-371.js",
+      "category": "detector",
+      "size": 3400,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 372,
+      "path": "detector/module-372.js",
+      "category": "detector",
+      "size": 257,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 373,
+      "path": "detector/module-373.js",
+      "category": "detector",
+      "size": 332,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 374,
+      "path": "detector/module-374.js",
+      "category": "detector",
+      "size": 2689,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 375,
+      "path": "detector/module-375.js",
+      "category": "detector",
+      "size": 437,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 376,
+      "path": "detector/module-376.js",
+      "category": "detector",
+      "size": 3175,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 377,
+      "path": "platform/module-377.js",
+      "category": "platform",
+      "size": 870,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 378,
+      "path": "detector/module-378.js",
+      "category": "detector",
+      "size": 4653,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 379,
+      "path": "platform/module-379.js",
+      "category": "platform",
+      "size": 283,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 380,
+      "path": "detector/module-380.js",
+      "category": "detector",
+      "size": 3597,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 381,
+      "path": "detector/module-381.js",
+      "category": "detector",
+      "size": 3585,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 382,
+      "path": "detector/module-382.js",
+      "category": "detector",
+      "size": 3680,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 383,
+      "path": "detector/module-383.js",
+      "category": "detector",
+      "size": 323,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 384,
+      "path": "detector/module-384.js",
+      "category": "detector",
+      "size": 373,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 385,
+      "path": "detector/module-385.js",
+      "category": "detector",
+      "size": 732,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 386,
+      "path": "platform/module-386.js",
+      "category": "platform",
+      "size": 240,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 387,
+      "path": "detector/module-387.js",
+      "category": "detector",
+      "size": 12968,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 388,
+      "path": "detector/module-388.js",
+      "category": "detector",
+      "size": 363,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 389,
+      "path": "providers/module-389.js",
+      "category": "providers",
+      "size": 269,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media provider adapter"
+    },
+    {
+      "id": 390,
+      "path": "detector/module-390.js",
+      "category": "detector",
+      "size": 3270,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 391,
+      "path": "platform/module-391.js",
+      "category": "platform",
+      "size": 285,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 392,
+      "path": "platform/module-392.js",
+      "category": "platform",
+      "size": 247,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 393,
+      "path": "detector/module-393.js",
+      "category": "detector",
+      "size": 4417,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 394,
+      "path": "vendor/module-394.js",
+      "category": "vendor",
+      "size": 4561,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 395,
+      "path": "detector/module-395.js",
+      "category": "detector",
+      "size": 648,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 396,
+      "path": "detector/module-396.js",
+      "category": "detector",
+      "size": 351,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 397,
+      "path": "detector/module-397.js",
+      "category": "detector",
+      "size": 3815,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 398,
+      "path": "detector/module-398.js",
+      "category": "detector",
+      "size": 3424,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 399,
+      "path": "detector/module-399.js",
+      "category": "detector",
+      "size": 503,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 400,
+      "path": "detector/module-400.js",
+      "category": "detector",
+      "size": 2193,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 401,
+      "path": "detector/module-401.js",
+      "category": "detector",
+      "size": 190,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 402,
+      "path": "detector/module-402.js",
+      "category": "detector",
+      "size": 6502,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 403,
+      "path": "detector/module-403.js",
+      "category": "detector",
+      "size": 5422,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 405,
+      "path": "platform/module-405.js",
+      "category": "platform",
+      "size": 2800,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 406,
+      "path": "platform/module-406.js",
+      "category": "platform",
+      "size": 92,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 407,
+      "path": "platform/module-407.js",
+      "category": "platform",
+      "size": 96,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 408,
+      "path": "platform/module-408.js",
+      "category": "platform",
+      "size": 97,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 409,
+      "path": "platform/module-409.js",
+      "category": "platform",
+      "size": 101,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 410,
+      "path": "platform/module-410.js",
+      "category": "platform",
+      "size": 95,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 411,
+      "path": "platform/module-411.js",
+      "category": "platform",
+      "size": 95,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 412,
+      "path": "platform/module-412.js",
+      "category": "platform",
+      "size": 97,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 413,
+      "path": "platform/module-413.js",
+      "category": "platform",
+      "size": 95,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 414,
+      "path": "platform/module-414.js",
+      "category": "platform",
+      "size": 95,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 415,
+      "path": "platform/module-415.js",
+      "category": "platform",
+      "size": 95,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 416,
+      "path": "platform/module-416.js",
+      "category": "platform",
+      "size": 97,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 417,
+      "path": "platform/module-417.js",
+      "category": "platform",
+      "size": 142,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 418,
+      "path": "platform/module-418.js",
+      "category": "platform",
+      "size": 125,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 419,
+      "path": "platform/module-419.js",
+      "category": "platform",
+      "size": 118,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 420,
+      "path": "platform/module-420.js",
+      "category": "platform",
+      "size": 272,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 421,
+      "path": "platform/module-421.js",
+      "category": "platform",
+      "size": 407,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 422,
+      "path": "platform/module-422.js",
+      "category": "platform",
+      "size": 985,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 423,
+      "path": "platform/module-423.js",
+      "category": "platform",
+      "size": 138,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 424,
+      "path": "platform/module-424.js",
+      "category": "platform",
+      "size": 171,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 425,
+      "path": "platform/module-425.js",
+      "category": "platform",
+      "size": 773,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 426,
+      "path": "platform/module-426.js",
+      "category": "platform",
+      "size": 359,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 427,
+      "path": "platform/module-427.js",
+      "category": "platform",
+      "size": 1983,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 428,
+      "path": "platform/module-428.js",
+      "category": "platform",
+      "size": 330,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 429,
+      "path": "platform/module-429.js",
+      "category": "platform",
+      "size": 217,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 430,
+      "path": "platform/module-430.js",
+      "category": "platform",
+      "size": 944,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 431,
+      "path": "platform/module-431.js",
+      "category": "platform",
+      "size": 773,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 432,
+      "path": "platform/module-432.js",
+      "category": "platform",
+      "size": 770,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 433,
+      "path": "vendor/elliptic/module-433.js",
+      "category": "vendor",
+      "size": 44364,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 434,
+      "path": "platform/module-434.js",
+      "category": "platform",
+      "size": 196,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 435,
+      "path": "platform/module-435.js",
+      "category": "platform",
+      "size": 5099,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 436,
+      "path": "platform/module-436.js",
+      "category": "platform",
+      "size": 277,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 437,
+      "path": "vendor/elliptic/module-437.js",
+      "category": "vendor",
+      "size": 103,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 442,
+      "path": "detector/module-442.js",
+      "category": "detector",
+      "size": 39574,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 443,
+      "path": "vendor/elliptic/module-443.js",
+      "category": "vendor",
+      "size": 43949,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 444,
+      "path": "detector/module-444.js",
+      "category": "detector",
+      "size": 6579,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 445,
+      "path": "vendor/module-445.js",
+      "category": "vendor",
+      "size": 4323,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 446,
+      "path": "detector/module-446.js",
+      "category": "detector",
+      "size": 9368,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 447,
+      "path": "vendor/module-447.js",
+      "category": "vendor",
+      "size": 3812,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 448,
+      "path": "detector/module-448.js",
+      "category": "detector",
+      "size": 4739,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 449,
+      "path": "crypto/module-449.js",
+      "category": "crypto",
+      "size": 9295,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 451,
+      "path": "platform/module-451.js",
+      "category": "platform",
+      "size": 1769,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 462,
+      "path": "platform/module-462.js",
+      "category": "platform",
+      "size": 10592,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 463,
+      "path": "platform/module-463.js",
+      "category": "platform",
+      "size": 87,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 464,
+      "path": "platform/module-464.js",
+      "category": "platform",
+      "size": 1154,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 465,
+      "path": "platform/module-465.js",
+      "category": "platform",
+      "size": 7087,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 466,
+      "path": "platform/module-466.js",
+      "category": "platform",
+      "size": 2049,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 467,
+      "path": "platform/module-467.js",
+      "category": "platform",
+      "size": 2170,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 468,
+      "path": "platform/module-468.js",
+      "category": "platform",
+      "size": 4441,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 469,
+      "path": "platform/module-469.js",
+      "category": "platform",
+      "size": 888,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 470,
+      "path": "platform/module-470.js",
+      "category": "platform",
+      "size": 126,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 471,
+      "path": "platform/module-471.js",
+      "category": "platform",
+      "size": 2358,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 472,
+      "path": "platform/module-472.js",
+      "category": "platform",
+      "size": 112,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 473,
+      "path": "platform/module-473.js",
+      "category": "platform",
+      "size": 392,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 474,
+      "path": "platform/module-474.js",
+      "category": "platform",
+      "size": 297,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 475,
+      "path": "platform/module-475.js",
+      "category": "platform",
+      "size": 1539,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 476,
+      "path": "platform/module-476.js",
+      "category": "platform",
+      "size": 391,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 477,
+      "path": "platform/module-477.js",
+      "category": "platform",
+      "size": 3272,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 478,
+      "path": "platform/module-478.js",
+      "category": "platform",
+      "size": 1681,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 479,
+      "path": "platform/module-479.js",
+      "category": "platform",
+      "size": 547,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 480,
+      "path": "platform/module-480.js",
+      "category": "platform",
+      "size": 182,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 481,
+      "path": "crypto/module-481.js",
+      "category": "crypto",
+      "size": 2163,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 482,
+      "path": "crypto/module-482.js",
+      "category": "crypto",
+      "size": 2000,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 483,
+      "path": "crypto/module-483.js",
+      "category": "crypto",
+      "size": 419,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 484,
+      "path": "platform/module-484.js",
+      "category": "platform",
+      "size": 1023,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 485,
+      "path": "vendor/elliptic/module-485.js",
+      "category": "vendor",
+      "size": 103,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 486,
+      "path": "platform/module-486.js",
+      "category": "platform",
+      "size": 1296,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 487,
+      "path": "platform/module-487.js",
+      "category": "platform",
+      "size": 10592,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 488,
+      "path": "platform/module-488.js",
+      "category": "platform",
+      "size": 87,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 489,
+      "path": "platform/module-489.js",
+      "category": "platform",
+      "size": 1154,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 490,
+      "path": "platform/module-490.js",
+      "category": "platform",
+      "size": 7087,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 491,
+      "path": "platform/module-491.js",
+      "category": "platform",
+      "size": 2049,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 492,
+      "path": "platform/module-492.js",
+      "category": "platform",
+      "size": 655,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 493,
+      "path": "platform/module-493.js",
+      "category": "platform",
+      "size": 144,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 494,
+      "path": "platform/module-494.js",
+      "category": "platform",
+      "size": 523,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 495,
+      "path": "platform/module-495.js",
+      "category": "platform",
+      "size": 1891,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 496,
+      "path": "platform/module-496.js",
+      "category": "platform",
+      "size": 4456,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 497,
+      "path": "platform/module-497.js",
+      "category": "platform",
+      "size": 1848,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 498,
+      "path": "platform/module-498.js",
+      "category": "platform",
+      "size": 195,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 499,
+      "path": "platform/module-499.js",
+      "category": "platform",
+      "size": 3963,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 500,
+      "path": "platform/module-500.js",
+      "category": "platform",
+      "size": 4392,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 501,
+      "path": "platform/module-501.js",
+      "category": "platform",
+      "size": 231,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 502,
+      "path": "platform/module-502.js",
+      "category": "platform",
+      "size": 301,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 503,
+      "path": "platform/module-503.js",
+      "category": "platform",
+      "size": 132,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 504,
+      "path": "platform/module-504.js",
+      "category": "platform",
+      "size": 205,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 565,
+      "path": "providers/module-565.js",
+      "category": "providers",
+      "size": 2979,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media provider adapter"
+    },
+    {
+      "id": 566,
+      "path": "providers/module-566.js",
+      "category": "providers",
+      "size": 3701,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media provider adapter"
+    },
+    {
+      "id": 567,
+      "path": "vendor/module-567.js",
+      "category": "vendor",
+      "size": 3275,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 568,
+      "path": "detector/module-568.js",
+      "category": "detector",
+      "size": 3385,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 569,
+      "path": "detector/module-569.js",
+      "category": "detector",
+      "size": 3289,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 570,
+      "path": "vendor/module-570.js",
+      "category": "vendor",
+      "size": 3457,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 571,
+      "path": "vendor/module-571.js",
+      "category": "vendor",
+      "size": 3291,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 572,
+      "path": "platform/module-572.js",
+      "category": "platform",
+      "size": 1347,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 573,
+      "path": "platform/module-573.js",
+      "category": "platform",
+      "size": 406,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 574,
+      "path": "platform/module-574.js",
+      "category": "platform",
+      "size": 146,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 575,
+      "path": "platform/module-575.js",
+      "category": "platform",
+      "size": 225,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 576,
+      "path": "platform/module-576.js",
+      "category": "platform",
+      "size": 125,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 577,
+      "path": "platform/module-577.js",
+      "category": "platform",
+      "size": 1037,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 578,
+      "path": "platform/module-578.js",
+      "category": "platform",
+      "size": 666,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 579,
+      "path": "platform/module-579.js",
+      "category": "platform",
+      "size": 1402,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 580,
+      "path": "platform/module-580.js",
+      "category": "platform",
+      "size": 277,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 581,
+      "path": "platform/module-581.js",
+      "category": "platform",
+      "size": 265,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 582,
+      "path": "platform/module-582.js",
+      "category": "platform",
+      "size": 266,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 583,
+      "path": "platform/module-583.js",
+      "category": "platform",
+      "size": 546,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 584,
+      "path": "platform/module-584.js",
+      "category": "platform",
+      "size": 1352,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 585,
+      "path": "platform/module-585.js",
+      "category": "platform",
+      "size": 247,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 586,
+      "path": "platform/module-586.js",
+      "category": "platform",
+      "size": 153,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 587,
+      "path": "platform/module-587.js",
+      "category": "platform",
+      "size": 144,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 588,
+      "path": "platform/module-588.js",
+      "category": "platform",
+      "size": 175,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 589,
+      "path": "platform/module-589.js",
+      "category": "platform",
+      "size": 146,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 590,
+      "path": "platform/module-590.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 591,
+      "path": "platform/module-591.js",
+      "category": "platform",
+      "size": 1238,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 592,
+      "path": "platform/module-592.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 593,
+      "path": "platform/module-593.js",
+      "category": "platform",
+      "size": 276,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 594,
+      "path": "platform/module-594.js",
+      "category": "platform",
+      "size": 1093,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 595,
+      "path": "platform/module-595.js",
+      "category": "platform",
+      "size": 1127,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 596,
+      "path": "platform/module-596.js",
+      "category": "platform",
+      "size": 650,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 597,
+      "path": "platform/module-597.js",
+      "category": "platform",
+      "size": 836,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 598,
+      "path": "platform/module-598.js",
+      "category": "platform",
+      "size": 585,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 599,
+      "path": "platform/module-599.js",
+      "category": "platform",
+      "size": 93,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 600,
+      "path": "platform/module-600.js",
+      "category": "platform",
+      "size": 1504,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 601,
+      "path": "platform/module-601.js",
+      "category": "platform",
+      "size": 1018,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 602,
+      "path": "platform/module-602.js",
+      "category": "platform",
+      "size": 746,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 603,
+      "path": "platform/module-603.js",
+      "category": "platform",
+      "size": 146,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 604,
+      "path": "platform/module-604.js",
+      "category": "platform",
+      "size": 850,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 605,
+      "path": "platform/module-605.js",
+      "category": "platform",
+      "size": 819,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 606,
+      "path": "crypto/module-606.js",
+      "category": "crypto",
+      "size": 1716,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 607,
+      "path": "platform/module-607.js",
+      "category": "platform",
+      "size": 172,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 608,
+      "path": "platform/module-608.js",
+      "category": "platform",
+      "size": 259,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 609,
+      "path": "platform/module-609.js",
+      "category": "platform",
+      "size": 501,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 610,
+      "path": "platform/module-610.js",
+      "category": "platform",
+      "size": 303,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 611,
+      "path": "platform/module-611.js",
+      "category": "platform",
+      "size": 465,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 612,
+      "path": "platform/module-612.js",
+      "category": "platform",
+      "size": 351,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 613,
+      "path": "platform/module-613.js",
+      "category": "platform",
+      "size": 1097,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 614,
+      "path": "crypto/module-614.js",
+      "category": "crypto",
+      "size": 1917,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 615,
+      "path": "platform/module-615.js",
+      "category": "platform",
+      "size": 239,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 616,
+      "path": "platform/module-616.js",
+      "category": "platform",
+      "size": 588,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 617,
+      "path": "platform/module-617.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 618,
+      "path": "vendor/elliptic/module-618.js",
+      "category": "vendor",
+      "size": 103,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 619,
+      "path": "platform/module-619.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 620,
+      "path": "platform/module-620.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 621,
+      "path": "platform/module-621.js",
+      "category": "platform",
+      "size": 7061,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 622,
+      "path": "platform/module-622.js",
+      "category": "platform",
+      "size": 2039,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 623,
+      "path": "platform/module-623.js",
+      "category": "platform",
+      "size": 1331,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 624,
+      "path": "platform/module-624.js",
+      "category": "platform",
+      "size": 175,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 625,
+      "path": "platform/module-625.js",
+      "category": "platform",
+      "size": 146,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 626,
+      "path": "platform/module-626.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 627,
+      "path": "platform/module-627.js",
+      "category": "platform",
+      "size": 1238,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 628,
+      "path": "platform/module-628.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 629,
+      "path": "platform/module-629.js",
+      "category": "platform",
+      "size": 276,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 630,
+      "path": "platform/module-630.js",
+      "category": "platform",
+      "size": 2316,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 631,
+      "path": "platform/module-631.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 632,
+      "path": "platform/module-632.js",
+      "category": "platform",
+      "size": 1203,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 633,
+      "path": "platform/module-633.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 634,
+      "path": "platform/module-634.js",
+      "category": "platform",
+      "size": 12623,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 635,
+      "path": "platform/module-635.js",
+      "category": "platform",
+      "size": 2608,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 636,
+      "path": "platform/module-636.js",
+      "category": "platform",
+      "size": 6174,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 637,
+      "path": "platform/module-637.js",
+      "category": "platform",
+      "size": 154,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 638,
+      "path": "platform/module-638.js",
+      "category": "platform",
+      "size": 972,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 639,
+      "path": "platform/module-639.js",
+      "category": "platform",
+      "size": 467,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 640,
+      "path": "platform/module-640.js",
+      "category": "platform",
+      "size": 558,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 641,
+      "path": "platform/module-641.js",
+      "category": "platform",
+      "size": 2003,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 642,
+      "path": "platform/module-642.js",
+      "category": "platform",
+      "size": 777,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 643,
+      "path": "vendor/elliptic/module-643.js",
+      "category": "vendor",
+      "size": 26200,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 644,
+      "path": "platform/module-644.js",
+      "category": "platform",
+      "size": 3755,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 645,
+      "path": "platform/module-645.js",
+      "category": "platform",
+      "size": 1792,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 646,
+      "path": "platform/module-646.js",
+      "category": "platform",
+      "size": 1755,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 647,
+      "path": "platform/module-647.js",
+      "category": "platform",
+      "size": 1753,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 648,
+      "path": "platform/module-648.js",
+      "category": "platform",
+      "size": 1851,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 649,
+      "path": "platform/module-649.js",
+      "category": "platform",
+      "size": 1380,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 650,
+      "path": "platform/module-650.js",
+      "category": "platform",
+      "size": 993,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 651,
+      "path": "platform/module-651.js",
+      "category": "platform",
+      "size": 2309,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 652,
+      "path": "vendor/elliptic/module-652.js",
+      "category": "vendor",
+      "size": 103,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 653,
+      "path": "platform/module-653.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 654,
+      "path": "platform/module-654.js",
+      "category": "platform",
+      "size": 922,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 655,
+      "path": "platform/module-655.js",
+      "category": "platform",
+      "size": 2366,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 656,
+      "path": "platform/module-656.js",
+      "category": "platform",
+      "size": 1584,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 657,
+      "path": "detector/module-657.js",
+      "category": "detector",
+      "size": 8982,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 658,
+      "path": "detector/module-658.js",
+      "category": "detector",
+      "size": 554,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 659,
+      "path": "platform/module-659.js",
+      "category": "platform",
+      "size": 92,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 660,
+      "path": "platform/module-660.js",
+      "category": "platform",
+      "size": 633,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 661,
+      "path": "platform/module-661.js",
+      "category": "platform",
+      "size": 92,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 662,
+      "path": "platform/module-662.js",
+      "category": "platform",
+      "size": 372,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 663,
+      "path": "platform/module-663.js",
+      "category": "platform",
+      "size": 1691,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 664,
+      "path": "platform/module-664.js",
+      "category": "platform",
+      "size": 556,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 665,
+      "path": "crypto/module-665.js",
+      "category": "crypto",
+      "size": 741,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 666,
+      "path": "platform/module-666.js",
+      "category": "platform",
+      "size": 1427,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 667,
+      "path": "platform/module-667.js",
+      "category": "platform",
+      "size": 1689,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 668,
+      "path": "vendor/elliptic/module-668.js",
+      "category": "vendor",
+      "size": 103,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 669,
+      "path": "platform/module-669.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 670,
+      "path": "platform/module-670.js",
+      "category": "platform",
+      "size": 231,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 671,
+      "path": "platform/module-671.js",
+      "category": "platform",
+      "size": 1034,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 672,
+      "path": "platform/module-672.js",
+      "category": "platform",
+      "size": 57,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 673,
+      "path": "platform/module-673.js",
+      "category": "platform",
+      "size": 1256,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 674,
+      "path": "platform/module-674.js",
+      "category": "platform",
+      "size": 1672,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 675,
+      "path": "detector/module-675.js",
+      "category": "detector",
+      "size": 3708,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 676,
+      "path": "platform/module-676.js",
+      "category": "platform",
+      "size": 304,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 677,
+      "path": "vendor/module-677.js",
+      "category": "vendor",
+      "size": 3222,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 678,
+      "path": "detector/module-678.js",
+      "category": "detector",
+      "size": 3732,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 679,
+      "path": "vendor/module-679.js",
+      "category": "vendor",
+      "size": 3021,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 680,
+      "path": "detector/module-680.js",
+      "category": "detector",
+      "size": 3487,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 681,
+      "path": "platform/module-681.js",
+      "category": "platform",
+      "size": 572,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 682,
+      "path": "platform/module-682.js",
+      "category": "platform",
+      "size": 898,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 683,
+      "path": "vendor/module-683.js",
+      "category": "vendor",
+      "size": 3465,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 684,
+      "path": "detector/module-684.js",
+      "category": "detector",
+      "size": 3403,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 685,
+      "path": "platform/module-685.js",
+      "category": "platform",
+      "size": 1459,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 686,
+      "path": "vendor/module-686.js",
+      "category": "vendor",
+      "size": 3205,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 687,
+      "path": "detector/module-687.js",
+      "category": "detector",
+      "size": 4570,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 688,
+      "path": "platform/module-688.js",
+      "category": "platform",
+      "size": 371,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 689,
+      "path": "platform/module-689.js",
+      "category": "platform",
+      "size": 1888,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 690,
+      "path": "detector/module-690.js",
+      "category": "detector",
+      "size": 3330,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 691,
+      "path": "detector/module-691.js",
+      "category": "detector",
+      "size": 373,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 692,
+      "path": "detector/module-692.js",
+      "category": "detector",
+      "size": 3328,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 693,
+      "path": "vendor/module-693.js",
+      "category": "vendor",
+      "size": 3395,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 694,
+      "path": "detector/module-694.js",
+      "category": "detector",
+      "size": 3397,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 695,
+      "path": "vendor/module-695.js",
+      "category": "vendor",
+      "size": 3321,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unreferenced vendored library or shim"
+    },
+    {
+      "id": 696,
+      "path": "detector/module-696.js",
+      "category": "detector",
+      "size": 2997,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 697,
+      "path": "platform/module-697.js",
+      "category": "platform",
+      "size": 593,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 698,
+      "path": "platform/module-698.js",
+      "category": "platform",
+      "size": 373,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    },
+    {
+      "id": 699,
+      "path": "detector/module-699.js",
+      "category": "detector",
+      "size": 419,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 700,
+      "path": "detector/module-700.js",
+      "category": "detector",
+      "size": 4075,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Orphaned media detector / parser helper unreferenced in entry graph"
+    },
+    {
+      "id": 741,
+      "path": "crypto/module-741.js",
+      "category": "crypto",
+      "size": 26971,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Unused cryptographic / hashing routine uncalled by active workflow"
+    },
+    {
+      "id": 742,
+      "path": "platform/module-742.js",
+      "category": "platform",
+      "size": 8340,
+      "status": "candidate_drop",
+      "disposition": "retained_unmodified",
+      "reason": "Legacy site detector / scraper unreferenced in entry graph"
+    }
+  ]
+}
