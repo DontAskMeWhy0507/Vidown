@@ -24,7 +24,7 @@
     }
   };
   n.r = function (e) {
-    if (typeof Symbol != "undefined" && Symbol.toStringTag) {
+    if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
       Object.defineProperty(e, Symbol.toStringTag, {
         value: "Module"
       });
@@ -34,13 +34,13 @@
     });
   };
   n.t = function (e, t) {
-    if (t & 1) {
+    if (1 & t) {
       e = n(e);
     }
-    if (t & 8) {
+    if (8 & t) {
       return e;
     }
-    if (t & 4 && typeof e == "object" && e && e.__esModule) {
+    if (4 & t && typeof e === "object" && e && e.__esModule) {
       return e;
     }
     var r = Object.create(null);
@@ -49,7 +49,7 @@
       enumerable: true,
       value: e
     });
-    if (t & 2 && typeof e != "string") {
+    if (2 & t && typeof e !== "string") {
       for (var o in e) {
         n.d(r, o, function (t) {
           return e[t];
@@ -2007,6 +2007,1427 @@
     var C = ["chrome://", "coccoc://"];
     var O = ["coccoc.com/webhp", "about:blank"];
     var I = ["sex", "porn", "vlxx", "vlxy", "vlzz", "69", "18", "xvideo", "hentai", "jav", "cliphot", "xx", "mobiblog", "spank", "quatvn", "phang", "missav", "boyfriendtv", "lon88", "lonkk", "sieukhung", "thiendia", "gaigu", "lenlut", "heovl", "phimheo", "quaylen", "checkerviet", "koanchay", "sieudamtv", "phevkl", "heomup", "hdvietsub", "cuongdam", "phimloz", "chinababe", "phimden", "phim18", "xemsv", "thisvid", "thisav", "xsub", "phimkk", "chich", "phimcapba", "chongtoico", "thanhlau", "hdgay", "vkl", "vl", "phima", "strip", "loz", "xhamster", "banlinh", "quyong", "maulon", "prn", "baocaosu", "tinhduc", "thudam", "ditnhau", "ditme", "jable", "gaimup", "mbbg", "lauxanh", "gaito", "vl", "3xchina", "phimnguoilon", "mat6tube", "jpxnx", "vnshow", "gaigoi", "titday", "7mmtv", "daongon", "londep", "lontv", "thienvadia", "phimtz", "fuck", "phimxes", "phimsec", "xnx", "phang", "3x", "buoito", "hangdep", "kynuviet", "gaikhoehang", "chinaav", "xyz", "sex", "vkl", "xx", "xxx", "jav", "dam", "hentai", "domknig", "18", "phetgai", "porn", "gaidam", "daoxinh", "heo88", "tuoinung", "xyz", "buomtv", "kichdam"];
+  },
+  3: function (e, t, n) {
+    "use strict";
+
+    n.d(t, "d", function () {
+      return d;
+    });
+    n.d(t, "f", function () {
+      return f;
+    });
+    n.d(t, "e", function () {
+      return p;
+    });
+    n.d(t, "g", function () {
+      return g;
+    });
+    n.d(t, "b", function () {
+      return v;
+    });
+    n.d(t, "h", function () {
+      return y;
+    });
+    n.d(t, "c", function () {
+      return k;
+    });
+    n.d(t, "a", function () {
+      return b;
+    });
+    var r = n(1);
+    var o = n(0);
+    function i() {
+      /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
+      var e;
+      var t;
+      var n = typeof Symbol == "function" ? Symbol : {};
+      var r = n.iterator || "@@iterator";
+      var o = n.toStringTag || "@@toStringTag";
+      function s(n, r, o, i) {
+        var s = r && r.prototype instanceof l ? r : l;
+        var u = Object.create(s.prototype);
+        a(u, "_invoke", function (n, r, o) {
+          var i;
+          var a;
+          var s;
+          var l = 0;
+          var u = o || [];
+          var d = false;
+          var f = {
+            p: 0,
+            n: 0,
+            v: e,
+            a: p,
+            f: p.bind(e, 4),
+            d: function (t, n) {
+              i = t;
+              a = 0;
+              s = e;
+              f.n = n;
+              return c;
+            }
+          };
+          function p(n, r) {
+            a = n;
+            s = r;
+            t = 0;
+            for (; !d && l && !o && t < u.length; t++) {
+              var o;
+              var i = u[t];
+              var p = f.p;
+              var h = i[2];
+              if (n > 3) {
+                if (o = h === r) {
+                  s = i[(a = i[4]) ? 5 : (a = 3, 3)];
+                  i[4] = i[5] = e;
+                }
+              } else if (i[0] <= p) {
+                if (o = n < 2 && p < i[1]) {
+                  a = 0;
+                  f.v = r;
+                  f.n = i[1];
+                } else if (p < h && (o = n < 3 || i[0] > r || r > h)) {
+                  i[4] = n;
+                  i[5] = r;
+                  f.n = h;
+                  a = 0;
+                }
+              }
+            }
+            if (o || n > 1) {
+              return c;
+            }
+            d = true;
+            throw r;
+          }
+          return function (o, u, h) {
+            if (l > 1) {
+              throw TypeError("Generator is already running");
+            }
+            if (d && u === 1) {
+              p(u, h);
+            }
+            a = u;
+            s = h;
+            while ((t = a < 2 ? e : s) || !d) {
+              if (!i) {
+                if (a) {
+                  if (a < 3) {
+                    if (a > 1) {
+                      f.n = -1;
+                    }
+                    p(a, s);
+                  } else {
+                    f.n = s;
+                  }
+                } else {
+                  f.v = s;
+                }
+              }
+              try {
+                l = 2;
+                if (i) {
+                  if (!a) {
+                    o = "next";
+                  }
+                  if (t = i[o]) {
+                    if (!(t = t.call(i, s))) {
+                      throw TypeError("iterator result is not an object");
+                    }
+                    if (!t.done) {
+                      return t;
+                    }
+                    s = t.value;
+                    if (a < 2) {
+                      a = 0;
+                    }
+                  } else {
+                    if (a === 1 && (t = i.return)) {
+                      t.call(i);
+                    }
+                    if (a < 2) {
+                      s = TypeError("The iterator does not provide a '" + o + "' method");
+                      a = 1;
+                    }
+                  }
+                  i = e;
+                } else if ((t = (d = f.n < 0) ? s : n.call(r, f)) !== c) {
+                  break;
+                }
+              } catch (t) {
+                i = e;
+                a = 1;
+                s = t;
+              } finally {
+                l = 1;
+              }
+            }
+            return {
+              value: t,
+              done: d
+            };
+          };
+        }(n, o, i), true);
+        return u;
+      }
+      var c = {};
+      function l() {}
+      function u() {}
+      function d() {}
+      t = Object.getPrototypeOf;
+      var f = [][r] ? t(t([][r]())) : (a(t = {}, r, function () {
+        return this;
+      }), t);
+      var p = d.prototype = l.prototype = Object.create(f);
+      function h(e) {
+        if (Object.setPrototypeOf) {
+          Object.setPrototypeOf(e, d);
+        } else {
+          e.__proto__ = d;
+          a(e, o, "GeneratorFunction");
+        }
+        e.prototype = Object.create(p);
+        return e;
+      }
+      u.prototype = d;
+      a(p, "constructor", d);
+      a(d, "constructor", u);
+      u.displayName = "GeneratorFunction";
+      a(d, o, "GeneratorFunction");
+      a(p);
+      a(p, o, "Generator");
+      a(p, r, function () {
+        return this;
+      });
+      a(p, "toString", function () {
+        return "[object Generator]";
+      });
+      return (i = function () {
+        return {
+          w: s,
+          m: h
+        };
+      })();
+    }
+    function a(e, t, n, r) {
+      var o = Object.defineProperty;
+      try {
+        o({}, "", {});
+      } catch (e) {
+        o = 0;
+      }
+      (a = function (e, t, n, r) {
+        function i(t, n) {
+          a(e, t, function (e) {
+            return this._invoke(t, n, e);
+          });
+        }
+        if (t) {
+          if (o) {
+            o(e, t, {
+              value: n,
+              enumerable: !r,
+              configurable: !r,
+              writable: !r
+            });
+          } else {
+            e[t] = n;
+          }
+        } else {
+          i("next", 0);
+          i("throw", 1);
+          i("return", 2);
+        }
+      })(e, t, n, r);
+    }
+    function s(e, t, n, r) {
+      return new (n ||= Promise)(function (o, i) {
+        function a(e) {
+          try {
+            c(r.next(e));
+          } catch (e) {
+            i(e);
+          }
+        }
+        function s(e) {
+          try {
+            c(r.throw(e));
+          } catch (e) {
+            i(e);
+          }
+        }
+        function c(e) {
+          var t;
+          if (e.done) {
+            o(e.value);
+          } else {
+            (t = e.value, t instanceof n ? t : new n(function (e) {
+              e(t);
+            })).then(a, s);
+          }
+        }
+        c((r = r.apply(e, t || [])).next());
+      });
+    }
+    var c = /([^/]+)$/i;
+    var l = /\.([^/.]*)$/i;
+    function u(e) {
+      if (e && e.indexOf("data:image") !== 0) {
+        return /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/\.?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/.exec(e);
+      } else {
+        return [];
+      }
+    }
+    function d(e) {
+      var t = "";
+      var n = "";
+      try {
+        var r = e.split("/");
+        t = r[0];
+        var o = r[1].split(";")[0];
+        n = o;
+        switch (o) {
+          case "webm":
+            n = t == "video" ? "webm" : "weba";
+            break;
+          case "3gpp":
+            n = "3gp";
+            break;
+          case "3gpp2":
+            n = "3g2";
+            break;
+          case "ogg":
+            n = t == "video" ? "ogv" : "oga";
+            break;
+          case "mpeg":
+            n = t == "video" ? "mpeg" : "mp3";
+            break;
+          case "x-midi":
+            n = "midi";
+            break;
+          case "x-msvideo":
+            n = "avi";
+            break;
+          case "mp2t":
+            n = "ts";
+        }
+        return {
+          type: t,
+          ext: n
+        };
+      } catch (e) {
+        return {
+          type: t,
+          ext: n
+        };
+      }
+    }
+    function f(e, t) {
+      var n = typeof e == "object" ? e.videoUrl : e;
+      var r = new URL(n, n.startsWith("http") ? undefined : location.origin);
+      var i = (r.pathname.match(c) || [])[1] || "";
+      var a = i.split(".").map(e => e.toLowerCase());
+      i = decodeURIComponent(i.replace(l, ""));
+      a.shift();
+      if (a.length === 0 && Object(o.isSpecialUrls)(e)) {
+        a = ["m3u8"];
+      }
+      var s = a[a.length - 1] || "";
+      var u = null;
+      if (r.href.startsWith("data:")) {
+        var f = d(r.href.match(/data:([a-z]+\/[a-z0-9\-_]+);/i)[1]);
+        s = f.ext;
+        u = f.type;
+      }
+      var p = {
+        url: typeof e == "object" ? e : r.href,
+        protocol: r.protocol,
+        host: r.host,
+        port: r.port,
+        pathname: r.pathname,
+        filename: i,
+        ext: s,
+        exts: a,
+        hash: r.hash,
+        search: r.search,
+        type: u
+      };
+      if (!p.port) {
+        delete p.port;
+      }
+      if (t) {
+        var h = {};
+        r.search.replace(/^\?/, "").split(/&/).forEach(e => {
+          var t = e.split("=");
+          h[t[0]] = t[1];
+        });
+        p.query = h;
+      }
+      if (s == "flac") {
+        p.quality = "Lossless";
+        p.resolution = "lossless";
+      }
+      return p;
+    }
+    function p(e) {
+      var n = typeof e == "object" ? e.videoUrl : e;
+      if (n.startsWith("data:")) {
+        var o = n.match(/data:([a-z]+)/)[1];
+        if (["audio", "video"].includes(o)) {
+          return o;
+        } else {
+          return "";
+        }
+      }
+      var i = u(n)?.[11] || "";
+      if (!i) {
+        return "";
+      }
+      var a = new Map();
+      var s = ["no_watermark_video"];
+      Object.keys(r.k).forEach(e => {
+        if (!s.includes(e)) {
+          for (var t = r.k[e].extensions, n = 0; n < t.length; n++) {
+            a.set(t[n], e);
+          }
+        }
+      });
+      if (n.includes("googlevideo.com/videoplayback") && i === "videoplayback" && n.includes("mp4")) {
+        i = "video.mp4";
+      }
+      if (n.includes("videoplayback") && i === "videoplayback" && n.includes("mp4")) {
+        i = "video.mp4";
+      }
+      var c = i.split(".");
+      var l = c.length - 1;
+      if (l <= 0) {
+        return "";
+      }
+      var d = c[l].toLowerCase();
+      return a.get(d);
+    }
+    function h(e) {
+      return s(this, undefined, undefined, i().m(function t() {
+        var n;
+        var r;
+        return i().w(function (t) {
+          while (true) {
+            switch (t.n) {
+              case 0:
+                t.n = 1;
+                return fetch(e);
+              case 1:
+                n = t.v;
+                t.n = 2;
+                return n.blob();
+              case 2:
+                r = t.v;
+                return t.a(2, new Promise((e, t) => {
+                  var n = new FileReader();
+                  n.onloadend = () => {
+                    var t;
+                    return e((t = n.result) === null || t === undefined ? undefined : t.toString());
+                  };
+                  n.onerror = t;
+                  n.readAsDataURL(r);
+                }));
+            }
+          }
+        }, t);
+      }));
+    }
+    function g(e) {
+      var t = e.url;
+      var n = e.node;
+      return s(this, undefined, undefined, i().m(function e() {
+        var r;
+        var a;
+        var s;
+        var u;
+        var d;
+        return i().w(function (e) {
+          while (true) {
+            switch (e.n) {
+              case 0:
+                r = new URL(t.startsWith("blob:") ? t.replace("blob:", "") : t);
+                a = n.alt || (r.pathname.match(c) || [])[1] || "";
+                a = decodeURIComponent(a.replace(l, "").replace(/%/g, "%25"));
+                e.n = 1;
+                return m(t);
+              case 1:
+                s = e.v;
+                u = {
+                  url: t,
+                  protocol: r.protocol,
+                  host: r.host,
+                  pathname: r.pathname,
+                  filename: `${a}.${s}`,
+                  ext: s,
+                  exts: [s],
+                  hash: r.hash,
+                  search: r.search,
+                  type: "image",
+                  i18n_quality: Object(o.i18n)("download_current_image")
+                };
+                if (!t.includes("blob:")) {
+                  e.n = 3;
+                  break;
+                }
+                e.n = 2;
+                return h(t);
+              case 2:
+                if (d = e.v) {
+                  u.url = d;
+                }
+              case 3:
+                return e.a(2, u);
+            }
+          }
+        }, e);
+      }));
+    }
+    function m(e) {
+      return s(this, undefined, undefined, i().m(function n() {
+        var r;
+        var o;
+        var a;
+        return i().w(function (n) {
+          while (true) {
+            switch (n.n) {
+              case 0:
+                r = new AbortController();
+                n.n = 1;
+                return fetch(e, {
+                  signal: r.signal
+                });
+              case 1:
+                o = n.v;
+                a = o.headers.get("content-type");
+                r.abort();
+                return n.a(2, (a == null ? undefined : a.split("/"))?.[1]);
+            }
+          }
+        }, n);
+      }));
+    }
+    function v(e) {
+      if ((e = Object.create(e)).query) {
+        e.search = [];
+        for (var t in e.query) {
+          if (e.query[t] !== undefined) {
+            e.search.push(t + "=" + encodeURIComponent(e.query[t]));
+          } else {
+            e.search.push(t);
+          }
+        }
+        e.search = "?" + e.search.join("&");
+        delete e.query;
+      }
+      return e.href;
+    }
+    function y(e) {
+      var t = (e = e.replace(/^[#?]{1}/, "")).split("&");
+      var n = {};
+      t.forEach(e => {
+        var t = e.split("=");
+        if (Object(o.defined)(t[0]) && Object(o.defined)(t[1])) {
+          n[t[0]] = decodeURIComponent(t[1].replace(/\+/g, " "));
+        }
+      });
+      return n;
+    }
+    var k = (() => {
+      var e = ["facebook.com", "youtube.com", "video.vnexpress.net", "mp3.zing.vn", "radio.zing.vn", "tv.zing.vn", "nhaccuatui.com", "video.thethao247.vn", "video.ngoisao.net", "xvideos.com", "phimmoi.net", "clip.vn", "yan.vn", "xem.vn", "pornhub.com", "xhamster.com", "dailymotion.com", "xnxx.com", "hdonline.vn", "phim3s.net", "redtube.com", "phim14.net", "soundcloud.com", "youporn.com", "vimeo.com", "fptplay.net", "haivn.com", "chiasenhac.com", "movies.hdviet.com", "nhac.vui.vn", "nhacso.net", "anime47.com", "tube8.com", "talktv.vn", "chatvl.info", "cohet.tv", "vlxx.tv", "hayhaytv.vn", "xemphimso.com", "vivo.vn", "xemvtv.net", "vkool.net", "chimsedinang.com", "keeng.vn", "vuighe.net", "vetv.vn", "xemphimon.com", "ixxx.com", "biphim.com", "kenhvideo.com", "videogame.vn", "phim.in", "voh.com.vn", "phimsexporn.com", "porn99.net", "news.zing.vn", "me.zing.vn", "twitter.com", "24h.com.vn", "phim.clip.vn", "video.ringring.vn", "v.nhaccuatui.com", "clip.vietnamnet.vn", "afamily.vn", "media.bongdaplus.vn", "bongdaclip.com", "gamek.vn", "phapluattp.vn", "hdviet.com", "haiivl.com", "chatvl.com", "2sao.vn", "videos.vietgiaitri.com", "nhac.vietgiaitri.com", "megafun.vn", "phim.hayhd.vn", "cand.com.vn", "ohay.tv", "phim.megabox.vn", "anhtrang.org", "phim.anhtrang.org", "8bongda.com", "xemphimone.com", "bongda365.com.vn", "phimhd.vn", "dinotube.com", "phimvipvn.net", "animeax.com", "phimdata.com", "phimnhanh.net", "vipphim.net", "phimvon.com", "pubvn.tv", "phim22.com", "phim7.com", "hayxemphim.com", "m-viet.com", "thethaoclip.com", "nhac.hay365.com", "ssphim.com", "phimtructuyenhd.com", "xuongphim.tv", "vino.vn/mp3", "haivl.io", "nhacvang.org", "starmovies.mobi", "clipvuivn.com", "phimporn.com", "123tv.vn", "phimonlinehd.net", "hai24h.net", "jax.vn", "kenhgioitre.net", "chiaseclip.net", "phim.xixam.com", "bilutv.com", "phimbathu.com", "instagram.com", "banhtv.com", "txxx.com", "video.vietnamnet.vn", "video.bongdaplus.vn", "creatives.livejasmin.com", "tv.naver.com", "tv.tuoitre.vn", "icdrama.se", "video.thanhnien.vn", "spankbang.com", "dmm.co.jp", "v.youku.com", "v.qq.com", "daikynguyenvn.com", "thethao247.vn", "e.vnexpress.net", "ione.vnexpress.net", "kenh14.vn", "dantri.com.vn", "baomoi.com", "emdep.vn", "tuoitre.vn", "soha.vn", "video.congan.com.vn", "cafef.vn", "bongda.com.vn", "bongdaso.com", "eva.vn", "danviet.vn", "cliptv.vn", "bbc.co.uk", "edition.cnn.com", "buzzfeed.com", "businessinsider.com", "cnet.com", "dailymail.co.uk", "bilutvx.net", "chill123.gotdns.ch"];
+      var t = {};
+      for (var n = 0, r = e.length; n < r; ++n) {
+        var o = e[n];
+        console.assert(!(o in t), "Duplicate \"" + o + "\": " + t[o] + ", " + n);
+        t[o] = n + 1;
+      }
+      return function (e) {
+        for (var n = function (e) {
+            return u(e)?.[6] || "";
+          }(e), r = t[n]; !r && n;) {
+          var o = n.indexOf(".") + 1;
+          if (o === 0) {
+            break;
+          }
+          n = n.substr(o);
+          r = t[n];
+        }
+        return 100 + (r | 0);
+      };
+    })();
+    function b(e, t, n = false) {
+      var r = e || new URL(t);
+      if (t.includes("https") || t.includes("//")) {
+        if (!t.includes("http")) {
+          t = "https:" + t;
+        }
+        return t.replace(/http:\/\//, "https://");
+      }
+      if (n && t.startsWith("/")) {
+        if (r.origin) {
+          return r.origin + t;
+        } else {
+          return t;
+        }
+      }
+      var o = (r.host + r.pathname).split("/").filter(e => !!e).slice(0, -1);
+      var i = t.split("/").filter(e => !!e);
+      var a = i.lastIndexOf("..");
+      var s = i.slice(0, a + 1);
+      var c = i.slice(a + 1);
+      if (s.length > 0) {
+        o = o.slice(0, -s.length);
+      }
+      var l = o.indexOf(c[0]);
+      if (l == -1) {
+        o.push(...c);
+      } else {
+        l += 1;
+        for (var u = 1; u < c.length; ++u) {
+          var d = c[u];
+          if (!o.includes(d)) {
+            if (o[l - 1] === c[u - 1]) {
+              o[l] = d;
+            } else {
+              o.push(d);
+            }
+          }
+          l += 1;
+        }
+      }
+      return r.protocol + "//" + o.join("/");
+    }
+  },
+  4: function (e, t, n) {
+    (function (t) {
+      var r;
+      r = r || function (e, r) {
+        var o;
+        if (typeof window != "undefined" && window.crypto) {
+          o = window.crypto;
+        }
+        if (typeof self != "undefined" && self.crypto) {
+          o = self.crypto;
+        }
+        if (typeof globalThis != "undefined" && globalThis.crypto) {
+          o = globalThis.crypto;
+        }
+        if (!o && typeof window != "undefined" && window.msCrypto) {
+          o = window.msCrypto;
+        }
+        if (!o && t !== undefined && t.crypto) {
+          o = t.crypto;
+        }
+        if (!o) {
+          try {
+            o = n(50);
+          } catch (e) {}
+        }
+        function i() {
+          if (o) {
+            if (typeof o.getRandomValues == "function") {
+              try {
+                return o.getRandomValues(new Uint32Array(1))[0];
+              } catch (e) {}
+            }
+            if (typeof o.randomBytes == "function") {
+              try {
+                return o.randomBytes(4).readInt32LE();
+              } catch (e) {}
+            }
+          }
+          throw new Error("Native crypto module could not be used to get secure random number.");
+        }
+        var a = Object.create || function () {
+          function e() {}
+          return function (t) {
+            var n;
+            e.prototype = t;
+            n = new e();
+            e.prototype = null;
+            return n;
+          };
+        }();
+        var s = {};
+        var c = s.lib = {};
+        var l = c.Base = {
+          extend: function (e) {
+            var t = a(this);
+            if (e) {
+              t.mixIn(e);
+            }
+            if (!t.hasOwnProperty("init") || this.init === t.init) {
+              t.init = function () {
+                t.$super.init.apply(this, arguments);
+              };
+            }
+            t.init.prototype = t;
+            t.$super = this;
+            return t;
+          },
+          create: function () {
+            var e = this.extend();
+            e.init.apply(e, arguments);
+            return e;
+          },
+          init: function () {},
+          mixIn: function (e) {
+            for (var t in e) {
+              if (e.hasOwnProperty(t)) {
+                this[t] = e[t];
+              }
+            }
+            if (e.hasOwnProperty("toString")) {
+              this.toString = e.toString;
+            }
+          },
+          clone: function () {
+            return this.init.prototype.extend(this);
+          }
+        };
+        var u = c.WordArray = l.extend({
+          init: function (e, t) {
+            e = this.words = e || [];
+            this.sigBytes = t ?? e.length * 4;
+          },
+          toString: function (e) {
+            return (e || f).stringify(this);
+          },
+          concat: function (e) {
+            var t = this.words;
+            var n = e.words;
+            var r = this.sigBytes;
+            var o = e.sigBytes;
+            this.clamp();
+            if (r % 4) {
+              for (var i = 0; i < o; i++) {
+                var a = n[i >>> 2] >>> 24 - i % 4 * 8 & 255;
+                t[r + i >>> 2] |= a << 24 - (r + i) % 4 * 8;
+              }
+            } else {
+              for (var s = 0; s < o; s += 4) {
+                t[r + s >>> 2] = n[s >>> 2];
+              }
+            }
+            this.sigBytes += o;
+            return this;
+          },
+          clamp: function () {
+            var t = this.words;
+            var n = this.sigBytes;
+            t[n >>> 2] &= -1 << 32 - n % 4 * 8;
+            t.length = e.ceil(n / 4);
+          },
+          clone: function () {
+            var e = l.clone.call(this);
+            e.words = this.words.slice(0);
+            return e;
+          },
+          random: function (e) {
+            var t = [];
+            for (var n = 0; n < e; n += 4) {
+              t.push(i());
+            }
+            return new u.init(t, e);
+          }
+        });
+        var d = s.enc = {};
+        var f = d.Hex = {
+          stringify: function (e) {
+            var t = e.words;
+            for (var n = e.sigBytes, r = [], o = 0; o < n; o++) {
+              var i = t[o >>> 2] >>> 24 - o % 4 * 8 & 255;
+              r.push((i >>> 4).toString(16));
+              r.push((i & 15).toString(16));
+            }
+            return r.join("");
+          },
+          parse: function (e) {
+            for (var t = e.length, n = [], r = 0; r < t; r += 2) {
+              n[r >>> 3] |= parseInt(e.substr(r, 2), 16) << 24 - r % 8 * 4;
+            }
+            return new u.init(n, t / 2);
+          }
+        };
+        var p = d.Latin1 = {
+          stringify: function (e) {
+            var t = e.words;
+            for (var n = e.sigBytes, r = [], o = 0; o < n; o++) {
+              var i = t[o >>> 2] >>> 24 - o % 4 * 8 & 255;
+              r.push(String.fromCharCode(i));
+            }
+            return r.join("");
+          },
+          parse: function (e) {
+            for (var t = e.length, n = [], r = 0; r < t; r++) {
+              n[r >>> 2] |= (e.charCodeAt(r) & 255) << 24 - r % 4 * 8;
+            }
+            return new u.init(n, t);
+          }
+        };
+        var h = d.Utf8 = {
+          stringify: function (e) {
+            try {
+              return decodeURIComponent(escape(p.stringify(e)));
+            } catch (e) {
+              throw new Error("Malformed UTF-8 data");
+            }
+          },
+          parse: function (e) {
+            return p.parse(unescape(encodeURIComponent(e)));
+          }
+        };
+        var g = c.BufferedBlockAlgorithm = l.extend({
+          reset: function () {
+            this._data = new u.init();
+            this._nDataBytes = 0;
+          },
+          _append: function (e) {
+            if (typeof e == "string") {
+              e = h.parse(e);
+            }
+            this._data.concat(e);
+            this._nDataBytes += e.sigBytes;
+          },
+          _process: function (t) {
+            var n;
+            var r = this._data;
+            var o = r.words;
+            var i = r.sigBytes;
+            var a = this.blockSize;
+            var s = i / (a * 4);
+            var c = (s = t ? e.ceil(s) : e.max((s | 0) - this._minBufferSize, 0)) * a;
+            var l = e.min(c * 4, i);
+            if (c) {
+              for (var d = 0; d < c; d += a) {
+                this._doProcessBlock(o, d);
+              }
+              n = o.splice(0, c);
+              r.sigBytes -= l;
+            }
+            return new u.init(n, l);
+          },
+          clone: function () {
+            var e = l.clone.call(this);
+            e._data = this._data.clone();
+            return e;
+          },
+          _minBufferSize: 0
+        });
+        c.Hasher = g.extend({
+          cfg: l.extend(),
+          init: function (e) {
+            this.cfg = this.cfg.extend(e);
+            this.reset();
+          },
+          reset: function () {
+            g.reset.call(this);
+            this._doReset();
+          },
+          update: function (e) {
+            this._append(e);
+            this._process();
+            return this;
+          },
+          finalize: function (e) {
+            if (e) {
+              this._append(e);
+            }
+            return this._doFinalize();
+          },
+          blockSize: 16,
+          _createHelper: function (e) {
+            return function (t, n) {
+              return new e.init(n).finalize(t);
+            };
+          },
+          _createHmacHelper: function (e) {
+            return function (t, n) {
+              return new m.HMAC.init(e, n).finalize(t);
+            };
+          }
+        });
+        var m = s.algo = {};
+        return s;
+      }(Math);
+      e.exports = r;
+    }).call(this, n(13));
+  },
+  5: function (e, t, n) {
+    "use strict";
+
+    var r = n(11);
+    var o = n(38);
+    class i {
+      constructor() {
+        this.SOURCE_POPUP_PAGE = 0;
+        this.SOURCE_OPTIONS_PAGE = 10;
+        this.SOURCE_CONTENT_SCRIPT = 20;
+        this.SOURCE_BACKGROUND_PAGE = 30;
+        this.LEGACY_METRICS_NAME_MAP = {
+          ButtonClicked: "TryItNowButtonClicked",
+          CheckBoxClicked: "OneClickCheckbox"
+        };
+        this.PAGE_WELCOME_SCREEN = 0;
+        this.PAGE_DOWNLOADS_LIST = 1;
+        this.PAGE_ONE_CLICK_DOWNLOAD = 2;
+        this.PAGE_NO_MEDIA_FOUND = 3;
+        this.PAGE_OPTIONS = 4;
+        this.PAGE_CONTENT_SHOW_CONTROLS = 5;
+        this.PAGE_CONTENT_NO_MEDIA = 9;
+        this.YOUTUBE_ERROR_WALL_BY_ADS_BLOCK = 0;
+        this.YOUTUBE_ERROR_POPUP_BY_ADS_BLOCK = 1;
+        this.YOUTUBE_ERROR_WALL_BY_SAVIOR = 2;
+        this.YOUTUBE_ERROR_POPUP_BY_SAVIOR = 3;
+        this.YOUTUBE_ERROR_WALL_BY_ADGUARD = 4;
+        this.YOUTUBE_ERROR_POPUP_WITH_CLOSE_BY_ADGUARD = 5;
+        this.YOUTUBE_ERROR_POPUP_WITHOUT_CLOSE_BY_ADGUARD = 6;
+        this.YOUTUBE_ERROR_POPUP_WITH_CLOSE_BY_ADS_BLOCK = 7;
+        this.YOUTUBE_ERROR_POPUP_WITHOUT_CLOSE_BY_ADS_BLOCK = 8;
+        this.YOUTUBE_ERROR_POPUP_WITH_CLOSE_BY_SAVIOR = 9;
+        this.YOUTUBE_ERROR_POPUP_WITHOUT_CLOSE_BY_SAVIOR = 10;
+        this.YOUTUBE_AUTO_CLOSE_POPUP_WITH_CLOSE = 11;
+        this.YOUTUBE_AUTO_CLOSE_POPUP_WITHOUT_CLOSE = 12;
+        this.YOUTUBE_VIDEO_ERROR_ADBLOCK = 13;
+        this.YOUTUBE_VIDEO_ERROR_ADGUARD = 14;
+        this.YOUTUBE_VIDEO_ERROR_ADBLOCK_OFF = 15;
+        this.YOUTUBE_VIDEO_ERROR_ADGUARD_OFF = 16;
+        this.YOUTUBE_ADGUARD_OFF = 0;
+        this.YOUTUBE_ADGUARD_ON = 1;
+        this.YOUTUBE_ADGUARD_API_ERROR_TURN_OFF_ABP = 2;
+        this.YOUTUBE_ADGUARD_API_ERROR_CHECK_TURN_OFF_ABP = 3;
+        this.YOUTUBE_ADGUARD_NO_OFFSCREEN = 4;
+        this.YOUTUBE_ADGUARD_NO_SCRIPT = 5;
+        this.YOUTUBE_ADGUARD_NO_TAB_ID = 6;
+        this.YOUTUBE_ADGUARD_USER_SCRIPT = 7;
+        this.YOUTUBE_ADGUARD_SCRIPTING = 8;
+        this.YOUTUBE_ADGUARD_IS_GROUP_TEST = 9;
+        this.YOUTUBE_ADGUARD_HAS_EVENT = 10;
+        this.YOUTUBE_ADGUARD_REGISTER_INJECT = 11;
+        this.YOUTUBE_SKIP_ADS_SHOWN = 1;
+        this.YOUTUBE_SKIP_ADS_FAST_FWD = 2;
+        this.YOUTUBE_SKIPPABLE_ADS = 3;
+        this.YOUTUBE_UNSKIPPABLE_ADS = 4;
+        this.YOUTUBE_AUDIO_CHANNEL_WIDGET_SHOW = 1;
+        this.YOUTUBE_AUDIO_CHANNEL_WIDGET_CHANGE = 2;
+        this.YOUTUBE_AUDIO_CHANNEL_POPUP_SHOW = 3;
+        this.YOUTUBE_AUDIO_CHANNEL_POPUP_CHANGE = 4;
+        this.DOWNLOAD_AUTO = 0;
+        this.DOWNLOAD_BUTTON = 1;
+        this.DOWNLOAD_ALL = 2;
+        this.DOWNLOAD_REQUEST_SIZE = 3;
+        this.DOWNLOAD_REQUEST_SIZE_FAILED = 4;
+        this.DOWNLOAD_SOUND_ONLY = 5;
+        this.DOWNLOAD_YOUTUBE_ERROR = 6;
+        this.DOWNLOAD_CANCELED = 7;
+        this.DOWNLOAD_SUBTITLES = 9;
+        this.DOWNLOAD_CURRENT_IMAGE = 0;
+        this.DOWNLOAD_ALL_IMAGES = 1;
+        this.BUTTON_HIDE_WITH_IMAGE = 0;
+        this.BUTTON_HIDE_PERMANENT_WITH_IMAGE = 1;
+        this.BUTTON_MAIN = 0;
+        this.BUTTON_TRY_IT_NOW = 1;
+        this.BUTTON_SHOW_DOWNLOADS = 2;
+        this.BUTTON_OPEN_SETTINGS = 3;
+        this.BUTTON_DOWNLOAD_ALL = 4;
+        this.BUTTON_MORE_OPTIONS = 5;
+        this.BUTTON_HIDE_PERMANENT = 6;
+        this.BUTTON_FAKE_QUALITY = 7;
+        this.BUTTON_DETACH = 8;
+        this.BUTTON_HIDE = 9;
+        this.CHECK_BOX_ENABLE_ONE_CLICK = 0;
+        this.CHECK_BOX_SHOW_ON_PAGE_BUTTONS = 2;
+        this.CHECK_BOX_PREFER_LAST_QUALITY = 4;
+        this.CHECK_BOX_DETACH_ENABLED = 6;
+        this.CHECK_BOX_DARK_THEM_ENABLED = 8;
+        this.PIP_DETACH_CLICK = 0;
+        this.PIP_RESTORE_CLICK = 1;
+        this.PIP_SITE_LINK_CLICK = 2;
+        this.PLAY_NOW_SHOWN = 0;
+        this.PLAY_NOW_WIDGET_CLICKED = 1;
+        this.PLAY_NOW_TOOLTIP_SHOWN = 2;
+        this.PLAY_NOW_TOOLTIP_CLOSED = 3;
+        this.PLAY_NOW_TOOLTIP_NOT_SHOW_AGAIN = 4;
+        this.PLAY_NOW_TOOLTIP_BOTTOM_SHOWN = 5;
+        this.PLAY_NOW_TOOLTIP_BOTTOM_CLOSED = 6;
+        this.PLAY_NOW_TOOLTIP_BOTTOM_NOT_SHOW_AGAIN = 7;
+        this.EXTENSION_MP4 = 1;
+        this.EXTENSION_MP3 = 2;
+        this.EXTENSION_WEBM = 3;
+        this.EXTENSION_3GP = 4;
+        this.EXTENSION_SRT = 5;
+        this.EXTENSION_OTHER = 6;
+        this.SEND_MOBILE_SHOW = 1;
+        this.SEND_MOBILE_CLICK = 2;
+        this.SEND_MOBILE_CLICK_CLOSE = 3;
+        this.SEND_MOBILE_CLICK_A = 4;
+        this.SEND_MOBILE_CLICK_G = 5;
+        this.SEND_MOBILE_CLICK_W = 6;
+        this.SEND_MOBILE_CLICK_AUDIO = 7;
+        this.SEND_MOBILE_ERROR = 9;
+        this.TURN_LIGHT_ON = 0;
+        this.TURN_LIGHT_OFF = 1;
+        this.ONBOARD_POPUP_SHOWN = 1;
+        this.ONBOARD_POPUP_SHOWN_SECOND = 1;
+        this.ONBOARD_POPUP_SHOWN_THIRD = 1;
+        this.ONBOARD_TRY_NOW_BTN_CLICK = 1;
+        this.CLOSE_ONBOARD_POPUP = 1;
+        this.OPEN_SETTING_POPUP = 1;
+        this.OPEN_SETTING_CONTENT = 2;
+        this.SKIP_VIDEO = 0;
+        this.SETTING_ENABLE_SKIP_VIDEO = 1;
+        this.SETTING_DISABLE_SKIP_VIDEO = 2;
+        this.SIDEPANEL_OPEN_ICON_CLICK = 1;
+        this.SIDEPANEL_OPEN_DONE = 2;
+        this.DOWNLOAD_SIDEPANEL_CLICK_VIDEO = 1;
+        this.DOWNLOAD_SIDEPANEL_CLICK_AUDIO = 2;
+        this.DOWNLOAD_SIDEPANEL_CLICK_SUBTITLE = 3;
+        this.DOWNLOAD_SIDEPANEL_CLICK_IMAGE = 4;
+        this.DOWNLOAD_SIDEPANEL_CLICK_BULK_MEDIA = 5;
+        this.DOWNLOAD_SIDEPANEL_CLICK_BULK_IMAGE = 6;
+        this.DOWNLOAD_SIDEPANEL_VIDEO_DIRECT = 1;
+        this.DOWNLOAD_SIDEPANEL_AUDIO_DIRECT = 2;
+        this.DOWNLOAD_SIDEPANEL_SUBTITLE_DIRECT = 3;
+        this.DOWNLOAD_SIDEPANEL_IMAGE_DIRECT = 4;
+        this.ONECLICK_CHECKBOX_ON = 1;
+        this.ONECLICK_CHECKBOX_OFF = 2;
+        this.ONECLICK_AUTO_QUALITY_HIGH = 18;
+        this.ONECLICK_AUTO_QUALITY_STANDARD = 19;
+        this.ONECLICK_AUTO_QUALITY_LOW = 20;
+        this.DOWNLOAD_SIDEPANEL_QUALITY_MOBILE = 10;
+        this.DOWNLOAD_SIDEPANEL_QUALITY_LOW = 11;
+        this.DOWNLOAD_SIDEPANEL_QUALITY_MEDIUM = 12;
+        this.DOWNLOAD_SIDEPANEL_QUALITY_STANDARD = 13;
+        this.DOWNLOAD_SIDEPANEL_QUALITY_HD = 14;
+        this.DOWNLOAD_SIDEPANEL_QUALITY_FULLHD = 15;
+        this.DOWNLOAD_SIDEPANEL_QUALITY_QHD = 16;
+        this.DOWNLOAD_SIDEPANEL_QUALITY_4K = 17;
+        this.DOWNLOAD_SIDEPANEL_QUALITY_8K = 18;
+        this.DOWNLOAD_SIDEPANEL_AUDIO_128 = 20;
+        this.DOWNLOAD_SIDEPANEL_AUDIO_320 = 21;
+        this.DOWNLOAD_SIDEPANEL_AUDIO_LOSSLESS = 22;
+        this.SELECT_ALL_TOGGLE_ON = 1;
+        this.SELECT_ALL_TOGGLE_OFF = 2;
+        this.IMAGE_SIZE_FILTER_ALL = 0;
+        this.IMAGE_SIZE_FILTER_SMALL = 1;
+        this.IMAGE_SIZE_FILTER_MEDIUM = 2;
+        this.IMAGE_SIZE_FILTER_LARGE = 3;
+      }
+      get source() {
+        if (!chrome.action && !chrome.pageAction) {
+          return this.SOURCE_CONTENT_SCRIPT;
+        }
+        switch (location.pathname) {
+          case "/popup.html":
+            return this.SOURCE_POPUP_PAGE;
+          case "/options.html":
+            return this.SOURCE_OPTIONS_PAGE;
+          case "/background.js":
+          case "/background.html":
+            return this.SOURCE_BACKGROUND_PAGE;
+          default:
+            return null;
+        }
+      }
+      _getFullName(e) {
+        return "Savior." + (this.LEGACY_METRICS_NAME_MAP[e] || e);
+      }
+      _getTotalValue(e, t, n) {
+        if (e.indexOf("Refr") === 0 || n || ["PageShown", "YTBlockType", "YTSkipAdShown", "ForceDisableAdblockOnYoutube"].includes(e) || (e == null ? undefined : e.startsWith("Onboarding.")) || typeof t != "number") {
+          return t;
+        } else {
+          return t + this.source;
+        }
+      }
+      _doLog(e, t, n) {
+        var i = this._getFullName(t);
+        if (!(parseInt(navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)?.[2] || "") <= 50)) {
+          if (this.source === this.SOURCE_CONTENT_SCRIPT) {
+            Object(o.a)({
+              type: "metrics",
+              method: "log",
+              params: {
+                name: t,
+                value: n
+              }
+            });
+          } else if (chrome.metricsPrivate) {
+            switch (e) {
+              case "recordSmallCount":
+                chrome.metricsPrivate.recordValue({
+                  metricName: i,
+                  type: chrome.metricsPrivate.MetricTypeType.HISTOGRAM_LINEAR,
+                  min: 0,
+                  max: 100,
+                  buckets: 100
+                }, n);
+                break;
+              case "recordValue":
+                chrome.metricsPrivate.recordValue({
+                  metricName: i,
+                  type: chrome.metricsPrivate.MetricTypeType.HISTOGRAM_LINEAR,
+                  min: 0,
+                  max: 1000,
+                  buckets: 1002
+                }, n);
+                break;
+              case "recordCustomData":
+                chrome.metricsPrivate.recordCustomData(n);
+                break;
+              case "recordLongTime":
+                chrome.metricsPrivate.recordLongTime(i, n);
+                break;
+              case "recordEnumerationValue":
+                chrome.metricsPrivate.recordEnumerationValue(i, n, 1000);
+            }
+          } else if (e === "recordCustomData") {
+            if (n && n.length === 1) {
+              console.info("%c[Metrics] %crecordCustomData %c%s", "color:gray", "color:silver", "color: lightgreen", n[0].key, JSON.parse(n[0].value));
+              return;
+            }
+            console.info("%c[Metrics]", "color:gray", "recordCustomData", n);
+          } else {
+            console.info("%c[Metrics]", "color:gray", e, i, n);
+          }
+        }
+      }
+      static _getMethodByName(e) {
+        switch (e) {
+          case "Refr":
+          case "RefrSE":
+          case "RefrFE":
+          case "RefrPin":
+            return "recordValue";
+          case "recordCustomData":
+            return "recordCustomData";
+          default:
+            return "recordEnumerationValue";
+        }
+      }
+      log(e, t, n) {
+        try {
+          var o = i._getMethodByName(e);
+          if (o === "recordCustomData" && r.a.CUSTOM_METRICS_JSON) {
+            this._doLog(o, e, t);
+            return;
+          }
+          var a = this._getTotalValue(e, t, n);
+          this._doLog(o, e, a);
+        } catch (e) {
+          console.warn("Catched", e);
+        }
+      }
+      logYtExtension(e) {
+        switch (e.toLowerCase()) {
+          case "mp4":
+            this.log("YtExtension", this.EXTENSION_MP4);
+            break;
+          case "mp3":
+            this.log("YtExtension", this.EXTENSION_MP3);
+            break;
+          case "webm":
+            this.log("YtExtension", this.EXTENSION_WEBM);
+            break;
+          case "3gp":
+            this.log("YtExtension", this.EXTENSION_3GP);
+            break;
+          case "srt":
+            this.log("YtExtension", this.EXTENSION_SRT);
+            break;
+          default:
+            this.log("YtExtension", this.EXTENSION_OTHER);
+        }
+      }
+      logSendMobile(e) {
+        this.log("SendMobile", e);
+      }
+      logFromContentScript(e, t) {
+        this.log(e, t, true);
+      }
+    logRequest(e) {}
+    }
+    t.a = new i();
+  },
+  8: function (e, t, n) {
+    var r;
+    var o;
+    var i;
+    var a;
+    var s;
+    var c;
+    var l;
+    var u;
+    var d;
+    var f;
+    var p;
+    var h;
+    var g;
+    var m;
+    var v;
+    var y;
+    var k;
+    var b;
+    var _;
+    r = n(4);
+    n(17);
+    e.exports = void (r.lib.Cipher || (o = r, i = o.lib, a = i.Base, s = i.WordArray, c = i.BufferedBlockAlgorithm, l = o.enc, l.Utf8, u = l.Base64, d = o.algo.EvpKDF, f = i.Cipher = c.extend({
+      cfg: a.extend(),
+      createEncryptor: function (e, t) {
+        return this.create(this._ENC_XFORM_MODE, e, t);
+      },
+      createDecryptor: function (e, t) {
+        return this.create(this._DEC_XFORM_MODE, e, t);
+      },
+      init: function (e, t, n) {
+        this.cfg = this.cfg.extend(n);
+        this._xformMode = e;
+        this._key = t;
+        this.reset();
+      },
+      reset: function () {
+        c.reset.call(this);
+        this._doReset();
+      },
+      process: function (e) {
+        this._append(e);
+        return this._process();
+      },
+      finalize: function (e) {
+        if (e) {
+          this._append(e);
+        }
+        return this._doFinalize();
+      },
+      keySize: 4,
+      ivSize: 4,
+      _ENC_XFORM_MODE: 1,
+      _DEC_XFORM_MODE: 2,
+      _createHelper: function () {
+        function e(e) {
+          if (typeof e == "string") {
+            return _;
+          } else {
+            return k;
+          }
+        }
+        return function (t) {
+          return {
+            encrypt: function (n, r, o) {
+              return e(r).encrypt(t, n, r, o);
+            },
+            decrypt: function (n, r, o) {
+              return e(r).decrypt(t, n, r, o);
+            }
+          };
+        };
+      }()
+    }), i.StreamCipher = f.extend({
+      _doFinalize: function () {
+        return this._process(true);
+      },
+      blockSize: 1
+    }), p = o.mode = {}, h = i.BlockCipherMode = a.extend({
+      createEncryptor: function (e, t) {
+        return this.Encryptor.create(e, t);
+      },
+      createDecryptor: function (e, t) {
+        return this.Decryptor.create(e, t);
+      },
+      init: function (e, t) {
+        this._cipher = e;
+        this._iv = t;
+      }
+    }), g = p.CBC = function () {
+      var e = h.extend();
+      function t(e, t, n) {
+        var r;
+        var o = this._iv;
+        if (o) {
+          r = o;
+          this._iv = undefined;
+        } else {
+          r = this._prevBlock;
+        }
+        for (var i = 0; i < n; i++) {
+          e[t + i] ^= r[i];
+        }
+      }
+      e.Encryptor = e.extend({
+        processBlock: function (e, n) {
+          var r = this._cipher;
+          var o = r.blockSize;
+          t.call(this, e, n, o);
+          r.encryptBlock(e, n);
+          this._prevBlock = e.slice(n, n + o);
+        }
+      });
+      e.Decryptor = e.extend({
+        processBlock: function (e, n) {
+          var r = this._cipher;
+          var o = r.blockSize;
+          var i = e.slice(n, n + o);
+          r.decryptBlock(e, n);
+          t.call(this, e, n, o);
+          this._prevBlock = i;
+        }
+      });
+      return e;
+    }(), m = (o.pad = {}).Pkcs7 = {
+      pad: function (e, t) {
+        var n = t * 4;
+        for (var r = n - e.sigBytes % n, o = r << 24 | r << 16 | r << 8 | r, i = [], a = 0; a < r; a += 4) {
+          i.push(o);
+        }
+        var c = s.create(i, r);
+        e.concat(c);
+      },
+      unpad: function (e) {
+        var t = e.words[e.sigBytes - 1 >>> 2] & 255;
+        e.sigBytes -= t;
+      }
+    }, i.BlockCipher = f.extend({
+      cfg: f.cfg.extend({
+        mode: g,
+        padding: m
+      }),
+      reset: function () {
+        var e;
+        f.reset.call(this);
+        var t = this.cfg;
+        var n = t.iv;
+        var r = t.mode;
+        if (this._xformMode == this._ENC_XFORM_MODE) {
+          e = r.createEncryptor;
+        } else {
+          e = r.createDecryptor;
+          this._minBufferSize = 1;
+        }
+        if (this._mode && this._mode.__creator == e) {
+          this._mode.init(this, n && n.words);
+        } else {
+          this._mode = e.call(r, this, n && n.words);
+          this._mode.__creator = e;
+        }
+      },
+      _doProcessBlock: function (e, t) {
+        this._mode.processBlock(e, t);
+      },
+      _doFinalize: function () {
+        var e;
+        var t = this.cfg.padding;
+        if (this._xformMode == this._ENC_XFORM_MODE) {
+          t.pad(this._data, this.blockSize);
+          e = this._process(true);
+        } else {
+          e = this._process(true);
+          t.unpad(e);
+        }
+        return e;
+      },
+      blockSize: 4
+    }), v = i.CipherParams = a.extend({
+      init: function (e) {
+        this.mixIn(e);
+      },
+      toString: function (e) {
+        return (e || this.formatter).stringify(this);
+      }
+    }), y = (o.format = {}).OpenSSL = {
+      stringify: function (e) {
+        var t = e.ciphertext;
+        var n = e.salt;
+        return (n ? s.create([1398893684, 1701076831]).concat(n).concat(t) : t).toString(u);
+      },
+      parse: function (e) {
+        var t;
+        var n = u.parse(e);
+        var r = n.words;
+        if (r[0] == 1398893684 && r[1] == 1701076831) {
+          t = s.create(r.slice(2, 4));
+          r.splice(0, 4);
+          n.sigBytes -= 16;
+        }
+        return v.create({
+          ciphertext: n,
+          salt: t
+        });
+      }
+    }, k = i.SerializableCipher = a.extend({
+      cfg: a.extend({
+        format: y
+      }),
+      encrypt: function (e, t, n, r) {
+        r = this.cfg.extend(r);
+        var o = e.createEncryptor(n, r);
+        var i = o.finalize(t);
+        var a = o.cfg;
+        return v.create({
+          ciphertext: i,
+          key: n,
+          iv: a.iv,
+          algorithm: e,
+          mode: a.mode,
+          padding: a.padding,
+          blockSize: e.blockSize,
+          formatter: r.format
+        });
+      },
+      decrypt: function (e, t, n, r) {
+        r = this.cfg.extend(r);
+        t = this._parse(t, r.format);
+        return e.createDecryptor(n, r).finalize(t.ciphertext);
+      },
+      _parse: function (e, t) {
+        if (typeof e == "string") {
+          return t.parse(e, this);
+        } else {
+          return e;
+        }
+      }
+    }), b = (o.kdf = {}).OpenSSL = {
+      execute: function (e, t, n, r, o) {
+        r ||= s.random(8);
+        if (o) {
+          i = d.create({
+            keySize: t + n,
+            hasher: o
+          }).compute(e, r);
+        } else {
+          var i = d.create({
+            keySize: t + n
+          }).compute(e, r);
+        }
+        var a = s.create(i.words.slice(t), n * 4);
+        i.sigBytes = t * 4;
+        return v.create({
+          key: i,
+          iv: a,
+          salt: r
+        });
+      }
+    }, _ = i.PasswordBasedCipher = k.extend({
+      cfg: k.cfg.extend({
+        kdf: b
+      }),
+      encrypt: function (e, t, n, r) {
+        var o = (r = this.cfg.extend(r)).kdf.execute(n, e.keySize, e.ivSize, r.salt, r.hasher);
+        r.iv = o.iv;
+        var i = k.encrypt.call(this, e, t, o.key, r);
+        i.mixIn(o);
+        return i;
+      },
+      decrypt: function (e, t, n, r) {
+        r = this.cfg.extend(r);
+        t = this._parse(t, r.format);
+        var o = r.kdf.execute(n, e.keySize, e.ivSize, t.salt, r.hasher);
+        r.iv = o.iv;
+        return k.decrypt.call(this, e, t, o.key, r);
+      }
+    })));
   },
   11: function (e, t, n) {
     "use strict";
@@ -4870,600 +6291,6 @@
       }
     });
     e.exports = c;
-  },
-  3: function (e, t, n) {
-    "use strict";
-
-    n.d(t, "d", function () {
-      return d;
-    });
-    n.d(t, "f", function () {
-      return f;
-    });
-    n.d(t, "e", function () {
-      return p;
-    });
-    n.d(t, "g", function () {
-      return g;
-    });
-    n.d(t, "b", function () {
-      return v;
-    });
-    n.d(t, "h", function () {
-      return y;
-    });
-    n.d(t, "c", function () {
-      return k;
-    });
-    n.d(t, "a", function () {
-      return b;
-    });
-    var r = n(1);
-    var o = n(0);
-    function i() {
-      /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
-      var e;
-      var t;
-      var n = typeof Symbol == "function" ? Symbol : {};
-      var r = n.iterator || "@@iterator";
-      var o = n.toStringTag || "@@toStringTag";
-      function s(n, r, o, i) {
-        var s = r && r.prototype instanceof l ? r : l;
-        var u = Object.create(s.prototype);
-        a(u, "_invoke", function (n, r, o) {
-          var i;
-          var a;
-          var s;
-          var l = 0;
-          var u = o || [];
-          var d = false;
-          var f = {
-            p: 0,
-            n: 0,
-            v: e,
-            a: p,
-            f: p.bind(e, 4),
-            d: function (t, n) {
-              i = t;
-              a = 0;
-              s = e;
-              f.n = n;
-              return c;
-            }
-          };
-          function p(n, r) {
-            a = n;
-            s = r;
-            t = 0;
-            for (; !d && l && !o && t < u.length; t++) {
-              var o;
-              var i = u[t];
-              var p = f.p;
-              var h = i[2];
-              if (n > 3) {
-                if (o = h === r) {
-                  s = i[(a = i[4]) ? 5 : (a = 3, 3)];
-                  i[4] = i[5] = e;
-                }
-              } else if (i[0] <= p) {
-                if (o = n < 2 && p < i[1]) {
-                  a = 0;
-                  f.v = r;
-                  f.n = i[1];
-                } else if (p < h && (o = n < 3 || i[0] > r || r > h)) {
-                  i[4] = n;
-                  i[5] = r;
-                  f.n = h;
-                  a = 0;
-                }
-              }
-            }
-            if (o || n > 1) {
-              return c;
-            }
-            d = true;
-            throw r;
-          }
-          return function (o, u, h) {
-            if (l > 1) {
-              throw TypeError("Generator is already running");
-            }
-            if (d && u === 1) {
-              p(u, h);
-            }
-            a = u;
-            s = h;
-            while ((t = a < 2 ? e : s) || !d) {
-              if (!i) {
-                if (a) {
-                  if (a < 3) {
-                    if (a > 1) {
-                      f.n = -1;
-                    }
-                    p(a, s);
-                  } else {
-                    f.n = s;
-                  }
-                } else {
-                  f.v = s;
-                }
-              }
-              try {
-                l = 2;
-                if (i) {
-                  if (!a) {
-                    o = "next";
-                  }
-                  if (t = i[o]) {
-                    if (!(t = t.call(i, s))) {
-                      throw TypeError("iterator result is not an object");
-                    }
-                    if (!t.done) {
-                      return t;
-                    }
-                    s = t.value;
-                    if (a < 2) {
-                      a = 0;
-                    }
-                  } else {
-                    if (a === 1 && (t = i.return)) {
-                      t.call(i);
-                    }
-                    if (a < 2) {
-                      s = TypeError("The iterator does not provide a '" + o + "' method");
-                      a = 1;
-                    }
-                  }
-                  i = e;
-                } else if ((t = (d = f.n < 0) ? s : n.call(r, f)) !== c) {
-                  break;
-                }
-              } catch (t) {
-                i = e;
-                a = 1;
-                s = t;
-              } finally {
-                l = 1;
-              }
-            }
-            return {
-              value: t,
-              done: d
-            };
-          };
-        }(n, o, i), true);
-        return u;
-      }
-      var c = {};
-      function l() {}
-      function u() {}
-      function d() {}
-      t = Object.getPrototypeOf;
-      var f = [][r] ? t(t([][r]())) : (a(t = {}, r, function () {
-        return this;
-      }), t);
-      var p = d.prototype = l.prototype = Object.create(f);
-      function h(e) {
-        if (Object.setPrototypeOf) {
-          Object.setPrototypeOf(e, d);
-        } else {
-          e.__proto__ = d;
-          a(e, o, "GeneratorFunction");
-        }
-        e.prototype = Object.create(p);
-        return e;
-      }
-      u.prototype = d;
-      a(p, "constructor", d);
-      a(d, "constructor", u);
-      u.displayName = "GeneratorFunction";
-      a(d, o, "GeneratorFunction");
-      a(p);
-      a(p, o, "Generator");
-      a(p, r, function () {
-        return this;
-      });
-      a(p, "toString", function () {
-        return "[object Generator]";
-      });
-      return (i = function () {
-        return {
-          w: s,
-          m: h
-        };
-      })();
-    }
-    function a(e, t, n, r) {
-      var o = Object.defineProperty;
-      try {
-        o({}, "", {});
-      } catch (e) {
-        o = 0;
-      }
-      (a = function (e, t, n, r) {
-        function i(t, n) {
-          a(e, t, function (e) {
-            return this._invoke(t, n, e);
-          });
-        }
-        if (t) {
-          if (o) {
-            o(e, t, {
-              value: n,
-              enumerable: !r,
-              configurable: !r,
-              writable: !r
-            });
-          } else {
-            e[t] = n;
-          }
-        } else {
-          i("next", 0);
-          i("throw", 1);
-          i("return", 2);
-        }
-      })(e, t, n, r);
-    }
-    function s(e, t, n, r) {
-      return new (n ||= Promise)(function (o, i) {
-        function a(e) {
-          try {
-            c(r.next(e));
-          } catch (e) {
-            i(e);
-          }
-        }
-        function s(e) {
-          try {
-            c(r.throw(e));
-          } catch (e) {
-            i(e);
-          }
-        }
-        function c(e) {
-          var t;
-          if (e.done) {
-            o(e.value);
-          } else {
-            (t = e.value, t instanceof n ? t : new n(function (e) {
-              e(t);
-            })).then(a, s);
-          }
-        }
-        c((r = r.apply(e, t || [])).next());
-      });
-    }
-    var c = /([^/]+)$/i;
-    var l = /\.([^/.]*)$/i;
-    function u(e) {
-      if (e && e.indexOf("data:image") !== 0) {
-        return /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/\.?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/.exec(e);
-      } else {
-        return [];
-      }
-    }
-    function d(e) {
-      var t = "";
-      var n = "";
-      try {
-        var r = e.split("/");
-        t = r[0];
-        var o = r[1].split(";")[0];
-        n = o;
-        switch (o) {
-          case "webm":
-            n = t == "video" ? "webm" : "weba";
-            break;
-          case "3gpp":
-            n = "3gp";
-            break;
-          case "3gpp2":
-            n = "3g2";
-            break;
-          case "ogg":
-            n = t == "video" ? "ogv" : "oga";
-            break;
-          case "mpeg":
-            n = t == "video" ? "mpeg" : "mp3";
-            break;
-          case "x-midi":
-            n = "midi";
-            break;
-          case "x-msvideo":
-            n = "avi";
-            break;
-          case "mp2t":
-            n = "ts";
-        }
-        return {
-          type: t,
-          ext: n
-        };
-      } catch (e) {
-        return {
-          type: t,
-          ext: n
-        };
-      }
-    }
-    function f(e, t) {
-      var n = typeof e == "object" ? e.videoUrl : e;
-      var r = new URL(n, n.startsWith("http") ? undefined : location.origin);
-      var i = (r.pathname.match(c) || [])[1] || "";
-      var a = i.split(".").map(e => e.toLowerCase());
-      i = decodeURIComponent(i.replace(l, ""));
-      a.shift();
-      if (a.length === 0 && Object(o.isSpecialUrls)(e)) {
-        a = ["m3u8"];
-      }
-      var s = a[a.length - 1] || "";
-      var u = null;
-      if (r.href.startsWith("data:")) {
-        var f = d(r.href.match(/data:([a-z]+\/[a-z0-9\-_]+);/i)[1]);
-        s = f.ext;
-        u = f.type;
-      }
-      var p = {
-        url: typeof e == "object" ? e : r.href,
-        protocol: r.protocol,
-        host: r.host,
-        port: r.port,
-        pathname: r.pathname,
-        filename: i,
-        ext: s,
-        exts: a,
-        hash: r.hash,
-        search: r.search,
-        type: u
-      };
-      if (!p.port) {
-        delete p.port;
-      }
-      if (t) {
-        var h = {};
-        r.search.replace(/^\?/, "").split(/&/).forEach(e => {
-          var t = e.split("=");
-          h[t[0]] = t[1];
-        });
-        p.query = h;
-      }
-      if (s == "flac") {
-        p.quality = "Lossless";
-        p.resolution = "lossless";
-      }
-      return p;
-    }
-    function p(e) {
-      var n = typeof e == "object" ? e.videoUrl : e;
-      if (n.startsWith("data:")) {
-        var o = n.match(/data:([a-z]+)/)[1];
-        if (["audio", "video"].includes(o)) {
-          return o;
-        } else {
-          return "";
-        }
-      }
-      var i = u(n)?.[11] || "";
-      if (!i) {
-        return "";
-      }
-      var a = new Map();
-      var s = ["no_watermark_video"];
-      Object.keys(r.k).forEach(e => {
-        if (!s.includes(e)) {
-          for (var t = r.k[e].extensions, n = 0; n < t.length; n++) {
-            a.set(t[n], e);
-          }
-        }
-      });
-      if (n.includes("googlevideo.com/videoplayback") && i === "videoplayback" && n.includes("mp4")) {
-        i = "video.mp4";
-      }
-      if (n.includes("videoplayback") && i === "videoplayback" && n.includes("mp4")) {
-        i = "video.mp4";
-      }
-      var c = i.split(".");
-      var l = c.length - 1;
-      if (l <= 0) {
-        return "";
-      }
-      var d = c[l].toLowerCase();
-      return a.get(d);
-    }
-    function h(e) {
-      return s(this, undefined, undefined, i().m(function t() {
-        var n;
-        var r;
-        return i().w(function (t) {
-          while (true) {
-            switch (t.n) {
-              case 0:
-                t.n = 1;
-                return fetch(e);
-              case 1:
-                n = t.v;
-                t.n = 2;
-                return n.blob();
-              case 2:
-                r = t.v;
-                return t.a(2, new Promise((e, t) => {
-                  var n = new FileReader();
-                  n.onloadend = () => {
-                    var t;
-                    return e((t = n.result) === null || t === undefined ? undefined : t.toString());
-                  };
-                  n.onerror = t;
-                  n.readAsDataURL(r);
-                }));
-            }
-          }
-        }, t);
-      }));
-    }
-    function g(e) {
-      var t = e.url;
-      var n = e.node;
-      return s(this, undefined, undefined, i().m(function e() {
-        var r;
-        var a;
-        var s;
-        var u;
-        var d;
-        return i().w(function (e) {
-          while (true) {
-            switch (e.n) {
-              case 0:
-                r = new URL(t.startsWith("blob:") ? t.replace("blob:", "") : t);
-                a = n.alt || (r.pathname.match(c) || [])[1] || "";
-                a = decodeURIComponent(a.replace(l, "").replace(/%/g, "%25"));
-                e.n = 1;
-                return m(t);
-              case 1:
-                s = e.v;
-                u = {
-                  url: t,
-                  protocol: r.protocol,
-                  host: r.host,
-                  pathname: r.pathname,
-                  filename: `${a}.${s}`,
-                  ext: s,
-                  exts: [s],
-                  hash: r.hash,
-                  search: r.search,
-                  type: "image",
-                  i18n_quality: Object(o.i18n)("download_current_image")
-                };
-                if (!t.includes("blob:")) {
-                  e.n = 3;
-                  break;
-                }
-                e.n = 2;
-                return h(t);
-              case 2:
-                if (d = e.v) {
-                  u.url = d;
-                }
-              case 3:
-                return e.a(2, u);
-            }
-          }
-        }, e);
-      }));
-    }
-    function m(e) {
-      return s(this, undefined, undefined, i().m(function n() {
-        var r;
-        var o;
-        var a;
-        return i().w(function (n) {
-          while (true) {
-            switch (n.n) {
-              case 0:
-                r = new AbortController();
-                n.n = 1;
-                return fetch(e, {
-                  signal: r.signal
-                });
-              case 1:
-                o = n.v;
-                a = o.headers.get("content-type");
-                r.abort();
-                return n.a(2, (a == null ? undefined : a.split("/"))?.[1]);
-            }
-          }
-        }, n);
-      }));
-    }
-    function v(e) {
-      if ((e = Object.create(e)).query) {
-        e.search = [];
-        for (var t in e.query) {
-          if (e.query[t] !== undefined) {
-            e.search.push(t + "=" + encodeURIComponent(e.query[t]));
-          } else {
-            e.search.push(t);
-          }
-        }
-        e.search = "?" + e.search.join("&");
-        delete e.query;
-      }
-      return e.href;
-    }
-    function y(e) {
-      var t = (e = e.replace(/^[#?]{1}/, "")).split("&");
-      var n = {};
-      t.forEach(e => {
-        var t = e.split("=");
-        if (Object(o.defined)(t[0]) && Object(o.defined)(t[1])) {
-          n[t[0]] = decodeURIComponent(t[1].replace(/\+/g, " "));
-        }
-      });
-      return n;
-    }
-    var k = (() => {
-      var e = ["facebook.com", "youtube.com", "video.vnexpress.net", "mp3.zing.vn", "radio.zing.vn", "tv.zing.vn", "nhaccuatui.com", "video.thethao247.vn", "video.ngoisao.net", "xvideos.com", "phimmoi.net", "clip.vn", "yan.vn", "xem.vn", "pornhub.com", "xhamster.com", "dailymotion.com", "xnxx.com", "hdonline.vn", "phim3s.net", "redtube.com", "phim14.net", "soundcloud.com", "youporn.com", "vimeo.com", "fptplay.net", "haivn.com", "chiasenhac.com", "movies.hdviet.com", "nhac.vui.vn", "nhacso.net", "anime47.com", "tube8.com", "talktv.vn", "chatvl.info", "cohet.tv", "vlxx.tv", "hayhaytv.vn", "xemphimso.com", "vivo.vn", "xemvtv.net", "vkool.net", "chimsedinang.com", "keeng.vn", "vuighe.net", "vetv.vn", "xemphimon.com", "ixxx.com", "biphim.com", "kenhvideo.com", "videogame.vn", "phim.in", "voh.com.vn", "phimsexporn.com", "porn99.net", "news.zing.vn", "me.zing.vn", "twitter.com", "24h.com.vn", "phim.clip.vn", "video.ringring.vn", "v.nhaccuatui.com", "clip.vietnamnet.vn", "afamily.vn", "media.bongdaplus.vn", "bongdaclip.com", "gamek.vn", "phapluattp.vn", "hdviet.com", "haiivl.com", "chatvl.com", "2sao.vn", "videos.vietgiaitri.com", "nhac.vietgiaitri.com", "megafun.vn", "phim.hayhd.vn", "cand.com.vn", "ohay.tv", "phim.megabox.vn", "anhtrang.org", "phim.anhtrang.org", "8bongda.com", "xemphimone.com", "bongda365.com.vn", "phimhd.vn", "dinotube.com", "phimvipvn.net", "animeax.com", "phimdata.com", "phimnhanh.net", "vipphim.net", "phimvon.com", "pubvn.tv", "phim22.com", "phim7.com", "hayxemphim.com", "m-viet.com", "thethaoclip.com", "nhac.hay365.com", "ssphim.com", "phimtructuyenhd.com", "xuongphim.tv", "vino.vn/mp3", "haivl.io", "nhacvang.org", "starmovies.mobi", "clipvuivn.com", "phimporn.com", "123tv.vn", "phimonlinehd.net", "hai24h.net", "jax.vn", "kenhgioitre.net", "chiaseclip.net", "phim.xixam.com", "bilutv.com", "phimbathu.com", "instagram.com", "banhtv.com", "txxx.com", "video.vietnamnet.vn", "video.bongdaplus.vn", "creatives.livejasmin.com", "tv.naver.com", "tv.tuoitre.vn", "icdrama.se", "video.thanhnien.vn", "spankbang.com", "dmm.co.jp", "v.youku.com", "v.qq.com", "daikynguyenvn.com", "thethao247.vn", "e.vnexpress.net", "ione.vnexpress.net", "kenh14.vn", "dantri.com.vn", "baomoi.com", "emdep.vn", "tuoitre.vn", "soha.vn", "video.congan.com.vn", "cafef.vn", "bongda.com.vn", "bongdaso.com", "eva.vn", "danviet.vn", "cliptv.vn", "bbc.co.uk", "edition.cnn.com", "buzzfeed.com", "businessinsider.com", "cnet.com", "dailymail.co.uk", "bilutvx.net", "chill123.gotdns.ch"];
-      var t = {};
-      for (var n = 0, r = e.length; n < r; ++n) {
-        var o = e[n];
-        console.assert(!(o in t), "Duplicate \"" + o + "\": " + t[o] + ", " + n);
-        t[o] = n + 1;
-      }
-      return function (e) {
-        for (var n = function (e) {
-            return u(e)?.[6] || "";
-          }(e), r = t[n]; !r && n;) {
-          var o = n.indexOf(".") + 1;
-          if (o === 0) {
-            break;
-          }
-          n = n.substr(o);
-          r = t[n];
-        }
-        return 100 + (r | 0);
-      };
-    })();
-    function b(e, t, n = false) {
-      var r = e || new URL(t);
-      if (t.includes("https") || t.includes("//")) {
-        if (!t.includes("http")) {
-          t = "https:" + t;
-        }
-        return t.replace(/http:\/\//, "https://");
-      }
-      if (n && t.startsWith("/")) {
-        if (r.origin) {
-          return r.origin + t;
-        } else {
-          return t;
-        }
-      }
-      var o = (r.host + r.pathname).split("/").filter(e => !!e).slice(0, -1);
-      var i = t.split("/").filter(e => !!e);
-      var a = i.lastIndexOf("..");
-      var s = i.slice(0, a + 1);
-      var c = i.slice(a + 1);
-      if (s.length > 0) {
-        o = o.slice(0, -s.length);
-      }
-      var l = o.indexOf(c[0]);
-      if (l == -1) {
-        o.push(...c);
-      } else {
-        l += 1;
-        for (var u = 1; u < c.length; ++u) {
-          var d = c[u];
-          if (!o.includes(d)) {
-            if (o[l - 1] === c[u - 1]) {
-              o[l] = d;
-            } else {
-              o.push(d);
-            }
-          }
-          l += 1;
-        }
-      }
-      return r.protocol + "//" + o.join("/");
-    }
   },
   34: function (e, t, n) {
     var r;
@@ -13743,261 +14570,6 @@
       return v;
     }();
   },
-  4: function (e, t, n) {
-    (function (t) {
-      var r;
-      r = r || function (e, r) {
-        var o;
-        if (typeof window != "undefined" && window.crypto) {
-          o = window.crypto;
-        }
-        if (typeof self != "undefined" && self.crypto) {
-          o = self.crypto;
-        }
-        if (typeof globalThis != "undefined" && globalThis.crypto) {
-          o = globalThis.crypto;
-        }
-        if (!o && typeof window != "undefined" && window.msCrypto) {
-          o = window.msCrypto;
-        }
-        if (!o && t !== undefined && t.crypto) {
-          o = t.crypto;
-        }
-        if (!o) {
-          try {
-            o = n(50);
-          } catch (e) {}
-        }
-        function i() {
-          if (o) {
-            if (typeof o.getRandomValues == "function") {
-              try {
-                return o.getRandomValues(new Uint32Array(1))[0];
-              } catch (e) {}
-            }
-            if (typeof o.randomBytes == "function") {
-              try {
-                return o.randomBytes(4).readInt32LE();
-              } catch (e) {}
-            }
-          }
-          throw new Error("Native crypto module could not be used to get secure random number.");
-        }
-        var a = Object.create || function () {
-          function e() {}
-          return function (t) {
-            var n;
-            e.prototype = t;
-            n = new e();
-            e.prototype = null;
-            return n;
-          };
-        }();
-        var s = {};
-        var c = s.lib = {};
-        var l = c.Base = {
-          extend: function (e) {
-            var t = a(this);
-            if (e) {
-              t.mixIn(e);
-            }
-            if (!t.hasOwnProperty("init") || this.init === t.init) {
-              t.init = function () {
-                t.$super.init.apply(this, arguments);
-              };
-            }
-            t.init.prototype = t;
-            t.$super = this;
-            return t;
-          },
-          create: function () {
-            var e = this.extend();
-            e.init.apply(e, arguments);
-            return e;
-          },
-          init: function () {},
-          mixIn: function (e) {
-            for (var t in e) {
-              if (e.hasOwnProperty(t)) {
-                this[t] = e[t];
-              }
-            }
-            if (e.hasOwnProperty("toString")) {
-              this.toString = e.toString;
-            }
-          },
-          clone: function () {
-            return this.init.prototype.extend(this);
-          }
-        };
-        var u = c.WordArray = l.extend({
-          init: function (e, t) {
-            e = this.words = e || [];
-            this.sigBytes = t ?? e.length * 4;
-          },
-          toString: function (e) {
-            return (e || f).stringify(this);
-          },
-          concat: function (e) {
-            var t = this.words;
-            var n = e.words;
-            var r = this.sigBytes;
-            var o = e.sigBytes;
-            this.clamp();
-            if (r % 4) {
-              for (var i = 0; i < o; i++) {
-                var a = n[i >>> 2] >>> 24 - i % 4 * 8 & 255;
-                t[r + i >>> 2] |= a << 24 - (r + i) % 4 * 8;
-              }
-            } else {
-              for (var s = 0; s < o; s += 4) {
-                t[r + s >>> 2] = n[s >>> 2];
-              }
-            }
-            this.sigBytes += o;
-            return this;
-          },
-          clamp: function () {
-            var t = this.words;
-            var n = this.sigBytes;
-            t[n >>> 2] &= -1 << 32 - n % 4 * 8;
-            t.length = e.ceil(n / 4);
-          },
-          clone: function () {
-            var e = l.clone.call(this);
-            e.words = this.words.slice(0);
-            return e;
-          },
-          random: function (e) {
-            var t = [];
-            for (var n = 0; n < e; n += 4) {
-              t.push(i());
-            }
-            return new u.init(t, e);
-          }
-        });
-        var d = s.enc = {};
-        var f = d.Hex = {
-          stringify: function (e) {
-            var t = e.words;
-            for (var n = e.sigBytes, r = [], o = 0; o < n; o++) {
-              var i = t[o >>> 2] >>> 24 - o % 4 * 8 & 255;
-              r.push((i >>> 4).toString(16));
-              r.push((i & 15).toString(16));
-            }
-            return r.join("");
-          },
-          parse: function (e) {
-            for (var t = e.length, n = [], r = 0; r < t; r += 2) {
-              n[r >>> 3] |= parseInt(e.substr(r, 2), 16) << 24 - r % 8 * 4;
-            }
-            return new u.init(n, t / 2);
-          }
-        };
-        var p = d.Latin1 = {
-          stringify: function (e) {
-            var t = e.words;
-            for (var n = e.sigBytes, r = [], o = 0; o < n; o++) {
-              var i = t[o >>> 2] >>> 24 - o % 4 * 8 & 255;
-              r.push(String.fromCharCode(i));
-            }
-            return r.join("");
-          },
-          parse: function (e) {
-            for (var t = e.length, n = [], r = 0; r < t; r++) {
-              n[r >>> 2] |= (e.charCodeAt(r) & 255) << 24 - r % 4 * 8;
-            }
-            return new u.init(n, t);
-          }
-        };
-        var h = d.Utf8 = {
-          stringify: function (e) {
-            try {
-              return decodeURIComponent(escape(p.stringify(e)));
-            } catch (e) {
-              throw new Error("Malformed UTF-8 data");
-            }
-          },
-          parse: function (e) {
-            return p.parse(unescape(encodeURIComponent(e)));
-          }
-        };
-        var g = c.BufferedBlockAlgorithm = l.extend({
-          reset: function () {
-            this._data = new u.init();
-            this._nDataBytes = 0;
-          },
-          _append: function (e) {
-            if (typeof e == "string") {
-              e = h.parse(e);
-            }
-            this._data.concat(e);
-            this._nDataBytes += e.sigBytes;
-          },
-          _process: function (t) {
-            var n;
-            var r = this._data;
-            var o = r.words;
-            var i = r.sigBytes;
-            var a = this.blockSize;
-            var s = i / (a * 4);
-            var c = (s = t ? e.ceil(s) : e.max((s | 0) - this._minBufferSize, 0)) * a;
-            var l = e.min(c * 4, i);
-            if (c) {
-              for (var d = 0; d < c; d += a) {
-                this._doProcessBlock(o, d);
-              }
-              n = o.splice(0, c);
-              r.sigBytes -= l;
-            }
-            return new u.init(n, l);
-          },
-          clone: function () {
-            var e = l.clone.call(this);
-            e._data = this._data.clone();
-            return e;
-          },
-          _minBufferSize: 0
-        });
-        c.Hasher = g.extend({
-          cfg: l.extend(),
-          init: function (e) {
-            this.cfg = this.cfg.extend(e);
-            this.reset();
-          },
-          reset: function () {
-            g.reset.call(this);
-            this._doReset();
-          },
-          update: function (e) {
-            this._append(e);
-            this._process();
-            return this;
-          },
-          finalize: function (e) {
-            if (e) {
-              this._append(e);
-            }
-            return this._doFinalize();
-          },
-          blockSize: 16,
-          _createHelper: function (e) {
-            return function (t, n) {
-              return new e.init(n).finalize(t);
-            };
-          },
-          _createHmacHelper: function (e) {
-            return function (t, n) {
-              return new m.HMAC.init(e, n).finalize(t);
-            };
-          }
-        });
-        var m = s.algo = {};
-        return s;
-      }(Math);
-      e.exports = r;
-    }).call(this, n(13));
-  },
   40: function (e, t, n) {
     var r;
     var o;
@@ -14231,301 +14803,6 @@
       e.HmacSHA512 = t._createHmacHelper(u);
     })();
     e.exports = r.SHA512;
-  },
-  5: function (e, t, n) {
-    "use strict";
-
-    var r = n(11);
-    var o = n(38);
-    class i {
-      constructor() {
-        this.SOURCE_POPUP_PAGE = 0;
-        this.SOURCE_OPTIONS_PAGE = 10;
-        this.SOURCE_CONTENT_SCRIPT = 20;
-        this.SOURCE_BACKGROUND_PAGE = 30;
-        this.LEGACY_METRICS_NAME_MAP = {
-          ButtonClicked: "TryItNowButtonClicked",
-          CheckBoxClicked: "OneClickCheckbox"
-        };
-        this.PAGE_WELCOME_SCREEN = 0;
-        this.PAGE_DOWNLOADS_LIST = 1;
-        this.PAGE_ONE_CLICK_DOWNLOAD = 2;
-        this.PAGE_NO_MEDIA_FOUND = 3;
-        this.PAGE_OPTIONS = 4;
-        this.PAGE_CONTENT_SHOW_CONTROLS = 5;
-        this.PAGE_CONTENT_NO_MEDIA = 9;
-        this.YOUTUBE_ERROR_WALL_BY_ADS_BLOCK = 0;
-        this.YOUTUBE_ERROR_POPUP_BY_ADS_BLOCK = 1;
-        this.YOUTUBE_ERROR_WALL_BY_SAVIOR = 2;
-        this.YOUTUBE_ERROR_POPUP_BY_SAVIOR = 3;
-        this.YOUTUBE_ERROR_WALL_BY_ADGUARD = 4;
-        this.YOUTUBE_ERROR_POPUP_WITH_CLOSE_BY_ADGUARD = 5;
-        this.YOUTUBE_ERROR_POPUP_WITHOUT_CLOSE_BY_ADGUARD = 6;
-        this.YOUTUBE_ERROR_POPUP_WITH_CLOSE_BY_ADS_BLOCK = 7;
-        this.YOUTUBE_ERROR_POPUP_WITHOUT_CLOSE_BY_ADS_BLOCK = 8;
-        this.YOUTUBE_ERROR_POPUP_WITH_CLOSE_BY_SAVIOR = 9;
-        this.YOUTUBE_ERROR_POPUP_WITHOUT_CLOSE_BY_SAVIOR = 10;
-        this.YOUTUBE_AUTO_CLOSE_POPUP_WITH_CLOSE = 11;
-        this.YOUTUBE_AUTO_CLOSE_POPUP_WITHOUT_CLOSE = 12;
-        this.YOUTUBE_VIDEO_ERROR_ADBLOCK = 13;
-        this.YOUTUBE_VIDEO_ERROR_ADGUARD = 14;
-        this.YOUTUBE_VIDEO_ERROR_ADBLOCK_OFF = 15;
-        this.YOUTUBE_VIDEO_ERROR_ADGUARD_OFF = 16;
-        this.YOUTUBE_ADGUARD_OFF = 0;
-        this.YOUTUBE_ADGUARD_ON = 1;
-        this.YOUTUBE_ADGUARD_API_ERROR_TURN_OFF_ABP = 2;
-        this.YOUTUBE_ADGUARD_API_ERROR_CHECK_TURN_OFF_ABP = 3;
-        this.YOUTUBE_ADGUARD_NO_OFFSCREEN = 4;
-        this.YOUTUBE_ADGUARD_NO_SCRIPT = 5;
-        this.YOUTUBE_ADGUARD_NO_TAB_ID = 6;
-        this.YOUTUBE_ADGUARD_USER_SCRIPT = 7;
-        this.YOUTUBE_ADGUARD_SCRIPTING = 8;
-        this.YOUTUBE_ADGUARD_IS_GROUP_TEST = 9;
-        this.YOUTUBE_ADGUARD_HAS_EVENT = 10;
-        this.YOUTUBE_ADGUARD_REGISTER_INJECT = 11;
-        this.YOUTUBE_SKIP_ADS_SHOWN = 1;
-        this.YOUTUBE_SKIP_ADS_FAST_FWD = 2;
-        this.YOUTUBE_SKIPPABLE_ADS = 3;
-        this.YOUTUBE_UNSKIPPABLE_ADS = 4;
-        this.YOUTUBE_AUDIO_CHANNEL_WIDGET_SHOW = 1;
-        this.YOUTUBE_AUDIO_CHANNEL_WIDGET_CHANGE = 2;
-        this.YOUTUBE_AUDIO_CHANNEL_POPUP_SHOW = 3;
-        this.YOUTUBE_AUDIO_CHANNEL_POPUP_CHANGE = 4;
-        this.DOWNLOAD_AUTO = 0;
-        this.DOWNLOAD_BUTTON = 1;
-        this.DOWNLOAD_ALL = 2;
-        this.DOWNLOAD_REQUEST_SIZE = 3;
-        this.DOWNLOAD_REQUEST_SIZE_FAILED = 4;
-        this.DOWNLOAD_SOUND_ONLY = 5;
-        this.DOWNLOAD_YOUTUBE_ERROR = 6;
-        this.DOWNLOAD_CANCELED = 7;
-        this.DOWNLOAD_SUBTITLES = 9;
-        this.DOWNLOAD_CURRENT_IMAGE = 0;
-        this.DOWNLOAD_ALL_IMAGES = 1;
-        this.BUTTON_HIDE_WITH_IMAGE = 0;
-        this.BUTTON_HIDE_PERMANENT_WITH_IMAGE = 1;
-        this.BUTTON_MAIN = 0;
-        this.BUTTON_TRY_IT_NOW = 1;
-        this.BUTTON_SHOW_DOWNLOADS = 2;
-        this.BUTTON_OPEN_SETTINGS = 3;
-        this.BUTTON_DOWNLOAD_ALL = 4;
-        this.BUTTON_MORE_OPTIONS = 5;
-        this.BUTTON_HIDE_PERMANENT = 6;
-        this.BUTTON_FAKE_QUALITY = 7;
-        this.BUTTON_DETACH = 8;
-        this.BUTTON_HIDE = 9;
-        this.CHECK_BOX_ENABLE_ONE_CLICK = 0;
-        this.CHECK_BOX_SHOW_ON_PAGE_BUTTONS = 2;
-        this.CHECK_BOX_PREFER_LAST_QUALITY = 4;
-        this.CHECK_BOX_DETACH_ENABLED = 6;
-        this.CHECK_BOX_DARK_THEM_ENABLED = 8;
-        this.PIP_DETACH_CLICK = 0;
-        this.PIP_RESTORE_CLICK = 1;
-        this.PIP_SITE_LINK_CLICK = 2;
-        this.PLAY_NOW_SHOWN = 0;
-        this.PLAY_NOW_WIDGET_CLICKED = 1;
-        this.PLAY_NOW_TOOLTIP_SHOWN = 2;
-        this.PLAY_NOW_TOOLTIP_CLOSED = 3;
-        this.PLAY_NOW_TOOLTIP_NOT_SHOW_AGAIN = 4;
-        this.PLAY_NOW_TOOLTIP_BOTTOM_SHOWN = 5;
-        this.PLAY_NOW_TOOLTIP_BOTTOM_CLOSED = 6;
-        this.PLAY_NOW_TOOLTIP_BOTTOM_NOT_SHOW_AGAIN = 7;
-        this.EXTENSION_MP4 = 1;
-        this.EXTENSION_MP3 = 2;
-        this.EXTENSION_WEBM = 3;
-        this.EXTENSION_3GP = 4;
-        this.EXTENSION_SRT = 5;
-        this.EXTENSION_OTHER = 6;
-        this.SEND_MOBILE_SHOW = 1;
-        this.SEND_MOBILE_CLICK = 2;
-        this.SEND_MOBILE_CLICK_CLOSE = 3;
-        this.SEND_MOBILE_CLICK_A = 4;
-        this.SEND_MOBILE_CLICK_G = 5;
-        this.SEND_MOBILE_CLICK_W = 6;
-        this.SEND_MOBILE_CLICK_AUDIO = 7;
-        this.SEND_MOBILE_ERROR = 9;
-        this.TURN_LIGHT_ON = 0;
-        this.TURN_LIGHT_OFF = 1;
-        this.ONBOARD_POPUP_SHOWN = 1;
-        this.ONBOARD_POPUP_SHOWN_SECOND = 1;
-        this.ONBOARD_POPUP_SHOWN_THIRD = 1;
-        this.ONBOARD_TRY_NOW_BTN_CLICK = 1;
-        this.CLOSE_ONBOARD_POPUP = 1;
-        this.OPEN_SETTING_POPUP = 1;
-        this.OPEN_SETTING_CONTENT = 2;
-        this.SKIP_VIDEO = 0;
-        this.SETTING_ENABLE_SKIP_VIDEO = 1;
-        this.SETTING_DISABLE_SKIP_VIDEO = 2;
-        this.SIDEPANEL_OPEN_ICON_CLICK = 1;
-        this.SIDEPANEL_OPEN_DONE = 2;
-        this.DOWNLOAD_SIDEPANEL_CLICK_VIDEO = 1;
-        this.DOWNLOAD_SIDEPANEL_CLICK_AUDIO = 2;
-        this.DOWNLOAD_SIDEPANEL_CLICK_SUBTITLE = 3;
-        this.DOWNLOAD_SIDEPANEL_CLICK_IMAGE = 4;
-        this.DOWNLOAD_SIDEPANEL_CLICK_BULK_MEDIA = 5;
-        this.DOWNLOAD_SIDEPANEL_CLICK_BULK_IMAGE = 6;
-        this.DOWNLOAD_SIDEPANEL_VIDEO_DIRECT = 1;
-        this.DOWNLOAD_SIDEPANEL_AUDIO_DIRECT = 2;
-        this.DOWNLOAD_SIDEPANEL_SUBTITLE_DIRECT = 3;
-        this.DOWNLOAD_SIDEPANEL_IMAGE_DIRECT = 4;
-        this.ONECLICK_CHECKBOX_ON = 1;
-        this.ONECLICK_CHECKBOX_OFF = 2;
-        this.ONECLICK_AUTO_QUALITY_HIGH = 18;
-        this.ONECLICK_AUTO_QUALITY_STANDARD = 19;
-        this.ONECLICK_AUTO_QUALITY_LOW = 20;
-        this.DOWNLOAD_SIDEPANEL_QUALITY_MOBILE = 10;
-        this.DOWNLOAD_SIDEPANEL_QUALITY_LOW = 11;
-        this.DOWNLOAD_SIDEPANEL_QUALITY_MEDIUM = 12;
-        this.DOWNLOAD_SIDEPANEL_QUALITY_STANDARD = 13;
-        this.DOWNLOAD_SIDEPANEL_QUALITY_HD = 14;
-        this.DOWNLOAD_SIDEPANEL_QUALITY_FULLHD = 15;
-        this.DOWNLOAD_SIDEPANEL_QUALITY_QHD = 16;
-        this.DOWNLOAD_SIDEPANEL_QUALITY_4K = 17;
-        this.DOWNLOAD_SIDEPANEL_QUALITY_8K = 18;
-        this.DOWNLOAD_SIDEPANEL_AUDIO_128 = 20;
-        this.DOWNLOAD_SIDEPANEL_AUDIO_320 = 21;
-        this.DOWNLOAD_SIDEPANEL_AUDIO_LOSSLESS = 22;
-        this.SELECT_ALL_TOGGLE_ON = 1;
-        this.SELECT_ALL_TOGGLE_OFF = 2;
-        this.IMAGE_SIZE_FILTER_ALL = 0;
-        this.IMAGE_SIZE_FILTER_SMALL = 1;
-        this.IMAGE_SIZE_FILTER_MEDIUM = 2;
-        this.IMAGE_SIZE_FILTER_LARGE = 3;
-      }
-      get source() {
-        if (!chrome.action && !chrome.pageAction) {
-          return this.SOURCE_CONTENT_SCRIPT;
-        }
-        switch (location.pathname) {
-          case "/popup.html":
-            return this.SOURCE_POPUP_PAGE;
-          case "/options.html":
-            return this.SOURCE_OPTIONS_PAGE;
-          case "/background.js":
-          case "/background.html":
-            return this.SOURCE_BACKGROUND_PAGE;
-          default:
-            return null;
-        }
-      }
-      _getFullName(e) {
-        return "Savior." + (this.LEGACY_METRICS_NAME_MAP[e] || e);
-      }
-      _getTotalValue(e, t, n) {
-        if (e.indexOf("Refr") === 0 || n || ["PageShown", "YTBlockType", "YTSkipAdShown", "ForceDisableAdblockOnYoutube"].includes(e) || (e == null ? undefined : e.startsWith("Onboarding.")) || typeof t != "number") {
-          return t;
-        } else {
-          return t + this.source;
-        }
-      }
-      _doLog(e, t, n) {
-        var i = this._getFullName(t);
-        if (!(parseInt(navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)?.[2] || "") <= 50)) {
-          if (this.source === this.SOURCE_CONTENT_SCRIPT) {
-            Object(o.a)({
-              type: "metrics",
-              method: "log",
-              params: {
-                name: t,
-                value: n
-              }
-            });
-          } else if (chrome.metricsPrivate) {
-            switch (e) {
-              case "recordSmallCount":
-                chrome.metricsPrivate.recordValue({
-                  metricName: i,
-                  type: chrome.metricsPrivate.MetricTypeType.HISTOGRAM_LINEAR,
-                  min: 0,
-                  max: 100,
-                  buckets: 100
-                }, n);
-                break;
-              case "recordValue":
-                chrome.metricsPrivate.recordValue({
-                  metricName: i,
-                  type: chrome.metricsPrivate.MetricTypeType.HISTOGRAM_LINEAR,
-                  min: 0,
-                  max: 1000,
-                  buckets: 1002
-                }, n);
-                break;
-              case "recordCustomData":
-                chrome.metricsPrivate.recordCustomData(n);
-                break;
-              case "recordLongTime":
-                chrome.metricsPrivate.recordLongTime(i, n);
-                break;
-              case "recordEnumerationValue":
-                chrome.metricsPrivate.recordEnumerationValue(i, n, 1000);
-            }
-          } else if (e === "recordCustomData") {
-            if (n && n.length === 1) {
-              console.info("%c[Metrics] %crecordCustomData %c%s", "color:gray", "color:silver", "color: lightgreen", n[0].key, JSON.parse(n[0].value));
-              return;
-            }
-            console.info("%c[Metrics]", "color:gray", "recordCustomData", n);
-          } else {
-            console.info("%c[Metrics]", "color:gray", e, i, n);
-          }
-        }
-      }
-      static _getMethodByName(e) {
-        switch (e) {
-          case "Refr":
-          case "RefrSE":
-          case "RefrFE":
-          case "RefrPin":
-            return "recordValue";
-          case "recordCustomData":
-            return "recordCustomData";
-          default:
-            return "recordEnumerationValue";
-        }
-      }
-      log(e, t, n) {
-        try {
-          var o = i._getMethodByName(e);
-          if (o === "recordCustomData" && r.a.CUSTOM_METRICS_JSON) {
-            this._doLog(o, e, t);
-            return;
-          }
-          var a = this._getTotalValue(e, t, n);
-          this._doLog(o, e, a);
-        } catch (e) {
-          console.warn("Catched", e);
-        }
-      }
-      logYtExtension(e) {
-        switch (e.toLowerCase()) {
-          case "mp4":
-            this.log("YtExtension", this.EXTENSION_MP4);
-            break;
-          case "mp3":
-            this.log("YtExtension", this.EXTENSION_MP3);
-            break;
-          case "webm":
-            this.log("YtExtension", this.EXTENSION_WEBM);
-            break;
-          case "3gp":
-            this.log("YtExtension", this.EXTENSION_3GP);
-            break;
-          case "srt":
-            this.log("YtExtension", this.EXTENSION_SRT);
-            break;
-          default:
-            this.log("YtExtension", this.EXTENSION_OTHER);
-        }
-      }
-      logSendMobile(e) {
-        this.log("SendMobile", e);
-      }
-      logFromContentScript(e, t) {
-        this.log(e, t, true);
-      }
-    logRequest(e) {}
-    }
-    t.a = new i();
   },
   50: function (e, t) {},
   51: function (e, t, n) {
@@ -15495,284 +15772,7 @@
   71: function (e, t, n) {},
   72: function (e, t, n) {},
   73: function (e, t, n) {},
-  736: function (e, t, n) {},
   74: function (e, t, n) {},
   75: function (e, t, n) {},
-  8: function (e, t, n) {
-    var r;
-    var o;
-    var i;
-    var a;
-    var s;
-    var c;
-    var l;
-    var u;
-    var d;
-    var f;
-    var p;
-    var h;
-    var g;
-    var m;
-    var v;
-    var y;
-    var k;
-    var b;
-    var _;
-    r = n(4);
-    n(17);
-    e.exports = void (r.lib.Cipher || (o = r, i = o.lib, a = i.Base, s = i.WordArray, c = i.BufferedBlockAlgorithm, l = o.enc, l.Utf8, u = l.Base64, d = o.algo.EvpKDF, f = i.Cipher = c.extend({
-      cfg: a.extend(),
-      createEncryptor: function (e, t) {
-        return this.create(this._ENC_XFORM_MODE, e, t);
-      },
-      createDecryptor: function (e, t) {
-        return this.create(this._DEC_XFORM_MODE, e, t);
-      },
-      init: function (e, t, n) {
-        this.cfg = this.cfg.extend(n);
-        this._xformMode = e;
-        this._key = t;
-        this.reset();
-      },
-      reset: function () {
-        c.reset.call(this);
-        this._doReset();
-      },
-      process: function (e) {
-        this._append(e);
-        return this._process();
-      },
-      finalize: function (e) {
-        if (e) {
-          this._append(e);
-        }
-        return this._doFinalize();
-      },
-      keySize: 4,
-      ivSize: 4,
-      _ENC_XFORM_MODE: 1,
-      _DEC_XFORM_MODE: 2,
-      _createHelper: function () {
-        function e(e) {
-          if (typeof e == "string") {
-            return _;
-          } else {
-            return k;
-          }
-        }
-        return function (t) {
-          return {
-            encrypt: function (n, r, o) {
-              return e(r).encrypt(t, n, r, o);
-            },
-            decrypt: function (n, r, o) {
-              return e(r).decrypt(t, n, r, o);
-            }
-          };
-        };
-      }()
-    }), i.StreamCipher = f.extend({
-      _doFinalize: function () {
-        return this._process(true);
-      },
-      blockSize: 1
-    }), p = o.mode = {}, h = i.BlockCipherMode = a.extend({
-      createEncryptor: function (e, t) {
-        return this.Encryptor.create(e, t);
-      },
-      createDecryptor: function (e, t) {
-        return this.Decryptor.create(e, t);
-      },
-      init: function (e, t) {
-        this._cipher = e;
-        this._iv = t;
-      }
-    }), g = p.CBC = function () {
-      var e = h.extend();
-      function t(e, t, n) {
-        var r;
-        var o = this._iv;
-        if (o) {
-          r = o;
-          this._iv = undefined;
-        } else {
-          r = this._prevBlock;
-        }
-        for (var i = 0; i < n; i++) {
-          e[t + i] ^= r[i];
-        }
-      }
-      e.Encryptor = e.extend({
-        processBlock: function (e, n) {
-          var r = this._cipher;
-          var o = r.blockSize;
-          t.call(this, e, n, o);
-          r.encryptBlock(e, n);
-          this._prevBlock = e.slice(n, n + o);
-        }
-      });
-      e.Decryptor = e.extend({
-        processBlock: function (e, n) {
-          var r = this._cipher;
-          var o = r.blockSize;
-          var i = e.slice(n, n + o);
-          r.decryptBlock(e, n);
-          t.call(this, e, n, o);
-          this._prevBlock = i;
-        }
-      });
-      return e;
-    }(), m = (o.pad = {}).Pkcs7 = {
-      pad: function (e, t) {
-        var n = t * 4;
-        for (var r = n - e.sigBytes % n, o = r << 24 | r << 16 | r << 8 | r, i = [], a = 0; a < r; a += 4) {
-          i.push(o);
-        }
-        var c = s.create(i, r);
-        e.concat(c);
-      },
-      unpad: function (e) {
-        var t = e.words[e.sigBytes - 1 >>> 2] & 255;
-        e.sigBytes -= t;
-      }
-    }, i.BlockCipher = f.extend({
-      cfg: f.cfg.extend({
-        mode: g,
-        padding: m
-      }),
-      reset: function () {
-        var e;
-        f.reset.call(this);
-        var t = this.cfg;
-        var n = t.iv;
-        var r = t.mode;
-        if (this._xformMode == this._ENC_XFORM_MODE) {
-          e = r.createEncryptor;
-        } else {
-          e = r.createDecryptor;
-          this._minBufferSize = 1;
-        }
-        if (this._mode && this._mode.__creator == e) {
-          this._mode.init(this, n && n.words);
-        } else {
-          this._mode = e.call(r, this, n && n.words);
-          this._mode.__creator = e;
-        }
-      },
-      _doProcessBlock: function (e, t) {
-        this._mode.processBlock(e, t);
-      },
-      _doFinalize: function () {
-        var e;
-        var t = this.cfg.padding;
-        if (this._xformMode == this._ENC_XFORM_MODE) {
-          t.pad(this._data, this.blockSize);
-          e = this._process(true);
-        } else {
-          e = this._process(true);
-          t.unpad(e);
-        }
-        return e;
-      },
-      blockSize: 4
-    }), v = i.CipherParams = a.extend({
-      init: function (e) {
-        this.mixIn(e);
-      },
-      toString: function (e) {
-        return (e || this.formatter).stringify(this);
-      }
-    }), y = (o.format = {}).OpenSSL = {
-      stringify: function (e) {
-        var t = e.ciphertext;
-        var n = e.salt;
-        return (n ? s.create([1398893684, 1701076831]).concat(n).concat(t) : t).toString(u);
-      },
-      parse: function (e) {
-        var t;
-        var n = u.parse(e);
-        var r = n.words;
-        if (r[0] == 1398893684 && r[1] == 1701076831) {
-          t = s.create(r.slice(2, 4));
-          r.splice(0, 4);
-          n.sigBytes -= 16;
-        }
-        return v.create({
-          ciphertext: n,
-          salt: t
-        });
-      }
-    }, k = i.SerializableCipher = a.extend({
-      cfg: a.extend({
-        format: y
-      }),
-      encrypt: function (e, t, n, r) {
-        r = this.cfg.extend(r);
-        var o = e.createEncryptor(n, r);
-        var i = o.finalize(t);
-        var a = o.cfg;
-        return v.create({
-          ciphertext: i,
-          key: n,
-          iv: a.iv,
-          algorithm: e,
-          mode: a.mode,
-          padding: a.padding,
-          blockSize: e.blockSize,
-          formatter: r.format
-        });
-      },
-      decrypt: function (e, t, n, r) {
-        r = this.cfg.extend(r);
-        t = this._parse(t, r.format);
-        return e.createDecryptor(n, r).finalize(t.ciphertext);
-      },
-      _parse: function (e, t) {
-        if (typeof e == "string") {
-          return t.parse(e, this);
-        } else {
-          return e;
-        }
-      }
-    }), b = (o.kdf = {}).OpenSSL = {
-      execute: function (e, t, n, r, o) {
-        r ||= s.random(8);
-        if (o) {
-          i = d.create({
-            keySize: t + n,
-            hasher: o
-          }).compute(e, r);
-        } else {
-          var i = d.create({
-            keySize: t + n
-          }).compute(e, r);
-        }
-        var a = s.create(i.words.slice(t), n * 4);
-        i.sigBytes = t * 4;
-        return v.create({
-          key: i,
-          iv: a,
-          salt: r
-        });
-      }
-    }, _ = i.PasswordBasedCipher = k.extend({
-      cfg: k.cfg.extend({
-        kdf: b
-      }),
-      encrypt: function (e, t, n, r) {
-        var o = (r = this.cfg.extend(r)).kdf.execute(n, e.keySize, e.ivSize, r.salt, r.hasher);
-        r.iv = o.iv;
-        var i = k.encrypt.call(this, e, t, o.key, r);
-        i.mixIn(o);
-        return i;
-      },
-      decrypt: function (e, t, n, r) {
-        r = this.cfg.extend(r);
-        t = this._parse(t, r.format);
-        var o = r.kdf.execute(n, e.keySize, e.ivSize, t.salt, r.hasher);
-        r.iv = o.iv;
-        return k.decrypt.call(this, e, t, o.key, r);
-      }
-    })));
-  }
+  736: function (e, t, n) {}
 });
