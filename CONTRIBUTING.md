@@ -31,7 +31,7 @@ All extension runtime scripts (`content-script.js`, `background.js`, `common.js`
 
 ## Building from Source
 
-A clean clone reproduces all shipped artifacts:
+The build pipeline compiles all extension artifacts from unpacked source:
 
 ```bash
 # Clone repository
