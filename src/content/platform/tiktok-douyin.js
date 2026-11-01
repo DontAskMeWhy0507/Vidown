@@ -192,12 +192,13 @@ export default function(module, exports, require) {
   }
 
   function parseAwemeVideoAttribute(videoElement) {
-    var rawAwemeAttr = videoElement?.getAttribute("data-aweme-video");
-    if (!rawAwemeAttr) return null;
+    if (!videoElement?.hasAttribute?.("data-aweme-video")) return null;
     try {
-      return JSON.parse(rawAwemeAttr);
+      return JSON.parse(videoElement.getAttribute("data-aweme-video"));
     } catch (parseErr) {
       return null;
+    } finally {
+      videoElement.removeAttribute("data-aweme-video");
     }
   }
 
@@ -420,97 +421,271 @@ export default function(module, exports, require) {
     return titleAnchor?.title || "";
   }
 
-  function extractValidMediaUrl(mediaStruct) {
-    if (!mediaStruct) return null;
-    var urlList = mediaStruct.urlList || mediaStruct.UrlList || [];
-    return urlList.find(function(urlStr) {
-      return isKnownVideoPattern(urlStr);
-    }) || urlList[0] || null;
+  function findCoverImage(element, fallbackCover) {
+    var imgSrc = (element?.currentSrc) || (element?.src) || "";
+    return imgSrc && !/^data:image\/gif/i.test(imgSrc) ? imgSrc : fallbackCover || void 0;
   }
 
-  function scrapeTikTokCurrentVideoMeta(videoElement) {
-    var rootElem = findTikTokItemRoot(videoElement);
-    var titleElem = rootElem?.querySelector('[data-e2e="video-desc"], [data-e2e="browse-video-desc"]');
-    var videoTitle = sanitizeVideoTitle(titleElem) || document.title;
-    var videoId = getTikTokItemId(videoElement);
+  function scrapeCurrentVideoFromDoc() {
+    var videoId = getCurrentTikTokVideoId();
+    if (!videoId) return null;
+    var descElem = document.querySelector(
+      '[data-e2e$="browse-video-desc"], [data-e2e$="video-desc"], [data-e2e="browse-video-desc"]'
+    );
+    var ogMeta = document.querySelector('meta[property="og:title"]');
+    var ogTitle = ogMeta?.getAttribute("content") || "";
+    var videoTitle = sanitizeVideoTitle(descElem?.innerText || ogTitle) || document.title;
+    var mainVideo = findTikTokMainVideo();
+    var parentElem = mainVideo?.parentElement;
+    var thumbnail;
+    for (var i = 0; i < 8 && parentElem && !thumbnail; i++) {
+      thumbnail = findCoverImage(parentElem.querySelector("img[src], img[srcset]"));
+      parentElem = parentElem.parentElement;
+    }
     return {
       id: videoId,
-      title: videoTitle,
       url: location.href,
       type: "video",
       ext: "mp4",
-      exts: ["mp4"]
+      exts: ["mp4"],
+      title: videoTitle,
+      thumbnail: thumbnail
     };
   }
 
-  function scrapeTikTokAnchorPreviewMeta(videoElement) {
-    var anchor = getTikTokAnchorElement(videoElement);
+  function scrapeTikTokAnchorPreviewMeta(element) {
+    if (isStandaloneTikTokVideo(element)) return scrapeCurrentVideoFromDoc();
+    var anchor = getTikTokAnchorElement(element);
     if (!anchor) return null;
-    var videoId = getTikTokVideoIdFromUrl(anchor.href);
-    var videoTitle = sanitizeVideoTitle(anchor.title || anchor.innerText) || document.title;
-    return {
-      id: videoId,
+    var anchorImg = anchor.querySelector("img");
+    var rawText = (anchor.title || anchorImg?.getAttribute("alt") || anchorImg?.alt || anchor.textContent || "")
+      .split(/created by/i)[0] || "";
+    var cleanTitle = rawText.trim().replace(/\s+/g, " ") || document.title;
+    var hrefMatch = anchor.href?.match(TIKTOK_VIDEO_URL_REGEX)?.[1] ||
+      anchor.getAttribute("href")?.match(TIKTOK_VIDEO_URL_REGEX)?.[1];
+    if (!hrefMatch && !anchor.href) return null;
+    var awemeCover;
+    try {
+      var rawAweme = anchor.getAttribute("data-aweme-video");
+      if (rawAweme) {
+        awemeCover = JSON.parse(rawAweme)?.cover || void 0;
+      }
+    } catch (ignoreErr) {}
+    var cover = findCoverImage(anchorImg, awemeCover);
+    return cover || cleanTitle ? {
+      id: hrefMatch || anchor.href,
       url: anchor.href,
-      title: videoTitle,
       type: "video",
       ext: "mp4",
       exts: ["mp4"],
-      thumbnail: anchor.querySelector("img")?.src || null
-    };
+      title: cleanTitle,
+      thumbnail: cover
+    } : null;
   }
 
-  function scrapeTikTokUniversalData() {
-    var rehydrationElement = document.querySelector("#__UNIVERSAL_DATA_FOR_REHYDRATION__");
-    if (!rehydrationElement?.innerText) return null;
-    try {
-      var parsedData = JSON.parse(rehydrationElement.innerText.trim());
-      return parsedData?.__DEFAULT_SCOPE__ || null;
-    } catch (parseErr) {
-      return null;
-    }
+  function formatBitratesOrPlayAddr(videoData, videoTitle) {
+    return asyncRunner2(this, void 0, void 0, w().m(function bitrateGenerator() {
+      var parsedList, singleMedia;
+      return w().w(function(step) {
+        for (;;) switch (step.n) {
+          case 0:
+            if (!videoData.bitrateInfo?.length) {
+              step.n = 2;
+              break;
+            }
+            step.n = 1;
+            return parseTikTokMediaItems(videoData.bitrateInfo, videoTitle || document.title);
+          case 1:
+            parsedList = step.v;
+            if (!parsedList.length) {
+              step.n = 2;
+              break;
+            }
+            return step.a(2, parsedList);
+          case 2:
+            if (!videoData.url) {
+              step.n = 3;
+              break;
+            }
+            singleMedia = urlUtils.f(videoData.url);
+            singleMedia.filename = videoTitle;
+            if (videoData.ratio) {
+              singleMedia.resolution = videoData.ratio;
+              singleMedia.quality = mediaConstants.r[singleMedia.resolution]?.label;
+            }
+            singleMedia.ext = "mp4";
+            singleMedia.exts = ["mp4"];
+            singleMedia.type = "video";
+            return step.a(2, [singleMedia]);
+          case 3:
+            return step.a(2, []);
+        }
+      }, bitrateGenerator);
+    }));
+  }
+
+  function scrapeUniversalDataById(videoId, videoTitle) {
+    return asyncRunner2(this, void 0, void 0, w().m(function universalGenerator() {
+      var rawText, parsedData, itemStruct, videoObj, resolvedTitle;
+      return w().w(function(step) {
+        for (;;) switch (step.p = step.n) {
+          case 0:
+            step.p = 0;
+            rawText = document.querySelector("#__UNIVERSAL_DATA_FOR_REHYDRATION__")?.textContent?.trim();
+            if (rawText) {
+              step.n = 1;
+              break;
+            }
+            return step.a(2, []);
+          case 1:
+            parsedData = JSON.parse(rawText)?.__DEFAULT_SCOPE__?.["webapp.video-detail"]?.itemInfo?.itemStruct;
+            if (parsedData && String(parsedData.id) === String(videoId)) {
+              step.n = 2;
+              break;
+            }
+            return step.a(2, []);
+          case 2:
+            videoObj = parsedData.video;
+            if (videoObj) {
+              step.n = 3;
+              break;
+            }
+            return step.a(2, []);
+          case 3:
+            resolvedTitle = sanitizeVideoTitle(parsedData.desc) || videoTitle || document.title;
+            return step.a(2, formatBitratesOrPlayAddr({
+              bitrateInfo: videoObj.bitrateInfo,
+              url: videoObj.playAddr || "",
+              desc: parsedData.desc,
+              ratio: videoObj.ratio || videoObj.definition,
+              cover: videoObj.cover || videoObj.originCover || "",
+              id: parsedData.id
+            }, resolvedTitle));
+          case 4:
+            step.p = 4;
+            return step.a(2, []);
+        }
+      }, universalGenerator, null, [[0, 4]]);
+    }));
   }
 
   function resolveTikTokVideoFromNode(videoNode) {
-    var xgId = extractXgPlayerId(videoNode);
-    if (xgId && douyinItemApiCache[xgId]) {
-      return douyinItemApiCache[xgId];
-    }
-    var anchor = getTikTokAnchorElement(videoNode);
-    var urlId = anchor ? getTikTokVideoIdFromUrl(anchor.href) : null;
-    if (urlId && douyinItemApiCache[urlId]) {
-      return douyinItemApiCache[urlId];
-    }
-    return videoNode.src || null;
+    return asyncRunner2(this, void 0, void 0, w().m(function resolveGenerator() {
+      var itemRoot, previewTitle, awemeData, resolvedTitle, parsedBitrates, currentVid;
+      return w().w(function(step) {
+        for (;;) switch (step.n) {
+          case 0:
+            itemRoot = findTikTokItemRoot(videoNode);
+            if (itemRoot || isTikTokExplorePage() || isTikTokUserPage()) {
+              step.n = 1;
+              break;
+            }
+            return step.a(2, []);
+          case 1:
+            previewTitle = scrapeTikTokAnchorPreviewMeta(itemRoot || videoNode)?.title;
+            if (videoNode.hasAttribute("data-aweme-video") || itemRoot?.hasAttribute("data-aweme-video")) {
+              step.n = 2;
+              break;
+            }
+            step.n = 2;
+            return injectTikTokMainWorldScript();
+          case 2:
+            awemeData = getAwemeVideoData(videoNode, findTikTokItemRoot);
+            resolvedTitle = previewTitle || sanitizeVideoTitle(awemeData?.desc) ||
+              getTikTokPostItemTitle(videoNode) || document.title;
+            if (!awemeData) {
+              step.n = 4;
+              break;
+            }
+            step.n = 3;
+            return formatBitratesOrPlayAddr(awemeData, resolvedTitle || document.title);
+          case 3:
+            parsedBitrates = step.v;
+            if (!parsedBitrates.length) {
+              step.n = 4;
+              break;
+            }
+            return step.a(2, parsedBitrates);
+          case 4:
+            currentVid = getTikTokItemId(videoNode);
+            if (!currentVid || currentVid !== getCurrentTikTokVideoId()) {
+              step.n = 5;
+              break;
+            }
+            return step.a(2, scrapeUniversalDataById(currentVid, resolvedTitle || document.title));
+          case 5:
+            return step.a(2, []);
+        }
+      }, resolveGenerator);
+    }));
   }
 
   var lazyBulkDownloadProvider = {
-    shouldShowButton: function(domContext) {
-      return Boolean(location.host.match(/(www.)?tiktok.com/i) && isTikTokExplorePage());
-    },
-    getCustomButtonParent: function() {
-      return document.querySelector('[data-e2e="explore-item-list"]') || document.querySelector("#main-content-explore_page");
-    },
-    getMediaList: function() {
-      var cards = Array.from(document.querySelectorAll('[data-e2e="explore-item"]'));
-      var mediaList = [];
-      cards.forEach(function(card) {
-        var anchor = card.querySelector('a[href*="/video/"]');
-        if (anchor) {
-          var vid = getTikTokVideoIdFromUrl(anchor.href);
-          var img = card.querySelector("img");
-          mediaList.push({
-            id: vid,
-            url: anchor.href,
-            title: sanitizeVideoTitle(card.innerText) || vid,
-            thumbnail: img?.src || null,
-            ext: "mp4",
-            exts: ["mp4"],
-            type: "video"
-          });
+    isActive: () => isTikTokExplorePage() || isTikTokUserPage(),
+    collectPendingItems: () => {
+      var seenIds = new Set();
+      var items = [];
+      var addItem = (item, explicitId) => {
+        if (item) {
+          var idStr = explicitId || String(item.id);
+          if (idStr && !seenIds.has(idStr)) {
+            seenIds.add(idStr);
+            items.push(Object.assign(Object.assign({}, item), { id: idStr }));
+          }
         }
+      };
+      if (isTikTokUserPage()) {
+        addItem(scrapeCurrentVideoFromDoc(), getCurrentTikTokVideoId());
+      }
+      findTikTokVideoLinks().forEach((anchorElem, idx) => {
+        var preview = scrapeTikTokAnchorPreviewMeta(anchorElem);
+        addItem(preview, getTikTokItemId(anchorElem) || String(preview?.id || "video-" + idx));
       });
-      return mediaList;
-    }
+      return items;
+    },
+    findItemRoot: node => findTikTokItemRoot(node),
+    getItemIdFromNode: node => getTikTokItemId(node),
+    getPreviewFromNode: node => scrapeTikTokAnchorPreviewMeta(node),
+    resolveItemById: videoId => function(id) {
+      return asyncRunner2(this, void 0, void 0, w().m(function resolveByIdGenerator() {
+        var mainVid, parsedMedia, anchorElem;
+        return w().w(function(step) {
+          for (;;) switch (step.n) {
+            case 0:
+              if (id !== getCurrentTikTokVideoId()) {
+                step.n = 3;
+                break;
+              }
+              mainVid = findTikTokMainVideo();
+              if (!mainVid) {
+                step.n = 2;
+                break;
+              }
+              step.n = 1;
+              return resolveTikTokVideoFromNode(mainVid);
+            case 1:
+              parsedMedia = step.v;
+              if (!parsedMedia.length) {
+                step.n = 2;
+                break;
+              }
+              return step.a(2, parsedMedia);
+            case 2:
+              return step.a(2, scrapeUniversalDataById(id, scrapeCurrentVideoFromDoc()?.title || document.title));
+            case 3:
+              anchorElem = findTikTokVideoLinks().find(a => getTikTokItemId(a) === id);
+              if (!anchorElem) {
+                step.n = 4;
+                break;
+              }
+              return step.a(2, []);
+            case 4:
+              return step.a(2, resolveTikTokVideoFromNode(anchorElem));
+          }
+        }, resolveByIdGenerator);
+      }));
+    }(videoId),
+    resolveItemFromNode: node => resolveTikTokVideoFromNode(node)
   };
 
   function createDouyinForOfIteratorHelper(iterable, allowArrayLike) {
@@ -611,46 +786,145 @@ export default function(module, exports, require) {
 
   var asyncRunner3 = $;
 
-  function extractDouyinPageTitle(element) {
-    var titleElem = document.querySelector('[data-e2e$="browse-video-desc"], [data-e2e$="video-desc"], [data-e2e="browse-video-desc"]');
-    if (titleElem?.innerText) return titleElem.innerText;
-    var container = element?.closest?.(".xg-video-container");
-    var detailSpan = container?.parentElement?.querySelector(".video-info-detail .title span");
-    if (detailSpan?.innerText) return detailSpan.innerText;
-    var interactionElem = container?.closest?.(".player-fullscreen-show-interaction");
-    var nextText = interactionElem?.parentElement?.nextSibling?.innerText;
-    if (nextText) return nextText.replace("\n", "-");
-    return document.title;
+  function extractTikTokVideoPostTitle(videoElement) {
+    for (
+      var currentElem = videoElement;
+      currentElem != null && cryptoUtils.queryAll("video", currentElem).length < 2;
+    ) {
+      var descElem = cryptoUtils.query('div[data-e2e$="video-desc"]', currentElem);
+      if (descElem?.innerText) return descElem.innerText;
+      currentElem = currentElem.parentNode;
+    }
+    var playerWrapper = videoElement?.closest?.(
+      'div[class*="DivVideoPlayerContainer"], div[class*="DivPlayerContainer"], div[class*="DivContainer"]'
+    );
+    var imgAlt = playerWrapper?.querySelector?.("img")?.alt;
+    if (typeof imgAlt === "string") return imgAlt;
+    var browserMode = videoElement?.closest?.('div[class*="DivBrowserModeContainer"]');
+    var mainDesc = browserMode?.querySelector?.('div[class*="DivMainContent"] div[class*="DivWrapper"]')?.innerText;
+    if (mainDesc) return mainDesc;
+    var playerContainer = videoElement?.closest?.('div[class*="DivPlayerContainer"]');
+    var videoInfoDesc = playerContainer?.querySelector?.(
+      'div[class*="DivVideoInfoContainer"] div[class*="DivWrapper"]'
+    )?.innerText;
+    if (videoInfoDesc) return videoInfoDesc;
+    var linkMatch = (videoElement?.closest?.('a[class*="AVideoContainer"]') || location).href.match(
+      /((?<=@).+)\/video\/(\d+)/
+    );
+    return linkMatch?.[1] && linkMatch?.[2] ? `${linkMatch[1]}_${linkMatch[2]}` : null;
   }
 
   function sanitizeDouyinTitle(rawTitle) {
     if (!rawTitle) return "";
-    return rawTitle.replace(/\s+/g, " ").trim();
-  }
-
-  function extractDouyinVideoNickname(element) {
-    var authorElem = document.querySelector('[data-e2e="video-author-uniqueid"], [data-e2e="user-info"] a');
-    return authorElem?.innerText?.trim() || "";
-  }
-
-  function parseDouyinAwemeInfoAttribute(element) {
-    var rawAwemeInfo = element?.getAttribute("data-aweme-info");
-    if (!rawAwemeInfo) return null;
     try {
-      return JSON.parse(rawAwemeInfo);
-    } catch (parseErr) {
-      return null;
+      return rawTitle.replace(/#\S+/gi, "").replace(/\s+/g, " ").trim();
+    } catch (err) {
+      return rawTitle;
     }
   }
 
-  function formatDouyinStreamMediaItem(streamUrl, definitionLabel, videoTitle) {
-    var mediaItem = domHelper.f(streamUrl);
-    mediaItem.filename = videoTitle || document.title;
-    mediaItem.ext = "mp4";
-    mediaItem.exts = ["mp4"];
+  function extractDouyinPageTitle(element) {
+    var feedItem = element?.closest?.('[data-e2e="feed-item"]');
+    var videoInfo = feedItem?.querySelector?.('[data-e2e="video-info"]');
+    var nickname = videoInfo?.querySelector?.('[data-e2e="feed-video-nickname"]')?.innerText?.trim();
+    var videoDesc = videoInfo?.querySelector?.('[data-e2e="video-desc"]')?.innerText?.trim();
+    if (videoDesc && videoDesc.length) return videoDesc;
+    if (nickname && nickname.length) return nickname;
+    var rightContainerH1 = element?.closest?.("#douyin-right-container")?.querySelector?.("h1")?.innerText?.trim();
+    return rightContainerH1 || null;
+  }
+
+  function parseDouyinAwemeInfoAttribute(element) {
+    try {
+      var awemeContainer = element.closest("[data-aweme-info]");
+      if (!awemeContainer) throw new Error("NO_VIDEO_INFO");
+      var awemeData = JSON.parse(awemeContainer.getAttribute("data-aweme-info") || "null");
+      if (!awemeData?.video) throw new Error("NO_VIDEO_PROP");
+      awemeContainer.removeAttribute("data-aweme-info");
+      var videoRatio = awemeData.video?.ratio;
+      var videoDesc = awemeData.desc;
+      var videoObj = awemeData.video;
+      var playApi = videoObj.playApi;
+      var playAddr = videoObj.playAddr;
+      var videoModel = videoObj.videoModel;
+      var bitRateList = videoObj.bitRateList;
+      var bitRateAudioList = videoObj.bitRateAudioList;
+      var resolvedTitle = videoDesc || extractDouyinPageTitle(element) || document.title;
+      if (videoModel) {
+        var dynamicVideo = videoModel.dynamicVideo;
+        if (dynamicVideo) {
+          var audioList = dynamicVideo.dynamic_audio_list;
+          var videoList = dynamicVideo.dynamic_video_list;
+          if (videoList?.length) {
+            return videoList.map(function(item) {
+              var formattedItem = urlUtils.f(item.main_url);
+              if (audioList?.[0]?.main_url) {
+                formattedItem.url = {
+                  audioUrl: audioList[0].main_url,
+                  videoUrl: item.main_url
+                };
+              }
+              var resolution = item.definition || item.video_meta?.definition;
+              formattedItem.resolution = resolution;
+              formattedItem.quality = mediaConstants.r[resolution]?.label;
+              formattedItem.i18n_quality = cryptoUtils.i18n(mediaConstants.r[resolution]?.i18n_label);
+              formattedItem.type = "video";
+              formattedItem.ext = "mp4";
+              formattedItem.exts = ["mp4"];
+              formattedItem.filename = resolvedTitle || formattedItem.filename;
+              return formattedItem;
+            });
+          }
+        }
+      }
+      if (bitRateList) {
+        var parsedList = bitRateList.map(function(bitrateItem) {
+          var matchedAudio = bitRateAudioList?.find(function(audio) {
+            return audio.fileId === bitrateItem.audioFileId;
+          });
+          var audioSrc = matchedAudio?.urlList?.[0]?.src;
+          var videoPlaySrc = bitrateItem.playApi || bitrateItem.playAddr?.[0]?.src;
+          var mediaTarget = audioSrc ? {
+            audioUrl: audioSrc,
+            videoUrl: videoPlaySrc
+          } : videoPlaySrc;
+          var formattedMedia = urlUtils.f(mediaTarget);
+          formattedMedia.filename = resolvedTitle;
+          formattedMedia.type = "video";
+          formattedMedia.ext = bitrateItem.format;
+          formattedMedia.exts = ["mp4"];
+          var gearMatch = bitrateItem.gearName?.match(/\d{3,4}/)?.[0];
+          if (gearMatch) {
+            formattedMedia.resolution = gearMatch + "p";
+            formattedMedia.quality = mediaConstants.r[formattedMedia.resolution]?.label;
+          }
+          formattedMedia.type = "video";
+          return formattedMedia;
+        });
+        if (parsedList?.length) return parsedList;
+      }
+      return playApi ?
+        [formatDouyinStreamMediaItem(playApi, videoRatio, element)] :
+        playAddr ?
+          playAddr.map(function(addr) { return formatDouyinStreamMediaItem(addr.src, videoRatio, element); }) :
+          [];
+    } catch (parseErr) {
+      return [];
+    }
+  }
+
+  function formatDouyinStreamMediaItem(streamUrl, definitionLabel, contextElement) {
+    var rawUrl = streamUrl.startsWith("//") ? "https:" + streamUrl : streamUrl;
+    var mediaItem = urlUtils.f(rawUrl);
     mediaItem.type = "video";
     mediaItem.resolution = definitionLabel;
-    mediaItem.quality = mediaConstants.r[definitionLabel]?.label || definitionLabel;
+    mediaItem.quality = mediaConstants.r[definitionLabel]?.label;
+    mediaItem.i18n_quality = cryptoUtils.i18n(mediaConstants.r[definitionLabel]?.i18n_label);
+    mediaItem.filename = extractDouyinPageTitle(contextElement) || document.title || mediaItem.filename;
+    if (!mediaItem.ext?.length) {
+      mediaItem.ext = "mp4";
+      mediaItem.exts = ["mp4"];
+    }
     return mediaItem;
   }
 
@@ -665,68 +939,103 @@ export default function(module, exports, require) {
   var photoVideoImageCache = new WeakMap();
 
   var isDouyinLiveSliderCard = function(videoNode) {
-    return Boolean(videoNode?.closest?.('[data-e2e="live-room-card"], [class*="-DivLiveCard"]'));
+    if (!videoNode) return false;
+    var sliderCard = videoNode.closest("#slider-card");
+    return Boolean(sliderCard && sliderCard.querySelector('a[data-e2e="live-slider"]'));
   };
 
   var fetchTikTokItemDetail = function(itemId) {
     return asyncRunner3(void 0, void 0, void 0, V().m(function fetchItemGenerator() {
       var apiUrl, responseData, playAddr;
       return V().w(function(step) {
-        for (;;) switch (step.n) {
+        for (;;) switch (step.p = step.n) {
           case 0:
-            if (!itemId) return step.a(2, null);
-            if (douyinItemApiCache[itemId]) return step.a(2, douyinItemApiCache[itemId]);
-            apiUrl = "https://www.tiktok.com/api/item/detail/?itemId=" + itemId;
-            step.n = 1;
-            return cryptoUtils.fetchJson(apiUrl);
-          case 1:
-            responseData = step.v;
-            playAddr = responseData?.itemInfo?.itemStruct?.video?.playAddr;
-            if (playAddr) {
-              douyinItemApiCache[itemId] = playAddr;
-              return step.a(2, playAddr);
+            step.p = 0;
+            if (itemId) {
+              step.n = 1;
+              break;
             }
-            return step.a(2, null);
+            return step.a(2);
+          case 1:
+            step.n = 2;
+            return fetch("https://www.tiktok.com/api/item/detail/?itemId=" + itemId);
+          case 2:
+            responseData = step.v;
+            step.n = 3;
+            return responseData.json();
+          case 3:
+            playAddr = step.v?.itemInfo?.itemStruct?.video?.playAddr;
+            return step.a(2, playAddr);
+          case 4:
+            step.p = 4;
+            return step.a(2);
         }
-      }, fetchItemGenerator);
+      }, fetchItemGenerator, null, [[0, 4]]);
     }));
   };
 
   var extractXgPlayerId = function(nodeElement) {
-    var xgWrapper = nodeElement?.closest?.('[id^="xgwrapper"]');
-    if (xgWrapper?.id) {
-      var match = xgWrapper.id.match(/^xgwrapper\d+-(\d+)/);
-      if (match) return match[1];
-    }
-    var playerContainer = nodeElement?.closest?.(".basePlayerContainer");
-    if (playerContainer) {
-      var vidClass = Array.from(playerContainer.classList).find(function(cls) {
-        return /video_\d+/.test(cls);
-      });
-      if (vidClass) return vidClass.split("_")[1];
-    }
-    return null;
+    var xgWrapper = nodeElement?.closest?.('.xgplayer-container, [id^="xgwrapper"]');
+    return xgWrapper?.id?.split("-")?.at(-1);
   };
 
-  var douyinRequestMap = {};
   var douyinResolvedCache = {};
+  var douyinParsedMediaCache = {};
 
   var resolveDouyinMediaFromVideoNode = function(videoElement) {
-    var xgId = extractXgPlayerId(videoElement);
-    if (xgId && douyinResolvedCache[xgId]) {
-      return [douyinResolvedCache[xgId]];
-    }
-    var awemeInfo = parseDouyinAwemeInfoAttribute(videoElement);
-    if (awemeInfo?.video?.play_addr?.url_list?.[0]) {
-      var playUrl = awemeInfo.video.play_addr.url_list[0];
-      var mediaObj = domHelper.f(playUrl);
-      mediaObj.filename = sanitizeDouyinTitle(extractDouyinPageTitle(videoElement));
-      mediaObj.ext = "mp4";
-      mediaObj.exts = ["mp4"];
-      mediaObj.type = "video";
-      return [mediaObj];
-    }
-    return [];
+    return asyncRunner3(void 0, void 0, void 0, V().m(function douyinVideoResolver() {
+      var e2eVid, classVidList, matchedClass, videoId, cachedParsed, parsedAwemeList, cachedResolved;
+      return V().w(function(step) {
+        for (;;) switch (step.n) {
+          case 0:
+            e2eVid = videoElement.closest("[data-e2e-vid]")?.getAttribute("data-e2e-vid");
+            classVidList = Array.from(videoElement.closest(".basePlayerContainer")?.classList || []);
+            matchedClass = classVidList.find(function(cls) { return /video_\d+/.test(cls); });
+            videoId = e2eVid || matchedClass?.split("_")?.[1] || "";
+            cachedParsed = douyinParsedMediaCache[videoId];
+            if (!cachedParsed?.length) {
+              step.n = 1;
+              break;
+            }
+            return step.a(2, cachedParsed);
+          case 1:
+            videoElement.setAttribute("data-target", "");
+            if (!douyinInFlightInjectMap.hasOwnProperty("douyin-" + videoId)) {
+              douyinInFlightInjectMap["douyin-" + videoId] = Promise.race([
+                cryptoUtils.sendMessage({ type: mediaConstants.b.SCRIPTING.INJECT, file: "douyin" }),
+                cryptoUtils.sleep(1000)
+              ]);
+            }
+            step.n = 2;
+            return douyinInFlightInjectMap["douyin-" + videoId];
+          case 2:
+            delete douyinInFlightInjectMap["douyin-" + videoId];
+            videoElement.removeAttribute("data-target");
+            parsedAwemeList = parseDouyinAwemeInfoAttribute(videoElement);
+            if (!parsedAwemeList.length) {
+              step.n = 3;
+              break;
+            }
+            douyinParsedMediaCache[videoId] = parsedAwemeList;
+            return step.a(2, parsedAwemeList);
+          case 3:
+            cachedResolved = douyinResolvedCache[videoId];
+            if (!cachedResolved) {
+              step.n = 4;
+              break;
+            }
+            return step.a(2, cachedResolved.url);
+          case 4:
+            if (!douyinAudioUrl || !douyinVideoUrl) {
+              step.n = 5;
+              break;
+            }
+            return step.a(2, { videoUrl: douyinVideoUrl, audioUrl: douyinAudioUrl });
+          case 5:
+            return step.a(2, []);
+        }
+      }, douyinVideoResolver);
+    }));
   };
 
   var tiktokDouyinProvider = {
