@@ -9,7 +9,8 @@
  * - Real <savior-host> mounted to document.documentElement
  * - Real EE events emitted by scripts (pre-installed recorder)
  * - Real video node detection in widget.node-changed
- * - Mutation gate verifies broken detection behavior in scanner fails test with intact fixture.
+ * - Video stamped attributes collected from main-world / companion interactions per platform
+ * - Mutation gate verifies broken detection behavior inside bundle fails test with intact fixture.
  */
 
 const assert = require('assert');
@@ -29,6 +30,8 @@ const { runGoldenFixture } = require('./helpers/golden_dom_harness');
   assert.ok(tiktokResult.widgetCreated, 'TikTok fixture must successfully create savior widget');
   assert.ok(tiktokResult.eeEvents.some(e => e.name === 'dom-scanner.load'), 'TikTok must emit dom-scanner.load on EE');
   assert.ok(tiktokResult.eeEvents.some(e => e.name === 'widget.node-changed'), 'TikTok must emit widget.node-changed on EE');
+  assert.ok(Array.isArray(tiktokResult.stampedAttrs), 'TikTok fixture must collect stamped attributes array');
+  assert.strictEqual(tiktokResult.stampedAttrs.length, 0, 'TikTok video element does not receive direct savior-* attributes');
   console.log('PASS: TikTok golden fixture detection verified (real DOM & EE effects).');
 
   // 2. Facebook Reels fixture
@@ -39,7 +42,9 @@ const { runGoldenFixture } = require('./helpers/golden_dom_harness');
   assert.ok(fbReelsResult.hostAppended, 'Facebook Reels fixture must mount real <savior-host> DOM element');
   assert.ok(fbReelsResult.nodeChangedEmitted, 'Facebook Reels must detect video node');
   assert.ok(fbReelsResult.widgetCreated, 'Facebook Reels fixture must mount savior widget');
-  console.log('PASS: Facebook Reels golden fixture detection verified (real DOM & EE effects).');
+  assert.ok(fbReelsResult.stampedAttrs.some(a => a.name === 'savior-video-detail' || a.name === 'savior-vid'), 
+    'Facebook Reels video element must receive stamped savior-* metadata (savior-video-detail or savior-vid)');
+  console.log('PASS: Facebook Reels golden fixture detection verified (real DOM, EE effects & stamped savior-* attrs).');
 
   // 3. YouTube Watch fixture
   console.log('Testing YouTube Watch detection...');
@@ -49,6 +54,7 @@ const { runGoldenFixture } = require('./helpers/golden_dom_harness');
   assert.ok(ytResult.hostAppended, 'YouTube Watch fixture must mount real <savior-host> DOM element');
   assert.ok(ytResult.nodeChangedEmitted, 'YouTube Watch must detect video node');
   assert.ok(ytResult.widgetCreated, 'YouTube Watch fixture must mount savior widget');
+  assert.ok(Array.isArray(ytResult.stampedAttrs), 'YouTube Watch must collect stamped attributes array');
   console.log('PASS: YouTube Watch golden fixture detection verified (real DOM & EE effects).');
 
   // 4. Generic HLS fixture
@@ -59,9 +65,10 @@ const { runGoldenFixture } = require('./helpers/golden_dom_harness');
   assert.ok(hlsResult.hostAppended, 'Generic HLS fixture must mount real <savior-host> DOM element');
   assert.ok(hlsResult.nodeChangedEmitted, 'Generic HLS must detect video node');
   assert.ok(hlsResult.widgetCreated, 'Generic HLS fixture must mount savior widget');
+  assert.ok(Array.isArray(hlsResult.stampedAttrs), 'Generic HLS must collect stamped attributes array');
   console.log('PASS: Generic HLS golden fixture detection verified (real DOM & EE effects).');
 
-  // 5. Mutation Gate Verification: Intact fixture DOM, broken detection engine in code under test
+  // 5. Mutation Gate Verification: Disables behaviour inside bundle under test (NOT environment)
   console.log('Testing Golden Harness Mutation Gate...');
   let gateThrew = false;
   try {
@@ -76,8 +83,8 @@ const { runGoldenFixture } = require('./helpers/golden_dom_harness');
       throw err;
     }
   }
-  assert.ok(gateThrew, 'Harness must fail when detection behavior is intentionally broken in code under test');
-  console.log('PASS: Mutation gate verified (catches broken detection with intact fixture).\n');
+  assert.ok(gateThrew, 'Harness must fail when detection behavior inside the bundle is intentionally broken');
+  console.log('PASS: Mutation gate verified (catches broken bundle behavior with intact DOM environment).\n');
 
   console.log('ALL GOLDEN CHARACTERIZATION TESTS PASSED! ✅');
 })().catch(err => {

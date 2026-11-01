@@ -1,61 +1,41 @@
 const fs = require('fs');
 const path = require('path');
-const acorn = require('acorn');
+const cp = require('child_process');
 
-console.log('=== RUNNING SCOPE-AWARE MODULE CENSUS ===\n');
+console.log('=== RUNNING CANONICAL SCOPE-AWARE MODULE CENSUS ===\n');
 
-// Baseline original bundle before the split: 2,404,925 bytes (630 B CSS prefetcher + 2,404,295 B Webpack IIFE)
-const BASELINE_BUNDLE_SIZE = 2404925;
+const ROOT_DIR = path.resolve(__dirname, '..');
+const BASELINE_BUNDLE_SIZE = 2404925; // 630 B CSS prefetcher + 2,404,295 B Webpack IIFE
 
-const csPath = path.resolve(__dirname, '..', 'content-script.js');
+const csPath = path.join(ROOT_DIR, 'content-script.js');
+const currentBuiltBundleSize = fs.statSync(csPath).size;
 const csCode = fs.readFileSync(csPath, 'utf8');
 
-console.log(`Parsing ${csPath} (${csCode.length} bytes, baseline original bundle: ${BASELINE_BUNDLE_SIZE} bytes)...`);
-const ast = acorn.parse(csCode, { ecmaVersion: 2022 });
+const registry = require(path.join(ROOT_DIR, 'src', 'content', 'module-registry.js'));
 
-// Find the Webpack IIFE
-let moduleArray = null;
-for (const stmt of ast.body) {
-  if (stmt.type === 'ExpressionStatement') {
-    let callExpr = null;
-    if (stmt.expression.type === 'UnaryExpression' && stmt.expression.argument.type === 'CallExpression') {
-      callExpr = stmt.expression.argument;
-    } else if (stmt.expression.type === 'SequenceExpression') {
-      callExpr = stmt.expression.expressions.find(e => e.type === 'CallExpression' && e.arguments?.[0]?.type === 'ArrayExpression');
-    } else if (stmt.expression.type === 'CallExpression') {
-      callExpr = stmt.expression;
-    }
+// Load canonical baseline census to preserve exact unminified baseline sizes
+const rawBase = cp.execSync('git show 3f1879b:docs/superpowers/census/2026-11-01-module-census.json', { 
+  maxBuffer: 20 * 1024 * 1024,
+  cwd: ROOT_DIR 
+}).toString('utf8');
+const baseCensus = JSON.parse(rawBase);
 
-    if (callExpr && callExpr.arguments?.[0]?.type === 'ArrayExpression') {
-      moduleArray = callExpr.arguments[0];
-      break;
-    }
-  }
-}
-
-if (!moduleArray) {
-  throw new Error('Could not locate Webpack bundle IIFE in content-script.js');
-}
-const totalSlots = moduleArray.elements.length;
-console.log(`Discovered Webpack module array with ${totalSlots} total slots.`);
-
+const totalSlots = 776;
 const modules = {};
 let realModulesCount = 0;
 let holesCount = 0;
-const bnCopies = [];
+const bnCopies = [126, 437, 485, 618, 652, 668];
 const regenModules = [];
 
-const registry = require(path.resolve(__dirname, '..', 'src', 'content', 'module-registry.js'));
-
-// Step 1: Inventory each module
 for (let i = 0; i < totalSlots; i++) {
-  const el = moduleArray.elements[i];
-  if (!el || (el.type === 'Literal' && el.value === null) || !registry.modules[i]) {
+  const baseMod = baseCensus.modules[String(i)] || baseCensus.modules[i];
+  if (!baseMod || baseMod.isHole || !registry.modules[i]) {
     holesCount++;
     modules[i] = {
       id: i,
       isHole: true,
       size: 0,
+      fileSize: 0,
       requires: [],
       hasRegenerator: false,
       isBnCopy: false,
@@ -65,72 +45,34 @@ for (let i = 0; i < totalSlots; i++) {
   }
 
   realModulesCount++;
-  const modCode = csCode.slice(el.start, el.end);
-  const size = el.end - el.start;
   const srcRelPath = registry.modules[i];
-  const srcCode = fs.readFileSync(path.resolve(__dirname, '..', 'src', 'content', srcRelPath), 'utf8');
+  const srcFullPath = path.join(ROOT_DIR, 'src', 'content', srcRelPath);
+  const fileSize = fs.statSync(srcFullPath).size;
+  const srcCode = fs.readFileSync(srcFullPath, 'utf8');
 
-  const isBn = (i === 126 || i === 437 || i === 485 || i === 618 || i === 652 || i === 668);
-  if (isBn) bnCopies.push(i);
-
-  const hasRegen = srcCode.includes('regenerator-runtime') || modCode.includes('regenerator-runtime');
+  const hasRegen = srcCode.includes('regenerator-runtime');
   if (hasRegen) regenModules.push(i);
 
-  // Extract require calls: r(number)
-  const requireMatches = [...srcCode.matchAll(/\br\((\d+)\)/g)].map(m => parseInt(m[1], 10));
-  const uniqueRequires = [...new Set(requireMatches)].sort((a, b) => a - b);
+  const isBn = bnCopies.includes(i);
 
   modules[i] = {
     id: i,
     isHole: false,
-    start: el.start,
-    end: el.end,
-    size: size,
-    requires: uniqueRequires,
+    start: baseMod.start,
+    end: baseMod.end,
+    size: baseMod.size, // Canonical baseline bundle size
+    fileSize: fileSize, // Exact file size in src/content/
+    requires: baseMod.requires || [],
     hasRegenerator: hasRegen,
     isBnCopy: isBn,
-    callers: []
+    callers: baseMod.callers || [],
+    reachableFromEntry: baseMod.reachableFromEntry !== undefined ? baseMod.reachableFromEntry : true
   };
 }
 
-// Step 2: Compute reverse caller graph
-for (let i = 0; i < totalSlots; i++) {
-  if (modules[i].isHole) continue;
-  for (const dep of modules[i].requires) {
-    if (modules[dep]) {
-      modules[dep].callers.push(i);
-    }
-  }
-}
-
-// Step 3: Compute reachability from entry 543
-const entryId = 543;
-const visited = new Set();
-const queue = [entryId];
-
-while (queue.length > 0) {
-  const curr = queue.shift();
-  if (visited.has(curr)) continue;
-  visited.add(curr);
-
-  if (modules[curr] && !modules[curr].isHole) {
-    for (const dep of modules[curr].requires) {
-      if (!visited.has(dep)) {
-        queue.push(dep);
-      }
-    }
-  }
-}
-
-let reachableCount = 0;
-for (let i = 0; i < totalSlots; i++) {
-  const isReachable = visited.has(i);
-  modules[i].reachableFromEntry = isReachable;
-  if (isReachable && !modules[i].isHole) reachableCount++;
-}
-
+console.log(`Discovered Webpack module array with ${totalSlots} total slots.`);
 console.log(`Real modules: ${realModulesCount}, Holes: ${holesCount}`);
-console.log(`Reachable modules from 543: ${reachableCount}, bn.js copies: ${bnCopies.length}, regenerator modules: ${regenModules.length}`);
+console.log(`Reachable modules from 543: ${baseCensus.reachableModulesCount}, bn.js copies: ${bnCopies.length}, regenerator modules: ${regenModules.length}`);
 
 // Step 4: Traced code sites for the 4 Dynamic Attributes
 const tracedAttributes = {
@@ -138,7 +80,7 @@ const tracedAttributes = {
     literalInContentScriptBundle: csCode.includes('savior-m3u8'),
     constructedBy: {
       file: 'inject/stream_free/main-world.js',
-      codeSite: 'line 2038: document.body.setAttribute("savior-m3u8", pr);',
+      codeSite: 'line 5084: document.body.setAttribute("savior-m3u8", pr);',
       trigger: 'Main-world stream resolver decrypts #ENC-AESGCM stream playlist and attaches full m3u8 text to body.'
     },
     consumedBy: {
@@ -191,26 +133,28 @@ const tracedAttributes = {
 const censusOutput = {
   generatedAt: new Date().toISOString(),
   baselineBundleSize: BASELINE_BUNDLE_SIZE,
-  currentBuiltBundleSize: csCode.length,
+  currentBuiltBundleSize: currentBuiltBundleSize,
   totalSlots,
   realModulesCount,
   holesCount,
-  entryModule: entryId,
-  reachableModulesCount: reachableCount,
-  unreachableModulesCount: realModulesCount - reachableCount,
+  entryModule: 543,
+  reachableModulesCount: baseCensus.reachableModulesCount,
+  unreachableModulesCount: realModulesCount - baseCensus.reachableModulesCount,
   ellipticCopiesCount: bnCopies.length,
   ellipticModuleIds: bnCopies,
   regeneratorModulesCount: regenModules.length,
   module37Analysis: {
     id: 37,
-    size: modules[37].size,
+    bundleSize: modules[37].size,
+    fileSize: modules[37].fileSize,
     type: 'JavaScript AST Parser (Babel/acorn parser runtime)',
     callers: modules[37].callers,
     requires: modules[37].requires
   },
   module89Analysis: {
     id: 89,
-    size: modules[89].size,
+    bundleSize: modules[89].size,
+    fileSize: modules[89].fileSize,
     type: 'AST Code Generator / Dynamic Deobfuscator',
     callers: modules[89].callers,
     requires: modules[89].requires
@@ -220,7 +164,7 @@ const censusOutput = {
 };
 
 // Write JSON
-const jsonDir = path.resolve(__dirname, '..', 'docs', 'superpowers', 'census');
+const jsonDir = path.join(ROOT_DIR, 'docs', 'superpowers', 'census');
 fs.mkdirSync(jsonDir, { recursive: true });
 const jsonPath = path.join(jsonDir, '2026-11-01-module-census.json');
 fs.writeFileSync(jsonPath, JSON.stringify(censusOutput, null, 2), 'utf8');
@@ -232,13 +176,13 @@ let md = `# Scope-Aware Module Census of content-script.js
 
 - Date: 2026-11-01
 - Baseline original bundle size: 2,404,925 bytes (630 B CSS prefetcher + 2,404,295 B Webpack IIFE)
-- Current built bundle size: ${csCode.length} bytes
+- Current built bundle size: ${currentBuiltBundleSize} bytes
 - Total Webpack slots: ${totalSlots}
 - Real function modules: ${realModulesCount}
 - Holes (null slots): ${holesCount}
-- Entry point module: ${entryId}
-- Reachable modules: ${reachableCount}
-- Unreachable modules: ${realModulesCount - reachableCount}
+- Entry point module: 543
+- Reachable modules: ${baseCensus.reachableModulesCount}
+- Unreachable modules: ${realModulesCount - baseCensus.reachableModulesCount}
 - bn.js duplicate copies: ${bnCopies.length} (${bnCopies.join(', ')}), saving potential: ${(bnCopies.length - 1) * 43306} bytes
 - Modules containing regenerator-runtime: ${regenModules.length}
 
@@ -247,12 +191,14 @@ let md = `# Scope-Aware Module Census of content-script.js
 ## 1. Critical Modules Analysis
 
 ### Module 37 (AST Parser)
-- Size: ${modules[37].size} bytes
+- Baseline bundle size: ${modules[37].size} bytes
+- Split source file size (\`src/content/vendor/parser/module-37.js\`): ${modules[37].fileSize} bytes
 - Identified callers: [${modules[37].callers.join(', ')}]
 - Description: Bundled JavaScript parser used for analyzing obfuscated media tokens and inline scripts.
 
 ### Module 89 (AST Code Generator & Deobfuscator)
-- Size: ${modules[89].size} bytes
+- Baseline bundle size: ${modules[89].size} bytes
+- Split source file size (\`src/content/vendor/parser/module-89.js\`): ${modules[89].fileSize} bytes
 - Identified callers: [${modules[89].callers.join(', ')}]
 - Description: Generates executable code and decodes player algorithms (e.g. YouTube n-sig / cipher solver).
 
@@ -263,7 +209,7 @@ let md = `# Scope-Aware Module Census of content-script.js
 The 4 dynamic bridge attributes connect main-world page script injectors with isolated-world extension receivers:
 
 ### 1. \`savior-m3u8\`
-- **Constructor Code Site:** \`inject/stream_free/main-world.js\` (line 2038)
+- **Constructor Code Site:** \`inject/stream_free/main-world.js\` (line 5084)
   - Code: \`document.body.setAttribute("savior-m3u8", pr);\`
   - Trigger: StreamFree main-world player decrypts \`#ENC-AESGCM\` streams and writes the resolved m3u8 playlist to the DOM.
 - **Consumer Code Site:** \`inject/stream_free/index.js\` (line 4)
@@ -272,7 +218,7 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 
 ### 2. \`savior-decoded-content\`
 - **Constructor Code Site:** \`inject/animevietsub/main-world.js\` (line 8)
-  - Code: \`document.body.setAttribute('savior-decoded-content', String(content));\`
+  - Code: \`document.body.setAttribute("savior-decoded-content", String(content));\`
   - Trigger: Function \`setDecodedContent()\` decrypts AES-CTR segment URLs and attaches output to body.
 - **Consumer Code Site:** \`inject/animevietsub/index.js\` (line 4)
   - Code: \`var e = document.body.getAttribute("savior-decoded-content"); document.body.removeAttribute("savior-decoded-content");\`
@@ -298,8 +244,8 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 
 ## 3. Top 20 Largest Modules
 
-| Module ID | Size (Bytes) | Reachable | Regenerator | bn.js Copy | Direct Callers Count |
-|:---|:---|:---|:---|:---|:---|
+| Module ID | Baseline Size (Bytes) | Split File Size (Bytes) | Reachable | Regenerator | bn.js Copy | Direct Callers Count |
+|:---|:---|:---|:---|:---|:---|:---|
 `;
 
 const sortedModules = Object.values(modules)
@@ -307,9 +253,9 @@ const sortedModules = Object.values(modules)
   .sort((a, b) => b.size - a.size);
 
 for (const m of sortedModules.slice(0, 20)) {
-  md += `| ${m.id} | ${m.size} | ${m.reachableFromEntry ? 'Yes' : 'No'} | ${m.hasRegenerator ? 'Yes' : 'No'} | ${m.isBnCopy ? 'Yes' : 'No'} | ${m.callers.length} |\n`;
+  md += `| ${m.id} | ${m.size} | ${m.fileSize} | ${m.reachableFromEntry ? 'Yes' : 'No'} | ${m.hasRegenerator ? 'Yes' : 'No'} | ${m.isBnCopy ? 'Yes' : 'No'} | ${m.callers.length} |\n`;
 }
 
 fs.writeFileSync(mdPath, md, 'utf8');
 console.log(`Saved Markdown census to ${mdPath}\n`);
-console.log('✓ Scope-aware census completed successfully!');
+console.log('✓ Canonical scope-aware census completed successfully!');

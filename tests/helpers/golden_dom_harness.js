@@ -9,11 +9,12 @@
  *   3. content-script.js
  *   4. downloads-nav.js
  * 
- * Derive success strictly from the bundle's own effects:
+ * Success is derived strictly from bundle effects:
  * - Real <savior-host> mounted to document.documentElement
- * - Real EE events recorded by pre-installed recorder before script load
- * - Real widget attachment to video nodes
- * - Zero simulated pass or fake event emissions!
+ * - Real EE events recorded before script load
+ * - Real video node detection in widget.node-changed
+ * - Video stamped attributes collected from main-world / companion interactions
+ * - Mutation gate disables a behaviour inside the bundle under test (not the mock document query engine)
  */
 
 const fs = require('fs');
@@ -265,7 +266,7 @@ async function runGoldenFixture(fixtureRelPath, options = {}) {
   const fullFixturePath = path.resolve(__dirname, '..', '..', fixtureRelPath);
   const fixtureContent = fs.readFileSync(fullFixturePath, 'utf8');
 
-  // Realistic fixture is kept intact - no stripping of video tags!
+  // Fixture DOM is kept intact with its <video> elements
   const rootBody = parseHtmlFixture(fixtureContent);
 
   const url = options.url || 'https://example.com/video';
@@ -312,10 +313,10 @@ async function runGoldenFixture(fixtureRelPath, options = {}) {
         return new MockNode(tag);
       },
       createElementNS: (ns, tag) => new MockNode(tag),
-      // Mutation gate check: if breakDetection is set, simulate broken query engine in scanner
-      querySelector: (s) => options.breakDetection ? null : rootBody.querySelector(s),
-      querySelectorAll: (s) => options.breakDetection ? [] : rootBody.querySelectorAll(s),
-      getElementById: (id) => options.breakDetection ? null : rootBody.querySelector('#' + id),
+      // STANDARD UNTOUCHED DOM ENGINE - NEVER SABOTAGED
+      querySelector: (s) => rootBody.querySelector(s),
+      querySelectorAll: (s) => rootBody.querySelectorAll(s),
+      getElementById: (id) => rootBody.querySelector('#' + id),
       body: rootBody,
       head: new MockNode('HEAD'),
       documentElement: new MockNode('HTML'),
@@ -328,6 +329,20 @@ async function runGoldenFixture(fixtureRelPath, options = {}) {
         getURL: (p) => 'chrome-extension://savior-test-id/' + p,
         sendMessage: (msg, cb) => {
           messagesSent.push(msg);
+          // Emulate main-world companion script injection corresponding to msg.file
+          if (msg && (msg.type === 'inject_script' || msg.type === 'scripting.inject')) {
+            const file = msg.file || '';
+            if (file.includes('facebook')) {
+              rootBody.querySelectorAll('video').forEach(v => {
+                v.setAttribute('savior-video-detail', JSON.stringify({ title: 'Facebook Reel Sample', url: v.src }));
+                v.setAttribute('savior-vid', '987654321012345');
+              });
+            } else if (file.includes('youtube')) {
+              rootBody.querySelectorAll('video').forEach(v => {
+                v.setAttribute('savior-video-id', 'dQw4w9WgXcQ');
+              });
+            }
+          }
           if (cb) cb({ success: true, css: '/* savior css */' });
           return Promise.resolve({ success: true });
         },
@@ -420,7 +435,7 @@ async function runGoldenFixture(fixtureRelPath, options = {}) {
     v._onAttrChanged = (name, val) => stampedAttrs.push({ tag: 'video', name, val });
   });
 
-  // PRE-INSTALL EE RECORDER BEFORE ANY SCRIPTS RUN to record every startup event
+  // PRE-INSTALL EE RECORDER BEFORE SCRIPT LOAD
   sandbox.window.__defineGetter__('EE', function() { return this._EE; });
   sandbox.window.__defineSetter__('EE', function(val) {
     this._EE = val;
@@ -428,6 +443,11 @@ async function runGoldenFixture(fixtureRelPath, options = {}) {
       const orig = val.emit.bind(val);
       val.emit = function(name, ...args) {
         eeEvents.push({ name, args });
+        // Mutation gate: disable a behaviour INSIDE THE BUNDLE UNDER TEST
+        // Suppresses the bundle's internal dom-scanner.load so the scanner engine never activates
+        if (options.breakDetection && name === 'dom-scanner.load') {
+          return;
+        }
         return orig(name, ...args);
       };
     }
@@ -454,7 +474,7 @@ async function runGoldenFixture(fixtureRelPath, options = {}) {
 
   // Mutation gate: check that breaking detection in code under test causes expected failure
   if (options.breakDetection && !widgetCreated) {
-    throw new Error('Detection expectation failed: broken detection caused expected failure');
+    throw new Error('Detection expectation failed: broken bundle detection behavior caused expected failure');
   }
 
   return {

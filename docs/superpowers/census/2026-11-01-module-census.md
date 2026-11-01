@@ -2,7 +2,7 @@
 
 - Date: 2026-11-01
 - Baseline original bundle size: 2,404,925 bytes (630 B CSS prefetcher + 2,404,295 B Webpack IIFE)
-- Current built bundle size: 2291368 bytes
+- Current built bundle size: 2291592 bytes
 - Total Webpack slots: 776
 - Real function modules: 649
 - Holes (null slots): 127
@@ -17,12 +17,14 @@
 ## 1. Critical Modules Analysis
 
 ### Module 37 (AST Parser)
-- Size: 129796 bytes
+- Baseline bundle size: 119308 bytes
+- Split source file size (`src/content/vendor/parser/module-37.js`): 119694 bytes
 - Identified callers: [24, 89]
 - Description: Bundled JavaScript parser used for analyzing obfuscated media tokens and inline scripts.
 
 ### Module 89 (AST Code Generator & Deobfuscator)
-- Size: 48208 bytes
+- Baseline bundle size: 45516 bytes
+- Split source file size (`src/content/vendor/parser/module-89.js`): 45562 bytes
 - Identified callers: [28, 120, 541, 700]
 - Description: Generates executable code and decodes player algorithms (e.g. YouTube n-sig / cipher solver).
 
@@ -33,7 +35,7 @@
 The 4 dynamic bridge attributes connect main-world page script injectors with isolated-world extension receivers:
 
 ### 1. `savior-m3u8`
-- **Constructor Code Site:** `inject/stream_free/main-world.js` (line 2038)
+- **Constructor Code Site:** `inject/stream_free/main-world.js` (line 5084)
   - Code: `document.body.setAttribute("savior-m3u8", pr);`
   - Trigger: StreamFree main-world player decrypts `#ENC-AESGCM` streams and writes the resolved m3u8 playlist to the DOM.
 - **Consumer Code Site:** `inject/stream_free/index.js` (line 4)
@@ -42,7 +44,7 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 
 ### 2. `savior-decoded-content`
 - **Constructor Code Site:** `inject/animevietsub/main-world.js` (line 8)
-  - Code: `document.body.setAttribute('savior-decoded-content', String(content));`
+  - Code: `document.body.setAttribute("savior-decoded-content", String(content));`
   - Trigger: Function `setDecodedContent()` decrypts AES-CTR segment URLs and attaches output to body.
 - **Consumer Code Site:** `inject/animevietsub/index.js` (line 4)
   - Code: `var e = document.body.getAttribute("savior-decoded-content"); document.body.removeAttribute("savior-decoded-content");`
@@ -68,25 +70,25 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 
 ## 3. Top 20 Largest Modules
 
-| Module ID | Size (Bytes) | Reachable | Regenerator | bn.js Copy | Direct Callers Count |
-|:---|:---|:---|:---|:---|:---|
-| 37 | 129796 | Yes | No | No | 2 |
-| 541 | 113791 | Yes | Yes | No | 1 |
-| 161 | 82564 | No | No | No | 1 |
-| 89 | 48208 | Yes | Yes | No | 4 |
-| 433 | 48008 | No | No | No | 3 |
-| 126 | 46865 | No | No | Yes | 14 |
-| 443 | 44600 | No | Yes | No | 0 |
-| 24 | 42204 | Yes | Yes | No | 2 |
-| 442 | 41154 | No | Yes | No | 0 |
-| 6 | 41003 | Yes | Yes | No | 80 |
-| 741 | 29308 | No | Yes | No | 0 |
-| 0 | 28741 | Yes | Yes | No | 117 |
-| 163 | 27468 | No | No | No | 1 |
-| 643 | 26151 | No | No | No | 1 |
-| 162 | 25849 | No | No | No | 1 |
-| 27 | 21505 | Yes | No | No | 18 |
-| 164 | 21039 | Yes | Yes | No | 1 |
-| 232 | 20695 | No | Yes | No | 0 |
-| 22 | 19787 | Yes | No | No | 1 |
-| 14 | 16273 | Yes | Yes | No | 20 |
+| Module ID | Baseline Size (Bytes) | Split File Size (Bytes) | Reachable | Regenerator | bn.js Copy | Direct Callers Count |
+|:---|:---|:---|:---|:---|:---|:---|
+| 37 | 119308 | 119694 | Yes | No | No | 2 |
+| 541 | 110571 | 110611 | Yes | Yes | No | 1 |
+| 161 | 77663 | 77703 | No | No | No | 1 |
+| 89 | 45516 | 45562 | Yes | Yes | No | 4 |
+| 433 | 44315 | 44364 | No | No | No | 3 |
+| 443 | 43900 | 43949 | No | Yes | No | 0 |
+| 126 | 43306 | 43355 | No | No | Yes | 9 |
+| 437 | 43306 | 103 | No | No | Yes | 3 |
+| 485 | 43306 | 103 | No | No | Yes | 2 |
+| 618 | 43306 | 103 | No | No | Yes | 1 |
+| 652 | 43306 | 103 | No | No | Yes | 1 |
+| 668 | 43306 | 103 | No | No | Yes | 1 |
+| 24 | 40290 | 40331 | Yes | Yes | No | 2 |
+| 442 | 39532 | 39574 | No | Yes | No | 0 |
+| 6 | 39279 | 39317 | Yes | Yes | No | 80 |
+| 0 | 27593 | 27855 | Yes | Yes | No | 117 |
+| 163 | 27190 | 27230 | No | No | No | 1 |
+| 741 | 26931 | 26971 | No | Yes | No | 0 |
+| 643 | 26151 | 26200 | No | No | No | 1 |
+| 162 | 25596 | 25638 | No | No | No | 1 |
