@@ -10,7 +10,7 @@ const child_process = require('child_process');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
-const ZIP_PATH = path.join(DIST_DIR, 'savior-extension-v2.4.65.zip');
+const ZIP_PATH = path.join(DIST_DIR, 'savior-extension-v3.0.0.zip');
 
 console.log('=== TEST SUITE: PACKAGING & CWS RELEASE CLEANLINESS ===\n');
 

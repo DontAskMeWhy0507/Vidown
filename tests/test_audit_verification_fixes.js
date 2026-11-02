@@ -56,7 +56,7 @@ const pkgScript = fs.readFileSync(path.join(__dirname, '..', 'scripts/package_re
 assert(pkgScript.includes("'node_modules'"), 'package_release.js EXCLUDED_DIRS must include node_modules');
 
 // 5. Verify release zip contains zero node_modules
-const zipPath = path.join(__dirname, '..', 'dist/savior-extension-v2.4.65.zip');
+const zipPath = path.join(__dirname, '..', 'dist/savior-extension-v3.0.0.zip');
 assert(fs.existsSync(zipPath), 'Release zip must exist');
 const zipBuf = fs.readFileSync(zipPath);
 

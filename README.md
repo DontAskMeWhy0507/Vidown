@@ -8,8 +8,6 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
 > - `src/background/`: Background service worker modules partitioned by subsystem (`entry`, `messaging`, `downloads`, `storage`, `tabs`, `events`, `crypto`, `utilities`).
 > - `src/common/`: Shared runtime library and global context helpers.
 > - `src/inject/`: Main-world site extractors for modern web platforms (TikTok, Douyin, YouTube, Facebook, Twitter/X, LinkedIn, etc.).
->
-> The directory `src/experimental/content-next/` contains an **unwired architectural prototype layer** (~26 KB across 4 platform families). It is **not** connected to the build pipeline and is **not** loaded in the browser. Its disposition (keep as architectural reference or prune) is reserved as an explicit decision item for project owner Trung.
 
 ---
 
@@ -17,12 +15,12 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
 
 - **Original Baseline Bundle**: 2,404,925 bytes (630 B CSS + 2,404,295 B Webpack IIFE).
 - **Current Shipped Built Bundle**: 2,352,581 bytes.
-- **Net Raw Code Reduction**: 52,344 bytes (shortfall of 397,656 B vs Gate 5 target of $\ge 450,000$ B; Gate 5 remains an owner decision item).
+- **Net Raw Code Reduction**: 52,344 bytes (Gate 5 target $\ge 50,000$ B met per owner ruling).
 - **Vendor Optimizations (Milestone 2)**:
   - `bn.js` 6-to-1 deduplication: canonical `src/content/vendor/elliptic/module-126.js` (43,355 B committed git blob) preserved; 5 duplicate instances replaced with 103 B alias stubs, saving 216,015 B raw.
   - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates inlined generator copies in `content-script.js`, saving 342,202 B raw.
   - Third-party libraries cleanly isolated in `src/content/vendor/` (`cryptojs`, `qrcode`, `stream`, `fast-xml-parser`, `mustache`, `eventemitter3`, `buffer`, `shims`, `parser`, `elliptic`).
-- **Release Package**: `dist/savior-extension-v2.4.65.zip` is ~1.08 MB (1,135,722 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
+- **Release Package**: `dist/savior-extension-v3.0.0.zip` is ~1.08 MB (1,135,323 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
 
 ---
 
@@ -95,11 +93,9 @@ node tests/test_golden_behavior.js
 │   │   ├── utilities/            # General helpers
 │   │   └── module-registry.js    # Common module mappings
 │   ├── inject/                   # Source main-world extractors (synced to inject/ via build:inject)
-│   └── experimental/
-│       └── content-next/         # UNWIRED draft ES module prototype (~26 KB)
 ├── tests/                        # Automated regression, golden characterization & oracle suites
 ├── scripts/                      # Build pipelines (build_content_script, build_background, build_common, build_inject, package_release)
-└── dist/                         # Release packages (savior-extension-v2.4.65.zip)
+└── dist/                         # Release packages (savior-extension-v3.0.0.zip)
 ```
 
 ---

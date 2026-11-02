@@ -1,5 +1,13 @@
 const assert = require('assert');
 const path = require('path');
+const fs = require('fs');
+
+const expDir = path.resolve(__dirname, '../src/experimental/content-next');
+if (!fs.existsSync(expDir)) {
+  console.log('=== TEST SUITE: EXPERIMENTAL CONTENT-NEXT CORE SEMANTIC FACADE ===');
+  console.log('SKIP: src/experimental/content-next/ deleted per Trung Gate 4.\n');
+  process.exit(0);
+}
 
 console.log('=== TEST SUITE: EXPERIMENTAL CONTENT-NEXT CORE SEMANTIC FACADE ===\n');
 

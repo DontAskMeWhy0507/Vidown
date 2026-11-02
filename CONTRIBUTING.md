@@ -23,10 +23,6 @@ All extension runtime scripts (`content-script.js`, `background.js`, `common.js`
 4. **Main-World Inject Extractors (`src/inject/` & `inject/`)**:
    - Source main-world site extractors are maintained under `src/inject/` and built to `inject/` via `scripts/build_inject.js`.
 
-5. **Experimental Prototype Layer (`src/experimental/content-next/`)**:
-   - An unwired architectural draft (~26 KB across 4 platform families) exploring an idiomatic ES module rewrite.
-   - **Nothing in the build pipeline or the browser currently loads this layer.** Disposition of this directory is reserved as an explicit decision item for project owner Trung.
-
 ---
 
 ## Building from Source
@@ -86,9 +82,9 @@ node tests/test_package_release_cleanliness.js
   - `data-target`: 4 sites
   - `removeAttribute`: 32 sites
   - Batch 1–4 identifiers present (`settingsManager`, `urlMatcher`, `OnboardingABTestProvider`, `facebookProvider`, etc.)
-- **Bundle & Package Limits**: Release zip `dist/savior-extension-v2.4.65.zip` must remain $\le 1.15\text{ MB}$ (currently ~1.08 MB / 1,135,722 B) with 66 entries, 0 `node_modules`, and 0 executables.
+- **Bundle & Package Limits**: Release zip `dist/savior-extension-v3.0.0.zip` must remain $\le 1.15\text{ MB}$ (currently ~1.08 MB / 1,135,323 B) with 66 entries, 0 `node_modules`, and 0 executables.
 - **Target Platform**: Chrome Manifest V3 (`minimum_chrome_version: 116`).
-- **Private Repository**: The repository remains strictly private until an explicit decision by Trung.
+- **Open Source Release**: Open-source release under the MIT License v3.0.0.
 
 ---
 

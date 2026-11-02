@@ -39,7 +39,7 @@ if (!fs.existsSync(MANIFEST_PATH)) {
 }
 
 const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
-const version = manifest.version || '2.4.65';
+const version = manifest.version || '3.0.0';
 const ZIP_NAME = `savior-extension-v${version}.zip`;
 const ZIP_PATH = path.join(DIST_DIR, ZIP_NAME);
 
