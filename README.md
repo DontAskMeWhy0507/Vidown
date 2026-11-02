@@ -64,7 +64,7 @@ node tests/test_golden_behavior.js
 
 ```
 ├── manifest.json                 # Chrome Manifest V3 manifest
-├── content-script.js             # Shipped production content script bundle (1,997,616 B)
+├── content-script.js             # Shipped production content script bundle (1,996,023 B)
 ├── background.js                 # Shipped background service worker bundle (1,154,528 B)
 ├── common.js                     # Shipped common runtime utility bundle (518,794 B)
 ├── inject/                       # Shipped main-world site extractors
