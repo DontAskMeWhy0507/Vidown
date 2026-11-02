@@ -16,7 +16,7 @@ set "HOST_PATH_ESC=%HOST_PATH:\=\\%"
   echo   "path": "%HOST_PATH_ESC%",
   echo   "type": "stdio",
   echo   "allowed_origins": [
-  echo     "chrome-extension://jdfkmiabjpfjacifcmihfdjhpnjpiick/"
+  echo     "chrome-extension://nnjbdidmmnecdmcllkcaajboplpcimcf/"
   echo   ]
   echo }
 ) > "%MANIFEST_PATH%"

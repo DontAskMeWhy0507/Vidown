@@ -7,7 +7,7 @@
  * 3. Instagram Stories support: /stories/ handling, stale-stamp invalidation, MutationObserver, event listeners.
  * 4. scripts/package_release.js excludes node_modules from release zip.
  * 5. native/com.savior.helper.json has no hardcoded machine drive path.
- * 6. native/host.js defines and exports startYtDlpDownload, while startDownload bypasses yt-dlp to preserve browser session cookies.
+ * 6. native/host.js completely deletes dead startYtDlpDownload, routing strictly through FFmpeg.
  */
 
 const fs = require('fs');
@@ -56,7 +56,7 @@ const pkgScript = fs.readFileSync(path.join(__dirname, '..', 'scripts/package_re
 assert(pkgScript.includes("'node_modules'"), 'package_release.js EXCLUDED_DIRS must include node_modules');
 
 // 5. Verify release zip contains zero node_modules
-const zipPath = path.join(__dirname, '..', 'dist/savior-extension-v3.0.0.zip');
+const zipPath = path.join(__dirname, '..', 'dist/savior-extension-v3.0.1.zip');
 assert(fs.existsSync(zipPath), 'Release zip must exist');
 const zipBuf = fs.readFileSync(zipPath);
 
@@ -91,8 +91,8 @@ const helperJson = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'native
 assert(!helperJson.path.includes('F:\\'), 'com.savior.helper.json template must not contain hardcoded machine path');
 
 const hostJs = fs.readFileSync(path.join(__dirname, '..', 'native/host.js'), 'utf8');
-assert(hostJs.includes('function startYtDlpDownload'), 'native/host.js defines startYtDlpDownload');
-assert(hostJs.includes('startYtDlpDownload,'), 'native/host.js exports startYtDlpDownload');
-console.log('PASS: Native helper manifest template is portable and yt-dlp is exported.');
+assert(!hostJs.includes('function startYtDlpDownload'), 'native/host.js must not define startYtDlpDownload');
+assert(!hostJs.includes('startYtDlpDownload,'), 'native/host.js must not export startYtDlpDownload');
+console.log('PASS: Native helper manifest template is portable and dead yt-dlp path is purged.');
 
 console.log('\nALL AUDIT VERIFICATION FIXES PASSED! ✅');

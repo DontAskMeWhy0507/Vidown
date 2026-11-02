@@ -1,6 +1,6 @@
 {
   "name": "savior-extension",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "VidManager Media Downloader Extension",
   "private": true,
   "scripts": {

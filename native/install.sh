@@ -7,7 +7,7 @@ chmod +x "$HOST_SH"
 chmod +x "$DIR/host.js"
 
 # Chrome Extension ID
-EXT_ID="jdfkmiabjpfjacifcmihfdjhpnjpiick"
+EXT_ID="nnjbdidmmnecdmcllkcaajboplpcimcf"
 
 TARGET_DIRS=(
   "$HOME/Library/Application Support/Google/Chrome/NativeMessagingHosts"

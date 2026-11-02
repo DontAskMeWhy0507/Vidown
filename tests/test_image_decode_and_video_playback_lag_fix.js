@@ -51,7 +51,6 @@ const hostCode = fs.readFileSync(path.join(__dirname, '../native/host.js'), 'utf
 assert(hostCode.includes('FFMPEG_THREAD_LIMIT'), 'native/host.js must define FFMPEG_THREAD_LIMIT');
 assert(hostCode.includes('setBackgroundPriority'), 'native/host.js must set background process priority');
 assert(hostCode.includes('PRIORITY_BELOW_NORMAL'), 'native/host.js must use PRIORITY_BELOW_NORMAL');
-assert(hostCode.includes("'--concurrent-fragments', '4'"), 'native/host.js must use cautious fragment concurrency for yt-dlp');
 console.log('✓ Test 6: native/host.js configures below-normal process priority & thread limiting to protect foreground video playback.');
 
 console.log('\nALL VERIFICATION CHECKS PASSED SUCCESSFULLY! 🚀');

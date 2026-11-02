@@ -44,7 +44,7 @@ function createChromeProxy(name = 'chrome') {
       return createChromeProxy(`${name}.${String(prop)}`);
     },
     apply(target, thisArg, args) {
-      if (name.endsWith('getManifest')) return { version: '3.0.0', name: 'VidManager' };
+      if (name.endsWith('getManifest')) return { version: '3.0.1', name: 'VidManager' };
       return Promise.resolve({});
     }
   });

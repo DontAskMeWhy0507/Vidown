@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-02T01:58:54.334Z",
+  "generatedAt": "2026-11-02T04:20:32.467Z",
   "background": {
     "file": "background.js",
     "totalSlots": 741,
@@ -15,7 +15,7 @@
         "size": 46398,
         "category": "messaging",
         "path": "messaging/dom-utils.js",
-        "fileSize": 47776
+        "fileSize": 47767
       },
       "1": {
         "id": 1,
@@ -213,7 +213,7 @@
         "size": 74642,
         "category": "storage",
         "path": "storage/hls-parser.js",
-        "fileSize": 70068
+        "fileSize": 70059
       },
       "25": {
         "id": 25,
@@ -243,7 +243,7 @@
         "size": 37548,
         "category": "utilities",
         "path": "utilities/ieee754-buffer.js",
-        "fileSize": 42851
+        "fileSize": 42856
       },
       "28": {
         "id": 28,
@@ -513,7 +513,7 @@
         "size": 5809,
         "category": "utilities",
         "path": "utilities/sha224.js",
-        "fileSize": 6887
+        "fileSize": 6893
       },
       "58": {
         "id": 58,
@@ -553,7 +553,7 @@
         "size": 1507,
         "category": "crypto",
         "path": "crypto/mode-ctr.js",
-        "fileSize": 1686
+        "fileSize": 1690
       },
       "62": {
         "id": 62,
@@ -1365,7 +1365,7 @@
         "size": 7793,
         "category": "events",
         "path": "events/download-event-router.js",
-        "fileSize": 7766
+        "fileSize": 7754
       },
       "175": {
         "id": 175,
@@ -1393,7 +1393,7 @@
         "size": 86003,
         "category": "entry",
         "path": "entry/service-worker-entry.js",
-        "fileSize": 65028
+        "fileSize": 65010
       },
       "179": {
         "id": 179,
@@ -2589,7 +2589,7 @@
         "size": 4154,
         "category": "events",
         "path": "events/media-capture-events.js",
-        "fileSize": 5052
+        "fileSize": 5046
       },
       "442": {
         "id": 442,
@@ -3115,7 +3115,7 @@
         "size": 4633,
         "category": "events",
         "path": "events/background-event-hub.js",
-        "fileSize": 5640
+        "fileSize": 5628
       },
       "539": {
         "id": 539,
@@ -3801,7 +3801,7 @@
         "size": 10616,
         "category": "utilities",
         "path": "utilities/stream-pipeline-controller.js",
-        "fileSize": 13812
+        "fileSize": 13806
       },
       "706": {
         "id": 706,
@@ -4031,7 +4031,7 @@
         "size": 5032,
         "category": "events",
         "path": "events/message-event-dispatcher.js",
-        "fileSize": 4604
+        "fileSize": 4601
       },
       "729": {
         "id": 729,
@@ -4101,7 +4101,7 @@
       }
     },
     "baselineBundleSize": 1154528,
-    "currentBuiltBundleSize": 1185532
+    "currentBuiltBundleSize": 1185457
   },
   "common": {
     "file": "common.js",
@@ -4115,7 +4115,7 @@
         "size": 49512,
         "category": "core-utils",
         "path": "core-utils/dom-utils.js",
-        "fileSize": 47777
+        "fileSize": 47768
       },
       "1": {
         "id": 1,
@@ -4223,7 +4223,7 @@
         "size": 79480,
         "category": "utilities",
         "path": "utilities/hls-parser.js",
-        "fileSize": 70070
+        "fileSize": 70061
       },
       "26": {
         "id": 26,
@@ -4277,7 +4277,7 @@
         "size": 12599,
         "category": "utilities",
         "path": "utilities/mustache-template.js",
-        "fileSize": 12385
+        "fileSize": 12388
       },
       "40": {
         "id": 40,
@@ -4367,7 +4367,7 @@
         "size": 6061,
         "category": "utilities",
         "path": "utilities/sha224.js",
-        "fileSize": 6887
+        "fileSize": 6893
       },
       "58": {
         "id": 58,
@@ -4403,7 +4403,7 @@
         "size": 1639,
         "category": "crypto",
         "path": "crypto/mode-ctr.js",
-        "fileSize": 1686
+        "fileSize": 1690
       },
       "62": {
         "id": 62,
@@ -4542,6 +4542,6 @@
       }
     },
     "baselineBundleSize": 518794,
-    "currentBuiltBundleSize": 501606
+    "currentBuiltBundleSize": 501588
   }
 }

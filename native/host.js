@@ -336,7 +336,7 @@ function handleMessage(msg) {
       sendMessage({
         status: 'ok',
         action: 'pong',
-        version: '3.0.0',
+        version: '3.0.1',
         downloadsDir: DOWNLOADS_DIR,
         hasFfmpeg: fs.existsSync(FFMPEG_PATH),
         hasYtDlp: fs.existsSync(YTDLP_PATH)
@@ -1230,7 +1230,7 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
     '-y',
     '-threads', FFMPEG_THREAD_LIMIT,
     '-fflags', '+genpts+igndts+discardcorrupt+sortdts',
-    '-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data'
+    '-protocol_whitelist', 'http,https,tcp,tls,crypto'
   ];
   if (videoUrl.startsWith('http')) {
     args.push(...netInputFlags, '-headers', headers);
@@ -1946,7 +1946,9 @@ async function startFfmpegDirectStream(req) {
     );
   }
 
-  args.push('-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data');
+  const isLocalInput = typeof ffmpegInput === 'string' && !ffmpegInput.startsWith('http');
+  const whitelist = isLocalInput ? 'file,http,https,tcp,tls,crypto' : 'http,https,tcp,tls,crypto';
+  args.push('-protocol_whitelist', whitelist);
   if (typeof ffmpegInput === 'string' && ffmpegInput.startsWith('http')) {
     args.push(
       '-reconnect', '1',
@@ -2443,199 +2445,6 @@ function parseProgressLine(line, targetUrl = '') {
   return null;
 }
 
-function startYtDlpDownload(req, targetUrl) {
-  if (activeProcess) {
-    activeProcess.isKilledByHost = true;
-    try { activeProcess.kill(); } catch (e) {}
-    activeProcess = null;
-  }
-
-  const isAudio = Boolean(req.soundOnly || req.quality === 'audio');
-  const quality = req.quality || 'best';
-  let formatArg = 'bv*+ba/b';
-
-  if (quality === '4k') formatArg = 'bv*[height<=2160]+ba/b';
-  else if (quality === '2k') formatArg = 'bv*[height<=1440]+ba/b';
-  else if (quality === '1080p') formatArg = 'bv*[height<=1080]+ba/b';
-  else if (quality === '720p') formatArg = 'bv*[height<=720]+ba/b';
-  else if (quality === '480p') formatArg = 'bv*[height<=480]+ba/b';
-  else if (quality === '360p') formatArg = 'bv*[height<=360]+ba/b';
-  else if (isAudio) formatArg = 'ba/b';
-
-  let safeTitle = (req.title || '').replace(/[<>:"/\\|?*]/g, '_').replace(/[\s.]+$/, '').trim().slice(0, 150).replace(/[\s.]+$/, '');
-  if (!safeTitle || safeTitle === 'video') {
-    if (targetUrl.includes('youtube') || targetUrl.includes('youtu.be')) safeTitle = `YouTube_${Date.now()}`;
-    else if (targetUrl.includes('facebook') || targetUrl.includes('fbcdn')) safeTitle = `Facebook_${Date.now()}`;
-    else if (targetUrl.includes('tiktok')) safeTitle = `TikTok_${Date.now()}`;
-    else safeTitle = `Video_${Date.now()}`;
-  }
-
-  const targetDir = resolveTargetDir(req.outputDir);
-  const outTemplate = path.join(targetDir, `${safeTitle}.%(ext)s`);
-
-  const isYouTube = checkIsYouTube(targetUrl) || checkIsYouTube(req.referer) || checkIsYouTube(req.pageUrl);
-
-  const args = [
-    '--no-playlist',
-    '--ffmpeg-location', BIN_DIR,
-    '--js-runtimes', `node:${process.execPath}`,
-    '--no-check-certificates',
-    '--geo-bypass',
-    '--retries', '5',
-    '--fragment-retries', '5',
-    '--socket-timeout', '20',
-    '--extractor-retries', '3',
-    '--http-chunk-size', '10M',
-    '--concurrent-fragments', '4',
-    '--throttled-rate', '100K',
-    '-f', formatArg,
-    '--format-sort', 'res,vcodec:h264,acodec:m4a,proto:https',
-    '--fixup', 'detect_or_warn',
-    '--no-warnings',
-    '--newline',
-    '--progress-template', 'download:UVD_PROG::%(progress._percent_str)s::%(progress._speed_str)s::%(progress._eta_str)s::%(progress._total_bytes_str)s',
-    '-o', outTemplate
-  ];
-
-  if (isYouTube) {
-    args.push('--extractor-args', 'youtube:player_client=visionos,android,web');
-  } else {
-    args.push('--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36');
-  }
-
-  if (isAudio) {
-    args.push('-x', '--audio-format', 'mp3');
-  } else {
-    args.push('--merge-output-format', 'mp4');
-  }
-
-  if (req.referer) {
-    const cleanRef = isYouTube ? 'https://www.youtube.com/' : req.referer;
-    args.push('--referer', cleanRef);
-    try {
-      const orig = new URL(cleanRef).origin;
-      args.push('--add-header', `Origin: ${orig}`);
-    } catch (_) {}
-  }
-
-  if (req.cookie && !isYouTube) {
-    args.push('--add-header', `Cookie: ${req.cookie}`);
-  }
-
-  args.push('--downloader-args', 'ffmpeg:-protocol_whitelist file,http,https,tcp,tls,crypto,data');
-  args.push('--postprocessor-args', 'ffmpeg:-avoid_negative_ts make_zero -max_muxing_queue_size 1024');
-
-  args.push(targetUrl);
-
-  sendMessage({
-    action: 'progress',
-    percent: '1%',
-    speed: 'Đang kết nối tăng tốc (yt-dlp)...',
-    eta: '',
-    size: ''
-  });
-
-  let finalFilename = '';
-  let lastSentTime = 0;
-  let fallbackInitiated = false;
-
-  function triggerFallback(reason) {
-    if (fallbackInitiated) return;
-    fallbackInitiated = true;
-    logHost(`yt-dlp fallback triggered (${reason}). Routing to FFmpeg.`);
-    if (req.videoUrl && req.audioUrl && req.videoUrl !== req.audioUrl) {
-      startFfmpegMux(req);
-    } else {
-      startFfmpegDirectStream(req);
-    }
-  }
-
-  function processOutput(text) {
-    const lines = text.split(/\r?\n/);
-    for (const line of lines) {
-      const prog = parseProgressLine(line, targetUrl);
-      if (prog) {
-        const now = Date.now();
-        if (now - lastSentTime > 150 || prog.percent === '100%' || prog.percent === '100.0%') {
-          lastSentTime = now;
-          sendMessage({ action: 'progress', ...prog });
-        }
-      }
-
-      if (line.includes('[Merger] Merging formats into') || line.includes('[download] Destination:') || line.includes('[ExtractAudio] Destination:') || line.includes('has already been downloaded')) {
-        const match = line.match(/"([^"]+)"/) || line.match(/Destination:\s*(.+)$/) || line.match(/\[download\]\s*(.+?)\s+has already been downloaded/);
-        if (match && match[1]) {
-          finalFilename = path.basename(match[1].trim());
-        }
-      }
-    }
-  }
-
-  activeProcess = spawn(YTDLP_PATH, args, { windowsHide: true });
-  setBackgroundPriority(activeProcess);
-  const proc = activeProcess;
-
-  let errOutput = '';
-  proc.stdout.on('data', (data) => {
-    const text = data.toString('utf8');
-    if (text.includes('ERROR:') || text.includes('Error:')) errOutput += text;
-    processOutput(text);
-  });
-
-  proc.stderr.on('data', (data) => {
-    const text = data.toString('utf8');
-    errOutput += text;
-    processOutput(text);
-  });
-
-  proc.on('close', (code) => {
-    if (proc && proc.isKilledByHost) {
-      if (activeProcess === proc) activeProcess = null;
-      notifySuperseded();
-      return;
-    }
-    if (activeProcess === proc) activeProcess = null;
-
-    if (code === 0) {
-      let savedFile = finalFilename;
-      try {
-        const completedFiles = fs.readdirSync(targetDir)
-          .filter(f => !f.endsWith('.part') && !f.endsWith('.ytdl') && !f.endsWith('.tmp'))
-          .map(f => ({ name: f, time: fs.statSync(path.join(targetDir, f)).mtimeMs }))
-          .sort((a, b) => b.time - a.time);
-
-        if (safeTitle) {
-          const matchTitle = completedFiles.find(f => f.name.startsWith(safeTitle));
-          if (matchTitle) savedFile = matchTitle.name;
-        }
-        if (!savedFile && completedFiles.length > 0) {
-          savedFile = completedFiles[0].name;
-        }
-      } catch (_) {}
-
-      sendMessage({
-        action: 'progress',
-        percent: '100%',
-        speed: 'Hoàn thành',
-        eta: '',
-        size: ''
-      });
-      sendMessage({
-        action: 'complete',
-        outputFile: savedFile || `${safeTitle}.mp4`,
-        downloadsDir: targetDir
-      });
-    } else {
-      triggerFallback(`exit code ${code}`);
-    }
-  });
-
-  proc.on('error', (err) => {
-    if (activeProcess === proc) activeProcess = null;
-    triggerFallback(`spawn error: ${err.message}`);
-  });
-}
-
 function startDownload(req) {
   logHost(`startDownload: ${JSON.stringify({ url: req.url, videoUrl: req.videoUrl, audioUrl: req.audioUrl, title: req.title, quality: req.quality })}`);
 
@@ -2684,7 +2493,6 @@ if (typeof module !== 'undefined') {
     handleMessage,
     setMessageHook,
     startDownload,
-    startYtDlpDownload,
     DISCONNECT_GRACE_MS
   };
 }

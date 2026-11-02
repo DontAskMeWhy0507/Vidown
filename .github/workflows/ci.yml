@@ -43,13 +43,8 @@ jobs:
               cp.execSync('node tests/' + f, { stdio: 'pipe' });
               passed++;
             } catch (err) {
-              if (f === 'test_milestone_2_dedupe.js') {
-                console.log('MARKER (ACCEPTED): ' + f + ' (Gate 5 reduction target accepted by Trung)');
-                passed++;
-              } else {
-                console.error('FAIL: ' + f);
-                failed++;
-              }
+              console.error('FAIL: ' + f);
+              failed++;
             }
           }
           console.log('\nCI TEST SUMMARY: ' + passed + ' passed, ' + failed + ' failed.');

@@ -51,7 +51,7 @@ console.log('PASS: .command/.sh/.dmg/.pkg/.app/.jar blocked from the launcher.')
 const installSh = read('native/install.sh');
 assert.ok(installSh.includes('NativeMessagingHosts'), 'install.sh registers native messaging dirs');
 assert.ok(installSh.includes('host.sh'), 'install.sh points at host.sh');
-assert.ok(installSh.includes('jdfkmiabjpfjacifcmihfdjhpnjpiick'), 'extension ID pinned in allowed_origins');
+assert.ok(installSh.includes('nnjbdidmmnecdmcllkcaajboplpcimcf'), 'extension ID pinned in allowed_origins');
 const hostSh = read('native/host.sh');
 assert.ok(hostSh.includes('/opt/homebrew/bin/node') || hostSh.includes('which node'), 'host.sh locates node');
 console.log('PASS: macOS installer and launcher wired.');
