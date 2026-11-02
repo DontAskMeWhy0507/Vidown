@@ -1,267 +1,426 @@
 // Module 330 - Savior Sexhihi_org Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(23),i=r(0),o=r(45),a=r(1),s=r(6),u=r(3),c=r(12);
-  function l(){
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
-  e,r="function"==typeof Symbol?Symbol:{
+  requireFn.r(exportsObj);
+  var dep_extractor_url_merger = requireFn(23),
+  dep_dom_utils = requireFn(0),
+  dep_token_hash_util = requireFn(45),
+  dep_media_constants = requireFn(1),
+  dep_media_sniffer = requireFn(6),
+  dep_url_utils = requireFn(3),
+  dep_dom_helper = requireFn(12);
+  function var_l() {
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var var_t,
+  var_e,
+  var_r = "function" == typeof Symbol ? Symbol : {
   }
-  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
-  function o(r,n,i,o){
-  var u=n&&n.prototype instanceof s?n:s,c=Object.create(u.prototype);
-  return f(c,"_invoke",function(r,n,i){
-  var o,s,u,c=0,l=i||[],f=!1,d={
-  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
-  return o=e,s=0,u=t,d.n=r,a}
+  ,
+  var_n = var_r.iterator || "@@iterator",
+  var_i = var_r.toStringTag || "@@toStringTag";
+  function var_o(param_r, param_n, param_i, param_o) {
+  var var_u_1 = param_n && param_n.prototype instanceof var_s ?
+  param_n : var_s,
+  var_c_1 = Object.create(var_u_1.prototype);
+  return var_f(var_c_1, "_invoke", function (param_r_1, param_n_1, param_i_1) {
+  var var_o_1,
+  var_s_1,
+  var_u_2,
+  num_c = 0,
+  var_l_1 = param_i_1 || [],
+  flag_f = !1,
+  obj_d = {
+  p: 0,
+  n: 0,
+  v: var_t,
+  a: var_h_1,
+  f: var_h_1.bind(var_t, 4),
+  d: function (param_e, param_r_2) {
+  return var_o_1 = param_e, var_s_1 = 0, var_u_2 = var_t, obj_d.n = param_r_2, obj_a;
+  }
   };
-  function h(r,n){
-  for(s=r,u=n,e=0;
-  !f&&c&&!i&&e<l.length;
-  e++){
-  var i,o=l[e],h=d.p,p=o[2];
-  r>3?(i=p===n)&&(u=o[(s=o[4])?5:(s=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(s=0,d.v=n,d.n=o[1]):
-  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,s=0))}
-  if(i||r>1)return a;
-  throw f=!0,n}
-  return function(i,l,p){
-  if(c>1)throw TypeError("Generator is already running");
-  for(f&&1===l&&h(l,p),s=l,u=p;
-  (e=s<2?t:u)||!f;
-  ){
-  o||(s?s<3?(s>1&&(d.n=-1),h(s,u)):d.n=u:d.v=u);
-  try{
-  if(c=2,o){
-  if(s||(i="next"),e=o[i]){
-  if(!(e=e.call(o,u)))throw TypeError("iterator result is not an object");
-  if(!e.done)return e;
-  u=e.value,s<2&&(s=0)}
-  else 1===s&&(e=o.return)&&e.call(o),s<2&&(u=TypeError("The iterator does not provide a '"+i+"' method"),
-  s=1);
-  o=t}
-  else if((e=(f=d.n<0)?u:r.call(n,d))!==a)break}
-  catch(e){
-  o=t,s=1,u=e}
-  finally{
-  c=1}
+  function var_h_1(param_r_2, param_n_2) {
+  for (var_s_1 = param_r_2, var_u_2 = param_n_2, var_e = 0;
+  !flag_f && num_c && !var_i_1 && var_e < var_l_1.length;
+  var_e++) {
+  var var_i_1,
+  var_o_2 = var_l_1[var_e],
+  var_h_2 = obj_d.p,
+  var_p_1 = var_o_2[2];
+  param_r_2 > 3 ? (var_i_1 = var_p_1 === param_n_2) && (var_u_2 = var_o_2[(var_s_1 = var_o_2[4]) ?
+  5 : (var_s_1 = 3, 3)], var_o_2[4] = var_o_2[5] = var_t) : var_o_2[0] <= var_h_2 &&
+  ((var_i_1 = param_r_2 < 2 && var_h_2 < var_o_2[1]) ? (var_s_1 = 0, obj_d.v = param_n_2,
+  obj_d.n = var_o_2[1]) : var_h_2 < var_p_1 && (var_i_1 = param_r_2 < 3 ||
+  var_o_2[0] > param_n_2 || param_n_2 > var_p_1) && (var_o_2[4] = param_r_2, var_o_2[5] = param_n_2,
+  obj_d.n = var_p_1, var_s_1 = 0));
   }
-  return{
-  value:e,done:f}
+  if (var_i_1 || param_r_2 > 1) return obj_a;
+  throw flag_f = !0, param_n_2;
+  }
+  return function (param_i_2, param_l, param_p) {
+  if (num_c > 1) throw TypeError("Generator is already running");
+  for (flag_f && 1 === param_l && var_h_1(param_l, param_p), var_s_1 = param_l, var_u_2 = param_p;
+  (var_e = var_s_1 < 2 ? var_t : var_u_2) || !flag_f;
+  ) {
+  var_o_1 || (var_s_1 ? var_s_1 < 3 ? (var_s_1 > 1 && (obj_d.n = -1), var_h_1(var_s_1,
+  var_u_2)) : obj_d.n = var_u_2 : obj_d.v = var_u_2);
+  try {
+  if (num_c = 2, var_o_1) {
+  if (var_s_1 || (param_i_2 = "next"), var_e = var_o_1[param_i_2]) {
+  if (!(var_e = var_e.call(var_o_1, var_u_2))) throw TypeError("iterator result is not an object");
+  if (!var_e.done) return var_e;
+  var_u_2 = var_e.value, var_s_1 < 2 && (var_s_1 = 0);
+  }
+  else 1 === var_s_1 && (var_e = var_o_1.return) && var_e.call(var_o_1), var_s_1 < 2 &&
+  (var_u_2 = TypeError("The iterator does not provide a '" + param_i_2 + "' method"),
+  var_s_1 = 1);
+  var_o_1 = var_t;
+  }
+  else if ((var_e = (flag_f = obj_d.n < 0) ? var_u_2 : param_r_1.call(param_n_1,
+  obj_d)) !== obj_a) break;
+  }
+  catch (var_e_1) {
+  var_o_1 = var_t, var_s_1 = 1, var_u_2 = var_e_1;
+  }
+  finally {
+  num_c = 1;
   }
   }
-  (r,i,o),!0),c}
-  var a={
+  return {
+  value: var_e,
+  done: flag_f
   };
-  function s(){
+  };
   }
-  function u(){
+  (param_r, param_i, param_o), !0), var_c_1;
   }
-  function c(){
+  var obj_a = {
+  };
+  function var_s() {
   }
-  e=Object.getPrototypeOf;
-  var d=[][n]?e(e([][n]())):(f(e={
+  function var_u() {
   }
-  ,n,(function(){
-  return this}
-  )),e),h=c.prototype=s.prototype=Object.create(d);
-  function p(t){
-  return Object.setPrototypeOf?Object.setPrototypeOf(t,c):(t.__proto__=c,f(t,i,"GeneratorFunction")),
-  t.prototype=Object.create(h),t}
-  return u.prototype=c,f(h,"constructor",c),f(c,"constructor",u),u.displayName="GeneratorFunction",f(c,
-  i,"GeneratorFunction"),f(h),f(h,i,"Generator"),f(h,n,(function(){
-  return this}
-  )),f(h,"toString",(function(){
-  return"[object Generator]"}
-  )),(l=function(){
-  return{
-  w:o,m:p}
+  function var_c() {
   }
-  )()}
-  function f(t,e,r,n){
-  var i=Object.defineProperty;
-  try{
-  i({
+  var_e = Object.getPrototypeOf;
+  var var_d = [][var_n] ? var_e(var_e([][var_n]())) : (var_f(var_e = {
   }
-  ,"",{
+  , var_n, function () {
+  return this;
   }
-  )}
-  catch(t){
-  i=0}
-  (f=function(t,e,r,n){
-  function o(e,r){
-  f(t,e,(function(t){
-  return this._invoke(e,r,t)}
-  ))}
-  e?i?i(t,e,{
-  value:r,enumerable:!n,configurable:!n,writable:!n}
-  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
-  )(t,e,r,n)}
-  var d=function(t,e,r,n){
-  return new(r||(r=Promise))((function(i,o){
-  function a(t){
-  try{
-  u(n.next(t))}
-  catch(t){
-  o(t)}
+  ), var_e),
+  var_h = var_c.prototype = var_s.prototype = Object.create(var_d);
+  function var_p(param_t) {
+  return Object.setPrototypeOf ? Object.setPrototypeOf(param_t, var_c) :
+  (param_t.__proto__ = var_c, var_f(param_t, var_i, "GeneratorFunction")), param_t.prototype = Object.create(
+  var_h), param_t;
   }
-  function s(t){
-  try{
-  u(n.throw(t))}
-  catch(t){
-  o(t)}
+  return var_u.prototype = var_c, var_f(var_h, "constructor", var_c), var_f(var_c,
+  "constructor", var_u), var_u.displayName = "GeneratorFunction", var_f(var_c, var_i,
+  "GeneratorFunction"), var_f(var_h), var_f(var_h, var_i, "Generator"), var_f(var_h,
+  var_n, function () {
+  return this;
   }
-  function u(t){
-  var e;
-  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
-  t(e)}
-  ))).then(a,s)}
-  u((n=n.apply(t,e||[])).next())}
-  ))}
-  ,h={
+  ), var_f(var_h, "toString", function () {
+  return "[object Generator]";
   }
-  ,p={
+  ), (var_l = function () {
+  return {
+  w: var_o,
+  m: var_p
+  };
   }
-  ,v={
-  getDomains:()=>["phimsex69","sexphimhd.net","sex333.net","sexhihi","sex5.pro","cu3x.net","sexmoi.cc",
-  "sexmoi.buzz","londep.pro","phimsexmy","jav678.net","xemsex.vip","phimsex.ink","haysex.net","haysex3xyz.net",
-  "xxvn.me","javnhe.","javpro.biz","top1sex.cc","phimsexxnxx.net","kichdam.cc","heovl.","sex2024.","sexviet88.",
-  "vlxyz.tube","heo69.moe","lenlut.tv","sexsoc.","sexvietco.","sexviettop.","vlxxai.","clipsexquaylen",
-  "sexdep.","sextop1.","simplyglitz.","guitest."],siteMatcher:(t,e)=>Boolean(t.match(/^javhd\.(?!today)/i)),
-  isValidVideoNode:t=>!("IFRAME"!=t.nodeName||!t.src.match(/\/\/streamobs\./i))||Object(c.m)(t),urls:
-  [{
-  checkUrl:t=>t.url.includes("streamqq.com"),getUrl:t=>{
-  t.url;
-  return d(void 0,void 0,void 0,l().m((function t(){
-  return l().w((function(t){
-  for(;;
-  )switch(t.n){
-  case 0:if(!h[location.href]){
-  t.n=1;
-  break}
-  return t.a(2,[h[location.href]]);
-  case 1:return t.a(2)}
+  )();
   }
-  ),t)}
-  )))}
+  function var_f(param_t, param_e, param_r, param_n) {
+  var var_i = Object.defineProperty;
+  try {
+  var_i({
   }
-  ,{
-  checkUrl:t=>t.url.includes(".cdn-xvideos-xnxx.xyz"),mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.ext="mp4",e.exts=["mp4"],"video"}
-  }
-  ,{
-  checkUrl:t=>{
-  var e=t.url;
-  return/sanstream\.xyz\/video/i.test(e)}
-  ,getUrl:t=>{
-  var e=t.url,r=new URL(e);
-  r.pathname+="/master.html";
-  var n=Object(u.f)(r.href);
-  return n.ext="m3u8",n.exts=["m3u8"],n.type="video",[n]}
-  }
-  ,{
-  checkUrl:t=>{
-  var e=t.node;
-  return!!(null==e?void 0:e.closest("[data-video-src]"))}
-  ,getUrl:t=>{
-  var e,r=t.node,n=null===(e=null==r?void 0:r.closest("[data-video-src]"))||void 0===e?void 0:e.getAttribute("data-video-src");
-  return n||[]}
-  ,mediaObjectChange:t=>{
-  var e,r,n=t.mediaObject,i=(null===(r=null===(e=document.querySelector(".dsp-title"))||void 0===e?void 0:
-  e.textContent)||void 0===r?void 0:r.trim())||document.title;
-  return n.filename=i,n.fixName=i,n.ext="m3u8",n.exts=["m3u8"],"video"}
-  }
-  ,{
-  checkUrl:()=>!!h[location.href],getUrl:()=>d(void 0,void 0,void 0,l().m((function t(){
-  return l().w((function(t){
-  for(;;
-  )switch(t.n){
-  case 0:return t.a(2,[h[location.href]])}
-  }
-  ),t)}
-  )))}
-  ],default:{
-  mediaObjectChange:t=>{
-  var e=t.mediaObject,r=t.node;
-  return d(void 0,void 0,void 0,l().m((function t(){
-  var n,o;
-  return l().w((function(t){
-  for(;;
-  )switch(t.n){
-  case 0:if(n=r.src,!h[location.href]){
-  t.n=4;
-  break}
-  if(p[n]){
-  t.n=3;
-  break}
-  return t.n=1,Object(i.sendMessage)({
-  type:a.b.GET_URL,params:{
-  url:h[location.href].url}
+  , "", {
   }
   );
-  case 1:if(!(o=t.v)||!o.url){
-  t.n=2;
-  break}
-  return p[n]=o.url,Object.assign(e,h[location.href]),e.realRes=o.url,e.ext="m3u8",e.exts=["m3u8"],e.url=location.href,
-  e.referrer=n,t.a(2,"video");
-  case 2:t.n=4;
+  }
+  catch (var_t) {
+  var_i = 0;
+  }
+  (var_f = function (param_t_1, param_e_1, param_r_1, param_n_1) {
+  function var_o(param_e_2, param_r_2) {
+  var_f(param_t_1, param_e_2, function (param_t_2) {
+  return this._invoke(param_e_2, param_r_2, param_t_2);
+  }
+  );
+  }
+  param_e_1 ? var_i ? var_i(param_t_1, param_e_1, {
+  value: param_r_1,
+  enumerable: !param_n_1,
+  configurable: !param_n_1,
+  writable: !param_n_1
+  }
+  ) : param_t_1[param_e_1] = param_r_1 : (var_o("next", 0), var_o("throw", 1), var_o(
+  "return", 2));
+  }
+  )(param_t, param_e, param_r, param_n);
+  }
+  var fn_d = function (param_t, param_e, param_r, param_n) {
+  return new (param_r || (param_r = Promise))(function (param_i, param_o) {
+  function var_a(param_t_1) {
+  try {
+  var_u(param_n.next(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_s(param_t_1) {
+  try {
+  var_u(param_n.throw(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_u(param_t_1) {
+  var var_e;
+  param_t_1.done ? param_i(param_t_1.value) : (var_e = param_t_1.value, var_e instanceof param_r ?
+  var_e : new param_r(function (param_t_2) {
+  param_t_2(var_e);
+  }
+  )).then(var_a, var_s);
+  }
+  var_u((param_n = param_n.apply(param_t, param_e || [])).next());
+  }
+  );
+  }
+  ,
+  obj_h = {
+  }
+  ,
+  obj_p = {
+  }
+  ,
+  obj_v = {
+  getDomains: () => ["phimsex69", "sexphimhd.net", "sex333.net", "sexhihi", "sex5.pro",
+  "cu3x.net", "sexmoi.cc", "sexmoi.buzz", "londep.pro", "phimsexmy", "jav678.net",
+  "xemsex.vip", "phimsex.ink", "haysex.net", "haysex3xyz.net", "xxvn.me", "javnhe.",
+  "javpro.biz", "top1sex.cc", "phimsexxnxx.net", "kichdam.cc", "heovl.", "sex2024.",
+  "sexviet88.", "vlxyz.tube", "heo69.moe", "lenlut.tv", "sexsoc.", "sexvietco.",
+  "sexviettop.", "vlxxai.", "clipsexquaylen", "sexdep.", "sextop1.", "simplyglitz.",
+  "guitest."],
+  siteMatcher: (param_t, param_e) => Boolean(param_t.match(/^javhd\.(?!today)/i)),
+  isValidVideoNode: param_t => !("IFRAME" != param_t.nodeName ||
+  !param_t.src.match(/\/\/streamobs\./i)) || Object(dep_dom_helper.m)(param_t),
+  urls: [{
+  checkUrl: param_t => param_t.url.includes("streamqq.com"),
+  getUrl: param_t => {
+  param_t.url;
+  return fn_d(void 0, void 0, void 0, var_l().m(function var_t() {
+  return var_l().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.n) {
+  case 0:
+  if (!obj_h[location.href]) {
+  param_t_1.n = 1;
   break;
-  case 3:return Object.assign(e,h[location.href]),e.url=location.href,e.ext="m3u8",e.exts=["m3u8"],e.referrer=n,
-  e.realRes=p[n],t.a(2,"video");
-  case 4:return t.a(2)}
   }
-  ),t)}
-  )))}
+  return param_t_1.a(2, [obj_h[location.href]]);
+  case 1:
+  return param_t_1.a(2);
   }
-  ,parse:{
-  sources:[{
-  checkSource:t=>t.url.includes(".cdn-xvideos-xnxx.xyz"),parse:t=>{
-  var e=t.media;
-  return d(void 0,void 0,void 0,l().m((function t(){
-  var r,n;
-  return l().w((function(t){
-  for(;;
-  )switch(t.n){
-  case 0:return t.n=1,Object(i.sendMessage)({
-  type:a.b.GET_URL}
+  }
+  , var_t);
+  }
+  ));
+  }
+  }
+  , {
+  checkUrl: param_t => param_t.url.includes(".cdn-xvideos-xnxx.xyz"),
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.ext = "mp4", var_e.exts = ["mp4"], "video";
+  }
+  }
+  , {
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return /sanstream\.xyz\/video/i.test(var_e);
+  }
+  ,
+  getUrl: param_t => {
+  var var_e = param_t.url,
+  var_r = new URL(var_e);
+  var_r.pathname += "/master.html";
+  var var_n = Object(dep_url_utils.f)(var_r.href);
+  return var_n.ext = "m3u8", var_n.exts = ["m3u8"], var_n.type = "video", [var_n];
+  }
+  }
+  , {
+  checkUrl: param_t => {
+  var var_e = param_t.node;
+  return !!(null == var_e ? void 0 : var_e.closest("[data-video-src]"));
+  }
+  ,
+  getUrl: param_t => {
+  var var_e,
+  var_r = param_t.node,
+  var_n = null === (var_e = null == var_r ? void 0 : var_r.closest("[data-video-src]")) ||
+  void 0 === var_e ? void 0 : var_e.getAttribute("data-video-src");
+  return var_n || [];
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e,
+  var_r,
+  var_n = param_t.mediaObject,
+  var_i = (null === (var_r = null === (var_e = document.querySelector(".dsp-title")) ||
+  void 0 === var_e ? void 0 : var_e.textContent) || void 0 === var_r ?
+  void 0 : var_r.trim()) || document.title;
+  return var_n.filename = var_i, var_n.fixName = var_i, var_n.ext = "m3u8", var_n.exts = ["m3u8"],
+  "video";
+  }
+  }
+  , {
+  checkUrl: () => !!obj_h[location.href],
+  getUrl: () => fn_d(void 0, void 0, void 0, var_l().m(function var_t() {
+  return var_l().w(function (param_t) {
+  for (;;
+  ) switch (param_t.n) {
+  case 0:
+  return param_t.a(2, [obj_h[location.href]]);
+  }
+  }
+  , var_t);
+  }
+  ))
+  }
+  ],
+  default: {
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject,
+  var_r = param_t.node;
+  return fn_d(void 0, void 0, void 0, var_l().m(function var_t() {
+  var var_n, var_o;
+  return var_l().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.n) {
+  case 0:
+  if (var_n = var_r.src, !obj_h[location.href]) {
+  param_t_1.n = 4;
+  break;
+  }
+  if (obj_p[var_n]) {
+  param_t_1.n = 3;
+  break;
+  }
+  return param_t_1.n = 1, Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.GET_URL,
+  params: {
+  url: obj_h[location.href].url
+  }
+  }
   );
-  case 1:if(!(null==(r=t.v)?void 0:r.url)){
-  t.n=3;
-  break}
-  return t.n=2,Object(s.e)(r.url,e);
-  case 2:return(n=t.v).forEach(t=>{
-  t.ext="m3u8",t.exts=["m3u8"],t.extraData=e.extraData}
-  ),1==n.length&&n[0].url==e.url&&(n[0].play_list=r.url,n[0].type="video"),t.a(2,n);
-  case 3:return t.a(2,[])}
+  case 1:
+  if (!(var_o = param_t_1.v) || !var_o.url) {
+  param_t_1.n = 2;
+  break;
   }
-  ),t)}
-  )))}
+  return obj_p[var_n] = var_o.url, Object.assign(var_e, obj_h[location.href]), var_e.realRes = var_o.url,
+  var_e.ext = "m3u8", var_e.exts = ["m3u8"], var_e.url = location.href, var_e.referrer = var_n,
+  param_t_1.a(2, "video");
+  case 2:
+  param_t_1.n = 4;
+  break;
+  case 3:
+  return Object.assign(var_e, obj_h[location.href]), var_e.url = location.href, var_e.ext = "m3u8",
+  var_e.exts = ["m3u8"], var_e.referrer = var_n, var_e.realRes = obj_p[var_n], param_t_1.a(
+  2, "video");
+  case 4:
+  return param_t_1.a(2);
   }
-  ,{
-  checkSource:t=>t.url.includes("streamqq"),parse:t=>{
-  var e=t.media;
-  return d(void 0,void 0,void 0,l().m((function t(){
-  var r,n;
-  return l().w((function(t){
-  for(;;
-  )switch(t.n){
-  case 0:return t.n=1,Object(i.sendMessage)({
-  type:a.b.GET_URL,params:{
-  url:e.url}
+  }
+  , var_t);
+  }
+  ));
+  }
+  }
+  ,
+  parse: {
+  sources: [{
+  checkSource: param_t => param_t.url.includes(".cdn-xvideos-xnxx.xyz"),
+  parse: param_t => {
+  var var_e = param_t.media;
+  return fn_d(void 0, void 0, void 0, var_l().m(function var_t() {
+  var var_r, var_n;
+  return var_l().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.n) {
+  case 0:
+  return param_t_1.n = 1, Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.GET_URL
   }
   );
-  case 1:if(!(null==(r=t.v)?void 0:r.url)){
-  t.n=3;
-  break}
-  return t.n=2,Object(s.e)(r.url,e);
-  case 2:return n=t.v,t.a(2,n);
-  case 3:return t.a(2,[])}
+  case 1:
+  if (!(null == (var_r = param_t_1.v) ? void 0 : var_r.url)) {
+  param_t_1.n = 3;
+  break;
   }
-  ),t)}
-  )))}
+  return param_t_1.n = 2, Object(dep_media_sniffer.e)(var_r.url, var_e);
+  case 2:
+  return (var_n = param_t_1.v).forEach(param_t_2 => {
+  param_t_2.ext = "m3u8", param_t_2.exts = ["m3u8"], param_t_2.extraData = var_e.extraData;
   }
-  ]}
-  ,processRequestIds:t=>{
-  if(t.url.match(/(master|video|playlist|hls|index|m3u8\/.+)\.m3u8/))return h[location.href]=t,!0}
+  ), 1 == var_n.length && var_n[0].url == var_e.url && (var_n[0].play_list = var_r.url,
+  var_n[0].type = "video"), param_t_1.a(2, var_n);
+  case 3:
+  return param_t_1.a(2, []);
+  }
+  }
+  , var_t);
+  }
+  ));
+  }
+  }
+  , {
+  checkSource: param_t => param_t.url.includes("streamqq"),
+  parse: param_t => {
+  var var_e = param_t.media;
+  return fn_d(void 0, void 0, void 0, var_l().m(function var_t() {
+  var var_r, var_n;
+  return var_l().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.n) {
+  case 0:
+  return param_t_1.n = 1, Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.GET_URL,
+  params: {
+  url: var_e.url
+  }
+  }
+  );
+  case 1:
+  if (!(null == (var_r = param_t_1.v) ? void 0 : var_r.url)) {
+  param_t_1.n = 3;
+  break;
+  }
+  return param_t_1.n = 2, Object(dep_media_sniffer.e)(var_r.url, var_e);
+  case 2:
+  return var_n = param_t_1.v, param_t_1.a(2, var_n);
+  case 3:
+  return param_t_1.a(2, []);
+  }
+  }
+  , var_t);
+  }
+  ));
+  }
+  }
+  ]
+  }
+  ,
+  processRequestIds: param_t => {
+  if (param_t.url.match(/(master|video|playlist|hls|index|m3u8\/.+)\.m3u8/)) return obj_h[location.href] = param_t,
+  !0;
+  }
   };
-  e.default=Object(n.a)(o.a,["urls","parse","processRequestIds"])(v)};
+  exportsObj.default = Object(dep_extractor_url_merger.a)(dep_token_hash_util.a,
+  ["urls", "parse", "processRequestIds"])(obj_v);
+  };

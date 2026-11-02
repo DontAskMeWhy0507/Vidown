@@ -1,21 +1,39 @@
 // Module 395 - Savior Xiaohongshu_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
+  requireFn.r(exportsObj);
+  var obj_n = {
   }
-  ,i={
-  getDomains:()=>["xiaohongshu.com"],processRequestIds(t){
-  var e,r,i=null===(e=location.href.match(/\/explore\/([\da-f]+)/i))||void 0===e?void 0:e[1];
-  if(i&&(null===(r=n[i])||void 0===r?void 0:r.url)!=t.url)return n[i]=t,!0}
-  ,default:{
-  getUrl:t=>{
-  var e,r,i,o=t.node,a=null===(e=location.href.match(/\/explore\/([\da-f]+)/i))||void 0===e?void 0:e[1],
-  s=null===(r=o.closest('.xgplayer, [id^="videoPlayer"]'))||void 0===r?void 0:r.id;
-  if(s){
-  var u=null===(i=s.match(/videoPlayer([\da-f]+)/i))||void 0===i?void 0:i[1];
-  u&&(a=u)}
-  if(a&&n[a])return[n[a]]}
+  ,
+  obj_i = {
+  getDomains: () => ["xiaohongshu.com"],
+  processRequestIds(param_t) {
+  var var_e,
+  var_r,
+  var_i = null === (var_e = location.href.match(/\/explore\/([\da-f]+)/i)) ||
+  void 0 === var_e ? void 0 : var_e[1];
+  if (var_i && (null === (var_r = obj_n[var_i]) || void 0 === var_r ?
+  void 0 : var_r.url) != param_t.url) return obj_n[var_i] = param_t, !0;
+  }
+  ,
+  default: {
+  getUrl: param_t => {
+  var var_e,
+  var_r,
+  var_i,
+  var_o = param_t.node,
+  var_a = null === (var_e = location.href.match(/\/explore\/([\da-f]+)/i)) ||
+  void 0 === var_e ? void 0 : var_e[1],
+  var_s = null === (var_r = var_o.closest('.xgplayer, [id^="videoPlayer"]')) ||
+  void 0 === var_r ? void 0 : var_r.id;
+  if (var_s) {
+  var var_u = null === (var_i = var_s.match(/videoPlayer([\da-f]+)/i)) ||
+  void 0 === var_i ? void 0 : var_i[1];
+  var_u && (var_a = var_u);
+  }
+  if (var_a && obj_n[var_a]) return [obj_n[var_a]];
+  }
   }
   };
-  e.default=i};
+  exportsObj.default = obj_i;
+  };

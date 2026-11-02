@@ -1,73 +1,111 @@
 // Module 170 - Savior Signature Verifier
-export default function(t,e,r){
-  var n=r(25).Buffer;
-  function i(t){
-  n.isBuffer(t)||(t=n.from(t));
-  for(var e=t.length/4|0,r=new Array(e),i=0;
-  i<e;
-  i++)r[i]=t.readUInt32BE(4*i);
-  return r}
-  function o(t){
-  for(;
-  0<t.length;
-  t++)t[0]=0}
-  function a(t,e,r,n,i){
-  for(var o,a,s,u,c=r[0],l=r[1],f=r[2],d=r[3],h=t[0]^e[0],p=t[1]^e[1],v=t[2]^e[2],m=t[3]^e[3],y=4,g=1;
-  g<i;
-  g++)o=c[h>>>24]^l[p>>>16&255]^f[v>>>8&255]^d[255&m]^e[y++],a=c[p>>>24]^l[v>>>16&255]^f[m>>>8&255]^d[255&h]^e[y++],
-  s=c[v>>>24]^l[m>>>16&255]^f[h>>>8&255]^d[255&p]^e[y++],u=c[m>>>24]^l[h>>>16&255]^f[p>>>8&255]^d[255&v]^e[y++],
-  h=o,p=a,v=s,m=u;
-  return o=(n[h>>>24]<<24|n[p>>>16&255]<<16|n[v>>>8&255]<<8|n[255&m])^e[y++],a=(n[p>>>24]<<24|n[v>>>16&255]<<16|n[m>>>8&255]<<8|n[255&h])^e[y++],
-  s=(n[v>>>24]<<24|n[m>>>16&255]<<16|n[h>>>8&255]<<8|n[255&p])^e[y++],u=(n[m>>>24]<<24|n[h>>>16&255]<<16|n[p>>>8&255]<<8|n[255&v])^e[y++],
-  [o>>>=0,a>>>=0,s>>>=0,u>>>=0]}
-  var s=[0,1,2,4,8,16,32,64,128,27,54],u=function(){
-  for(var t=new Array(256),e=0;
-  e<256;
-  e++)t[e]=e<128?e<<1:e<<1^283;
-  for(var r=[],n=[],i=[[],[],[],[]],o=[[],[],[],[]],a=0,s=0,u=0;
-  u<256;
-  ++u){
-  var c=s^s<<1^s<<2^s<<3^s<<4;
-  c=c>>>8^255&c^99,r[a]=c,n[c]=a;
-  var l=t[a],f=t[l],d=t[f],h=257*t[c]^16843008*c;
-  i[0][a]=h<<24|h>>>8,i[1][a]=h<<16|h>>>16,i[2][a]=h<<8|h>>>24,i[3][a]=h,h=16843009*d^65537*f^257*l^16843008*a,
-  o[0][c]=h<<24|h>>>8,o[1][c]=h<<16|h>>>16,o[2][c]=h<<8|h>>>24,o[3][c]=h,0===a?a=s=1:(a=l^t[t[t[d^l]]],
-  s^=t[t[s]])}
-  return{
-  SBOX:r,INV_SBOX:n,SUB_MIX:i,INV_SUB_MIX:o}
+export default function (moduleObj, exportsObj, requireFn) {
+  var var_n = requireFn(25).Buffer;
+  function var_i(param_t) {
+  var_n.isBuffer(param_t) || (param_t = var_n.from(param_t));
+  for (var var_e = param_t.length / 4 | 0, var_r = new Array(var_e), num_i = 0;
+  num_i < var_e;
+  num_i++) var_r[num_i] = param_t.readUInt32BE(4 * num_i);
+  return var_r;
+  }
+  function var_o(param_t) {
+  for (;
+  0 < param_t.length;
+  param_t++) param_t[0] = 0;
+  }
+  function var_a(param_t, param_e, param_r, param_n, param_i) {
+  for (var var_o_1, var_a_1, var_s, var_u_1, var_c_1 = param_r[0], var_l = param_r[1],
+  var_f = param_r[2], var_d = param_r[3], var_h = param_t[0] ^ param_e[0], var_p = param_t[1] ^ param_e[1],
+  var_v = param_t[2] ^ param_e[2], var_m = param_t[3] ^ param_e[3], num_y = 4, num_g = 1;
+  num_g < param_i;
+  num_g++) var_o_1 = var_c_1[var_h >>> 24] ^ var_l[var_p >>> 16 & 255] ^ var_f[var_v >>> 8 & 255] ^ var_d[255 & var_m] ^ param_e[num_y++],
+  var_a_1 = var_c_1[var_p >>> 24] ^ var_l[var_v >>> 16 & 255] ^ var_f[var_m >>> 8 & 255] ^ var_d[255 & var_h] ^ param_e[num_y++],
+  var_s = var_c_1[var_v >>> 24] ^ var_l[var_m >>> 16 & 255] ^ var_f[var_h >>> 8 & 255] ^ var_d[255 & var_p] ^ param_e[num_y++],
+  var_u_1 = var_c_1[var_m >>> 24] ^ var_l[var_h >>> 16 & 255] ^ var_f[var_p >>> 8 & 255] ^ var_d[255 & var_v] ^ param_e[num_y++],
+  var_h = var_o_1, var_p = var_a_1, var_v = var_s, var_m = var_u_1;
+  return var_o_1 = (param_n[var_h >>> 24] << 24 | param_n[var_p >>> 16 & 255] << 16 | param_n[var_v >>> 8 & 255] << 8 | param_n[255 & var_m]) ^ param_e[num_y++],
+  var_a_1 = (param_n[var_p >>> 24] << 24 | param_n[var_v >>> 16 & 255] << 16 | param_n[var_m >>> 8 & 255] << 8 | param_n[255 & var_h]) ^ param_e[num_y++],
+  var_s = (param_n[var_v >>> 24] << 24 | param_n[var_m >>> 16 & 255] << 16 | param_n[var_h >>> 8 & 255] << 8 | param_n[255 & var_p]) ^ param_e[num_y++],
+  var_u_1 = (param_n[var_m >>> 24] << 24 | param_n[var_h >>> 16 & 255] << 16 | param_n[var_p >>> 8 & 255] << 8 | param_n[255 & var_v]) ^ param_e[num_y++],
+  [var_o_1 >>>= 0, var_a_1 >>>= 0, var_s >>>= 0, var_u_1 >>>= 0];
+  }
+  var list_s = [0, 1, 2, 4, 8, 16, 32, 64, 128, 27, 54],
+  var_u = function () {
+  for (var var_t = new Array(256), num_e = 0;
+  num_e < 256;
+  num_e++) var_t[num_e] = num_e < 128 ? num_e << 1 : num_e << 1 ^ 283;
+  for (var list_r = [], list_n = [], list_i = [[], [], [], []], list_o = [[], [],
+  [], []], num_a = 0, num_s = 0, num_u = 0;
+  num_u < 256;
+  ++num_u) {
+  var var_c_1 = num_s ^ num_s << 1 ^ num_s << 2 ^ num_s << 3 ^ num_s << 4;
+  var_c_1 = var_c_1 >>> 8 ^ 255 & var_c_1 ^ 99, list_r[num_a] = var_c_1, list_n[var_c_1] = num_a;
+  var var_l = var_t[num_a],
+  var_f = var_t[var_l],
+  var_d = var_t[var_f],
+  var_h = 257 * var_t[var_c_1] ^ 16843008 * var_c_1;
+  list_i[0][num_a] = var_h << 24 | var_h >>> 8, list_i[1][num_a] = var_h << 16 | var_h >>> 16,
+  list_i[2][num_a] = var_h << 8 | var_h >>> 24, list_i[3][num_a] = var_h, var_h = 16843009 * var_d ^ 65537 * var_f ^ 257 * var_l ^ 16843008 * num_a,
+  list_o[0][var_c_1] = var_h << 24 | var_h >>> 8, list_o[1][var_c_1] = var_h << 16 | var_h >>> 16,
+  list_o[2][var_c_1] = var_h << 8 | var_h >>> 24, list_o[3][var_c_1] = var_h, 0 === num_a ?
+  num_a = num_s = 1 : (num_a = var_l ^ var_t[var_t[var_t[var_d ^ var_l]]], num_s ^= var_t[var_t[num_s]]);
+  }
+  return {
+  SBOX: list_r,
+  INV_SBOX: list_n,
+  SUB_MIX: list_i,
+  INV_SUB_MIX: list_o
+  };
   }
   ();
-  function c(t){
-  this._key=i(t),this._reset()}
-  c.blockSize=16,c.keySize=32,c.prototype.blockSize=c.blockSize,c.prototype.keySize=c.keySize,c.prototype._reset=function(){
-  for(var t=this._key,e=t.length,r=e+6,n=4*(r+1),i=[],o=0;
-  o<e;
-  o++)i[o]=t[o];
-  for(o=e;
-  o<n;
-  o++){
-  var a=i[o-1];
-  o%e==0?(a=a<<8|a>>>24,a=u.SBOX[a>>>24]<<24|u.SBOX[a>>>16&255]<<16|u.SBOX[a>>>8&255]<<8|u.SBOX[255&a],
-  a^=s[o/e|0]<<24):e>6&&o%e==4&&(a=u.SBOX[a>>>24]<<24|u.SBOX[a>>>16&255]<<16|u.SBOX[a>>>8&255]<<8|u.SBOX[255&a]),
-  i[o]=i[o-e]^a}
-  for(var c=[],l=0;
-  l<n;
-  l++){
-  var f=n-l,d=i[f-(l%4?0:4)];
-  c[l]=l<4||f<=4?d:u.INV_SUB_MIX[0][u.SBOX[d>>>24]]^u.INV_SUB_MIX[1][u.SBOX[d>>>16&255]]^u.INV_SUB_MIX[2][u.SBOX[d>>>8&255]]^u.INV_SUB_MIX[3][u.SBOX[255&d]]}
-  this._nRounds=r,this._keySchedule=i,this._invKeySchedule=c}
-  ,c.prototype.encryptBlockRaw=function(t){
-  return a(t=i(t),this._keySchedule,u.SUB_MIX,u.SBOX,this._nRounds)}
-  ,c.prototype.encryptBlock=function(t){
-  var e=this.encryptBlockRaw(t),r=n.allocUnsafe(16);
-  return r.writeUInt32BE(e[0],0),r.writeUInt32BE(e[1],4),r.writeUInt32BE(e[2],8),r.writeUInt32BE(e[3],
-  12),r}
-  ,c.prototype.decryptBlock=function(t){
-  var e=(t=i(t))[1];
-  t[1]=t[3],t[3]=e;
-  var r=a(t,this._invKeySchedule,u.INV_SUB_MIX,u.INV_SBOX,this._nRounds),o=n.allocUnsafe(16);
-  return o.writeUInt32BE(r[0],0),o.writeUInt32BE(r[3],4),o.writeUInt32BE(r[2],8),o.writeUInt32BE(r[1],
-  12),o}
-  ,c.prototype.scrub=function(){
-  o(this._keySchedule),o(this._invKeySchedule),o(this._key)}
-  ,t.exports.AES=c};
+  function var_c(param_t) {
+  this._key = var_i(param_t), this._reset();
+  }
+  var_c.blockSize = 16, var_c.keySize = 32, var_c.prototype.blockSize = var_c.blockSize,
+  var_c.prototype.keySize = var_c.keySize, var_c.prototype._reset = function () {
+  for (var var_t = this._key, var_e = var_t.length, var_r = var_e + 6, var_n_1 = 4 * (
+  var_r + 1), list_i = [], num_o = 0;
+  num_o < var_e;
+  num_o++) list_i[num_o] = var_t[num_o];
+  for (num_o = var_e;
+  num_o < var_n_1;
+  num_o++) {
+  var var_a_1 = list_i[num_o - 1];
+  num_o % var_e == 0 ? (var_a_1 = var_a_1 << 8 | var_a_1 >>> 24, var_a_1 = var_u.SBOX[var_a_1 >>> 24] << 24 | var_u.SBOX[var_a_1 >>> 16 & 255] << 16 | var_u.SBOX[var_a_1 >>> 8 & 255] << 8 | var_u.SBOX[255 & var_a_1],
+  var_a_1 ^= list_s[num_o / var_e | 0] << 24) : var_e > 6 &&
+  num_o % var_e == 4 && (var_a_1 = var_u.SBOX[var_a_1 >>> 24] << 24 | var_u.SBOX[var_a_1 >>> 16 & 255] << 16 | var_u.SBOX[var_a_1 >>> 8 & 255] << 8 | var_u.SBOX[255 & var_a_1]),
+  list_i[num_o] = list_i[num_o - var_e] ^ var_a_1;
+  }
+  for (var list_c = [], num_l = 0;
+  num_l < var_n_1;
+  num_l++) {
+  var var_f = var_n_1 - num_l,
+  var_d = list_i[var_f - (num_l % 4 ? 0 : 4)];
+  list_c[num_l] = num_l < 4 || var_f <= 4 ? var_d : var_u.INV_SUB_MIX[0][var_u.SBOX[var_d >>> 24]] ^ var_u.INV_SUB_MIX[1][var_u.SBOX[var_d >>> 16 & 255]] ^ var_u.INV_SUB_MIX[2][var_u.SBOX[var_d >>> 8 & 255]] ^ var_u.INV_SUB_MIX[3][var_u.SBOX[255 & var_d]];
+  }
+  this._nRounds = var_r, this._keySchedule = list_i, this._invKeySchedule = list_c;
+  }
+  , var_c.prototype.encryptBlockRaw = function (param_t) {
+  return var_a(param_t = var_i(param_t), this._keySchedule, var_u.SUB_MIX, var_u.SBOX,
+  this._nRounds);
+  }
+  , var_c.prototype.encryptBlock = function (param_t) {
+  var var_e = this.encryptBlockRaw(param_t),
+  var_r = var_n.allocUnsafe(16);
+  return var_r.writeUInt32BE(var_e[0], 0), var_r.writeUInt32BE(var_e[1], 4), var_r.writeUInt32BE(
+  var_e[2], 8), var_r.writeUInt32BE(var_e[3], 12), var_r;
+  }
+  , var_c.prototype.decryptBlock = function (param_t) {
+  var var_e = (param_t = var_i(param_t))[1];
+  param_t[1] = param_t[3], param_t[3] = var_e;
+  var var_r = var_a(param_t, this._invKeySchedule, var_u.INV_SUB_MIX, var_u.INV_SBOX,
+  this._nRounds),
+  var_o_1 = var_n.allocUnsafe(16);
+  return var_o_1.writeUInt32BE(var_r[0], 0), var_o_1.writeUInt32BE(var_r[3], 4),
+  var_o_1.writeUInt32BE(var_r[2], 8), var_o_1.writeUInt32BE(var_r[1], 12), var_o_1;
+  }
+  , var_c.prototype.scrub = function () {
+  var_o(this._keySchedule), var_o(this._invKeySchedule), var_o(this._key);
+  }
+  , moduleObj.exports.AES = var_c;
+  };

@@ -1,12 +1,14 @@
 // Module 608 - Savior Helper 608
-export default function(t,e,r){
-  var n=r(155);
-  e.encrypt=function(t,e){
-  var r=n(e,t._prev);
-  return t._prev=t._cipher.encryptBlock(r),t._prev}
-  ,e.decrypt=function(t,e){
-  var r=t._prev;
-  t._prev=e;
-  var i=t._cipher.decryptBlock(e);
-  return n(i,r)}
+export default function (moduleObj, exportsObj, requireFn) {
+  var dep_helper_155 = requireFn(155);
+  exportsObj.encrypt = function (param_t, param_e) {
+  var var_r = dep_helper_155(param_e, param_t._prev);
+  return param_t._prev = param_t._cipher.encryptBlock(var_r), param_t._prev;
+  }
+  , exportsObj.decrypt = function (param_t, param_e) {
+  var var_r = param_t._prev;
+  param_t._prev = param_e;
+  var var_i = param_t._cipher.decryptBlock(param_e);
+  return dep_helper_155(var_i, var_r);
+  };
   };

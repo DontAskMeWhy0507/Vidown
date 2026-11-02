@@ -1,193 +1,311 @@
 // Module 319 - Savior Pinterest_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  function n(){
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
-  e,r="function"==typeof Symbol?Symbol:{
+  function var_n() {
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var var_t,
+  var_e,
+  var_r = "function" == typeof Symbol ? Symbol : {
   }
-  ,o=r.iterator||"@@iterator",a=r.toStringTag||"@@toStringTag";
-  function s(r,n,o,a){
-  var s=n&&n.prototype instanceof c?n:c,l=Object.create(s.prototype);
-  return i(l,"_invoke",function(r,n,i){
-  var o,a,s,c=0,l=i||[],f=!1,d={
-  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
-  return o=e,a=0,s=t,d.n=r,u}
+  ,
+  var_o = var_r.iterator || "@@iterator",
+  var_a = var_r.toStringTag || "@@toStringTag";
+  function var_s(param_r, param_n, param_o, param_a) {
+  var var_s_1 = param_n && param_n.prototype instanceof var_c ?
+  param_n : var_c,
+  var_l_1 = Object.create(var_s_1.prototype);
+  return var_i(var_l_1, "_invoke", function (param_r_1, param_n_1, param_i) {
+  var var_o_1,
+  var_a_1,
+  var_s_2,
+  num_c = 0,
+  var_l_2 = param_i || [],
+  flag_f = !1,
+  obj_d = {
+  p: 0,
+  n: 0,
+  v: var_t,
+  a: var_h_1,
+  f: var_h_1.bind(var_t, 4),
+  d: function (param_e, param_r_2) {
+  return var_o_1 = param_e, var_a_1 = 0, var_s_2 = var_t, obj_d.n = param_r_2, obj_u;
+  }
   };
-  function h(r,n){
-  for(a=r,s=n,e=0;
-  !f&&c&&!i&&e<l.length;
-  e++){
-  var i,o=l[e],h=d.p,p=o[2];
-  r>3?(i=p===n)&&(s=o[(a=o[4])?5:(a=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(a=0,d.v=n,d.n=o[1]):
-  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,a=0))}
-  if(i||r>1)return u;
-  throw f=!0,n}
-  return function(i,l,p){
-  if(c>1)throw TypeError("Generator is already running");
-  for(f&&1===l&&h(l,p),a=l,s=p;
-  (e=a<2?t:s)||!f;
-  ){
-  o||(a?a<3?(a>1&&(d.n=-1),h(a,s)):d.n=s:d.v=s);
-  try{
-  if(c=2,o){
-  if(a||(i="next"),e=o[i]){
-  if(!(e=e.call(o,s)))throw TypeError("iterator result is not an object");
-  if(!e.done)return e;
-  s=e.value,a<2&&(a=0)}
-  else 1===a&&(e=o.return)&&e.call(o),a<2&&(s=TypeError("The iterator does not provide a '"+i+"' method"),
-  a=1);
-  o=t}
-  else if((e=(f=d.n<0)?s:r.call(n,d))!==u)break}
-  catch(e){
-  o=t,a=1,s=e}
-  finally{
-  c=1}
+  function var_h_1(param_r_2, param_n_2) {
+  for (var_a_1 = param_r_2, var_s_2 = param_n_2, var_e = 0;
+  !flag_f && num_c && !var_i_1 && var_e < var_l_2.length;
+  var_e++) {
+  var var_i_1,
+  var_o_2 = var_l_2[var_e],
+  var_h_2 = obj_d.p,
+  var_p_1 = var_o_2[2];
+  param_r_2 > 3 ? (var_i_1 = var_p_1 === param_n_2) && (var_s_2 = var_o_2[(var_a_1 = var_o_2[4]) ?
+  5 : (var_a_1 = 3, 3)], var_o_2[4] = var_o_2[5] = var_t) : var_o_2[0] <= var_h_2 &&
+  ((var_i_1 = param_r_2 < 2 && var_h_2 < var_o_2[1]) ? (var_a_1 = 0, obj_d.v = param_n_2,
+  obj_d.n = var_o_2[1]) : var_h_2 < var_p_1 && (var_i_1 = param_r_2 < 3 ||
+  var_o_2[0] > param_n_2 || param_n_2 > var_p_1) && (var_o_2[4] = param_r_2, var_o_2[5] = param_n_2,
+  obj_d.n = var_p_1, var_a_1 = 0));
   }
-  return{
-  value:e,done:f}
+  if (var_i_1 || param_r_2 > 1) return obj_u;
+  throw flag_f = !0, param_n_2;
+  }
+  return function (param_i_1, param_l, param_p) {
+  if (num_c > 1) throw TypeError("Generator is already running");
+  for (flag_f && 1 === param_l && var_h_1(param_l, param_p), var_a_1 = param_l, var_s_2 = param_p;
+  (var_e = var_a_1 < 2 ? var_t : var_s_2) || !flag_f;
+  ) {
+  var_o_1 || (var_a_1 ? var_a_1 < 3 ? (var_a_1 > 1 && (obj_d.n = -1), var_h_1(var_a_1,
+  var_s_2)) : obj_d.n = var_s_2 : obj_d.v = var_s_2);
+  try {
+  if (num_c = 2, var_o_1) {
+  if (var_a_1 || (param_i_1 = "next"), var_e = var_o_1[param_i_1]) {
+  if (!(var_e = var_e.call(var_o_1, var_s_2))) throw TypeError("iterator result is not an object");
+  if (!var_e.done) return var_e;
+  var_s_2 = var_e.value, var_a_1 < 2 && (var_a_1 = 0);
+  }
+  else 1 === var_a_1 && (var_e = var_o_1.return) && var_e.call(var_o_1), var_a_1 < 2 &&
+  (var_s_2 = TypeError("The iterator does not provide a '" + param_i_1 + "' method"),
+  var_a_1 = 1);
+  var_o_1 = var_t;
+  }
+  else if ((var_e = (flag_f = obj_d.n < 0) ? var_s_2 : param_r_1.call(param_n_1,
+  obj_d)) !== obj_u) break;
+  }
+  catch (var_e_1) {
+  var_o_1 = var_t, var_a_1 = 1, var_s_2 = var_e_1;
+  }
+  finally {
+  num_c = 1;
   }
   }
-  (r,o,a),!0),l}
-  var u={
+  return {
+  value: var_e,
+  done: flag_f
   };
-  function c(){
+  };
   }
-  function l(){
+  (param_r, param_o, param_a), !0), var_l_1;
   }
-  function f(){
+  var obj_u = {
+  };
+  function var_c() {
   }
-  e=Object.getPrototypeOf;
-  var d=[][o]?e(e([][o]())):(i(e={
+  function var_l() {
   }
-  ,o,(function(){
-  return this}
-  )),e),h=f.prototype=c.prototype=Object.create(d);
-  function p(t){
-  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,i(t,a,"GeneratorFunction")),
-  t.prototype=Object.create(h),t}
-  return l.prototype=f,i(h,"constructor",f),i(f,"constructor",l),l.displayName="GeneratorFunction",i(f,
-  a,"GeneratorFunction"),i(h),i(h,a,"Generator"),i(h,o,(function(){
-  return this}
-  )),i(h,"toString",(function(){
-  return"[object Generator]"}
-  )),(n=function(){
-  return{
-  w:s,m:p}
+  function var_f() {
   }
-  )()}
-  function i(t,e,r,n){
-  var o=Object.defineProperty;
-  try{
-  o({
+  var_e = Object.getPrototypeOf;
+  var var_d = [][var_o] ? var_e(var_e([][var_o]())) : (var_i(var_e = {
   }
-  ,"",{
+  , var_o, function () {
+  return this;
   }
-  )}
-  catch(t){
-  o=0}
-  (i=function(t,e,r,n){
-  function a(e,r){
-  i(t,e,(function(t){
-  return this._invoke(e,r,t)}
-  ))}
-  e?o?o(t,e,{
-  value:r,enumerable:!n,configurable:!n,writable:!n}
-  ):t[e]=r:(a("next",0),a("throw",1),a("return",2))}
-  )(t,e,r,n)}
-  r.r(e);
-  var o=function(t,e,r,n){
-  return new(r||(r=Promise))((function(i,o){
-  function a(t){
-  try{
-  u(n.next(t))}
-  catch(t){
-  o(t)}
+  ), var_e),
+  var_h = var_f.prototype = var_c.prototype = Object.create(var_d);
+  function var_p(param_t) {
+  return Object.setPrototypeOf ? Object.setPrototypeOf(param_t, var_f) :
+  (param_t.__proto__ = var_f, var_i(param_t, var_a, "GeneratorFunction")), param_t.prototype = Object.create(
+  var_h), param_t;
   }
-  function s(t){
-  try{
-  u(n.throw(t))}
-  catch(t){
-  o(t)}
+  return var_l.prototype = var_f, var_i(var_h, "constructor", var_f), var_i(var_f,
+  "constructor", var_l), var_l.displayName = "GeneratorFunction", var_i(var_f, var_a,
+  "GeneratorFunction"), var_i(var_h), var_i(var_h, var_a, "Generator"), var_i(var_h,
+  var_o, function () {
+  return this;
   }
-  function u(t){
-  var e;
-  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
-  t(e)}
-  ))).then(a,s)}
-  u((n=n.apply(t,e||[])).next())}
-  ))}
-  ,a=[],s={
+  ), var_i(var_h, "toString", function () {
+  return "[object Generator]";
   }
-  ,u=function(t){
-  var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:location.href;
-  s[e]=t};
-  e.default={
-  getDomains:()=>["pinterest.com"],isValidVideoNode:t=>"VIDEO"===t.nodeName&&!!t.closest('div[data-layout-shift-boundary-id=CloseupPageBody], div[data-test-id=closeup-data-loaded], div[data-test-id="closeup-visual-container"]'),
-  urls:[{
-  checkUrl:t=>"VIDEO"===t.node.tagName,getUrl:t=>{
-  var e=t.node;
-  return o(void 0,void 0,void 0,n().m((function t(){
-  var r,i,o,c,l,f,d,h,p,v,m,y,g,b,w,A,_,E;
-  return n().w((function(t){
-  for(;;
-  )switch(t.n){
-  case 0:if(p=/<video[^>]*src="([^"]*)"/,v=location.href,e.closest("a")&&(v=(null===(r=e.closest("a"))||
-  void 0===r?void 0:r.href)||""),-1!==a.indexOf(v)){
-  t.n=4;
-  break}
-  return t.n=1,fetch(v).then(t=>t.text());
-  case 1:if(m=t.v,a.push(v),!p.test(m)){
-  t.n=2;
-  break}
-  return g=/<div class="richPinInformation">.*<span[^>]*>([^<]*)<\/span>\s*(<span|<div)/,b=/<div class="richPinInformation">.*<span[^>]*>([^<]*)<\/span>\s*(<span|<div|<\/div)/,
-  (h=(y=/<h1[^>]*>([^<]*)<\/h1>/).exec(m)?null===(i=y.exec(m))||void 0===i?void 0:i[1]:y.exec(m))||(h=g.exec(m)?
-  null===(o=g.exec(m))||void 0===o?void 0:o[1]:b.exec(m)?null===(c=b.exec(m))||void 0===c?void 0:c[1]:
-  b.exec(m)),h||(w=/["']closeup_unified_title["']:\s*["'](.*)["'],?/i,(A=m.match(w))&&A.length>1&&A[1].length<1e3&&
-  (h=A[1])),u({
-  url:(null===(l=p.exec(m))||void 0===l?void 0:l[1])||"",fileName:h}
-  ,v),t.a(2,null===(f=p.exec(m))||void 0===f?void 0:f[1]);
-  case 2:if(_=/is_promotable.*?("|')*closeup_user_note("|')*:("|')*((.+?)("|'|,))/,!(E=/V_HLSV4.*?("|')*url("|')*:("|')*(.*?\.m3u8)("|')*/.exec(m))){
-  t.n=3;
-  break}
-  return h=null===(d=_.exec(m))||void 0===d?void 0:d[4],u({
-  url:E[4],fileName:h}
-  ,v),t.a(2,E[4]);
-  case 3:t.n=6;
+  ), (var_n = function () {
+  return {
+  w: var_s,
+  m: var_p
+  };
+  }
+  )();
+  }
+  function var_i(param_t, param_e, param_r, param_n) {
+  var var_o = Object.defineProperty;
+  try {
+  var_o({
+  }
+  , "", {
+  }
+  );
+  }
+  catch (var_t) {
+  var_o = 0;
+  }
+  (var_i = function (param_t_1, param_e_1, param_r_1, param_n_1) {
+  function var_a(param_e_2, param_r_2) {
+  var_i(param_t_1, param_e_2, function (param_t_2) {
+  return this._invoke(param_e_2, param_r_2, param_t_2);
+  }
+  );
+  }
+  param_e_1 ? var_o ? var_o(param_t_1, param_e_1, {
+  value: param_r_1,
+  enumerable: !param_n_1,
+  configurable: !param_n_1,
+  writable: !param_n_1
+  }
+  ) : param_t_1[param_e_1] = param_r_1 : (var_a("next", 0), var_a("throw", 1), var_a(
+  "return", 2));
+  }
+  )(param_t, param_e, param_r, param_n);
+  }
+  requireFn.r(exportsObj);
+  var fn_o = function (param_t, param_e, param_r, param_n) {
+  return new (param_r || (param_r = Promise))(function (param_i, param_o) {
+  function var_a(param_t_1) {
+  try {
+  var_u(param_n.next(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_s(param_t_1) {
+  try {
+  var_u(param_n.throw(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_u(param_t_1) {
+  var var_e;
+  param_t_1.done ? param_i(param_t_1.value) : (var_e = param_t_1.value, var_e instanceof param_r ?
+  var_e : new param_r(function (param_t_2) {
+  param_t_2(var_e);
+  }
+  )).then(var_a, var_s);
+  }
+  var_u((param_n = param_n.apply(param_t, param_e || [])).next());
+  }
+  );
+  }
+  ,
+  list_a = [],
+  obj_s = {
+  }
+  ,
+  fn_u = function (param_t) {
+  var var_e = arguments.length > 1 && void 0 !== arguments[1] ?
+  arguments[1] : location.href;
+  obj_s[var_e] = param_t;
+  };
+  exportsObj.default = {
+  getDomains: () => ["pinterest.com"],
+  isValidVideoNode: param_t => "VIDEO" === param_t.nodeName &&
+  !!param_t.closest('div[data-layout-shift-boundary-id=CloseupPageBody], div[data-test-id=closeup-data-loaded], div[data-test-id="closeup-visual-container"]'),
+  urls: [{
+  checkUrl: param_t => "VIDEO" === param_t.node.tagName,
+  getUrl: param_t => {
+  var var_e = param_t.node;
+  return fn_o(void 0, void 0, void 0, var_n().m(function var_t() {
+  var var_r, var_i_1, var_o, var_c, var_l, var_f, var_d, var_h, var_p, var_v, var_m,
+  var_y, var_g, var_b, var_w, var_A, var__, var_E;
+  return var_n().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.n) {
+  case 0:
+  if (var_p = /<video[^>]*src="([^"]*)"/, var_v = location.href, var_e.closest("a") &&
+  (var_v = (null === (var_r = var_e.closest("a")) || void 0 === var_r ?
+  void 0 : var_r.href) || ""), -1 !== list_a.indexOf(var_v)) {
+  param_t_1.n = 4;
   break;
-  case 4:if(!s[v]){
-  t.n=5;
-  break}
-  return t.a(2,s[v].url);
-  case 5:if(!s[location.href]){
-  t.n=6;
-  break}
-  return h=s[location.href].fileName,t.a(2,s[location.href].url);
-  case 6:return t.a(2)}
   }
-  ),t)}
-  )))}
-  ,mediaObjectChange:t=>{
-  var e,r,n,i=t.mediaObject,o=Object.keys(s).find(t=>s[t].url===i.url),a=(null===(e=s[o])||void 0===e?
-  void 0:e.fileName)||(null===(r=document.querySelector('[data-test-id="pinTitle"]'))||void 0===r?void 0:
-  r.textContent)||(null===(n=s[location.href])||void 0===n?void 0:n.fileName)||document.title;
-  i.fixName=a.replace(/&quot;|&apos;|&lt;|&gt;/g,""),i.noAudio=!0}
+  return param_t_1.n = 1, fetch(var_v).then(param_t_2 => param_t_2.text());
+  case 1:
+  if (var_m = param_t_1.v, list_a.push(var_v), !var_p.test(var_m)) {
+  param_t_1.n = 2;
+  break;
   }
-  ],getCustomParent:t=>location.href.match(/pinterest.com(\.[a-z]+)?\/?$/i)||t.closest('[data-test-id="relatedPins"]')?
-  t.closest('[role="listitem"]'):t.closest('[data-test-id="visual-content-container"]'),toggleLight:
-  {
-  turnOff:{
-  updated(t,e){
-  var r,n;
-  null===(n=null===(r=e.parent.$parent)||void 0===r?void 0:r.closest("#gradient>div>div"))||void 0===n||
-  n.classList.add("--savior-overlay-position-static");
-  var i=document.querySelector("div[data-layout-shift-boundary-id=CloseupPageContainerInner]");
-  if(i){
-  i.classList.add("--savior-overlay-z-index-top","--savior-overlay-position-relative");
-  var o=i.querySelector("div[data-layout-shift-boundary-id=CloseupPageBody]");
-  o&&(o.classList.remove("--savior-overlay-z-index-reset"),o.classList.add("--savior-overlay-z-index-top",
-  "--savior-overlay-position-relative"))}
+  return var_g = /<div class="richPinInformation">.*<span[^>]*>([^<]*)<\/span>\s*(<span|<div)/,
+  var_b = /<div class="richPinInformation">.*<span[^>]*>([^<]*)<\/span>\s*(<span|<div|<\/div)/,
+  (var_h = (var_y = /<h1[^>]*>([^<]*)<\/h1>/).exec(var_m) ? null === (var_i_1 = var_y.exec(
+  var_m)) || void 0 === var_i_1 ? void 0 : var_i_1[1] : var_y.exec(var_m)) ||
+  (var_h = var_g.exec(var_m) ? null === (var_o = var_g.exec(var_m)) ||
+  void 0 === var_o ? void 0 : var_o[1] : var_b.exec(var_m) ?
+  null === (var_c = var_b.exec(var_m)) || void 0 === var_c ?
+  void 0 : var_c[1] : var_b.exec(var_m)), var_h || (var_w = /["']closeup_unified_title["']:\s*["'](.*)["'],?/i,
+  (var_A = var_m.match(var_w)) && var_A.length > 1 && var_A[1].length < 1e3 &&
+  (var_h = var_A[1])), fn_u({
+  url: (null === (var_l = var_p.exec(var_m)) || void 0 === var_l ?
+  void 0 : var_l[1]) || "",
+  fileName: var_h
+  }
+  , var_v), param_t_1.a(2, null === (var_f = var_p.exec(var_m)) ||
+  void 0 === var_f ? void 0 : var_f[1]);
+  case 2:
+  if (var__ = /is_promotable.*?("|')*closeup_user_note("|')*:("|')*((.+?)("|'|,))/,
+  !(var_E = /V_HLSV4.*?("|')*url("|')*:("|')*(.*?\.m3u8)("|')*/.exec(var_m))) {
+  param_t_1.n = 3;
+  break;
+  }
+  return var_h = null === (var_d = var__.exec(var_m)) || void 0 === var_d ?
+  void 0 : var_d[4], fn_u({
+  url: var_E[4],
+  fileName: var_h
+  }
+  , var_v), param_t_1.a(2, var_E[4]);
+  case 3:
+  param_t_1.n = 6;
+  break;
+  case 4:
+  if (!obj_s[var_v]) {
+  param_t_1.n = 5;
+  break;
+  }
+  return param_t_1.a(2, obj_s[var_v].url);
+  case 5:
+  if (!obj_s[location.href]) {
+  param_t_1.n = 6;
+  break;
+  }
+  return var_h = obj_s[location.href].fileName, param_t_1.a(2, obj_s[location.href].url);
+  case 6:
+  return param_t_1.a(2);
+  }
+  }
+  , var_t);
+  }
+  ));
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e,
+  var_r,
+  var_n_1,
+  var_i_1 = param_t.mediaObject,
+  var_o = Object.keys(obj_s).find(param_t_1 => obj_s[param_t_1].url === var_i_1.url),
+  var_a = (null === (var_e = obj_s[var_o]) || void 0 === var_e ?
+  void 0 : var_e.fileName) || (null === (var_r = document.querySelector('[data-test-id="pinTitle"]')) ||
+  void 0 === var_r ? void 0 : var_r.textContent) || (null === (var_n_1 = obj_s[location.href]) ||
+  void 0 === var_n_1 ? void 0 : var_n_1.fileName) || document.title;
+  var_i_1.fixName = var_a.replace(/&quot;|&apos;|&lt;|&gt;/g, ""), var_i_1.noAudio = !0;
+  }
+  }
+  ],
+  getCustomParent: param_t => location.href.match(/pinterest.com(\.[a-z]+)?\/?$/i) ||
+  param_t.closest('[data-test-id="relatedPins"]') ? param_t.closest('[role="listitem"]') :
+  param_t.closest('[data-test-id="visual-content-container"]'),
+  toggleLight: {
+  turnOff: {
+  updated(param_t, param_e) {
+  var var_r, var_n_1;
+  null === (var_n_1 = null === (var_r = param_e.parent.$parent) ||
+  void 0 === var_r ? void 0 : var_r.closest("#gradient>div>div")) ||
+  void 0 === var_n_1 || var_n_1.classList.add("--savior-overlay-position-static");
+  var var_i_1 = document.querySelector("div[data-layout-shift-boundary-id=CloseupPageContainerInner]");
+  if (var_i_1) {
+  var_i_1.classList.add("--savior-overlay-z-index-top", "--savior-overlay-position-relative");
+  var var_o = var_i_1.querySelector("div[data-layout-shift-boundary-id=CloseupPageBody]");
+  var_o && (var_o.classList.remove("--savior-overlay-z-index-reset"), var_o.classList.add(
+  "--savior-overlay-z-index-top", "--savior-overlay-position-relative"));
   }
   }
   }
   }
+  };
   };

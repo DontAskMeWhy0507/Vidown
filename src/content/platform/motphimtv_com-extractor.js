@@ -1,324 +1,517 @@
 // Module 281 - Savior Motphimtv_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(0),i=r(14),o=r(20),a=r(1),s=r(6),u=r(31),c=r(23);
-  function l(){
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
-  e,r="function"==typeof Symbol?Symbol:{
+  requireFn.r(exportsObj);
+  var dep_dom_utils = requireFn(0),
+  dep_format_resolver = requireFn(14),
+  dep_network_monitor = requireFn(20),
+  dep_media_constants = requireFn(1),
+  dep_media_sniffer = requireFn(6),
+  dep_stream_cipher_helper = requireFn(31),
+  dep_extractor_url_merger = requireFn(23);
+  function var_l() {
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var var_t,
+  var_e,
+  var_r = "function" == typeof Symbol ? Symbol : {
   }
-  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
-  function o(r,n,i,o){
-  var u=n&&n.prototype instanceof s?n:s,c=Object.create(u.prototype);
-  return f(c,"_invoke",function(r,n,i){
-  var o,s,u,c=0,l=i||[],f=!1,d={
-  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
-  return o=e,s=0,u=t,d.n=r,a}
+  ,
+  var_n = var_r.iterator || "@@iterator",
+  var_i = var_r.toStringTag || "@@toStringTag";
+  function var_o(param_r, param_n, param_i, param_o) {
+  var var_u_1 = param_n && param_n.prototype instanceof var_s ?
+  param_n : var_s,
+  var_c_1 = Object.create(var_u_1.prototype);
+  return var_f(var_c_1, "_invoke", function (param_r_1, param_n_1, param_i_1) {
+  var var_o_1,
+  var_s_1,
+  var_u_2,
+  num_c = 0,
+  var_l_1 = param_i_1 || [],
+  flag_f = !1,
+  obj_d = {
+  p: 0,
+  n: 0,
+  v: var_t,
+  a: var_h_1,
+  f: var_h_1.bind(var_t, 4),
+  d: function (param_e, param_r_2) {
+  return var_o_1 = param_e, var_s_1 = 0, var_u_2 = var_t, obj_d.n = param_r_2, obj_a;
+  }
   };
-  function h(r,n){
-  for(s=r,u=n,e=0;
-  !f&&c&&!i&&e<l.length;
-  e++){
-  var i,o=l[e],h=d.p,p=o[2];
-  r>3?(i=p===n)&&(u=o[(s=o[4])?5:(s=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(s=0,d.v=n,d.n=o[1]):
-  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,s=0))}
-  if(i||r>1)return a;
-  throw f=!0,n}
-  return function(i,l,p){
-  if(c>1)throw TypeError("Generator is already running");
-  for(f&&1===l&&h(l,p),s=l,u=p;
-  (e=s<2?t:u)||!f;
-  ){
-  o||(s?s<3?(s>1&&(d.n=-1),h(s,u)):d.n=u:d.v=u);
-  try{
-  if(c=2,o){
-  if(s||(i="next"),e=o[i]){
-  if(!(e=e.call(o,u)))throw TypeError("iterator result is not an object");
-  if(!e.done)return e;
-  u=e.value,s<2&&(s=0)}
-  else 1===s&&(e=o.return)&&e.call(o),s<2&&(u=TypeError("The iterator does not provide a '"+i+"' method"),
-  s=1);
-  o=t}
-  else if((e=(f=d.n<0)?u:r.call(n,d))!==a)break}
-  catch(e){
-  o=t,s=1,u=e}
-  finally{
-  c=1}
+  function var_h_1(param_r_2, param_n_2) {
+  for (var_s_1 = param_r_2, var_u_2 = param_n_2, var_e = 0;
+  !flag_f && num_c && !var_i_1 && var_e < var_l_1.length;
+  var_e++) {
+  var var_i_1,
+  var_o_2 = var_l_1[var_e],
+  var_h_2 = obj_d.p,
+  var_p_1 = var_o_2[2];
+  param_r_2 > 3 ? (var_i_1 = var_p_1 === param_n_2) && (var_u_2 = var_o_2[(var_s_1 = var_o_2[4]) ?
+  5 : (var_s_1 = 3, 3)], var_o_2[4] = var_o_2[5] = var_t) : var_o_2[0] <= var_h_2 &&
+  ((var_i_1 = param_r_2 < 2 && var_h_2 < var_o_2[1]) ? (var_s_1 = 0, obj_d.v = param_n_2,
+  obj_d.n = var_o_2[1]) : var_h_2 < var_p_1 && (var_i_1 = param_r_2 < 3 ||
+  var_o_2[0] > param_n_2 || param_n_2 > var_p_1) && (var_o_2[4] = param_r_2, var_o_2[5] = param_n_2,
+  obj_d.n = var_p_1, var_s_1 = 0));
   }
-  return{
-  value:e,done:f}
+  if (var_i_1 || param_r_2 > 1) return obj_a;
+  throw flag_f = !0, param_n_2;
+  }
+  return function (param_i_2, param_l, param_p) {
+  if (num_c > 1) throw TypeError("Generator is already running");
+  for (flag_f && 1 === param_l && var_h_1(param_l, param_p), var_s_1 = param_l, var_u_2 = param_p;
+  (var_e = var_s_1 < 2 ? var_t : var_u_2) || !flag_f;
+  ) {
+  var_o_1 || (var_s_1 ? var_s_1 < 3 ? (var_s_1 > 1 && (obj_d.n = -1), var_h_1(var_s_1,
+  var_u_2)) : obj_d.n = var_u_2 : obj_d.v = var_u_2);
+  try {
+  if (num_c = 2, var_o_1) {
+  if (var_s_1 || (param_i_2 = "next"), var_e = var_o_1[param_i_2]) {
+  if (!(var_e = var_e.call(var_o_1, var_u_2))) throw TypeError("iterator result is not an object");
+  if (!var_e.done) return var_e;
+  var_u_2 = var_e.value, var_s_1 < 2 && (var_s_1 = 0);
+  }
+  else 1 === var_s_1 && (var_e = var_o_1.return) && var_e.call(var_o_1), var_s_1 < 2 &&
+  (var_u_2 = TypeError("The iterator does not provide a '" + param_i_2 + "' method"),
+  var_s_1 = 1);
+  var_o_1 = var_t;
+  }
+  else if ((var_e = (flag_f = obj_d.n < 0) ? var_u_2 : param_r_1.call(param_n_1,
+  obj_d)) !== obj_a) break;
+  }
+  catch (var_e_1) {
+  var_o_1 = var_t, var_s_1 = 1, var_u_2 = var_e_1;
+  }
+  finally {
+  num_c = 1;
   }
   }
-  (r,i,o),!0),c}
-  var a={
+  return {
+  value: var_e,
+  done: flag_f
   };
-  function s(){
+  };
   }
-  function u(){
+  (param_r, param_i, param_o), !0), var_c_1;
   }
-  function c(){
+  var obj_a = {
+  };
+  function var_s() {
   }
-  e=Object.getPrototypeOf;
-  var d=[][n]?e(e([][n]())):(f(e={
+  function var_u() {
   }
-  ,n,(function(){
-  return this}
-  )),e),h=c.prototype=s.prototype=Object.create(d);
-  function p(t){
-  return Object.setPrototypeOf?Object.setPrototypeOf(t,c):(t.__proto__=c,f(t,i,"GeneratorFunction")),
-  t.prototype=Object.create(h),t}
-  return u.prototype=c,f(h,"constructor",c),f(c,"constructor",u),u.displayName="GeneratorFunction",f(c,
-  i,"GeneratorFunction"),f(h),f(h,i,"Generator"),f(h,n,(function(){
-  return this}
-  )),f(h,"toString",(function(){
-  return"[object Generator]"}
-  )),(l=function(){
-  return{
-  w:o,m:p}
+  function var_c() {
   }
-  )()}
-  function f(t,e,r,n){
-  var i=Object.defineProperty;
-  try{
-  i({
+  var_e = Object.getPrototypeOf;
+  var var_d_1 = [][var_n] ? var_e(var_e([][var_n]())) : (var_f(var_e = {
   }
-  ,"",{
+  , var_n, function () {
+  return this;
   }
-  )}
-  catch(t){
-  i=0}
-  (f=function(t,e,r,n){
-  function o(e,r){
-  f(t,e,(function(t){
-  return this._invoke(e,r,t)}
-  ))}
-  e?i?i(t,e,{
-  value:r,enumerable:!n,configurable:!n,writable:!n}
-  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
-  )(t,e,r,n)}
-  var d,h=function(t,e,r,n){
-  return new(r||(r=Promise))((function(i,o){
-  function a(t){
-  try{
-  u(n.next(t))}
-  catch(t){
-  o(t)}
+  ), var_e),
+  var_h = var_c.prototype = var_s.prototype = Object.create(var_d_1);
+  function var_p(param_t) {
+  return Object.setPrototypeOf ? Object.setPrototypeOf(param_t, var_c) :
+  (param_t.__proto__ = var_c, var_f(param_t, var_i, "GeneratorFunction")), param_t.prototype = Object.create(
+  var_h), param_t;
   }
-  function s(t){
-  try{
-  u(n.throw(t))}
-  catch(t){
-  o(t)}
+  return var_u.prototype = var_c, var_f(var_h, "constructor", var_c), var_f(var_c,
+  "constructor", var_u), var_u.displayName = "GeneratorFunction", var_f(var_c, var_i,
+  "GeneratorFunction"), var_f(var_h), var_f(var_h, var_i, "Generator"), var_f(var_h,
+  var_n, function () {
+  return this;
   }
-  function u(t){
-  var e;
-  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
-  t(e)}
-  ))).then(a,s)}
-  u((n=n.apply(t,e||[])).next())}
-  ))}
-  ,p={
+  ), var_f(var_h, "toString", function () {
+  return "[object Generator]";
   }
-  ,v=(t,e)=>h(void 0,void 0,void 0,l().m((function r(){
-  var i,o;
-  return l().w((function(r){
-  for(;;
-  )switch(r.n){
-  case 0:if(e[t]){
-  r.n=3;
-  break}
-  return r.n=1,Object(n.sendMessage)({
-  type:a.b.GET_URL}
+  ), (var_l = function () {
+  return {
+  w: var_o,
+  m: var_p
+  };
+  }
+  )();
+  }
+  function var_f(param_t, param_e, param_r, param_n) {
+  var var_i = Object.defineProperty;
+  try {
+  var_i({
+  }
+  , "", {
+  }
   );
-  case 1:if(!(i=r.v)||!i.url){
-  r.n=2;
-  break}
-  return o=i.url.find(t=>t.url.includes(".m3u8")).url,e[t]=o,r.a(2,o);
-  case 2:r.n=4;
+  }
+  catch (var_t) {
+  var_i = 0;
+  }
+  (var_f = function (param_t_1, param_e_1, param_r_1, param_n_1) {
+  function var_o(param_e_2, param_r_2) {
+  var_f(param_t_1, param_e_2, function (param_t_2) {
+  return this._invoke(param_e_2, param_r_2, param_t_2);
+  }
+  );
+  }
+  param_e_1 ? var_i ? var_i(param_t_1, param_e_1, {
+  value: param_r_1,
+  enumerable: !param_n_1,
+  configurable: !param_n_1,
+  writable: !param_n_1
+  }
+  ) : param_t_1[param_e_1] = param_r_1 : (var_o("next", 0), var_o("throw", 1), var_o(
+  "return", 2));
+  }
+  )(param_t, param_e, param_r, param_n);
+  }
+  var var_d,
+  fn_h = function (param_t, param_e, param_r, param_n) {
+  return new (param_r || (param_r = Promise))(function (param_i, param_o) {
+  function var_a(param_t_1) {
+  try {
+  var_u(param_n.next(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_s(param_t_1) {
+  try {
+  var_u(param_n.throw(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_u(param_t_1) {
+  var var_e;
+  param_t_1.done ? param_i(param_t_1.value) : (var_e = param_t_1.value, var_e instanceof param_r ?
+  var_e : new param_r(function (param_t_2) {
+  param_t_2(var_e);
+  }
+  )).then(var_a, var_s);
+  }
+  var_u((param_n = param_n.apply(param_t, param_e || [])).next());
+  }
+  );
+  }
+  ,
+  obj_p = {
+  }
+  ,
+  fn_v = (param_t, param_e) => fn_h(void 0, void 0, void 0, var_l().m(function var_r(
+  ) {
+  var var_i, var_o;
+  return var_l().w(function (param_r) {
+  for (;;
+  ) switch (param_r.n) {
+  case 0:
+  if (param_e[param_t]) {
+  param_r.n = 3;
   break;
-  case 3:return r.a(2,e[t]);
-  case 4:return r.a(2)}
   }
-  ),r)}
-  ))),m={
-  getDomains:()=>["motphimtv","motphimm.com","cphimmoi.com","vuviphim.co","motphimtw.com","subnhanhs.com",
-  "subnhanhss.net","motchill.","motphim.","motphimtvv.","motchjll.","motphims1","phimthuyetminh.top",
-  "cobephim","phim.nguonc.","tramphim."],siteMatcher:(t,e)=>/motchill[a-z0-9]*|gogophim[a-z0-9]*./i.test(t),
-  parse:{
-  sources:[...(null===(d=o.a.parse)||void 0===d?void 0:d.sources)||[],{
-  checkSource:t=>t.url.includes("s6.kkphimplayer6.com"),parse:t=>{
-  var e=t.media,r=t.response;
-  return h(void 0,void 0,void 0,l().m((function t(){
-  var n,i;
-  return l().w((function(t){
-  for(;;
-  )switch(t.n){
-  case 0:return t.n=1,Object(s.e)(r,e);
-  case 1:return(i=t.v)[0].play_list=null===(n=i[0].play_list)||void 0===n?void 0:n.split("#EXT-X-DISCONTINUITY").filter(t=>!(t.match(/^\s*#ext-x-key:method=none/i)||
-  t.length<100)).join("\n"),t.a(2,i)}
-  }
-  ),t)}
-  )))}
-  }
-  ,{
-  checkSource:t=>{
-  var e=t.url;
-  return e.includes("https://hls.streamvda.top")||/\/\/embed\d*\.streamc\.xyz/i.test(e)}
-  ,parse:t=>{
-  var e=t.media;
-  return h(void 0,void 0,void 0,l().m((function t(){
-  var r,i;
-  return l().w((function(t){
-  for(;;
-  )switch(t.n){
-  case 0:return t.n=1,Object(n.sendMessage)({
-  type:a.b.GET_URL,params:{
-  url:e.url}
+  return param_r.n = 1, Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.GET_URL
   }
   );
-  case 1:return r=t.v,(i=Object.assign({
-  }
-  ,e)).play_list=r.url,i.ext="m3u8",i.exts=["m3u8"],i.fixName&&(i.filename=i.fixName),i.filename&&i.filename.length<10&&
-  (i.filename=document.title),t.a(2,[i])}
-  }
-  ),t)}
-  )))}
-  }
-  ,{
-  checkSource:t=>{
-  var e=t.url;
-  return/(vkvd\d*\.mycdn\.me|vk[a-z0-9\-]+\.vkuser\.net)\/.*&ct=(\d+)/i.test(e)}
-  ,parse:t=>{
-  var e=t.media,r=t.response;
-  try{
-  if("m3u8"==e.ext){
-  if(r.match(/<\?xml/i)){
-  var n=new URL(e.url);
-  return Object(i.b)(r,e.filename,n.origin)}
-  if(r.match(/#extm3u/i))return Object(s.e)(r,e)}
-  return[e]}
-  catch(t){
-  return console.warn(t),[e]}
-  }
-  }
-  ,{
-  checkSource:t=>{
-  var e=t.url;
-  return/vidsugar\.com\/.+api\.json/i.test(e)}
-  ,parse:t=>{
-  var e=t.media,r=t.response;
-  try{
-  var n=JSON.parse(r);
-  n.proxy=atob(n.proxy),n.cdn=atob(n.cdn);
-  var i=["#EXTM3U","#EXT-X-VERSION:"+n.version,"#EXT-X-TARGETDURATION:"+n.targetDuration,"#EXT-X-MEDIA-SEQUENCE:0"];
-  n.chunks.forEach((t,e)=>{
-  i.push(`#EXTINF:${t}
-  ,`),i.push(n.proxy+encodeURIComponent(`${n.cdn}
-  /${e}
-  .html`))}
-  ),i.push("#EXT-X-ENDLIST");
-  var o=e;
-  return o.play_list=i.join("\n"),o.url=o.url.replace("api.json","chunklist.m3u8"),o.filename=document.title,
-  [o]}
-  catch(t){
-  return[]}
-  }
-  }
-  ,{
-  checkSource:t=>{
-  var e=t.url;
-  return/vidsugar\.com\/.+chunklist\.m3u8/i.test(e)}
-  ,parse:t=>{
-  var e=t.media,r=t.response;
-  try{
-  var n=r,i=[];
-  (n=n.split("\n").map(t=>t.includes("url=")?t=(t=(t=t.split("url=")[1]).replaceAll("%2F","/")).replaceAll("%3A",
-  ":"):t)).forEach(t=>{
-  i.push(t)}
-  );
-  var o=e;
-  return o.play_list=i.join("\n"),o.filename=document.title,[o]}
-  catch(t){
-  return[]}
-  }
-  }
-  ]}
-  ,urls:[...o.a.urls||[],{
-  checkUrl:t=>t.url.includes("ads-vast"),getUrl:()=>[]}
-  ,{
-  checkUrl:t=>t.url.includes("stream.hlstream"),getUrl:t=>t.url+"/master.html?cdn=false",mediaObjectChange:
-  t=>{
-  var e=t.mediaObject;
-  e.ext="m3u8",e.exts=["m3u8"]}
-  }
-  ,{
-  checkUrl:t=>!!t.url.match(/haivan\.[a-zA-Z]+\/player/),getUrl:t=>{
-  var e=t.url,r=t.node;
-  return h(void 0,void 0,void 0,l().m((function t(){
-  var i,o;
-  return l().w((function(t){
-  for(;;
-  )switch(t.p=t.n){
-  case 0:return o=r,t.n=1,Object(n.sleep)(1e3);
-  case 1:if(t.p=1,null===(i=o.contentDocument)||void 0===i?void 0:i.querySelectorAll(".list-server li").length){
-  t.n=2;
-  break}
-  return o.contentWindow?o.contentWindow.onload=()=>{
-  setTimeout(()=>{
-  EE.emit("widget.updateMedia")}
-  ,1e3)}
-  :setTimeout(()=>{
-  EE.emit("widget.updateMedia")}
-  ,1e3),t.a(2);
-  case 2:return t.n=3,v(e,p);
-  case 3:return t.a(2,t.v);
-  case 4:return t.p=4,t.v,t.n=5,v(e,p);
-  case 5:return t.a(2,t.v)}
-  }
-  ),t,null,[[1,4]])}
-  )))}
-  ,mediaObjectChange:t=>{
-  var e=t.mediaObject,r=t.node;
-  e.referrer=r.src}
-  }
-  ,{
-  checkUrl:t=>t.url.includes("vuviphims.net"),getUrl:t=>{
-  var e=t.url;
-  return h(void 0,void 0,void 0,l().m((function t(){
-  var r;
-  return l().w((function(t){
-  for(;;
-  )switch(t.n){
-  case 0:if(p[e]){
-  t.n=3;
-  break}
-  return t.n=1,Object(n.sendMessage)({
-  type:a.b.GET_URL}
-  );
-  case 1:if(!(r=t.v)||!r.url){
-  t.n=2;
-  break}
-  return p[e]=r.url,t.a(2,r.url);
-  case 2:t.n=4;
+  case 1:
+  if (!(var_i = param_r.v) || !var_i.url) {
+  param_r.n = 2;
   break;
-  case 3:return t.a(2,p[e]);
-  case 4:return t.a(2)}
   }
-  ),t)}
-  )))}
-  ,mediaObjectChange:t=>((t=>{
-  delete t.referrer,t.skipReferrer=!0}
-  )(t.mediaObject),"video")}
-  ,{
-  checkUrl:t=>t.url.includes("t4vstream.xyz/"),getUrl:t=>t.url,mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.ext="mp4",e.exts=["mp4"],e.referrer=location.href,"video"}
+  return var_o = var_i.url.find(param_t_1 => param_t_1.url.includes(".m3u8")).url,
+  param_e[param_t] = var_o, param_r.a(2, var_o);
+  case 2:
+  param_r.n = 4;
+  break;
+  case 3:
+  return param_r.a(2, param_e[param_t]);
+  case 4:
+  return param_r.a(2);
   }
-  ],idsProcess(t){
-  var e,r=t.defaultIds,n=t.id,i=t.index;
-  if(/(vkvd\d*\.mycdn\.me|vk[a-z0-9\-]+\.vkuser\.net)/i.test(n.url)){
-  6!=Number((null===(e=n.url.match(/(vkvd\d*\.mycdn\.me|vk[a-z0-9\-]+\.vkuser\.net)\/.*&ct=(\d+)/i))||
-  void 0===e?void 0:e[2])||"0")&&r.splice(i,1)}
-  "m3u8"==n.ext&&(n.skipUrlToCombineHls=!0)}
+  }
+  , var_r);
+  }
+  )),
+  obj_m = {
+  getDomains: () => ["motphimtv", "motphimm.com", "cphimmoi.com", "vuviphim.co",
+  "motphimtw.com", "subnhanhs.com", "subnhanhss.net", "motchill.", "motphim.", "motphimtvv.",
+  "motchjll.", "motphims1", "phimthuyetminh.top", "cobephim", "phim.nguonc.", "tramphim."],
+  siteMatcher: (param_t, param_e) => /motchill[a-z0-9]*|gogophim[a-z0-9]*./i.test(
+  param_t),
+  parse: {
+  sources: [...((null === (var_d = dep_network_monitor.a.parse) ||
+  void 0 === var_d ? void 0 : var_d.sources) || []), {
+  checkSource: param_t => param_t.url.includes("s6.kkphimplayer6.com"),
+  parse: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  return fn_h(void 0, void 0, void 0, var_l().m(function var_t() {
+  var var_n, var_i;
+  return var_l().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.n) {
+  case 0:
+  return param_t_1.n = 1, Object(dep_media_sniffer.e)(var_r, var_e);
+  case 1:
+  return (var_i = param_t_1.v)[0].play_list = null === (var_n = var_i[0].play_list) ||
+  void 0 === var_n ? void 0 : var_n.split("#EXT-X-DISCONTINUITY").filter(param_t_2 => !(
+  param_t_2.match(/^\s*#ext-x-key:method=none/i) || param_t_2.length < 100)).join(
+  "\n"), param_t_1.a(2, var_i);
+  }
+  }
+  , var_t);
+  }
+  ));
+  }
+  }
+  , {
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return var_e.includes("https://hls.streamvda.top") || /\/\/embed\d*\.streamc\.xyz/i.test(
+  var_e);
+  }
+  ,
+  parse: param_t => {
+  var var_e = param_t.media;
+  return fn_h(void 0, void 0, void 0, var_l().m(function var_t() {
+  var var_r, var_i;
+  return var_l().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.n) {
+  case 0:
+  return param_t_1.n = 1, Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.GET_URL,
+  params: {
+  url: var_e.url
+  }
+  }
+  );
+  case 1:
+  return var_r = param_t_1.v, (var_i = Object.assign({
+  }
+  , var_e)).play_list = var_r.url, var_i.ext = "m3u8", var_i.exts = ["m3u8"], var_i.fixName &&
+  (var_i.filename = var_i.fixName), var_i.filename && var_i.filename.length < 10 &&
+  (var_i.filename = document.title), param_t_1.a(2, [var_i]);
+  }
+  }
+  , var_t);
+  }
+  ));
+  }
+  }
+  , {
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return /(vkvd\d*\.mycdn\.me|vk[a-z0-9\-]+\.vkuser\.net)\/.*&ct=(\d+)/i.test(var_e);
+  }
+  ,
+  parse: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  try {
+  if ("m3u8" == var_e.ext) {
+  if (var_r.match(/<\?xml/i)) {
+  var var_n = new URL(var_e.url);
+  return Object(dep_format_resolver.b)(var_r, var_e.filename, var_n.origin);
+  }
+  if (var_r.match(/#extm3u/i)) return Object(dep_media_sniffer.e)(var_r, var_e);
+  }
+  return [var_e];
+  }
+  catch (var_t) {
+  return console.warn(var_t), [var_e];
+  }
+  }
+  }
+  , {
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return /vidsugar\.com\/.+api\.json/i.test(var_e);
+  }
+  ,
+  parse: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  try {
+  var var_n = JSON.parse(var_r);
+  var_n.proxy = atob(var_n.proxy), var_n.cdn = atob(var_n.cdn);
+  var list_i = ["#EXTM3U", "#EXT-X-VERSION:" + var_n.version, "#EXT-X-TARGETDURATION:" + var_n.targetDuration,
+  "#EXT-X-MEDIA-SEQUENCE:0"];
+  var_n.chunks.forEach((param_t_1, param_e) => {
+  list_i.push(`#EXTINF:${param_t_1}
+  
+  
+  ,`), list_i.push(var_n.proxy + encodeURIComponent(`${var_n.cdn}
+  
+  
+  /${param_e}
+  
+  
+  .html`));
+  }
+  ), list_i.push("#EXT-X-ENDLIST");
+  var var_o = var_e;
+  return var_o.play_list = list_i.join("\n"), var_o.url = var_o.url.replace("api.json",
+  "chunklist.m3u8"), var_o.filename = document.title, [var_o];
+  }
+  catch (var_t) {
+  return [];
+  }
+  }
+  }
+  , {
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return /vidsugar\.com\/.+chunklist\.m3u8/i.test(var_e);
+  }
+  ,
+  parse: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  try {
+  var var_n = var_r,
+  list_i = [];
+  (var_n = var_n.split("\n").map(param_t_1 => param_t_1.includes("url=") ?
+  param_t_1 = (param_t_1 = (param_t_1 = param_t_1.split("url=")[1]).replaceAll("%2F",
+  "/")).replaceAll("%3A", ":") : param_t_1)).forEach(param_t_1 => {
+  list_i.push(param_t_1);
+  }
+  );
+  var var_o = var_e;
+  return var_o.play_list = list_i.join("\n"), var_o.filename = document.title, [var_o];
+  }
+  catch (var_t) {
+  return [];
+  }
+  }
+  }
+  ]
+  }
+  ,
+  urls: [...(dep_network_monitor.a.urls || []), {
+  checkUrl: param_t => param_t.url.includes("ads-vast"),
+  getUrl: () => []
+  }
+  , {
+  checkUrl: param_t => param_t.url.includes("stream.hlstream"),
+  getUrl: param_t => param_t.url + "/master.html?cdn=false",
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  var_e.ext = "m3u8", var_e.exts = ["m3u8"];
+  }
+  }
+  , {
+  checkUrl: param_t => !!param_t.url.match(/haivan\.[a-zA-Z]+\/player/),
+  getUrl: param_t => {
+  var var_e = param_t.url,
+  var_r = param_t.node;
+  return fn_h(void 0, void 0, void 0, var_l().m(function var_t() {
+  var var_i, var_o;
+  return var_l().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.p = param_t_1.n) {
+  case 0:
+  return var_o = var_r, param_t_1.n = 1, Object(dep_dom_utils.sleep)(1e3);
+  case 1:
+  if (param_t_1.p = 1, null === (var_i = var_o.contentDocument) ||
+  void 0 === var_i ? void 0 : var_i.querySelectorAll(".list-server li").length) {
+  param_t_1.n = 2;
+  break;
+  }
+  return var_o.contentWindow ? var_o.contentWindow.onload = () => {
+  setTimeout(() => {
+  EE.emit("widget.updateMedia");
+  }
+  , 1e3);
+  }
+  : setTimeout(() => {
+  EE.emit("widget.updateMedia");
+  }
+  , 1e3), param_t_1.a(2);
+  case 2:
+  return param_t_1.n = 3, fn_v(var_e, obj_p);
+  case 3:
+  return param_t_1.a(2, param_t_1.v);
+  case 4:
+  return param_t_1.p = 4, param_t_1.v, param_t_1.n = 5, fn_v(var_e, obj_p);
+  case 5:
+  return param_t_1.a(2, param_t_1.v);
+  }
+  }
+  , var_t, null, [[1, 4]]);
+  }
+  ));
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject,
+  var_r = param_t.node;
+  var_e.referrer = var_r.src;
+  }
+  }
+  , {
+  checkUrl: param_t => param_t.url.includes("vuviphims.net"),
+  getUrl: param_t => {
+  var var_e = param_t.url;
+  return fn_h(void 0, void 0, void 0, var_l().m(function var_t() {
+  var var_r;
+  return var_l().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.n) {
+  case 0:
+  if (obj_p[var_e]) {
+  param_t_1.n = 3;
+  break;
+  }
+  return param_t_1.n = 1, Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.GET_URL
+  }
+  );
+  case 1:
+  if (!(var_r = param_t_1.v) || !var_r.url) {
+  param_t_1.n = 2;
+  break;
+  }
+  return obj_p[var_e] = var_r.url, param_t_1.a(2, var_r.url);
+  case 2:
+  param_t_1.n = 4;
+  break;
+  case 3:
+  return param_t_1.a(2, obj_p[var_e]);
+  case 4:
+  return param_t_1.a(2);
+  }
+  }
+  , var_t);
+  }
+  ));
+  }
+  ,
+  mediaObjectChange: param_t => ((param_t_1 => {
+  delete param_t_1.referrer, param_t_1.skipReferrer = !0;
+  }
+  )(param_t.mediaObject), "video")
+  }
+  , {
+  checkUrl: param_t => param_t.url.includes("t4vstream.xyz/"),
+  getUrl: param_t => param_t.url,
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.ext = "mp4", var_e.exts = ["mp4"], var_e.referrer = location.href,
+  "video";
+  }
+  }
+  ],
+  idsProcess(param_t) {
+  var var_e,
+  var_r = param_t.defaultIds,
+  var_n = param_t.id,
+  var_i = param_t.index;
+  if (/(vkvd\d*\.mycdn\.me|vk[a-z0-9\-]+\.vkuser\.net)/i.test(var_n.url)) {
+  6 != Number((null === (var_e = var_n.url.match(/(vkvd\d*\.mycdn\.me|vk[a-z0-9\-]+\.vkuser\.net)\/.*&ct=(\d+)/i)) ||
+  void 0 === var_e ? void 0 : var_e[2]) || "0") && var_r.splice(var_i, 1);
+  }
+  "m3u8" == var_n.ext && (var_n.skipUrlToCombineHls = !0);
+  }
   };
-  e.default=Object(c.a)(u.a,["parse","urls"])(m)};
+  exportsObj.default = Object(dep_extractor_url_merger.a)(dep_stream_cipher_helper.a,
+  ["parse", "urls"])(obj_m);
+  };

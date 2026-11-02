@@ -1,40 +1,53 @@
 // Module 422 - Savior Helper 422
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n="Function.prototype.bind called on incompatible ",i=Object.prototype.toString,o=Math.max,a=function(t,
-  e){
-  for(var r=[],n=0;
-  n<t.length;
-  n+=1)r[n]=t[n];
-  for(var i=0;
-  i<e.length;
-  i+=1)r[i+t.length]=e[i];
-  return r}
-  ,s=function(t,e){
-  for(var r=[],n=e||0,i=0;
-  n<t.length;
-  n+=1,i+=1)r[i]=t[n];
-  return r}
-  ,u=function(t,e){
-  for(var r="",n=0;
-  n<t.length;
-  n+=1)r+=t[n],n+1<t.length&&(r+=e);
-  return r};
-  t.exports=function(t){
-  var e=this;
-  if("function"!=typeof e||"[object Function]"!==i.apply(e))throw new TypeError(n+e);
-  for(var r,c=s(arguments,1),l=function(){
-  if(this instanceof r){
-  var n=e.apply(this,a(c,arguments));
-  return Object(n)===n?n:this}
-  return e.apply(t,a(c,arguments))}
-  ,f=o(0,e.length-c.length),d=[],h=0;
-  h<f;
-  h++)d[h]="$"+h;
-  if(r=Function("binder","return function ("+u(d,",")+"){ return binder.apply(this,arguments); }")(l),
-  e.prototype){
-  var p=function(){
+  var str_n = "Function.prototype.bind called on incompatible ",
+  var_i = Object.prototype.toString,
+  var_o = Math.max,
+  fn_a = function (param_t, param_e) {
+  for (var list_r = [], num_n = 0;
+  num_n < param_t.length;
+  num_n += 1) list_r[num_n] = param_t[num_n];
+  for (var num_i = 0;
+  num_i < param_e.length;
+  num_i += 1) list_r[num_i + param_t.length] = param_e[num_i];
+  return list_r;
+  }
+  ,
+  fn_s = function (param_t, param_e) {
+  for (var list_r = [], var_n = param_e || 0, num_i = 0;
+  var_n < param_t.length;
+  var_n += 1, num_i += 1) list_r[num_i] = param_t[var_n];
+  return list_r;
+  }
+  ,
+  fn_u = function (param_t, param_e) {
+  for (var str_r = "", num_n = 0;
+  num_n < param_t.length;
+  num_n += 1) str_r += param_t[num_n], num_n + 1 < param_t.length &&
+  (str_r += param_e);
+  return str_r;
   };
-  p.prototype=e.prototype,r.prototype=new p,p.prototype=null}
-  return r}
+  moduleObj.exports = function (param_t) {
+  var var_e = this;
+  if ("function" != typeof var_e || "[object Function]" !== var_i.apply(var_e)) throw new TypeError(
+  str_n + var_e);
+  for (var var_r, var_c = fn_s(arguments, 1), fn_l = function () {
+  if (this instanceof var_r) {
+  var var_n = var_e.apply(this, fn_a(var_c, arguments));
+  return Object(var_n) === var_n ? var_n : this;
+  }
+  return var_e.apply(param_t, fn_a(var_c, arguments));
+  }
+  , var_f = var_o(0, var_e.length - var_c.length), list_d = [], num_h = 0;
+  num_h < var_f;
+  num_h++) list_d[num_h] = "$" + num_h;
+  if (var_r = Function("binder", "return function (" + fn_u(list_d, ",") + "){ return binder.apply(this,arguments); }")(
+  fn_l), var_e.prototype) {
+  var fn_p = function () {
+  };
+  fn_p.prototype = var_e.prototype, var_r.prototype = new fn_p(), fn_p.prototype = null;
+  }
+  return var_r;
+  };
   };

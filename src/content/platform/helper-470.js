@@ -1,6 +1,7 @@
 // Module 470 - Savior Helper 470
-export default function(t,e,r){
-  var n=r(76);
-  t.exports=function(t){
-  return(new n).update(t).digest()}
+export default function (moduleObj, exportsObj, requireFn) {
+  var dep_module_76 = requireFn(76);
+  moduleObj.exports = function (param_t) {
+  return new dep_module_76().update(param_t).digest();
+  };
   };

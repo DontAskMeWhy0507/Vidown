@@ -1,37 +1,54 @@
 // Module 156 - Savior Helper 156
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(122),i=r(116);
-  function o(){
-  this.pending=null,this.pendingTotal=0,this.blockSize=this.constructor.blockSize,this.outSize=this.constructor.outSize,
-  this.hmacStrength=this.constructor.hmacStrength,this.padLength=this.constructor.padLength/8,this.endian="big",
-  this._delta8=this.blockSize/8,this._delta32=this.blockSize/32}
-  e.BlockHash=o,o.prototype.update=function(t,e){
-  if(t=n.toArray(t,e),this.pending?this.pending=this.pending.concat(t):this.pending=t,this.pendingTotal+=t.length,
-  this.pending.length>=this._delta8){
-  var r=(t=this.pending).length%this._delta8;
-  this.pending=t.slice(t.length-r,t.length),0===this.pending.length&&(this.pending=null),t=n.join32(t,
-  0,t.length-r,this.endian);
-  for(var i=0;
-  i<t.length;
-  i+=this._delta32)this._update(t,i,i+this._delta32)}
-  return this}
-  ,o.prototype.digest=function(t){
-  return this.update(this._pad()),i(null===this.pending),this._digest(t)}
-  ,o.prototype._pad=function(){
-  var t=this.pendingTotal,e=this._delta8,r=e-(t+this.padLength)%e,n=new Array(r+this.padLength);
-  n[0]=128;
-  for(var i=1;
-  i<r;
-  i++)n[i]=0;
-  if(t<<=3,"big"===this.endian){
-  for(var o=8;
-  o<this.padLength;
-  o++)n[i++]=0;
-  n[i++]=0,n[i++]=0,n[i++]=0,n[i++]=0,n[i++]=t>>>24&255,n[i++]=t>>>16&255,n[i++]=t>>>8&255,n[i++]=255&t}
-  else for(n[i++]=255&t,n[i++]=t>>>8&255,n[i++]=t>>>16&255,n[i++]=t>>>24&255,n[i++]=0,n[i++]=0,n[i++]=0,
-  n[i++]=0,o=8;
-  o<this.padLength;
-  o++)n[i++]=0;
-  return n}
+  var dep_helper_122 = requireFn(122),
+  dep_helper_116 = requireFn(116);
+  function var_o() {
+  this.pending = null, this.pendingTotal = 0, this.blockSize = this.constructor.blockSize,
+  this.outSize = this.constructor.outSize, this.hmacStrength = this.constructor.hmacStrength,
+  this.padLength = this.constructor.padLength / 8, this.endian = "big", this._delta8 = this.blockSize / 8,
+  this._delta32 = this.blockSize / 32;
+  }
+  exportsObj.BlockHash = var_o, var_o.prototype.update = function (param_t, param_e) {
+  if (param_t = dep_helper_122.toArray(param_t, param_e), this.pending ?
+  this.pending = this.pending.concat(param_t) : this.pending = param_t, this.pendingTotal += param_t.length,
+  this.pending.length >= this._delta8) {
+  var var_r = (param_t = this.pending).length % this._delta8;
+  this.pending = param_t.slice(param_t.length - var_r, param_t.length), 0 === this.pending.length &&
+  (this.pending = null), param_t = dep_helper_122.join32(param_t, 0, param_t.length - var_r,
+  this.endian);
+  for (var num_i = 0;
+  num_i < param_t.length;
+  num_i += this._delta32) this._update(param_t, num_i, num_i + this._delta32);
+  }
+  return this;
+  }
+  , var_o.prototype.digest = function (param_t) {
+  return this.update(this._pad()), dep_helper_116(null === this.pending), this._digest(
+  param_t);
+  }
+  , var_o.prototype._pad = function () {
+  var var_t = this.pendingTotal,
+  var_e = this._delta8,
+  var_r = var_e - (var_t + this.padLength) % var_e,
+  var_n = new Array(var_r + this.padLength);
+  var_n[0] = 128;
+  for (var num_i = 1;
+  num_i < var_r;
+  num_i++) var_n[num_i] = 0;
+  if (var_t <<= 3, "big" === this.endian) {
+  for (var num_o = 8;
+  num_o < this.padLength;
+  num_o++) var_n[num_i++] = 0;
+  var_n[num_i++] = 0, var_n[num_i++] = 0, var_n[num_i++] = 0, var_n[num_i++] = 0,
+  var_n[num_i++] = var_t >>> 24 & 255, var_n[num_i++] = var_t >>> 16 & 255, var_n[num_i++] = var_t >>> 8 & 255,
+  var_n[num_i++] = 255 & var_t;
+  }
+  else for (var_n[num_i++] = 255 & var_t, var_n[num_i++] = var_t >>> 8 & 255, var_n[num_i++] = var_t >>> 16 & 255,
+  var_n[num_i++] = var_t >>> 24 & 255, var_n[num_i++] = 0, var_n[num_i++] = 0, var_n[num_i++] = 0,
+  var_n[num_i++] = 0, num_o = 8;
+  num_o < this.padLength;
+  num_o++) var_n[num_i++] = 0;
+  return var_n;
+  };
   };

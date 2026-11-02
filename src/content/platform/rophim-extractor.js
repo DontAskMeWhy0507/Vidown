@@ -1,17 +1,31 @@
 // Module 324 - Savior Rophim Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n,i=[],o=location.href,a={
-  getDomains:()=>["rophimz.","rophim."],urls:[{
-  checkUrl:t=>{
-  var e=t.url,r=new URL(e).searchParams.get("q");
-  return!!r&&(n=r,!0)}
-  ,getUrl:()=>n||[]}
-  ,{
-  checkUrl:()=>Boolean(i.length),getUrl:()=>i[0].url}
-  ],processRequestIds:t=>!(!/\/hls\/.+[0-9a-z]\=\.m3u8/.test(t.url)&&!/\/superrounho\/.+\.m3u8/.test(t.url))&&
-  (i[0]=t,!0),forceUpdate(){
-  location.href!==o&&(i=[],EE.emit("widget.forceUpdate"),o=location.href)}
+  requireFn.r(exportsObj);
+  var var_n,
+  list_i = [],
+  var_o = location.href,
+  obj_a = {
+  getDomains: () => ["rophimz.", "rophim."],
+  urls: [{
+  checkUrl: param_t => {
+  var var_e = param_t.url,
+  var_r = new URL(var_e).searchParams.get("q");
+  return !!var_r && (var_n = var_r, !0);
+  }
+  ,
+  getUrl: () => var_n || []
+  }
+  , {
+  checkUrl: () => Boolean(list_i.length),
+  getUrl: () => list_i[0].url
+  }
+  ],
+  processRequestIds: param_t => !(!/\/hls\/.+[0-9a-z]\=\.m3u8/.test(param_t.url) &&
+  !/\/superrounho\/.+\.m3u8/.test(param_t.url)) && (list_i[0] = param_t, !0),
+  forceUpdate() {
+  location.href !== var_o && (list_i = [], EE.emit("widget.forceUpdate"), var_o = location.href);
+  }
   };
-  e.default=a};
+  exportsObj.default = obj_a;
+  };

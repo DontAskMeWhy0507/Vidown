@@ -1,43 +1,65 @@
 // Module 591 - Savior Helper 591
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(425).Buffer,i=r(592);
-  t.exports=function(){
-  function t(){
-  !function(t,e){
-  if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}
-  (this,t),this.head=null,this.tail=null,this.length=0}
-  return t.prototype.push=function(t){
-  var e={
-  data:t,next:null};
-  this.length>0?this.tail.next=e:this.head=e,this.tail=e,++this.length}
-  ,t.prototype.unshift=function(t){
-  var e={
-  data:t,next:this.head};
-  0===this.length&&(this.tail=e),this.head=e,++this.length}
-  ,t.prototype.shift=function(){
-  if(0!==this.length){
-  var t=this.head.data;
-  return 1===this.length?this.head=this.tail=null:this.head=this.head.next,--this.length,t}
+  var var_n = requireFn(425).Buffer,
+  dep_helper_592 = requireFn(592);
+  moduleObj.exports = function () {
+  function var_t() {
+  !function (param_t, param_e) {
+  if (!(param_t instanceof param_e)) throw new TypeError("Cannot call a class as a function");
   }
-  ,t.prototype.clear=function(){
-  this.head=this.tail=null,this.length=0}
-  ,t.prototype.join=function(t){
-  if(0===this.length)return"";
-  for(var e=this.head,r=""+e.data;
-  e=e.next;
-  )r+=t+e.data;
-  return r}
-  ,t.prototype.concat=function(t){
-  if(0===this.length)return n.alloc(0);
-  for(var e,r,i,o=n.allocUnsafe(t>>>0),a=this.head,s=0;
-  a;
-  )e=a.data,r=o,i=s,e.copy(r,i),s+=a.data.length,a=a.next;
-  return o}
-  ,t}
-  (),i&&i.inspect&&i.inspect.custom&&(t.exports.prototype[i.inspect.custom]=function(){
-  var t=i.inspect({
-  length:this.length}
+  (this, var_t), this.head = null, this.tail = null, this.length = 0;
+  }
+  return var_t.prototype.push = function (param_t) {
+  var obj_e = {
+  data: param_t,
+  next: null
+  };
+  this.length > 0 ? this.tail.next = obj_e : this.head = obj_e, this.tail = obj_e,
+  ++this.length;
+  }
+  , var_t.prototype.unshift = function (param_t) {
+  var obj_e = {
+  data: param_t,
+  next: this.head
+  };
+  0 === this.length && (this.tail = obj_e), this.head = obj_e, ++this.length;
+  }
+  , var_t.prototype.shift = function () {
+  if (0 !== this.length) {
+  var var_t_1 = this.head.data;
+  return 1 === this.length ? this.head = this.tail = null : this.head = this.head.next,
+  --this.length, var_t_1;
+  }
+  }
+  , var_t.prototype.clear = function () {
+  this.head = this.tail = null, this.length = 0;
+  }
+  , var_t.prototype.join = function (param_t) {
+  if (0 === this.length) return "";
+  for (var var_e = this.head, var_r = "" + var_e.data;
+  var_e = var_e.next;
+  ) var_r += param_t + var_e.data;
+  return var_r;
+  }
+  , var_t.prototype.concat = function (param_t) {
+  if (0 === this.length) return var_n.alloc(0);
+  for (var var_e, var_r, var_i, var_o = var_n.allocUnsafe(param_t >>> 0), var_a = this.head,
+  num_s = 0;
+  var_a;
+  ) var_e = var_a.data, var_r = var_o, var_i = num_s, var_e.copy(var_r, var_i), num_s += var_a.data.length,
+  var_a = var_a.next;
+  return var_o;
+  }
+  , var_t;
+  }
+  (), dep_helper_592 && dep_helper_592.inspect && dep_helper_592.inspect.custom &&
+  (moduleObj.exports.prototype[dep_helper_592.inspect.custom] = function () {
+  var var_t = dep_helper_592.inspect({
+  length: this.length
+  }
   );
-  return this.constructor.name+" "+t}
-  )};
+  return this.constructor.name + " " + var_t;
+  }
+  );
+  };

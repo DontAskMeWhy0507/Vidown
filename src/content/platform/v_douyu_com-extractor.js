@@ -1,40 +1,79 @@
 // Module 365 - Savior V_douyu_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n,i=r(1),o=r(3),a=r(6),s=location.href,u={
+  requireFn.r(exportsObj);
+  var var_n,
+  dep_media_constants = requireFn(1),
+  dep_url_utils = requireFn(3),
+  dep_media_sniffer = requireFn(6),
+  var_s = location.href,
+  obj_u = {
   }
-  ,c={
-  getDomains:()=>["v.douyu.com"],forceUpdate:()=>{
-  location.href!==s&&(EE.emit("widget.forceUpdate"),s=location.href)}
-  ,processRequestIds:t=>{
-  var e,r;
-  return n=t,(null===(e=null==t?void 0:t.params)||void 0===e?void 0:e.vid)&&(u[(null===(r=t.params.vid)||
-  void 0===r?void 0:r[0])||t.params.vid]=t),!0}
-  ,getCustomElement:()=>{
-  var t,e=document.querySelectorAll("demand-video")[0];
-  return e?Array.from((null===(t=e.shadowRoot)||void 0===t?void 0:t.querySelectorAll("video"))||[]).map(t=>(t.$parent=e,
-  t)):[]}
-  ,getCustomParent:t=>t.$parent||null,parse:{
-  default:t=>{
-  var e,r,n,s,u,c,l=t.media,f=t.response;
-  if(l.url.includes("playlist.m3u8"))return Object(a.e)(f,l);
-  var d=(t,e)=>{
-  var r=Object(o.f)(t);
-  return r.filename=document.title,r.quality=i.r[e].label,r.resolution=e,r.type="video",r}
-  ,h=JSON.parse(f),p=[];
-  return(null===(n=null===(r=null===(e=h.data)||void 0===e?void 0:e.thumb_video)||void 0===r?void 0:
-  r.high)||void 0===n?void 0:n.url)&&p.push(d(h.data.thumb_video.high.url,"720p")),(null===(c=null===(u=null===(s=h.data)||
-  void 0===s?void 0:s.thumb_video)||void 0===u?void 0:u.normal)||void 0===c?void 0:c.url)&&p.push(d(h.data.thumb_video.normal.url,
-  "480p")),p}
+  ,
+  obj_c = {
+  getDomains: () => ["v.douyu.com"],
+  forceUpdate: () => {
+  location.href !== var_s && (EE.emit("widget.forceUpdate"), var_s = location.href);
   }
-  ,default:{
-  getUrl:()=>{
-  var t=location.href.match(/v\.douyu\.com\/show\/([a-z0-9]+)/i);
-  if(t&&t[1]){
-  var e=u[t[1]];
-  if(e)return[e]}
-  return[n]}
+  ,
+  processRequestIds: param_t => {
+  var var_e, var_r;
+  return var_n = param_t, (null === (var_e = null == param_t ?
+  void 0 : param_t.params) || void 0 === var_e ? void 0 : var_e.vid) &&
+  (obj_u[(null === (var_r = param_t.params.vid) || void 0 === var_r ?
+  void 0 : var_r[0]) || param_t.params.vid] = param_t), !0;
+  }
+  ,
+  getCustomElement: () => {
+  var var_t,
+  var_e = document.querySelectorAll("demand-video")[0];
+  return var_e ? Array.from((null === (var_t = var_e.shadowRoot) ||
+  void 0 === var_t ? void 0 : var_t.querySelectorAll("video")) ||
+  []).map(param_t => (param_t.$parent = var_e, param_t)) : [];
+  }
+  ,
+  getCustomParent: param_t => param_t.$parent || null,
+  parse: {
+  default: param_t => {
+  var var_e,
+  var_r,
+  var_n_1,
+  var_s_1,
+  var_u,
+  var_c,
+  var_l = param_t.media,
+  var_f = param_t.response;
+  if (var_l.url.includes("playlist.m3u8")) return Object(dep_media_sniffer.e)(var_f,
+  var_l);
+  var fn_d = (param_t_1, param_e) => {
+  var var_r_1 = Object(dep_url_utils.f)(param_t_1);
+  return var_r_1.filename = document.title, var_r_1.quality = dep_media_constants.r[param_e].label,
+  var_r_1.resolution = param_e, var_r_1.type = "video", var_r_1;
+  }
+  ,
+  var_h = JSON.parse(var_f),
+  list_p = [];
+  return (null === (var_n_1 = null === (var_r = null === (var_e = var_h.data) ||
+  void 0 === var_e ? void 0 : var_e.thumb_video) || void 0 === var_r ?
+  void 0 : var_r.high) || void 0 === var_n_1 ? void 0 : var_n_1.url) &&
+  list_p.push(fn_d(var_h.data.thumb_video.high.url, "720p")), (null === (var_c = null === (
+  var_u = null === (var_s_1 = var_h.data) || void 0 === var_s_1 ?
+  void 0 : var_s_1.thumb_video) || void 0 === var_u ? void 0 :
+  var_u.normal) || void 0 === var_c ? void 0 : var_c.url) &&
+  list_p.push(fn_d(var_h.data.thumb_video.normal.url, "480p")), list_p;
+  }
+  }
+  ,
+  default: {
+  getUrl: () => {
+  var var_t = location.href.match(/v\.douyu\.com\/show\/([a-z0-9]+)/i);
+  if (var_t && var_t[1]) {
+  var var_e = obj_u[var_t[1]];
+  if (var_e) return [var_e];
+  }
+  return [var_n];
+  }
   }
   };
-  e.default=c};
+  exportsObj.default = obj_c;
+  };

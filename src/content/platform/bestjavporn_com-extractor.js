@@ -1,20 +1,34 @@
 // Module 213 - Savior Bestjavporn_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=[],i={
-  getDomains:()=>["bestjavporn."],parse:{
-  default:t=>{
-  var e=t.response,r=t.media;
-  return r.play_list=e,[r]}
+  requireFn.r(exportsObj);
+  var list_n = [],
+  obj_i = {
+  getDomains: () => ["bestjavporn."],
+  parse: {
+  default: param_t => {
+  var var_e = param_t.response,
+  var_r = param_t.media;
+  return var_r.play_list = var_e, [var_r];
   }
-  ,isValidVideoNode:t=>"IFRAME"===t.nodeName,urls:[{
-  checkUrl:()=>!!n.length,getUrl:()=>{
-  var t,e=n[0],r=document.title||(null===(t=document.querySelector("h1"))||void 0===t?void 0:t.innerText);
-  return e.filename=r,[e]}
   }
-  ],processRequestIds:t=>{
-  if(t.url.match(/\/stream\/hls\.php\?.+|\.cloudatacdn\.com\/.+|\.tapecontent\.net\/.+\.mp4.+|.+\.m3u8/))return n[0]=t,
-  !0}
+  ,
+  isValidVideoNode: param_t => "IFRAME" === param_t.nodeName,
+  urls: [{
+  checkUrl: () => !!list_n.length,
+  getUrl: () => {
+  var var_t,
+  var_e = list_n[0],
+  var_r = document.title || (null === (var_t = document.querySelector("h1")) ||
+  void 0 === var_t ? void 0 : var_t.innerText);
+  return var_e.filename = var_r, [var_e];
+  }
+  }
+  ],
+  processRequestIds: param_t => {
+  if (param_t.url.match(/\/stream\/hls\.php\?.+|\.cloudatacdn\.com\/.+|\.tapecontent\.net\/.+\.mp4.+|.+\.m3u8/)) return list_n[0] = param_t,
+  !0;
+  }
   };
-  e.default=i};
+  exportsObj.default = obj_i;
+  };

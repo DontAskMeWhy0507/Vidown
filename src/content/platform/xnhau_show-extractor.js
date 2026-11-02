@@ -1,15 +1,23 @@
 // Module 396 - Savior Xnhau_show Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["xnhau."],isValidVideoNode:t=>!!t.matches(".fp-engine"),urls:[{
-  checkUrl:t=>{
-  var e=t.url;
-  return/xnhau\.\w+\/get_file\//i.test(e)}
-  ,getUrl:t=>t.url,mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.ext="mp4",e.exts=["mp4"],"video"}
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["xnhau."],
+  isValidVideoNode: param_t => !!param_t.matches(".fp-engine"),
+  urls: [{
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return /xnhau\.\w+\/get_file\//i.test(var_e);
   }
-  ]};
-  e.default=n};
+  ,
+  getUrl: param_t => param_t.url,
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.ext = "mp4", var_e.exts = ["mp4"], "video";
+  }
+  }
+  ]
+  };
+  exportsObj.default = obj_n;
+  };

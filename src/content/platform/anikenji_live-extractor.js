@@ -1,157 +1,250 @@
 // Module 189 - Savior Anikenji_live Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(6);
-  function i(){
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
-  e,r="function"==typeof Symbol?Symbol:{
+  requireFn.r(exportsObj);
+  var dep_media_sniffer = requireFn(6);
+  function var_i() {
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var var_t,
+  var_e,
+  var_r = "function" == typeof Symbol ? Symbol : {
   }
-  ,n=r.iterator||"@@iterator",a=r.toStringTag||"@@toStringTag";
-  function s(r,n,i,a){
-  var s=n&&n.prototype instanceof c?n:c,l=Object.create(s.prototype);
-  return o(l,"_invoke",function(r,n,i){
-  var o,a,s,c=0,l=i||[],f=!1,d={
-  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
-  return o=e,a=0,s=t,d.n=r,u}
+  ,
+  var_n = var_r.iterator || "@@iterator",
+  var_a = var_r.toStringTag || "@@toStringTag";
+  function var_s(param_r, param_n, param_i, param_a) {
+  var var_s_1 = param_n && param_n.prototype instanceof var_c ?
+  param_n : var_c,
+  var_l_1 = Object.create(var_s_1.prototype);
+  return var_o(var_l_1, "_invoke", function (param_r_1, param_n_1, param_i_1) {
+  var var_o_1,
+  var_a_1,
+  var_s_2,
+  num_c = 0,
+  var_l_2 = param_i_1 || [],
+  flag_f = !1,
+  obj_d = {
+  p: 0,
+  n: 0,
+  v: var_t,
+  a: var_h_1,
+  f: var_h_1.bind(var_t, 4),
+  d: function (param_e, param_r_2) {
+  return var_o_1 = param_e, var_a_1 = 0, var_s_2 = var_t, obj_d.n = param_r_2, obj_u;
+  }
   };
-  function h(r,n){
-  for(a=r,s=n,e=0;
-  !f&&c&&!i&&e<l.length;
-  e++){
-  var i,o=l[e],h=d.p,p=o[2];
-  r>3?(i=p===n)&&(s=o[(a=o[4])?5:(a=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(a=0,d.v=n,d.n=o[1]):
-  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,a=0))}
-  if(i||r>1)return u;
-  throw f=!0,n}
-  return function(i,l,p){
-  if(c>1)throw TypeError("Generator is already running");
-  for(f&&1===l&&h(l,p),a=l,s=p;
-  (e=a<2?t:s)||!f;
-  ){
-  o||(a?a<3?(a>1&&(d.n=-1),h(a,s)):d.n=s:d.v=s);
-  try{
-  if(c=2,o){
-  if(a||(i="next"),e=o[i]){
-  if(!(e=e.call(o,s)))throw TypeError("iterator result is not an object");
-  if(!e.done)return e;
-  s=e.value,a<2&&(a=0)}
-  else 1===a&&(e=o.return)&&e.call(o),a<2&&(s=TypeError("The iterator does not provide a '"+i+"' method"),
-  a=1);
-  o=t}
-  else if((e=(f=d.n<0)?s:r.call(n,d))!==u)break}
-  catch(e){
-  o=t,a=1,s=e}
-  finally{
-  c=1}
+  function var_h_1(param_r_2, param_n_2) {
+  for (var_a_1 = param_r_2, var_s_2 = param_n_2, var_e = 0;
+  !flag_f && num_c && !var_i_1 && var_e < var_l_2.length;
+  var_e++) {
+  var var_i_1,
+  var_o_2 = var_l_2[var_e],
+  var_h_2 = obj_d.p,
+  var_p_1 = var_o_2[2];
+  param_r_2 > 3 ? (var_i_1 = var_p_1 === param_n_2) && (var_s_2 = var_o_2[(var_a_1 = var_o_2[4]) ?
+  5 : (var_a_1 = 3, 3)], var_o_2[4] = var_o_2[5] = var_t) : var_o_2[0] <= var_h_2 &&
+  ((var_i_1 = param_r_2 < 2 && var_h_2 < var_o_2[1]) ? (var_a_1 = 0, obj_d.v = param_n_2,
+  obj_d.n = var_o_2[1]) : var_h_2 < var_p_1 && (var_i_1 = param_r_2 < 3 ||
+  var_o_2[0] > param_n_2 || param_n_2 > var_p_1) && (var_o_2[4] = param_r_2, var_o_2[5] = param_n_2,
+  obj_d.n = var_p_1, var_a_1 = 0));
   }
-  return{
-  value:e,done:f}
+  if (var_i_1 || param_r_2 > 1) return obj_u;
+  throw flag_f = !0, param_n_2;
+  }
+  return function (param_i_2, param_l, param_p) {
+  if (num_c > 1) throw TypeError("Generator is already running");
+  for (flag_f && 1 === param_l && var_h_1(param_l, param_p), var_a_1 = param_l, var_s_2 = param_p;
+  (var_e = var_a_1 < 2 ? var_t : var_s_2) || !flag_f;
+  ) {
+  var_o_1 || (var_a_1 ? var_a_1 < 3 ? (var_a_1 > 1 && (obj_d.n = -1), var_h_1(var_a_1,
+  var_s_2)) : obj_d.n = var_s_2 : obj_d.v = var_s_2);
+  try {
+  if (num_c = 2, var_o_1) {
+  if (var_a_1 || (param_i_2 = "next"), var_e = var_o_1[param_i_2]) {
+  if (!(var_e = var_e.call(var_o_1, var_s_2))) throw TypeError("iterator result is not an object");
+  if (!var_e.done) return var_e;
+  var_s_2 = var_e.value, var_a_1 < 2 && (var_a_1 = 0);
+  }
+  else 1 === var_a_1 && (var_e = var_o_1.return) && var_e.call(var_o_1), var_a_1 < 2 &&
+  (var_s_2 = TypeError("The iterator does not provide a '" + param_i_2 + "' method"),
+  var_a_1 = 1);
+  var_o_1 = var_t;
+  }
+  else if ((var_e = (flag_f = obj_d.n < 0) ? var_s_2 : param_r_1.call(param_n_1,
+  obj_d)) !== obj_u) break;
+  }
+  catch (var_e_1) {
+  var_o_1 = var_t, var_a_1 = 1, var_s_2 = var_e_1;
+  }
+  finally {
+  num_c = 1;
   }
   }
-  (r,i,a),!0),l}
-  var u={
+  return {
+  value: var_e,
+  done: flag_f
   };
-  function c(){
-  }
-  function l(){
-  }
-  function f(){
-  }
-  e=Object.getPrototypeOf;
-  var d=[][n]?e(e([][n]())):(o(e={
-  }
-  ,n,(function(){
-  return this}
-  )),e),h=f.prototype=c.prototype=Object.create(d);
-  function p(t){
-  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,o(t,a,"GeneratorFunction")),
-  t.prototype=Object.create(h),t}
-  return l.prototype=f,o(h,"constructor",f),o(f,"constructor",l),l.displayName="GeneratorFunction",o(f,
-  a,"GeneratorFunction"),o(h),o(h,a,"Generator"),o(h,n,(function(){
-  return this}
-  )),o(h,"toString",(function(){
-  return"[object Generator]"}
-  )),(i=function(){
-  return{
-  w:s,m:p}
-  }
-  )()}
-  function o(t,e,r,n){
-  var i=Object.defineProperty;
-  try{
-  i({
-  }
-  ,"",{
-  }
-  )}
-  catch(t){
-  i=0}
-  (o=function(t,e,r,n){
-  function a(e,r){
-  o(t,e,(function(t){
-  return this._invoke(e,r,t)}
-  ))}
-  e?i?i(t,e,{
-  value:r,enumerable:!n,configurable:!n,writable:!n}
-  ):t[e]=r:(a("next",0),a("throw",1),a("return",2))}
-  )(t,e,r,n)}
-  var a=function(t,e,r,n){
-  return new(r||(r=Promise))((function(i,o){
-  function a(t){
-  try{
-  u(n.next(t))}
-  catch(t){
-  o(t)}
-  }
-  function s(t){
-  try{
-  u(n.throw(t))}
-  catch(t){
-  o(t)}
-  }
-  function u(t){
-  var e;
-  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
-  t(e)}
-  ))).then(a,s)}
-  u((n=n.apply(t,e||[])).next())}
-  ))}
-  ,s={
-  getDomains:()=>["anikenji."],parse:{
-  sources:[{
-  checkSource:t=>{
-  var e=t.url;
-  return/\.streamc\.xyz\/([a-z]{1,2}[a-z0-9].+\.(m3u8|m3u9))/i.test(e)}
-  ,parse:t=>{
-  var e=t.media,r=t.response;
-  return a(void 0,void 0,void 0,i().m((function t(){
-  var o,a;
-  return i().w((function(t){
-  for(;;
-  )switch(t.p=t.n){
-  case 0:if(t.p=0,null==r?void 0:r.match(/#extm3u/i)){
-  t.n=2;
-  break}
-  return t.n=1,Object(n.e)("",e);
-  case 1:return(o=t.v).forEach(t=>{
-  "html"==t.ext&&(t.ext="m3u8",t.exts=["m3u8"],t.removeOrigin=!0)}
-  ),t.a(2,o);
-  case 2:if(e.fixName=e.filename,a=Object.assign({
-  }
-  ,e),!(null==r?void 0:r.match(/#extm3u/i))){
-  t.n=3;
-  break}
-  return a.play_list=r,a.ext="m3u8",a.exts=["m3u8"],t.a(2,[a]);
-  case 3:return t.a(2,[]);
-  case 4:return t.p=4,t.v,t.a(2,[])}
-  }
-  ),t,null,[[0,4]])}
-  )))}
-  }
-  ]}
-  ,idsProcess:t=>{
-  var e=t.defaultIds,r=t.id,n=t.index;
-  /\.streamc\.xyz\/([a-z]{1,2}[a-z0-9].+\.(m3u8|m3u9))/i.test(r.url)||e.splice(n,1)}
   };
-  e.default=s};
+  }
+  (param_r, param_i, param_a), !0), var_l_1;
+  }
+  var obj_u = {
+  };
+  function var_c() {
+  }
+  function var_l() {
+  }
+  function var_f() {
+  }
+  var_e = Object.getPrototypeOf;
+  var var_d = [][var_n] ? var_e(var_e([][var_n]())) : (var_o(var_e = {
+  }
+  , var_n, function () {
+  return this;
+  }
+  ), var_e),
+  var_h = var_f.prototype = var_c.prototype = Object.create(var_d);
+  function var_p(param_t) {
+  return Object.setPrototypeOf ? Object.setPrototypeOf(param_t, var_f) :
+  (param_t.__proto__ = var_f, var_o(param_t, var_a, "GeneratorFunction")), param_t.prototype = Object.create(
+  var_h), param_t;
+  }
+  return var_l.prototype = var_f, var_o(var_h, "constructor", var_f), var_o(var_f,
+  "constructor", var_l), var_l.displayName = "GeneratorFunction", var_o(var_f, var_a,
+  "GeneratorFunction"), var_o(var_h), var_o(var_h, var_a, "Generator"), var_o(var_h,
+  var_n, function () {
+  return this;
+  }
+  ), var_o(var_h, "toString", function () {
+  return "[object Generator]";
+  }
+  ), (var_i = function () {
+  return {
+  w: var_s,
+  m: var_p
+  };
+  }
+  )();
+  }
+  function var_o(param_t, param_e, param_r, param_n) {
+  var var_i_1 = Object.defineProperty;
+  try {
+  var_i_1({
+  }
+  , "", {
+  }
+  );
+  }
+  catch (var_t) {
+  var_i_1 = 0;
+  }
+  (var_o = function (param_t_1, param_e_1, param_r_1, param_n_1) {
+  function var_a(param_e_2, param_r_2) {
+  var_o(param_t_1, param_e_2, function (param_t_2) {
+  return this._invoke(param_e_2, param_r_2, param_t_2);
+  }
+  );
+  }
+  param_e_1 ? var_i_1 ? var_i_1(param_t_1, param_e_1, {
+  value: param_r_1,
+  enumerable: !param_n_1,
+  configurable: !param_n_1,
+  writable: !param_n_1
+  }
+  ) : param_t_1[param_e_1] = param_r_1 : (var_a("next", 0), var_a("throw", 1), var_a(
+  "return", 2));
+  }
+  )(param_t, param_e, param_r, param_n);
+  }
+  var fn_a = function (param_t, param_e, param_r, param_n) {
+  return new (param_r || (param_r = Promise))(function (param_i, param_o) {
+  function var_a(param_t_1) {
+  try {
+  var_u(param_n.next(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_s(param_t_1) {
+  try {
+  var_u(param_n.throw(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_u(param_t_1) {
+  var var_e;
+  param_t_1.done ? param_i(param_t_1.value) : (var_e = param_t_1.value, var_e instanceof param_r ?
+  var_e : new param_r(function (param_t_2) {
+  param_t_2(var_e);
+  }
+  )).then(var_a, var_s);
+  }
+  var_u((param_n = param_n.apply(param_t, param_e || [])).next());
+  }
+  );
+  }
+  ,
+  obj_s = {
+  getDomains: () => ["anikenji."],
+  parse: {
+  sources: [{
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return /\.streamc\.xyz\/([a-z]{1,2}[a-z0-9].+\.(m3u8|m3u9))/i.test(var_e);
+  }
+  ,
+  parse: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  return fn_a(void 0, void 0, void 0, var_i().m(function var_t() {
+  var var_o_1, var_a;
+  return var_i().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.p = param_t_1.n) {
+  case 0:
+  if (param_t_1.p = 0, null == var_r ? void 0 : var_r.match(/#extm3u/i)) {
+  param_t_1.n = 2;
+  break;
+  }
+  return param_t_1.n = 1, Object(dep_media_sniffer.e)("", var_e);
+  case 1:
+  return (var_o_1 = param_t_1.v).forEach(param_t_2 => {
+  "html" == param_t_2.ext && (param_t_2.ext = "m3u8", param_t_2.exts = ["m3u8"],
+  param_t_2.removeOrigin = !0);
+  }
+  ), param_t_1.a(2, var_o_1);
+  case 2:
+  if (var_e.fixName = var_e.filename, var_a = Object.assign({
+  }
+  , var_e), !(null == var_r ? void 0 : var_r.match(/#extm3u/i))) {
+  param_t_1.n = 3;
+  break;
+  }
+  return var_a.play_list = var_r, var_a.ext = "m3u8", var_a.exts = ["m3u8"], param_t_1.a(
+  2, [var_a]);
+  case 3:
+  return param_t_1.a(2, []);
+  case 4:
+  return param_t_1.p = 4, param_t_1.v, param_t_1.a(2, []);
+  }
+  }
+  , var_t, null, [[0, 4]]);
+  }
+  ));
+  }
+  }
+  ]
+  }
+  ,
+  idsProcess: param_t => {
+  var var_e = param_t.defaultIds,
+  var_r = param_t.id,
+  var_n = param_t.index;
+  /\.streamc\.xyz\/([a-z]{1,2}[a-z0-9].+\.(m3u8|m3u9))/i.test(var_r.url) ||
+  var_e.splice(var_n, 1);
+  }
+  };
+  exportsObj.default = obj_s;
+  };

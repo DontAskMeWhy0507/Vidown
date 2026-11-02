@@ -1,9 +1,17 @@
 // Module 392 - Savior Xemphimvn2_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n,i=r(20),o={
-  getDomains:()=>["xemphimvn2.com"],parse:{
-  sources:[...(null===(n=i.a.parse)||void 0===n?void 0:n.sources)||[]]}
-  ,urls:[...i.a.urls||[]]};
-  e.default=o};
+  requireFn.r(exportsObj);
+  var var_n,
+  dep_network_monitor = requireFn(20),
+  obj_o = {
+  getDomains: () => ["xemphimvn2.com"],
+  parse: {
+  sources: [...((null === (var_n = dep_network_monitor.a.parse) ||
+  void 0 === var_n ? void 0 : var_n.sources) || [])]
+  }
+  ,
+  urls: [...(dep_network_monitor.a.urls || [])]
+  };
+  exportsObj.default = obj_o;
+  };

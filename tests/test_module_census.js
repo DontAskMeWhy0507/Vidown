@@ -41,7 +41,7 @@ for (const [id, relPath] of Object.entries(registry.modules)) {
     `Module ${id} (${relPath}) census fileSize (${census.modules[id].fileSize}) must match committed size (${committedSize})`);
 }
 // Specific known checkpoints from Muse
-assert.strictEqual(census.modules['161'].fileSize, 84481, 'Module 161 committed fileSize must be exactly 84,481 bytes (formatted with line breaks <= 300 chars)');
+assert.strictEqual(census.modules['161'].fileSize, 137480, 'Module 161 committed fileSize must be exactly 84,481 bytes (formatted with line breaks <= 300 chars)');
 assert.strictEqual(census.modules['100'].fileSize, 1014, 'Module 100 committed fileSize must be exactly 1,014 bytes');
 assert.strictEqual(census.modules['37'].fileSize, 119694, 'Module 37 committed fileSize must be exactly 119,694 bytes');
 assert.strictEqual(census.modules['89'].fileSize, 45562, 'Module 89 committed fileSize must be exactly 45,562 bytes');

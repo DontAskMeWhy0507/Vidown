@@ -1,8 +1,9 @@
 // Module 589 - Savior Helper 589
-export default function(t,e){
-  var r={
+export default function (moduleObj, exportsObj) {
+  var var_r = {
   }
   .toString;
-  t.exports=Array.isArray||function(t){
-  return"[object Array]"==r.call(t)}
+  moduleObj.exports = Array.isArray || function (param_t) {
+  return "[object Array]" == var_r.call(param_t);
+  };
   };

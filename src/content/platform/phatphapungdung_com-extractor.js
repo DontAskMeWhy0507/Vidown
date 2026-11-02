@@ -1,35 +1,57 @@
 // Module 301 - Savior Phatphapungdung_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(28),i=r(0),o=r(3),a={
-  getDomains:()=>["phatphapungdung."],getCustomParent:t=>t.closest(".data-item")||t.closest(".fp-player"),
-  addNode:()=>[".fp-player iframe.fp-engine"],isMiniPlayerNode:t=>t.src.includes(".mp3"),isValidVideoNode:
-  t=>["IFRAME"].includes(t.nodeName)||"VIDEO"===t.nodeName,parse:{
-  sources:[{
-  checkSource:t=>{
-  var e=t.url;
-  return Boolean(Object(i.getVideoId)(e))}
-  ,parse:t=>{
-  var e=t.media;
-  return n.a.parse(e.url)}
+  requireFn.r(exportsObj);
+  var dep_dash_parser = requireFn(28),
+  dep_dom_utils = requireFn(0),
+  dep_url_utils = requireFn(3),
+  obj_a = {
+  getDomains: () => ["phatphapungdung."],
+  getCustomParent: param_t => param_t.closest(".data-item") ||
+  param_t.closest(".fp-player"),
+  addNode: () => [".fp-player iframe.fp-engine"],
+  isMiniPlayerNode: param_t => param_t.src.includes(".mp3"),
+  isValidVideoNode: param_t => ["IFRAME"].includes(param_t.nodeName) ||
+  "VIDEO" === param_t.nodeName,
+  parse: {
+  sources: [{
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return Boolean(Object(dep_dom_utils.getVideoId)(var_e));
   }
-  ]}
-  ,urls:[{
-  checkUrl:t=>{
-  var e=t.url;
-  return Boolean(Object(i.getVideoId)(e))}
-  ,mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.ext="mp4",e.exts=["mp4"],"video"}
+  ,
+  parse: param_t => {
+  var var_e = param_t.media;
+  return dep_dash_parser.a.parse(var_e.url);
   }
-  ,{
-  checkUrl:t=>{
-  var e=t.url;
-  return"VIDEO"==t.node.nodeName&&/\.(mp3|mp4|avi|aac|wav)$/i.test(e)}
-  ,getUrl(t){
-  var e=t.url,r=Object(o.f)(e);
-  return"mp3"===r.ext&&(r.type="audio"),[r]}
   }
-  ]};
-  e.default=a};
+  ]
+  }
+  ,
+  urls: [{
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return Boolean(Object(dep_dom_utils.getVideoId)(var_e));
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.ext = "mp4", var_e.exts = ["mp4"], "video";
+  }
+  }
+  , {
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return "VIDEO" == param_t.node.nodeName && /\.(mp3|mp4|avi|aac|wav)$/i.test(var_e);
+  }
+  ,
+  getUrl(param_t) {
+  var var_e = param_t.url,
+  var_r = Object(dep_url_utils.f)(var_e);
+  return "mp3" === var_r.ext && (var_r.type = "audio"), [var_r];
+  }
+  }
+  ]
+  };
+  exportsObj.default = obj_a;
+  };

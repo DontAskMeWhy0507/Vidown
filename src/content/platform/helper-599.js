@@ -1,4 +1,5 @@
 // Module 599 - Savior Helper 599
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=r(471)};
+  moduleObj.exports = requireFn(471);
+  };

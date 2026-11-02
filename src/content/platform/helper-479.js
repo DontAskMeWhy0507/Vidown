@@ -1,18 +1,27 @@
 // Module 479 - Savior Helper 479
-export default function(t,e,r){
-  var n=r(155),i=r(25).Buffer,o=r(480);
-  function a(t){
-  var e=t._cipher.encryptBlockRaw(t._prev);
-  return o(t._prev),e}
-  e.encrypt=function(t,e){
-  var r=Math.ceil(e.length/16),o=t._cache.length;
-  t._cache=i.concat([t._cache,i.allocUnsafe(16*r)]);
-  for(var s=0;
-  s<r;
-  s++){
-  var u=a(t),c=o+16*s;
-  t._cache.writeUInt32BE(u[0],c+0),t._cache.writeUInt32BE(u[1],c+4),t._cache.writeUInt32BE(u[2],c+8),
-  t._cache.writeUInt32BE(u[3],c+12)}
-  var l=t._cache.slice(0,e.length);
-  return t._cache=t._cache.slice(e.length),n(e,l)}
+export default function (moduleObj, exportsObj, requireFn) {
+  var dep_helper_155 = requireFn(155),
+  var_i = requireFn(25).Buffer,
+  dep_helper_480 = requireFn(480);
+  function var_a(param_t) {
+  var var_e = param_t._cipher.encryptBlockRaw(param_t._prev);
+  return dep_helper_480(param_t._prev), var_e;
+  }
+  exportsObj.encrypt = function (param_t, param_e) {
+  var var_r = Math.ceil(param_e.length / 16),
+  var_o = param_t._cache.length;
+  param_t._cache = var_i.concat([param_t._cache, var_i.allocUnsafe(16 * var_r)]);
+  for (var num_s = 0;
+  num_s < var_r;
+  num_s++) {
+  var var_u = var_a(param_t),
+  var_c = var_o + 16 * num_s;
+  param_t._cache.writeUInt32BE(var_u[0], var_c + 0), param_t._cache.writeUInt32BE(
+  var_u[1], var_c + 4), param_t._cache.writeUInt32BE(var_u[2], var_c + 8), param_t._cache.writeUInt32BE(
+  var_u[3], var_c + 12);
+  }
+  var var_l = param_t._cache.slice(0, param_e.length);
+  return param_t._cache = param_t._cache.slice(param_e.length), dep_helper_155(param_e,
+  var_l);
+  };
   };

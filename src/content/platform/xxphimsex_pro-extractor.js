@@ -1,18 +1,31 @@
 // Module 399 - Savior Xxphimsex_pro Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e),r.d(e,"_data",(function(){
-  return o}
-  ));
-  var n=[],i=location.href,o={
-  getDomains:()=>["xxphimsex.pro"],forceUpdate:()=>{
-  location.href!==i&&(EE.emit("widget.forceUpdate"),i=location.href)}
-  ,processRequestIds:t=>{
-  if("string"==typeof t.url&&(t.url.match(/ntkstream.xyz/)||t.url.includes(".m3u8")))return n.push(t),
-  !0}
-  ,default:{
-  getUrl:t=>{
-  if(n.length>0)return n.map(e=>(e.referrer=t.url,e))}
+  requireFn.r(exportsObj), requireFn.d(exportsObj, "_data", function () {
+  return obj_o;
   }
-  ,addNode:()=>["iframe"]};
-  e.default=o};
+  );
+  var list_n = [],
+  var_i = location.href,
+  obj_o = {
+  getDomains: () => ["xxphimsex.pro"],
+  forceUpdate: () => {
+  location.href !== var_i && (EE.emit("widget.forceUpdate"), var_i = location.href);
+  }
+  ,
+  processRequestIds: param_t => {
+  if ("string" == typeof param_t.url && (param_t.url.match(/ntkstream.xyz/) ||
+  param_t.url.includes(".m3u8"))) return list_n.push(param_t), !0;
+  }
+  ,
+  default: {
+  getUrl: param_t => {
+  if (list_n.length > 0) return list_n.map(param_e => (param_e.referrer = param_t.url,
+  param_e));
+  }
+  }
+  ,
+  addNode: () => ["iframe"]
+  };
+  exportsObj.default = obj_o;
+  };

@@ -1,33 +1,53 @@
 // Module 249 - Savior Hk Ancillaries Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n,i=r(0);
-  e.default={
-  getDomains:()=>["hk-ancillaries.s3.amazonaws."],onDomScannerInit:t=>{
-  var e=Object(i.queryAll)(t.mediaTags.join(", "));
-  if("IFRAME"==e[0].nodeName){
-  var r=e[0];
-  r.addEventListener("load",()=>{
-  var e;
-  if(r.contentDocument){
-  var n=Object(i.queryAll)(t.mediaTags.join(", "),r.contentDocument);
-  null===(e=t._observer)||void 0===e||e.observe(r.contentDocument,{
-  childList:!0,subtree:!0,attributeFilter:["src","data-src","hidden","opened"]}
-  ),n.length&&t.nodeChangedNotifier(n)}
+  requireFn.r(exportsObj);
+  var var_n,
+  dep_dom_utils = requireFn(0);
+  exportsObj.default = {
+  getDomains: () => ["hk-ancillaries.s3.amazonaws."],
+  onDomScannerInit: param_t => {
+  var var_e = Object(dep_dom_utils.queryAll)(param_t.mediaTags.join(", "));
+  if ("IFRAME" == var_e[0].nodeName) {
+  var var_r = var_e[0];
+  var_r.addEventListener("load", () => {
+  var var_e_1;
+  if (var_r.contentDocument) {
+  var var_n_1 = Object(dep_dom_utils.queryAll)(param_t.mediaTags.join(", "), var_r.contentDocument);
+  null === (var_e_1 = param_t._observer) || void 0 === var_e_1 ||
+  var_e_1.observe(var_r.contentDocument, {
+  childList: !0,
+  subtree: !0,
+  attributeFilter: ["src", "data-src", "hidden", "opened"]
   }
-  )}
+  ), var_n_1.length && param_t.nodeChangedNotifier(var_n_1);
   }
-  ,default:{
-  getUrl:t=>{
-  t.url;
-  return n?n.url:[]}
-  ,mediaObjectChange:t=>{
-  var e,r,n,i=t.mediaObject;
-  i.filename=null===(n=null===(r=null===(e=document.querySelector("iframe"))||void 0===e?void 0:e.contentDocument)||
-  void 0===r?void 0:r.querySelector("p"))||void 0===n?void 0:n.innerText,i.fixName=i.filename}
   }
-  ,processRequestIds(t){
-  if(t.url.toString().includes("master.m3u8"))return n=t,EE.emit("widget.forceUpdate"),!0}
+  );
   }
+  }
+  ,
+  default: {
+  getUrl: param_t => {
+  param_t.url;
+  return var_n ? var_n.url : [];
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e,
+  var_r,
+  var_n_1,
+  var_i = param_t.mediaObject;
+  var_i.filename = null === (var_n_1 = null === (var_r = null === (var_e = document.querySelector(
+  "iframe")) || void 0 === var_e ? void 0 : var_e.contentDocument) ||
+  void 0 === var_r ? void 0 : var_r.querySelector("p")) || void 0 === var_n_1 ?
+  void 0 : var_n_1.innerText, var_i.fixName = var_i.filename;
+  }
+  }
+  ,
+  processRequestIds(param_t) {
+  if (param_t.url.toString().includes("master.m3u8")) return var_n = param_t, EE.emit(
+  "widget.forceUpdate"), !0;
+  }
+  };
   };

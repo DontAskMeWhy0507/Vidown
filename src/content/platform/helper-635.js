@@ -1,60 +1,100 @@
 // Module 635 - Savior Helper 635
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(126),i=r(15),o=r(172),a=r(117);
-  function s(t){
-  o.call(this,"mont",t),this.a=new n(t.a,16).toRed(this.red),this.b=new n(t.b,16).toRed(this.red),this.i4=new n(4).toRed(this.red).redInvm(),
-  this.two=new n(2).toRed(this.red),this.a24=this.i4.redMul(this.a.redAdd(this.two))}
-  function u(t,e,r){
-  o.BasePoint.call(this,t,"projective"),null===e&&null===r?(this.x=this.curve.one,this.z=this.curve.zero):
-  (this.x=new n(e,16),this.z=new n(r,16),this.x.red||(this.x=this.x.toRed(this.curve.red)),this.z.red||
-  (this.z=this.z.toRed(this.curve.red)))}
-  i(s,o),t.exports=s,s.prototype.validate=function(t){
-  var e=t.normalize().x,r=e.redSqr(),n=r.redMul(e).redAdd(r.redMul(this.a)).redAdd(e);
-  return 0===n.redSqrt().redSqr().cmp(n)}
-  ,i(u,o.BasePoint),s.prototype.decodePoint=function(t,e){
-  return this.point(a.toArray(t,e),1)}
-  ,s.prototype.point=function(t,e){
-  return new u(this,t,e)}
-  ,s.prototype.pointFromJSON=function(t){
-  return u.fromJSON(this,t)}
-  ,u.prototype.precompute=function(){
+  var dep_module_126 = requireFn(126),
+  dep_module_15 = requireFn(15),
+  dep_helper_172 = requireFn(172),
+  dep_helper_117 = requireFn(117);
+  function var_s(param_t) {
+  dep_helper_172.call(this, "mont", param_t), this.a = new dep_module_126(param_t.a,
+  16).toRed(this.red), this.b = new dep_module_126(param_t.b, 16).toRed(this.red),
+  this.i4 = new dep_module_126(4).toRed(this.red).redInvm(), this.two = new dep_module_126(
+  2).toRed(this.red), this.a24 = this.i4.redMul(this.a.redAdd(this.two));
   }
-  ,u.prototype._encode=function(){
-  return this.getX().toArray("be",this.curve.p.byteLength())}
-  ,u.fromJSON=function(t,e){
-  return new u(t,e[0],e[1]||t.one)}
-  ,u.prototype.inspect=function(){
-  return this.isInfinity()?"<EC Point Infinity>":"<EC Point x: "+this.x.fromRed().toString(16,2)+" z: "+this.z.fromRed().toString(16,
-  2)+">"}
-  ,u.prototype.isInfinity=function(){
-  return 0===this.z.cmpn(0)}
-  ,u.prototype.dbl=function(){
-  var t=this.x.redAdd(this.z).redSqr(),e=this.x.redSub(this.z).redSqr(),r=t.redSub(e),n=t.redMul(e),
-  i=r.redMul(e.redAdd(this.curve.a24.redMul(r)));
-  return this.curve.point(n,i)}
-  ,u.prototype.add=function(){
-  throw new Error("Not supported on Montgomery curve")}
-  ,u.prototype.diffAdd=function(t,e){
-  var r=this.x.redAdd(this.z),n=this.x.redSub(this.z),i=t.x.redAdd(t.z),o=t.x.redSub(t.z).redMul(r),
-  a=i.redMul(n),s=e.z.redMul(o.redAdd(a).redSqr()),u=e.x.redMul(o.redISub(a).redSqr());
-  return this.curve.point(s,u)}
-  ,u.prototype.mul=function(t){
-  for(var e=t.clone(),r=this,n=this.curve.point(null,null),i=[];
-  0!==e.cmpn(0);
-  e.iushrn(1))i.push(e.andln(1));
-  for(var o=i.length-1;
-  o>=0;
-  o--)0===i[o]?(r=r.diffAdd(n,this),n=n.dbl()):(n=r.diffAdd(n,this),r=r.dbl());
-  return n}
-  ,u.prototype.mulAdd=function(){
-  throw new Error("Not supported on Montgomery curve")}
-  ,u.prototype.jumlAdd=function(){
-  throw new Error("Not supported on Montgomery curve")}
-  ,u.prototype.eq=function(t){
-  return 0===this.getX().cmp(t.getX())}
-  ,u.prototype.normalize=function(){
-  return this.x=this.x.redMul(this.z.redInvm()),this.z=this.curve.one,this}
-  ,u.prototype.getX=function(){
-  return this.normalize(),this.x.fromRed()}
+  function var_u(param_t, param_e, param_r) {
+  dep_helper_172.BasePoint.call(this, param_t, "projective"), null === param_e &&
+  null === param_r ? (this.x = this.curve.one, this.z = this.curve.zero) :
+  (this.x = new dep_module_126(param_e, 16), this.z = new dep_module_126(param_r,
+  16), this.x.red || (this.x = this.x.toRed(this.curve.red)), this.z.red ||
+  (this.z = this.z.toRed(this.curve.red)));
+  }
+  dep_module_15(var_s, dep_helper_172), moduleObj.exports = var_s, var_s.prototype.validate = function (
+  param_t) {
+  var var_e = param_t.normalize().x,
+  var_r = var_e.redSqr(),
+  var_n = var_r.redMul(var_e).redAdd(var_r.redMul(this.a)).redAdd(var_e);
+  return 0 === var_n.redSqrt().redSqr().cmp(var_n);
+  }
+  , dep_module_15(var_u, dep_helper_172.BasePoint), var_s.prototype.decodePoint = function (
+  param_t, param_e) {
+  return this.point(dep_helper_117.toArray(param_t, param_e), 1);
+  }
+  , var_s.prototype.point = function (param_t, param_e) {
+  return new var_u(this, param_t, param_e);
+  }
+  , var_s.prototype.pointFromJSON = function (param_t) {
+  return var_u.fromJSON(this, param_t);
+  }
+  , var_u.prototype.precompute = function () {
+  }
+  , var_u.prototype._encode = function () {
+  return this.getX().toArray("be", this.curve.p.byteLength());
+  }
+  , var_u.fromJSON = function (param_t, param_e) {
+  return new var_u(param_t, param_e[0], param_e[1] || param_t.one);
+  }
+  , var_u.prototype.inspect = function () {
+  return this.isInfinity() ? "<EC Point Infinity>" : "<EC Point x: " + this.x.fromRed(
+  ).toString(16, 2) + " z: " + this.z.fromRed().toString(16, 2) + ">";
+  }
+  , var_u.prototype.isInfinity = function () {
+  return 0 === this.z.cmpn(0);
+  }
+  , var_u.prototype.dbl = function () {
+  var var_t = this.x.redAdd(this.z).redSqr(),
+  var_e = this.x.redSub(this.z).redSqr(),
+  var_r = var_t.redSub(var_e),
+  var_n = var_t.redMul(var_e),
+  var_i = var_r.redMul(var_e.redAdd(this.curve.a24.redMul(var_r)));
+  return this.curve.point(var_n, var_i);
+  }
+  , var_u.prototype.add = function () {
+  throw new Error("Not supported on Montgomery curve");
+  }
+  , var_u.prototype.diffAdd = function (param_t, param_e) {
+  var var_r = this.x.redAdd(this.z),
+  var_n = this.x.redSub(this.z),
+  var_i = param_t.x.redAdd(param_t.z),
+  var_o = param_t.x.redSub(param_t.z).redMul(var_r),
+  var_a = var_i.redMul(var_n),
+  var_s_1 = param_e.z.redMul(var_o.redAdd(var_a).redSqr()),
+  var_u_1 = param_e.x.redMul(var_o.redISub(var_a).redSqr());
+  return this.curve.point(var_s_1, var_u_1);
+  }
+  , var_u.prototype.mul = function (param_t) {
+  for (var var_e = param_t.clone(), var_r = this, var_n = this.curve.point(null,
+  null), list_i = [];
+  0 !== var_e.cmpn(0);
+  var_e.iushrn(1)) list_i.push(var_e.andln(1));
+  for (var var_o = list_i.length - 1;
+  var_o >= 0;
+  var_o--) 0 === list_i[var_o] ? (var_r = var_r.diffAdd(var_n, this), var_n = var_n.dbl(
+  )) : (var_n = var_r.diffAdd(var_n, this), var_r = var_r.dbl());
+  return var_n;
+  }
+  , var_u.prototype.mulAdd = function () {
+  throw new Error("Not supported on Montgomery curve");
+  }
+  , var_u.prototype.jumlAdd = function () {
+  throw new Error("Not supported on Montgomery curve");
+  }
+  , var_u.prototype.eq = function (param_t) {
+  return 0 === this.getX().cmp(param_t.getX());
+  }
+  , var_u.prototype.normalize = function () {
+  return this.x = this.x.redMul(this.z.redInvm()), this.z = this.curve.one, this;
+  }
+  , var_u.prototype.getX = function () {
+  return this.normalize(), this.x.fromRed();
+  };
   };

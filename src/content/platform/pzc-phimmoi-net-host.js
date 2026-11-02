@@ -1,94 +1,133 @@
 // Module 689 - Savior Pzc Phimmoi Net Host
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(0);
-  function i(t,e){
-  var r="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];
-  if(!r){
-  if(Array.isArray(t)||(r=function(t,e){
-  if(t){
-  if("string"==typeof t)return o(t,e);
-  var r={
+  requireFn.r(exportsObj);
+  var dep_dom_utils = requireFn(0);
+  function var_i(param_t, param_e) {
+  var var_r = "undefined" != typeof Symbol && param_t[Symbol.iterator] ||
+  param_t["@@iterator"];
+  if (!var_r) {
+  if (Array.isArray(param_t) || (var_r = function (param_t_1, param_e_1) {
+  if (param_t_1) {
+  if ("string" == typeof param_t_1) return var_o(param_t_1, param_e_1);
+  var var_r_1 = {
   }
-  .toString.call(t).slice(8,-1);
-  return"Object"===r&&t.constructor&&(r=t.constructor.name),"Map"===r||"Set"===r?Array.from(t):"Arguments"===r||
-  /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?o(t,e):void 0}
+  .toString.call(param_t_1).slice(8, -1);
+  return "Object" === var_r_1 && param_t_1.constructor && (var_r_1 = param_t_1.constructor.name),
+  "Map" === var_r_1 || "Set" === var_r_1 ? Array.from(param_t_1) :
+  "Arguments" === var_r_1 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(var_r_1) ?
+  var_o(param_t_1, param_e_1) : void 0;
   }
-  (t))||e&&t&&"number"==typeof t.length){
-  r&&(t=r);
-  var n=0,i=function(){
+  }
+  (param_t)) || param_e && param_t && "number" == typeof param_t.length) {
+  var_r && (param_t = var_r);
+  var num_n = 0,
+  fn_i = function () {
   };
-  return{
-  s:i,n:function(){
-  return n>=t.length?{
-  done:!0}
-  :{
-  done:!1,value:t[n++]}
+  return {
+  s: fn_i,
+  n: function () {
+  return num_n >= param_t.length ? {
+  done: !0
   }
-  ,e:function(t){
-  throw t}
-  ,f:i}
+  : {
+  done: !1,
+  value: param_t[num_n++]
+  };
   }
-  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}
-  var a,s=!0,u=!1;
-  return{
-  s:function(){
-  r=r.call(t)}
-  ,n:function(){
-  var t=r.next();
-  return s=t.done,t}
-  ,e:function(t){
-  u=!0,a=t}
-  ,f:function(){
-  try{
-  s||null==r.return||r.return()}
-  finally{
-  if(u)throw a}
+  ,
+  e: function (param_t_1) {
+  throw param_t_1;
   }
+  ,
+  f: fn_i
+  };
   }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function o(t,e){
-  (null==e||e>t.length)&&(e=t.length);
-  for(var r=0,n=Array(e);
-  r<e;
-  r++)n[r]=t[r];
-  return n}
-  var a=[];
-  function s(t){
-  var e;
-  if(a.length<1)return t;
-  var r=a[Math.floor(Math.random()*a.length)],n=null===(e=/:\/\/([^/]+)\//i.exec(t))||void 0===e?void 0:
-  e[1];
-  return t=t.replace(n,r)}
-  e.default={
-  index:100,getUrl(t,e,r,o){
-  var u,c;
-  if(/pzc\.phimmoi.*\.net/.test(t)){
-  var l,f=i(Object(n.queryAll)("script").filter(t=>t.innerHTML));
-  try{
-  for(f.s();
-  !(l=f.n()).done;
-  ){
-  var d=l.value.innerHTML;
-  if(d.includes("VIDEO_URL")){
-  var h=/deliveryServers=\[(^]]*)\]/,p=(null===(u=/VIDEO_URL=swapServer\("([^)]*)"\)/.exec(d))||void 0===u?
-  void 0:u[1])||"";
-  h.test(d)&&(a=(null===(c=h.exec(d))||void 0===c?void 0:c[1].replace(/'/g,"").split(","))||[]),p=s(p),
-  Object(n.sendMessage)({
-  requestType:"save_url",params:{
-  url:p,referrer:location.href}
+  var var_a,
+  flag_s = !0,
+  flag_u = !1;
+  return {
+  s: function () {
+  var_r = var_r.call(param_t);
   }
-  )}
+  ,
+  n: function () {
+  var var_t = var_r.next();
+  return flag_s = var_t.done, var_t;
+  }
+  ,
+  e: function (param_t_1) {
+  flag_u = !0, var_a = param_t_1;
+  }
+  ,
+  f: function () {
+  try {
+  flag_s || null == var_r.return || var_r.return();
+  }
+  finally {
+  if (flag_u) throw var_a;
   }
   }
-  catch(t){
-  f.e(t)}
-  finally{
-  f.f()}
+  };
   }
-  return{
-  return:!1,data:null}
+  function var_o(param_t, param_e) {
+  (null == param_e || param_e > param_t.length) && (param_e = param_t.length);
+  for (var num_r = 0, var_n = Array(param_e);
+  num_r < param_e;
+  num_r++) var_n[num_r] = param_t[num_r];
+  return var_n;
+  }
+  var list_a = [];
+  function var_s(param_t) {
+  var var_e;
+  if (list_a.length < 1) return param_t;
+  var var_r = list_a[Math.floor(Math.random() * list_a.length)],
+  var_n = null === (var_e = /:\/\/([^/]+)\//i.exec(param_t)) ||
+  void 0 === var_e ? void 0 : var_e[1];
+  return param_t = param_t.replace(var_n, var_r);
+  }
+  exportsObj.default = {
+  index: 100,
+  getUrl(param_t, param_e, param_r, param_o) {
+  var var_u, var_c;
+  if (/pzc\.phimmoi.*\.net/.test(param_t)) {
+  var var_l,
+  var_f = var_i(Object(dep_dom_utils.queryAll)("script").filter(param_t_1 => param_t_1.innerHTML));
+  try {
+  for (var_f.s();
+  !(var_l = var_f.n()).done;
+  ) {
+  var var_d = var_l.value.innerHTML;
+  if (var_d.includes("VIDEO_URL")) {
+  var regex_h = /deliveryServers=\[(^]]*)\]/,
+  var_p = (null === (var_u = /VIDEO_URL=swapServer\("([^)]*)"\)/.exec(var_d)) ||
+  void 0 === var_u ? void 0 : var_u[1]) || "";
+  regex_h.test(var_d) && (list_a = (null === (var_c = regex_h.exec(var_d)) ||
+  void 0 === var_c ? void 0 : var_c[1].replace(/'/g, "").split(",")) ||
+  []), var_p = var_s(var_p), Object(dep_dom_utils.sendMessage)({
+  requestType: "save_url",
+  params: {
+  url: var_p,
+  referrer: location.href
   }
   }
+  );
+  }
+  }
+  }
+  catch (var_t) {
+  var_f.e(var_t);
+  }
+  finally {
+  var_f.f();
+  }
+  }
+  return {
+  return: !1,
+  data: null
+  };
+  }
+  };
   };

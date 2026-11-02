@@ -1,15 +1,21 @@
 // Module 240 - Savior Hayko_tv Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(12),i={
-  getDomains:()=>["hayko.tv"],default:{
-  mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.ext="mp4",e.exts=["mp4"],"video"}
+  requireFn.r(exportsObj);
+  var dep_dom_helper = requireFn(12),
+  obj_i = {
+  getDomains: () => ["hayko.tv"],
+  default: {
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.ext = "mp4", var_e.exts = ["mp4"], "video";
   }
-  ,getCustomParent(t){
-  var e=Object(n.d)(t);
-  return t.closest(".video-card")||e}
+  }
+  ,
+  getCustomParent(param_t) {
+  var var_e = Object(dep_dom_helper.d)(param_t);
+  return param_t.closest(".video-card") || var_e;
+  }
   };
-  e.default=i};
+  exportsObj.default = obj_i;
+  };

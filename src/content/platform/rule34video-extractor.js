@@ -1,14 +1,23 @@
 // Module 326 - Savior Rule34video Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e),e.default={
-  getDomains:()=>["rule34video"],urls:[{
-  checkUrl:t=>t.url.includes(".mp4"),getUrl:t=>t.url,mediaObjectChange:t=>{
-  var e,r,n=t.mediaObject,i=t.node;
-  n.ext="mp4",n.exts=["mp4"];
-  var o=null===(r=null===(e=i.closest(".fancybox-overlay"))||void 0===e?void 0:e.querySelector("h1"))||
-  void 0===r?void 0:r.innerText;
-  return n.filename=o||document.title,"video"}
+  requireFn.r(exportsObj), exportsObj.default = {
+  getDomains: () => ["rule34video"],
+  urls: [{
+  checkUrl: param_t => param_t.url.includes(".mp4"),
+  getUrl: param_t => param_t.url,
+  mediaObjectChange: param_t => {
+  var var_e,
+  var_r,
+  var_n = param_t.mediaObject,
+  var_i = param_t.node;
+  var_n.ext = "mp4", var_n.exts = ["mp4"];
+  var var_o = null === (var_r = null === (var_e = var_i.closest(".fancybox-overlay")) ||
+  void 0 === var_e ? void 0 : var_e.querySelector("h1")) || void 0 === var_r ?
+  void 0 : var_r.innerText;
+  return var_n.filename = var_o || document.title, "video";
   }
-  ]}
+  }
+  ]
+  };
   };

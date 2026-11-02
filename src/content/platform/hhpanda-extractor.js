@@ -1,8 +1,11 @@
 // Module 246 - Savior Hhpanda Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(94),i=Object.assign({
-  getDomains:()=>["hhpanda.men"]}
-  ,n.a);
-  e.default=i};
+  requireFn.r(exportsObj);
+  var dep_request_interceptor = requireFn(94),
+  var_i = Object.assign({
+  getDomains: () => ["hhpanda.men"]
+  }
+  , dep_request_interceptor.a);
+  exportsObj.default = var_i;
+  };

@@ -1,12 +1,15 @@
 // Module 256 - Savior Istockphoto_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  e.default={
-  getDomains:()=>["istockphoto.com"],default:{
-  mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  if(!e.url.startsWith("blob:"))return e.ext="mp4",e.exts=["mp4"],e.noAudio=!0,"video"}
+  requireFn.r(exportsObj);
+  exportsObj.default = {
+  getDomains: () => ["istockphoto.com"],
+  default: {
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  if (!var_e.url.startsWith("blob:")) return var_e.ext = "mp4", var_e.exts = ["mp4"],
+  var_e.noAudio = !0, "video";
   }
   }
+  };
   };

@@ -1,338 +1,565 @@
 // Module 214 - Savior Bilibili_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(1),i=r(3);
-  function o(){
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
-  e,r="function"==typeof Symbol?Symbol:{
+  requireFn.r(exportsObj);
+  var dep_media_constants = requireFn(1),
+  dep_url_utils = requireFn(3);
+  function var_o() {
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var var_t,
+  var_e,
+  var_r = "function" == typeof Symbol ? Symbol : {
   }
-  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
-  function s(r,n,i,o){
-  var s=n&&n.prototype instanceof c?n:c,l=Object.create(s.prototype);
-  return a(l,"_invoke",function(r,n,i){
-  var o,a,s,c=0,l=i||[],f=!1,d={
-  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
-  return o=e,a=0,s=t,d.n=r,u}
+  ,
+  var_n = var_r.iterator || "@@iterator",
+  var_i = var_r.toStringTag || "@@toStringTag";
+  function var_s_1(param_r, param_n, param_i, param_o) {
+  var var_s_2 = param_n && param_n.prototype instanceof var_c ?
+  param_n : var_c,
+  var_l_2 = Object.create(var_s_2.prototype);
+  return var_a(var_l_2, "_invoke", function (param_r_1, param_n_1, param_i_1) {
+  var var_o_1,
+  var_a_1,
+  var_s_3,
+  num_c = 0,
+  var_l_3 = param_i_1 || [],
+  flag_f = !1,
+  obj_d = {
+  p: 0,
+  n: 0,
+  v: var_t,
+  a: var_h_1,
+  f: var_h_1.bind(var_t, 4),
+  d: function (param_e, param_r_2) {
+  return var_o_1 = param_e, var_a_1 = 0, var_s_3 = var_t, obj_d.n = param_r_2, obj_u;
+  }
   };
-  function h(r,n){
-  for(a=r,s=n,e=0;
-  !f&&c&&!i&&e<l.length;
-  e++){
-  var i,o=l[e],h=d.p,p=o[2];
-  r>3?(i=p===n)&&(s=o[(a=o[4])?5:(a=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(a=0,d.v=n,d.n=o[1]):
-  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,a=0))}
-  if(i||r>1)return u;
-  throw f=!0,n}
-  return function(i,l,p){
-  if(c>1)throw TypeError("Generator is already running");
-  for(f&&1===l&&h(l,p),a=l,s=p;
-  (e=a<2?t:s)||!f;
-  ){
-  o||(a?a<3?(a>1&&(d.n=-1),h(a,s)):d.n=s:d.v=s);
-  try{
-  if(c=2,o){
-  if(a||(i="next"),e=o[i]){
-  if(!(e=e.call(o,s)))throw TypeError("iterator result is not an object");
-  if(!e.done)return e;
-  s=e.value,a<2&&(a=0)}
-  else 1===a&&(e=o.return)&&e.call(o),a<2&&(s=TypeError("The iterator does not provide a '"+i+"' method"),
-  a=1);
-  o=t}
-  else if((e=(f=d.n<0)?s:r.call(n,d))!==u)break}
-  catch(e){
-  o=t,a=1,s=e}
-  finally{
-  c=1}
+  function var_h_1(param_r_2, param_n_2) {
+  for (var_a_1 = param_r_2, var_s_3 = param_n_2, var_e = 0;
+  !flag_f && num_c && !var_i_1 && var_e < var_l_3.length;
+  var_e++) {
+  var var_i_1,
+  var_o_2 = var_l_3[var_e],
+  var_h_2 = obj_d.p,
+  var_p_1 = var_o_2[2];
+  param_r_2 > 3 ? (var_i_1 = var_p_1 === param_n_2) && (var_s_3 = var_o_2[(var_a_1 = var_o_2[4]) ?
+  5 : (var_a_1 = 3, 3)], var_o_2[4] = var_o_2[5] = var_t) : var_o_2[0] <= var_h_2 &&
+  ((var_i_1 = param_r_2 < 2 && var_h_2 < var_o_2[1]) ? (var_a_1 = 0, obj_d.v = param_n_2,
+  obj_d.n = var_o_2[1]) : var_h_2 < var_p_1 && (var_i_1 = param_r_2 < 3 ||
+  var_o_2[0] > param_n_2 || param_n_2 > var_p_1) && (var_o_2[4] = param_r_2, var_o_2[5] = param_n_2,
+  obj_d.n = var_p_1, var_a_1 = 0));
   }
-  return{
-  value:e,done:f}
+  if (var_i_1 || param_r_2 > 1) return obj_u;
+  throw flag_f = !0, param_n_2;
+  }
+  return function (param_i_2, param_l, param_p) {
+  if (num_c > 1) throw TypeError("Generator is already running");
+  for (flag_f && 1 === param_l && var_h_1(param_l, param_p), var_a_1 = param_l, var_s_3 = param_p;
+  (var_e = var_a_1 < 2 ? var_t : var_s_3) || !flag_f;
+  ) {
+  var_o_1 || (var_a_1 ? var_a_1 < 3 ? (var_a_1 > 1 && (obj_d.n = -1), var_h_1(var_a_1,
+  var_s_3)) : obj_d.n = var_s_3 : obj_d.v = var_s_3);
+  try {
+  if (num_c = 2, var_o_1) {
+  if (var_a_1 || (param_i_2 = "next"), var_e = var_o_1[param_i_2]) {
+  if (!(var_e = var_e.call(var_o_1, var_s_3))) throw TypeError("iterator result is not an object");
+  if (!var_e.done) return var_e;
+  var_s_3 = var_e.value, var_a_1 < 2 && (var_a_1 = 0);
+  }
+  else 1 === var_a_1 && (var_e = var_o_1.return) && var_e.call(var_o_1), var_a_1 < 2 &&
+  (var_s_3 = TypeError("The iterator does not provide a '" + param_i_2 + "' method"),
+  var_a_1 = 1);
+  var_o_1 = var_t;
+  }
+  else if ((var_e = (flag_f = obj_d.n < 0) ? var_s_3 : param_r_1.call(param_n_1,
+  obj_d)) !== obj_u) break;
+  }
+  catch (var_e_1) {
+  var_o_1 = var_t, var_a_1 = 1, var_s_3 = var_e_1;
+  }
+  finally {
+  num_c = 1;
   }
   }
-  (r,i,o),!0),l}
-  var u={
+  return {
+  value: var_e,
+  done: flag_f
   };
-  function c(){
+  };
   }
-  function l(){
+  (param_r, param_i, param_o), !0), var_l_2;
   }
-  function f(){
+  var obj_u = {
+  };
+  function var_c() {
   }
-  e=Object.getPrototypeOf;
-  var d=[][n]?e(e([][n]())):(a(e={
+  function var_l_1() {
   }
-  ,n,(function(){
-  return this}
-  )),e),h=f.prototype=c.prototype=Object.create(d);
-  function p(t){
-  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,a(t,i,"GeneratorFunction")),
-  t.prototype=Object.create(h),t}
-  return l.prototype=f,a(h,"constructor",f),a(f,"constructor",l),l.displayName="GeneratorFunction",a(f,
-  i,"GeneratorFunction"),a(h),a(h,i,"Generator"),a(h,n,(function(){
-  return this}
-  )),a(h,"toString",(function(){
-  return"[object Generator]"}
-  )),(o=function(){
-  return{
-  w:s,m:p}
+  function var_f() {
   }
-  )()}
-  function a(t,e,r,n){
-  var i=Object.defineProperty;
-  try{
-  i({
+  var_e = Object.getPrototypeOf;
+  var var_d = [][var_n] ? var_e(var_e([][var_n]())) : (var_a(var_e = {
   }
-  ,"",{
+  , var_n, function () {
+  return this;
   }
-  )}
-  catch(t){
-  i=0}
-  (a=function(t,e,r,n){
-  function o(e,r){
-  a(t,e,(function(t){
-  return this._invoke(e,r,t)}
-  ))}
-  e?i?i(t,e,{
-  value:r,enumerable:!n,configurable:!n,writable:!n}
-  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
-  )(t,e,r,n)}
-  var s,u=function(t,e,r,n){
-  return new(r||(r=Promise))((function(i,o){
-  function a(t){
-  try{
-  u(n.next(t))}
-  catch(t){
-  o(t)}
+  ), var_e),
+  var_h = var_f.prototype = var_c.prototype = Object.create(var_d);
+  function var_p(param_t) {
+  return Object.setPrototypeOf ? Object.setPrototypeOf(param_t, var_f) :
+  (param_t.__proto__ = var_f, var_a(param_t, var_i, "GeneratorFunction")), param_t.prototype = Object.create(
+  var_h), param_t;
   }
-  function s(t){
-  try{
-  u(n.throw(t))}
-  catch(t){
-  o(t)}
+  return var_l_1.prototype = var_f, var_a(var_h, "constructor", var_f), var_a(var_f,
+  "constructor", var_l_1), var_l_1.displayName = "GeneratorFunction", var_a(var_f,
+  var_i, "GeneratorFunction"), var_a(var_h), var_a(var_h, var_i, "Generator"), var_a(
+  var_h, var_n, function () {
+  return this;
   }
-  function u(t){
-  var e;
-  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
-  t(e)}
-  ))).then(a,s)}
-  u((n=n.apply(t,e||[])).next())}
-  ))}
-  ,c=[],l=window.location.href;
-  !function(t){
-  t.getPlayDataFromDocument=function(t){
-  var e=Array.from(t.querySelectorAll("script")).map(t=>{
-  var e;
-  return null===(e=t.innerText.match(/__playinfo_+=(\{.+\})/i))||void 0===e?void 0:e[1]}
-  ).filter(t=>null==t?void 0:t.length);
-  if(e[0]){
-  var r=JSON.parse(e[0]),n=null==r?void 0:r.data;
-  if(!n)throw new Error("");
-  return n}
-  throw new Error("")}
+  ), var_a(var_h, "toString", function () {
+  return "[object Generator]";
   }
-  (s||(s={
+  ), (var_o = function () {
+  return {
+  w: var_s_1,
+  m: var_p
+  };
+  }
+  )();
+  }
+  function var_a(param_t, param_e, param_r, param_n) {
+  var var_i = Object.defineProperty;
+  try {
+  var_i({
+  }
+  , "", {
+  }
+  );
+  }
+  catch (var_t) {
+  var_i = 0;
+  }
+  (var_a = function (param_t_1, param_e_1, param_r_1, param_n_1) {
+  function var_o_1(param_e_2, param_r_2) {
+  var_a(param_t_1, param_e_2, function (param_t_2) {
+  return this._invoke(param_e_2, param_r_2, param_t_2);
+  }
+  );
+  }
+  param_e_1 ? var_i ? var_i(param_t_1, param_e_1, {
+  value: param_r_1,
+  enumerable: !param_n_1,
+  configurable: !param_n_1,
+  writable: !param_n_1
+  }
+  ) : param_t_1[param_e_1] = param_r_1 : (var_o_1("next", 0), var_o_1("throw", 1),
+  var_o_1("return", 2));
+  }
+  )(param_t, param_e, param_r, param_n);
+  }
+  var var_s,
+  fn_u = function (param_t, param_e, param_r, param_n) {
+  return new (param_r || (param_r = Promise))(function (param_i, param_o) {
+  function var_a_1(param_t_1) {
+  try {
+  var_u(param_n.next(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_s_1(param_t_1) {
+  try {
+  var_u(param_n.throw(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_u(param_t_1) {
+  var var_e;
+  param_t_1.done ? param_i(param_t_1.value) : (var_e = param_t_1.value, var_e instanceof param_r ?
+  var_e : new param_r(function (param_t_2) {
+  param_t_2(var_e);
+  }
+  )).then(var_a_1, var_s_1);
+  }
+  var_u((param_n = param_n.apply(param_t, param_e || [])).next());
+  }
+  );
+  }
+  ,
+  list_c = [],
+  var_l = window.location.href;
+  !function (param_t) {
+  param_t.getPlayDataFromDocument = function (param_t_1) {
+  var var_e = Array.from(param_t_1.querySelectorAll("script")).map(param_t_2 => {
+  var var_e_1;
+  return null === (var_e_1 = param_t_2.innerText.match(/__playinfo_+=(\{.+\})/i)) ||
+  void 0 === var_e_1 ? void 0 : var_e_1[1];
+  }
+  ).filter(param_t_2 => null == param_t_2 ? void 0 : param_t_2.length);
+  if (var_e[0]) {
+  var var_r = JSON.parse(var_e[0]),
+  var_n = null == var_r ? void 0 : var_r.data;
+  if (!var_n) throw new Error("");
+  return var_n;
+  }
+  throw new Error("");
+  };
+  }
+  (var_s || (var_s = {
   }
   ));
-  var f={
-  getDomains:()=>["bilibili."],processRequestIds:t=>{
-  if(!c.includes(t)&&"string"==typeof t.url&&!t.url.includes("flv"))return c.push(t),!0}
-  ,parse:{
-  sources:[{
-  checkSource:t=>t.url==location.href&&location.host.includes("bilibili.com"),parse:t=>{
-  var e,r=t.media,o=t.response;
-  r.ext="mp4",r.exts=["mp4"];
-  var a=r.playData;
-  if("string"==typeof o)try{
-  var u=(new DOMParser).parseFromString(o,"text/html");
-  a=s.getPlayDataFromDocument(u)}
-  catch(t){
-  a=r.playData}
-  try{
-  r.fixName!=document.title&&(r.fixName=document.title),r.fixName||(r.fixName=r.filename);
-  var c=a.dash;
-  if(!c){
-  var l=Object.assign(Object.assign({
+  var obj_f = {
+  getDomains: () => ["bilibili."],
+  processRequestIds: param_t => {
+  if (!list_c.includes(param_t) && "string" == typeof param_t.url &&
+  !param_t.url.includes("flv")) return list_c.push(param_t), !0;
   }
-  ,Object(i.f)(a.durl[0].url)),{
-  filename:r.fixName,type:"video",ext:"mp4",exts:["mp4"]}
-  ),f=[];
-  return f[0]=l,f}
-  return c.video?c.video.filter(t=>t.baseUrl).map(t=>{
-  var e,o,s=Object.assign(Object.assign({
+  ,
+  parse: {
+  sources: [{
+  checkSource: param_t => param_t.url == location.href && location.host.includes(
+  "bilibili.com"),
+  parse: param_t => {
+  var var_e,
+  var_r = param_t.media,
+  var_o_1 = param_t.response;
+  var_r.ext = "mp4", var_r.exts = ["mp4"];
+  var var_a_1 = var_r.playData;
+  if ("string" == typeof var_o_1) try {
+  var var_u = new DOMParser().parseFromString(var_o_1, "text/html");
+  var_a_1 = var_s.getPlayDataFromDocument(var_u);
   }
-  ,Object(i.f)(t.baseUrl)),{
-  filename:r.fixName,type:"video",ext:"mp4",exts:["mp4"],resolution:t.height+"p"}
+  catch (var_t) {
+  var_a_1 = var_r.playData;
+  }
+  try {
+  var_r.fixName != document.title && (var_r.fixName = document.title), var_r.fixName ||
+  (var_r.fixName = var_r.filename);
+  var var_c = var_a_1.dash;
+  if (!var_c) {
+  var var_l_1 = Object.assign(Object.assign({
+  }
+  , Object(dep_url_utils.f)(var_a_1.durl[0].url)), {
+  filename: var_r.fixName,
+  type: "video",
+  ext: "mp4",
+  exts: ["mp4"]
+  }
+  ),
+  list_f = [];
+  return list_f[0] = var_l_1, list_f;
+  }
+  return var_c.video ? var_c.video.filter(param_t_1 => param_t_1.baseUrl).map(param_t_1 => {
+  var var_e_1,
+  var_o_2,
+  var_s_1 = Object.assign(Object.assign({
+  }
+  , Object(dep_url_utils.f)(param_t_1.baseUrl)), {
+  filename: var_r.fixName,
+  type: "video",
+  ext: "mp4",
+  exts: ["mp4"],
+  resolution: param_t_1.height + "p"
+  }
   );
-  s.quality=(null===(e=n.r[s.resolution])||void 0===e?void 0:e.label)||(null===(o=a.support_formats.find(e=>e.quality==t.id))||
-  void 0===o?void 0:o.display_desc)||s.resolution;
-  var u=c.audio[0].baseUrl;
-  return s.url={
-  audioUrl:u,videoUrl:t.baseUrl}
-  ,s}
-  ):(null===(e=c.audio)||void 0===e?void 0:e.map(t=>Object.assign(Object.assign({
+  var_s_1.quality = (null === (var_e_1 = dep_media_constants.r[var_s_1.resolution]) ||
+  void 0 === var_e_1 ? void 0 : var_e_1.label) || (null === (var_o_2 = var_a_1.support_formats.find(
+  param_e => param_e.quality == param_t_1.id)) || void 0 === var_o_2 ?
+  void 0 : var_o_2.display_desc) || var_s_1.resolution;
+  var var_u_1 = var_c.audio[0].baseUrl;
+  return var_s_1.url = {
+  audioUrl: var_u_1,
+  videoUrl: param_t_1.baseUrl
   }
-  ,Object(i.f)(t.baseUrl)),{
-  filename:r.fixName,type:"audio"}
-  )))||[]}
-  catch(t){
-  return[]}
+  , var_s_1;
+  }
+  ) : (null === (var_e = var_c.audio) || void 0 === var_e ? void 0 :
+  var_e.map(param_t_1 => Object.assign(Object.assign({
+  }
+  , Object(dep_url_utils.f)(param_t_1.baseUrl)), {
+  filename: var_r.fixName,
+  type: "audio"
+  }
+  ))) || [];
+  }
+  catch (var_t) {
+  return [];
   }
   }
-  ,{
-  checkSource:t=>{
-  var e=t.url;
-  return"string"==typeof e&&e.includes("/web/playurl")}
-  ,parse:t=>{
-  var e,r=t.media,o=t.response;
-  try{
-  var a=JSON.parse(o).data.playurl;
-  return a.video?a.video.filter(t=>t.video_resource.url).map(t=>{
-  var e,o,s=Object.assign(Object.assign({
   }
-  ,Object(i.f)(t.video_resource.url)),{
-  filename:r.filename,type:"video",ext:"mp4",exts:["mp4"],resolution:t.video_resource.height+"p"}
+  , {
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return "string" == typeof var_e && var_e.includes("/web/playurl");
+  }
+  ,
+  parse: param_t => {
+  var var_e,
+  var_r = param_t.media,
+  var_o_1 = param_t.response;
+  try {
+  var var_a_1 = JSON.parse(var_o_1).data.playurl;
+  return var_a_1.video ? var_a_1.video.filter(param_t_1 => param_t_1.video_resource.url).map(
+  param_t_1 => {
+  var var_e_1,
+  var_o_2,
+  var_s_1 = Object.assign(Object.assign({
+  }
+  , Object(dep_url_utils.f)(param_t_1.video_resource.url)), {
+  filename: var_r.filename,
+  type: "video",
+  ext: "mp4",
+  exts: ["mp4"],
+  resolution: param_t_1.video_resource.height + "p"
+  }
   );
-  s.quality=(null===(e=n.r[s.resolution])||void 0===e?void 0:e.label)||t.stream_info.desc_words;
-  var u=null===(o=a.audio_resource)||void 0===o?void 0:o.find(e=>e.quality==t.audio_quality);
-  return s.url={
-  audioUrl:u.url,videoUrl:t.video_resource.url}
-  ,s}
-  ):(null===(e=a.audio_resource)||void 0===e?void 0:e.map(t=>Object.assign(Object.assign({
+  var_s_1.quality = (null === (var_e_1 = dep_media_constants.r[var_s_1.resolution]) ||
+  void 0 === var_e_1 ? void 0 : var_e_1.label) || param_t_1.stream_info.desc_words;
+  var var_u = null === (var_o_2 = var_a_1.audio_resource) ||
+  void 0 === var_o_2 ? void 0 : var_o_2.find(param_e => param_e.quality == param_t_1.audio_quality);
+  return var_s_1.url = {
+  audioUrl: var_u.url,
+  videoUrl: param_t_1.video_resource.url
   }
-  ,Object(i.f)(t.url)),{
-  filename:r.filename,type:"audio",resolution:t.quality}
-  )))||[]}
-  catch(t){
-  return[]}
+  , var_s_1;
+  }
+  ) : (null === (var_e = var_a_1.audio_resource) || void 0 === var_e ?
+  void 0 : var_e.map(param_t_1 => Object.assign(Object.assign({
+  }
+  , Object(dep_url_utils.f)(param_t_1.url)), {
+  filename: var_r.filename,
+  type: "audio",
+  resolution: param_t_1.quality
+  }
+  ))) || [];
+  }
+  catch (var_t) {
+  return [];
   }
   }
-  ,{
-  checkSource:t=>{
-  var e=t.url;
-  return"string"==typeof e&&e.includes("wbi/playurl")}
-  ,parse:t=>{
-  var e,r=t.media,o=t.response;
-  try{
-  var a=JSON.parse(o).data.dash;
-  return a.video?a.video.filter(t=>t.base_url||t.baseUrl).map((t,e)=>{
-  var o,s,u,c,l=Object.assign(Object.assign({
   }
-  ,Object(i.f)(t.base_url||t.baseUrl)),{
-  filename:r.filename,type:"video",ext:"mp4",exts:["mp4"],resolution:t.height+"p"}
+  , {
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return "string" == typeof var_e && var_e.includes("wbi/playurl");
+  }
+  ,
+  parse: param_t => {
+  var var_e,
+  var_r = param_t.media,
+  var_o_1 = param_t.response;
+  try {
+  var var_a_1 = JSON.parse(var_o_1).data.dash;
+  return var_a_1.video ? var_a_1.video.filter(param_t_1 => param_t_1.base_url ||
+  param_t_1.baseUrl).map((param_t_1, param_e) => {
+  var var_o_2,
+  var_s_1,
+  var_u,
+  var_c,
+  var_l_1 = Object.assign(Object.assign({
+  }
+  , Object(dep_url_utils.f)(param_t_1.base_url || param_t_1.baseUrl)), {
+  filename: var_r.filename,
+  type: "video",
+  ext: "mp4",
+  exts: ["mp4"],
+  resolution: param_t_1.height + "p"
+  }
   );
-  l.quality=(null===(o=n.r[l.resolution])||void 0===o?void 0:o.label)||(null===(s=t.codecs)||void 0===s?
-  void 0:s.slice(0,12));
-  var f=(null===(u=a.audio)||void 0===u?void 0:u[e])||(null===(c=a.audio)||void 0===c?void 0:c[0]);
-  return l.url={
-  audioUrl:f.base_url||f.baseUrl,videoUrl:l.url}
-  ,l}
-  ):(null===(e=a.audio)||void 0===e?void 0:e.map(t=>Object.assign(Object.assign({
+  var_l_1.quality = (null === (var_o_2 = dep_media_constants.r[var_l_1.resolution]) ||
+  void 0 === var_o_2 ? void 0 : var_o_2.label) || (null === (var_s_1 = param_t_1.codecs) ||
+  void 0 === var_s_1 ? void 0 : var_s_1.slice(0, 12));
+  var var_f = (null === (var_u = var_a_1.audio) || void 0 === var_u ?
+  void 0 : var_u[param_e]) || (null === (var_c = var_a_1.audio) ||
+  void 0 === var_c ? void 0 : var_c[0]);
+  return var_l_1.url = {
+  audioUrl: var_f.base_url || var_f.baseUrl,
+  videoUrl: var_l_1.url
   }
-  ,Object(i.f)(t.base_url||t.baseUrl)),{
-  filename:r.filename,type:"audio",resolution:t.bandwidth}
-  )))||[]}
-  catch(t){
-  return[]}
+  , var_l_1;
   }
+  ) : (null === (var_e = var_a_1.audio) || void 0 === var_e ?
+  void 0 : var_e.map(param_t_1 => Object.assign(Object.assign({
   }
-  ]}
-  ,urls:[{
-  checkUrl:()=>/bilibili\.tv(\/.+)?\/(video|play)\/(\d+)(\/(\d+))?/i.test(location.href),getUrl:t=>{
-  var e,r,n=t.node,i=/\/(video|play)\/(\d+)(\/(\d+))?/i,o=location.href.match(i),a=o&&o[2],s=o&&o[4];
-  if(a){
-  var u="https://api.bilibili.tv/intl/gateway/web/playurl?s_locale=en_US&platform=web&aid="+a;
-  if(/\/play\/(\d+)/i.test(location.href)){
-  if(!s){
-  var c=null===(e=(n.closest("section.video-play")||document).querySelector(".ep-item--active"))||void 0===e?
-  void 0:e.href;
-  if(!c)return u;
-  s=(null===(r=c.match(i))||void 0===r?void 0:r[4])||null}
-  s&&(u="https://api.bilibili.tv/intl/gateway/web/playurl?s_locale=en_US&platform=web&ep_id="+s)}
-  return u}
+  , Object(dep_url_utils.f)(param_t_1.base_url || param_t_1.baseUrl)), {
+  filename: var_r.filename,
+  type: "audio",
+  resolution: param_t_1.bandwidth
   }
-  ,mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.ext="m3u8",e.exts=["m3u8"],e.filename=document.title,"video"}
+  ))) || [];
   }
-  ,{
-  checkUrl:()=>/bilibili\.com(\/.+)?\/(video|play)\/([a-z0-9]+)/i.test(location.href)&&Array.from(document.querySelectorAll("script")).map(t=>{
-  var e;
-  return null===(e=t.innerText.match(/(playurlSSRData|__playinfo__)\s*=\s*(\{.+\})/i))||void 0===e?void 0:
-  e[2]}
-  ).filter(t=>null==t?void 0:t.length).length>0,getUrl:()=>location.href,mediaObjectChange:t=>{
-  var e,r,n=t.mediaObject,i=t.node;
-  n.fixName=document.title,n.skipRedirect=!0;
-  var o=null===(e=i.closest('[class*="video-container"]'))||void 0===e?void 0:e.querySelector(".video-title, h1");
-  o&&(n.fixName=o.innerText.trim());
-  var a=Array.from(document.querySelectorAll("script")).map(t=>{
-  var e;
-  return null===(e=t.innerText.match(/(playurlSSRData|__playinfo__)\s*=\s*(\{.+\})/i))||void 0===e?void 0:
-  e[2]}
-  ).filter(t=>null==t?void 0:t.length);
-  if(a[0])try{
-  var s=JSON.parse(a[0]),u=(null===(r=null==s?void 0:s.result)||void 0===r?void 0:r.video_info)||(null==s?
-  void 0:s.data);
-  if(!u)throw new Error("");
-  return n.ext="m3u8",n.exts=["m3u8"],n.playData=u,"video"}
-  catch(t){
-  return console.warn(t),"null"}
+  catch (var_t) {
+  return [];
   }
   }
-  ,{
-  checkUrl:t=>{
-  var e=t.url;
-  return Boolean(e.match(/blob:https:\/\/(www\.)*bilibili\./))}
-  ,getUrl:t=>{
-  var e,r,n,i,o,a=t.node,s=null===(e=location.href.match(/bilibili\.com(\/.+)?\/(video|play)\/([a-z0-9]+)/i))||
-  void 0===e?void 0:e[3];
-  if(c.length>0){
-  var u=[...c];
-  u.reverse();
-  var l=u.findIndex(t=>{
-  var e,r;
-  return(null===(e=t.url)||void 0===e?void 0:e.includes("wbi/playurl"))&&(!s||(null===(r=t.search)||
-  void 0===r?void 0:r.includes(s)))}
-  ),f=u[l];
-  if(f){
-  var d=a.closest('.video-player-box, [class*="video-container"]');
-  if(d){
-  var h=null===(o=(null===(r=d.querySelector(".bpx-player-top-left-title, video-info-title [data-title]"))||
-  void 0===r?void 0:r.innerText)||(null===(i=null===(n=d.parentElement)||void 0===n?void 0:n.querySelector(".video-toobar_title"))||
-  void 0===i?void 0:i.innerText))||void 0===o?void 0:o.trim();
-  h&&(f.filename=h)}
-  return f.identifier=Date.now().toString(),[f]}
-  var p=c[c.length-1].url,v=p.split("/"),m=v[v.length-2],y=[];
-  y.push(c[0]),y[0].url={
-  videoUrl:p,audioUrl:p};
-  for(var g={
   }
-  ,b=1;
-  b<c.length;
-  b++){
-  var w=c[b].url;
-  if("string"==typeof c[b].url&&w.includes(m)){
-  var A=new URL(w).searchParams.get("upsig");
-  A&&(!g[A]||g[A].size<c[b].size)&&(g[A]=c[b])}
+  ]
   }
-  for(var _=Object.values(g),E=_[0],S=_[0],O=1;
-  O<_.length;
-  O++)_[O].size>E.size&&(E=_[O]),_[O].size<S.size&&(S=_[O]);
-  return y[0].url.videoUrl=E.url,y[0].url.audioUrl=S.url,y[0].url}
+  ,
+  urls: [{
+  checkUrl: () => /bilibili\.tv(\/.+)?\/(video|play)\/(\d+)(\/(\d+))?/i.test(location.href),
+  getUrl: param_t => {
+  var var_e,
+  var_r,
+  var_n = param_t.node,
+  regex_i = /\/(video|play)\/(\d+)(\/(\d+))?/i,
+  var_o_1 = location.href.match(regex_i),
+  var_a_1 = var_o_1 && var_o_1[2],
+  var_s_1 = var_o_1 && var_o_1[4];
+  if (var_a_1) {
+  var var_u = "https://api.bilibili.tv/intl/gateway/web/playurl?s_locale=en_US&platform=web&aid=" + var_a_1;
+  if (/\/play\/(\d+)/i.test(location.href)) {
+  if (!var_s_1) {
+  var var_c = null === (var_e = (var_n.closest("section.video-play") ||
+  document).querySelector(".ep-item--active")) || void 0 === var_e ?
+  void 0 : var_e.href;
+  if (!var_c) return var_u;
+  var_s_1 = (null === (var_r = var_c.match(regex_i)) || void 0 === var_r ?
+  void 0 : var_r[4]) || null;
   }
-  ,mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  if("object"==typeof e.url&&e.url.videoUrl)return e.ext="mp4",e.exts=["mp4"],e.filename=document.title,
-  e.referrer=location.href,e.extraData=[{
-  name:"simple_request",value:"true"}
-  ],"video"}
+  var_s_1 && (var_u = "https://api.bilibili.tv/intl/gateway/web/playurl?s_locale=en_US&platform=web&ep_id=" + var_s_1);
   }
-  ],beforeGetUrl:()=>u(void 0,void 0,void 0,o().m((function t(){
-  return o().w((function(t){
-  for(;;
-  )switch(t.n){
-  case 0:window.location.href!==l&&(l=window.location.href,c.length=0);
-  case 1:return t.a(2)}
+  return var_u;
   }
-  ),t)}
-  )))};
-  e.default=f};
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.ext = "m3u8", var_e.exts = ["m3u8"], var_e.filename = document.title,
+  "video";
+  }
+  }
+  , {
+  checkUrl: () => /bilibili\.com(\/.+)?\/(video|play)\/([a-z0-9]+)/i.test(location.href) &&
+  Array.from(document.querySelectorAll("script")).map(param_t => {
+  var var_e;
+  return null === (var_e = param_t.innerText.match(/(playurlSSRData|__playinfo__)\s*=\s*(\{.+\})/i)) ||
+  void 0 === var_e ? void 0 : var_e[2];
+  }
+  ).filter(param_t => null == param_t ? void 0 : param_t.length).length > 0,
+  getUrl: () => location.href,
+  mediaObjectChange: param_t => {
+  var var_e,
+  var_r,
+  var_n = param_t.mediaObject,
+  var_i = param_t.node;
+  var_n.fixName = document.title, var_n.skipRedirect = !0;
+  var var_o_1 = null === (var_e = var_i.closest('[class*="video-container"]')) ||
+  void 0 === var_e ? void 0 : var_e.querySelector(".video-title, h1");
+  var_o_1 && (var_n.fixName = var_o_1.innerText.trim());
+  var var_a_1 = Array.from(document.querySelectorAll("script")).map(param_t_1 => {
+  var var_e_1;
+  return null === (var_e_1 = param_t_1.innerText.match(/(playurlSSRData|__playinfo__)\s*=\s*(\{.+\})/i)) ||
+  void 0 === var_e_1 ? void 0 : var_e_1[2];
+  }
+  ).filter(param_t_1 => null == param_t_1 ? void 0 : param_t_1.length);
+  if (var_a_1[0]) try {
+  var var_s_1 = JSON.parse(var_a_1[0]),
+  var_u = (null === (var_r = null == var_s_1 ? void 0 : var_s_1.result) ||
+  void 0 === var_r ? void 0 : var_r.video_info) || (null == var_s_1 ?
+  void 0 : var_s_1.data);
+  if (!var_u) throw new Error("");
+  return var_n.ext = "m3u8", var_n.exts = ["m3u8"], var_n.playData = var_u, "video";
+  }
+  catch (var_t) {
+  return console.warn(var_t), "null";
+  }
+  }
+  }
+  , {
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return Boolean(var_e.match(/blob:https:\/\/(www\.)*bilibili\./));
+  }
+  ,
+  getUrl: param_t => {
+  var var_e,
+  var_r,
+  var_n,
+  var_i,
+  var_o_1,
+  var_a_1 = param_t.node,
+  var_s_1 = null === (var_e = location.href.match(/bilibili\.com(\/.+)?\/(video|play)\/([a-z0-9]+)/i)) ||
+  void 0 === var_e ? void 0 : var_e[3];
+  if (list_c.length > 0) {
+  var list_u = [...list_c];
+  list_u.reverse();
+  var var_l_1 = list_u.findIndex(param_t_1 => {
+  var var_e_1, var_r_1;
+  return (null === (var_e_1 = param_t_1.url) || void 0 === var_e_1 ?
+  void 0 : var_e_1.includes("wbi/playurl")) && (!var_s_1 || (null === (var_r_1 = param_t_1.search) ||
+  void 0 === var_r_1 ? void 0 : var_r_1.includes(var_s_1)));
+  }
+  ),
+  var_f = list_u[var_l_1];
+  if (var_f) {
+  var var_d = var_a_1.closest('.video-player-box, [class*="video-container"]');
+  if (var_d) {
+  var var_h = null === (var_o_1 = (null === (var_r = var_d.querySelector(".bpx-player-top-left-title, video-info-title [data-title]")) ||
+  void 0 === var_r ? void 0 : var_r.innerText) || (null === (var_i = null === (var_n = var_d.parentElement) ||
+  void 0 === var_n ? void 0 : var_n.querySelector(".video-toobar_title")) ||
+  void 0 === var_i ? void 0 : var_i.innerText)) || void 0 === var_o_1 ?
+  void 0 : var_o_1.trim();
+  var_h && (var_f.filename = var_h);
+  }
+  return var_f.identifier = Date.now().toString(), [var_f];
+  }
+  var var_p = list_c[list_c.length - 1].url,
+  var_v = var_p.split("/"),
+  var_m = var_v[var_v.length - 2],
+  list_y = [];
+  list_y.push(list_c[0]), list_y[0].url = {
+  videoUrl: var_p,
+  audioUrl: var_p
+  };
+  for (var obj_g = {
+  }
+  , num_b = 1;
+  num_b < list_c.length;
+  num_b++) {
+  var var_w = list_c[num_b].url;
+  if ("string" == typeof list_c[num_b].url && var_w.includes(var_m)) {
+  var var_A = new URL(var_w).searchParams.get("upsig");
+  var_A && (!obj_g[var_A] || obj_g[var_A].size < list_c[num_b].size) &&
+  (obj_g[var_A] = list_c[num_b]);
+  }
+  }
+  for (var var__ = Object.values(obj_g), var_E = var__[0], var_S = var__[0], num_O = 1;
+  num_O < var__.length;
+  num_O++) var__[num_O].size > var_E.size && (var_E = var__[num_O]), var__[num_O].size < var_S.size &&
+  (var_S = var__[num_O]);
+  return list_y[0].url.videoUrl = var_E.url, list_y[0].url.audioUrl = var_S.url,
+  list_y[0].url;
+  }
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  if ("object" == typeof var_e.url && var_e.url.videoUrl) return var_e.ext = "mp4",
+  var_e.exts = ["mp4"], var_e.filename = document.title, var_e.referrer = location.href,
+  var_e.extraData = [{
+  name: "simple_request",
+  value: "true"
+  }
+  ], "video";
+  }
+  }
+  ],
+  beforeGetUrl: () => fn_u(void 0, void 0, void 0, var_o().m(function var_t() {
+  return var_o().w(function (param_t) {
+  for (;;
+  ) switch (param_t.n) {
+  case 0:
+  window.location.href !== var_l && (var_l = window.location.href, list_c.length = 0);
+  case 1:
+  return param_t.a(2);
+  }
+  }
+  , var_t);
+  }
+  ))
+  };
+  exportsObj.default = obj_f;
+  };

@@ -1,14 +1,23 @@
 // Module 222 - Savior Cnn_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n;
-  r.r(e);
-  var i=location.href,o={
-  getDomains:()=>["edition.cnn.com"],forceUpdate(){
-  location.href!==i&&(EE.emit("widget.forceUpdate"),i=location.href,n=void 0)}
-  ,default:{
-  getUrl:()=>null==n?void 0:n.url}
-  ,processRequestIds(t){
-  if(t.url.match(/\/proxy(\.\d+)?\.m3u8/i))return n=t,!0}
+  var var_n;
+  requireFn.r(exportsObj);
+  var var_i = location.href,
+  obj_o = {
+  getDomains: () => ["edition.cnn.com"],
+  forceUpdate() {
+  location.href !== var_i && (EE.emit("widget.forceUpdate"), var_i = location.href,
+  var_n = void 0);
+  }
+  ,
+  default: {
+  getUrl: () => null == var_n ? void 0 : var_n.url
+  }
+  ,
+  processRequestIds(param_t) {
+  if (param_t.url.match(/\/proxy(\.\d+)?\.m3u8/i)) return var_n = param_t, !0;
+  }
   };
-  e.default=o};
+  exportsObj.default = obj_o;
+  };

@@ -1,19 +1,35 @@
 // Module 279 - Savior Motphim2_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(14),i=r(20),o=[],a={
-  getDomains:()=>["motphim2.com","iphimchillzz.com"],processRequestIds:t=>{
-  if(null==t?void 0:t.url){
-  var e=new URL(t.url),r=e.origin,n=e.searchParams;
-  return"1"===n.get("type")&&"6"===n.get("ct")&&(t.origin=r,o.push(t)),!0}
+  requireFn.r(exportsObj);
+  var dep_format_resolver = requireFn(14),
+  dep_network_monitor = requireFn(20),
+  list_o = [],
+  obj_a = {
+  getDomains: () => ["motphim2.com", "iphimchillzz.com"],
+  processRequestIds: param_t => {
+  if (null == param_t ? void 0 : param_t.url) {
+  var var_e = new URL(param_t.url),
+  var_r = var_e.origin,
+  var_n = var_e.searchParams;
+  return "1" === var_n.get("type") && "6" === var_n.get("ct") &&
+  (param_t.origin = var_r, list_o.push(param_t)), !0;
   }
-  ,parse:{
-  default:t=>{
-  var e=t.media,r=t.response;
-  return r?Object(n.b)(r,document.title,e.origin,e.url):[]}
   }
-  ,urls:[...i.a.urls||[]],default:{
-  getUrl:()=>o[0]?[o[0]]:[]}
+  ,
+  parse: {
+  default: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  return var_r ? Object(dep_format_resolver.b)(var_r, document.title, var_e.origin,
+  var_e.url) : [];
+  }
+  }
+  ,
+  urls: [...(dep_network_monitor.a.urls || [])],
+  default: {
+  getUrl: () => list_o[0] ? [list_o[0]] : []
+  }
   };
-  e.default=a};
+  exportsObj.default = obj_a;
+  };

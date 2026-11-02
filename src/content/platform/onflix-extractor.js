@@ -1,197 +1,320 @@
 // Module 298 - Savior Onflix Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(1),i=r(9);
-  function o(){
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
-  e,r="function"==typeof Symbol?Symbol:{
+  requireFn.r(exportsObj);
+  var dep_media_constants = requireFn(1),
+  dep_quality_helper = requireFn(9);
+  function var_o() {
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var var_t,
+  var_e,
+  var_r = "function" == typeof Symbol ? Symbol : {
   }
-  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
-  function s(r,n,i,o){
-  var s=n&&n.prototype instanceof c?n:c,l=Object.create(s.prototype);
-  return a(l,"_invoke",function(r,n,i){
-  var o,a,s,c=0,l=i||[],f=!1,d={
-  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
-  return o=e,a=0,s=t,d.n=r,u}
+  ,
+  var_n = var_r.iterator || "@@iterator",
+  var_i = var_r.toStringTag || "@@toStringTag";
+  function var_s(param_r, param_n, param_i, param_o) {
+  var var_s_1 = param_n && param_n.prototype instanceof var_c_1 ?
+  param_n : var_c_1,
+  var_l_2 = Object.create(var_s_1.prototype);
+  return var_a(var_l_2, "_invoke", function (param_r_1, param_n_1, param_i_1) {
+  var var_o_1,
+  var_a_1,
+  var_s_2,
+  num_c = 0,
+  var_l_3 = param_i_1 || [],
+  flag_f = !1,
+  obj_d = {
+  p: 0,
+  n: 0,
+  v: var_t,
+  a: var_h_1,
+  f: var_h_1.bind(var_t, 4),
+  d: function (param_e, param_r_2) {
+  return var_o_1 = param_e, var_a_1 = 0, var_s_2 = var_t, obj_d.n = param_r_2, obj_u;
+  }
   };
-  function h(r,n){
-  for(a=r,s=n,e=0;
-  !f&&c&&!i&&e<l.length;
-  e++){
-  var i,o=l[e],h=d.p,p=o[2];
-  r>3?(i=p===n)&&(s=o[(a=o[4])?5:(a=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(a=0,d.v=n,d.n=o[1]):
-  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,a=0))}
-  if(i||r>1)return u;
-  throw f=!0,n}
-  return function(i,l,p){
-  if(c>1)throw TypeError("Generator is already running");
-  for(f&&1===l&&h(l,p),a=l,s=p;
-  (e=a<2?t:s)||!f;
-  ){
-  o||(a?a<3?(a>1&&(d.n=-1),h(a,s)):d.n=s:d.v=s);
-  try{
-  if(c=2,o){
-  if(a||(i="next"),e=o[i]){
-  if(!(e=e.call(o,s)))throw TypeError("iterator result is not an object");
-  if(!e.done)return e;
-  s=e.value,a<2&&(a=0)}
-  else 1===a&&(e=o.return)&&e.call(o),a<2&&(s=TypeError("The iterator does not provide a '"+i+"' method"),
-  a=1);
-  o=t}
-  else if((e=(f=d.n<0)?s:r.call(n,d))!==u)break}
-  catch(e){
-  o=t,a=1,s=e}
-  finally{
-  c=1}
+  function var_h_1(param_r_2, param_n_2) {
+  for (var_a_1 = param_r_2, var_s_2 = param_n_2, var_e = 0;
+  !flag_f && num_c && !var_i_1 && var_e < var_l_3.length;
+  var_e++) {
+  var var_i_1,
+  var_o_2 = var_l_3[var_e],
+  var_h_2 = obj_d.p,
+  var_p_1 = var_o_2[2];
+  param_r_2 > 3 ? (var_i_1 = var_p_1 === param_n_2) && (var_s_2 = var_o_2[(var_a_1 = var_o_2[4]) ?
+  5 : (var_a_1 = 3, 3)], var_o_2[4] = var_o_2[5] = var_t) : var_o_2[0] <= var_h_2 &&
+  ((var_i_1 = param_r_2 < 2 && var_h_2 < var_o_2[1]) ? (var_a_1 = 0, obj_d.v = param_n_2,
+  obj_d.n = var_o_2[1]) : var_h_2 < var_p_1 && (var_i_1 = param_r_2 < 3 ||
+  var_o_2[0] > param_n_2 || param_n_2 > var_p_1) && (var_o_2[4] = param_r_2, var_o_2[5] = param_n_2,
+  obj_d.n = var_p_1, var_a_1 = 0));
   }
-  return{
-  value:e,done:f}
+  if (var_i_1 || param_r_2 > 1) return obj_u;
+  throw flag_f = !0, param_n_2;
+  }
+  return function (param_i_2, param_l, param_p) {
+  if (num_c > 1) throw TypeError("Generator is already running");
+  for (flag_f && 1 === param_l && var_h_1(param_l, param_p), var_a_1 = param_l, var_s_2 = param_p;
+  (var_e = var_a_1 < 2 ? var_t : var_s_2) || !flag_f;
+  ) {
+  var_o_1 || (var_a_1 ? var_a_1 < 3 ? (var_a_1 > 1 && (obj_d.n = -1), var_h_1(var_a_1,
+  var_s_2)) : obj_d.n = var_s_2 : obj_d.v = var_s_2);
+  try {
+  if (num_c = 2, var_o_1) {
+  if (var_a_1 || (param_i_2 = "next"), var_e = var_o_1[param_i_2]) {
+  if (!(var_e = var_e.call(var_o_1, var_s_2))) throw TypeError("iterator result is not an object");
+  if (!var_e.done) return var_e;
+  var_s_2 = var_e.value, var_a_1 < 2 && (var_a_1 = 0);
+  }
+  else 1 === var_a_1 && (var_e = var_o_1.return) && var_e.call(var_o_1), var_a_1 < 2 &&
+  (var_s_2 = TypeError("The iterator does not provide a '" + param_i_2 + "' method"),
+  var_a_1 = 1);
+  var_o_1 = var_t;
+  }
+  else if ((var_e = (flag_f = obj_d.n < 0) ? var_s_2 : param_r_1.call(param_n_1,
+  obj_d)) !== obj_u) break;
+  }
+  catch (var_e_1) {
+  var_o_1 = var_t, var_a_1 = 1, var_s_2 = var_e_1;
+  }
+  finally {
+  num_c = 1;
   }
   }
-  (r,i,o),!0),l}
-  var u={
+  return {
+  value: var_e,
+  done: flag_f
   };
-  function c(){
+  };
   }
-  function l(){
+  (param_r, param_i, param_o), !0), var_l_2;
   }
-  function f(){
+  var obj_u = {
+  };
+  function var_c_1() {
   }
-  e=Object.getPrototypeOf;
-  var d=[][n]?e(e([][n]())):(a(e={
+  function var_l_1() {
   }
-  ,n,(function(){
-  return this}
-  )),e),h=f.prototype=c.prototype=Object.create(d);
-  function p(t){
-  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,a(t,i,"GeneratorFunction")),
-  t.prototype=Object.create(h),t}
-  return l.prototype=f,a(h,"constructor",f),a(f,"constructor",l),l.displayName="GeneratorFunction",a(f,
-  i,"GeneratorFunction"),a(h),a(h,i,"Generator"),a(h,n,(function(){
-  return this}
-  )),a(h,"toString",(function(){
-  return"[object Generator]"}
-  )),(o=function(){
-  return{
-  w:s,m:p}
+  function var_f_1() {
   }
-  )()}
-  function a(t,e,r,n){
-  var i=Object.defineProperty;
-  try{
-  i({
+  var_e = Object.getPrototypeOf;
+  var var_d_1 = [][var_n] ? var_e(var_e([][var_n]())) : (var_a(var_e = {
   }
-  ,"",{
+  , var_n, function () {
+  return this;
   }
-  )}
-  catch(t){
-  i=0}
-  (a=function(t,e,r,n){
-  function o(e,r){
-  a(t,e,(function(t){
-  return this._invoke(e,r,t)}
-  ))}
-  e?i?i(t,e,{
-  value:r,enumerable:!n,configurable:!n,writable:!n}
-  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
-  )(t,e,r,n)}
-  var s=function(t,e,r,n){
-  return new(r||(r=Promise))((function(i,o){
-  function a(t){
-  try{
-  u(n.next(t))}
-  catch(t){
-  o(t)}
+  ), var_e),
+  var_h = var_f_1.prototype = var_c_1.prototype = Object.create(var_d_1);
+  function var_p(param_t) {
+  return Object.setPrototypeOf ? Object.setPrototypeOf(param_t, var_f_1) :
+  (param_t.__proto__ = var_f_1, var_a(param_t, var_i, "GeneratorFunction")), param_t.prototype = Object.create(
+  var_h), param_t;
   }
-  function s(t){
-  try{
-  u(n.throw(t))}
-  catch(t){
-  o(t)}
+  return var_l_1.prototype = var_f_1, var_a(var_h, "constructor", var_f_1), var_a(
+  var_f_1, "constructor", var_l_1), var_l_1.displayName = "GeneratorFunction", var_a(
+  var_f_1, var_i, "GeneratorFunction"), var_a(var_h), var_a(var_h, var_i, "Generator"),
+  var_a(var_h, var_n, function () {
+  return this;
   }
-  function u(t){
-  var e;
-  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
-  t(e)}
-  ))).then(a,s)}
-  u((n=n.apply(t,e||[])).next())}
-  ))}
-  ,u=/data-vod-node\.onflixcdn\.com/i,c=location.href;
-  function l(){
-  return document.title.replace(/\s*-\s*ONFLIX.*$/i,"").trim()}
-  function f(t,e){
-  var r,o=JSON.parse(JSON.stringify(t)),a=e.quality;
-  return o.type="video",o.ext="m3u8",o.exts=["m3u8"],o.play_list=e.play_vid,o.referrer="https://playembed.vip/",
-  o.filename=l(),o.url="https://www.google.com",a?(o.resolution=a,o.quality=(null===(r=n.r[a])||void 0===r?
-  void 0:r.label)||i.b.DEFAULT_QUALITY_TYPE):o.quality=e.quality||i.b.DEFAULT_QUALITY_TYPE,o}
-  function d(t,e){
-  return s(this,void 0,void 0,o().m((function r(){
-  var n,i,a;
-  return o().w((function(r){
-  for(;;
-  )switch(r.p=r.n){
-  case 0:r.p=0,n="string"==typeof e?JSON.parse(e):e,r.n=3;
-  break;
-  case 1:return r.p=1,r.v,r.n=2,fetch(t.url).then(t=>t.json());
-  case 2:n=r.v;
-  case 3:if("master"!==(null==n?void 0:n.type)||!Array.isArray(n.qualities)||!n.qualities.length){
-  r.n=5;
-  break}
-  return i=t.url,r.n=4,Promise.allSettled(n.qualities.map(e=>s(this,void 0,void 0,o().m((function r(){
-  var n,a;
-  return o().w((function(r){
-  for(;;
-  )switch(r.n){
-  case 0:return(n=new URL(i)).searchParams.set("q",String(e.qid)),r.n=1,fetch(n.href).then(t=>t.json());
-  case 1:if(null==(a=r.v)?void 0:a.play_vid){
-  r.n=2;
-  break}
-  throw new Error("Missing play_vid for qid="+e.qid);
-  case 2:return r.a(2,f(t,a))}
+  ), var_a(var_h, "toString", function () {
+  return "[object Generator]";
   }
-  ),r)}
-  )))));
-  case 4:return a=r.v,r.a(2,a.filter(t=>"fulfilled"===t.status).map(t=>t.value));
-  case 5:return r.a(2,[])}
+  ), (var_o = function () {
+  return {
+  w: var_s,
+  m: var_p
+  };
   }
-  ),r,this,[[0,1]])}
-  )))}
-  var h={
-  getDomains:()=>["onflix.","playembed."],parse:{
-  sources:[{
-  checkSource:t=>{
-  var e=t.url;
-  return u.test(e)}
-  ,parse:t=>{
-  var e=t.media,r=t.response;
-  return s(void 0,void 0,void 0,o().m((function t(){
-  var n;
-  return o().w((function(t){
-  for(;;
-  )switch(t.p=t.n){
-  case 0:return t.p=0,t.n=1,d(e,r);
-  case 1:return t.a(2,t.v);
-  case 2:return t.p=2,n=t.v,console.warn("[onflix] failed to parse VOD response",n),t.a(2,[])}
+  )();
   }
-  ),t,null,[[0,2]])}
-  )))}
+  function var_a(param_t, param_e, param_r, param_n) {
+  var var_i = Object.defineProperty;
+  try {
+  var_i({
   }
-  ]}
-  ,urls:[{
-  checkUrl:t=>{
-  var e=t.url;
-  return/playembed\./i.test(e)}
-  ,getUrl:t=>{
-  var e=t.ids.filter(t=>{
-  var e;
-  return u.test(t.url)&&!(null===(e=t.search)||void 0===e?void 0:e.includes("q="))}
+  , "", {
+  }
   );
-  return e.forEach(t=>{
-  t.filename=l(),t.type="video",t.ext="m3u8",t.exts=["m3u8"],t.referrer="https://playembed.vip/"}
-  ),e}
   }
-  ],forceUpdate(){
-  location.href!==c&&(EE.emit("widget.forceUpdate"),c=location.href)}
+  catch (var_t) {
+  var_i = 0;
+  }
+  (var_a = function (param_t_1, param_e_1, param_r_1, param_n_1) {
+  function var_o_1(param_e_2, param_r_2) {
+  var_a(param_t_1, param_e_2, function (param_t_2) {
+  return this._invoke(param_e_2, param_r_2, param_t_2);
+  }
+  );
+  }
+  param_e_1 ? var_i ? var_i(param_t_1, param_e_1, {
+  value: param_r_1,
+  enumerable: !param_n_1,
+  configurable: !param_n_1,
+  writable: !param_n_1
+  }
+  ) : param_t_1[param_e_1] = param_r_1 : (var_o_1("next", 0), var_o_1("throw", 1),
+  var_o_1("return", 2));
+  }
+  )(param_t, param_e, param_r, param_n);
+  }
+  var fn_s = function (param_t, param_e, param_r, param_n) {
+  return new (param_r || (param_r = Promise))(function (param_i, param_o) {
+  function var_a_1(param_t_1) {
+  try {
+  var_u(param_n.next(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_s(param_t_1) {
+  try {
+  var_u(param_n.throw(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_u(param_t_1) {
+  var var_e;
+  param_t_1.done ? param_i(param_t_1.value) : (var_e = param_t_1.value, var_e instanceof param_r ?
+  var_e : new param_r(function (param_t_2) {
+  param_t_2(var_e);
+  }
+  )).then(var_a_1, var_s);
+  }
+  var_u((param_n = param_n.apply(param_t, param_e || [])).next());
+  }
+  );
+  }
+  ,
+  regex_u = /data-vod-node\.onflixcdn\.com/i,
+  var_c = location.href;
+  function var_l() {
+  return document.title.replace(/\s*-\s*ONFLIX.*$/i, "").trim();
+  }
+  function var_f(param_t, param_e) {
+  var var_r,
+  var_o_1 = JSON.parse(JSON.stringify(param_t)),
+  var_a_1 = param_e.quality;
+  return var_o_1.type = "video", var_o_1.ext = "m3u8", var_o_1.exts = ["m3u8"], var_o_1.play_list = param_e.play_vid,
+  var_o_1.referrer = "https://playembed.vip/", var_o_1.filename = var_l(), var_o_1.url = "https://www.google.com",
+  var_a_1 ? (var_o_1.resolution = var_a_1, var_o_1.quality = (null === (var_r = dep_media_constants.r[var_a_1]) ||
+  void 0 === var_r ? void 0 : var_r.label) || dep_quality_helper.b.DEFAULT_QUALITY_TYPE) :
+  var_o_1.quality = param_e.quality || dep_quality_helper.b.DEFAULT_QUALITY_TYPE,
+  var_o_1;
+  }
+  function var_d(param_t, param_e) {
+  return fn_s(this, void 0, void 0, var_o().m(function var_r() {
+  var var_n, var_i, var_a_1;
+  return var_o().w(function (param_r) {
+  for (;;
+  ) switch (param_r.p = param_r.n) {
+  case 0:
+  param_r.p = 0, var_n = "string" == typeof param_e ? JSON.parse(param_e) :
+  param_e, param_r.n = 3;
+  break;
+  case 1:
+  return param_r.p = 1, param_r.v, param_r.n = 2, fetch(param_t.url).then(param_t_1 => param_t_1.json(
+  ));
+  case 2:
+  var_n = param_r.v;
+  case 3:
+  if ("master" !== (null == var_n ? void 0 : var_n.type) || !Array.isArray(var_n.qualities) ||
+  !var_n.qualities.length) {
+  param_r.n = 5;
+  break;
+  }
+  return var_i = param_t.url, param_r.n = 4, Promise.allSettled(var_n.qualities.map(
+  param_e_1 => fn_s(this, void 0, void 0, var_o().m(function var_r_1() {
+  var var_n_1, var_a_2;
+  return var_o().w(function (param_r_1) {
+  for (;;
+  ) switch (param_r_1.n) {
+  case 0:
+  return (var_n_1 = new URL(var_i)).searchParams.set("q", String(param_e_1.qid)),
+  param_r_1.n = 1, fetch(var_n_1.href).then(param_t_1 => param_t_1.json());
+  case 1:
+  if (null == (var_a_2 = param_r_1.v) ? void 0 : var_a_2.play_vid) {
+  param_r_1.n = 2;
+  break;
+  }
+  throw new Error("Missing play_vid for qid=" + param_e_1.qid);
+  case 2:
+  return param_r_1.a(2, var_f(param_t, var_a_2));
+  }
+  }
+  , var_r_1);
+  }
+  ))));
+  case 4:
+  return var_a_1 = param_r.v, param_r.a(2, var_a_1.filter(param_t_1 => "fulfilled" === param_t_1.status).map(
+  param_t_1 => param_t_1.value));
+  case 5:
+  return param_r.a(2, []);
+  }
+  }
+  , var_r, this, [[0, 1]]);
+  }
+  ));
+  }
+  var obj_h = {
+  getDomains: () => ["onflix.", "playembed."],
+  parse: {
+  sources: [{
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return regex_u.test(var_e);
+  }
+  ,
+  parse: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  return fn_s(void 0, void 0, void 0, var_o().m(function var_t() {
+  var var_n;
+  return var_o().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.p = param_t_1.n) {
+  case 0:
+  return param_t_1.p = 0, param_t_1.n = 1, var_d(var_e, var_r);
+  case 1:
+  return param_t_1.a(2, param_t_1.v);
+  case 2:
+  return param_t_1.p = 2, var_n = param_t_1.v, console.warn("[onflix] failed to parse VOD response",
+  var_n), param_t_1.a(2, []);
+  }
+  }
+  , var_t, null, [[0, 2]]);
+  }
+  ));
+  }
+  }
+  ]
+  }
+  ,
+  urls: [{
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return /playembed\./i.test(var_e);
+  }
+  ,
+  getUrl: param_t => {
+  var var_e = param_t.ids.filter(param_t_1 => {
+  var var_e_1;
+  return regex_u.test(param_t_1.url) && !(null === (var_e_1 = param_t_1.search) ||
+  void 0 === var_e_1 ? void 0 : var_e_1.includes("q="));
+  }
+  );
+  return var_e.forEach(param_t_1 => {
+  param_t_1.filename = var_l(), param_t_1.type = "video", param_t_1.ext = "m3u8",
+  param_t_1.exts = ["m3u8"], param_t_1.referrer = "https://playembed.vip/";
+  }
+  ), var_e;
+  }
+  }
+  ],
+  forceUpdate() {
+  location.href !== var_c && (EE.emit("widget.forceUpdate"), var_c = location.href);
+  }
   };
-  e.default=h};
+  exportsObj.default = obj_h;
+  };

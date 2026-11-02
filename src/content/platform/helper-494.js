@@ -1,21 +1,32 @@
 // Module 494 - Savior Helper 494
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(122).rotr32;
-  function i(t,e,r){
-  return t&e^~t&r}
-  function o(t,e,r){
-  return t&e^t&r^e&r}
-  function a(t,e,r){
-  return t^e^r}
-  e.ft_1=function(t,e,r,n){
-  return 0===t?i(e,r,n):1===t||3===t?a(e,r,n):2===t?o(e,r,n):void 0}
-  ,e.ch32=i,e.maj32=o,e.p32=a,e.s0_256=function(t){
-  return n(t,2)^n(t,13)^n(t,22)}
-  ,e.s1_256=function(t){
-  return n(t,6)^n(t,11)^n(t,25)}
-  ,e.g0_256=function(t){
-  return n(t,7)^n(t,18)^t>>>3}
-  ,e.g1_256=function(t){
-  return n(t,17)^n(t,19)^t>>>10}
+  var var_n = requireFn(122).rotr32;
+  function var_i(param_t, param_e, param_r) {
+  return param_t & param_e ^ ~param_t & param_r;
+  }
+  function var_o(param_t, param_e, param_r) {
+  return param_t & param_e ^ param_t & param_r ^ param_e & param_r;
+  }
+  function var_a(param_t, param_e, param_r) {
+  return param_t ^ param_e ^ param_r;
+  }
+  exportsObj.ft_1 = function (param_t, param_e, param_r, param_n) {
+  return 0 === param_t ? var_i(param_e, param_r, param_n) : 1 === param_t ||
+  3 === param_t ? var_a(param_e, param_r, param_n) : 2 === param_t ?
+  var_o(param_e, param_r, param_n) : void 0;
+  }
+  , exportsObj.ch32 = var_i, exportsObj.maj32 = var_o, exportsObj.p32 = var_a, exportsObj.s0_256 = function (
+  param_t) {
+  return var_n(param_t, 2) ^ var_n(param_t, 13) ^ var_n(param_t, 22);
+  }
+  , exportsObj.s1_256 = function (param_t) {
+  return var_n(param_t, 6) ^ var_n(param_t, 11) ^ var_n(param_t, 25);
+  }
+  , exportsObj.g0_256 = function (param_t) {
+  return var_n(param_t, 7) ^ var_n(param_t, 18) ^ param_t >>> 3;
+  }
+  , exportsObj.g1_256 = function (param_t) {
+  return var_n(param_t, 17) ^ var_n(param_t, 19) ^ param_t >>> 10;
+  };
   };

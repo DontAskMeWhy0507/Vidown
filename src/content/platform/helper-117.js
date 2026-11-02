@@ -1,38 +1,62 @@
 // Module 117 - Savior Helper 117
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=e,i=r(126),o=r(116),a=r(492);
-  n.assert=o,n.toArray=a.toArray,n.zero2=a.zero2,n.toHex=a.toHex,n.encode=a.encode,n.getNAF=function(t,
-  e,r){
-  var n,i=new Array(Math.max(t.bitLength(),r)+1);
-  for(n=0;
-  n<i.length;
-  n+=1)i[n]=0;
-  var o=1<<e+1,a=t.clone();
-  for(n=0;
-  n<i.length;
-  n++){
-  var s,u=a.andln(o-1);
-  a.isOdd()?(s=u>(o>>1)-1?(o>>1)-u:u,a.isubn(s)):s=0,i[n]=s,a.iushrn(1)}
-  return i}
-  ,n.getJSF=function(t,e){
-  var r=[[],[]];
-  t=t.clone(),e=e.clone();
-  for(var n,i=0,o=0;
-  t.cmpn(-i)>0||e.cmpn(-o)>0;
-  ){
-  var a,s,u=t.andln(3)+i&3,c=e.andln(3)+o&3;
-  3===u&&(u=-1),3===c&&(c=-1),a=0==(1&u)?0:3!==(n=t.andln(7)+i&7)&&5!==n||2!==c?u:-u,r[0].push(a),s=0==(1&c)?
-  0:3!==(n=e.andln(7)+o&7)&&5!==n||2!==u?c:-c,r[1].push(s),2*i===a+1&&(i=1-i),2*o===s+1&&(o=1-o),t.iushrn(1),
-  e.iushrn(1)}
-  return r}
-  ,n.cachedProperty=function(t,e,r){
-  var n="_"+e;
-  t.prototype[e]=function(){
-  return void 0!==this[n]?this[n]:this[n]=r.call(this)}
+  var var_n = exportsObj,
+  dep_module_126 = requireFn(126),
+  dep_helper_116 = requireFn(116),
+  dep_helper_492 = requireFn(492);
+  var_n.assert = dep_helper_116, var_n.toArray = dep_helper_492.toArray, var_n.zero2 = dep_helper_492.zero2,
+  var_n.toHex = dep_helper_492.toHex, var_n.encode = dep_helper_492.encode, var_n.getNAF = function (
+  param_t, param_e, param_r) {
+  var var_n_1,
+  var_i = new Array(Math.max(param_t.bitLength(), param_r) + 1);
+  for (var_n_1 = 0;
+  var_n_1 < var_i.length;
+  var_n_1 += 1) var_i[var_n_1] = 0;
+  var var_o = 1 << param_e + 1,
+  var_a = param_t.clone();
+  for (var_n_1 = 0;
+  var_n_1 < var_i.length;
+  var_n_1++) {
+  var var_s,
+  var_u = var_a.andln(var_o - 1);
+  var_a.isOdd() ? (var_s = var_u > (var_o >> 1) - 1 ? (var_o >> 1) - var_u :
+  var_u, var_a.isubn(var_s)) : var_s = 0, var_i[var_n_1] = var_s, var_a.iushrn(1);
   }
-  ,n.parseBytes=function(t){
-  return"string"==typeof t?n.toArray(t,"hex"):t}
-  ,n.intFromLE=function(t){
-  return new i(t,"hex","le")}
+  return var_i;
+  }
+  , var_n.getJSF = function (param_t, param_e) {
+  var list_r = [[], []];
+  param_t = param_t.clone(), param_e = param_e.clone();
+  for (var var_n_1, num_i = 0, num_o = 0;
+  param_t.cmpn(-num_i) > 0 || param_e.cmpn(-num_o) > 0;
+  ) {
+  var var_a,
+  var_s,
+  var_u = param_t.andln(3) + num_i & 3,
+  var_c = param_e.andln(3) + num_o & 3;
+  3 === var_u && (var_u = -1), 3 === var_c && (var_c = -1), var_a = 0 == (1 & var_u) ?
+  0 : 3 !== (var_n_1 = param_t.andln(7) + num_i & 7) && 5 !== var_n_1 ||
+  2 !== var_c ? var_u : -var_u, list_r[0].push(var_a), var_s = 0 == (1 & var_c) ?
+  0 : 3 !== (var_n_1 = param_e.andln(7) + num_o & 7) && 5 !== var_n_1 ||
+  2 !== var_u ? var_c : -var_c, list_r[1].push(var_s), 2 * num_i === var_a + 1 &&
+  (num_i = 1 - num_i), 2 * num_o === var_s + 1 && (num_o = 1 - num_o), param_t.iushrn(
+  1), param_e.iushrn(1);
+  }
+  return list_r;
+  }
+  , var_n.cachedProperty = function (param_t, param_e, param_r) {
+  var var_n_1 = "_" + param_e;
+  param_t.prototype[param_e] = function () {
+  return void 0 !== this[var_n_1] ? this[var_n_1] : this[var_n_1] = param_r.call(
+  this);
+  };
+  }
+  , var_n.parseBytes = function (param_t) {
+  return "string" == typeof param_t ? var_n.toArray(param_t, "hex") :
+  param_t;
+  }
+  , var_n.intFromLE = function (param_t) {
+  return new dep_module_126(param_t, "hex", "le");
+  };
   };

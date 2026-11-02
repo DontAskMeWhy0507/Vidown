@@ -1,10 +1,16 @@
 // Module 357 - Savior Tse_edu Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n;
-  r.r(e);
-  var i={
-  getDomains:()=>["tse.edu.vn"],default:{
-  getUrl:()=>n?n.url:[]}
-  ,processRequestIds:t=>!!t.url.includes("playlist")&&(n=t,!0)};
-  e.default=i};
+  var var_n;
+  requireFn.r(exportsObj);
+  var obj_i = {
+  getDomains: () => ["tse.edu.vn"],
+  default: {
+  getUrl: () => var_n ? var_n.url : []
+  }
+  ,
+  processRequestIds: param_t => !!param_t.url.includes("playlist") &&
+  (var_n = param_t, !0)
+  };
+  exportsObj.default = obj_i;
+  };

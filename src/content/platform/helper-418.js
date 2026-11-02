@@ -1,6 +1,7 @@
 // Module 418 - Savior Helper 418
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=Number.isNaN||function(t){
-  return t!=t}
+  moduleObj.exports = Number.isNaN || function (param_t) {
+  return param_t != param_t;
+  };
   };

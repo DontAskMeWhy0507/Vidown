@@ -1,4 +1,5 @@
 // Module 413 - Savior Helper 413
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=Math.max};
+  moduleObj.exports = Math.max;
+  };

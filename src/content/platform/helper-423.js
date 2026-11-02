@@ -1,4 +1,6 @@
 // Module 423 - Savior Helper 423
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports="undefined"!=typeof Reflect&&Reflect&&Reflect.apply};
+  moduleObj.exports = "undefined" != typeof Reflect && Reflect &&
+  Reflect.apply;
+  };

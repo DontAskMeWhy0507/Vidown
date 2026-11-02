@@ -1,4 +1,5 @@
 // Module 407 - Savior Helper 407
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=EvalError};
+  moduleObj.exports = EvalError;
+  };

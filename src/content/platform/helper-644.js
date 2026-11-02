@@ -1,102 +1,171 @@
 // Module 644 - Savior Helper 644
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(126),i=r(645),o=r(117),a=r(435),s=r(430),u=o.assert,c=r(646),l=r(647);
-  function f(t){
-  if(!(this instanceof f))return new f(t);
-  "string"==typeof t&&(u(Object.prototype.hasOwnProperty.call(a,t),"Unknown curve "+t),t=a[t]),t instanceof a.PresetCurve&&
-  (t={
-  curve:t}
-  ),this.curve=t.curve.curve,this.n=this.curve.n,this.nh=this.n.ushrn(1),this.g=this.curve.g,this.g=t.curve.g,
-  this.g.precompute(t.curve.n.bitLength()+1),this.hash=t.hash||t.curve.hash}
-  t.exports=f,f.prototype.keyPair=function(t){
-  return new c(this,t)}
-  ,f.prototype.keyFromPrivate=function(t,e){
-  return c.fromPrivate(this,t,e)}
-  ,f.prototype.keyFromPublic=function(t,e){
-  return c.fromPublic(this,t,e)}
-  ,f.prototype.genKeyPair=function(t){
-  t||(t={
+  var dep_module_126 = requireFn(126),
+  dep_helper_645 = requireFn(645),
+  dep_helper_117 = requireFn(117),
+  dep_helper_435 = requireFn(435),
+  dep_helper_430 = requireFn(430),
+  var_u = dep_helper_117.assert,
+  dep_helper_646 = requireFn(646),
+  dep_helper_647 = requireFn(647);
+  function var_f(param_t) {
+  if (!(this instanceof var_f)) return new var_f(param_t);
+  "string" == typeof param_t && (var_u(Object.prototype.hasOwnProperty.call(dep_helper_435,
+  param_t), "Unknown curve " + param_t), param_t = dep_helper_435[param_t]), param_t instanceof dep_helper_435.PresetCurve &&
+  (param_t = {
+  curve: param_t
+  }
+  ), this.curve = param_t.curve.curve, this.n = this.curve.n, this.nh = this.n.ushrn(
+  1), this.g = this.curve.g, this.g = param_t.curve.g, this.g.precompute(param_t.curve.n.bitLength(
+  ) + 1), this.hash = param_t.hash || param_t.curve.hash;
+  }
+  moduleObj.exports = var_f, var_f.prototype.keyPair = function (param_t) {
+  return new dep_helper_646(this, param_t);
+  }
+  , var_f.prototype.keyFromPrivate = function (param_t, param_e) {
+  return dep_helper_646.fromPrivate(this, param_t, param_e);
+  }
+  , var_f.prototype.keyFromPublic = function (param_t, param_e) {
+  return dep_helper_646.fromPublic(this, param_t, param_e);
+  }
+  , var_f.prototype.genKeyPair = function (param_t) {
+  param_t || (param_t = {
   }
   );
-  for(var e=new i({
-  hash:this.hash,pers:t.pers,persEnc:t.persEnc||"utf8",entropy:t.entropy||s(this.hash.hmacStrength),
-  entropyEnc:t.entropy&&t.entropyEnc||"utf8",nonce:this.n.toArray()}
-  ),r=this.n.byteLength(),o=this.n.sub(new n(2));;
-  ){
-  var a=new n(e.generate(r));
-  if(!(a.cmp(o)>0))return a.iaddn(1),this.keyFromPrivate(a)}
+  for (var var_e = new dep_helper_645({
+  hash: this.hash,
+  pers: param_t.pers,
+  persEnc: param_t.persEnc || "utf8",
+  entropy: param_t.entropy || dep_helper_430(this.hash.hmacStrength),
+  entropyEnc: param_t.entropy && param_t.entropyEnc || "utf8",
+  nonce: this.n.toArray()
   }
-  ,f.prototype._truncateToN=function(t,e,r){
-  var i;
-  if(n.isBN(t)||"number"==typeof t)i=(t=new n(t,16)).byteLength();
-  else if("object"==typeof t)i=t.length,t=new n(t,16);
-  else{
-  var o=t.toString();
-  i=o.length+1>>>1,t=new n(o,16)}
-  "number"!=typeof r&&(r=8*i);
-  var a=r-this.n.bitLength();
-  return a>0&&(t=t.ushrn(a)),!e&&t.cmp(this.n)>=0?t.sub(this.n):t}
-  ,f.prototype.sign=function(t,e,r,o){
-  if("object"==typeof r&&(o=r,r=null),o||(o={
-  }
-  ),"string"!=typeof t&&"number"!=typeof t&&!n.isBN(t)){
-  u("object"==typeof t&&t&&"number"==typeof t.length,"Expected message to be an array-like, a hex string, or a BN instance"),
-  u(t.length>>>0===t.length);
-  for(var a=0;
-  a<t.length;
-  a++)u((255&t[a])===t[a])}
-  e=this.keyFromPrivate(e,r),t=this._truncateToN(t,!1,o.msgBitLength),u(!t.isNeg(),"Can not sign a negative message");
-  var s=this.n.byteLength(),c=e.getPrivate().toArray("be",s),f=t.toArray("be",s);
-  u(new n(f).eq(t),"Can not sign message");
-  for(var d=new i({
-  hash:this.hash,entropy:c,nonce:f,pers:o.pers,persEnc:o.persEnc||"utf8"}
-  ),h=this.n.sub(new n(1)),p=0;;
-  p++){
-  var v=o.k?o.k(p):new n(d.generate(this.n.byteLength()));
-  if(!((v=this._truncateToN(v,!0)).cmpn(1)<=0||v.cmp(h)>=0)){
-  var m=this.g.mul(v);
-  if(!m.isInfinity()){
-  var y=m.getX(),g=y.umod(this.n);
-  if(0!==g.cmpn(0)){
-  var b=v.invm(this.n).mul(g.mul(e.getPrivate()).iadd(t));
-  if(0!==(b=b.umod(this.n)).cmpn(0)){
-  var w=(m.getY().isOdd()?1:0)|(0!==y.cmp(g)?2:0);
-  return o.canonical&&b.cmp(this.nh)>0&&(b=this.n.sub(b),w^=1),new l({
-  r:g,s:b,recoveryParam:w}
-  )}
+  ), var_r = this.n.byteLength(), var_o = this.n.sub(new dep_module_126(2));;
+  ) {
+  var var_a = new dep_module_126(var_e.generate(var_r));
+  if (!(var_a.cmp(var_o) > 0)) return var_a.iaddn(1), this.keyFromPrivate(var_a);
   }
   }
+  , var_f.prototype._truncateToN = function (param_t, param_e, param_r) {
+  var var_i;
+  if (dep_module_126.isBN(param_t) || "number" == typeof param_t) var_i = (param_t = new dep_module_126(
+  param_t, 16)).byteLength();
+  else if ("object" == typeof param_t) var_i = param_t.length, param_t = new dep_module_126(
+  param_t, 16);
+  else {
+  var var_o = param_t.toString();
+  var_i = var_o.length + 1 >>> 1, param_t = new dep_module_126(var_o, 16);
+  }
+  "number" != typeof param_r && (param_r = 8 * var_i);
+  var var_a = param_r - this.n.bitLength();
+  return var_a > 0 && (param_t = param_t.ushrn(var_a)), !param_e &&
+  param_t.cmp(this.n) >= 0 ? param_t.sub(this.n) : param_t;
+  }
+  , var_f.prototype.sign = function (param_t, param_e, param_r, param_o) {
+  if ("object" == typeof param_r && (param_o = param_r, param_r = null), param_o ||
+  (param_o = {
+  }
+  ), "string" != typeof param_t && "number" != typeof param_t &&
+  !dep_module_126.isBN(param_t)) {
+  var_u("object" == typeof param_t && param_t && "number" == typeof param_t.length,
+  "Expected message to be an array-like, a hex string, or a BN instance"), var_u(
+  param_t.length >>> 0 === param_t.length);
+  for (var num_a = 0;
+  num_a < param_t.length;
+  num_a++) var_u((255 & param_t[num_a]) === param_t[num_a]);
+  }
+  param_e = this.keyFromPrivate(param_e, param_r), param_t = this._truncateToN(param_t,
+  !1, param_o.msgBitLength), var_u(!param_t.isNeg(), "Can not sign a negative message");
+  var var_s = this.n.byteLength(),
+  var_c = param_e.getPrivate().toArray("be", var_s),
+  var_f_1 = param_t.toArray("be", var_s);
+  var_u(new dep_module_126(var_f_1).eq(param_t), "Can not sign message");
+  for (var var_d = new dep_helper_645({
+  hash: this.hash,
+  entropy: var_c,
+  nonce: var_f_1,
+  pers: param_o.pers,
+  persEnc: param_o.persEnc || "utf8"
+  }
+  ), var_h = this.n.sub(new dep_module_126(1)), num_p = 0;;
+  num_p++) {
+  var var_v = param_o.k ? param_o.k(num_p) : new dep_module_126(var_d.generate(this.n.byteLength(
+  )));
+  if (!((var_v = this._truncateToN(var_v, !0)).cmpn(1) <= 0 ||
+  var_v.cmp(var_h) >= 0)) {
+  var var_m = this.g.mul(var_v);
+  if (!var_m.isInfinity()) {
+  var var_y = var_m.getX(),
+  var_g = var_y.umod(this.n);
+  if (0 !== var_g.cmpn(0)) {
+  var var_b = var_v.invm(this.n).mul(var_g.mul(param_e.getPrivate()).iadd(param_t));
+  if (0 !== (var_b = var_b.umod(this.n)).cmpn(0)) {
+  var var_w = (var_m.getY().isOdd() ? 1 : 0) | (0 !== var_y.cmp(var_g) ?
+  2 : 0);
+  return param_o.canonical && var_b.cmp(this.nh) > 0 && (var_b = this.n.sub(var_b),
+  var_w ^= 1), new dep_helper_647({
+  r: var_g,
+  s: var_b,
+  recoveryParam: var_w
+  }
+  );
   }
   }
   }
-  ,f.prototype.verify=function(t,e,r,n,i){
-  i||(i={
   }
-  ),t=this._truncateToN(t,!1,i.msgBitLength),r=this.keyFromPublic(r,n);
-  var o=(e=new l(e,"hex")).r,a=e.s;
-  if(o.cmpn(1)<0||o.cmp(this.n)>=0)return!1;
-  if(a.cmpn(1)<0||a.cmp(this.n)>=0)return!1;
-  var s,u=a.invm(this.n),c=u.mul(t).umod(this.n),f=u.mul(o).umod(this.n);
-  return this.curve._maxwellTrick?!(s=this.g.jmulAdd(c,r.getPublic(),f)).isInfinity()&&s.eqXToP(o):!(s=this.g.mulAdd(c,
-  r.getPublic(),f)).isInfinity()&&0===s.getX().umod(this.n).cmp(o)}
-  ,f.prototype.recoverPubKey=function(t,e,r,i){
-  u((3&r)===r,"The recovery param is more than two bits"),e=new l(e,i);
-  var o=this.n,a=new n(t),s=e.r,c=e.s,f=1&r,d=r>>1;
-  if(s.cmp(this.curve.p.umod(this.curve.n))>=0&&d)throw new Error("Unable to find sencond key candinate");
-  s=d?this.curve.pointFromX(s.add(this.curve.n),f):this.curve.pointFromX(s,f);
-  var h=e.r.invm(o),p=o.sub(a).mul(h).umod(o),v=c.mul(h).umod(o);
-  return this.g.mulAdd(p,s,v)}
-  ,f.prototype.getKeyRecoveryParam=function(t,e,r,n){
-  if(null!==(e=new l(e,n)).recoveryParam)return e.recoveryParam;
-  for(var i=0;
-  i<4;
-  i++){
-  var o;
-  try{
-  o=this.recoverPubKey(t,e,i)}
-  catch(t){
-  continue}
-  if(o.eq(r))return i}
-  throw new Error("Unable to find valid recovery factor")}
+  }
+  }
+  , var_f.prototype.verify = function (param_t, param_e, param_r, param_n, param_i) {
+  param_i || (param_i = {
+  }
+  ), param_t = this._truncateToN(param_t, !1, param_i.msgBitLength), param_r = this.keyFromPublic(
+  param_r, param_n);
+  var var_o = (param_e = new dep_helper_647(param_e, "hex")).r,
+  var_a = param_e.s;
+  if (var_o.cmpn(1) < 0 || var_o.cmp(this.n) >= 0) return !1;
+  if (var_a.cmpn(1) < 0 || var_a.cmp(this.n) >= 0) return !1;
+  var var_s,
+  var_u_1 = var_a.invm(this.n),
+  var_c = var_u_1.mul(param_t).umod(this.n),
+  var_f_1 = var_u_1.mul(var_o).umod(this.n);
+  return this.curve._maxwellTrick ? !(var_s = this.g.jmulAdd(var_c, param_r.getPublic(
+  ), var_f_1)).isInfinity() && var_s.eqXToP(var_o) : !(var_s = this.g.mulAdd(var_c,
+  param_r.getPublic(), var_f_1)).isInfinity() && 0 === var_s.getX().umod(this.n).cmp(
+  var_o);
+  }
+  , var_f.prototype.recoverPubKey = function (param_t, param_e, param_r, param_i) {
+  var_u((3 & param_r) === param_r, "The recovery param is more than two bits"), param_e = new dep_helper_647(
+  param_e, param_i);
+  var var_o = this.n,
+  var_a = new dep_module_126(param_t),
+  var_s = param_e.r,
+  var_c = param_e.s,
+  var_f_1 = 1 & param_r,
+  var_d = param_r >> 1;
+  if (var_s.cmp(this.curve.p.umod(this.curve.n)) >= 0 && var_d) throw new Error(
+  "Unable to find sencond key candinate");
+  var_s = var_d ? this.curve.pointFromX(var_s.add(this.curve.n), var_f_1) :
+  this.curve.pointFromX(var_s, var_f_1);
+  var var_h = param_e.r.invm(var_o),
+  var_p = var_o.sub(var_a).mul(var_h).umod(var_o),
+  var_v = var_c.mul(var_h).umod(var_o);
+  return this.g.mulAdd(var_p, var_s, var_v);
+  }
+  , var_f.prototype.getKeyRecoveryParam = function (param_t, param_e, param_r, param_n) {
+  if (null !== (param_e = new dep_helper_647(param_e, param_n)).recoveryParam) return param_e.recoveryParam;
+  for (var num_i = 0;
+  num_i < 4;
+  num_i++) {
+  var var_o;
+  try {
+  var_o = this.recoverPubKey(param_t, param_e, num_i);
+  }
+  catch (var_t) {
+  continue;
+  }
+  if (var_o.eq(param_r)) return num_i;
+  }
+  throw new Error("Unable to find valid recovery factor");
+  };
   };

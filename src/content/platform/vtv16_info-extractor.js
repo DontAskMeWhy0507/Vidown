@@ -1,19 +1,35 @@
 // Module 388 - Savior Vtv16_info Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["vtv16.info"],urls:[{
-  checkUrl:t=>{
-  var e=t.url;
-  return Boolean(e.match(/public\/dist\/index\.html\?id=\w{32}/g))}
-  ,getUrl:t=>{
-  var e=t.url,r=new URL(e),n=r.searchParams.get("id");
-  return`${r.protocol}
-  //${r.host}
-  /playlist/${n}
-  /${Date.now()}
-  .m3u8`}
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["vtv16.info"],
+  urls: [{
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return Boolean(var_e.match(/public\/dist\/index\.html\?id=\w{32}/g));
   }
-  ]};
-  e.default=n};
+  ,
+  getUrl: param_t => {
+  var var_e = param_t.url,
+  var_r = new URL(var_e),
+  var_n = var_r.searchParams.get("id");
+  return `${var_r.protocol}
+  
+  
+  //${var_r.host}
+  
+  
+  /playlist/${var_n}
+  
+  
+  /${Date.now()}
+  
+  
+  .m3u8`;
+  }
+  }
+  ]
+  };
+  exportsObj.default = obj_n;
+  };

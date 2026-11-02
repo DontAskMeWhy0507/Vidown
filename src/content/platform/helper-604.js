@@ -1,45 +1,58 @@
 // Module 604 - Savior Helper 604
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(116),i=r(15),o={
+  var dep_helper_116 = requireFn(116),
+  dep_module_15 = requireFn(15),
+  obj_o = {
   };
-  function a(t){
-  n.equal(t.length,8,"Invalid IV length"),this.iv=new Array(8);
-  for(var e=0;
-  e<this.iv.length;
-  e++)this.iv[e]=t[e]}
-  e.instantiate=function(t){
-  function e(e){
-  t.call(this,e),this._cbcInit()}
-  i(e,t);
-  for(var r=Object.keys(o),n=0;
-  n<r.length;
-  n++){
-  var a=r[n];
-  e.prototype[a]=o[a]}
-  return e.create=function(t){
-  return new e(t)}
-  ,e}
-  ,o._cbcInit=function(){
-  var t=new a(this.options.iv);
-  this._cbcState=t}
-  ,o._update=function(t,e,r,n){
-  var i=this._cbcState,o=this.constructor.super_.prototype,a=i.iv;
-  if("encrypt"===this.type){
-  for(var s=0;
-  s<this.blockSize;
-  s++)a[s]^=t[e+s];
-  o._update.call(this,a,0,r,n);
-  for(s=0;
-  s<this.blockSize;
-  s++)a[s]=r[n+s]}
-  else{
-  o._update.call(this,t,e,r,n);
-  for(s=0;
-  s<this.blockSize;
-  s++)r[n+s]^=a[s];
-  for(s=0;
-  s<this.blockSize;
-  s++)a[s]=t[e+s]}
+  function var_a(param_t) {
+  dep_helper_116.equal(param_t.length, 8, "Invalid IV length"), this.iv = new Array(
+  8);
+  for (var num_e = 0;
+  num_e < this.iv.length;
+  num_e++) this.iv[num_e] = param_t[num_e];
   }
+  exportsObj.instantiate = function (param_t) {
+  function var_e(param_e) {
+  param_t.call(this, param_e), this._cbcInit();
+  }
+  dep_module_15(var_e, param_t);
+  for (var var_r = Object.keys(obj_o), num_n = 0;
+  num_n < var_r.length;
+  num_n++) {
+  var var_a_1 = var_r[num_n];
+  var_e.prototype[var_a_1] = obj_o[var_a_1];
+  }
+  return var_e.create = function (param_t_1) {
+  return new var_e(param_t_1);
+  }
+  , var_e;
+  }
+  , obj_o._cbcInit = function () {
+  var var_t = new var_a(this.options.iv);
+  this._cbcState = var_t;
+  }
+  , obj_o._update = function (param_t, param_e, param_r, param_n) {
+  var var_i = this._cbcState,
+  var_o = this.constructor.super_.prototype,
+  var_a_1 = var_i.iv;
+  if ("encrypt" === this.type) {
+  for (var num_s = 0;
+  num_s < this.blockSize;
+  num_s++) var_a_1[num_s] ^= param_t[param_e + num_s];
+  var_o._update.call(this, var_a_1, 0, param_r, param_n);
+  for (num_s = 0;
+  num_s < this.blockSize;
+  num_s++) var_a_1[num_s] = param_r[param_n + num_s];
+  }
+  else {
+  var_o._update.call(this, param_t, param_e, param_r, param_n);
+  for (num_s = 0;
+  num_s < this.blockSize;
+  num_s++) param_r[param_n + num_s] ^= var_a_1[num_s];
+  for (num_s = 0;
+  num_s < this.blockSize;
+  num_s++) var_a_1[num_s] = param_t[param_e + num_s];
+  }
+  };
   };

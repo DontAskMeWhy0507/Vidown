@@ -1,15 +1,18 @@
 // Module 337 - Savior Shutterstock_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["shutterstock.com"],default:{
-  mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  if("preview"===e.filename){
-  var r=document.querySelector('[data-automation="PlayerInterface_container"] a');
-  e.filename=r?r.innerText:e.filename}
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["shutterstock.com"],
+  default: {
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  if ("preview" === var_e.filename) {
+  var var_r = document.querySelector('[data-automation="PlayerInterface_container"] a');
+  var_e.filename = var_r ? var_r.innerText : var_e.filename;
+  }
   }
   }
   };
-  e.default=n};
+  exportsObj.default = obj_n;
+  };

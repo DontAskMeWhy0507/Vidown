@@ -1,121 +1,196 @@
 // Module 342 - Savior Soundcloud Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(3),i=r(9),o=r(0);
-  function a(t,e){
-  var r="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];
-  if(!r){
-  if(Array.isArray(t)||(r=function(t,e){
-  if(t){
-  if("string"==typeof t)return s(t,e);
-  var r={
+  requireFn.r(exportsObj);
+  var dep_url_utils = requireFn(3),
+  dep_quality_helper = requireFn(9),
+  dep_dom_utils = requireFn(0);
+  function var_a(param_t, param_e) {
+  var var_r = "undefined" != typeof Symbol && param_t[Symbol.iterator] ||
+  param_t["@@iterator"];
+  if (!var_r) {
+  if (Array.isArray(param_t) || (var_r = function (param_t_1, param_e_1) {
+  if (param_t_1) {
+  if ("string" == typeof param_t_1) return var_s(param_t_1, param_e_1);
+  var var_r_1 = {
   }
-  .toString.call(t).slice(8,-1);
-  return"Object"===r&&t.constructor&&(r=t.constructor.name),"Map"===r||"Set"===r?Array.from(t):"Arguments"===r||
-  /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?s(t,e):void 0}
+  .toString.call(param_t_1).slice(8, -1);
+  return "Object" === var_r_1 && param_t_1.constructor && (var_r_1 = param_t_1.constructor.name),
+  "Map" === var_r_1 || "Set" === var_r_1 ? Array.from(param_t_1) :
+  "Arguments" === var_r_1 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(var_r_1) ?
+  var_s(param_t_1, param_e_1) : void 0;
   }
-  (t))||e&&t&&"number"==typeof t.length){
-  r&&(t=r);
-  var n=0,i=function(){
+  }
+  (param_t)) || param_e && param_t && "number" == typeof param_t.length) {
+  var_r && (param_t = var_r);
+  var num_n = 0,
+  fn_i = function () {
   };
-  return{
-  s:i,n:function(){
-  return n>=t.length?{
-  done:!0}
-  :{
-  done:!1,value:t[n++]}
+  return {
+  s: fn_i,
+  n: function () {
+  return num_n >= param_t.length ? {
+  done: !0
   }
-  ,e:function(t){
-  throw t}
-  ,f:i}
+  : {
+  done: !1,
+  value: param_t[num_n++]
+  };
   }
-  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}
-  var o,a=!0,u=!1;
-  return{
-  s:function(){
-  r=r.call(t)}
-  ,n:function(){
-  var t=r.next();
-  return a=t.done,t}
-  ,e:function(t){
-  u=!0,o=t}
-  ,f:function(){
-  try{
-  a||null==r.return||r.return()}
-  finally{
-  if(u)throw o}
+  ,
+  e: function (param_t_1) {
+  throw param_t_1;
   }
+  ,
+  f: fn_i
+  };
   }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function s(t,e){
-  (null==e||e>t.length)&&(e=t.length);
-  for(var r=0,n=Array(e);
-  r<e;
-  r++)n[r]=t[r];
-  return n}
-  var u,c=/client_id=([^&]+)/,l=/soundcloud:tracks:([0-9]+)/,f="https://api-v2.soundcloud.com/tracks?ids={{track_id}}&client_id={{client_id}}&%5Bobject%20Object%5D=&app_version={{app_version}}&app_locale=en",
-  d=[],h=location.href,p={
-  getDomains:()=>["soundcloud.com"],forceUpdate:()=>{
-  location.href!==h&&(EE.emit("widget.forceUpdate"),h=location.href)}
-  ,parse:{
-  sources:[],default:t=>{
-  var e,r,o,a=t.media,s=t.response,d=[];
-  try{
-  o=JSON.parse(s)}
-  catch(t){
-  return[]}
-  if(o.http_mp3_128_url){
-  var h=Object(n.f)(o.http_mp3_128_url),p=a.url.match(/soundcloud\.com\/i1\/tracks\/(\d+)\//);
-  if(!p||!p.length)return[];
-  var v=p[1],m=((t,e)=>{
-  e||(e=window.location.href),t=t.replace(/[[\]]/g,"\\$&");
-  var r=new RegExp("[?&]"+t+"(=([^&#]*)|&|#|$)").exec(e);
-  return r?r[2]?decodeURIComponent(r[2].replace(/\+/g," ")):"":null}
-  )("client_id",a.url)||"";
-  return fetch(f.replace("{{track_id}}",v).replace("{{client_id}}",m)).then((function(t){
-  return t.json()}
-  )).then((function(t){
-  if(!t.length)return[];
-  var e=t[0];
-  return h.title=e.title,h.quality=i.b.DEFAULT_QUALITY_TYPE,h.type="audio",d.push(h),d}
-  )).catch((function(){
-  return[]}
-  ))}
-  var y=(null===(e=c.exec(a.url))||void 0===e?void 0:e[1])||"client_id",g=(null===(r=l.exec(a.url))||
-  void 0===r?void 0:r[1])||"track_id";
-  if(o.url){
-  var b=f.replace("{{track_id}}",g).replace("{{client_id}}",y).replace("{{app_version}}",u);
-  return fetch(b).then(t=>t.json()).then(t=>{
-  var e=Object(n.f)(o.url);
-  return e.title=t[0].title,e.type="audio",fetch(e.url).then(t=>t.text()).then(t=>(e.play_list=t,d.push(e),
-  d))}
-  )}
-  return[]}
+  var var_o,
+  flag_a = !0,
+  flag_u = !1;
+  return {
+  s: function () {
+  var_r = var_r.call(param_t);
   }
-  ,beforeGetUrl:()=>{
-  var t,e=a(Array.from(document.scripts).filter(t=>t.innerHTML));
-  try{
-  for(e.s();
-  !(t=e.n()).done;
-  ){
-  var r=t.value.innerHTML;
-  if(r.includes("__sc_version")){
-  var n=/__sc_version\s*=\s*("|')(.+?)("|')/.exec(r);
-  n&&(u=n[2])}
+  ,
+  n: function () {
+  var var_t = var_r.next();
+  return flag_a = var_t.done, var_t;
+  }
+  ,
+  e: function (param_t_1) {
+  flag_u = !0, var_o = param_t_1;
+  }
+  ,
+  f: function () {
+  try {
+  flag_a || null == var_r.return || var_r.return();
+  }
+  finally {
+  if (flag_u) throw var_o;
   }
   }
-  catch(t){
-  e.e(t)}
-  finally{
-  e.f()}
+  };
   }
-  ,processRequestIds:t=>{
-  if(t.url.match(/api(-v[0-9]*)*\.soundcloud\.com\/media\/soundcloud:tracks:[0-9]+/gi)||t.url.includes(".m3u8"))return d.push(t),
-  EE.emit("widget.forceUpdate"),!0}
-  ,default:{
-  getUrl:()=>{
-  if(d.length>0)return d}
+  function var_s(param_t, param_e) {
+  (null == param_e || param_e > param_t.length) && (param_e = param_t.length);
+  for (var num_r = 0, var_n = Array(param_e);
+  num_r < param_e;
+  num_r++) var_n[num_r] = param_t[num_r];
+  return var_n;
   }
-  ,addNode:()=>[".playControls"],getCustomElement:()=>Object(o.queryAll)(".playControls")};
-  e.default=p};
+  var var_u,
+  regex_c = /client_id=([^&]+)/,
+  regex_l = /soundcloud:tracks:([0-9]+)/,
+  str_f = "https://api-v2.soundcloud.com/tracks?ids={{track_id}}&client_id={{client_id}}&%5Bobject%20Object%5D=&app_version={{app_version}}&app_locale=en",
+  list_d = [],
+  var_h = location.href,
+  obj_p = {
+  getDomains: () => ["soundcloud.com"],
+  forceUpdate: () => {
+  location.href !== var_h && (EE.emit("widget.forceUpdate"), var_h = location.href);
+  }
+  ,
+  parse: {
+  sources: [],
+  default: param_t => {
+  var var_e,
+  var_r,
+  var_o,
+  var_a_1 = param_t.media,
+  var_s_1 = param_t.response,
+  list_d_1 = [];
+  try {
+  var_o = JSON.parse(var_s_1);
+  }
+  catch (var_t) {
+  return [];
+  }
+  if (var_o.http_mp3_128_url) {
+  var var_h_1 = Object(dep_url_utils.f)(var_o.http_mp3_128_url),
+  var_p = var_a_1.url.match(/soundcloud\.com\/i1\/tracks\/(\d+)\//);
+  if (!var_p || !var_p.length) return [];
+  var var_v = var_p[1],
+  var_m = ((param_t_1, param_e) => {
+  param_e || (param_e = window.location.href), param_t_1 = param_t_1.replace(/[[\]]/g,
+  "\\$&");
+  var var_r_1 = new RegExp("[?&]" + param_t_1 + "(=([^&#]*)|&|#|$)").exec(param_e);
+  return var_r_1 ? var_r_1[2] ? decodeURIComponent(var_r_1[2].replace(/\+/g, " ")) :
+  "" : null;
+  }
+  )("client_id", var_a_1.url) || "";
+  return fetch(str_f.replace("{{track_id}}", var_v).replace("{{client_id}}", var_m)).then(
+  function (param_t_1) {
+  return param_t_1.json();
+  }
+  ).then(function (param_t_1) {
+  if (!param_t_1.length) return [];
+  var var_e_1 = param_t_1[0];
+  return var_h_1.title = var_e_1.title, var_h_1.quality = dep_quality_helper.b.DEFAULT_QUALITY_TYPE,
+  var_h_1.type = "audio", list_d_1.push(var_h_1), list_d_1;
+  }
+  ).catch(function () {
+  return [];
+  }
+  );
+  }
+  var var_y = (null === (var_e = regex_c.exec(var_a_1.url)) ||
+  void 0 === var_e ? void 0 : var_e[1]) || "client_id",
+  var_g = (null === (var_r = regex_l.exec(var_a_1.url)) || void 0 === var_r ?
+  void 0 : var_r[1]) || "track_id";
+  if (var_o.url) {
+  var var_b = str_f.replace("{{track_id}}", var_g).replace("{{client_id}}", var_y).replace(
+  "{{app_version}}", var_u);
+  return fetch(var_b).then(param_t_1 => param_t_1.json()).then(param_t_1 => {
+  var var_e_1 = Object(dep_url_utils.f)(var_o.url);
+  return var_e_1.title = param_t_1[0].title, var_e_1.type = "audio", fetch(var_e_1.url).then(
+  param_t_2 => param_t_2.text()).then(param_t_2 => (var_e_1.play_list = param_t_2,
+  list_d_1.push(var_e_1), list_d_1));
+  }
+  );
+  }
+  return [];
+  }
+  }
+  ,
+  beforeGetUrl: () => {
+  var var_t,
+  var_e = var_a(Array.from(document.scripts).filter(param_t => param_t.innerHTML));
+  try {
+  for (var_e.s();
+  !(var_t = var_e.n()).done;
+  ) {
+  var var_r = var_t.value.innerHTML;
+  if (var_r.includes("__sc_version")) {
+  var var_n = /__sc_version\s*=\s*("|')(.+?)("|')/.exec(var_r);
+  var_n && (var_u = var_n[2]);
+  }
+  }
+  }
+  catch (var_t_1) {
+  var_e.e(var_t_1);
+  }
+  finally {
+  var_e.f();
+  }
+  }
+  ,
+  processRequestIds: param_t => {
+  if (param_t.url.match(/api(-v[0-9]*)*\.soundcloud\.com\/media\/soundcloud:tracks:[0-9]+/gi) ||
+  param_t.url.includes(".m3u8")) return list_d.push(param_t), EE.emit("widget.forceUpdate"),
+  !0;
+  }
+  ,
+  default: {
+  getUrl: () => {
+  if (list_d.length > 0) return list_d;
+  }
+  }
+  ,
+  addNode: () => [".playControls"],
+  getCustomElement: () => Object(dep_dom_utils.queryAll)(".playControls")
+  };
+  exportsObj.default = obj_p;
+  };

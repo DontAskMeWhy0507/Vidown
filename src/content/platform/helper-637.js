@@ -1,4 +1,6 @@
 // Module 637 - Savior Helper 637
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  e.sha1=r(638),e.sha224=r(639),e.sha256=r(495),e.sha384=r(640),e.sha512=r(496)};
+  exportsObj.sha1 = requireFn(638), exportsObj.sha224 = requireFn(639), exportsObj.sha256 = requireFn(
+  495), exportsObj.sha384 = requireFn(640), exportsObj.sha512 = requireFn(496);
+  };

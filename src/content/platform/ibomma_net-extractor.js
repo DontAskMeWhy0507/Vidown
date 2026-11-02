@@ -1,15 +1,22 @@
 // Module 253 - Savior Ibomma_net Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=location.href,i={
-  getDomains:()=>["ibomma.net","net.ibomma.day"],default:{
-  mediaObjectChange:t=>{
-  var e=t.mediaObject,r=t.node;
-  return n=r.src,e.referrer=n,e.type}
+  requireFn.r(exportsObj);
+  var var_n = location.href,
+  obj_i = {
+  getDomains: () => ["ibomma.net", "net.ibomma.day"],
+  default: {
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject,
+  var_r = param_t.node;
+  return var_n = var_r.src, var_e.referrer = var_n, var_e.type;
   }
-  ,idsProcess(t){
-  var e=t.id;
-  e.referrer==e.url&&(e.referrer=n)}
+  }
+  ,
+  idsProcess(param_t) {
+  var var_e = param_t.id;
+  var_e.referrer == var_e.url && (var_e.referrer = var_n);
+  }
   };
-  e.default=i};
+  exportsObj.default = obj_i;
+  };

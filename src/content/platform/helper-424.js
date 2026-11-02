@@ -1,5 +1,8 @@
 // Module 424 - Savior Helper 424
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=Function.prototype.call,i=Object.prototype.hasOwnProperty,o=r(121);
-  t.exports=o.call(n,i)};
+  var var_n = Function.prototype.call,
+  var_i = Object.prototype.hasOwnProperty,
+  dep_helper_121 = requireFn(121);
+  moduleObj.exports = dep_helper_121.call(var_n, var_i);
+  };

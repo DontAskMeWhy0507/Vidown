@@ -1,4 +1,5 @@
 // Module 137 - Savior Helper 137
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=Function.prototype.call};
+  moduleObj.exports = Function.prototype.call;
+  };

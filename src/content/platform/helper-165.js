@@ -1,31 +1,49 @@
 // Module 165 - Savior Helper 165
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(25).Buffer,i=r(574),o=r(575),a=ArrayBuffer.isView||function(t){
-  try{
-  return o(t),!0}
-  catch(t){
-  return!1}
+  var var_n = requireFn(25).Buffer,
+  dep_helper_574 = requireFn(574),
+  dep_helper_575 = requireFn(575),
+  var_a = ArrayBuffer.isView || function (param_t) {
+  try {
+  return dep_helper_575(param_t), !0;
   }
-  ,s="undefined"!=typeof Uint8Array,u="undefined"!=typeof ArrayBuffer&&"undefined"!=typeof Uint8Array,
-  c=u&&(n.prototype instanceof Uint8Array||n.TYPED_ARRAY_SUPPORT);
-  t.exports=function(t,e){
-  if(n.isBuffer(t))return t.constructor&&!("isBuffer"in t)?n.from(t):t;
-  if("string"==typeof t)return n.from(t,e);
-  if(u&&a(t)){
-  if(0===t.byteLength)return n.alloc(0);
-  if(c){
-  var r=n.from(t.buffer,t.byteOffset,t.byteLength);
-  if(r.byteLength===t.byteLength)return r}
-  var o=t instanceof Uint8Array?t:new Uint8Array(t.buffer,t.byteOffset,t.byteLength),l=n.from(o);
-  if(l.length===t.byteLength)return l}
-  if(s&&t instanceof Uint8Array)return n.from(t);
-  var f=i(t);
-  if(f)for(var d=0;
-  d<t.length;
-  d+=1){
-  var h=t[d];
-  if("number"!=typeof h||h<0||h>255||~~h!==h)throw new RangeError("Array items must be numbers in the range 0-255.")}
-  if(f||n.isBuffer(t)&&t.constructor&&"function"==typeof t.constructor.isBuffer&&t.constructor.isBuffer(t))return n.from(t);
-  throw new TypeError('The "data" argument must be a string, an Array, a Buffer, a Uint8Array, or a DataView.')}
+  catch (var_t) {
+  return !1;
+  }
+  }
+  ,
+  var_s = "undefined" != typeof Uint8Array,
+  var_u = "undefined" != typeof ArrayBuffer && "undefined" != typeof Uint8Array,
+  var_c = var_u && (var_n.prototype instanceof Uint8Array ||
+  var_n.TYPED_ARRAY_SUPPORT);
+  moduleObj.exports = function (param_t, param_e) {
+  if (var_n.isBuffer(param_t)) return param_t.constructor &&
+  !("isBuffer" in param_t) ? var_n.from(param_t) : param_t;
+  if ("string" == typeof param_t) return var_n.from(param_t, param_e);
+  if (var_u && var_a(param_t)) {
+  if (0 === param_t.byteLength) return var_n.alloc(0);
+  if (var_c) {
+  var var_r = var_n.from(param_t.buffer, param_t.byteOffset, param_t.byteLength);
+  if (var_r.byteLength === param_t.byteLength) return var_r;
+  }
+  var var_o = param_t instanceof Uint8Array ? param_t : new Uint8Array(param_t.buffer,
+  param_t.byteOffset, param_t.byteLength),
+  var_l = var_n.from(var_o);
+  if (var_l.length === param_t.byteLength) return var_l;
+  }
+  if (var_s && param_t instanceof Uint8Array) return var_n.from(param_t);
+  var var_f = dep_helper_574(param_t);
+  if (var_f) for (var num_d = 0;
+  num_d < param_t.length;
+  num_d += 1) {
+  var var_h = param_t[num_d];
+  if ("number" != typeof var_h || var_h < 0 || var_h > 255 ||
+  ~~var_h !== var_h) throw new RangeError("Array items must be numbers in the range 0-255.");
+  }
+  if (var_f || var_n.isBuffer(param_t) && param_t.constructor &&
+  "function" == typeof param_t.constructor.isBuffer && param_t.constructor.isBuffer(
+  param_t)) return var_n.from(param_t);
+  throw new TypeError('The "data" argument must be a string, an Array, a Buffer, a Uint8Array, or a DataView.');
+  };
   };

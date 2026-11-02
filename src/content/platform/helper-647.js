@@ -1,69 +1,88 @@
 // Module 647 - Savior Helper 647
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(126),i=r(117),o=i.assert;
-  function a(t,e){
-  if(t instanceof a)return t;
-  this._importDER(t,e)||(o(t.r&&t.s,"Signature without r or s"),this.r=new n(t.r,16),this.s=new n(t.s,
-  16),void 0===t.recoveryParam?this.recoveryParam=null:this.recoveryParam=t.recoveryParam)}
-  function s(){
-  this.place=0}
-  function u(t,e){
-  var r=t[e.place++];
-  if(!(128&r))return r;
-  var n=15&r;
-  if(0===n||n>4)return!1;
-  if(0===t[e.place])return!1;
-  for(var i=0,o=0,a=e.place;
-  o<n;
-  o++,a++)i<<=8,i|=t[a],i>>>=0;
-  return!(i<=127)&&(e.place=a,i)}
-  function c(t){
-  for(var e=0,r=t.length-1;
-  !t[e]&&!(128&t[e+1])&&e<r;
-  )e++;
-  return 0===e?t:t.slice(e)}
-  function l(t,e){
-  if(e<128)t.push(e);
-  else{
-  var r=1+(Math.log(e)/Math.LN2>>>3);
-  for(t.push(128|r);
-  --r;
-  )t.push(e>>>(r<<3)&255);
-  t.push(e)}
+  var dep_module_126 = requireFn(126),
+  dep_helper_117 = requireFn(117),
+  var_o = dep_helper_117.assert;
+  function var_a(param_t, param_e) {
+  if (param_t instanceof var_a) return param_t;
+  this._importDER(param_t, param_e) || (var_o(param_t.r && param_t.s, "Signature without r or s"),
+  this.r = new dep_module_126(param_t.r, 16), this.s = new dep_module_126(param_t.s,
+  16), void 0 === param_t.recoveryParam ? this.recoveryParam = null :
+  this.recoveryParam = param_t.recoveryParam);
   }
-  t.exports=a,a.prototype._importDER=function(t,e){
-  t=i.toArray(t,e);
-  var r=new s;
-  if(48!==t[r.place++])return!1;
-  var o=u(t,r);
-  if(!1===o)return!1;
-  if(o+r.place!==t.length)return!1;
-  if(2!==t[r.place++])return!1;
-  var a=u(t,r);
-  if(!1===a)return!1;
-  if(0!=(128&t[r.place]))return!1;
-  var c=t.slice(r.place,a+r.place);
-  if(r.place+=a,2!==t[r.place++])return!1;
-  var l=u(t,r);
-  if(!1===l)return!1;
-  if(t.length!==l+r.place)return!1;
-  if(0!=(128&t[r.place]))return!1;
-  var f=t.slice(r.place,l+r.place);
-  if(0===c[0]){
-  if(!(128&c[1]))return!1;
-  c=c.slice(1)}
-  if(0===f[0]){
-  if(!(128&f[1]))return!1;
-  f=f.slice(1)}
-  return this.r=new n(c),this.s=new n(f),this.recoveryParam=null,!0}
-  ,a.prototype.toDER=function(t){
-  var e=this.r.toArray(),r=this.s.toArray();
-  for(128&e[0]&&(e=[0].concat(e)),128&r[0]&&(r=[0].concat(r)),e=c(e),r=c(r);
-  !(r[0]||128&r[1]);
-  )r=r.slice(1);
-  var n=[2];
-  l(n,e.length),(n=n.concat(e)).push(2),l(n,r.length);
-  var o=n.concat(r),a=[48];
-  return l(a,o.length),a=a.concat(o),i.encode(a,t)}
+  function var_s() {
+  this.place = 0;
+  }
+  function var_u(param_t, param_e) {
+  var var_r = param_t[param_e.place++];
+  if (!(128 & var_r)) return var_r;
+  var var_n = 15 & var_r;
+  if (0 === var_n || var_n > 4) return !1;
+  if (0 === param_t[param_e.place]) return !1;
+  for (var num_i = 0, num_o = 0, var_a_1 = param_e.place;
+  num_o < var_n;
+  num_o++, var_a_1++) num_i <<= 8, num_i |= param_t[var_a_1], num_i >>>= 0;
+  return !(num_i <= 127) && (param_e.place = var_a_1, num_i);
+  }
+  function var_c(param_t) {
+  for (var num_e = 0, var_r = param_t.length - 1;
+  !param_t[num_e] && !(128 & param_t[num_e + 1]) && num_e < var_r;
+  ) num_e++;
+  return 0 === num_e ? param_t : param_t.slice(num_e);
+  }
+  function var_l(param_t, param_e) {
+  if (param_e < 128) param_t.push(param_e);
+  else {
+  var var_r = 1 + (Math.log(param_e) / Math.LN2 >>> 3);
+  for (param_t.push(128 | var_r);
+  --var_r;
+  ) param_t.push(param_e >>> (var_r << 3) & 255);
+  param_t.push(param_e);
+  }
+  }
+  moduleObj.exports = var_a, var_a.prototype._importDER = function (param_t, param_e) {
+  param_t = dep_helper_117.toArray(param_t, param_e);
+  var var_r = new var_s();
+  if (48 !== param_t[var_r.place++]) return !1;
+  var var_o_1 = var_u(param_t, var_r);
+  if (!1 === var_o_1) return !1;
+  if (var_o_1 + var_r.place !== param_t.length) return !1;
+  if (2 !== param_t[var_r.place++]) return !1;
+  var var_a_1 = var_u(param_t, var_r);
+  if (!1 === var_a_1) return !1;
+  if (0 != (128 & param_t[var_r.place])) return !1;
+  var var_c_1 = param_t.slice(var_r.place, var_a_1 + var_r.place);
+  if (var_r.place += var_a_1, 2 !== param_t[var_r.place++]) return !1;
+  var var_l_1 = var_u(param_t, var_r);
+  if (!1 === var_l_1) return !1;
+  if (param_t.length !== var_l_1 + var_r.place) return !1;
+  if (0 != (128 & param_t[var_r.place])) return !1;
+  var var_f = param_t.slice(var_r.place, var_l_1 + var_r.place);
+  if (0 === var_c_1[0]) {
+  if (!(128 & var_c_1[1])) return !1;
+  var_c_1 = var_c_1.slice(1);
+  }
+  if (0 === var_f[0]) {
+  if (!(128 & var_f[1])) return !1;
+  var_f = var_f.slice(1);
+  }
+  return this.r = new dep_module_126(var_c_1), this.s = new dep_module_126(var_f),
+  this.recoveryParam = null, !0;
+  }
+  , var_a.prototype.toDER = function (param_t) {
+  var var_e = this.r.toArray(),
+  var_r = this.s.toArray();
+  for (128 & var_e[0] && (var_e = [0].concat(var_e)), 128 & var_r[0] &&
+  (var_r = [0].concat(var_r)), var_e = var_c(var_e), var_r = var_c(var_r);
+  !(var_r[0] || 128 & var_r[1]);
+  ) var_r = var_r.slice(1);
+  var list_n = [2];
+  var_l(list_n, var_e.length), (list_n = list_n.concat(var_e)).push(2), var_l(list_n,
+  var_r.length);
+  var var_o_1 = list_n.concat(var_r),
+  list_a = [48];
+  return var_l(list_a, var_o_1.length), list_a = list_a.concat(var_o_1), dep_helper_117.encode(
+  list_a, param_t);
+  };
   };

@@ -1,25 +1,45 @@
 // Module 292 - Savior Ngamvn_net Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(3),i={
-  18:"360p",22:"720p"}
-  ,o={
-  18:"Medium",22:"Standard"}
-  ,a=/VIDEO_CONFIG\s*=\s(.*)\s*\n*\t*<\/script>/,s={
-  getDomains:()=>["viet69.org"],parse:{
-  sources:[],default:t=>{
-  var e,r=t.response;
-  return r?JSON.parse((null===(e=a.exec(r))||void 0===e?void 0:e[1])||"{}").streams.map(t=>{
-  var e=Object(n.f)(t.play_url);
-  return e.filename=document.title,e.ext="mp4",e.exts=["mp4"],e.type="video",e.resolution=i[t.format_id],
-  e.quality=o[t.format_id],e}
-  ):[]}
+  requireFn.r(exportsObj);
+  var dep_url_utils = requireFn(3),
+  obj_i = {
+  18: "360p",
+  22: "720p"
   }
-  ,urls:[{
-  checkUrl:t=>t.url.includes("blogger.com"),mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.ext="m3u8",e.exts=["m3u8"],"video"}
+  ,
+  obj_o = {
+  18: "Medium",
+  22: "Standard"
   }
-  ]};
-  e.default=s};
+  ,
+  regex_a = /VIDEO_CONFIG\s*=\s(.*)\s*\n*\t*<\/script>/,
+  obj_s = {
+  getDomains: () => ["viet69.org"],
+  parse: {
+  sources: [],
+  default: param_t => {
+  var var_e,
+  var_r = param_t.response;
+  return var_r ? JSON.parse((null === (var_e = regex_a.exec(var_r)) ||
+  void 0 === var_e ? void 0 : var_e[1]) || "{}").streams.map(param_t_1 => {
+  var var_e_1 = Object(dep_url_utils.f)(param_t_1.play_url);
+  return var_e_1.filename = document.title, var_e_1.ext = "mp4", var_e_1.exts = ["mp4"],
+  var_e_1.type = "video", var_e_1.resolution = obj_i[param_t_1.format_id], var_e_1.quality = obj_o[param_t_1.format_id],
+  var_e_1;
+  }
+  ) : [];
+  }
+  }
+  ,
+  urls: [{
+  checkUrl: param_t => param_t.url.includes("blogger.com"),
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.ext = "m3u8", var_e.exts = ["m3u8"], "video";
+  }
+  }
+  ]
+  };
+  exportsObj.default = obj_s;
+  };

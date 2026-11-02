@@ -1,4 +1,6 @@
 // Module 603 - Savior Helper 603
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  e.utils=r(477),e.Cipher=r(427),e.DES=r(478),e.CBC=r(604),e.EDE=r(605)};
+  exportsObj.utils = requireFn(477), exportsObj.Cipher = requireFn(427), exportsObj.DES = requireFn(
+  478), exportsObj.CBC = requireFn(604), exportsObj.EDE = requireFn(605);
+  };

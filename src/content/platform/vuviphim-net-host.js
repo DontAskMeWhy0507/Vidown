@@ -1,21 +1,28 @@
 // Module 699 - Savior Vuviphim Net Host
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(0);
-  e.default={
-  index:60,getUrl(t,e,r,i){
-  if(t.match(/vuviphim[a-z]+\.net/i)&&!r.requestedUrls.includes(location.href))try{
-  var o=document.querySelector("#player video"),a=null==o?void 0:o.src;
-  r.requestedUrls.push(location.href),Object(n.sendMessage)({
-  requestType:"save_url",params:{
-  url:a}
-  }
-  )}
-  catch(t){
-  }
-  return{
-  return:!1,data:null}
+  requireFn.r(exportsObj);
+  var dep_dom_utils = requireFn(0);
+  exportsObj.default = {
+  index: 60,
+  getUrl(param_t, param_e, param_r, param_i) {
+  if (param_t.match(/vuviphim[a-z]+\.net/i) && !param_r.requestedUrls.includes(location.href)) try {
+  var var_o = document.querySelector("#player video"),
+  var_a = null == var_o ? void 0 : var_o.src;
+  param_r.requestedUrls.push(location.href), Object(dep_dom_utils.sendMessage)({
+  requestType: "save_url",
+  params: {
+  url: var_a
   }
   }
+  );
+  }
+  catch (var_t) {
+  }
+  return {
+  return: !1,
+  data: null
+  };
+  }
+  };
   };

@@ -1,12 +1,18 @@
 // Module 356 - Savior Truyenaudiocv_org Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["truyenaudiocv.org"],default:{
-  mediaObjectChange(t){
-  var e,r=t.mediaObject,n=null===(e=document.getElementById("npTitle"))||void 0===e?void 0:e.innerText.trim();
-  return n&&(r.filename=n),r.type}
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["truyenaudiocv.org"],
+  default: {
+  mediaObjectChange(param_t) {
+  var var_e,
+  var_r = param_t.mediaObject,
+  var_n = null === (var_e = document.getElementById("npTitle")) ||
+  void 0 === var_e ? void 0 : var_e.innerText.trim();
+  return var_n && (var_r.filename = var_n), var_r.type;
+  }
   }
   };
-  e.default=n};
+  exportsObj.default = obj_n;
+  };

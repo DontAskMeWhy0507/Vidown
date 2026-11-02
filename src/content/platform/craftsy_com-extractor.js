@@ -1,14 +1,23 @@
 // Module 223 - Savior Craftsy_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=[],i={
-  getDomains:()=>["craftsy."],processRequestIds:t=>{
-  if(t.url.match(/manifest.prod.boltdns.net\/.+\/master.m3u8/i))return n.push(t),!0}
-  ,default:{
-  getUrl:()=>{
-  var t,e=null===(t=n[n.length-1])||void 0===t?void 0:t.url;
-  return n.length=0,e}
+  requireFn.r(exportsObj);
+  var list_n = [],
+  obj_i = {
+  getDomains: () => ["craftsy."],
+  processRequestIds: param_t => {
+  if (param_t.url.match(/manifest.prod.boltdns.net\/.+\/master.m3u8/i)) return list_n.push(
+  param_t), !0;
+  }
+  ,
+  default: {
+  getUrl: () => {
+  var var_t,
+  var_e = null === (var_t = list_n[list_n.length - 1]) || void 0 === var_t ?
+  void 0 : var_t.url;
+  return list_n.length = 0, var_e;
+  }
   }
   };
-  e.default=i};
+  exportsObj.default = obj_i;
+  };

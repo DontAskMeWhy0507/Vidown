@@ -1,15 +1,21 @@
 // Module 282 - Savior Mrgay_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["mrgay."],default:{
-  getUrl:t=>{
-  var e=t.url;
-  return/mrgay\..*\/get_file/.test(e)?e:[]}
-  ,mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.filename=document.title,e.ext="mp4",e.exts=["mp4"],"video"}
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["mrgay."],
+  default: {
+  getUrl: param_t => {
+  var var_e = param_t.url;
+  return /mrgay\..*\/get_file/.test(var_e) ? var_e : [];
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.filename = document.title, var_e.ext = "mp4", var_e.exts = ["mp4"],
+  "video";
+  }
   }
   };
-  e.default=n};
+  exportsObj.default = obj_n;
+  };

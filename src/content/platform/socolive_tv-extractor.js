@@ -1,12 +1,18 @@
 // Module 341 - Savior Socolive_tv Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(0),i={
-  getDomains:()=>["socolive.tv","socolive13.co","socolive13.tv"],default:{
-  mediaObjectChange:t=>{
-  var e,r=t.mediaObject;
-  r.filename=(null===(e=Object(n.query)(".detail-title"))||void 0===e?void 0:e.textContent)||r.filename}
+  requireFn.r(exportsObj);
+  var dep_dom_utils = requireFn(0),
+  obj_i = {
+  getDomains: () => ["socolive.tv", "socolive13.co", "socolive13.tv"],
+  default: {
+  mediaObjectChange: param_t => {
+  var var_e,
+  var_r = param_t.mediaObject;
+  var_r.filename = (null === (var_e = Object(dep_dom_utils.query)(".detail-title")) ||
+  void 0 === var_e ? void 0 : var_e.textContent) || var_r.filename;
+  }
   }
   };
-  e.default=i};
+  exportsObj.default = obj_i;
+  };

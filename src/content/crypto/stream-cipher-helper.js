@@ -1,241 +1,393 @@
 // Module 31 - Savior Stream Cipher Helper
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(114),i=r(1),o=r(0),a=r(147);
-  function s(){
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
-  e,r="function"==typeof Symbol?Symbol:{
+  var dep_url_decryption_provider = requireFn(114),
+  dep_media_constants = requireFn(1),
+  dep_dom_utils = requireFn(0),
+  dep_streamc_xyz_host = requireFn(147);
+  function var_s() {
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var var_t,
+  var_e,
+  var_r = "function" == typeof Symbol ? Symbol : {
   }
-  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
-  function o(r,n,i,o){
-  var s=n&&n.prototype instanceof c?n:c,l=Object.create(s.prototype);
-  return u(l,"_invoke",function(r,n,i){
-  var o,s,u,c=0,l=i||[],f=!1,d={
-  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
-  return o=e,s=0,u=t,d.n=r,a}
+  ,
+  var_n = var_r.iterator || "@@iterator",
+  var_i = var_r.toStringTag || "@@toStringTag";
+  function var_o(param_r, param_n, param_i, param_o) {
+  var var_s_1 = param_n && param_n.prototype instanceof var_c_1 ?
+  param_n : var_c_1,
+  var_l_1 = Object.create(var_s_1.prototype);
+  return var_u(var_l_1, "_invoke", function (param_r_1, param_n_1, param_i_1) {
+  var var_o_1,
+  var_s_2,
+  var_u_1,
+  num_c = 0,
+  var_l_2 = param_i_1 || [],
+  flag_f = !1,
+  obj_d = {
+  p: 0,
+  n: 0,
+  v: var_t,
+  a: var_h_1,
+  f: var_h_1.bind(var_t, 4),
+  d: function (param_e, param_r_2) {
+  return var_o_1 = param_e, var_s_2 = 0, var_u_1 = var_t, obj_d.n = param_r_2, obj_a;
+  }
   };
-  function h(r,n){
-  for(s=r,u=n,e=0;
-  !f&&c&&!i&&e<l.length;
-  e++){
-  var i,o=l[e],h=d.p,p=o[2];
-  r>3?(i=p===n)&&(u=o[(s=o[4])?5:(s=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(s=0,d.v=n,d.n=o[1]):
-  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,s=0))}
-  if(i||r>1)return a;
-  throw f=!0,n}
-  return function(i,l,p){
-  if(c>1)throw TypeError("Generator is already running");
-  for(f&&1===l&&h(l,p),s=l,u=p;
-  (e=s<2?t:u)||!f;
-  ){
-  o||(s?s<3?(s>1&&(d.n=-1),h(s,u)):d.n=u:d.v=u);
-  try{
-  if(c=2,o){
-  if(s||(i="next"),e=o[i]){
-  if(!(e=e.call(o,u)))throw TypeError("iterator result is not an object");
-  if(!e.done)return e;
-  u=e.value,s<2&&(s=0)}
-  else 1===s&&(e=o.return)&&e.call(o),s<2&&(u=TypeError("The iterator does not provide a '"+i+"' method"),
-  s=1);
-  o=t}
-  else if((e=(f=d.n<0)?u:r.call(n,d))!==a)break}
-  catch(e){
-  o=t,s=1,u=e}
-  finally{
-  c=1}
+  function var_h_1(param_r_2, param_n_2) {
+  for (var_s_2 = param_r_2, var_u_1 = param_n_2, var_e = 0;
+  !flag_f && num_c && !var_i_1 && var_e < var_l_2.length;
+  var_e++) {
+  var var_i_1,
+  var_o_2 = var_l_2[var_e],
+  var_h_2 = obj_d.p,
+  var_p_1 = var_o_2[2];
+  param_r_2 > 3 ? (var_i_1 = var_p_1 === param_n_2) && (var_u_1 = var_o_2[(var_s_2 = var_o_2[4]) ?
+  5 : (var_s_2 = 3, 3)], var_o_2[4] = var_o_2[5] = var_t) : var_o_2[0] <= var_h_2 &&
+  ((var_i_1 = param_r_2 < 2 && var_h_2 < var_o_2[1]) ? (var_s_2 = 0, obj_d.v = param_n_2,
+  obj_d.n = var_o_2[1]) : var_h_2 < var_p_1 && (var_i_1 = param_r_2 < 3 ||
+  var_o_2[0] > param_n_2 || param_n_2 > var_p_1) && (var_o_2[4] = param_r_2, var_o_2[5] = param_n_2,
+  obj_d.n = var_p_1, var_s_2 = 0));
   }
-  return{
-  value:e,done:f}
+  if (var_i_1 || param_r_2 > 1) return obj_a;
+  throw flag_f = !0, param_n_2;
+  }
+  return function (param_i_2, param_l, param_p) {
+  if (num_c > 1) throw TypeError("Generator is already running");
+  for (flag_f && 1 === param_l && var_h_1(param_l, param_p), var_s_2 = param_l, var_u_1 = param_p;
+  (var_e = var_s_2 < 2 ? var_t : var_u_1) || !flag_f;
+  ) {
+  var_o_1 || (var_s_2 ? var_s_2 < 3 ? (var_s_2 > 1 && (obj_d.n = -1), var_h_1(var_s_2,
+  var_u_1)) : obj_d.n = var_u_1 : obj_d.v = var_u_1);
+  try {
+  if (num_c = 2, var_o_1) {
+  if (var_s_2 || (param_i_2 = "next"), var_e = var_o_1[param_i_2]) {
+  if (!(var_e = var_e.call(var_o_1, var_u_1))) throw TypeError("iterator result is not an object");
+  if (!var_e.done) return var_e;
+  var_u_1 = var_e.value, var_s_2 < 2 && (var_s_2 = 0);
+  }
+  else 1 === var_s_2 && (var_e = var_o_1.return) && var_e.call(var_o_1), var_s_2 < 2 &&
+  (var_u_1 = TypeError("The iterator does not provide a '" + param_i_2 + "' method"),
+  var_s_2 = 1);
+  var_o_1 = var_t;
+  }
+  else if ((var_e = (flag_f = obj_d.n < 0) ? var_u_1 : param_r_1.call(param_n_1,
+  obj_d)) !== obj_a) break;
+  }
+  catch (var_e_1) {
+  var_o_1 = var_t, var_s_2 = 1, var_u_1 = var_e_1;
+  }
+  finally {
+  num_c = 1;
   }
   }
-  (r,i,o),!0),l}
-  var a={
+  return {
+  value: var_e,
+  done: flag_f
   };
-  function c(){
+  };
   }
-  function l(){
+  (param_r, param_i, param_o), !0), var_l_1;
   }
-  function f(){
+  var obj_a = {
+  };
+  function var_c_1() {
   }
-  e=Object.getPrototypeOf;
-  var d=[][n]?e(e([][n]())):(u(e={
+  function var_l() {
   }
-  ,n,(function(){
-  return this}
-  )),e),h=f.prototype=c.prototype=Object.create(d);
-  function p(t){
-  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,u(t,i,"GeneratorFunction")),
-  t.prototype=Object.create(h),t}
-  return l.prototype=f,u(h,"constructor",f),u(f,"constructor",l),l.displayName="GeneratorFunction",u(f,
-  i,"GeneratorFunction"),u(h),u(h,i,"Generator"),u(h,n,(function(){
-  return this}
-  )),u(h,"toString",(function(){
-  return"[object Generator]"}
-  )),(s=function(){
-  return{
-  w:o,m:p}
+  function var_f_1() {
   }
-  )()}
-  function u(t,e,r,n){
-  var i=Object.defineProperty;
-  try{
-  i({
+  var_e = Object.getPrototypeOf;
+  var var_d = [][var_n] ? var_e(var_e([][var_n]())) : (var_u(var_e = {
   }
-  ,"",{
+  , var_n, function () {
+  return this;
   }
-  )}
-  catch(t){
-  i=0}
-  (u=function(t,e,r,n){
-  function o(e,r){
-  u(t,e,(function(t){
-  return this._invoke(e,r,t)}
-  ))}
-  e?i?i(t,e,{
-  value:r,enumerable:!n,configurable:!n,writable:!n}
-  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
-  )(t,e,r,n)}
-  var c,l=function(t,e,r,n){
-  return new(r||(r=Promise))((function(i,o){
-  function a(t){
-  try{
-  u(n.next(t))}
-  catch(t){
-  o(t)}
+  ), var_e),
+  var_h = var_f_1.prototype = var_c_1.prototype = Object.create(var_d);
+  function var_p(param_t) {
+  return Object.setPrototypeOf ? Object.setPrototypeOf(param_t, var_f_1) :
+  (param_t.__proto__ = var_f_1, var_u(param_t, var_i, "GeneratorFunction")), param_t.prototype = Object.create(
+  var_h), param_t;
   }
-  function s(t){
-  try{
-  u(n.throw(t))}
-  catch(t){
-  o(t)}
+  return var_l.prototype = var_f_1, var_u(var_h, "constructor", var_f_1), var_u(
+  var_f_1, "constructor", var_l), var_l.displayName = "GeneratorFunction", var_u(
+  var_f_1, var_i, "GeneratorFunction"), var_u(var_h), var_u(var_h, var_i, "Generator"),
+  var_u(var_h, var_n, function () {
+  return this;
   }
-  function u(t){
-  var e;
-  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
-  t(e)}
-  ))).then(a,s)}
-  u((n=n.apply(t,e||[])).next())}
-  ))}
-  ,f=null===(c=document.getElementById("player"))||void 0===c?void 0:c.dataset.obf,d="",h="";
-  e.a={
-  urls:[{
-  checkUrl:t=>t.url.includes(".php")||/\.streamc\.xyz/i.test(location.host),getUrl:t=>{
-  var e=t.ids,r=t.url;
-  return/xemphim1\.top|motchill[a-z0-9]*\.|vietsubtv|motchilltvphim\.com|yumeani\.|caphim\.|hh3dsub\.|ani4u\.|gogophim[a-z0-9]*\.|phimhdcss\.|tramphim\.|saigonphim\./.test(location.host)&&
-  (e=e.filter(t=>t.url.includes(".m3u8")||/\.streamc\.xyz\/(eyJ[A-Za-z0-9+/=_-]+)/.test(t.url))),(e=e.filter(t=>!t.url.includes("embed.php"))).forEach(t=>{
-  ["getPlaylist","get",void 0].includes(t.filename)&&(t.fixName=document.title),/xemphim1\.top|gogophim[a-z0-9]*\.|phim\.nguonc\.|phimhdcss\.|saigonphim\.|cobephim|tramphim\./.test(location.host)&&
-  (t.fixName=document.title,t.filename=document.title),t.skipRedirect=!0}
-  ),h=r,e}
-  ,mediaObjectChange(t){
-  t.mediaObject.fixName=document.title}
+  ), var_u(var_h, "toString", function () {
+  return "[object Generator]";
   }
-  ],parse:{
-  sources:[{
-  checkSource:t=>{
-  var e=t.url;
-  return/\.streamc\.xyz\/((.*hash\.php|(get|[a-z]{1,2})[a-z0-9]*\.php)\?hash=.+|[a-z]{1,2}[a-z0-9].+\.(m3u8|m3u9)|eyJ[A-Za-z0-9+/=_-]+)/i.test(e)}
-  ,parse:t=>{
-  var e=t.media,r=t.response;
-  return l(void 0,void 0,void 0,s().m((function t(){
-  var u,c,l,p,v,m,y,g,b,w,A;
-  return s().w((function(t){
-  for(;;
-  )switch(t.p=t.n){
-  case 0:if(c=r,f||d){
-  t.n=4;
-  break}
-  if(!/\.streamc\.xyz\/embed\.php/.test(location.href)){
-  t.n=2;
-  break}
-  return t.n=1,a.default.getUrl("",{
+  ), (var_s = function () {
+  return {
+  w: var_o,
+  m: var_p
+  };
   }
-  ,{
+  )();
   }
-  ,"https://embed14.streamc.xyz/embed.php");
-  case 1:l=t.v,d=null==l?void 0:l.data.videoHash,f=null==l?void 0:l.data.obf,t.n=4;
+  function var_u(param_t, param_e, param_r, param_n) {
+  var var_i = Object.defineProperty;
+  try {
+  var_i({
+  }
+  , "", {
+  }
+  );
+  }
+  catch (var_t) {
+  var_i = 0;
+  }
+  (var_u = function (param_t_1, param_e_1, param_r_1, param_n_1) {
+  function var_o(param_e_2, param_r_2) {
+  var_u(param_t_1, param_e_2, function (param_t_2) {
+  return this._invoke(param_e_2, param_r_2, param_t_2);
+  }
+  );
+  }
+  param_e_1 ? var_i ? var_i(param_t_1, param_e_1, {
+  value: param_r_1,
+  enumerable: !param_n_1,
+  configurable: !param_n_1,
+  writable: !param_n_1
+  }
+  ) : param_t_1[param_e_1] = param_r_1 : (var_o("next", 0), var_o("throw", 1), var_o(
+  "return", 2));
+  }
+  )(param_t, param_e, param_r, param_n);
+  }
+  var var_c,
+  fn_l = function (param_t, param_e, param_r, param_n) {
+  return new (param_r || (param_r = Promise))(function (param_i, param_o) {
+  function var_a(param_t_1) {
+  try {
+  var_u_1(param_n.next(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_s_1(param_t_1) {
+  try {
+  var_u_1(param_n.throw(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_u_1(param_t_1) {
+  var var_e;
+  param_t_1.done ? param_i(param_t_1.value) : (var_e = param_t_1.value, var_e instanceof param_r ?
+  var_e : new param_r(function (param_t_2) {
+  param_t_2(var_e);
+  }
+  )).then(var_a, var_s_1);
+  }
+  var_u_1((param_n = param_n.apply(param_t, param_e || [])).next());
+  }
+  );
+  }
+  ,
+  var_f = null === (var_c = document.getElementById("player")) ||
+  void 0 === var_c ? void 0 : var_c.dataset.obf,
+  str_d = "",
+  str_h = "";
+  exportsObj.a = {
+  urls: [{
+  checkUrl: param_t => param_t.url.includes(".php") || /\.streamc\.xyz/i.test(location.host),
+  getUrl: param_t => {
+  var var_e = param_t.ids,
+  var_r = param_t.url;
+  return /xemphim1\.top|motchill[a-z0-9]*\.|vietsubtv|motchilltvphim\.com|yumeani\.|caphim\.|hh3dsub\.|ani4u\.|gogophim[a-z0-9]*\.|phimhdcss\.|tramphim\.|saigonphim\./.test(
+  location.host) && (var_e = var_e.filter(param_t_1 => param_t_1.url.includes(".m3u8") ||
+  /\.streamc\.xyz\/(eyJ[A-Za-z0-9+/=_-]+)/.test(param_t_1.url))), (var_e = var_e.filter(
+  param_t_1 => !param_t_1.url.includes("embed.php"))).forEach(param_t_1 => {
+  ["getPlaylist", "get", void 0].includes(param_t_1.filename) &&
+  (param_t_1.fixName = document.title), /xemphim1\.top|gogophim[a-z0-9]*\.|phim\.nguonc\.|phimhdcss\.|saigonphim\.|cobephim|tramphim\./.test(
+  location.host) && (param_t_1.fixName = document.title, param_t_1.filename = document.title),
+  param_t_1.skipRedirect = !0;
+  }
+  ), str_h = var_r, var_e;
+  }
+  ,
+  mediaObjectChange(param_t) {
+  param_t.mediaObject.fixName = document.title;
+  }
+  }
+  ],
+  parse: {
+  sources: [{
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return /\.streamc\.xyz\/((.*hash\.php|(get|[a-z]{1,2})[a-z0-9]*\.php)\?hash=.+|[a-z]{1,2}[a-z0-9].+\.(m3u8|m3u9)|eyJ[A-Za-z0-9+/=_-]+)/i.test(
+  var_e);
+  }
+  ,
+  parse: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  return fn_l(void 0, void 0, void 0, var_s().m(function var_t() {
+  var var_u_1, var_c_1, var_l, var_p, var_v, var_m, var_y, var_g, var_b, var_w, var_A;
+  return var_s().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.p = param_t_1.n) {
+  case 0:
+  if (var_c_1 = var_r, var_f || str_d) {
+  param_t_1.n = 4;
   break;
-  case 2:return t.n=3,Object(o.sendMessage)({
-  type:i.b.GET_URL,params:{
-  url:"https://embed14.streamc.xyz/embed.php"}
   }
-  );
-  case 3:p=t.v,d=null==p?void 0:p.videoHash,f=null==p?void 0:p.obf;
-  case 4:if(!!c){
-  t.n=6;
-  break}
-  return t.n=5,Object(o.sendMessage)({
-  type:i.b.GET_URL,params:{
-  url:e.url}
-  }
-  );
-  case 5:c=t.v.url;
-  case 6:if(f||d){
-  t.n=8;
-  break}
-  return t.n=7,Object(o.sendMessage)({
-  type:i.b.CORS_FETCH,data:{
-  url:h,responseType:"text"}
-  }
-  );
-  case 7:v=t.v,(m=/data-obf="(\.?)"/.exec(v))&&(f=m[1]);
-  case 8:if(!(null==c?void 0:c.includes("#ENC-AESGCM"))){
-  t.n=16;
-  break}
-  return t.n=9,Object(o.sendMessage)({
-  type:i.b.GET_URL,params:{
-  url:"https://embed14.streamc.xyz/embed.php"}
-  }
-  );
-  case 9:if(y=t.v,!(null==(g=JSON.parse((null===(u=document.getElementById("stream-bootstrap"))||void 0===u?
-  void 0:u.textContent)||"null")||(null==y?void 0:y.bootstrap))?void 0:g.video)){
-  t.n=11;
-  break}
-  return t.n=10,Object(n.decryptM3U8)(c,g.video);
-  case 10:return c=t.v,t.a(3,16);
-  case 11:if(!(f=f||(null==y?void 0:y.obf))){
-  t.n=16;
-  break}
-  return t.p=12,b=d||Object(n.parseVideoHashFromObf)(f),t.n=13,Object(n.decryptM3U8)(c,b);
-  case 13:c=t.v,t.n=16;
+  if (!/\.streamc\.xyz\/embed\.php/.test(location.href)) {
+  param_t_1.n = 2;
   break;
-  case 14:return t.p=14,t.v,w=Object(n.parseKXFromNonce)(f),t.n=15,Object(n.decryptM3U8WithKX)(c,w);
-  case 15:c=t.v;
-  case 16:if(!(null==(r=c)?void 0:r.match(/#extm3u/i))){
-  t.n=17;
-  break}
-  return e.fixName=e.filename,(A=Object.assign({
   }
-  ,e)).play_list=r,A.ext="m3u8",A.exts=["m3u8"],A.url="https://google.com",t.a(2,[A]);
-  case 17:return t.a(2,[])}
+  return param_t_1.n = 1, dep_streamc_xyz_host.default.getUrl("", {
   }
-  ),t,null,[[12,14]])}
-  )))}
+  , {
   }
-  ,{
-  checkSource:t=>{
-  var e=t.url;
-  return/\.streamc\.xyz\/s3\/[a-z0-9]+\.(m3u8|m3u9)/i.test(e)}
-  ,parse:t=>{
-  var e=t.media,r=t.response;
-  return l(void 0,void 0,void 0,s().m((function t(){
-  var n;
-  return s().w((function(t){
-  for(;;
-  )switch(t.p=t.n){
-  case 0:if(t.p=0,e.filename=document.title.replace(/xem phim|watch/i,"").trim()||e.filename,e.fixName=e.filename,
-  r.match(/#extm3u/i)){
-  t.n=2;
-  break}
-  return t.n=1,fetch(e.url).then(t=>t.text());
-  case 1:r=t.v;
-  case 2:return n=Object.assign({
+  , "https://embed14.streamc.xyz/embed.php");
+  case 1:
+  var_l = param_t_1.v, str_d = null == var_l ? void 0 : var_l.data.videoHash, var_f = null == var_l ?
+  void 0 : var_l.data.obf, param_t_1.n = 4;
+  break;
+  case 2:
+  return param_t_1.n = 3, Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.GET_URL,
+  params: {
+  url: "https://embed14.streamc.xyz/embed.php"
   }
-  ,e),r&&(n.play_list=r,n.ext="m3u8",n.exts=["m3u8"]),t.a(2,[n]);
-  case 3:return t.p=3,t.v,t.a(2,[e])}
   }
-  ),t,null,[[0,3]])}
-  )))}
+  );
+  case 3:
+  var_p = param_t_1.v, str_d = null == var_p ? void 0 : var_p.videoHash, var_f = null == var_p ?
+  void 0 : var_p.obf;
+  case 4:
+  if (!!var_c_1) {
+  param_t_1.n = 6;
+  break;
   }
-  ]}
+  return param_t_1.n = 5, Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.GET_URL,
+  params: {
+  url: var_e.url
   }
+  }
+  );
+  case 5:
+  var_c_1 = param_t_1.v.url;
+  case 6:
+  if (var_f || str_d) {
+  param_t_1.n = 8;
+  break;
+  }
+  return param_t_1.n = 7, Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.CORS_FETCH,
+  data: {
+  url: str_h,
+  responseType: "text"
+  }
+  }
+  );
+  case 7:
+  var_v = param_t_1.v, (var_m = /data-obf="(\.?)"/.exec(var_v)) &&
+  (var_f = var_m[1]);
+  case 8:
+  if (!(null == var_c_1 ? void 0 : var_c_1.includes("#ENC-AESGCM"))) {
+  param_t_1.n = 16;
+  break;
+  }
+  return param_t_1.n = 9, Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.GET_URL,
+  params: {
+  url: "https://embed14.streamc.xyz/embed.php"
+  }
+  }
+  );
+  case 9:
+  if (var_y = param_t_1.v, !(null == (var_g = JSON.parse((null === (var_u_1 = document.getElementById(
+  "stream-bootstrap")) || void 0 === var_u_1 ? void 0 : var_u_1.textContent) ||
+  "null") || (null == var_y ? void 0 : var_y.bootstrap)) ? void 0 :
+  var_g.video)) {
+  param_t_1.n = 11;
+  break;
+  }
+  return param_t_1.n = 10, Object(dep_url_decryption_provider.decryptM3U8)(var_c_1,
+  var_g.video);
+  case 10:
+  return var_c_1 = param_t_1.v, param_t_1.a(3, 16);
+  case 11:
+  if (!(var_f = var_f || (null == var_y ? void 0 : var_y.obf))) {
+  param_t_1.n = 16;
+  break;
+  }
+  return param_t_1.p = 12, var_b = str_d || Object(dep_url_decryption_provider.parseVideoHashFromObf)(
+  var_f), param_t_1.n = 13, Object(dep_url_decryption_provider.decryptM3U8)(var_c_1,
+  var_b);
+  case 13:
+  var_c_1 = param_t_1.v, param_t_1.n = 16;
+  break;
+  case 14:
+  return param_t_1.p = 14, param_t_1.v, var_w = Object(dep_url_decryption_provider.parseKXFromNonce)(
+  var_f), param_t_1.n = 15, Object(dep_url_decryption_provider.decryptM3U8WithKX)(
+  var_c_1, var_w);
+  case 15:
+  var_c_1 = param_t_1.v;
+  case 16:
+  if (!(null == (var_r = var_c_1) ? void 0 : var_r.match(/#extm3u/i))) {
+  param_t_1.n = 17;
+  break;
+  }
+  return var_e.fixName = var_e.filename, (var_A = Object.assign({
+  }
+  , var_e)).play_list = var_r, var_A.ext = "m3u8", var_A.exts = ["m3u8"], var_A.url = "https://google.com",
+  param_t_1.a(2, [var_A]);
+  case 17:
+  return param_t_1.a(2, []);
+  }
+  }
+  , var_t, null, [[12, 14]]);
+  }
+  ));
+  }
+  }
+  , {
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return /\.streamc\.xyz\/s3\/[a-z0-9]+\.(m3u8|m3u9)/i.test(var_e);
+  }
+  ,
+  parse: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  return fn_l(void 0, void 0, void 0, var_s().m(function var_t() {
+  var var_n;
+  return var_s().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.p = param_t_1.n) {
+  case 0:
+  if (param_t_1.p = 0, var_e.filename = document.title.replace(/xem phim|watch/i,
+  "").trim() || var_e.filename, var_e.fixName = var_e.filename, var_r.match(/#extm3u/i)) {
+  param_t_1.n = 2;
+  break;
+  }
+  return param_t_1.n = 1, fetch(var_e.url).then(param_t_2 => param_t_2.text());
+  case 1:
+  var_r = param_t_1.v;
+  case 2:
+  return var_n = Object.assign({
+  }
+  , var_e), var_r && (var_n.play_list = var_r, var_n.ext = "m3u8", var_n.exts = ["m3u8"]),
+  param_t_1.a(2, [var_n]);
+  case 3:
+  return param_t_1.p = 3, param_t_1.v, param_t_1.a(2, [var_e]);
+  }
+  }
+  , var_t, null, [[0, 3]]);
+  }
+  ));
+  }
+  }
+  ]
+  }
+  };
   };

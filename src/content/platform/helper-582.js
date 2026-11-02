@@ -1,10 +1,17 @@
 // Module 582 - Savior Helper 582
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(583),i=r(136),o=r(141),a=r(586);
-  t.exports=function(t){
-  var e=o(arguments),r=1+t.length-(arguments.length-1);
-  return n(e,r>0?r:0,!0)}
-  ,i?i(t.exports,"apply",{
-  value:a}
-  ):t.exports.apply=a};
+  var dep_helper_583 = requireFn(583),
+  dep_helper_136 = requireFn(136),
+  dep_helper_141 = requireFn(141),
+  dep_helper_586 = requireFn(586);
+  moduleObj.exports = function (param_t) {
+  var var_e = dep_helper_141(arguments),
+  var_r = 1 + param_t.length - (arguments.length - 1);
+  return dep_helper_583(var_e, var_r > 0 ? var_r : 0, !0);
+  }
+  , dep_helper_136 ? dep_helper_136(moduleObj.exports, "apply", {
+  value: dep_helper_586
+  }
+  ) : moduleObj.exports.apply = dep_helper_586;
+  };

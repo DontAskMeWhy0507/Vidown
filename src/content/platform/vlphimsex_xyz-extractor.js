@@ -1,13 +1,16 @@
 // Module 379 - Savior Vlphimsex_xyz Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  e.default={
-  getDomains:()=>["vlphimsex.xyz"],idsProcess:t=>{
-  var e=t.id;
-  if(null==e?void 0:e.url){
-  var r=e.url,n=r.match(/(https:\/\/|http:\/\/)(?:[\w-]+\.)*([\w-]+\.[a-z]+)/);
-  e.referrer=n?n[1]+n[2]:r}
+  requireFn.r(exportsObj);
+  exportsObj.default = {
+  getDomains: () => ["vlphimsex.xyz"],
+  idsProcess: param_t => {
+  var var_e = param_t.id;
+  if (null == var_e ? void 0 : var_e.url) {
+  var var_r = var_e.url,
+  var_n = var_r.match(/(https:\/\/|http:\/\/)(?:[\w-]+\.)*([\w-]+\.[a-z]+)/);
+  var_e.referrer = var_n ? var_n[1] + var_n[2] : var_r;
   }
   }
+  };
   };

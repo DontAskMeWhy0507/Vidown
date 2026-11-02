@@ -1,23 +1,41 @@
 // Module 650 - Savior Helper 650
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(126),i=r(117),o=i.assert,a=i.cachedProperty,s=i.parseBytes;
-  function u(t,e){
-  this.eddsa=t,"object"!=typeof e&&(e=s(e)),Array.isArray(e)&&(o(e.length===2*t.encodingLength,"Signature has invalid size"),
-  e={
-  R:e.slice(0,t.encodingLength),S:e.slice(t.encodingLength)}
-  ),o(e.R&&e.S,"Signature without R or S"),t.isPoint(e.R)&&(this._R=e.R),e.S instanceof n&&(this._S=e.S),
-  this._Rencoded=Array.isArray(e.R)?e.R:e.Rencoded,this._Sencoded=Array.isArray(e.S)?e.S:e.Sencoded}
-  a(u,"S",(function(){
-  return this.eddsa.decodeInt(this.Sencoded())}
-  )),a(u,"R",(function(){
-  return this.eddsa.decodePoint(this.Rencoded())}
-  )),a(u,"Rencoded",(function(){
-  return this.eddsa.encodePoint(this.R())}
-  )),a(u,"Sencoded",(function(){
-  return this.eddsa.encodeInt(this.S())}
-  )),u.prototype.toBytes=function(){
-  return this.Rencoded().concat(this.Sencoded())}
-  ,u.prototype.toHex=function(){
-  return i.encode(this.toBytes(),"hex").toUpperCase()}
-  ,t.exports=u};
+  var dep_module_126 = requireFn(126),
+  dep_helper_117 = requireFn(117),
+  var_o = dep_helper_117.assert,
+  var_a = dep_helper_117.cachedProperty,
+  var_s = dep_helper_117.parseBytes;
+  function var_u(param_t, param_e) {
+  this.eddsa = param_t, "object" != typeof param_e && (param_e = var_s(param_e)),
+  Array.isArray(param_e) && (var_o(param_e.length === 2 * param_t.encodingLength,
+  "Signature has invalid size"), param_e = {
+  R: param_e.slice(0, param_t.encodingLength),
+  S: param_e.slice(param_t.encodingLength)
+  }
+  ), var_o(param_e.R && param_e.S, "Signature without R or S"), param_t.isPoint(
+  param_e.R) && (this._R = param_e.R), param_e.S instanceof dep_module_126 &&
+  (this._S = param_e.S), this._Rencoded = Array.isArray(param_e.R) ?
+  param_e.R : param_e.Rencoded, this._Sencoded = Array.isArray(param_e.S) ?
+  param_e.S : param_e.Sencoded;
+  }
+  var_a(var_u, "S", function () {
+  return this.eddsa.decodeInt(this.Sencoded());
+  }
+  ), var_a(var_u, "R", function () {
+  return this.eddsa.decodePoint(this.Rencoded());
+  }
+  ), var_a(var_u, "Rencoded", function () {
+  return this.eddsa.encodePoint(this.R());
+  }
+  ), var_a(var_u, "Sencoded", function () {
+  return this.eddsa.encodeInt(this.S());
+  }
+  ), var_u.prototype.toBytes = function () {
+  return this.Rencoded().concat(this.Sencoded());
+  }
+  , var_u.prototype.toHex = function () {
+  return dep_helper_117.encode(this.toBytes(), "hex").toUpperCase();
+  }
+  , moduleObj.exports = var_u;
+  };

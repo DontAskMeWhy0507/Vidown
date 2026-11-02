@@ -1,22 +1,32 @@
 // Module 171 - Savior Helper 171
-export default function(t,e,r){
-  var n=r(25).Buffer,i=r(76);
-  t.exports=function(t,e,r,o){
-  if(n.isBuffer(t)||(t=n.from(t,"binary")),e&&(n.isBuffer(e)||(e=n.from(e,"binary")),8!==e.length))throw new RangeError("salt should be Buffer with 8 byte length");
-  for(var a=r/8,s=n.alloc(a),u=n.alloc(o||0),c=n.alloc(0);
-  a>0||o>0;
-  ){
-  var l=new i;
-  l.update(c),l.update(t),e&&l.update(e),c=l.digest();
-  var f=0;
-  if(a>0){
-  var d=s.length-a;
-  f=Math.min(a,c.length),c.copy(s,d,0,f),a-=f}
-  if(f<c.length&&o>0){
-  var h=u.length-o,p=Math.min(o,c.length-f);
-  c.copy(u,h,f,f+p),o-=p}
+export default function (moduleObj, exportsObj, requireFn) {
+  var var_n = requireFn(25).Buffer,
+  dep_module_76 = requireFn(76);
+  moduleObj.exports = function (param_t, param_e, param_r, param_o) {
+  if (var_n.isBuffer(param_t) || (param_t = var_n.from(param_t, "binary")), param_e &&
+  (var_n.isBuffer(param_e) || (param_e = var_n.from(param_e, "binary")), 8 !== param_e.length)) throw new RangeError(
+  "salt should be Buffer with 8 byte length");
+  for (var var_a = param_r / 8, var_s = var_n.alloc(var_a), var_u = var_n.alloc(
+  param_o || 0), var_c = var_n.alloc(0);
+  var_a > 0 || param_o > 0;
+  ) {
+  var var_l = new dep_module_76();
+  var_l.update(var_c), var_l.update(param_t), param_e && var_l.update(param_e), var_c = var_l.digest(
+  );
+  var num_f = 0;
+  if (var_a > 0) {
+  var var_d = var_s.length - var_a;
+  num_f = Math.min(var_a, var_c.length), var_c.copy(var_s, var_d, 0, num_f), var_a -= num_f;
   }
-  return c.fill(0),{
-  key:s,iv:u}
+  if (num_f < var_c.length && param_o > 0) {
+  var var_h = var_u.length - param_o,
+  var_p = Math.min(param_o, var_c.length - num_f);
+  var_c.copy(var_u, var_h, num_f, num_f + var_p), param_o -= var_p;
   }
+  }
+  return var_c.fill(0), {
+  key: var_s,
+  iv: var_u
+  };
+  };
   };

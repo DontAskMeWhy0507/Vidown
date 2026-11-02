@@ -1,95 +1,143 @@
 // Module 400 - Savior Yiihuu_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n,i=r(0);
-  function o(t,e){
-  var r="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];
-  if(!r){
-  if(Array.isArray(t)||(r=function(t,e){
-  if(t){
-  if("string"==typeof t)return a(t,e);
-  var r={
+  requireFn.r(exportsObj);
+  var var_n,
+  dep_dom_utils = requireFn(0);
+  function var_o(param_t, param_e) {
+  var var_r = "undefined" != typeof Symbol && param_t[Symbol.iterator] ||
+  param_t["@@iterator"];
+  if (!var_r) {
+  if (Array.isArray(param_t) || (var_r = function (param_t_1, param_e_1) {
+  if (param_t_1) {
+  if ("string" == typeof param_t_1) return var_a(param_t_1, param_e_1);
+  var var_r_1 = {
   }
-  .toString.call(t).slice(8,-1);
-  return"Object"===r&&t.constructor&&(r=t.constructor.name),"Map"===r||"Set"===r?Array.from(t):"Arguments"===r||
-  /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?a(t,e):void 0}
+  .toString.call(param_t_1).slice(8, -1);
+  return "Object" === var_r_1 && param_t_1.constructor && (var_r_1 = param_t_1.constructor.name),
+  "Map" === var_r_1 || "Set" === var_r_1 ? Array.from(param_t_1) :
+  "Arguments" === var_r_1 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(var_r_1) ?
+  var_a(param_t_1, param_e_1) : void 0;
   }
-  (t))||e&&t&&"number"==typeof t.length){
-  r&&(t=r);
-  var n=0,i=function(){
+  }
+  (param_t)) || param_e && param_t && "number" == typeof param_t.length) {
+  var_r && (param_t = var_r);
+  var num_n = 0,
+  fn_i = function () {
   };
-  return{
-  s:i,n:function(){
-  return n>=t.length?{
-  done:!0}
-  :{
-  done:!1,value:t[n++]}
+  return {
+  s: fn_i,
+  n: function () {
+  return num_n >= param_t.length ? {
+  done: !0
   }
-  ,e:function(t){
-  throw t}
-  ,f:i}
+  : {
+  done: !1,
+  value: param_t[num_n++]
+  };
   }
-  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}
-  var o,s=!0,u=!1;
-  return{
-  s:function(){
-  r=r.call(t)}
-  ,n:function(){
-  var t=r.next();
-  return s=t.done,t}
-  ,e:function(t){
-  u=!0,o=t}
-  ,f:function(){
-  try{
-  s||null==r.return||r.return()}
-  finally{
-  if(u)throw o}
+  ,
+  e: function (param_t_1) {
+  throw param_t_1;
   }
+  ,
+  f: fn_i
+  };
   }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
-  function a(t,e){
-  (null==e||e>t.length)&&(e=t.length);
-  for(var r=0,n=Array(e);
-  r<e;
-  r++)n[r]=t[r];
-  return n}
-  var s={
-  getDomains:()=>["yiihuu.com"],default:{
-  mediaObjectChange:t=>{
-  var e,r,a=t.mediaObject,s=t.node;
-  if(location.pathname.match(/[0-9]+/)){
-  var u=null===(e=location.pathname.match(/[0-9]+/))||void 0===e?void 0:e[0],c="https://www.yiihuu.com/polyv/polyv_get_token.php?vid="+u;
-  if(n)a.dashVideoId=n;
-  else try{
-  fetch(c).then(t=>t.text()).then(t=>{
-  var e=t,r=location.origin+"/get_video_uri.php?video_type=xhtml&play_video_id="+u+"&_="+Date.now();
-  fetch(r).then(t=>t.text()).then(t=>{
-  var r=(t=t.trim()).split("_")[0],i=t.charAt(t.indexOf("_")+1),o="https://hls.videocc.net/playsafe/v1102/"+t.substring(0,
-  parseInt(i)+1)+"/"+i+"/"+r+"_1.key?token="+e;
-  fetch(o).then(t=>t.arrayBuffer()).then(t=>{
-  n=t}
-  )}
-  )}
-  )}
-  catch(t){
-  console.log(t)}
-  a.ext="mp4",a.exts=["mp4"];
-  var l,f=o(Object(i.queryAll)(".feed-shared-linkedin-video__container"));
-  try{
-  for(f.s();
-  !(l=f.n()).done;
-  ){
-  var d=l.value;
-  s.isSameNode(Object(i.query)("video",d))&&"ARTICLE"===(null===(r=d.nextElementSibling)||void 0===r?
-  void 0:r.tagName)&&(a.filename=d.nextElementSibling.innerText)}
+  var var_o_1,
+  flag_s = !0,
+  flag_u = !1;
+  return {
+  s: function () {
+  var_r = var_r.call(param_t);
   }
-  catch(t){
-  f.e(t)}
-  finally{
-  f.f()}
-  return"video"}
+  ,
+  n: function () {
+  var var_t = var_r.next();
+  return flag_s = var_t.done, var_t;
+  }
+  ,
+  e: function (param_t_1) {
+  flag_u = !0, var_o_1 = param_t_1;
+  }
+  ,
+  f: function () {
+  try {
+  flag_s || null == var_r.return || var_r.return();
+  }
+  finally {
+  if (flag_u) throw var_o_1;
   }
   }
   };
-  e.default=s};
+  }
+  function var_a(param_t, param_e) {
+  (null == param_e || param_e > param_t.length) && (param_e = param_t.length);
+  for (var num_r = 0, var_n_1 = Array(param_e);
+  num_r < param_e;
+  num_r++) var_n_1[num_r] = param_t[num_r];
+  return var_n_1;
+  }
+  var obj_s = {
+  getDomains: () => ["yiihuu.com"],
+  default: {
+  mediaObjectChange: param_t => {
+  var var_e,
+  var_r,
+  var_a_1 = param_t.mediaObject,
+  var_s = param_t.node;
+  if (location.pathname.match(/[0-9]+/)) {
+  var var_u = null === (var_e = location.pathname.match(/[0-9]+/)) ||
+  void 0 === var_e ? void 0 : var_e[0],
+  var_c = "https://www.yiihuu.com/polyv/polyv_get_token.php?vid=" + var_u;
+  if (var_n) var_a_1.dashVideoId = var_n;
+  else try {
+  fetch(var_c).then(param_t_1 => param_t_1.text()).then(param_t_1 => {
+  var var_e_1 = param_t_1,
+  var_r_1 = location.origin + "/get_video_uri.php?video_type=xhtml&play_video_id=" + var_u + "&_=" + Date.now(
+  );
+  fetch(var_r_1).then(param_t_2 => param_t_2.text()).then(param_t_2 => {
+  var var_r_2 = (param_t_2 = param_t_2.trim()).split("_")[0],
+  var_i = param_t_2.charAt(param_t_2.indexOf("_") + 1),
+  var_o_1 = "https://hls.videocc.net/playsafe/v1102/" + param_t_2.substring(0, parseInt(
+  var_i) + 1) + "/" + var_i + "/" + var_r_2 + "_1.key?token=" + var_e_1;
+  fetch(var_o_1).then(param_t_3 => param_t_3.arrayBuffer()).then(param_t_3 => {
+  var_n = param_t_3;
+  }
+  );
+  }
+  );
+  }
+  );
+  }
+  catch (var_t) {
+  console.log(var_t);
+  }
+  var_a_1.ext = "mp4", var_a_1.exts = ["mp4"];
+  var var_l,
+  var_f = var_o(Object(dep_dom_utils.queryAll)(".feed-shared-linkedin-video__container"));
+  try {
+  for (var_f.s();
+  !(var_l = var_f.n()).done;
+  ) {
+  var var_d = var_l.value;
+  var_s.isSameNode(Object(dep_dom_utils.query)("video", var_d)) &&
+  "ARTICLE" === (null === (var_r = var_d.nextElementSibling) ||
+  void 0 === var_r ? void 0 : var_r.tagName) && (var_a_1.filename = var_d.nextElementSibling.innerText);
+  }
+  }
+  catch (var_t) {
+  var_f.e(var_t);
+  }
+  finally {
+  var_f.f();
+  }
+  return "video";
+  }
+  }
+  }
+  };
+  exportsObj.default = obj_s;
+  };

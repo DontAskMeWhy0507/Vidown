@@ -1,9 +1,12 @@
 // Module 186 - Savior Anhquangdaytoantct_vn Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["anhquangdaytoantct."],default:{
-  getUrl:t=>t.ids.reverse()}
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["anhquangdaytoantct."],
+  default: {
+  getUrl: param_t => param_t.ids.reverse()
+  }
   };
-  e.default=n};
+  exportsObj.default = obj_n;
+  };

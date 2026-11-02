@@ -1,50 +1,78 @@
 // Module 272 - Savior Luotphimtv_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(9),i=r(0),o={
+  requireFn.r(exportsObj);
+  var dep_quality_helper = requireFn(9),
+  dep_dom_utils = requireFn(0),
+  obj_o = {
   }
-  ,a={
-  getDomains:()=>["luotphimtv"],parse:{
-  sources:[{
-  checkSource:t=>{
-  var e=t.url;
-  return Boolean(e.match(/(dpst1.xyz\/stream)/))}
-  ,parse:t=>{
-  var e=t.media;
-  return[Object.assign(Object.assign({
+  ,
+  obj_a = {
+  getDomains: () => ["luotphimtv"],
+  parse: {
+  sources: [{
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return Boolean(var_e.match(/(dpst1.xyz\/stream)/));
   }
-  ,e),{
-  referrer:o[e.url]||o[location.href]||location.href}
-  )]}
+  ,
+  parse: param_t => {
+  var var_e = param_t.media;
+  return [Object.assign(Object.assign({
   }
-  ,{
-  checkSource:t=>{
-  var e=t.url;
-  if(e.match(/(video\.mp4\?)/)){
-  var r=new URL(e),n=r.searchParams.has("hash"),i=r.searchParams.has("cookie"),o=r.searchParams.has("key");
-  if(n&&i&&o)return!0}
-  return!1}
-  ,parse:t=>{
-  var e=t.media,r=Object.assign(Object.assign({
+  , var_e), {
+  referrer: obj_o[var_e.url] || obj_o[location.href] || location.href
   }
-  ,e),{
-  skipReferrer:!0}
+  )];
+  }
+  }
+  , {
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  if (var_e.match(/(video\.mp4\?)/)) {
+  var var_r = new URL(var_e),
+  var_n = var_r.searchParams.has("hash"),
+  var_i = var_r.searchParams.has("cookie"),
+  var_o = var_r.searchParams.has("key");
+  if (var_n && var_i && var_o) return !0;
+  }
+  return !1;
+  }
+  ,
+  parse: param_t => {
+  var var_e = param_t.media,
+  var_r = Object.assign(Object.assign({
+  }
+  , var_e), {
+  skipReferrer: !0
+  }
   );
-  return delete r.referrer,r.quality||(r.quality=n.b.DEFAULT_QUALITY_TYPE),"number"==typeof r.size&&
-  (r.size=Object(i.beautifyFileSize)(r.size)),[r]}
+  return delete var_r.referrer, var_r.quality || (var_r.quality = dep_quality_helper.b.DEFAULT_QUALITY_TYPE),
+  "number" == typeof var_r.size && (var_r.size = Object(dep_dom_utils.beautifyFileSize)(
+  var_r.size)), [var_r];
   }
-  ]}
-  ,urls:[{
-  checkUrl:t=>{
-  var e=t.url;
-  return Boolean(e.match(/(dpst1.xyz\/stream)|(nobiphim\.com)/))}
-  ,getUrl:t=>{
-  var e=t.url;
-  return o[location.href]=e,e}
-  ,mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  e.referrer=o[e.url]||o[location.href]||location.href}
   }
-  ]};
-  e.default=a};
+  ]
+  }
+  ,
+  urls: [{
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return Boolean(var_e.match(/(dpst1.xyz\/stream)|(nobiphim\.com)/));
+  }
+  ,
+  getUrl: param_t => {
+  var var_e = param_t.url;
+  return obj_o[location.href] = var_e, var_e;
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  var_e.referrer = obj_o[var_e.url] || obj_o[location.href] ||
+  location.href;
+  }
+  }
+  ]
+  };
+  exportsObj.default = obj_a;
+  };

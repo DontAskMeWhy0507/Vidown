@@ -33,7 +33,7 @@ const prefetcherCode = entrySource.slice(0, section2Idx).trim();
 
 // 2. Read each module
 const slotCodes = [];
-const regenPattern = /function\s+([a-zA-Z0-9_$]+)\s*\(\)\s*\{\s*\/\*!\s*regenerator-runtime[\s\S]*?\(\1\s*=\s*function\(\)\s*\{\s*return\s*\{\s*w:\s*[a-zA-Z0-9_$]+\s*,\s*m:\s*[a-zA-Z0-9_$]+\s*\}\s*\}\s*\)\s*\(\s*\)\s*;?\s*\}/g;
+const regenPattern = /function\s+([a-zA-Z0-9_$]+)\s*\(\)\s*\{\s*\/\*!\s*regenerator-runtime[\s\S]*?\(\s*\1\s*=\s*function\s*\(\)\s*\{\s*return\s*\{\s*w:\s*[a-zA-Z0-9_$]+\s*,\s*m:\s*[a-zA-Z0-9_$]+\s*\}\s*;?\s*\}\s*\)\s*\(\s*\)\s*;?\s*\}/g;
 let deduplicatedRegenCount = 0;
 
 for (let i = 0; i < 776; i++) {

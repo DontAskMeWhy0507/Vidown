@@ -1,4 +1,5 @@
 // Module 406 - Savior Helper 406
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=Error};
+  moduleObj.exports = Error;
+  };

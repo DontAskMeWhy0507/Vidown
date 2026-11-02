@@ -1,9 +1,15 @@
 // Module 289 - Savior Netflix_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["netflix.com","dungmori.com"],default:{
-  getUrl:()=>[]}
-  ,shouldWidgetAttachToParentNode:t=>!0,getCustomParent:t=>t.closest('[data-videoid], [data-uia="player"]')};
-  e.default=n};
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["netflix.com", "dungmori.com"],
+  default: {
+  getUrl: () => []
+  }
+  ,
+  shouldWidgetAttachToParentNode: param_t => !0,
+  getCustomParent: param_t => param_t.closest('[data-videoid], [data-uia="player"]')
+  };
+  exportsObj.default = obj_n;
+  };

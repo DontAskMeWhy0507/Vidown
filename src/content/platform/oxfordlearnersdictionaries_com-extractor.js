@@ -1,17 +1,29 @@
 // Module 299 - Savior Oxfordlearnersdictionaries_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=[],i=location.href,o={
-  getDomains:()=>["oxfordlearnersdictionaries.com"],forceUpdate:()=>{
-  location.href!==i&&(EE.emit("widget.forceUpdate"),i=location.href)}
-  ,processRequestIds:t=>{
-  if("string"==typeof t.url&&(t.url.match(/oxfordlearnersdictionaries.com\/media/)||t.url.includes(".mp3")))return n.push(t),
-  !0}
-  ,default:{
-  getUrl:t=>{
-  if(n.length>0)return(null==t?void 0:t.node)?n.filter(e=>e.url==t.node.getAttribute("data-src-mp3")):
-  n}
+  requireFn.r(exportsObj);
+  var list_n = [],
+  var_i = location.href,
+  obj_o = {
+  getDomains: () => ["oxfordlearnersdictionaries.com"],
+  forceUpdate: () => {
+  location.href !== var_i && (EE.emit("widget.forceUpdate"), var_i = location.href);
   }
-  ,addNode:()=>[".audio_play_button"]};
-  e.default=o};
+  ,
+  processRequestIds: param_t => {
+  if ("string" == typeof param_t.url && (param_t.url.match(/oxfordlearnersdictionaries.com\/media/) ||
+  param_t.url.includes(".mp3"))) return list_n.push(param_t), !0;
+  }
+  ,
+  default: {
+  getUrl: param_t => {
+  if (list_n.length > 0) return (null == param_t ? void 0 : param_t.node) ?
+  list_n.filter(param_e => param_e.url == param_t.node.getAttribute("data-src-mp3")) :
+  list_n;
+  }
+  }
+  ,
+  addNode: () => [".audio_play_button"]
+  };
+  exportsObj.default = obj_o;
+  };

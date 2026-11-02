@@ -1,4 +1,5 @@
 // Module 152 - Savior Helper 152
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=Object};
+  moduleObj.exports = Object;
+  };

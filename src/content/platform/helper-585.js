@@ -1,15 +1,21 @@
 // Module 585 - Savior Helper 585
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(136),i=function(){
-  return!!n};
-  i.hasArrayLengthDefineBug=function(){
-  if(!n)return null;
-  try{
-  return 1!==n([],"length",{
-  value:1}
-  ).length}
-  catch(t){
-  return!0}
+  var dep_helper_136 = requireFn(136),
+  fn_i = function () {
+  return !!dep_helper_136;
+  };
+  fn_i.hasArrayLengthDefineBug = function () {
+  if (!dep_helper_136) return null;
+  try {
+  return 1 !== dep_helper_136([], "length", {
+  value: 1
   }
-  ,t.exports=i};
+  ).length;
+  }
+  catch (var_t) {
+  return !0;
+  }
+  }
+  , moduleObj.exports = fn_i;
+  };

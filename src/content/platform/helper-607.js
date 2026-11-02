@@ -1,7 +1,9 @@
 // Module 607 - Savior Helper 607
-export default function(t,e){
-  e.encrypt=function(t,e){
-  return t._cipher.encryptBlock(e)}
-  ,e.decrypt=function(t,e){
-  return t._cipher.decryptBlock(e)}
+export default function (moduleObj, exportsObj) {
+  exportsObj.encrypt = function (param_t, param_e) {
+  return param_t._cipher.encryptBlock(param_e);
+  }
+  , exportsObj.decrypt = function (param_t, param_e) {
+  return param_t._cipher.decryptBlock(param_e);
+  };
   };

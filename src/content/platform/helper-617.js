@@ -1,3 +1,3 @@
 // Module 617 - Savior Helper 617
-export default function(t,e){
+export default function (moduleObj, exportsObj) {
   };

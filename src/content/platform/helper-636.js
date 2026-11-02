@@ -1,113 +1,217 @@
 // Module 636 - Savior Helper 636
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(117),i=r(126),o=r(15),a=r(172),s=n.assert;
-  function u(t){
-  this.twisted=1!=(0|t.a),this.mOneA=this.twisted&&-1==(0|t.a),this.extended=this.mOneA,a.call(this,
-  "edwards",t),this.a=new i(t.a,16).umod(this.red.m),this.a=this.a.toRed(this.red),this.c=new i(t.c,
-  16).toRed(this.red),this.c2=this.c.redSqr(),this.d=new i(t.d,16).toRed(this.red),this.dd=this.d.redAdd(this.d),
-  s(!this.twisted||0===this.c.fromRed().cmpn(1)),this.oneC=1==(0|t.c)}
-  function c(t,e,r,n,o){
-  a.BasePoint.call(this,t,"projective"),null===e&&null===r&&null===n?(this.x=this.curve.zero,this.y=this.curve.one,
-  this.z=this.curve.one,this.t=this.curve.zero,this.zOne=!0):(this.x=new i(e,16),this.y=new i(r,16),
-  this.z=n?new i(n,16):this.curve.one,this.t=o&&new i(o,16),this.x.red||(this.x=this.x.toRed(this.curve.red)),
-  this.y.red||(this.y=this.y.toRed(this.curve.red)),this.z.red||(this.z=this.z.toRed(this.curve.red)),
-  this.t&&!this.t.red&&(this.t=this.t.toRed(this.curve.red)),this.zOne=this.z===this.curve.one,this.curve.extended&&
-  !this.t&&(this.t=this.x.redMul(this.y),this.zOne||(this.t=this.t.redMul(this.z.redInvm()))))}
-  o(u,a),t.exports=u,u.prototype._mulA=function(t){
-  return this.mOneA?t.redNeg():this.a.redMul(t)}
-  ,u.prototype._mulC=function(t){
-  return this.oneC?t:this.c.redMul(t)}
-  ,u.prototype.jpoint=function(t,e,r,n){
-  return this.point(t,e,r,n)}
-  ,u.prototype.pointFromX=function(t,e){
-  (t=new i(t,16)).red||(t=t.toRed(this.red));
-  var r=t.redSqr(),n=this.c2.redSub(this.a.redMul(r)),o=this.one.redSub(this.c2.redMul(this.d).redMul(r)),
-  a=n.redMul(o.redInvm()),s=a.redSqrt();
-  if(0!==s.redSqr().redSub(a).cmp(this.zero))throw new Error("invalid point");
-  var u=s.fromRed().isOdd();
-  return(e&&!u||!e&&u)&&(s=s.redNeg()),this.point(t,s)}
-  ,u.prototype.pointFromY=function(t,e){
-  (t=new i(t,16)).red||(t=t.toRed(this.red));
-  var r=t.redSqr(),n=r.redSub(this.c2),o=r.redMul(this.d).redMul(this.c2).redSub(this.a),a=n.redMul(o.redInvm());
-  if(0===a.cmp(this.zero)){
-  if(e)throw new Error("invalid point");
-  return this.point(this.zero,t)}
-  var s=a.redSqrt();
-  if(0!==s.redSqr().redSub(a).cmp(this.zero))throw new Error("invalid point");
-  return s.fromRed().isOdd()!==e&&(s=s.redNeg()),this.point(s,t)}
-  ,u.prototype.validate=function(t){
-  if(t.isInfinity())return!0;
-  t.normalize();
-  var e=t.x.redSqr(),r=t.y.redSqr(),n=e.redMul(this.a).redAdd(r),i=this.c2.redMul(this.one.redAdd(this.d.redMul(e).redMul(r)));
-  return 0===n.cmp(i)}
-  ,o(c,a.BasePoint),u.prototype.pointFromJSON=function(t){
-  return c.fromJSON(this,t)}
-  ,u.prototype.point=function(t,e,r,n){
-  return new c(this,t,e,r,n)}
-  ,c.fromJSON=function(t,e){
-  return new c(t,e[0],e[1],e[2])}
-  ,c.prototype.inspect=function(){
-  return this.isInfinity()?"<EC Point Infinity>":"<EC Point x: "+this.x.fromRed().toString(16,2)+" y: "+this.y.fromRed().toString(16,
-  2)+" z: "+this.z.fromRed().toString(16,2)+">"}
-  ,c.prototype.isInfinity=function(){
-  return 0===this.x.cmpn(0)&&(0===this.y.cmp(this.z)||this.zOne&&0===this.y.cmp(this.curve.c))}
-  ,c.prototype._extDbl=function(){
-  var t=this.x.redSqr(),e=this.y.redSqr(),r=this.z.redSqr();
-  r=r.redIAdd(r);
-  var n=this.curve._mulA(t),i=this.x.redAdd(this.y).redSqr().redISub(t).redISub(e),o=n.redAdd(e),a=o.redSub(r),
-  s=n.redSub(e),u=i.redMul(a),c=o.redMul(s),l=i.redMul(s),f=a.redMul(o);
-  return this.curve.point(u,c,f,l)}
-  ,c.prototype._projDbl=function(){
-  var t,e,r,n,i,o,a=this.x.redAdd(this.y).redSqr(),s=this.x.redSqr(),u=this.y.redSqr();
-  if(this.curve.twisted){
-  var c=(n=this.curve._mulA(s)).redAdd(u);
-  this.zOne?(t=a.redSub(s).redSub(u).redMul(c.redSub(this.curve.two)),e=c.redMul(n.redSub(u)),r=c.redSqr().redSub(c).redSub(c)):
-  (i=this.z.redSqr(),o=c.redSub(i).redISub(i),t=a.redSub(s).redISub(u).redMul(o),e=c.redMul(n.redSub(u)),
-  r=c.redMul(o))}
-  else n=s.redAdd(u),i=this.curve._mulC(this.z).redSqr(),o=n.redSub(i).redSub(i),t=this.curve._mulC(a.redISub(n)).redMul(o),
-  e=this.curve._mulC(n).redMul(s.redISub(u)),r=n.redMul(o);
-  return this.curve.point(t,e,r)}
-  ,c.prototype.dbl=function(){
-  return this.isInfinity()?this:this.curve.extended?this._extDbl():this._projDbl()}
-  ,c.prototype._extAdd=function(t){
-  var e=this.y.redSub(this.x).redMul(t.y.redSub(t.x)),r=this.y.redAdd(this.x).redMul(t.y.redAdd(t.x)),
-  n=this.t.redMul(this.curve.dd).redMul(t.t),i=this.z.redMul(t.z.redAdd(t.z)),o=r.redSub(e),a=i.redSub(n),
-  s=i.redAdd(n),u=r.redAdd(e),c=o.redMul(a),l=s.redMul(u),f=o.redMul(u),d=a.redMul(s);
-  return this.curve.point(c,l,d,f)}
-  ,c.prototype._projAdd=function(t){
-  var e,r,n=this.z.redMul(t.z),i=n.redSqr(),o=this.x.redMul(t.x),a=this.y.redMul(t.y),s=this.curve.d.redMul(o).redMul(a),
-  u=i.redSub(s),c=i.redAdd(s),l=this.x.redAdd(this.y).redMul(t.x.redAdd(t.y)).redISub(o).redISub(a),
-  f=n.redMul(u).redMul(l);
-  return this.curve.twisted?(e=n.redMul(c).redMul(a.redSub(this.curve._mulA(o))),r=u.redMul(c)):(e=n.redMul(c).redMul(a.redSub(o)),
-  r=this.curve._mulC(u).redMul(c)),this.curve.point(f,e,r)}
-  ,c.prototype.add=function(t){
-  return this.isInfinity()?t:t.isInfinity()?this:this.curve.extended?this._extAdd(t):this._projAdd(t)}
-  ,c.prototype.mul=function(t){
-  return this._hasDoubles(t)?this.curve._fixedNafMul(this,t):this.curve._wnafMul(this,t)}
-  ,c.prototype.mulAdd=function(t,e,r){
-  return this.curve._wnafMulAdd(1,[this,e],[t,r],2,!1)}
-  ,c.prototype.jmulAdd=function(t,e,r){
-  return this.curve._wnafMulAdd(1,[this,e],[t,r],2,!0)}
-  ,c.prototype.normalize=function(){
-  if(this.zOne)return this;
-  var t=this.z.redInvm();
-  return this.x=this.x.redMul(t),this.y=this.y.redMul(t),this.t&&(this.t=this.t.redMul(t)),this.z=this.curve.one,
-  this.zOne=!0,this}
-  ,c.prototype.neg=function(){
-  return this.curve.point(this.x.redNeg(),this.y,this.z,this.t&&this.t.redNeg())}
-  ,c.prototype.getX=function(){
-  return this.normalize(),this.x.fromRed()}
-  ,c.prototype.getY=function(){
-  return this.normalize(),this.y.fromRed()}
-  ,c.prototype.eq=function(t){
-  return this===t||0===this.getX().cmp(t.getX())&&0===this.getY().cmp(t.getY())}
-  ,c.prototype.eqXToP=function(t){
-  var e=t.toRed(this.curve.red).redMul(this.z);
-  if(0===this.x.cmp(e))return!0;
-  for(var r=t.clone(),n=this.curve.redN.redMul(this.z);;
-  ){
-  if(r.iadd(this.curve.n),r.cmp(this.curve.p)>=0)return!1;
-  if(e.redIAdd(n),0===this.x.cmp(e))return!0}
+  var dep_helper_117 = requireFn(117),
+  dep_module_126 = requireFn(126),
+  dep_module_15 = requireFn(15),
+  dep_helper_172 = requireFn(172),
+  var_s = dep_helper_117.assert;
+  function var_u(param_t) {
+  this.twisted = 1 != (0 | param_t.a), this.mOneA = this.twisted &&
+  -1 == (0 | param_t.a), this.extended = this.mOneA, dep_helper_172.call(this, "edwards",
+  param_t), this.a = new dep_module_126(param_t.a, 16).umod(this.red.m), this.a = this.a.toRed(
+  this.red), this.c = new dep_module_126(param_t.c, 16).toRed(this.red), this.c2 = this.c.redSqr(
+  ), this.d = new dep_module_126(param_t.d, 16).toRed(this.red), this.dd = this.d.redAdd(
+  this.d), var_s(!this.twisted || 0 === this.c.fromRed().cmpn(1)), this.oneC = 1 == (
+  0 | param_t.c);
   }
-  ,c.prototype.toP=c.prototype.normalize,c.prototype.mixedAdd=c.prototype.add};
+  function var_c(param_t, param_e, param_r, param_n, param_o) {
+  dep_helper_172.BasePoint.call(this, param_t, "projective"), null === param_e &&
+  null === param_r && null === param_n ? (this.x = this.curve.zero, this.y = this.curve.one,
+  this.z = this.curve.one, this.t = this.curve.zero, this.zOne = !0) :
+  (this.x = new dep_module_126(param_e, 16), this.y = new dep_module_126(param_r,
+  16), this.z = param_n ? new dep_module_126(param_n, 16) : this.curve.one, this.t = param_o &&
+  new dep_module_126(param_o, 16), this.x.red || (this.x = this.x.toRed(this.curve.red)),
+  this.y.red || (this.y = this.y.toRed(this.curve.red)), this.z.red ||
+  (this.z = this.z.toRed(this.curve.red)), this.t && !this.t.red &&
+  (this.t = this.t.toRed(this.curve.red)), this.zOne = this.z === this.curve.one,
+  this.curve.extended && !this.t && (this.t = this.x.redMul(this.y), this.zOne ||
+  (this.t = this.t.redMul(this.z.redInvm()))));
+  }
+  dep_module_15(var_u, dep_helper_172), moduleObj.exports = var_u, var_u.prototype._mulA = function (
+  param_t) {
+  return this.mOneA ? param_t.redNeg() : this.a.redMul(param_t);
+  }
+  , var_u.prototype._mulC = function (param_t) {
+  return this.oneC ? param_t : this.c.redMul(param_t);
+  }
+  , var_u.prototype.jpoint = function (param_t, param_e, param_r, param_n) {
+  return this.point(param_t, param_e, param_r, param_n);
+  }
+  , var_u.prototype.pointFromX = function (param_t, param_e) {
+  (param_t = new dep_module_126(param_t, 16)).red || (param_t = param_t.toRed(this.red));
+  var var_r = param_t.redSqr(),
+  var_n = this.c2.redSub(this.a.redMul(var_r)),
+  var_o = this.one.redSub(this.c2.redMul(this.d).redMul(var_r)),
+  var_a = var_n.redMul(var_o.redInvm()),
+  var_s_1 = var_a.redSqrt();
+  if (0 !== var_s_1.redSqr().redSub(var_a).cmp(this.zero)) throw new Error("invalid point");
+  var var_u_1 = var_s_1.fromRed().isOdd();
+  return (param_e && !var_u_1 || !param_e && var_u_1) && (var_s_1 = var_s_1.redNeg(
+  )), this.point(param_t, var_s_1);
+  }
+  , var_u.prototype.pointFromY = function (param_t, param_e) {
+  (param_t = new dep_module_126(param_t, 16)).red || (param_t = param_t.toRed(this.red));
+  var var_r = param_t.redSqr(),
+  var_n = var_r.redSub(this.c2),
+  var_o = var_r.redMul(this.d).redMul(this.c2).redSub(this.a),
+  var_a = var_n.redMul(var_o.redInvm());
+  if (0 === var_a.cmp(this.zero)) {
+  if (param_e) throw new Error("invalid point");
+  return this.point(this.zero, param_t);
+  }
+  var var_s_1 = var_a.redSqrt();
+  if (0 !== var_s_1.redSqr().redSub(var_a).cmp(this.zero)) throw new Error("invalid point");
+  return var_s_1.fromRed().isOdd() !== param_e && (var_s_1 = var_s_1.redNeg()), this.point(
+  var_s_1, param_t);
+  }
+  , var_u.prototype.validate = function (param_t) {
+  if (param_t.isInfinity()) return !0;
+  param_t.normalize();
+  var var_e = param_t.x.redSqr(),
+  var_r = param_t.y.redSqr(),
+  var_n = var_e.redMul(this.a).redAdd(var_r),
+  var_i = this.c2.redMul(this.one.redAdd(this.d.redMul(var_e).redMul(var_r)));
+  return 0 === var_n.cmp(var_i);
+  }
+  , dep_module_15(var_c, dep_helper_172.BasePoint), var_u.prototype.pointFromJSON = function (
+  param_t) {
+  return var_c.fromJSON(this, param_t);
+  }
+  , var_u.prototype.point = function (param_t, param_e, param_r, param_n) {
+  return new var_c(this, param_t, param_e, param_r, param_n);
+  }
+  , var_c.fromJSON = function (param_t, param_e) {
+  return new var_c(param_t, param_e[0], param_e[1], param_e[2]);
+  }
+  , var_c.prototype.inspect = function () {
+  return this.isInfinity() ? "<EC Point Infinity>" : "<EC Point x: " + this.x.fromRed(
+  ).toString(16, 2) + " y: " + this.y.fromRed().toString(16, 2) + " z: " + this.z.fromRed(
+  ).toString(16, 2) + ">";
+  }
+  , var_c.prototype.isInfinity = function () {
+  return 0 === this.x.cmpn(0) && (0 === this.y.cmp(this.z) ||
+  this.zOne && 0 === this.y.cmp(this.curve.c));
+  }
+  , var_c.prototype._extDbl = function () {
+  var var_t = this.x.redSqr(),
+  var_e = this.y.redSqr(),
+  var_r = this.z.redSqr();
+  var_r = var_r.redIAdd(var_r);
+  var var_n = this.curve._mulA(var_t),
+  var_i = this.x.redAdd(this.y).redSqr().redISub(var_t).redISub(var_e),
+  var_o = var_n.redAdd(var_e),
+  var_a = var_o.redSub(var_r),
+  var_s_1 = var_n.redSub(var_e),
+  var_u_1 = var_i.redMul(var_a),
+  var_c_1 = var_o.redMul(var_s_1),
+  var_l = var_i.redMul(var_s_1),
+  var_f = var_a.redMul(var_o);
+  return this.curve.point(var_u_1, var_c_1, var_f, var_l);
+  }
+  , var_c.prototype._projDbl = function () {
+  var var_t,
+  var_e,
+  var_r,
+  var_n,
+  var_i,
+  var_o,
+  var_a = this.x.redAdd(this.y).redSqr(),
+  var_s_1 = this.x.redSqr(),
+  var_u_1 = this.y.redSqr();
+  if (this.curve.twisted) {
+  var var_c_1 = (var_n = this.curve._mulA(var_s_1)).redAdd(var_u_1);
+  this.zOne ? (var_t = var_a.redSub(var_s_1).redSub(var_u_1).redMul(var_c_1.redSub(
+  this.curve.two)), var_e = var_c_1.redMul(var_n.redSub(var_u_1)), var_r = var_c_1.redSqr(
+  ).redSub(var_c_1).redSub(var_c_1)) : (var_i = this.z.redSqr(), var_o = var_c_1.redSub(
+  var_i).redISub(var_i), var_t = var_a.redSub(var_s_1).redISub(var_u_1).redMul(var_o),
+  var_e = var_c_1.redMul(var_n.redSub(var_u_1)), var_r = var_c_1.redMul(var_o));
+  }
+  else var_n = var_s_1.redAdd(var_u_1), var_i = this.curve._mulC(this.z).redSqr(
+  ), var_o = var_n.redSub(var_i).redSub(var_i), var_t = this.curve._mulC(var_a.redISub(
+  var_n)).redMul(var_o), var_e = this.curve._mulC(var_n).redMul(var_s_1.redISub(
+  var_u_1)), var_r = var_n.redMul(var_o);
+  return this.curve.point(var_t, var_e, var_r);
+  }
+  , var_c.prototype.dbl = function () {
+  return this.isInfinity() ? this : this.curve.extended ? this._extDbl() :
+  this._projDbl();
+  }
+  , var_c.prototype._extAdd = function (param_t) {
+  var var_e = this.y.redSub(this.x).redMul(param_t.y.redSub(param_t.x)),
+  var_r = this.y.redAdd(this.x).redMul(param_t.y.redAdd(param_t.x)),
+  var_n = this.t.redMul(this.curve.dd).redMul(param_t.t),
+  var_i = this.z.redMul(param_t.z.redAdd(param_t.z)),
+  var_o = var_r.redSub(var_e),
+  var_a = var_i.redSub(var_n),
+  var_s_1 = var_i.redAdd(var_n),
+  var_u_1 = var_r.redAdd(var_e),
+  var_c_1 = var_o.redMul(var_a),
+  var_l = var_s_1.redMul(var_u_1),
+  var_f = var_o.redMul(var_u_1),
+  var_d = var_a.redMul(var_s_1);
+  return this.curve.point(var_c_1, var_l, var_d, var_f);
+  }
+  , var_c.prototype._projAdd = function (param_t) {
+  var var_e,
+  var_r,
+  var_n = this.z.redMul(param_t.z),
+  var_i = var_n.redSqr(),
+  var_o = this.x.redMul(param_t.x),
+  var_a = this.y.redMul(param_t.y),
+  var_s_1 = this.curve.d.redMul(var_o).redMul(var_a),
+  var_u_1 = var_i.redSub(var_s_1),
+  var_c_1 = var_i.redAdd(var_s_1),
+  var_l = this.x.redAdd(this.y).redMul(param_t.x.redAdd(param_t.y)).redISub(var_o).redISub(
+  var_a),
+  var_f = var_n.redMul(var_u_1).redMul(var_l);
+  return this.curve.twisted ? (var_e = var_n.redMul(var_c_1).redMul(var_a.redSub(
+  this.curve._mulA(var_o))), var_r = var_u_1.redMul(var_c_1)) :
+  (var_e = var_n.redMul(var_c_1).redMul(var_a.redSub(var_o)), var_r = this.curve._mulC(
+  var_u_1).redMul(var_c_1)), this.curve.point(var_f, var_e, var_r);
+  }
+  , var_c.prototype.add = function (param_t) {
+  return this.isInfinity() ? param_t : param_t.isInfinity() ?
+  this : this.curve.extended ? this._extAdd(param_t) : this._projAdd(param_t);
+  }
+  , var_c.prototype.mul = function (param_t) {
+  return this._hasDoubles(param_t) ? this.curve._fixedNafMul(this, param_t) :
+  this.curve._wnafMul(this, param_t);
+  }
+  , var_c.prototype.mulAdd = function (param_t, param_e, param_r) {
+  return this.curve._wnafMulAdd(1, [this, param_e], [param_t, param_r], 2, !1);
+  }
+  , var_c.prototype.jmulAdd = function (param_t, param_e, param_r) {
+  return this.curve._wnafMulAdd(1, [this, param_e], [param_t, param_r], 2, !0);
+  }
+  , var_c.prototype.normalize = function () {
+  if (this.zOne) return this;
+  var var_t = this.z.redInvm();
+  return this.x = this.x.redMul(var_t), this.y = this.y.redMul(var_t), this.t &&
+  (this.t = this.t.redMul(var_t)), this.z = this.curve.one, this.zOne = !0, this;
+  }
+  , var_c.prototype.neg = function () {
+  return this.curve.point(this.x.redNeg(), this.y, this.z, this.t &&
+  this.t.redNeg());
+  }
+  , var_c.prototype.getX = function () {
+  return this.normalize(), this.x.fromRed();
+  }
+  , var_c.prototype.getY = function () {
+  return this.normalize(), this.y.fromRed();
+  }
+  , var_c.prototype.eq = function (param_t) {
+  return this === param_t || 0 === this.getX().cmp(param_t.getX()) &&
+  0 === this.getY().cmp(param_t.getY());
+  }
+  , var_c.prototype.eqXToP = function (param_t) {
+  var var_e = param_t.toRed(this.curve.red).redMul(this.z);
+  if (0 === this.x.cmp(var_e)) return !0;
+  for (var var_r = param_t.clone(), var_n = this.curve.redN.redMul(this.z);;
+  ) {
+  if (var_r.iadd(this.curve.n), var_r.cmp(this.curve.p) >= 0) return !1;
+  if (var_e.redIAdd(var_n), 0 === this.x.cmp(var_e)) return !0;
+  }
+  }
+  , var_c.prototype.toP = var_c.prototype.normalize, var_c.prototype.mixedAdd = var_c.prototype.add;
+  };

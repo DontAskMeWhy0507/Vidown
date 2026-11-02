@@ -1,7 +1,10 @@
 // Module 401 - Savior You_porn Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["youporn"],getCustomParent:()=>document.querySelector("#videoWrapper")};
-  e.default=n};
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["youporn"],
+  getCustomParent: () => document.querySelector("#videoWrapper")
+  };
+  exportsObj.default = obj_n;
+  };

@@ -1,17 +1,22 @@
 // Module 676 - Savior Fileone Host
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(0);
-  e.default={
-  index:80,getUrl(t,e,r,i){
-  if(t.includes("fileone.tv")){
-  var o=document.querySelector("source");
-  Object(n.sendMessage)({
-  requestType:"save_url",params:{
-  url:null==o?void 0:o.src,source:location.href}
+  requireFn.r(exportsObj);
+  var dep_dom_utils = requireFn(0);
+  exportsObj.default = {
+  index: 80,
+  getUrl(param_t, param_e, param_r, param_i) {
+  if (param_t.includes("fileone.tv")) {
+  var var_o = document.querySelector("source");
+  Object(dep_dom_utils.sendMessage)({
+  requestType: "save_url",
+  params: {
+  url: null == var_o ? void 0 : var_o.src,
+  source: location.href
   }
-  )}
+  }
+  );
   }
   }
+  };
   };

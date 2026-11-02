@@ -1,4 +1,5 @@
 // Module 410 - Savior Helper 410
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=URIError};
+  moduleObj.exports = URIError;
+  };

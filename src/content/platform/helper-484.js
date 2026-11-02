@@ -1,44 +1,62 @@
 // Module 484 - Savior Helper 484
-export default function(t,e,r){
-  var n=r(139);
-  t.exports=g,g.simpleSieve=m,g.fermatTest=y;
-  var i=r(485),o=new i(24),a=new(r(486)),s=new i(1),u=new i(2),c=new i(5),l=(new i(16),new i(8),new i(10)),
-  f=new i(3),d=(new i(7),new i(11)),h=new i(4),p=(new i(12),null);
-  function v(){
-  if(null!==p)return p;
-  var t=[];
-  t[0]=2;
-  for(var e=1,r=3;
-  r<1048576;
-  r+=2){
-  for(var n=Math.ceil(Math.sqrt(r)),i=0;
-  i<e&&t[i]<=n&&r%t[i]!=0;
-  i++);
-  e!==i&&t[i]<=n||(t[e++]=r)}
-  return p=t,t}
-  function m(t){
-  for(var e=v(),r=0;
-  r<e.length;
-  r++)if(0===t.modn(e[r]))return 0===t.cmpn(e[r]);
-  return!0}
-  function y(t){
-  var e=i.mont(t);
-  return 0===u.toRed(e).redPow(t.subn(1)).fromRed().cmpn(1)}
-  function g(t,e){
-  if(t<16)return new i(2===e||5===e?[140,123]:[140,39]);
-  var r,p;
-  for(e=new i(e);;
-  ){
-  for(r=new i(n(Math.ceil(t/8)));
-  r.bitLength()>t;
-  )r.ishrn(1);
-  if(r.isEven()&&r.iadd(s),r.testn(1)||r.iadd(u),e.cmp(u)){
-  if(!e.cmp(c))for(;
-  r.mod(l).cmp(f);
-  )r.iadd(h)}
-  else for(;
-  r.mod(o).cmp(d);
-  )r.iadd(h);
-  if(m(p=r.shrn(1))&&m(r)&&y(p)&&y(r)&&a.test(p)&&a.test(r))return r}
+export default function (moduleObj, exportsObj, requireFn) {
+  var dep_helper_139 = requireFn(139);
+  moduleObj.exports = var_g, var_g.simpleSieve = var_m, var_g.fermatTest = var_y;
+  var dep_module_485 = requireFn(485),
+  var_o = new dep_module_485(24),
+  var_a = new (requireFn(486))(),
+  var_s = new dep_module_485(1),
+  var_u = new dep_module_485(2),
+  var_c = new dep_module_485(5),
+  var_l = (new dep_module_485(16), new dep_module_485(8), new dep_module_485(10)),
+  var_f = new dep_module_485(3),
+  var_d = (new dep_module_485(7), new dep_module_485(11)),
+  var_h = new dep_module_485(4),
+  var_p = (new dep_module_485(12), null);
+  function var_v() {
+  if (null !== var_p) return var_p;
+  var list_t = [];
+  list_t[0] = 2;
+  for (var num_e = 1, num_r = 3;
+  num_r < 1048576;
+  num_r += 2) {
+  for (var var_n = Math.ceil(Math.sqrt(num_r)), num_i = 0;
+  num_i < num_e && list_t[num_i] <= var_n && num_r % list_t[num_i] != 0;
+  num_i++);
+  num_e !== num_i && list_t[num_i] <= var_n || (list_t[num_e++] = num_r);
+  }
+  return var_p = list_t, list_t;
+  }
+  function var_m(param_t) {
+  for (var var_e = var_v(), num_r = 0;
+  num_r < var_e.length;
+  num_r++) if (0 === param_t.modn(var_e[num_r])) return 0 === param_t.cmpn(var_e[num_r]);
+  return !0;
+  }
+  function var_y(param_t) {
+  var var_e = dep_module_485.mont(param_t);
+  return 0 === var_u.toRed(var_e).redPow(param_t.subn(1)).fromRed().cmpn(1);
+  }
+  function var_g(param_t, param_e) {
+  if (param_t < 16) return new dep_module_485(2 === param_e ||
+  5 === param_e ? [140, 123] : [140, 39]);
+  var var_r, var_p_1;
+  for (param_e = new dep_module_485(param_e);;
+  ) {
+  for (var_r = new dep_module_485(dep_helper_139(Math.ceil(param_t / 8)));
+  var_r.bitLength() > param_t;
+  ) var_r.ishrn(1);
+  if (var_r.isEven() && var_r.iadd(var_s), var_r.testn(1) ||
+  var_r.iadd(var_u), param_e.cmp(var_u)) {
+  if (!param_e.cmp(var_c)) for (;
+  var_r.mod(var_l).cmp(var_f);
+  ) var_r.iadd(var_h);
+  }
+  else for (;
+  var_r.mod(var_o).cmp(var_d);
+  ) var_r.iadd(var_h);
+  if (var_m(var_p_1 = var_r.shrn(1)) && var_m(var_r) && var_y(var_p_1) &&
+  var_y(var_r) && var_a.test(var_p_1) && var_a.test(var_r)) return var_r;
+  }
   }
   };

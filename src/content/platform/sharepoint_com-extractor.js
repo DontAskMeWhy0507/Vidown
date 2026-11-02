@@ -1,21 +1,36 @@
 // Module 336 - Savior Sharepoint_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=[],i={
-  getDomains:()=>[".sharepoint.com"],processRequestIds(t){
-  if(t.url.match(/-mediap\.svc\.ms\/.+\/videomanifest/i))return n.push(t),!0}
-  ,parse:{
-  sources:[{
-  checkSource:t=>Boolean(t.url.match(/southeastasia1-mediap.svc.ms\/.+\/videomanifest/i)),parse:t=>{
-  var e=t.media;
-  return e._isDashMPD=!0,[e]}
+  requireFn.r(exportsObj);
+  var list_n = [],
+  obj_i = {
+  getDomains: () => [".sharepoint.com"],
+  processRequestIds(param_t) {
+  if (param_t.url.match(/-mediap\.svc\.ms\/.+\/videomanifest/i)) return list_n.push(
+  param_t), !0;
   }
-  ]}
-  ,urls:[{
-  checkUrl:()=>!0,getUrl:()=>n.length>0?n[0].url:"blob:a.a",mediaObjectChange(t){
-  var e=t.mediaObject;
-  if(!e.url.includes("blob:"))return e.ext="mp4",e.exts=["mp4"],e.type="video","video"}
+  ,
+  parse: {
+  sources: [{
+  checkSource: param_t => Boolean(param_t.url.match(/southeastasia1-mediap.svc.ms\/.+\/videomanifest/i)),
+  parse: param_t => {
+  var var_e = param_t.media;
+  return var_e._isDashMPD = !0, [var_e];
   }
-  ]};
-  e.default=i};
+  }
+  ]
+  }
+  ,
+  urls: [{
+  checkUrl: () => !0,
+  getUrl: () => list_n.length > 0 ? list_n[0].url : "blob:a.a",
+  mediaObjectChange(param_t) {
+  var var_e = param_t.mediaObject;
+  if (!var_e.url.includes("blob:")) return var_e.ext = "mp4", var_e.exts = ["mp4"],
+  var_e.type = "video", "video";
+  }
+  }
+  ]
+  };
+  exportsObj.default = obj_i;
+  };

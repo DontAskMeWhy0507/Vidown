@@ -1,27 +1,43 @@
 // Module 247 - Savior Hhtm Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n,i=r(1),o=r(0);
-  e.default={
-  getDomains:()=>["hhtm.","yanhh3d."],default:{
-  getUrl:t=>{
-  var e=t.url;
-  return n?[n]:e.includes(".mp4")?e:[]}
-  ,mediaObjectChange:t=>{
-  var e,r=t.mediaObject,n=document.querySelector(".film-name");
-  n&&(r.filename=null===(e=n.textContent)||void 0===e?void 0:e.trim())}
+  requireFn.r(exportsObj);
+  var var_n,
+  dep_media_constants = requireFn(1),
+  dep_dom_utils = requireFn(0);
+  exportsObj.default = {
+  getDomains: () => ["hhtm.", "yanhh3d."],
+  default: {
+  getUrl: param_t => {
+  var var_e = param_t.url;
+  return var_n ? [var_n] : var_e.includes(".mp4") ? var_e : [];
   }
-  ,urls:[{
-  checkUrl:t=>t.url.includes("abyss-cdn.ink/video"),getUrl:t=>t.url+"/master.html",mediaObjectChange:
-  t=>{
-  var e=t.mediaObject;
-  e.ext="m3u8",e.exts=["m3u8"]}
+  ,
+  mediaObjectChange: param_t => {
+  var var_e,
+  var_r = param_t.mediaObject,
+  var_n_1 = document.querySelector(".film-name");
+  var_n_1 && (var_r.filename = null === (var_e = var_n_1.textContent) ||
+  void 0 === var_e ? void 0 : var_e.trim());
   }
-  ],processRequestIds:t=>(Object(o.sendMessage)({
-  type:i.b.CONSOLE_LOG,params:{
-  id:t}
   }
-  ),!!(t.url.includes("/stream/m3u8/")||t.url.includes("/avcaption.v1.StreamingService/GetPlaylist")||
-  t.url.match(/scontent-sin([\d\-]+)xx\.fbcdn\./))&&(n=t,!0))}
+  ,
+  urls: [{
+  checkUrl: param_t => param_t.url.includes("abyss-cdn.ink/video"),
+  getUrl: param_t => param_t.url + "/master.html",
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  var_e.ext = "m3u8", var_e.exts = ["m3u8"];
+  }
+  }
+  ],
+  processRequestIds: param_t => (Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.CONSOLE_LOG,
+  params: {
+  id: param_t
+  }
+  }
+  ), !!(param_t.url.includes("/stream/m3u8/") || param_t.url.includes("/avcaption.v1.StreamingService/GetPlaylist") ||
+  param_t.url.match(/scontent-sin([\d\-]+)xx\.fbcdn\./)) && (var_n = param_t, !0))
+  };
   };

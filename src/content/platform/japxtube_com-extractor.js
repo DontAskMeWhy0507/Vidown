@@ -1,8 +1,11 @@
 // Module 257 - Savior Japxtube_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e),e.default={
-  getDomains:()=>["japxtube."],default:{
-  getUrl:t=>t.ids.filter(t=>String(t.url).includes("master.m3u8"))}
+  requireFn.r(exportsObj), exportsObj.default = {
+  getDomains: () => ["japxtube."],
+  default: {
+  getUrl: param_t => param_t.ids.filter(param_t_1 => String(param_t_1.url).includes(
+  "master.m3u8"))
   }
+  };
   };

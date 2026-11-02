@@ -1,5 +1,6 @@
 // Module 158 - Savior Helper 158
-export default function(t,e,r){
-  var n=e;
-  n.Reporter=r(656).Reporter,n.DecoderBuffer=r(497).DecoderBuffer,n.EncoderBuffer=r(497).EncoderBuffer,
-  n.Node=r(657)};
+export default function (moduleObj, exportsObj, requireFn) {
+  var var_n = exportsObj;
+  var_n.Reporter = requireFn(656).Reporter, var_n.DecoderBuffer = requireFn(497).DecoderBuffer,
+  var_n.EncoderBuffer = requireFn(497).EncoderBuffer, var_n.Node = requireFn(657);
+  };

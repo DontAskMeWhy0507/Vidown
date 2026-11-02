@@ -1,16 +1,25 @@
 // Module 609 - Savior Helper 609
-export default function(t,e,r){
-  var n=r(25).Buffer,i=r(155);
-  function o(t,e,r){
-  var o=e.length,a=i(e,t._cache);
-  return t._cache=t._cache.slice(o),t._prev=n.concat([t._prev,r?e:a]),a}
-  e.encrypt=function(t,e,r){
-  for(var i,a=n.allocUnsafe(0);
-  e.length;
-  ){
-  if(0===t._cache.length&&(t._cache=t._cipher.encryptBlock(t._prev),t._prev=n.allocUnsafe(0)),!(t._cache.length<=e.length)){
-  a=n.concat([a,o(t,e,r)]);
-  break}
-  i=t._cache.length,a=n.concat([a,o(t,e.slice(0,i),r)]),e=e.slice(i)}
-  return a}
+export default function (moduleObj, exportsObj, requireFn) {
+  var var_n = requireFn(25).Buffer,
+  dep_helper_155 = requireFn(155);
+  function var_o(param_t, param_e, param_r) {
+  var var_o_1 = param_e.length,
+  var_a = dep_helper_155(param_e, param_t._cache);
+  return param_t._cache = param_t._cache.slice(var_o_1), param_t._prev = var_n.concat(
+  [param_t._prev, param_r ? param_e : var_a]), var_a;
+  }
+  exportsObj.encrypt = function (param_t, param_e, param_r) {
+  for (var var_i, var_a = var_n.allocUnsafe(0);
+  param_e.length;
+  ) {
+  if (0 === param_t._cache.length && (param_t._cache = param_t._cipher.encryptBlock(
+  param_t._prev), param_t._prev = var_n.allocUnsafe(0)), !(param_t._cache.length <= param_e.length)) {
+  var_a = var_n.concat([var_a, var_o(param_t, param_e, param_r)]);
+  break;
+  }
+  var_i = param_t._cache.length, var_a = var_n.concat([var_a, var_o(param_t, param_e.slice(
+  0, var_i), param_r)]), param_e = param_e.slice(var_i);
+  }
+  return var_a;
+  };
   };

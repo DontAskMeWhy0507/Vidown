@@ -1,13 +1,17 @@
 // Module 136 - Savior Helper 136
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=Object.defineProperty||!1;
-  if(n)try{
-  n({
+  var var_n = Object.defineProperty || !1;
+  if (var_n) try {
+  var_n({
   }
-  ,"a",{
-  value:1}
-  )}
-  catch(t){
-  n=!1}
-  t.exports=n};
+  , "a", {
+  value: 1
+  }
+  );
+  }
+  catch (var_t) {
+  var_n = !1;
+  }
+  moduleObj.exports = var_n;
+  };

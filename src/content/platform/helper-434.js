@@ -1,5 +1,8 @@
 // Module 434 - Savior Helper 434
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=e;
-  n.version=r(632).version,n.utils=r(117),n.rand=r(430),n.curve=r(493),n.curves=r(435),n.ec=r(644),n.eddsa=r(648)};
+  var var_n = exportsObj;
+  var_n.version = requireFn(632).version, var_n.utils = requireFn(117), var_n.rand = requireFn(
+  430), var_n.curve = requireFn(493), var_n.curves = requireFn(435), var_n.ec = requireFn(
+  644), var_n.eddsa = requireFn(648);
+  };

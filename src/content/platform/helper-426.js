@@ -1,9 +1,14 @@
 // Module 426 - Savior Helper 426
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=function(e){
-  var r=e.toLowerCase(),n=t.exports[r];
-  if(!n)throw new Error(r+" is not supported (we accept pull requests)");
-  return new n}
-  ,t.exports.sha=r(594),t.exports.sha1=r(595),t.exports.sha224=r(596),t.exports.sha256=r(467),t.exports.sha384=r(597),
-  t.exports.sha512=r(468)};
+  moduleObj.exports = function (param_e) {
+  var var_r = param_e.toLowerCase(),
+  var_n = moduleObj.exports[var_r];
+  if (!var_n) throw new Error(var_r + " is not supported (we accept pull requests)");
+  return new var_n();
+  }
+  , moduleObj.exports.sha = requireFn(594), moduleObj.exports.sha1 = requireFn(595),
+  moduleObj.exports.sha224 = requireFn(596), moduleObj.exports.sha256 = requireFn(
+  467), moduleObj.exports.sha384 = requireFn(597), moduleObj.exports.sha512 = requireFn(
+  468);
+  };

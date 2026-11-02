@@ -1,4 +1,5 @@
 // Module 409 - Savior Helper 409
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=ReferenceError};
+  moduleObj.exports = ReferenceError;
+  };

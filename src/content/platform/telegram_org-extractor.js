@@ -1,12 +1,18 @@
 // Module 349 - Savior Telegram_org Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["web.telegram.org"],urls:[{
-  checkUrl:t=>t.url.includes("mimeType%22%3A%22video%2Fmp4"),mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.ext="mp4",e.exts=["mp4"],e.filename=document.title,"video"}
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["web.telegram.org"],
+  urls: [{
+  checkUrl: param_t => param_t.url.includes("mimeType%22%3A%22video%2Fmp4"),
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.ext = "mp4", var_e.exts = ["mp4"], var_e.filename = document.title,
+  "video";
   }
-  ]};
-  e.default=n};
+  }
+  ]
+  };
+  exportsObj.default = obj_n;
+  };

@@ -1,67 +1,106 @@
 // Module 314 - Savior Phimsea_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  function n(t,e){
-  return function(t){
-  if(Array.isArray(t))return t}
-  (t)||function(t,e){
-  var r=null==t?null:"undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];
-  if(null!=r){
-  var n,i,o,a,s=[],u=!0,c=!1;
-  try{
-  if(o=(r=r.call(t)).next,0===e){
-  if(Object(r)!==r)return;
-  u=!1}
-  else for(;
-  !(u=(n=o.call(r)).done)&&(s.push(n.value),s.length!==e);
-  u=!0);
+  function var_n(param_t, param_e) {
+  return function (param_t_1) {
+  if (Array.isArray(param_t_1)) return param_t_1;
   }
-  catch(t){
-  c=!0,i=t}
-  finally{
-  try{
-  if(!u&&null!=r.return&&(a=r.return(),Object(a)!==a))return}
-  finally{
-  if(c)throw i}
+  (param_t) || function (param_t_1, param_e_1) {
+  var var_r = null == param_t_1 ? null : "undefined" != typeof Symbol &&
+  param_t_1[Symbol.iterator] || param_t_1["@@iterator"];
+  if (null != var_r) {
+  var var_n_1,
+  var_i_1,
+  var_o_1,
+  var_a,
+  list_s = [],
+  flag_u = !0,
+  flag_c = !1;
+  try {
+  if (var_o_1 = (var_r = var_r.call(param_t_1)).next, 0 === param_e_1) {
+  if (Object(var_r) !== var_r) return;
+  flag_u = !1;
   }
-  return s}
+  else for (;
+  !(flag_u = (var_n_1 = var_o_1.call(var_r)).done) && (list_s.push(var_n_1.value),
+  list_s.length !== param_e_1);
+  flag_u = !0);
   }
-  (t,e)||function(t,e){
-  if(t){
-  if("string"==typeof t)return i(t,e);
-  var r={
+  catch (var_t) {
+  flag_c = !0, var_i_1 = var_t;
   }
-  .toString.call(t).slice(8,-1);
-  return"Object"===r&&t.constructor&&(r=t.constructor.name),"Map"===r||"Set"===r?Array.from(t):"Arguments"===r||
-  /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?i(t,e):void 0}
+  finally {
+  try {
+  if (!flag_u && null != var_r.return && (var_a = var_r.return(), Object(var_a) !== var_a)) return;
   }
-  (t,e)||function(){
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}
-  ()}
-  function i(t,e){
-  (null==e||e>t.length)&&(e=t.length);
-  for(var r=0,n=Array(e);
-  r<e;
-  r++)n[r]=t[r];
-  return n}
-  function o(t){
-  var e,r,i=t.split("/").pop(),o=n((null==i?void 0:i.split("."))||[],2),a=o[0],s=o[1],u=(e=6,r=a.replace(/[a-zA-Z]/g,
-  t=>{
-  var r=t.charCodeAt(0)+e,n=t<="Z"?90:122;
-  return String.fromCharCode(r<=n?r:r-26)}
-  ),atob(r)),c=t.split("/");
-  return c[c.length-1]=u+"."+s,c.join("/")}
-  r.r(e);
-  var a={
-  getDomains:()=>["phimsea."],parse:{
-  default:t=>{
-  var e=t.media,r=t.response,n=null==r?void 0:r.split("\n").map(t=>t.startsWith("https")?o(t):t.startsWith("#EXT-X-KEY")?
-  t.replace(/https:\/\/.*\.key/,t=>o(t)):t).join("\n");
-  return[Object.assign(Object.assign({
+  finally {
+  if (flag_c) throw var_i_1;
   }
-  ,e),{
-  url:"https://google.com",play_list:n}
-  )]}
+  }
+  return list_s;
+  }
+  }
+  (param_t, param_e) || function (param_t_1, param_e_1) {
+  if (param_t_1) {
+  if ("string" == typeof param_t_1) return var_i(param_t_1, param_e_1);
+  var var_r = {
+  }
+  .toString.call(param_t_1).slice(8, -1);
+  return "Object" === var_r && param_t_1.constructor && (var_r = param_t_1.constructor.name),
+  "Map" === var_r || "Set" === var_r ? Array.from(param_t_1) :
+  "Arguments" === var_r || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(var_r) ?
+  var_i(param_t_1, param_e_1) : void 0;
+  }
+  }
+  (param_t, param_e) || function () {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  ();
+  }
+  function var_i(param_t, param_e) {
+  (null == param_e || param_e > param_t.length) && (param_e = param_t.length);
+  for (var num_r = 0, var_n_1 = Array(param_e);
+  num_r < param_e;
+  num_r++) var_n_1[num_r] = param_t[num_r];
+  return var_n_1;
+  }
+  function var_o(param_t) {
+  var var_e,
+  var_r,
+  var_i_1 = param_t.split("/").pop(),
+  var_o_1 = var_n((null == var_i_1 ? void 0 : var_i_1.split(".")) ||
+  [], 2),
+  var_a = var_o_1[0],
+  var_s = var_o_1[1],
+  var_u = (var_e = 6, var_r = var_a.replace(/[a-zA-Z]/g, param_t_1 => {
+  var var_r_1 = param_t_1.charCodeAt(0) + var_e,
+  var_n_1 = param_t_1 <= "Z" ? 90 : 122;
+  return String.fromCharCode(var_r_1 <= var_n_1 ? var_r_1 : var_r_1 - 26);
+  }
+  ), atob(var_r)),
+  var_c = param_t.split("/");
+  return var_c[var_c.length - 1] = var_u + "." + var_s, var_c.join("/");
+  }
+  requireFn.r(exportsObj);
+  var obj_a = {
+  getDomains: () => ["phimsea."],
+  parse: {
+  default: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response,
+  var_n_1 = null == var_r ? void 0 : var_r.split("\n").map(param_t_1 => param_t_1.startsWith(
+  "https") ? var_o(param_t_1) : param_t_1.startsWith("#EXT-X-KEY") ?
+  param_t_1.replace(/https:\/\/.*\.key/, param_t_2 => var_o(param_t_2)) :
+  param_t_1).join("\n");
+  return [Object.assign(Object.assign({
+  }
+  , var_e), {
+  url: "https://google.com",
+  play_list: var_n_1
+  }
+  )];
+  }
   }
   };
-  e.default=a};
+  exportsObj.default = obj_a;
+  };

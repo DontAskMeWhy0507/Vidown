@@ -1,15 +1,22 @@
 // Module 384 - Savior Vphimmoizz_net Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=[],i={
-  getDomains:()=>["vphimmoizz."],processRequestIds:t=>!t.url.match(/.+app-.+\/video.mp4/i)||(n.push(t),
-  !0),urls:[{
-  checkUrl:t=>t.url.includes("p.thoctv.com"),getUrl:()=>{
-  if(n.length>0){
-  var t=n[0];
-  return t.referrer="https://p.thoctv.com",t.title=document.title,[t]}
+  requireFn.r(exportsObj);
+  var list_n = [],
+  obj_i = {
+  getDomains: () => ["vphimmoizz."],
+  processRequestIds: param_t => !param_t.url.match(/.+app-.+\/video.mp4/i) ||
+  (list_n.push(param_t), !0),
+  urls: [{
+  checkUrl: param_t => param_t.url.includes("p.thoctv.com"),
+  getUrl: () => {
+  if (list_n.length > 0) {
+  var var_t = list_n[0];
+  return var_t.referrer = "https://p.thoctv.com", var_t.title = document.title, [var_t];
   }
   }
-  ]};
-  e.default=i};
+  }
+  ]
+  };
+  exportsObj.default = obj_i;
+  };

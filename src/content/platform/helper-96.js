@@ -1,15 +1,21 @@
 // Module 96 - Savior Helper 96
-export default function(t,e){
-  t.exports=function(t){
-  return t.webpackPolyfill||(t.deprecate=function(){
+export default function (moduleObj, exportsObj) {
+  moduleObj.exports = function (param_t) {
+  return param_t.webpackPolyfill || (param_t.deprecate = function () {
   }
-  ,t.paths=[],t.children||(t.children=[]),Object.defineProperty(t,"loaded",{
-  enumerable:!0,get:function(){
-  return t.l}
+  , param_t.paths = [], param_t.children || (param_t.children = []), Object.defineProperty(
+  param_t, "loaded", {
+  enumerable: !0,
+  get: function () {
+  return param_t.l;
   }
-  ),Object.defineProperty(t,"id",{
-  enumerable:!0,get:function(){
-  return t.i}
   }
-  ),t.webpackPolyfill=1),t}
+  ), Object.defineProperty(param_t, "id", {
+  enumerable: !0,
+  get: function () {
+  return param_t.i;
+  }
+  }
+  ), param_t.webpackPolyfill = 1), param_t;
+  };
   };

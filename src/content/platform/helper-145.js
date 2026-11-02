@@ -1,39 +1,56 @@
 // Module 145 - Savior Helper 145
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(36),i=Object.keys||function(t){
-  var e=[];
-  for(var r in t)e.push(r);
-  return e};
-  t.exports=f;
-  var o=Object.create(r(29));
-  o.inherits=r(15);
-  var a=r(487),s=r(490);
-  o.inherits(f,a);
-  for(var u=i(s.prototype),c=0;
-  c<u.length;
-  c++){
-  var l=u[c];
-  f.prototype[l]||(f.prototype[l]=s.prototype[l])}
-  function f(t){
-  if(!(this instanceof f))return new f(t);
-  a.call(this,t),s.call(this,t),t&&!1===t.readable&&(this.readable=!1),t&&!1===t.writable&&(this.writable=!1),
-  this.allowHalfOpen=!0,t&&!1===t.allowHalfOpen&&(this.allowHalfOpen=!1),this.once("end",d)}
-  function d(){
-  this.allowHalfOpen||this._writableState.ended||n.nextTick(h,this)}
-  function h(t){
-  t.end()}
-  Object.defineProperty(f.prototype,"writableHighWaterMark",{
-  enumerable:!1,get:function(){
-  return this._writableState.highWaterMark}
+  var dep_module_36 = requireFn(36),
+  var_i = Object.keys || function (param_t) {
+  var list_e = [];
+  for (var var_r in param_t) list_e.push(var_r);
+  return list_e;
+  };
+  moduleObj.exports = var_f;
+  var var_o = Object.create(requireFn(29));
+  var_o.inherits = requireFn(15);
+  var dep_helper_487 = requireFn(487),
+  dep_helper_490 = requireFn(490);
+  var_o.inherits(var_f, dep_helper_487);
+  for (var var_u = var_i(dep_helper_490.prototype), num_c = 0;
+  num_c < var_u.length;
+  num_c++) {
+  var var_l = var_u[num_c];
+  var_f.prototype[var_l] || (var_f.prototype[var_l] = dep_helper_490.prototype[var_l]);
   }
-  ),Object.defineProperty(f.prototype,"destroyed",{
-  get:function(){
-  return void 0!==this._readableState&&void 0!==this._writableState&&(this._readableState.destroyed&&
-  this._writableState.destroyed)}
-  ,set:function(t){
-  void 0!==this._readableState&&void 0!==this._writableState&&(this._readableState.destroyed=t,this._writableState.destroyed=t)}
+  function var_f(param_t) {
+  if (!(this instanceof var_f)) return new var_f(param_t);
+  dep_helper_487.call(this, param_t), dep_helper_490.call(this, param_t), param_t &&
+  !1 === param_t.readable && (this.readable = !1), param_t &&
+  !1 === param_t.writable && (this.writable = !1), this.allowHalfOpen = !0, param_t &&
+  !1 === param_t.allowHalfOpen && (this.allowHalfOpen = !1), this.once("end", var_d);
   }
-  ),f.prototype._destroy=function(t,e){
-  this.push(null),this.end(),n.nextTick(e,t)}
+  function var_d() {
+  this.allowHalfOpen || this._writableState.ended || dep_module_36.nextTick(var_h,
+  this);
+  }
+  function var_h(param_t) {
+  param_t.end();
+  }
+  Object.defineProperty(var_f.prototype, "writableHighWaterMark", {
+  enumerable: !1,
+  get: function () {
+  return this._writableState.highWaterMark;
+  }
+  }
+  ), Object.defineProperty(var_f.prototype, "destroyed", {
+  get: function () {
+  return void 0 !== this._readableState && void 0 !== this._writableState &&
+  this._readableState.destroyed && this._writableState.destroyed;
+  }
+  ,
+  set: function (param_t) {
+  void 0 !== this._readableState && void 0 !== this._writableState &&
+  (this._readableState.destroyed = param_t, this._writableState.destroyed = param_t);
+  }
+  }
+  ), var_f.prototype._destroy = function (param_t, param_e) {
+  this.push(null), this.end(), dep_module_36.nextTick(param_e, param_t);
+  };
   };

@@ -1,8 +1,11 @@
 // Module 575 - Savior Helper 575
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(115),i=r(151)("TypedArray.prototype.buffer",!0),o=r(576);
-  t.exports=i||function(t){
-  if(!o(t))throw new n("Not a Typed Array");
-  return t.buffer}
+  var dep_helper_115 = requireFn(115),
+  var_i = requireFn(151)("TypedArray.prototype.buffer", !0),
+  dep_helper_576 = requireFn(576);
+  moduleObj.exports = var_i || function (param_t) {
+  if (!dep_helper_576(param_t)) throw new dep_helper_115("Not a Typed Array");
+  return param_t.buffer;
+  };
   };

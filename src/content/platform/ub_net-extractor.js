@@ -1,9 +1,12 @@
 // Module 363 - Savior Ub_net Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  siteMatcher:t=>/^(?:[a-zA-Z0-9-]+\.)*ub\.net$/i.test(t),default:{
-  getUrl:()=>[]}
+  requireFn.r(exportsObj);
+  var obj_n = {
+  siteMatcher: param_t => /^(?:[a-zA-Z0-9-]+\.)*ub\.net$/i.test(param_t),
+  default: {
+  getUrl: () => []
+  }
   };
-  e.default=n};
+  exportsObj.default = obj_n;
+  };

@@ -1,265 +1,447 @@
 // Module 269 - Savior Linkedin_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e),r.d(e,"createM3u8FromPlaylist",(function(){
-  return h}
-  ));
-  var n=r(1),i=r(0),o=r(3),a=r(14);
-  function s(){
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,
-  e,r="function"==typeof Symbol?Symbol:{
+  requireFn.r(exportsObj), requireFn.d(exportsObj, "createM3u8FromPlaylist", function (
+  ) {
+  return var_h;
   }
-  ,n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";
-  function o(r,n,i,o){
-  var s=n&&n.prototype instanceof c?n:c,l=Object.create(s.prototype);
-  return u(l,"_invoke",function(r,n,i){
-  var o,s,u,c=0,l=i||[],f=!1,d={
-  p:0,n:0,v:t,a:h,f:h.bind(t,4),d:function(e,r){
-  return o=e,s=0,u=t,d.n=r,a}
+  );
+  var dep_media_constants = requireFn(1),
+  dep_dom_utils = requireFn(0),
+  dep_url_utils = requireFn(3),
+  dep_format_resolver = requireFn(14);
+  function var_s() {
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var var_t,
+  var_e,
+  var_r = "function" == typeof Symbol ? Symbol : {
+  }
+  ,
+  var_n = var_r.iterator || "@@iterator",
+  var_i = var_r.toStringTag || "@@toStringTag";
+  function var_o(param_r, param_n, param_i, param_o) {
+  var var_s_1 = param_n && param_n.prototype instanceof var_c_1 ?
+  param_n : var_c_1,
+  var_l_2 = Object.create(var_s_1.prototype);
+  return var_u(var_l_2, "_invoke", function (param_r_1, param_n_1, param_i_1) {
+  var var_o_1,
+  var_s_2,
+  var_u_1,
+  num_c = 0,
+  var_l_3 = param_i_1 || [],
+  flag_f = !1,
+  obj_d = {
+  p: 0,
+  n: 0,
+  v: var_t,
+  a: var_h_2,
+  f: var_h_2.bind(var_t, 4),
+  d: function (param_e, param_r_2) {
+  return var_o_1 = param_e, var_s_2 = 0, var_u_1 = var_t, obj_d.n = param_r_2, obj_a;
+  }
   };
-  function h(r,n){
-  for(s=r,u=n,e=0;
-  !f&&c&&!i&&e<l.length;
-  e++){
-  var i,o=l[e],h=d.p,p=o[2];
-  r>3?(i=p===n)&&(u=o[(s=o[4])?5:(s=3,3)],o[4]=o[5]=t):o[0]<=h&&((i=r<2&&h<o[1])?(s=0,d.v=n,d.n=o[1]):
-  h<p&&(i=r<3||o[0]>n||n>p)&&(o[4]=r,o[5]=n,d.n=p,s=0))}
-  if(i||r>1)return a;
-  throw f=!0,n}
-  return function(i,l,p){
-  if(c>1)throw TypeError("Generator is already running");
-  for(f&&1===l&&h(l,p),s=l,u=p;
-  (e=s<2?t:u)||!f;
-  ){
-  o||(s?s<3?(s>1&&(d.n=-1),h(s,u)):d.n=u:d.v=u);
-  try{
-  if(c=2,o){
-  if(s||(i="next"),e=o[i]){
-  if(!(e=e.call(o,u)))throw TypeError("iterator result is not an object");
-  if(!e.done)return e;
-  u=e.value,s<2&&(s=0)}
-  else 1===s&&(e=o.return)&&e.call(o),s<2&&(u=TypeError("The iterator does not provide a '"+i+"' method"),
-  s=1);
-  o=t}
-  else if((e=(f=d.n<0)?u:r.call(n,d))!==a)break}
-  catch(e){
-  o=t,s=1,u=e}
-  finally{
-  c=1}
+  function var_h_2(param_r_2, param_n_2) {
+  for (var_s_2 = param_r_2, var_u_1 = param_n_2, var_e = 0;
+  !flag_f && num_c && !var_i_1 && var_e < var_l_3.length;
+  var_e++) {
+  var var_i_1,
+  var_o_2 = var_l_3[var_e],
+  var_h_3 = obj_d.p,
+  var_p_1 = var_o_2[2];
+  param_r_2 > 3 ? (var_i_1 = var_p_1 === param_n_2) && (var_u_1 = var_o_2[(var_s_2 = var_o_2[4]) ?
+  5 : (var_s_2 = 3, 3)], var_o_2[4] = var_o_2[5] = var_t) : var_o_2[0] <= var_h_3 &&
+  ((var_i_1 = param_r_2 < 2 && var_h_3 < var_o_2[1]) ? (var_s_2 = 0, obj_d.v = param_n_2,
+  obj_d.n = var_o_2[1]) : var_h_3 < var_p_1 && (var_i_1 = param_r_2 < 3 ||
+  var_o_2[0] > param_n_2 || param_n_2 > var_p_1) && (var_o_2[4] = param_r_2, var_o_2[5] = param_n_2,
+  obj_d.n = var_p_1, var_s_2 = 0));
   }
-  return{
-  value:e,done:f}
+  if (var_i_1 || param_r_2 > 1) return obj_a;
+  throw flag_f = !0, param_n_2;
+  }
+  return function (param_i_2, param_l, param_p) {
+  if (num_c > 1) throw TypeError("Generator is already running");
+  for (flag_f && 1 === param_l && var_h_2(param_l, param_p), var_s_2 = param_l, var_u_1 = param_p;
+  (var_e = var_s_2 < 2 ? var_t : var_u_1) || !flag_f;
+  ) {
+  var_o_1 || (var_s_2 ? var_s_2 < 3 ? (var_s_2 > 1 && (obj_d.n = -1), var_h_2(var_s_2,
+  var_u_1)) : obj_d.n = var_u_1 : obj_d.v = var_u_1);
+  try {
+  if (num_c = 2, var_o_1) {
+  if (var_s_2 || (param_i_2 = "next"), var_e = var_o_1[param_i_2]) {
+  if (!(var_e = var_e.call(var_o_1, var_u_1))) throw TypeError("iterator result is not an object");
+  if (!var_e.done) return var_e;
+  var_u_1 = var_e.value, var_s_2 < 2 && (var_s_2 = 0);
+  }
+  else 1 === var_s_2 && (var_e = var_o_1.return) && var_e.call(var_o_1), var_s_2 < 2 &&
+  (var_u_1 = TypeError("The iterator does not provide a '" + param_i_2 + "' method"),
+  var_s_2 = 1);
+  var_o_1 = var_t;
+  }
+  else if ((var_e = (flag_f = obj_d.n < 0) ? var_u_1 : param_r_1.call(param_n_1,
+  obj_d)) !== obj_a) break;
+  }
+  catch (var_e_1) {
+  var_o_1 = var_t, var_s_2 = 1, var_u_1 = var_e_1;
+  }
+  finally {
+  num_c = 1;
   }
   }
-  (r,i,o),!0),l}
-  var a={
+  return {
+  value: var_e,
+  done: flag_f
   };
-  function c(){
-  }
-  function l(){
-  }
-  function f(){
-  }
-  e=Object.getPrototypeOf;
-  var d=[][n]?e(e([][n]())):(u(e={
-  }
-  ,n,(function(){
-  return this}
-  )),e),h=f.prototype=c.prototype=Object.create(d);
-  function p(t){
-  return Object.setPrototypeOf?Object.setPrototypeOf(t,f):(t.__proto__=f,u(t,i,"GeneratorFunction")),
-  t.prototype=Object.create(h),t}
-  return l.prototype=f,u(h,"constructor",f),u(f,"constructor",l),l.displayName="GeneratorFunction",u(f,
-  i,"GeneratorFunction"),u(h),u(h,i,"Generator"),u(h,n,(function(){
-  return this}
-  )),u(h,"toString",(function(){
-  return"[object Generator]"}
-  )),(s=function(){
-  return{
-  w:o,m:p}
-  }
-  )()}
-  function u(t,e,r,n){
-  var i=Object.defineProperty;
-  try{
-  i({
-  }
-  ,"",{
-  }
-  )}
-  catch(t){
-  i=0}
-  (u=function(t,e,r,n){
-  function o(e,r){
-  u(t,e,(function(t){
-  return this._invoke(e,r,t)}
-  ))}
-  e?i?i(t,e,{
-  value:r,enumerable:!n,configurable:!n,writable:!n}
-  ):t[e]=r:(o("next",0),o("throw",1),o("return",2))}
-  )(t,e,r,n)}
-  function c(t,e){
-  var r="undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];
-  if(!r){
-  if(Array.isArray(t)||(r=function(t,e){
-  if(t){
-  if("string"==typeof t)return l(t,e);
-  var r={
-  }
-  .toString.call(t).slice(8,-1);
-  return"Object"===r&&t.constructor&&(r=t.constructor.name),"Map"===r||"Set"===r?Array.from(t):"Arguments"===r||
-  /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?l(t,e):void 0}
-  }
-  (t))||e&&t&&"number"==typeof t.length){
-  r&&(t=r);
-  var n=0,i=function(){
   };
-  return{
-  s:i,n:function(){
-  return n>=t.length?{
-  done:!0}
-  :{
-  done:!1,value:t[n++]}
   }
-  ,e:function(t){
-  throw t}
-  ,f:i}
+  (param_r, param_i, param_o), !0), var_l_2;
   }
-  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}
-  var o,a=!0,s=!1;
-  return{
-  s:function(){
-  r=r.call(t)}
-  ,n:function(){
-  var t=r.next();
-  return a=t.done,t}
-  ,e:function(t){
-  s=!0,o=t}
-  ,f:function(){
-  try{
-  a||null==r.return||r.return()}
-  finally{
-  if(s)throw o}
+  var obj_a = {
+  };
+  function var_c_1() {
+  }
+  function var_l_1() {
+  }
+  function var_f() {
+  }
+  var_e = Object.getPrototypeOf;
+  var var_d_1 = [][var_n] ? var_e(var_e([][var_n]())) : (var_u(var_e = {
+  }
+  , var_n, function () {
+  return this;
+  }
+  ), var_e),
+  var_h_1 = var_f.prototype = var_c_1.prototype = Object.create(var_d_1);
+  function var_p(param_t) {
+  return Object.setPrototypeOf ? Object.setPrototypeOf(param_t, var_f) :
+  (param_t.__proto__ = var_f, var_u(param_t, var_i, "GeneratorFunction")), param_t.prototype = Object.create(
+  var_h_1), param_t;
+  }
+  return var_l_1.prototype = var_f, var_u(var_h_1, "constructor", var_f), var_u(
+  var_f, "constructor", var_l_1), var_l_1.displayName = "GeneratorFunction", var_u(
+  var_f, var_i, "GeneratorFunction"), var_u(var_h_1), var_u(var_h_1, var_i, "Generator"),
+  var_u(var_h_1, var_n, function () {
+  return this;
+  }
+  ), var_u(var_h_1, "toString", function () {
+  return "[object Generator]";
+  }
+  ), (var_s = function () {
+  return {
+  w: var_o,
+  m: var_p
+  };
+  }
+  )();
+  }
+  function var_u(param_t, param_e, param_r, param_n) {
+  var var_i = Object.defineProperty;
+  try {
+  var_i({
+  }
+  , "", {
+  }
+  );
+  }
+  catch (var_t) {
+  var_i = 0;
+  }
+  (var_u = function (param_t_1, param_e_1, param_r_1, param_n_1) {
+  function var_o(param_e_2, param_r_2) {
+  var_u(param_t_1, param_e_2, function (param_t_2) {
+  return this._invoke(param_e_2, param_r_2, param_t_2);
+  }
+  );
+  }
+  param_e_1 ? var_i ? var_i(param_t_1, param_e_1, {
+  value: param_r_1,
+  enumerable: !param_n_1,
+  configurable: !param_n_1,
+  writable: !param_n_1
+  }
+  ) : param_t_1[param_e_1] = param_r_1 : (var_o("next", 0), var_o("throw", 1), var_o(
+  "return", 2));
+  }
+  )(param_t, param_e, param_r, param_n);
+  }
+  function var_c(param_t, param_e) {
+  var var_r = "undefined" != typeof Symbol && param_t[Symbol.iterator] ||
+  param_t["@@iterator"];
+  if (!var_r) {
+  if (Array.isArray(param_t) || (var_r = function (param_t_1, param_e_1) {
+  if (param_t_1) {
+  if ("string" == typeof param_t_1) return var_l(param_t_1, param_e_1);
+  var var_r_1 = {
+  }
+  .toString.call(param_t_1).slice(8, -1);
+  return "Object" === var_r_1 && param_t_1.constructor && (var_r_1 = param_t_1.constructor.name),
+  "Map" === var_r_1 || "Set" === var_r_1 ? Array.from(param_t_1) :
+  "Arguments" === var_r_1 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(var_r_1) ?
+  var_l(param_t_1, param_e_1) : void 0;
   }
   }
+  (param_t)) || param_e && param_t && "number" == typeof param_t.length) {
+  var_r && (param_t = var_r);
+  var num_n = 0,
+  fn_i = function () {
+  };
+  return {
+  s: fn_i,
+  n: function () {
+  return num_n >= param_t.length ? {
+  done: !0
   }
-  function l(t,e){
-  (null==e||e>t.length)&&(e=t.length);
-  for(var r=0,n=Array(e);
-  r<e;
-  r++)n[r]=t[r];
-  return n}
-  var f=function(t,e,r,n){
-  return new(r||(r=Promise))((function(i,o){
-  function a(t){
-  try{
-  u(n.next(t))}
-  catch(t){
-  o(t)}
+  : {
+  done: !1,
+  value: param_t[num_n++]
+  };
   }
-  function s(t){
-  try{
-  u(n.throw(t))}
-  catch(t){
-  o(t)}
+  ,
+  e: function (param_t_1) {
+  throw param_t_1;
   }
-  function u(t){
-  var e;
-  t.done?i(t.value):(e=t.value,e instanceof r?e:new r((function(t){
-  t(e)}
-  ))).then(a,s)}
-  u((n=n.apply(t,e||[])).next())}
-  ))};
-  function d(t){
-  return t.resolvedUri||t.uri||""}
-  function h(t){
-  var e,r,n,i,o=["#EXTM3U","#EXT-X-VERSION:"+(null!==(e=t.version)&&void 0!==e?e:7),"#EXT-X-TARGETDURATION:"+Math.ceil(t.targetDuration),
-  "#EXT-X-MEDIA-SEQUENCE:"+(null!==(r=t.mediaSequence)&&void 0!==r?r:0)];
-  (t.playlistType||t.endList)&&o.push("#EXT-X-PLAYLIST-TYPE:"+(null!==(n=t.playlistType)&&void 0!==n?
-  n:"VOD"));
-  var a,s,u,l="",f="",h=c(t.segments);
-  try{
-  for(h.s();
-  !(a=h.n()).done;
-  ){
-  var p=a.value,v=(null==(u=p.map)?void 0:u.resolvedUri)||(null==u?void 0:u.uri)||"";
-  if(v&&v!==l&&(o.push(`#EXT-X-MAP:URI="${v}
-  "`),l=v),p.key){
-  var m="NONE"===p.key.method?"#EXT-X-KEY:METHOD=NONE":`#EXT-X-KEY:METHOD=${p.key.method}
-  ,URI="${null!==(i=p.key.uri)&&void 0!==i?i:""}
-  "${p.key.iv?",IV="+p.key.iv:""}
+  ,
+  f: fn_i
+  };
+  }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  var var_o,
+  flag_a = !0,
+  flag_s = !1;
+  return {
+  s: function () {
+  var_r = var_r.call(param_t);
+  }
+  ,
+  n: function () {
+  var var_t = var_r.next();
+  return flag_a = var_t.done, var_t;
+  }
+  ,
+  e: function (param_t_1) {
+  flag_s = !0, var_o = param_t_1;
+  }
+  ,
+  f: function () {
+  try {
+  flag_a || null == var_r.return || var_r.return();
+  }
+  finally {
+  if (flag_s) throw var_o;
+  }
+  }
+  };
+  }
+  function var_l(param_t, param_e) {
+  (null == param_e || param_e > param_t.length) && (param_e = param_t.length);
+  for (var num_r = 0, var_n = Array(param_e);
+  num_r < param_e;
+  num_r++) var_n[num_r] = param_t[num_r];
+  return var_n;
+  }
+  var fn_f = function (param_t, param_e, param_r, param_n) {
+  return new (param_r || (param_r = Promise))(function (param_i, param_o) {
+  function var_a(param_t_1) {
+  try {
+  var_u_1(param_n.next(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_s_1(param_t_1) {
+  try {
+  var_u_1(param_n.throw(param_t_1));
+  }
+  catch (var_t) {
+  param_o(var_t);
+  }
+  }
+  function var_u_1(param_t_1) {
+  var var_e;
+  param_t_1.done ? param_i(param_t_1.value) : (var_e = param_t_1.value, var_e instanceof param_r ?
+  var_e : new param_r(function (param_t_2) {
+  param_t_2(var_e);
+  }
+  )).then(var_a, var_s_1);
+  }
+  var_u_1((param_n = param_n.apply(param_t, param_e || [])).next());
+  }
+  );
+  };
+  function var_d(param_t) {
+  return param_t.resolvedUri || param_t.uri || "";
+  }
+  function var_h(param_t) {
+  var var_e,
+  var_r,
+  var_n,
+  var_i,
+  list_o = ["#EXTM3U", "#EXT-X-VERSION:" + (null !== (var_e = param_t.version) &&
+  void 0 !== var_e ? var_e : 7), "#EXT-X-TARGETDURATION:" + Math.ceil(param_t.targetDuration),
+  "#EXT-X-MEDIA-SEQUENCE:" + (null !== (var_r = param_t.mediaSequence) &&
+  void 0 !== var_r ? var_r : 0)];
+  (param_t.playlistType || param_t.endList) && list_o.push("#EXT-X-PLAYLIST-TYPE:" + (
+  null !== (var_n = param_t.playlistType) && void 0 !== var_n ?
+  var_n : "VOD"));
+  var var_a,
+  var_s_1,
+  var_u_1,
+  str_l = "",
+  str_f = "",
+  var_h_1 = var_c(param_t.segments);
+  try {
+  for (var_h_1.s();
+  !(var_a = var_h_1.n()).done;
+  ) {
+  var var_p = var_a.value,
+  var_v_1 = (null == (var_u_1 = var_p.map) ? void 0 : var_u_1.resolvedUri) ||
+  (null == var_u_1 ? void 0 : var_u_1.uri) || "";
+  if (var_v_1 && var_v_1 !== str_l && (list_o.push(`#EXT-X-MAP:URI="${var_v_1}
+  
+  
+  "`), str_l = var_v_1), var_p.key) {
+  var var_m = "NONE" === var_p.key.method ? "#EXT-X-KEY:METHOD=NONE" :
+  `#EXT-X-KEY:METHOD=${var_p.key.method}
+  
+  
+  ,URI="${null !== (var_i = var_p.key.uri) && void 0 !== var_i ?
+  var_i : ""}
+  
+  
+  "${var_p.key.iv ? ",IV=" + var_p.key.iv : ""}
+  
+  
   `;
-  m!==f&&(o.push(m),f=m)}
-  var y=d(p);
-  y&&(o.push(`#EXTINF:${s=p.duration,Number(s.toFixed(3)).toString()}
-  ,`),o.push(y))}
+  var_m !== str_f && (list_o.push(var_m), str_f = var_m);
   }
-  catch(t){
-  h.e(t)}
-  finally{
-  h.f()}
-  return!1!==t.endList&&o.push("#EXT-X-ENDLIST"),o.join("\n")}
-  var p={
+  var var_y = var_d(var_p);
+  var_y && (list_o.push(`#EXTINF:${var_s_1 = var_p.duration, Number(var_s_1.toFixed(
+  3)).toString()}
+  
+  
+  ,`), list_o.push(var_y));
+  }
+  }
+  catch (var_t) {
+  var_h_1.e(var_t);
+  }
+  finally {
+  var_h_1.f();
+  }
+  return !1 !== param_t.endList && list_o.push("#EXT-X-ENDLIST"), list_o.join("\n");
+  }
+  var obj_p = {
   };
-  function v(t,e){
-  var r=t.closest('.feed-shared-update-v2, [role="listitem"][componentkey*="update-card-focus"]'),n=null==r?
-  void 0:r.querySelector('article, [class*="linkedin-video__description"], .feed-shared-update-v2__description, [data-testid="expandable-text-box"]');
-  n&&(e.filename=n.innerText,e.fixName=n.innerText)}
-  var m={
-  getDomains:()=>["linkedin.com"],default:{
-  getUrl:t=>{
-  var e=t.node;
-  return f(void 0,void 0,void 0,s().m((function t(){
-  var r,a,u,c,l;
-  return s().w((function(t){
-  for(;;
-  )switch(t.p=t.n){
-  case 0:if(e.hasAttribute("savior-manifest-url")){
-  t.n=4;
-  break}
-  return t.p=1,p.hasOwnProperty("linkedin")||(p.linkedin=Promise.race([Object(i.sendMessage)({
-  type:n.b.SCRIPTING.INJECT,file:"linkedin"}
-  ),Object(i.sleep)(1e3)])),t.n=2,p.linkedin;
-  case 2:delete p.linkedin,t.n=4;
+  function var_v(param_t, param_e) {
+  var var_r = param_t.closest('.feed-shared-update-v2, [role="listitem"][componentkey*="update-card-focus"]'),
+  var_n = null == var_r ? void 0 : var_r.querySelector('article, [class*="linkedin-video__description"], .feed-shared-update-v2__description, [data-testid="expandable-text-box"]');
+  var_n && (param_e.filename = var_n.innerText, param_e.fixName = var_n.innerText);
+  }
+  var obj_m = {
+  getDomains: () => ["linkedin.com"],
+  default: {
+  getUrl: param_t => {
+  var var_e = param_t.node;
+  return fn_f(void 0, void 0, void 0, var_s().m(function var_t() {
+  var var_r, var_a, var_u_1, var_c_1, var_l_1;
+  return var_s().w(function (param_t_1) {
+  for (;;
+  ) switch (param_t_1.p = param_t_1.n) {
+  case 0:
+  if (var_e.hasAttribute("savior-manifest-url")) {
+  param_t_1.n = 4;
   break;
-  case 3:t.p=3,t.v,EE.emit("widget.forceUpdate");
-  case 4:if(!(null==(a=e.getAttribute("savior-manifest-url"))?void 0:a.startsWith("data:application"))){
-  t.n=7;
-  break}
-  return t.p=5,u=JSON.parse(a.slice(a.indexOf(",")+1)),c=null===(r=u.playlists)||void 0===r?void 0:r.map(t=>{
-  var r,a,s,u=Object(o.f)(e.src.replace(/^blob:/,"")),c=null===(a=null===(r=t.attributes)||void 0===r?
-  void 0:r.RESOLUTION)||void 0===a?void 0:a.width,l=c?c+"p":void 0;
-  return u.play_list=h(t),u.ext="m3u8",u.exts=["m3u8"],u.type="video",l&&(u.resolution=l,u.quality=(null===(s=n.r[l])||
-  void 0===s?void 0:s.label)||l,u.i18n_quality=n.r[l]?Object(i.i18n)(n.r[l].i18n_label):l),v(e,u),u}
-  ).filter(Boolean),t.a(2,c);
-  case 6:return t.p=6,l=t.v,console.error("Failed to parse manifest data:",l),t.a(2,[]);
-  case 7:return t.a(2,a)}
   }
-  ),t,null,[[5,6],[1,3]])}
-  )))}
-  ,mediaObjectChange:t=>{
-  var e,r,n=t.mediaObject,i=t.node;
-  if(v(i,n),(null===(e=null==n?void 0:n.url)||void 0===e?void 0:e.match(/^https:\/\/dms.licdn\.com\/playlist/))&&
-  n.url==(null==i?void 0:i.src)||n.url==i.getAttribute("savior-manifest-url"))return(null===(r=i.src)||
-  void 0===r?void 0:r.endsWith("mp4"))||n.url==(null==i?void 0:i.src)?(n.ext="mp4",n.exts=["mp4"]):(n.ext="m3u8",
-  n.exts=["m3u8"]),"video"}
+  return param_t_1.p = 1, obj_p.hasOwnProperty("linkedin") ||
+  (obj_p.linkedin = Promise.race([Object(dep_dom_utils.sendMessage)({
+  type: dep_media_constants.b.SCRIPTING.INJECT,
+  file: "linkedin"
   }
-  ,toggleLight:{
-  turnOff:{
-  updated(t){
-  var e=(null==t?void 0:t.querySelector(".classroom-layout__screen"))||(null==t?void 0:t.closest(".classroom-layout__screen"));
-  null==e||e.classList.add("--savior-overlay-z-index-top")}
+  ), Object(dep_dom_utils.sleep)(1e3)])), param_t_1.n = 2, obj_p.linkedin;
+  case 2:
+  delete obj_p.linkedin, param_t_1.n = 4;
+  break;
+  case 3:
+  param_t_1.p = 3, param_t_1.v, EE.emit("widget.forceUpdate");
+  case 4:
+  if (!(null == (var_a = var_e.getAttribute("savior-manifest-url")) ?
+  void 0 : var_a.startsWith("data:application"))) {
+  param_t_1.n = 7;
+  break;
+  }
+  return param_t_1.p = 5, var_u_1 = JSON.parse(var_a.slice(var_a.indexOf(",") + 1)),
+  var_c_1 = null === (var_r = var_u_1.playlists) || void 0 === var_r ?
+  void 0 : var_r.map(param_t_2 => {
+  var var_r_1,
+  var_a_1,
+  var_s_1,
+  var_u_2 = Object(dep_url_utils.f)(var_e.src.replace(/^blob:/, "")),
+  var_c_2 = null === (var_a_1 = null === (var_r_1 = param_t_2.attributes) ||
+  void 0 === var_r_1 ? void 0 : var_r_1.RESOLUTION) || void 0 === var_a_1 ?
+  void 0 : var_a_1.width,
+  var_l_2 = var_c_2 ? var_c_2 + "p" : void 0;
+  return var_u_2.play_list = var_h(param_t_2), var_u_2.ext = "m3u8", var_u_2.exts = ["m3u8"],
+  var_u_2.type = "video", var_l_2 && (var_u_2.resolution = var_l_2, var_u_2.quality = (
+  null === (var_s_1 = dep_media_constants.r[var_l_2]) || void 0 === var_s_1 ?
+  void 0 : var_s_1.label) || var_l_2, var_u_2.i18n_quality = dep_media_constants.r[var_l_2] ?
+  Object(dep_dom_utils.i18n)(dep_media_constants.r[var_l_2].i18n_label) :
+  var_l_2), var_v(var_e, var_u_2), var_u_2;
+  }
+  ).filter(Boolean), param_t_1.a(2, var_c_1);
+  case 6:
+  return param_t_1.p = 6, var_l_1 = param_t_1.v, console.error("Failed to parse manifest data:",
+  var_l_1), param_t_1.a(2, []);
+  case 7:
+  return param_t_1.a(2, var_a);
   }
   }
-  ,parse:{
-  default:t=>{
-  var e=t.media,r=t.response;
-  return e.url="https://google.com",r.startsWith("<MPD")?Object(a.b)(r,e.filename||document.title,e.host,
-  String(e.url)).map(t=>Object.assign(Object.assign({
+  , var_t, null, [[5, 6], [1, 3]]);
   }
-  ,t),{
-  ext:"mp4",exts:["mp4"]}
-  )):[e]}
+  ));
   }
-  ,processRequestIds:()=>!0};
-  e.default=m};
+  ,
+  mediaObjectChange: param_t => {
+  var var_e,
+  var_r,
+  var_n = param_t.mediaObject,
+  var_i = param_t.node;
+  if (var_v(var_i, var_n), (null === (var_e = null == var_n ?
+  void 0 : var_n.url) || void 0 === var_e ? void 0 : var_e.match(/^https:\/\/dms.licdn\.com\/playlist/)) &&
+  var_n.url == (null == var_i ? void 0 : var_i.src) || var_n.url == var_i.getAttribute(
+  "savior-manifest-url")) return (null === (var_r = var_i.src) ||
+  void 0 === var_r ? void 0 : var_r.endsWith("mp4")) || var_n.url == (null == var_i ?
+  void 0 : var_i.src) ? (var_n.ext = "mp4", var_n.exts = ["mp4"]) :
+  (var_n.ext = "m3u8", var_n.exts = ["m3u8"]), "video";
+  }
+  }
+  ,
+  toggleLight: {
+  turnOff: {
+  updated(param_t) {
+  var var_e = (null == param_t ? void 0 : param_t.querySelector(".classroom-layout__screen")) ||
+  (null == param_t ? void 0 : param_t.closest(".classroom-layout__screen"));
+  null == var_e || var_e.classList.add("--savior-overlay-z-index-top");
+  }
+  }
+  }
+  ,
+  parse: {
+  default: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  return var_e.url = "https://google.com", var_r.startsWith("<MPD") ?
+  Object(dep_format_resolver.b)(var_r, var_e.filename || document.title, var_e.host,
+  String(var_e.url)).map(param_t_1 => Object.assign(Object.assign({
+  }
+  , param_t_1), {
+  ext: "mp4",
+  exts: ["mp4"]
+  }
+  )) : [var_e];
+  }
+  }
+  ,
+  processRequestIds: () => !0
+  };
+  exportsObj.default = obj_m;
+  };

@@ -1,10 +1,13 @@
 // Module 155 - Savior Helper 155
-export default function(t,e,r){
-  (function(e){
-  t.exports=function(t,r){
-  for(var n=Math.min(t.length,r.length),i=new e(n),o=0;
-  o<n;
-  ++o)i[o]=t[o]^r[o];
-  return i}
+export default function (moduleObj, exportsObj, requireFn) {
+  (function (param_e) {
+  moduleObj.exports = function (param_t, param_r) {
+  for (var var_n = Math.min(param_t.length, param_r.length), var_i = new param_e(
+  var_n), num_o = 0;
+  num_o < var_n;
+  ++num_o) var_i[num_o] = param_t[num_o] ^ param_r[num_o];
+  return var_i;
+  };
   }
-  ).call(this,r(27).Buffer)};
+  ).call(this, requireFn(27).Buffer);
+  };

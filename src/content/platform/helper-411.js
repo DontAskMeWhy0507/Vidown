@@ -1,4 +1,5 @@
 // Module 411 - Savior Helper 411
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=Math.abs};
+  moduleObj.exports = Math.abs;
+  };

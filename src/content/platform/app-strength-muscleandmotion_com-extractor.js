@@ -1,22 +1,38 @@
 // Module 203 - Savior App Strength Muscleandmotion_com Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  audioUrl:"",videoUrl:""}
-  ,i={
-  getDomains:()=>["app.strength.muscleandmotion.com"],urls:[{
-  checkUrl:t=>{
-  var e=t.url;
-  return/d24cq1nx03h9us\.cloudfront\.net.*\.(mp3|mp4)$/.test(e)}
-  ,getUrl:t=>{
-  var e=t.url;
-  return e.includes(".mp3")&&n.audioUrl!==e&&(n.audioUrl=e),e.includes(".mp4")&&n.videoUrl!==e&&(n.videoUrl=e),
-  n}
-  ,mediaObjectChange:t=>{
-  var e,r,n=t.mediaObject,i=(null===(r=null===(e=t.node.closest("div.simplebar-content"))||void 0===e?
-  void 0:e.querySelector("h2"))||void 0===r?void 0:r.textContent)||document.title;
-  n.filename=i}
+  requireFn.r(exportsObj);
+  var obj_n = {
+  audioUrl: "",
+  videoUrl: ""
   }
-  ]};
-  e.default=i};
+  ,
+  obj_i = {
+  getDomains: () => ["app.strength.muscleandmotion.com"],
+  urls: [{
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return /d24cq1nx03h9us\.cloudfront\.net.*\.(mp3|mp4)$/.test(var_e);
+  }
+  ,
+  getUrl: param_t => {
+  var var_e = param_t.url;
+  return var_e.includes(".mp3") && obj_n.audioUrl !== var_e &&
+  (obj_n.audioUrl = var_e), var_e.includes(".mp4") && obj_n.videoUrl !== var_e &&
+  (obj_n.videoUrl = var_e), obj_n;
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e,
+  var_r,
+  var_n = param_t.mediaObject,
+  var_i = (null === (var_r = null === (var_e = param_t.node.closest("div.simplebar-content")) ||
+  void 0 === var_e ? void 0 : var_e.querySelector("h2")) || void 0 === var_r ?
+  void 0 : var_r.textContent) || document.title;
+  var_n.filename = var_i;
+  }
+  }
+  ]
+  };
+  exportsObj.default = obj_i;
+  };

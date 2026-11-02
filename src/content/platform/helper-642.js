@@ -1,25 +1,32 @@
 // Module 642 - Savior Helper 642
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(122),i=r(116);
-  function o(t,e,r){
-  if(!(this instanceof o))return new o(t,e,r);
-  this.Hash=t,this.blockSize=t.blockSize/8,this.outSize=t.outSize/8,this.inner=null,this.outer=null,
-  this._init(n.toArray(e,r))}
-  t.exports=o,o.prototype._init=function(t){
-  t.length>this.blockSize&&(t=(new this.Hash).update(t).digest()),i(t.length<=this.blockSize);
-  for(var e=t.length;
-  e<this.blockSize;
-  e++)t.push(0);
-  for(e=0;
-  e<t.length;
-  e++)t[e]^=54;
-  for(this.inner=(new this.Hash).update(t),e=0;
-  e<t.length;
-  e++)t[e]^=106;
-  this.outer=(new this.Hash).update(t)}
-  ,o.prototype.update=function(t,e){
-  return this.inner.update(t,e),this}
-  ,o.prototype.digest=function(t){
-  return this.outer.update(this.inner.digest()),this.outer.digest(t)}
+  var dep_helper_122 = requireFn(122),
+  dep_helper_116 = requireFn(116);
+  function var_o(param_t, param_e, param_r) {
+  if (!(this instanceof var_o)) return new var_o(param_t, param_e, param_r);
+  this.Hash = param_t, this.blockSize = param_t.blockSize / 8, this.outSize = param_t.outSize / 8,
+  this.inner = null, this.outer = null, this._init(dep_helper_122.toArray(param_e,
+  param_r));
+  }
+  moduleObj.exports = var_o, var_o.prototype._init = function (param_t) {
+  param_t.length > this.blockSize && (param_t = new this.Hash().update(param_t).digest(
+  )), dep_helper_116(param_t.length <= this.blockSize);
+  for (var var_e = param_t.length;
+  var_e < this.blockSize;
+  var_e++) param_t.push(0);
+  for (var_e = 0;
+  var_e < param_t.length;
+  var_e++) param_t[var_e] ^= 54;
+  for (this.inner = new this.Hash().update(param_t), var_e = 0;
+  var_e < param_t.length;
+  var_e++) param_t[var_e] ^= 106;
+  this.outer = new this.Hash().update(param_t);
+  }
+  , var_o.prototype.update = function (param_t, param_e) {
+  return this.inner.update(param_t, param_e), this;
+  }
+  , var_o.prototype.digest = function (param_t) {
+  return this.outer.update(this.inner.digest()), this.outer.digest(param_t);
+  };
   };

@@ -1,7 +1,12 @@
 // Module 303 - Savior Phim_vkoolzz_net Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(20),i={
-  getDomains:()=>["phim.vkoolzz.net","phim.vkoolss.net","phimoxy.com"],parse:n.a.parse,urls:n.a.urls};
-  e.default=i};
+  requireFn.r(exportsObj);
+  var dep_network_monitor = requireFn(20),
+  obj_i = {
+  getDomains: () => ["phim.vkoolzz.net", "phim.vkoolss.net", "phimoxy.com"],
+  parse: dep_network_monitor.a.parse,
+  urls: dep_network_monitor.a.urls
+  };
+  exportsObj.default = obj_i;
+  };

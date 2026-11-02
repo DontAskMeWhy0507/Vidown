@@ -1,4 +1,5 @@
 // Module 408 - Savior Helper 408
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=RangeError};
+  moduleObj.exports = RangeError;
+  };

@@ -1,22 +1,38 @@
 // Module 320 - Savior Pops_vn Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(14),i=r(6),o=location.href,a={
+  requireFn.r(exportsObj);
+  var dep_format_resolver = requireFn(14),
+  dep_media_sniffer = requireFn(6),
+  var_o = location.href,
+  obj_a = {
   }
-  ,s={
-  getDomains:()=>["pops.vn","motphimc."],forceUpdate(){
-  location.href!==o&&(EE.emit("widget.forceUpdate"),o=location.href)}
-  ,processRequestIds(t){
-  var e=t.url;
-  if(e.match(/\/index.m3u8/i))return e.includes("maxRes")||(a[location.href]=e),!0}
-  ,parse:{
-  default:t=>{
-  var e=t.media,r=t.response;
-  return!r&&e.realRes&&(r=e.realRes),(null==r?void 0:r.match(/<\?xml.+<mpd/i))?Object(n.b)(r,e.filename||
-  document.title,e.host,e.url):Object(i.e)(r,e)}
+  ,
+  obj_s = {
+  getDomains: () => ["pops.vn", "motphimc."],
+  forceUpdate() {
+  location.href !== var_o && (EE.emit("widget.forceUpdate"), var_o = location.href);
   }
-  ,default:{
-  getUrl:()=>a[location.href]}
+  ,
+  processRequestIds(param_t) {
+  var var_e = param_t.url;
+  if (var_e.match(/\/index.m3u8/i)) return var_e.includes("maxRes") ||
+  (obj_a[location.href] = var_e), !0;
+  }
+  ,
+  parse: {
+  default: param_t => {
+  var var_e = param_t.media,
+  var_r = param_t.response;
+  return !var_r && var_e.realRes && (var_r = var_e.realRes), (null == var_r ?
+  void 0 : var_r.match(/<\?xml.+<mpd/i)) ? Object(dep_format_resolver.b)(var_r, var_e.filename ||
+  document.title, var_e.host, var_e.url) : Object(dep_media_sniffer.e)(var_r, var_e);
+  }
+  }
+  ,
+  default: {
+  getUrl: () => obj_a[location.href]
+  }
   };
-  e.default=s};
+  exportsObj.default = obj_s;
+  };

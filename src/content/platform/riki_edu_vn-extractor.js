@@ -1,56 +1,103 @@
 // Module 323 - Savior Riki_edu_vn Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(28),i=r(6),o=/youtube.*.com\/embed\/([a-z0-9\-_]+)/i,a=location.href,s=void 0,u={
-  getDomains:()=>["riki.edu.vn","medium.com","ketcausoft."],forceUpdate(){
-  location.href!==a&&(EE.emit("widget.forceUpdate"),a=location.href)}
-  ,parse:{
-  sources:[{
-  checkSource:t=>{
-  var e=t.url;
-  return Boolean(e.match(o))}
-  ,parse:t=>{
-  var e,r="https://www.youtube.com/watch?v="+(null===(e=t.media.url.match(o))||void 0===e?void 0:e[1]);
-  return n.a.parse(r)}
+  requireFn.r(exportsObj);
+  var dep_dash_parser = requireFn(28),
+  dep_media_sniffer = requireFn(6),
+  regex_o = /youtube.*.com\/embed\/([a-z0-9\-_]+)/i,
+  var_a = location.href,
+  var_s = void 0,
+  obj_u = {
+  getDomains: () => ["riki.edu.vn", "medium.com", "ketcausoft."],
+  forceUpdate() {
+  location.href !== var_a && (EE.emit("widget.forceUpdate"), var_a = location.href);
   }
-  ,{
-  checkSource:t=>{
-  var e=t.url;
-  return/.+playlist\.m3u8/i.test(e)}
-  ,parse:t=>{
-  var e,r,n,o=t.media,a=t.response,s=null===(e=o.url.match(/\/(a-z0-9\-_]+)\/playlist.m3u8/i))||void 0===e?
-  void 0:e[1];
-  return o.fixName=s||((null===(n=null===(r=document.querySelector("h1.detail_course_header__title"))||
-  void 0===r?void 0:r.innerText)||void 0===n?void 0:n.trim())||document.title),Object(i.e)(a,o)}
+  ,
+  parse: {
+  sources: [{
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return Boolean(var_e.match(regex_o));
   }
-  ]}
-  ,urls:[{
-  checkUrl:t=>{
-  var e=t.url;
-  return"IFRAME"==t.node.nodeName&&Boolean(e.match(o))}
-  ,getUrl:t=>t.url,mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.ext="mp4",e.exts=["mp4"],"video"}
+  ,
+  parse: param_t => {
+  var var_e,
+  var_r = "https://www.youtube.com/watch?v=" + (null === (var_e = param_t.media.url.match(
+  regex_o)) || void 0 === var_e ? void 0 : var_e[1]);
+  return dep_dash_parser.a.parse(var_r);
   }
-  ,{
-  checkUrl:t=>{
-  var e=t.url;
-  return"IFRAME"==t.node.nodeName&&Boolean(decodeURIComponent(e).match(o))}
-  ,getUrl:t=>{
-  var e=t.url;
-  return e=decodeURIComponent(e),new URL(e).searchParams.get("src")||void 0}
-  ,mediaObjectChange:t=>{
-  var e=t.mediaObject;
-  return e.ext="mp4",e.exts=["mp4"],"video"}
   }
-  ,{
-  checkUrl:t=>{
-  var e=t.url;
-  return"VIDEO"==t.node.nodeName&&e.startsWith("blob:")||e.includes("mediadelivery.net")}
-  ,getUrl:()=>s?null==s?void 0:s.url:[],mediaObjectChange:t=>{
-  var e=t.mediaObject,r=t.node;
-  return e.filename=r.title,e.type}
+  , {
+  checkSource: param_t => {
+  var var_e = param_t.url;
+  return /.+playlist\.m3u8/i.test(var_e);
   }
-  ],processRequestIds:t=>(/.+playlist\.m3u8/i.test(t.url)&&(s=t),!0)};
-  e.default=u};
+  ,
+  parse: param_t => {
+  var var_e,
+  var_r,
+  var_n,
+  var_o = param_t.media,
+  var_a_1 = param_t.response,
+  var_s_1 = null === (var_e = var_o.url.match(/\/(a-z0-9\-_]+)\/playlist.m3u8/i)) ||
+  void 0 === var_e ? void 0 : var_e[1];
+  return var_o.fixName = var_s_1 || (null === (var_n = null === (var_r = document.querySelector(
+  "h1.detail_course_header__title")) || void 0 === var_r ? void 0 :
+  var_r.innerText) || void 0 === var_n ? void 0 : var_n.trim()) ||
+  document.title, Object(dep_media_sniffer.e)(var_a_1, var_o);
+  }
+  }
+  ]
+  }
+  ,
+  urls: [{
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return "IFRAME" == param_t.node.nodeName && Boolean(var_e.match(regex_o));
+  }
+  ,
+  getUrl: param_t => param_t.url,
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.ext = "mp4", var_e.exts = ["mp4"], "video";
+  }
+  }
+  , {
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return "IFRAME" == param_t.node.nodeName && Boolean(decodeURIComponent(var_e).match(
+  regex_o));
+  }
+  ,
+  getUrl: param_t => {
+  var var_e = param_t.url;
+  return var_e = decodeURIComponent(var_e), new URL(var_e).searchParams.get("src") ||
+  void 0;
+  }
+  ,
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject;
+  return var_e.ext = "mp4", var_e.exts = ["mp4"], "video";
+  }
+  }
+  , {
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return "VIDEO" == param_t.node.nodeName && var_e.startsWith("blob:") ||
+  var_e.includes("mediadelivery.net");
+  }
+  ,
+  getUrl: () => var_s ? null == var_s ? void 0 : var_s.url :
+  [],
+  mediaObjectChange: param_t => {
+  var var_e = param_t.mediaObject,
+  var_r = param_t.node;
+  return var_e.filename = var_r.title, var_e.type;
+  }
+  }
+  ],
+  processRequestIds: param_t => (/.+playlist\.m3u8/i.test(param_t.url) &&
+  (var_s = param_t), !0)
+  };
+  exportsObj.default = obj_u;
+  };

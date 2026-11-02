@@ -1,40 +1,81 @@
 // Module 370 - Savior Video_afamily_vn Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n,i;
-  r.r(e);
-  var o=null===(i=null===(n=document.querySelector("h2"))||void 0===n?void 0:n.textContent)||void 0===i?
-  void 0:i.trim(),a=[],s={
-  getDomains:()=>["video.afamily.vn"],forceUpdate(){
-  var t,e,r=null===(e=null===(t=document.querySelector("h2"))||void 0===t?void 0:t.textContent)||void 0===e?
-  void 0:e.trim();
-  r!==o&&(EE.emit("widget.forceUpdate"),o=r)}
-  ,default:{
-  getUrl:t=>{
-  var e,r,n=t.node.closest("[data-vid]"),i=null==n?void 0:n.getAttribute("data-vid"),o=null==i?void 0:
-  i.split("/");
-  i=(null==o?void 0:o.pop())||(null==o?void 0:o.pop());
-  var s=a.filter(t=>t.url.includes(i)),u=Array.from(document.querySelectorAll("h2")).map(t=>{
-  var e,r,n,i,o=null===(n=null===(r=null===(e=t.querySelector("a"))||void 0===e?void 0:e.href.split("/").pop())||
-  void 0===r?void 0:r.split("."))||void 0===n?void 0:n[0].split("-").slice(0,-1).join("-");
-  return{
-  title:null===(i=t.textContent)||void 0===i?void 0:i.trim(),idUrl:o||""}
+  var var_n, var_i;
+  requireFn.r(exportsObj);
+  var var_o = null === (var_i = null === (var_n = document.querySelector("h2")) ||
+  void 0 === var_n ? void 0 : var_n.textContent) || void 0 === var_i ?
+  void 0 : var_i.trim(),
+  list_a = [],
+  obj_s = {
+  getDomains: () => ["video.afamily.vn"],
+  forceUpdate() {
+  var var_t,
+  var_e,
+  var_r = null === (var_e = null === (var_t = document.querySelector("h2")) ||
+  void 0 === var_t ? void 0 : var_t.textContent) || void 0 === var_e ?
+  void 0 : var_e.trim();
+  var_r !== var_o && (EE.emit("widget.forceUpdate"), var_o = var_r);
   }
-  ),c=Array.from(document.querySelectorAll("h3")).map(t=>{
-  var e,r,n,i,o=null===(n=null===(r=null===(e=t.querySelector("a"))||void 0===e?void 0:e.href.split("/").pop())||
-  void 0===r?void 0:r.split("."))||void 0===n?void 0:n[0].split("-").slice(0,-1).join("-");
-  return{
-  title:null===(i=t.textContent)||void 0===i?void 0:i.trim(),idUrl:o||""}
+  ,
+  default: {
+  getUrl: param_t => {
+  var var_e,
+  var_r,
+  var_n_1 = param_t.node.closest("[data-vid]"),
+  var_i_1 = null == var_n_1 ? void 0 : var_n_1.getAttribute("data-vid"),
+  var_o_1 = null == var_i_1 ? void 0 : var_i_1.split("/");
+  var_i_1 = (null == var_o_1 ? void 0 : var_o_1.pop()) || (null == var_o_1 ?
+  void 0 : var_o_1.pop());
+  var var_s = list_a.filter(param_t_1 => param_t_1.url.includes(var_i_1)),
+  var_u = Array.from(document.querySelectorAll("h2")).map(param_t_1 => {
+  var var_e_1,
+  var_r_1,
+  var_n_2,
+  var_i_2,
+  var_o_2 = null === (var_n_2 = null === (var_r_1 = null === (var_e_1 = param_t_1.querySelector(
+  "a")) || void 0 === var_e_1 ? void 0 : var_e_1.href.split("/").pop()) ||
+  void 0 === var_r_1 ? void 0 : var_r_1.split(".")) || void 0 === var_n_2 ?
+  void 0 : var_n_2[0].split("-").slice(0, -1).join("-");
+  return {
+  title: null === (var_i_2 = param_t_1.textContent) || void 0 === var_i_2 ?
+  void 0 : var_i_2.trim(),
+  idUrl: var_o_2 || ""
+  };
+  }
+  ),
+  var_c = Array.from(document.querySelectorAll("h3")).map(param_t_1 => {
+  var var_e_1,
+  var_r_1,
+  var_n_2,
+  var_i_2,
+  var_o_2 = null === (var_n_2 = null === (var_r_1 = null === (var_e_1 = param_t_1.querySelector(
+  "a")) || void 0 === var_e_1 ? void 0 : var_e_1.href.split("/").pop()) ||
+  void 0 === var_r_1 ? void 0 : var_r_1.split(".")) || void 0 === var_n_2 ?
+  void 0 : var_n_2[0].split("-").slice(0, -1).join("-");
+  return {
+  title: null === (var_i_2 = param_t_1.textContent) || void 0 === var_i_2 ?
+  void 0 : var_i_2.trim(),
+  idUrl: var_o_2 || ""
+  };
   }
   );
-  if(s.length){
-  var l=(null===(e=u.find(t=>i.includes(t.idUrl)))||void 0===e?void 0:e.title)||(null===(r=c.find(t=>i.includes(t.idUrl)))||
-  void 0===r?void 0:r.title)||"";
-  s[0].fixName=l}
-  return s}
+  if (var_s.length) {
+  var var_l = (null === (var_e = var_u.find(param_t_1 => var_i_1.includes(param_t_1.idUrl))) ||
+  void 0 === var_e ? void 0 : var_e.title) || (null === (var_r = var_c.find(param_t_1 => var_i_1.includes(
+  param_t_1.idUrl))) || void 0 === var_r ? void 0 : var_r.title) ||
+  "";
+  var_s[0].fixName = var_l;
   }
-  ,processRequestIds:t=>{
-  var e;
-  if(null===(e=t.pathname)||void 0===e?void 0:e.includes("master.m3u8"))return a.push(t),!0}
+  return var_s;
+  }
+  }
+  ,
+  processRequestIds: param_t => {
+  var var_e;
+  if (null === (var_e = param_t.pathname) || void 0 === var_e ?
+  void 0 : var_e.includes("master.m3u8")) return list_a.push(param_t), !0;
+  }
   };
-  e.default=s};
+  exportsObj.default = obj_s;
+  };

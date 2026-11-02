@@ -1,15 +1,19 @@
 // Module 372 - Savior Videocelebs Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["videocelebs."],toggleLight:{
-  turnOff:{
-  updated(t,e){
-  e.parent.getComponent("toggleLight").mutationObserver.disconnect()}
-  ,parentUpdate(){
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["videocelebs."],
+  toggleLight: {
+  turnOff: {
+  updated(param_t, param_e) {
+  param_e.parent.getComponent("toggleLight").mutationObserver.disconnect();
+  }
+  ,
+  parentUpdate() {
   }
   }
   }
   };
-  e.default=n};
+  exportsObj.default = obj_n;
+  };

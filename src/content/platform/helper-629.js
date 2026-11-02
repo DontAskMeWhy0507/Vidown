@@ -1,11 +1,15 @@
 // Module 629 - Savior Helper 629
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=o;
-  var n=r(491),i=Object.create(r(29));
-  function o(t){
-  if(!(this instanceof o))return new o(t);
-  n.call(this,t)}
-  i.inherits=r(15),i.inherits(o,n),o.prototype._transform=function(t,e,r){
-  r(null,t)}
+  moduleObj.exports = var_o;
+  var dep_helper_491 = requireFn(491),
+  var_i = Object.create(requireFn(29));
+  function var_o(param_t) {
+  if (!(this instanceof var_o)) return new var_o(param_t);
+  dep_helper_491.call(this, param_t);
+  }
+  var_i.inherits = requireFn(15), var_i.inherits(var_o, dep_helper_491), var_o.prototype._transform = function (
+  param_t, param_e, param_r) {
+  param_r(null, param_t);
+  };
   };

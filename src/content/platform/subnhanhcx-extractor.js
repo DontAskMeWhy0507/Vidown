@@ -1,17 +1,22 @@
 // Module 346 - Savior Subnhanhcx Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n=r(6);
-  e.default={
-  getDomains:()=>["subnhanhcx."],parse:{
-  default:t=>{
-  var e=t.response,r=t.media;
-  return Object(n.e)(e,r)}
-  }
-  ,default:{
-  getUrl:t=>{
-  if(t.url.includes("1.mp4"))return[]}
+  requireFn.r(exportsObj);
+  var dep_media_sniffer = requireFn(6);
+  exportsObj.default = {
+  getDomains: () => ["subnhanhcx."],
+  parse: {
+  default: param_t => {
+  var var_e = param_t.response,
+  var_r = param_t.media;
+  return Object(dep_media_sniffer.e)(var_e, var_r);
   }
   }
+  ,
+  default: {
+  getUrl: param_t => {
+  if (param_t.url.includes("1.mp4")) return [];
+  }
+  }
+  };
   };

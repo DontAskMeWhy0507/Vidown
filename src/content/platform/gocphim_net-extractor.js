@@ -1,14 +1,21 @@
 // Module 238 - Savior Gocphim_net Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  siteMatcher:t=>/gocphim[a-z0-9]*\.(net)/i.test(t),getCustomParent:t=>t.closest("#video-player-wrap-control, .video-player-content"),
-  shouldWidgetAttachToParentNode:()=>!0,isValidVideoNode:t=>!!["VIDEO","IFRAME"].includes(t.nodeName),
-  urls:[{
-  checkUrl:t=>{
-  var e=t.url;
-  return"VIDEO"==t.node.nodeName&&!e}
-  ,getUrl:t=>t.ids}
-  ]};
-  e.default=n};
+  requireFn.r(exportsObj);
+  var obj_n = {
+  siteMatcher: param_t => /gocphim[a-z0-9]*\.(net)/i.test(param_t),
+  getCustomParent: param_t => param_t.closest("#video-player-wrap-control, .video-player-content"),
+  shouldWidgetAttachToParentNode: () => !0,
+  isValidVideoNode: param_t => !!["VIDEO", "IFRAME"].includes(param_t.nodeName),
+  urls: [{
+  checkUrl: param_t => {
+  var var_e = param_t.url;
+  return "VIDEO" == param_t.node.nodeName && !var_e;
+  }
+  ,
+  getUrl: param_t => param_t.ids
+  }
+  ]
+  };
+  exportsObj.default = obj_n;
+  };

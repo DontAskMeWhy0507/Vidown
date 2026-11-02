@@ -1,39 +1,63 @@
 // Module 674 - Savior Helper 674
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  (function(t,n){
-  function i(){
-  throw new Error("secure random number generation not supported by this browser\nuse chrome, FireFox or Internet Explorer 11")}
-  var o=r(25),a=r(139),s=o.Buffer,u=o.kMaxLength,c=t.crypto||t.msCrypto,l=Math.pow(2,32)-1;
-  function f(t,e){
-  if("number"!=typeof t||t!=t)throw new TypeError("offset must be a number");
-  if(t>l||t<0)throw new TypeError("offset must be a uint32");
-  if(t>u||t>e)throw new RangeError("offset out of range")}
-  function d(t,e,r){
-  if("number"!=typeof t||t!=t)throw new TypeError("size must be a number");
-  if(t>l||t<0)throw new TypeError("size must be a uint32");
-  if(t+e>r||t>u)throw new RangeError("buffer too small")}
-  function h(t,e,r,i){
-  if(n.browser){
-  var o=t.buffer,s=new Uint8Array(o,e,r);
-  return c.getRandomValues(s),i?void n.nextTick((function(){
-  i(null,t)}
-  )):t}
-  if(!i)return a(r).copy(t,e),t;
-  a(r,(function(r,n){
-  if(r)return i(r);
-  n.copy(t,e),i(null,t)}
-  ))}
-  c&&c.getRandomValues||!n.browser?(e.randomFill=function(e,r,n,i){
-  if(!(s.isBuffer(e)||e instanceof t.Uint8Array))throw new TypeError('"buf" argument must be a Buffer or Uint8Array');
-  if("function"==typeof r)i=r,r=0,n=e.length;
-  else if("function"==typeof n)i=n,n=e.length-r;
-  else if("function"!=typeof i)throw new TypeError('"cb" argument must be a function');
-  return f(r,e.length),d(n,r,e.length),h(e,r,n,i)}
-  ,e.randomFillSync=function(e,r,n){
-  void 0===r&&(r=0);
-  if(!(s.isBuffer(e)||e instanceof t.Uint8Array))throw new TypeError('"buf" argument must be a Buffer or Uint8Array');
-  f(r,e.length),void 0===n&&(n=e.length-r);
-  return d(n,r,e.length),h(e,r,n)}
-  ):(e.randomFill=i,e.randomFillSync=i)}
-  ).call(this,r(13),r(32))};
+  (function (param_t, param_n) {
+  function var_i() {
+  throw new Error("secure random number generation not supported by this browser\nuse chrome, FireFox or Internet Explorer 11");
+  }
+  var dep_module_25 = requireFn(25),
+  dep_helper_139 = requireFn(139),
+  var_s = dep_module_25.Buffer,
+  var_u = dep_module_25.kMaxLength,
+  var_c = param_t.crypto || param_t.msCrypto,
+  var_l = Math.pow(2, 32) - 1;
+  function var_f(param_t_1, param_e) {
+  if ("number" != typeof param_t_1 || param_t_1 != param_t_1) throw new TypeError(
+  "offset must be a number");
+  if (param_t_1 > var_l || param_t_1 < 0) throw new TypeError("offset must be a uint32");
+  if (param_t_1 > var_u || param_t_1 > param_e) throw new RangeError("offset out of range");
+  }
+  function var_d(param_t_1, param_e, param_r) {
+  if ("number" != typeof param_t_1 || param_t_1 != param_t_1) throw new TypeError(
+  "size must be a number");
+  if (param_t_1 > var_l || param_t_1 < 0) throw new TypeError("size must be a uint32");
+  if (param_t_1 + param_e > param_r || param_t_1 > var_u) throw new RangeError("buffer too small");
+  }
+  function var_h(param_t_1, param_e, param_r, param_i) {
+  if (param_n.browser) {
+  var var_o = param_t_1.buffer,
+  var_s_1 = new Uint8Array(var_o, param_e, param_r);
+  return var_c.getRandomValues(var_s_1), param_i ? void param_n.nextTick(function (
+  ) {
+  param_i(null, param_t_1);
+  }
+  ) : param_t_1;
+  }
+  if (!param_i) return dep_helper_139(param_r).copy(param_t_1, param_e), param_t_1;
+  dep_helper_139(param_r, function (param_r_1, param_n_1) {
+  if (param_r_1) return param_i(param_r_1);
+  param_n_1.copy(param_t_1, param_e), param_i(null, param_t_1);
+  }
+  );
+  }
+  var_c && var_c.getRandomValues || !param_n.browser ? (exportsObj.randomFill = function (
+  param_e, param_r, param_n_1, param_i) {
+  if (!(var_s.isBuffer(param_e) || param_e instanceof param_t.Uint8Array)) throw new TypeError(
+  '"buf" argument must be a Buffer or Uint8Array');
+  if ("function" == typeof param_r) param_i = param_r, param_r = 0, param_n_1 = param_e.length;
+  else if ("function" == typeof param_n_1) param_i = param_n_1, param_n_1 = param_e.length - param_r;
+  else if ("function" != typeof param_i) throw new TypeError('"cb" argument must be a function');
+  return var_f(param_r, param_e.length), var_d(param_n_1, param_r, param_e.length),
+  var_h(param_e, param_r, param_n_1, param_i);
+  }
+  , exportsObj.randomFillSync = function (param_e, param_r, param_n_1) {
+  void 0 === param_r && (param_r = 0);
+  if (!(var_s.isBuffer(param_e) || param_e instanceof param_t.Uint8Array)) throw new TypeError(
+  '"buf" argument must be a Buffer or Uint8Array');
+  var_f(param_r, param_e.length), void 0 === param_n_1 && (param_n_1 = param_e.length - param_r);
+  return var_d(param_n_1, param_r, param_e.length), var_h(param_e, param_r, param_n_1);
+  }
+  ) : (exportsObj.randomFill = var_i, exportsObj.randomFillSync = var_i);
+  }
+  ).call(this, requireFn(13), requireFn(32));
+  };

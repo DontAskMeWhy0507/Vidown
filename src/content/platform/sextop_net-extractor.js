@@ -1,11 +1,18 @@
 // Module 332 - Savior Sextop_net Extractor
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  r.r(e);
-  var n={
-  getDomains:()=>["sextop.net"],idsProcess:t=>{
-  var e,r=t.defaultIds,n=t.id,i=t.index;
-  ((null===(e=n.referrer)||void 0===e?void 0:e.match(/[/-_]ads|static\./))||n.url.match(/[/-_]ads|static\./))&&
-  r.splice(i,1)}
+  requireFn.r(exportsObj);
+  var obj_n = {
+  getDomains: () => ["sextop.net"],
+  idsProcess: param_t => {
+  var var_e,
+  var_r = param_t.defaultIds,
+  var_n = param_t.id,
+  var_i = param_t.index;
+  ((null === (var_e = var_n.referrer) || void 0 === var_e ? void 0 :
+  var_e.match(/[/-_]ads|static\./)) || var_n.url.match(/[/-_]ads|static\./)) &&
+  var_r.splice(var_i, 1);
+  }
   };
-  e.default=n};
+  exportsObj.default = obj_n;
+  };

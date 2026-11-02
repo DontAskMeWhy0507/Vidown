@@ -1,100 +1,163 @@
 // Module 122 - Savior Helper 122
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  var n=r(116),i=r(15);
-  function o(t,e){
-  return 55296==(64512&t.charCodeAt(e))&&(!(e<0||e+1>=t.length)&&56320==(64512&t.charCodeAt(e+1)))}
-  function a(t){
-  return(t>>>24|t>>>8&65280|t<<8&16711680|(255&t)<<24)>>>0}
-  function s(t){
-  return 1===t.length?"0"+t:t}
-  function u(t){
-  return 7===t.length?"0"+t:6===t.length?"00"+t:5===t.length?"000"+t:4===t.length?"0000"+t:3===t.length?
-  "00000"+t:2===t.length?"000000"+t:1===t.length?"0000000"+t:t}
-  e.inherits=i,e.toArray=function(t,e){
-  if(Array.isArray(t))return t.slice();
-  if(!t)return[];
-  var r=[];
-  if("string"==typeof t)if(e){
-  if("hex"===e)for((t=t.replace(/[^a-z0-9]+/gi,"")).length%2!=0&&(t="0"+t),i=0;
-  i<t.length;
-  i+=2)r.push(parseInt(t[i]+t[i+1],16))}
-  else for(var n=0,i=0;
-  i<t.length;
-  i++){
-  var a=t.charCodeAt(i);
-  a<128?r[n++]=a:a<2048?(r[n++]=a>>6|192,r[n++]=63&a|128):o(t,i)?(a=65536+((1023&a)<<10)+(1023&t.charCodeAt(++i)),
-  r[n++]=a>>18|240,r[n++]=a>>12&63|128,r[n++]=a>>6&63|128,r[n++]=63&a|128):(r[n++]=a>>12|224,r[n++]=a>>6&63|128,
-  r[n++]=63&a|128)}
-  else for(i=0;
-  i<t.length;
-  i++)r[i]=0|t[i];
-  return r}
-  ,e.toHex=function(t){
-  for(var e="",r=0;
-  r<t.length;
-  r++)e+=s(t[r].toString(16));
-  return e}
-  ,e.htonl=a,e.toHex32=function(t,e){
-  for(var r="",n=0;
-  n<t.length;
-  n++){
-  var i=t[n];
-  "little"===e&&(i=a(i)),r+=u(i.toString(16))}
-  return r}
-  ,e.zero2=s,e.zero8=u,e.join32=function(t,e,r,i){
-  var o=r-e;
-  n(o%4==0);
-  for(var a=new Array(o/4),s=0,u=e;
-  s<a.length;
-  s++,u+=4){
-  var c;
-  c="big"===i?t[u]<<24|t[u+1]<<16|t[u+2]<<8|t[u+3]:t[u+3]<<24|t[u+2]<<16|t[u+1]<<8|t[u],a[s]=c>>>0}
-  return a}
-  ,e.split32=function(t,e){
-  for(var r=new Array(4*t.length),n=0,i=0;
-  n<t.length;
-  n++,i+=4){
-  var o=t[n];
-  "big"===e?(r[i]=o>>>24,r[i+1]=o>>>16&255,r[i+2]=o>>>8&255,r[i+3]=255&o):(r[i+3]=o>>>24,r[i+2]=o>>>16&255,
-  r[i+1]=o>>>8&255,r[i]=255&o)}
-  return r}
-  ,e.rotr32=function(t,e){
-  return t>>>e|t<<32-e}
-  ,e.rotl32=function(t,e){
-  return t<<e|t>>>32-e}
-  ,e.sum32=function(t,e){
-  return t+e>>>0}
-  ,e.sum32_3=function(t,e,r){
-  return t+e+r>>>0}
-  ,e.sum32_4=function(t,e,r,n){
-  return t+e+r+n>>>0}
-  ,e.sum32_5=function(t,e,r,n,i){
-  return t+e+r+n+i>>>0}
-  ,e.sum64=function(t,e,r,n){
-  var i=t[e],o=n+t[e+1]>>>0,a=(o<n?1:0)+r+i;
-  t[e]=a>>>0,t[e+1]=o}
-  ,e.sum64_hi=function(t,e,r,n){
-  return(e+n>>>0<e?1:0)+t+r>>>0}
-  ,e.sum64_lo=function(t,e,r,n){
-  return e+n>>>0}
-  ,e.sum64_4_hi=function(t,e,r,n,i,o,a,s){
-  var u=0,c=e;
-  return u+=(c=c+n>>>0)<e?1:0,u+=(c=c+o>>>0)<o?1:0,t+r+i+a+(u+=(c=c+s>>>0)<s?1:0)>>>0}
-  ,e.sum64_4_lo=function(t,e,r,n,i,o,a,s){
-  return e+n+o+s>>>0}
-  ,e.sum64_5_hi=function(t,e,r,n,i,o,a,s,u,c){
-  var l=0,f=e;
-  return l+=(f=f+n>>>0)<e?1:0,l+=(f=f+o>>>0)<o?1:0,l+=(f=f+s>>>0)<s?1:0,t+r+i+a+u+(l+=(f=f+c>>>0)<c?
-  1:0)>>>0}
-  ,e.sum64_5_lo=function(t,e,r,n,i,o,a,s,u,c){
-  return e+n+o+s+c>>>0}
-  ,e.rotr64_hi=function(t,e,r){
-  return(e<<32-r|t>>>r)>>>0}
-  ,e.rotr64_lo=function(t,e,r){
-  return(t<<32-r|e>>>r)>>>0}
-  ,e.shr64_hi=function(t,e,r){
-  return t>>>r}
-  ,e.shr64_lo=function(t,e,r){
-  return(t<<32-r|e>>>r)>>>0}
+  var dep_helper_116 = requireFn(116),
+  dep_module_15 = requireFn(15);
+  function var_o(param_t, param_e) {
+  return 55296 == (64512 & param_t.charCodeAt(param_e)) && !(param_e < 0 ||
+  param_e + 1 >= param_t.length) && 56320 == (64512 & param_t.charCodeAt(param_e + 1));
+  }
+  function var_a(param_t) {
+  return (param_t >>> 24 | param_t >>> 8 & 65280 | param_t << 8 & 16711680 | (255 & param_t) << 24) >>> 0;
+  }
+  function var_s(param_t) {
+  return 1 === param_t.length ? "0" + param_t : param_t;
+  }
+  function var_u(param_t) {
+  return 7 === param_t.length ? "0" + param_t : 6 === param_t.length ?
+  "00" + param_t : 5 === param_t.length ? "000" + param_t : 4 === param_t.length ?
+  "0000" + param_t : 3 === param_t.length ? "00000" + param_t :
+  2 === param_t.length ? "000000" + param_t : 1 === param_t.length ?
+  "0000000" + param_t : param_t;
+  }
+  exportsObj.inherits = dep_module_15, exportsObj.toArray = function (param_t, param_e) {
+  if (Array.isArray(param_t)) return param_t.slice();
+  if (!param_t) return [];
+  var list_r = [];
+  if ("string" == typeof param_t) {
+  if (param_e) {
+  if ("hex" === param_e) for ((param_t = param_t.replace(/[^a-z0-9]+/gi, "")).length % 2 != 0 &&
+  (param_t = "0" + param_t), num_i = 0;
+  num_i < param_t.length;
+  num_i += 2) list_r.push(parseInt(param_t[num_i] + param_t[num_i + 1], 16));
+  }
+  else for (var num_n = 0, num_i = 0;
+  num_i < param_t.length;
+  num_i++) {
+  var var_a_1 = param_t.charCodeAt(num_i);
+  var_a_1 < 128 ? list_r[num_n++] = var_a_1 : var_a_1 < 2048 ?
+  (list_r[num_n++] = var_a_1 >> 6 | 192, list_r[num_n++] = 63 & var_a_1 | 128) :
+  var_o(param_t, num_i) ? (var_a_1 = 65536 + ((1023 & var_a_1) << 10) + (1023 & param_t.charCodeAt(
+  ++num_i)), list_r[num_n++] = var_a_1 >> 18 | 240, list_r[num_n++] = var_a_1 >> 12 & 63 | 128,
+  list_r[num_n++] = var_a_1 >> 6 & 63 | 128, list_r[num_n++] = 63 & var_a_1 | 128) :
+  (list_r[num_n++] = var_a_1 >> 12 | 224, list_r[num_n++] = var_a_1 >> 6 & 63 | 128,
+  list_r[num_n++] = 63 & var_a_1 | 128);
+  }
+  }
+  else for (num_i = 0;
+  num_i < param_t.length;
+  num_i++) list_r[num_i] = 0 | param_t[num_i];
+  return list_r;
+  }
+  , exportsObj.toHex = function (param_t) {
+  for (var str_e = "", num_r = 0;
+  num_r < param_t.length;
+  num_r++) str_e += var_s(param_t[num_r].toString(16));
+  return str_e;
+  }
+  , exportsObj.htonl = var_a, exportsObj.toHex32 = function (param_t, param_e) {
+  for (var str_r = "", num_n = 0;
+  num_n < param_t.length;
+  num_n++) {
+  var var_i = param_t[num_n];
+  "little" === param_e && (var_i = var_a(var_i)), str_r += var_u(var_i.toString(
+  16));
+  }
+  return str_r;
+  }
+  , exportsObj.zero2 = var_s, exportsObj.zero8 = var_u, exportsObj.join32 = function (
+  param_t, param_e, param_r, param_i) {
+  var var_o_1 = param_r - param_e;
+  dep_helper_116(var_o_1 % 4 == 0);
+  for (var var_a_1 = new Array(var_o_1 / 4), num_s = 0, var_u_1 = param_e;
+  num_s < var_a_1.length;
+  num_s++, var_u_1 += 4) {
+  var var_c;
+  var_c = "big" === param_i ? param_t[var_u_1] << 24 | param_t[var_u_1 + 1] << 16 | param_t[var_u_1 + 2] << 8 | param_t[var_u_1 + 3] :
+  param_t[var_u_1 + 3] << 24 | param_t[var_u_1 + 2] << 16 | param_t[var_u_1 + 1] << 8 | param_t[var_u_1],
+  var_a_1[num_s] = var_c >>> 0;
+  }
+  return var_a_1;
+  }
+  , exportsObj.split32 = function (param_t, param_e) {
+  for (var var_r = new Array(4 * param_t.length), num_n = 0, num_i = 0;
+  num_n < param_t.length;
+  num_n++, num_i += 4) {
+  var var_o_1 = param_t[num_n];
+  "big" === param_e ? (var_r[num_i] = var_o_1 >>> 24, var_r[num_i + 1] = var_o_1 >>> 16 & 255,
+  var_r[num_i + 2] = var_o_1 >>> 8 & 255, var_r[num_i + 3] = 255 & var_o_1) :
+  (var_r[num_i + 3] = var_o_1 >>> 24, var_r[num_i + 2] = var_o_1 >>> 16 & 255, var_r[num_i + 1] = var_o_1 >>> 8 & 255,
+  var_r[num_i] = 255 & var_o_1);
+  }
+  return var_r;
+  }
+  , exportsObj.rotr32 = function (param_t, param_e) {
+  return param_t >>> param_e | param_t << 32 - param_e;
+  }
+  , exportsObj.rotl32 = function (param_t, param_e) {
+  return param_t << param_e | param_t >>> 32 - param_e;
+  }
+  , exportsObj.sum32 = function (param_t, param_e) {
+  return param_t + param_e >>> 0;
+  }
+  , exportsObj.sum32_3 = function (param_t, param_e, param_r) {
+  return param_t + param_e + param_r >>> 0;
+  }
+  , exportsObj.sum32_4 = function (param_t, param_e, param_r, param_n) {
+  return param_t + param_e + param_r + param_n >>> 0;
+  }
+  , exportsObj.sum32_5 = function (param_t, param_e, param_r, param_n, param_i) {
+  return param_t + param_e + param_r + param_n + param_i >>> 0;
+  }
+  , exportsObj.sum64 = function (param_t, param_e, param_r, param_n) {
+  var var_i = param_t[param_e],
+  var_o_1 = param_n + param_t[param_e + 1] >>> 0,
+  var_a_1 = (var_o_1 < param_n ? 1 : 0) + param_r + var_i;
+  param_t[param_e] = var_a_1 >>> 0, param_t[param_e + 1] = var_o_1;
+  }
+  , exportsObj.sum64_hi = function (param_t, param_e, param_r, param_n) {
+  return (param_e + param_n >>> 0 < param_e ? 1 : 0) + param_t + param_r >>> 0;
+  }
+  , exportsObj.sum64_lo = function (param_t, param_e, param_r, param_n) {
+  return param_e + param_n >>> 0;
+  }
+  , exportsObj.sum64_4_hi = function (param_t, param_e, param_r, param_n, param_i,
+  param_o, param_a, param_s) {
+  var num_u = 0,
+  var_c = param_e;
+  return num_u += (var_c = var_c + param_n >>> 0) < param_e ?
+  1 : 0, num_u += (var_c = var_c + param_o >>> 0) < param_o ?
+  1 : 0, param_t + param_r + param_i + param_a + (num_u += (var_c = var_c + param_s >>> 0) < param_s ?
+  1 : 0) >>> 0;
+  }
+  , exportsObj.sum64_4_lo = function (param_t, param_e, param_r, param_n, param_i,
+  param_o, param_a, param_s) {
+  return param_e + param_n + param_o + param_s >>> 0;
+  }
+  , exportsObj.sum64_5_hi = function (param_t, param_e, param_r, param_n, param_i,
+  param_o, param_a, param_s, param_u, param_c) {
+  var num_l = 0,
+  var_f = param_e;
+  return num_l += (var_f = var_f + param_n >>> 0) < param_e ?
+  1 : 0, num_l += (var_f = var_f + param_o >>> 0) < param_o ?
+  1 : 0, num_l += (var_f = var_f + param_s >>> 0) < param_s ?
+  1 : 0, param_t + param_r + param_i + param_a + param_u + (num_l += (var_f = var_f + param_c >>> 0) < param_c ?
+  1 : 0) >>> 0;
+  }
+  , exportsObj.sum64_5_lo = function (param_t, param_e, param_r, param_n, param_i,
+  param_o, param_a, param_s, param_u, param_c) {
+  return param_e + param_n + param_o + param_s + param_c >>> 0;
+  }
+  , exportsObj.rotr64_hi = function (param_t, param_e, param_r) {
+  return (param_e << 32 - param_r | param_t >>> param_r) >>> 0;
+  }
+  , exportsObj.rotr64_lo = function (param_t, param_e, param_r) {
+  return (param_t << 32 - param_r | param_e >>> param_r) >>> 0;
+  }
+  , exportsObj.shr64_hi = function (param_t, param_e, param_r) {
+  return param_t >>> param_r;
+  }
+  , exportsObj.shr64_lo = function (param_t, param_e, param_r) {
+  return (param_t << 32 - param_r | param_e >>> param_r) >>> 0;
+  };
   };

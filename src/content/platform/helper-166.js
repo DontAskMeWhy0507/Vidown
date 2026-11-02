@@ -1,4 +1,5 @@
 // Module 166 - Savior Helper 166
-export default function(t,e,r) {
+export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
-  t.exports=SyntaxError};
+  moduleObj.exports = SyntaxError;
+  };
