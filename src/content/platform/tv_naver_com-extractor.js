@@ -247,13 +247,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   param_t_1.n = 3;
   break;
   }
-  return var_h = `${var_f}
-  
-  
-  ?__gda__=${var_d}
-  
-  
-  `, var_p = Object(dep_url_utils.f)(var_h), param_t_1.n = 1, fetch(var_h).then(
+  return var_h = `${var_f}?__gda__=${var_d}`, var_p = Object(dep_url_utils.f)(var_h), param_t_1.n = 1, fetch(var_h).then(
   param_t_2 => param_t_2.text());
   case 1:
   return var_v = param_t_1.v, var_m = var_v.replace(/\.m3u8/g, ".m3u8?__gda__=" + var_d),
@@ -305,13 +299,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return var_n = param_t.v, var_i = /\"videoId\"\s*:\s*\"([^"]*)\"/, var_o = null === (
   var_e = /\"inKey\"\s*:\s*\"([^"]*)\"/.exec(var_n)) || void 0 === var_e ?
   void 0 : var_e[1], var_a = null === (var_r = var_i.exec(var_n)) ||
-  void 0 === var_r ? void 0 : var_r[1], var_s = `https://apis.naver.com/rmcnmv/rmcnmv/vod/play/v2.0/${var_a}
-  
-  
-  ?key=${var_o}
-  
-  
-  `, list_f.push(location.href), obj_d[location.href] = var_s, param_t.a(2,
+  void 0 === var_r ? void 0 : var_r[1], var_s = `https://apis.naver.com/rmcnmv/rmcnmv/vod/play/v2.0/${var_a}?key=${var_o}`, list_f.push(location.href), obj_d[location.href] = var_s, param_t.a(2,
   var_s);
   case 2:
   return param_t.a(2, obj_d[location.href]);

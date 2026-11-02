@@ -260,37 +260,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   num_u < var_n.data[0].length;
   num_u++) {
   var var_c = void 0;
-  var_c = ".rd" == var_i.ext ? `https://${var_i.domainList[num_u % var_o]}
-  
-  
-  ${var_i.part}
-  
-  
-  ${var_n.v}
-  
-  
-  /${var_n.quaity}
-  
-  
-  /${var_i.userId}
-  
-  
-  /${var_n.data[1][num_u]}
-  
-  
-  ${var_i.ext}
-  
-  
-  ` : `https://${var_i.domainList[num_u % var_o]}
-  
-  
-  /stream/v5/${var_n.data[1][num_u]}
-  
-  
-  .html`, 0 == num_u && (var_a.url = var_c), list_s.push(`#EXTINF:${var_n.data[0][num_u]}
-  
-  
-  ,`), list_s.push(var_c);
+  var_c = ".rd" == var_i.ext ? `https://${var_i.domainList[num_u % var_o]}${var_i.part}${var_n.v}/${var_n.quaity}/${var_i.userId}/${var_n.data[1][num_u]}${var_i.ext}` : `https://${var_i.domainList[num_u % var_o]}/stream/v5/${var_n.data[1][num_u]}.html`, 0 == num_u && (var_a.url = var_c), list_s.push(`#EXTINF:${var_n.data[0][num_u]},`), list_s.push(var_c);
   }
   return list_s.push("#EXT-X-ENDLIST"), var_a.play_list = list_s.join("\n"), [var_a];
   }

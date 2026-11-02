@@ -222,10 +222,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   if (var_o) {
   var var_a = null === (var_e = getComputedStyle(var_o).backgroundImage.match(/\/(short-video\/.+)\/[a-z0-9\-_]+\./i)) ||
   void 0 === var_e ? void 0 : var_e[1];
-  if (var_a) return `https://vcdn.dantri.com.vn/vod/${var_a}
-  
-  
-  /playlist.m3u8`;
+  if (var_a) return `https://vcdn.dantri.com.vn/vod/${var_a}/playlist.m3u8`;
   }
   return var_n_1;
   }

@@ -412,28 +412,13 @@ export default function (moduleObj, exportsObj, requireFn) {
   switch (param_t.streamType) {
   case var_E.Tiktok:
   var var_r = param_t.segmentUri.split("/").pop();
-  null != var_r && var_r.includes("~") && (var_r = var_r.split("~")[0]), str_e = `/redirector/${var_E.Tiktok}
-  
-  
-  ?key=${var_r}
-  
-  
-  `;
+  null != var_r && var_r.includes("~") && (var_r = var_r.split("~")[0]), str_e = `/redirector/${var_E.Tiktok}?key=${var_r}`;
   break;
   default:
   var var_n = param_t.segmentDomains[param_t.segmentIndex % param_t.segmentDomains.length],
   var_i = param_t.variant.replace("playlist.m3u8", "").slice(0, -1),
   var_o = param_t.segmentUri.replace(".png", ""),
-  var_a = new URL(`/${param_t.videoId}
-  
-  
-  /${var_i}
-  
-  
-  /${var_o}
-  
-  
-  .png`, var_n).href;
+  var_a = new URL(`/${param_t.videoId}/${var_i}/${var_o}.png`, var_n).href;
   str_e = `/redirector/${var_E.Default}
   
   
@@ -654,10 +639,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return param_t_1.n = 2, Object(dep_dom_utils.sendMessage)({
   type: dep_media_constants.b.GET_URL,
   params: {
-  url: `https://ipa.irex.cc/storage/${var_o}
-  
-  
-  .html`
+  url: `https://ipa.irex.cc/storage/${var_o}.html`
   }
   }
   );
@@ -692,10 +674,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   .${var_w_1.ext}
   
   
-  `, var_g_1.push(`#EXTINF:${var_w_1.duration}
-  
-  
-  ,`), var_g_1.push(var_A_1);
+  `, var_g_1.push(`#EXTINF:${var_w_1.duration},`), var_g_1.push(var_A_1);
   var_g_1.push("#EXT-X-ENDLIST"), var_y_1.play_list = var_g_1.join("\n"), var_y_1.ext = "m3u8",
   var_y_1.exts = ["m3u8"], var_y_1.type = "video", var_y_1.filename = var_d_1.video.title,
   var_h_1.push(var_y_1);

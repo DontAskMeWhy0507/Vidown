@@ -1581,9 +1581,7 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   var obj_t = {
   };
   chrome.webNavigation.onBeforeNavigate.addListener(param_e => {
-  var var_r_1 = `${param_e.tabId}
-  _${param_e.frameId}
-  `;
+  var var_r_1 = `${param_e.tabId}_${param_e.frameId}`;
   obj_t[var_r_1] ||= [];
   obj_t[var_r_1].push(param_e.url);
   }
@@ -2222,9 +2220,7 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   !(var_u = var_p_1.n()).done;
   ) {
   var var_f = var_u.value;
-  var var_h = `${var_k}
-  _${var_f.frameId}
-  `;
+  var var_h = `${var_k}_${var_f.frameId}`;
   var var_m = var_s == null ? undefined : var_s.includes("playhydrax.com");
   if (var_s == null ? undefined : var_s.includes("playhydrax.com")) {
   var var_g = new URL(var_s).search;
@@ -2339,8 +2335,7 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   }
   ,
   world: chrome.scripting.ExecutionWorld.MAIN,
-  files: [`inject/${param_n.file}
-  /main-world.js`]
+  files: [`inject/${param_n.file}/main-world.js`]
   }
   );
   chrome.scripting.executeScript({
@@ -2349,8 +2344,7 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   frameIds: var_j ? [var_j] : undefined
   }
   ,
-  files: [`inject/${param_n.file}
-  /index.js`]
+  files: [`inject/${param_n.file}/index.js`]
   }
   );
   return param_T.a(3, 86);

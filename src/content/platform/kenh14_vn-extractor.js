@@ -93,10 +93,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_r = (null == var_e ? void 0 : var_e.getAttribute("data-vid")) ||
   void 0;
   if (var_r) return var_r.startsWith("kenh14/") && (var_r = var_r.replace("kenh14/",
-  "kenh14cdn.com/")), var_i(`https://${var_r}
-  
-  
-  .master.m3u8`);
+  "kenh14cdn.com/")), var_i(`https://${var_r}.master.m3u8`);
   }
   ,
   mediaObjectChange: param_t => {
@@ -114,10 +111,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   getUrl: param_t => {
   var var_e = param_t.url,
   var_r = var_e.match(/(kenh14cdn\.com\/.+\.mp4)/i)[1];
-  return var_r ? var_i(`https://${var_r}
-  
-  
-  .master.m3u8`) : var_e;
+  return var_r ? var_i(`https://${var_r}.master.m3u8`) : var_e;
   }
   ,
   mediaObjectChange: param_t => {
@@ -142,10 +136,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 === var_r ? void 0 : var_r.href;
   if (var_n_1) {
   var var_o = new URL(var_n_1).searchParams.get("vid");
-  return var_o ? var_i(`https://kenh14cdn.com/${var_o}
-  
-  
-  .master.m3u8`) : var_n_1;
+  return var_o ? var_i(`https://kenh14cdn.com/${var_o}.master.m3u8`) : var_n_1;
   }
   }
   ,

@@ -54,10 +54,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_u_1 = param_t_1["@"],
   var_c_1 = Math.ceil(var_m / (var_w.duration / var_w.timescale));
   var_r_1 = var_u_1.id + "/" + var_w.initialization.split("/")[1], (var_n = [dep_format_resolver.h]).push(
-  `<Initialization sourceURL="${var_r_1}
-  
-  
-  "/>`);
+  `<Initialization sourceURL="${var_r_1}"/>`);
   for (var num_l = 1;
   num_l < var_c_1;
   num_l++) {
@@ -65,17 +62,10 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_h_1 = var_f_1.length < 2 ? new Array(2 - var_f_1.length + 1).join("0") + num_l :
   var_f_1,
   var_v_1 = var_u_1.id + "/" + var_w.media.split("/")[1].replace(/\$Number\$/, var_h_1);
-  var_n.push(`<SegmentURL media="${var_v_1}
-  
-  
-  "/>`);
+  var_n.push(`<SegmentURL media="${var_v_1}"/>`);
   }
   var_n.push('</SegmentList>\n\t\t\t\t\t\t\t\t\t</Representation>\n\t\t\t\t\t\t\t</AdaptationSet>\n\t\t\t\t\t\t\t<AdaptationSet lang="en" mimeType="audio/mp4" codecs="mp4a.40.2" bitmovin:label="English stereo">\n\t\t\t\t\t\t\t\t<Representation id="4" mimeType="audio/mp4" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="98414">\n\t\t\t\t\t\t\t\t\t<SegmentList duration="10">'),
-  var_n.push(`<Initialization sourceURL="${var_A + "/" + var__.initialization.split(
-  "/")[1]}
-  
-  
-  "/>`);
+  var_n.push(`<Initialization sourceURL="${var_A + "/" + var__.initialization.split("/")[1]}"/>`);
   for (var num_y = 1;
   num_y < var_c_1;
   num_y++) {
@@ -83,10 +73,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_E = var_b_1.length < 2 ? new Array(2 - var_b_1.length + 1).join("0") + num_y :
   var_b_1,
   var_S = var_A + "/" + var__.media.split("/")[1].replace(/\$Number\$/, var_E);
-  var_n.push(`<SegmentURL media="${var_S}
-  
-  
-  "/>`);
+  var_n.push(`<SegmentURL media="${var_S}"/>`);
   }
   var_n.push("</SegmentList>\n\t\t\t\t\t\t\t\t\t</Representation>\n\t\t\t\t\t\t\t\t</AdaptationSet>\n\t\t\t\t\t\t\t</Period>\n\t\t\t\t\t\t</MPD>");
   }

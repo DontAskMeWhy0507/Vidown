@@ -349,10 +349,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   case 2:
   return var_h_1 = Object(dep_dom_utils.getCookies)(document.cookie), var_p_1 = null === (
   var_n = document.documentElement.innerHTML.match(/\"x-ig-app-id\":\s*\"(\w+)\"/i)) ||
-  void 0 === var_n ? void 0 : var_n[1], param_t_1.n = 3, fetch(`https://www.instagram.com/api/v1/media/${var_c_1}
-  
-  
-  /info/`, {
+  void 0 === var_n ? void 0 : var_n[1], param_t_1.n = 3, fetch(`https://www.instagram.com/api/v1/media/${var_c_1}/info/`, {
   headers: {
   "x-csrftoken": var_h_1.csrftoken,
   "x-ig-app-id": var_p_1 || ""
@@ -405,10 +402,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_c_1 = /("|')video_dash_manifest("|'):\s*("|')(.+?)("|'),/.exec(var_s);
   if (!var_c_1) {
   var var_l = /("|')media_id("|'):\s*("|')(.+?)("|'),/.exec(var_s);
-  return var_l ? fetch(`https://i.instagram.com/api/v1/media/${var_l[4]}
-  
-  
-  /info/`, {
+  return var_l ? fetch(`https://i.instagram.com/api/v1/media/${var_l[4]}/info/`, {
   headers: obj_d,
   credentials: "include"
   }

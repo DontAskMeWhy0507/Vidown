@@ -304,10 +304,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   ) switch (param_t_1.n) {
   case 0:
   if (var_o = /<title>(.+?)<\/title>/, var_s_1 = null === (var_r = /\/(\d+)(\..+?mp4?|\/)/.exec(
-  var_e)) || void 0 === var_r ? void 0 : var_r[1], var_u_1 = `https://player.vimeo.com/video/${var_s_1}
-  
-  
-  ?title=0&portrait=0&byline=0&autoplay=1&muted=true`, !list_l.includes(var_e) ||
+  var_e)) || void 0 === var_r ? void 0 : var_r[1], var_u_1 = `https://player.vimeo.com/video/${var_s_1}?title=0&portrait=0&byline=0&autoplay=1&muted=true`, !list_l.includes(var_e) ||
   !obj_f[var_e]) {
   param_t_1.n = 1;
   break;

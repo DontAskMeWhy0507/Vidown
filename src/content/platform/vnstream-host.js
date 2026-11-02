@@ -12,13 +12,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return {
   return: !0,
   data: {
-  url: `${location.origin}
-  
-  
-  /sources/?vid=${var_o}
-  
-  
-  &s=1`,
+  url: `${location.origin}/sources/?vid=${var_o}&s=1`,
   vid: var_o,
   referer: location.href
   }

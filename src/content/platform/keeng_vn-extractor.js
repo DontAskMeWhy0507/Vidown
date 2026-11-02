@@ -279,13 +279,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_t = location.href.match(/\/(video|album)\/.+\/([a-z0-9]+)/i);
   if (!var_t || !var_t[2]) return [];
   var var_e = var_t[2];
-  return "video" === var_t[1] ? `https://vipservice.keeng.vn/KeengWSRestful///ws/common/getVideo?identify=${var_e}
-  
-  
-  &id_has_played=` : `https://vipservice.keeng.vn/KeengWSRestful///ws/common/getAlbumInfo?identify=${var_e}
-  
-  
-  &id_has_played=`;
+  return "video" === var_t[1] ? `https://vipservice.keeng.vn/KeengWSRestful///ws/common/getVideo?identify=${var_e}&id_has_played=` : `https://vipservice.keeng.vn/KeengWSRestful///ws/common/getAlbumInfo?identify=${var_e}&id_has_played=`;
   }
   ,
   mediaObjectChange(param_t) {
@@ -323,10 +317,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   ) switch (param_t_1.p = param_t_1.n) {
   case 0:
   if (var_e = location.href.split("/"), var_r = var_e.pop() ||
-  var_e.pop(), var_i = `http://vip.service.keeng.vn:8080/KeengWSRestful///ws/common/getVideo?identify=${var_r}
-  
-  
-  &id_has_played=`, -1 !== list_l.indexOf(var_i)) {
+  var_e.pop(), var_i = `http://vip.service.keeng.vn:8080/KeengWSRestful///ws/common/getVideo?identify=${var_r}&id_has_played=`, -1 !== list_l.indexOf(var_i)) {
   param_t_1.n = 4;
   break;
   }

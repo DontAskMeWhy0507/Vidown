@@ -14,19 +14,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_e = param_t.url,
   var_r = new URL(var_e),
   var_n = var_r.searchParams.get("id");
-  return `${var_r.protocol}
-  
-  
-  //${var_r.host}
-  
-  
-  /playlist/${var_n}
-  
-  
-  /${Date.now()}
-  
-  
-  .m3u8`;
+  return `${var_r.protocol}//${var_r.host}/playlist/${var_n}/${Date.now()}.m3u8`;
   }
   }
   ]

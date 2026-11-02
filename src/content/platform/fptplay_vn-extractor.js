@@ -62,35 +62,22 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_c = param_t_1["@"],
   var_l_2 = Math.ceil(var_b / (var_S.duration / var_S.timescale));
   var_r_1 = var_c.id + "/" + var_S.initialization.split("/")[1], (var_i = [dep_format_resolver.h]).push(
-  `<Initialization sourceURL="${var_r_1}
-  
-  
-  "/>`);
+  `<Initialization sourceURL="${var_r_1}"/>`);
   for (var num_f = 1;
   num_f < var_l_2;
   num_f++) {
   var var_d_1 = num_f.toString(),
   var_h_1 = var_c.id + "/" + var_S.media.split("/")[1].replace(/\$Number\$/, var_d_1);
-  var_i.push(`<SegmentURL media="${var_h_1}
-  
-  
-  "/>`);
+  var_i.push(`<SegmentURL media="${var_h_1}"/>`);
   }
   var_i.push('</SegmentList>\n\t\t\t\t\t\t\t\t\t</Representation>\n\t\t\t\t\t\t\t</AdaptationSet>\n\t\t\t\t\t\t\t<AdaptationSet lang="en" mimeType="audio/mp4" codecs="mp4a.40.2" bitmovin:label="English stereo">\n\t\t\t\t\t\t\t\t<Representation id="4" mimeType="audio/mp4" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="98414">\n\t\t\t\t\t\t\t\t\t<SegmentList duration="10">'),
-  var_i.push(`<Initialization sourceURL="${var_O + "/" + var_x.initialization.split(
-  "/")[1]}
-  
-  
-  "/>`);
+  var_i.push(`<Initialization sourceURL="${var_O + "/" + var_x.initialization.split("/")[1]}"/>`);
   for (var num_p = 1;
   num_p < var_l_2;
   num_p++) {
   var var_m_1 = num_p.toString(),
   var_g_1 = var_O + "/" + var_x.media.split("/")[1].replace(/\$Number\$/, var_m_1);
-  var_i.push(`<SegmentURL media="${var_g_1}
-  
-  
-  "/>`);
+  var_i.push(`<SegmentURL media="${var_g_1}"/>`);
   }
   var_i.push("</SegmentList>\n\t\t\t\t\t\t\t\t\t</Representation>\n\t\t\t\t\t\t\t\t</AdaptationSet>\n\t\t\t\t\t\t\t</Period>\n\t\t\t\t\t\t</MPD>");
   }

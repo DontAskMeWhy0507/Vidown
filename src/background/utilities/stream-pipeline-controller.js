@@ -294,9 +294,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   if (var_n.formats.length) {
   var_n.html5player = var_n.html5player || fn_E(await fn_w(param_e, param_r)) ||
   fn_E(await ((param_e_1, param_t) => {
-  const var_r = `${"https://www.youtube.com/embed/" + param_e_1}
-  ?hl=${param_t.lang || "en"}
-  `;
+  const var_r = `${"https://www.youtube.com/embed/" + param_e_1}?hl=${param_t.lang || "en"}`;
   return dep_download_event_sink.exposedMiniget(var_r, param_t).text();
   }
   )(param_e, param_r));

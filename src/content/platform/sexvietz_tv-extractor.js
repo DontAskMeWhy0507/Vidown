@@ -218,34 +218,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   list_u_1.push("#EXT-X-PLAYLIST-TYPE:VOD");
   for (var num_c = 0;
   num_c < var_n_1.data[0].length;
-  num_c++) 0 == num_c && (var_a.url = `https://${var_i_1.domainList[num_c % var_o]}
-  
-  
-  /rdv6/${var_n_1.quaity}
-  
-  
-  /${var_i_1.userId}
-  
-  
-  /${var_n_1.data[1][num_c]}
-  
-  
-  .rd`), list_u_1.push(`#EXTINF:${var_n_1.data[0][num_c]}
-  
-  
-  ,`), list_u_1.push(`https://${var_i_1.domainList[num_c % var_o]}
-  
-  
-  /rdv6/${var_n_1.quaity}
-  
-  
-  /${var_i_1.userId}
-  
-  
-  /${var_n_1.data[1][num_c]}
-  
-  
-  .rd`);
+  num_c++) 0 == num_c && (var_a.url = `https://${var_i_1.domainList[num_c % var_o]}/rdv6/${var_n_1.quaity}/${var_i_1.userId}/${var_n_1.data[1][num_c]}.rd`), list_u_1.push(`#EXTINF:${var_n_1.data[0][num_c]},`), list_u_1.push(`https://${var_i_1.domainList[num_c % var_o]}/rdv6/${var_n_1.quaity}/${var_i_1.userId}/${var_n_1.data[1][num_c]}.rd`);
   return list_u_1.push("#EXT-X-ENDLIST"), var_a.play_list = list_u_1.join("\n"),
   [var_a];
   }

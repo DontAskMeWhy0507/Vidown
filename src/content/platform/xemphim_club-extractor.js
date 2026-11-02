@@ -514,13 +514,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   param_t_1.n = 4;
   break;
   }
-  throw new Error(`HTTP ${var_v_1.status}
-  
-  
-  : ${new TextDecoder().decode(var_m).slice(0, 200)}
-  
-  
-  `);
+  throw new Error(`HTTP ${var_v_1.status}: ${new TextDecoder().decode(var_m).slice(0, 200)}`);
   case 4:
   if (!var_i_1(var_y)) {
   param_t_1.n = 6;

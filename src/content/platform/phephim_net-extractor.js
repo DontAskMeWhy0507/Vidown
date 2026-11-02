@@ -220,13 +220,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   function var_m(param_t) {
   var var_e = navigator.userAgent.toLowerCase().indexOf("safari/") > -1;
   return function (param_t_1, param_e) {
-  return fetch(`https://playngon.net/api/v2/getvinfo/${param_t_1}
-  
-  
-  ?blob=${param_e}
-  
-  
-  `, {
+  return fetch(`https://playngon.net/api/v2/getvinfo/${param_t_1}?blob=${param_e}`, {
   method: "get",
   headers: {
   referer: "https://playngon.net/embed/video/" + param_t_1
@@ -254,19 +248,13 @@ export default function (moduleObj, exportsObj, requireFn) {
   };
   return param_e_1 === obj_v.iq && obj_r.tracks.push({
   kind: "captions",
-  file: `https://playngon.net/subtitles/iq/${param_t}
-  
-  
-  .vtt`,
+  file: `https://playngon.net/subtitles/iq/${param_t}.vtt`,
   label: "Tiếng Việt",
   default: !0
   }
   ), param_e_1 === obj_v.wetv && obj_r.tracks.push({
   kind: "captions",
-  file: `https://playngon.net//subtitles/wetv/${param_t}
-  
-  
-  .srt`,
+  file: `https://playngon.net//subtitles/wetv/${param_t}.srt`,
   label: "Tiếng Việt",
   default: !0
   }
@@ -447,10 +435,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_r = param_t.id,
   var_n = param_t.index,
   var_i = window.location.host.replace(/\./g, "\\."),
-  var_o = new RegExp(`(${var_i}
-  
-  
-  /media/[a-z0-9-_]+.mp4)|(videos/tvc.mp4)`, "i");
+  var_o = new RegExp(`(${var_i}/media/[a-z0-9-_]+.mp4)|(videos/tvc.mp4)`, "i");
   var_r.url.match(var_o) && var_e.splice(var_n, 1);
   }
   };

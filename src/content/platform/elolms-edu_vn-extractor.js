@@ -358,10 +358,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   finally {
   var_o_1.f();
   }
-  return `<SegmentURL media="${list_n.join("/")}
-  
-  
-  " />`;
+  return `<SegmentURL media="${list_n.join("/")}" />`;
   }
   )), list_o.push("</SegmentList>"), list_o.push("</Representation>"), list_o.push(
   "</AdaptationSet>");
@@ -410,10 +407,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   finally {
   var_o_1.f();
   }
-  return `<SegmentURL media="${list_n.join("/")}
-  
-  
-  " />`;
+  return `<SegmentURL media="${list_n.join("/")}" />`;
   }
   )), list_o.push("</SegmentList>"), list_o.push("</Representation>"), list_o.push(
   "</AdaptationSet>"), list_o.push("</Period>"), list_o.push("</MPD>");

@@ -253,16 +253,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   getUrl: param_t => {
   var var_e = param_t.url,
   var_r = new URL(var_e).searchParams.get("id");
-  return `${Object(dep_format_resolver.c)(var_e)}
-  
-  
-  /playlist/${var_r}
-  
-  
-  /${new Date().getTime()}
-  
-  
-  .m3u8`;
+  return `${Object(dep_format_resolver.c)(var_e)}/playlist/${var_r}/${new Date().getTime()}.m3u8`;
   }
   }
   ]

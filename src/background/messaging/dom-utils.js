@@ -761,9 +761,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_l_1 = Object.keys(param_o).map(param_e_1 => param_e_1 + "=" + param_o[param_e_1]).join(
   "&");
   if (location.host.includes("facebook")) {
-  var_l_1 = Object.keys(param_o).map(param_e_1 => `${param_e_1}
-  =${encodeURIComponent(param_o[param_e_1])}
-  `).join("&");
+  var_l_1 = Object.keys(param_o).map(param_e_1 => `${param_e_1}=${encodeURIComponent(param_o[param_e_1])}`).join("&");
   }
   }
   else {
@@ -1490,8 +1488,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   var var_t = param_e_1.match(/(?:youtube\.com\/.*v=|youtu\.be\/)([^&\n?#]+)/);
   if (var_t) {
-  return `https://img.youtube.com/vi/${var_t[1]}
-  /maxresdefault.jpg`;
+  return `https://img.youtube.com/vi/${var_t[1]}/maxresdefault.jpg`;
   }
   else {
   return null;

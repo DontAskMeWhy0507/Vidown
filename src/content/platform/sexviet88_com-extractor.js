@@ -211,10 +211,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   for (var num_u = 0;
   num_u < var_o_1.data[1].length;
   num_u++) 0 == num_u && (var_a.url = "https://play.playsex3x.xyz" + var_o_1.data[1][num_u]),
-  list_s.push(`#EXTINF:${var_o_1.data[0][num_u]}
-  
-  
-  ,`), list_s.push("https://play.playsex3x.xyz" + var_o_1.data[1][num_u]);
+  list_s.push(`#EXTINF:${var_o_1.data[0][num_u]},`), list_s.push("https://play.playsex3x.xyz" + var_o_1.data[1][num_u]);
   return list_s.push("#EXT-X-ENDLIST"), var_a.filename = document.title, var_a.play_list = list_s.join(
   "\n"), [var_a];
   }

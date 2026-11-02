@@ -287,13 +287,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_n_1 = Object.assign({
   }
   , var_r);
-  var_n_1.filename = var_n_1.fixName, var_n_1.id = `${var_n_1.id}
-  
-  
-  _${param_t_1.label}
-  
-  
-  `, var_n_1.resolution = param_t_1.label + "p", var_n_1.quality = (null === (
+  var_n_1.filename = var_n_1.fixName, var_n_1.id = `${var_n_1.id}_${param_t_1.label}`, var_n_1.resolution = param_t_1.label + "p", var_n_1.quality = (null === (
   var_e_1 = dep_media_constants.r[var_n_1.resolution]) || void 0 === var_e_1 ?
   void 0 : var_e_1.label) || "Standard";
   var var_u_1 = ((param_t_2, param_e, param_r, param_n, param_i, param_o) => {

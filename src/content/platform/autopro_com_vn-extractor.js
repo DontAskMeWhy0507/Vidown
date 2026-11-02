@@ -8,11 +8,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   checkUrl: param_t => "VIDEO" === param_t.node.tagName,
   getUrl: param_t => {
   var var_e;
-  return `https://${null === (var_e = param_t.node.closest(".VCSortableInPreviewMode")) ||
-  void 0 === var_e ? void 0 : var_e.getAttribute("data-vid")}
-  
-  
-  /master.m3u8`.replace("autopro/", "autopro8.mediacdn.vn/");
+  return `https://${null === (var_e = param_t.node.closest(".VCSortableInPreviewMode")) ||void 0 === var_e ? void 0 : var_e.getAttribute("data-vid")}/master.m3u8`.replace("autopro/", "autopro8.mediacdn.vn/");
   }
   ,
   mediaObjectChange: param_t => {

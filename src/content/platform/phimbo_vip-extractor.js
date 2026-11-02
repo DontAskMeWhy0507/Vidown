@@ -32,10 +32,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   num_l < var_f;
   num_l++) {
   var var_d = var_a.content[num_l];
-  list_c.push(`#EXTINF:${var_d.extinf}
-  
-  
-  ,`), list_c.push(`${var_u}
+  list_c.push(`#EXTINF:${var_d.extinf},`), list_c.push(`${var_u}
   
   
   ${var_d.url}

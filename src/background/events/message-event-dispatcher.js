@@ -140,8 +140,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   this.emit("end");
   }
   else {
-  this.destroy(Error(`Representation '${param_e}
-  ' not found`));
+  this.destroy(Error(`Representation '${param_e}' not found`));
   }
   };
   this._parser.on("closetag", param_e_1 => {

@@ -251,10 +251,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   (null === (var_n = null === (var_r_1 = var_a_1[num_s].match(/:URI="([^"]+)"/i)) ||
   void 0 === var_r_1 ? void 0 : var_r_1[1]) || void 0 === var_n ?
   void 0 : var_n.startsWith("/")) && (var_a_1[num_s] = var_a_1[num_s].replace(/:URI="([^"]+)"/i,
-  `:URI="${var_o}
-  
-  
-  $1"`));
+  `:URI="${var_o}$1"`));
   param_t_2.play_list = var_a_1.join("\n");
   }
   }

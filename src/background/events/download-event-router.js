@@ -108,9 +108,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   );
   if (var_n_1.username) {
-  obj_r.auth = `${var_n_1.username}
-  :${var_n_1.password}
-  `;
+  obj_r.auth = `${var_n_1.username}:${var_n_1.password}`;
   }
   var_t = obj_s[String(obj_r.protocol)];
   }
@@ -127,9 +125,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   obj_r.headers = Object.assign({
   }
   , obj_r.headers, {
-  Range: `bytes=${var_e}
-  -${var_t_1}
-  `
+  Range: `bytes=${var_e}-${var_t_1}`
   }
   );
   }

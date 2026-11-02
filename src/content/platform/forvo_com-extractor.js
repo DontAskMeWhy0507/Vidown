@@ -40,16 +40,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return list_a.map((param_t_1, param_e) => {
   if (param_t_1) {
   var var_r_1 = atob(param_t_1),
-  var_o_1 = `https://${str_i}
-  
-  
-  ${list_c[param_e]}
-  
-  
-  ${var_r_1}
-  
-  
-  `,
+  var_o_1 = `https://${str_i}${list_c[param_e]}${var_r_1}`,
   var_a = Object(dep_url_utils.f)(var_o_1);
   return var_a.filename = var_s, var_a.quality = var_u, var_a.type = "audio", var_a;
   }

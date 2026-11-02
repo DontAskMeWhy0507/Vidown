@@ -399,10 +399,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_e,
   var_r = param_t.mediaObject,
   var_n = new URLSearchParams(location.search).get("pid"),
-  var_i = null === (var_e = document.querySelector(`#program-${var_n}
-  
-  
-   [title]`)) || void 0 === var_e ? void 0 : var_e.innerText;
+  var_i = null === (var_e = document.querySelector(`#program-${var_n}[title]`)) || void 0 === var_e ? void 0 : var_e.innerText;
   return var_r.filename = var_i, var_r.fixName = var_i, var_r.type;
   }
   }

@@ -137,9 +137,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_t.headers = Object.assign({
   }
   , var_t.headers, {
-  Range: `bytes=${var_o_1}
-  -${var_i || ""}
-  `
+  Range: `bytes=${var_o_1}-${var_i || ""}`
   }
   );
   var_m = dep_download_event_router(var_n_1.url, var_t);
@@ -166,9 +164,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_t.headers = Object.assign({
   }
   , var_t.headers, {
-  Range: `bytes=${param_r.range.start || "0"}
-  -${param_r.range.end || ""}
-  `
+  Range: `bytes=${param_r.range.start || "0"}-${param_r.range.end || ""}`
   }
   );
   }

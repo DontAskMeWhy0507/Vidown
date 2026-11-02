@@ -336,10 +336,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var list_i = ["#EXTM3U", "#EXT-X-VERSION:" + var_n.version, "#EXT-X-TARGETDURATION:" + var_n.targetDuration,
   "#EXT-X-MEDIA-SEQUENCE:0"];
   var_n.chunks.forEach((param_t_1, param_e) => {
-  list_i.push(`#EXTINF:${param_t_1}
-  
-  
-  ,`), list_i.push(var_n.proxy + encodeURIComponent(`${var_n.cdn}
+  list_i.push(`#EXTINF:${param_t_1},`), list_i.push(var_n.proxy + encodeURIComponent(`${var_n.cdn}
   
   
   /${param_e}

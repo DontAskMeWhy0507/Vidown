@@ -25,28 +25,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   list_u.push("#EXT-X-PLAYLIST-TYPE:VOD");
   for (var num_c = 0;
   num_c < var_i.data[0].length;
-  num_c++) 0 == num_c && (var_s.url = `https://${var_o.domainList[num_c % var_a]}
-  
-  
-  /${var_o.userId}
-  
-  
-  /${var_i.data[1][num_c]}
-  
-  
-  `), list_u.push(`#EXTINF:${var_i.data[0][num_c]}
-  
-  
-  ,`), list_u.push(`https://${var_o.domainList[num_c % var_a]}
-  
-  
-  /${var_o.userId}
-  
-  
-  /${var_i.data[1][num_c]}
-  
-  
-  `);
+  num_c++) 0 == num_c && (var_s.url = `https://${var_o.domainList[num_c % var_a]}/${var_o.userId}/${var_i.data[1][num_c]}`), list_u.push(`#EXTINF:${var_i.data[0][num_c]},`), list_u.push(`https://${var_o.domainList[num_c % var_a]}/${var_o.userId}/${var_i.data[1][num_c]}`);
   return list_u.push("#EXT-X-ENDLIST"), var_s.play_list = list_u.join("\n"), [var_s];
   }
   return 2 == var_i.type ? [{

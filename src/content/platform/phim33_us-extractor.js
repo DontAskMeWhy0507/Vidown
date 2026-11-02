@@ -213,10 +213,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   param_t_1.n = 5;
   break;
   }
-  if (var_u_1 = `https://ok.ru/videoembed/${var_r[1]}
-  
-  
-  ?autoplay=1`, !obj_l[var_u_1]) {
+  if (var_u_1 = `https://ok.ru/videoembed/${var_r[1]}?autoplay=1`, !obj_l[var_u_1]) {
   param_t_1.n = 1;
   break;
   }

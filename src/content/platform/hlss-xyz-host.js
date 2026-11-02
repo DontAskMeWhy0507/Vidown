@@ -207,10 +207,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   param_e_1.n = 3;
   break;
   }
-  if (var_u = `https://hlss.xyz/player/index.php?data=${var_s}
-  
-  
-  &do=getVideo`, (var_c = new URLSearchParams()).append("hash", var_s), var_l = {
+  if (var_u = `https://hlss.xyz/player/index.php?data=${var_s}&do=getVideo`, (var_c = new URLSearchParams()).append("hash", var_s), var_l = {
   method: "post",
   headers: {
   "X-Requested-With": "XMLHttpRequest",

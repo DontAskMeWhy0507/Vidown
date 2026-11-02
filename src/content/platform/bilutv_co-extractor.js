@@ -289,10 +289,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   num_o++) {
   var var_a_2 = var_e_1[num_o];
   var_a_2.startsWith("#EXT-X-TARGETDURATION") && (str_n = var_a_2.split(":")[1]),
-  var_a_2.startsWith("http") && list_r.push(`<SegmentURL media="${var_a_2}
-  
-  
-  " />`);
+  var_a_2.startsWith("http") && list_r.push(`<SegmentURL media="${var_a_2}" />`);
   }
   return list_i.push(`<AdaptationSet mimeType="video/mp4" codecs="${var_p}
   
@@ -319,10 +316,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   num_o++) {
   var var_a_2 = var_e_1[num_o];
   var_a_2.startsWith("#EXT-X-TARGETDURATION") && (str_i = var_a_2.split(":")[1]),
-  var_a_2.startsWith("http") && list_n.push(`<SegmentURL media="${var_a_2}
-  
-  
-  " />`);
+  var_a_2.startsWith("http") && list_n.push(`<SegmentURL media="${var_a_2}" />`);
   }
   return list_r.push(`<AdaptationSet lang="${var_A}
   

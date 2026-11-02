@@ -242,13 +242,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 === var_e_1 ? void 0 : var_e_1.split("x")) || void 0 === var_r_1 ?
   void 0 : var_r_1[0];
   if (param_t_1.m3u8Url) {
-  var var_a_1 = Object(dep_url_utils.f)(`${var_y}
-  
-  
-  ${param_t_1.m3u8Url}
-  
-  
-  `);
+  var var_a_1 = Object(dep_url_utils.f)(`${var_y}${param_t_1.m3u8Url}`);
   return var_a_1.ext = "m3u8", var_a_1.exts = ["m3u8"], var_a_1.type = "video", var_a_1.filename = var_v,
   var_a_1.resolution = var_o_2 + "p", void var_g.push(var_a_1);
   }
@@ -279,13 +273,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_u_1);
   }
   if (param_t_1.m3u8) {
-  var var_c = Object(dep_url_utils.f)(`${var_y}
-  
-  
-  ${param_t_1.m3u8Url || param_t_1.mu}
-  
-  
-  `);
+  var var_c = Object(dep_url_utils.f)(`${var_y}${param_t_1.m3u8Url || param_t_1.mu}`);
   return var_c.ext = "m3u8", var_c.exts = ["m3u8"], var_c.type = "video", var_c.play_list = param_t_1.m3u8,
   var_c.filename = var_v, var_c.resolution = var_o_2 + "p", void var_g.push(var_c);
   }
@@ -293,13 +281,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   ), var_m.audio.forEach(param_t_1 => {
   if (param_t_1.m3u8Url) {
-  var var_e_1 = Object(dep_url_utils.f)(`${var_y}
-  
-  
-  ${param_t_1.m3u8Url}
-  
-  
-  `);
+  var var_e_1 = Object(dep_url_utils.f)(`${var_y}${param_t_1.m3u8Url}`);
   return var_e_1.ext = "m3u8", var_e_1.exts = ["m3u8"], var_e_1.type = "audio", var_e_1.filename = var_v,
   void var_g.push(var_e_1);
   }

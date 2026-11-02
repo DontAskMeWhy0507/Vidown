@@ -737,10 +737,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 === var_d_1 ? void 0 : var_d_1.src), (var_E_1 = null === (var_h_1 = null == var_w ?
   void 0 : var_w.match(regex_k)) || void 0 === var_h_1 ? void 0 :
   var_h_1[1]) && (var_b_1 ? obj_O[var_E_1] = var_b_1 : var_b_1 = obj_O[var_E_1]),
-  !obj__[var_M_1 = `https://vimeo.com/${var_b_1}
-  
-  
-  ?action=load_config`] || null == var_b_1) {
+  !obj__[var_M_1 = `https://vimeo.com/${var_b_1}?action=load_config`] || null == var_b_1) {
   param_t_1.n = 2;
   break;
   }

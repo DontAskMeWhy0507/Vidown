@@ -2432,9 +2432,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   while (true) {
   switch (param_p.p = param_p.n) {
   case 0:
-  if (!(var_h_1 = `https://${location.hostname}
-  /watch?v=${param_e}
-  &has_verified=1`).match(/(youtube-nocookie)/i)) {
+  if (!(var_h_1 = `https://${location.hostname}/watch?v=${param_e}&has_verified=1`).match(/(youtube-nocookie)/i)) {
   param_p.n = 2;
   break;
   }
@@ -2442,8 +2440,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return Object(dep_dom_utils.sendMessage)({
   type: dep_media_constants.b.CORS_FETCH,
   data: {
-  url: `https://www.youtube.com/watch?v=${param_e}
-  &has_verified=1`,
+  url: `https://www.youtube.com/watch?v=${param_e}&has_verified=1`,
   responseType: "text"
   }
   }

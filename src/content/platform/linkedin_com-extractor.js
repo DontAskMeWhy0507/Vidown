@@ -296,10 +296,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_p = var_a.value,
   var_v_1 = (null == (var_u_1 = var_p.map) ? void 0 : var_u_1.resolvedUri) ||
   (null == var_u_1 ? void 0 : var_u_1.uri) || "";
-  if (var_v_1 && var_v_1 !== str_l && (list_o.push(`#EXT-X-MAP:URI="${var_v_1}
-  
-  
-  "`), str_l = var_v_1), var_p.key) {
+  if (var_v_1 && var_v_1 !== str_l && (list_o.push(`#EXT-X-MAP:URI="${var_v_1}"`), str_l = var_v_1), var_p.key) {
   var var_m = "NONE" === var_p.key.method ? "#EXT-X-KEY:METHOD=NONE" :
   `#EXT-X-KEY:METHOD=${var_p.key.method}
   
@@ -315,11 +312,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_m !== str_f && (list_o.push(var_m), str_f = var_m);
   }
   var var_y = var_d(var_p);
-  var_y && (list_o.push(`#EXTINF:${var_s_1 = var_p.duration, Number(var_s_1.toFixed(
-  3)).toString()}
-  
-  
-  ,`), list_o.push(var_y));
+  var_y && (list_o.push(`#EXTINF:${var_s_1 = var_p.duration, Number(var_s_1.toFixed(3)).toString()},`), list_o.push(var_y));
   }
   }
   catch (var_t) {

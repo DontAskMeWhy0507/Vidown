@@ -834,9 +834,7 @@
   var_l_1 = Object.keys(param_o).map(param_e_1 => param_e_1 + "=" + param_o[param_e_1]).join(
   "&");
   if (location.host.includes("facebook")) {
-  var_l_1 = Object.keys(param_o).map(param_e_1 => `${param_e_1}
-  =${encodeURIComponent(param_o[param_e_1])}
-  `).join("&");
+  var_l_1 = Object.keys(param_o).map(param_e_1 => `${param_e_1}=${encodeURIComponent(param_o[param_e_1])}`).join("&");
   }
   }
   else {
@@ -1563,8 +1561,7 @@
   }
   var var_t = param_e_1.match(/(?:youtube\.com\/.*v=|youtu\.be\/)([^&\n?#]+)/);
   if (var_t) {
-  return `https://img.youtube.com/vi/${var_t[1]}
-  /maxresdefault.jpg`;
+  return `https://img.youtube.com/vi/${var_t[1]}/maxresdefault.jpg`;
   }
   else {
   return null;
@@ -8196,9 +8193,7 @@ function (moduleObj, exportsObj, requireFn) {
   while (true) {
   switch (param_f.p = param_f.n) {
   case 0:
-  if (!(var_h_1 = `https://${location.hostname}
-  /watch?v=${param_e}
-  &has_verified=1`).match(/(youtube-nocookie)/i)) {
+  if (!(var_h_1 = `https://${location.hostname}/watch?v=${param_e}&has_verified=1`).match(/(youtube-nocookie)/i)) {
   param_f.n = 2;
   break;
   }
@@ -8206,8 +8201,7 @@ function (moduleObj, exportsObj, requireFn) {
   return Object(dep_dom_utils.sendMessage)({
   type: dep_media_constants.b.CORS_FETCH,
   data: {
-  url: `https://www.youtube.com/watch?v=${param_e}
-  &has_verified=1`,
+  url: `https://www.youtube.com/watch?v=${param_e}&has_verified=1`,
   responseType: "text"
   }
   }
@@ -27625,9 +27619,7 @@ function (moduleObj, exportsObj, requireFn) {
   }
   );
   if (var_n_1.username) {
-  obj_r.auth = `${var_n_1.username}
-  :${var_n_1.password}
-  `;
+  obj_r.auth = `${var_n_1.username}:${var_n_1.password}`;
   }
   var_t = obj_s[String(obj_r.protocol)];
   }
@@ -27644,9 +27636,7 @@ function (moduleObj, exportsObj, requireFn) {
   obj_r.headers = Object.assign({
   }
   , obj_r.headers, {
-  Range: `bytes=${var_e}
-  -${var_t_1}
-  `
+  Range: `bytes=${var_e}-${var_t_1}`
   }
   );
   }
@@ -30055,9 +30045,7 @@ function (module, __webpack_exports__, __webpack_require__) {
   var obj_t = {
   };
   chrome.webNavigation.onBeforeNavigate.addListener(param_e => {
-  var var_r_1 = `${param_e.tabId}
-  _${param_e.frameId}
-  `;
+  var var_r_1 = `${param_e.tabId}_${param_e.frameId}`;
   obj_t[var_r_1] ||= [];
   obj_t[var_r_1].push(param_e.url);
   }
@@ -30696,9 +30684,7 @@ function (module, __webpack_exports__, __webpack_require__) {
   !(var_u = var_p_1.n()).done;
   ) {
   var var_f = var_u.value;
-  var var_h = `${var_k}
-  _${var_f.frameId}
-  `;
+  var var_h = `${var_k}_${var_f.frameId}`;
   var var_m = var_s == null ? undefined : var_s.includes("playhydrax.com");
   if (var_s == null ? undefined : var_s.includes("playhydrax.com")) {
   var var_g = new URL(var_s).search;
@@ -30813,8 +30799,7 @@ function (module, __webpack_exports__, __webpack_require__) {
   }
   ,
   world: chrome.scripting.ExecutionWorld.MAIN,
-  files: [`inject/${param_n.file}
-  /main-world.js`]
+  files: [`inject/${param_n.file}/main-world.js`]
   }
   );
   chrome.scripting.executeScript({
@@ -30823,8 +30808,7 @@ function (module, __webpack_exports__, __webpack_require__) {
   frameIds: var_j ? [var_j] : undefined
   }
   ,
-  files: [`inject/${param_n.file}
-  /index.js`]
+  files: [`inject/${param_n.file}/index.js`]
   }
   );
   return param_T.a(3, 86);
@@ -31893,9 +31877,7 @@ function (moduleObj, exportsObj, requireFn) {
   var_o.headers = Object.assign({
   }
   , var_o.headers, {
-  Range: `bytes=${param_t_1.range.start}
-  -${param_t_1.range.end}
-  `
+  Range: `bytes=${param_t_1.range.start}-${param_t_1.range.end}`
   }
   );
   }
@@ -37509,9 +37491,7 @@ function (moduleObj, exportsObj, requireFn) {
   var_t.headers = Object.assign({
   }
   , var_t.headers, {
-  Range: `bytes=${var_o_1}
-  -${var_i || ""}
-  `
+  Range: `bytes=${var_o_1}-${var_i || ""}`
   }
   );
   var_m = dep_download_event_router(var_n_1.url, var_t);
@@ -37538,9 +37518,7 @@ function (moduleObj, exportsObj, requireFn) {
   var_t.headers = Object.assign({
   }
   , var_t.headers, {
-  Range: `bytes=${param_r.range.start || "0"}
-  -${param_r.range.end || ""}
-  `
+  Range: `bytes=${param_r.range.start || "0"}-${param_r.range.end || ""}`
   }
   );
   }
@@ -38105,9 +38083,7 @@ function (moduleObj, exportsObj, requireFn) {
   if (var_n.formats.length) {
   var_n.html5player = var_n.html5player || fn_E(await fn_w(param_e, param_r)) ||
   fn_E(await ((param_e_1, param_t) => {
-  const var_r = `${"https://www.youtube.com/embed/" + param_e_1}
-  ?hl=${param_t.lang || "en"}
-  `;
+  const var_r = `${"https://www.youtube.com/embed/" + param_e_1}?hl=${param_t.lang || "en"}`;
   return dep_download_event_sink.exposedMiniget(var_r, param_t).text();
   }
   )(param_e, param_r));
@@ -41108,8 +41084,7 @@ function (moduleObj, exportsObj, requireFn) {
   this.emit("end");
   }
   else {
-  this.destroy(Error(`Representation '${param_e}
-  ' not found`));
+  this.destroy(Error(`Representation '${param_e}' not found`));
   }
   };
   this._parser.on("closetag", param_e_1 => {

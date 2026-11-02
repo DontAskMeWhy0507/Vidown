@@ -342,15 +342,9 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_h = var_f.find(param_t_1 => param_t_1.url.includes("master.m3u8"));
   if (var_h) return var_h.filename = var_s_1, [var_h];
   }
-  var var_p = `https://${var_u}
-  
-  
-  .json`;
+  var var_p = `https://${var_u}.json`;
   (null == var_u ? void 0 : var_u.startsWith("tuoitre/")) &&
-  (var_p = `https://hls.tuoitre.vn/${var_u}
-  
-  
-  .json`);
+  (var_p = `https://hls.tuoitre.vn/${var_u}.json`);
   var var_v = Object(dep_url_utils.f)(var_p);
   return var_v.filename = var_s_1, var_v.ext = "m3u8", var_v.exts = ["m3u8", "json"],
   var_v.type = "video", [var_v];

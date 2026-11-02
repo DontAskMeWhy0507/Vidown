@@ -265,10 +265,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_u_1 = param_t_1["@"],
   var_c_1 = Math.ceil(var_O / (var_T.duration / var_T.timescale));
   var_r_1 = var_T.initialization.replace(/\$RepresentationID\$/, var_u_1.id), (var_n = [dep_format_resolver.h]).push(
-  `<Initialization sourceURL="${var_A + "/dash/" + var_r_1}
-  
-  
-  "/>`);
+  `<Initialization sourceURL="${var_A + "/dash/" + var_r_1}"/>`);
   for (var num_l = 1;
   num_l < var_c_1;
   num_l++) {
@@ -277,17 +274,10 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_f_2,
   var_h = var_T.media.replace(/\$RepresentationID\$/, var_u_1.id).replace(/\$Number\$/,
   var_d_1);
-  var_n.push(`<SegmentURL media="${var_A + "/dash/" + var_h}
-  
-  
-  "/>`);
+  var_n.push(`<SegmentURL media="${var_A + "/dash/" + var_h}"/>`);
   }
   var_n.push('</SegmentList>\n                                                </Representation>\n                                        </AdaptationSet>\n                                        <AdaptationSet lang="en" mimeType="audio/mp4" codecs="mp4a.40.2" bitmovin:label="English stereo">\n                                            <Representation id="4" mimeType="audio/mp4" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="98414">\n                                                <SegmentList duration="10">'),
-  var_n.push(`<Initialization sourceURL="${var_A + "/dash/" + var_j.initialization.replace(
-  /\$RepresentationID\$/, var_I)}
-  
-  
-  "/>`);
+  var_n.push(`<Initialization sourceURL="${var_A + "/dash/" + var_j.initialization.replace(/\$RepresentationID\$/, var_I)}"/>`);
   for (var num_p = 1;
   num_p < var_c_1;
   num_p++) {
@@ -296,10 +286,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_v_1,
   var_g_1 = var_j.media.replace(/\$RepresentationID\$/, var_I).replace(/\$Number\$/,
   var_m_1);
-  var_n.push(`<SegmentURL media="${var_A + "/dash/" + var_g_1}
-  
-  
-  "/>`);
+  var_n.push(`<SegmentURL media="${var_A + "/dash/" + var_g_1}"/>`);
   }
   var_n.push("</SegmentList>\n                                                </Representation>\n                                            </AdaptationSet>\n                                        </Period>\n                                    </MPD>");
   }

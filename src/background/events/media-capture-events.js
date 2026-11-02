@@ -72,9 +72,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_o.headers = Object.assign({
   }
   , var_o.headers, {
-  Range: `bytes=${param_t_1.range.start}
-  -${param_t_1.range.end}
-  `
+  Range: `bytes=${param_t_1.range.start}-${param_t_1.range.end}`
   }
   );
   }

@@ -215,16 +215,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_l = /Fc\s*=\s*(\d+)\,/, var_f = /Vc\s*=\s*(\d+)\,/, var_d = null === (var_e = var_o.match(
   var_s_1)) || void 0 === var_e ? void 0 : var_e[2], var_h = null === (var_r = var_o.match(
   var_l)) || void 0 === var_r ? void 0 : var_r[1], var_c = (null === (var_n = var_o.match(
-  var_f)) || void 0 === var_n ? void 0 : var_n[1]) || "", var_p = `client_secret=${var_d}
-  
-  
-  &client_id=${var_c}
-  
-  
-  &scopes=audio_anonymous,video_anonymous,photos_anonymous,profile_anonymous&isApiOauthAnonymEnabled=false&version=1&app_id=${var_h}
-  
-  
-  `, param_t.n = 3, fetch("https://login.vk.com/?act=get_anonym_token", {
+  var_f)) || void 0 === var_n ? void 0 : var_n[1]) || "", var_p = `client_secret=${var_d}&client_id=${var_c}&scopes=audio_anonymous,video_anonymous,photos_anonymous,profile_anonymous&isApiOauthAnonymEnabled=false&version=1&app_id=${var_h}`, param_t.n = 3, fetch("https://login.vk.com/?act=get_anonym_token", {
   method: "POST",
   headers: {
   "Content-type": "application/x-www-form-urlencoded"

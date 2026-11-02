@@ -194,10 +194,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 === var_t ? void 0 : var_t.closest("a");
   var_r && (var_e = encodeURIComponent(var_r.href.split("?")[0] + ".html"));
   }
-  return `http://apivideo.mocha.com.vn:8081/onMediaBackendBiz/mochavideo/getVideoDetail?url=${var_e}
-  
-  
-  &token=""`;
+  return `http://apivideo.mocha.com.vn:8081/onMediaBackendBiz/mochavideo/getVideoDetail?url=${var_e}&token=""`;
   }
   var var_c = location.href,
   obj_l = {

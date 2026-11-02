@@ -44,10 +44,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_n = Math.ceil(var_d / (var_r_1.duration / var_r_1.timescale)),
   var_c_1 = var_r_1.initialization.replace(/\$RepresentationID\$/, param_t_1["@"].id),
   list_l = [dep_format_resolver.h];
-  list_l.push(`<Initialization sourceURL="${var_c_1}
-  
-  
-  "/>`);
+  list_l.push(`<Initialization sourceURL="${var_c_1}"/>`);
   for (var num_f = 0;
   num_f < var_n;
   num_f++) {
@@ -60,25 +57,16 @@ export default function (moduleObj, exportsObj, requireFn) {
   
   
   `);
-  list_l.push(`<SegmentURL media="${var_p_1}
-  
-  
-  "/>`);
+  list_l.push(`<SegmentURL media="${var_p_1}"/>`);
   }
   list_l.push('</SegmentList>\n\t\t\t\t\t\t\t</Representation>\n\t\t\t\t\t</AdaptationSet>\n\t\t\t\t\t<AdaptationSet lang="en" mimeType="audio/mp4" codecs="mp4a.40.2" bitmovin:label="English stereo">\n\t\t\t\t\t\t<Representation id="4" mimeType="audio/mp4" codecs="mp4a.40.2" audioSamplingRate="48000" startWithSAP="1" bandwidth="98414">\n\t\t\t\t\t\t\t<SegmentList duration="10">'),
-  list_l.push(`<Initialization sourceURL="${var_y.initialization}
-  
-  
-  "/>`);
+  list_l.push(`<Initialization sourceURL="${var_y.initialization}"/>`);
   for (var num_v = 0;
   num_v < var_n;
   num_v++) {
   var var_g = new Array(8 - num_v.toString().length + 1).join("0") + num_v,
   var_b = var_m.BaseURL + var_y.media.replace(/\$Number%08d\$/, var_g);
-  list_l.push(`<SegmentURL media="${var_b}
-  
-  
-  "/>`);
+  list_l.push(`<SegmentURL media="${var_b}"/>`);
   }
   list_l.push("</SegmentList>\n\t\t\t\t\t\t\t</Representation>\n\t\t\t\t\t\t</AdaptationSet>\n\t\t\t\t\t</Period>\n\t\t\t\t</MPD>");
   var var_w,

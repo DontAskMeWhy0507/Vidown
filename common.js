@@ -835,9 +835,7 @@
   var_u_1 = Object.keys(param_o).map(param_e_1 => param_e_1 + "=" + param_o[param_e_1]).join(
   "&");
   if (location.host.includes("facebook")) {
-  var_u_1 = Object.keys(param_o).map(param_e_1 => `${param_e_1}
-  =${encodeURIComponent(param_o[param_e_1])}
-  `).join("&");
+  var_u_1 = Object.keys(param_o).map(param_e_1 => `${param_e_1}=${encodeURIComponent(param_o[param_e_1])}`).join("&");
   }
   }
   else {
@@ -1564,8 +1562,7 @@
   }
   var var_t = param_e_1.match(/(?:youtube\.com\/.*v=|youtu\.be\/)([^&\n?#]+)/);
   if (var_t) {
-  return `https://img.youtube.com/vi/${var_t[1]}
-  /maxresdefault.jpg`;
+  return `https://img.youtube.com/vi/${var_t[1]}/maxresdefault.jpg`;
   }
   else {
   return null;
@@ -6985,9 +6982,7 @@
   while (true) {
   switch (param_p.p = param_p.n) {
   case 0:
-  if (!(var_h_1 = `https://${location.hostname}
-  /watch?v=${param_e}
-  &has_verified=1`).match(/(youtube-nocookie)/i)) {
+  if (!(var_h_1 = `https://${location.hostname}/watch?v=${param_e}&has_verified=1`).match(/(youtube-nocookie)/i)) {
   param_p.n = 2;
   break;
   }
@@ -6995,8 +6990,7 @@
   return Object(dep_dom_utils.sendMessage)({
   type: dep_media_constants.b.CORS_FETCH,
   data: {
-  url: `https://www.youtube.com/watch?v=${param_e}
-  &has_verified=1`,
+  url: `https://www.youtube.com/watch?v=${param_e}&has_verified=1`,
   responseType: "text"
   }
   }

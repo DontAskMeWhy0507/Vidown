@@ -247,10 +247,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_e,
   var_r = null === (var_e = param_t.url.match(/\/api\/([a-z0-9\-_]+)/i)) ||
   void 0 === var_e ? void 0 : var_e[1];
-  if (var_r) return `https://hidecdn.stream/videos/${var_r}
-  
-  
-  /noah_yan.txt`;
+  if (var_r) return `https://hidecdn.stream/videos/${var_r}/noah_yan.txt`;
   }
   ,
   mediaObjectChange(param_t) {
