@@ -298,17 +298,8 @@ export default function (moduleObj, exportsObj, requireFn) {
   (null == var_u_1 ? void 0 : var_u_1.uri) || "";
   if (var_v_1 && var_v_1 !== str_l && (list_o.push(`#EXT-X-MAP:URI="${var_v_1}"`), str_l = var_v_1), var_p.key) {
   var var_m = "NONE" === var_p.key.method ? "#EXT-X-KEY:METHOD=NONE" :
-  `#EXT-X-KEY:METHOD=${var_p.key.method}
-  
-  
-  ,URI="${null !== (var_i = var_p.key.uri) && void 0 !== var_i ?
-  var_i : ""}
-  
-  
-  "${var_p.key.iv ? ",IV=" + var_p.key.iv : ""}
-  
-  
-  `;
+  `#EXT-X-KEY:METHOD=${var_p.key.method},URI="${null !== (var_i = var_p.key.uri) && void 0 !== var_i ?
+  var_i : ""}"${var_p.key.iv ? ",IV=" + var_p.key.iv : ""}`;
   var_m !== str_f && (list_o.push(var_m), str_f = var_m);
   }
   var var_y = var_d(var_p);

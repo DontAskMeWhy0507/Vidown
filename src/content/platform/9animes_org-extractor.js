@@ -267,13 +267,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_i = (null === (var_e = var_n.textContent) || void 0 === var_e ?
   void 0 : var_e.trim()) || "",
   var_o = document.title.replace(/(xem phim )|(watch )/i, "");
-  var_r.fixName = `${var_o}
-  
-  
-   episode ${var_i}
-  
-  
-  `;
+  var_r.fixName = `${var_o}episode ${var_i}`;
   }
   return var_r.type;
   }
@@ -297,13 +291,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 : var_e.trim()) || "",
   var_o = document.title.replace(/(xem phim )|(watch )/i, "").replace(/ online free on 9anime/i,
   "");
-  var_r.fixName = `${var_o}
-  
-  
-   episode ${var_i}
-  
-  
-  `;
+  var_r.fixName = `${var_o}episode ${var_i}`;
   }
   return var_r.type;
   }

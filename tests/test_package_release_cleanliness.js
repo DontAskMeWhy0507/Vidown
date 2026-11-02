@@ -14,6 +14,12 @@ const ZIP_PATH = path.join(DIST_DIR, 'savior-extension-v3.0.1.zip');
 
 console.log('=== TEST SUITE: PACKAGING & CWS RELEASE CLEANLINESS ===\n');
 
+// Preserve original zip so running tests never mutates working tree
+let originalZipBytes = null;
+if (fs.existsSync(ZIP_PATH)) {
+  originalZipBytes = fs.readFileSync(ZIP_PATH);
+}
+
 // 1. Verify orphan root popup files do NOT exist
 console.log('[Test 1] Checking absence of root orphan files...');
 const rootPopupHtml = path.join(ROOT_DIR, 'popup.html');
@@ -180,3 +186,8 @@ console.log('✓ Test 4: All zip entries strictly verified: 0 executables, 0 log
 console.log('======================================================');
 console.log('ALL PACKAGING & RELEASE CLEANLINESS TESTS PASSED! 🎉');
 console.log('======================================================');
+
+// Restore original zip so working tree remains 100% clean
+if (originalZipBytes) {
+  fs.writeFileSync(ZIP_PATH, originalZipBytes);
+}

@@ -244,13 +244,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   param_t.n = 3;
   break;
   }
-  return param_t.a(2, `${dep_youtube.YOUTUBE_VIDEO_URL}
-  
-  
-  ${var_s_1.data}
-  
-  
-  `);
+  return param_t.a(2, `${dep_youtube.YOUTUBE_VIDEO_URL}${var_s_1.data}`);
   case 3:
   return param_t.a(2);
   }

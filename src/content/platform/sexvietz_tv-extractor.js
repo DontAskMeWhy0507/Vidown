@@ -282,16 +282,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   userId: var_b,
   typeEnd: var_w
   }
-  , param_t_1.a(2, `${var_m}
-  
-  
-  ${var_b}
-  
-  
-  /${var_g}
-  
-  
-  `);
+  , param_t_1.a(2, `${var_m}${var_b}/${var_g}`);
   case 2:
   param_t_1.n = 4;
   break;
@@ -300,16 +291,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   param_t_1.n = 4;
   break;
   }
-  return var_A = obj_s[var_e], param_t_1.a(2, `${var_A.domainApi}
-  
-  
-  ${var_A.userId}
-  
-  
-  /${var_A.fileId}
-  
-  
-  `);
+  return var_A = obj_s[var_e], param_t_1.a(2, `${var_A.domainApi}${var_A.userId}/${var_A.fileId}`);
   case 4:
   return param_t_1.a(2);
   }

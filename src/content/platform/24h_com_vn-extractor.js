@@ -167,18 +167,12 @@ export default function (moduleObj, exportsObj, requireFn) {
   quality: obj_l[param_t_1]
   }
   );
-  return var_e_1.url = var_e_1.url.replace(/(---(nu|nam)_(bac|nam))?\.mp3/i, `---${param_t_1}
-  
-  
-  .mp3`), var_e_1;
+  return var_e_1.url = var_e_1.url.replace(/(---(nu|nam)_(bac|nam))?\.mp3/i, `---${param_t_1}.mp3`), var_e_1;
   }
   );
   }
   return /---(nu|nam)_(bac|nam)\.mp3/i.test(var_o_1) ? var_o_1 :
-  var_o_1.replace(/(---(nu|nam)_(bac|nam))?\.mp3/i, `---${var_a}
-  
-  
-  .mp3`);
+  var_o_1.replace(/(---(nu|nam)_(bac|nam))?\.mp3/i, `---${var_a}.mp3`);
   }
   ,
   mediaObjectChange: param_t => {

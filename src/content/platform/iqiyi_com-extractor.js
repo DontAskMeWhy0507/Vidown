@@ -261,13 +261,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   else {
   if (param_t_1.mpdUrl) {
-  var var_u_1 = Object(dep_url_utils.f)(`${var_y}
-  
-  
-  ${param_t_1.mpdUrl}
-  
-  
-  `);
+  var var_u_1 = Object(dep_url_utils.f)(`${var_y}${param_t_1.mpdUrl}`);
   return var_u_1.ext = "mp4", var_u_1.exts = ["mp4"], var_u_1.type = "video", var_u_1._isDashMPD = !0,
   var_u_1.filename = var_v, var_u_1.resolution = var_o_2 + "p", void var_g.push(
   var_u_1);
@@ -286,13 +280,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   void var_g.push(var_e_1);
   }
   if (param_t_1.mpdUrl) {
-  var var_r_1 = Object(dep_url_utils.f)(`${var_y}
-  
-  
-  ${param_t_1.mpdUrl}
-  
-  
-  `);
+  var var_r_1 = Object(dep_url_utils.f)(`${var_y}${param_t_1.mpdUrl}`);
   return var_r_1.ext = "mp4", var_r_1.exts = ["mp4"], var_r_1.type = "audio", var_r_1.quality = param_t_1.name,
   var_r_1.i18n_quality = param_t_1.name, var_r_1._isDashMPD = !0, var_r_1.filename = var_v,
   void var_g.push(var_r_1);

@@ -21,10 +21,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_e,
   var_r,
   var_o,
-  var_a = document.querySelector(`[data-video-url="${param_t.url}
-  
-  
-  "]`),
+  var_a = document.querySelector(`[data-video-url="${param_t.url}"]`),
   var_s = null === (var_r = null === (var_e = null == var_a ?
   void 0 : var_a.querySelector('[data-element-id="video-title"], .vse-video-title-text')) ||
   void 0 === var_e ? void 0 : var_e.innerText) || void 0 === var_r ?

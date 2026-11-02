@@ -465,13 +465,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 === var_e ? void 0 : var_e.innerText,
   var_c = null === (var_r = var_s_1.querySelector("ul li.active, ul li.playing")) ||
   void 0 === var_r ? void 0 : var_r.innerText;
-  var_u_1 && var_c && (var_o.filename = `${var_u_1}
-  
-  
-   - ${var_c}
-  
-  
-  `);
+  var_u_1 && var_c && (var_o.filename = `${var_u_1}- ${var_c}`);
   }
   var var_l = null === (var_n = location.href.match(/.+a(\d+)\/.+\.html/i)) ||
   void 0 === var_n ? void 0 : var_n[1],

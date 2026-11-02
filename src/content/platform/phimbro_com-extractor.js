@@ -34,10 +34,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   if (param_t_1.trim().startsWith("#") && param_t_1.toLowerCase().includes("uri")) {
   var var_r_1 = var_i((null === (var_e_1 = param_t_1.match(/URI="([^"]+)"/)) ||
   void 0 === var_e_1 ? void 0 : var_e_1[1]) || "");
-  return param_t_1.replace(/URI="([^"]+)"/, `URI="${var_r_1}
-  
-  
-  "`);
+  return param_t_1.replace(/URI="([^"]+)"/, `URI="${var_r_1}"`);
   }
   return param_t_1.trim().startsWith("#") || !param_t_1.trim() ?
   param_t_1 : var_i(param_t_1);

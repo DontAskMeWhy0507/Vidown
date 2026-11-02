@@ -258,13 +258,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_c = null === (var_i = null === (var_n = var_s_1.querySelector(".artist")) ||
   void 0 === var_n ? void 0 : var_n.innerText) || void 0 === var_i ?
   void 0 : var_i.trim(),
-  var_l_1 = `${var_u_1}
-  
-  
-  ${var_c ? " - " + var_c : ""}
-  
-  
-  `;
+  var_l_1 = `${var_u_1}${var_c ? " - " + var_c : ""}`;
   var_o.filename = var_l_1;
   }
   return var_o.ext = "mp4", var_o.exts = ["mp4"], "video";
@@ -287,13 +281,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return JSON.parse(var_r).map(param_t => {
   var var_e_1,
   var_r_1 = param_t.description || param_t.media_desc,
-  var_o = `${param_t.title || param_t.media_title}
-  
-  
-  ${var_r_1 ? " - " + var_r_1 : ""}
-  
-  
-  `;
+  var_o = `${param_t.title || param_t.media_title}${var_r_1 ? " - " + var_r_1 : ""}`;
   return param_t.sources.map(param_t_1 => {
   var var_e_2 = Object(dep_url_utils.f)(param_t_1.file);
   var_e_2.filename = var_o;

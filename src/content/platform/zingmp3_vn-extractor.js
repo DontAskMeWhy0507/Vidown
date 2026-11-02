@@ -362,13 +362,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   "zmp3_non_logged.v1.1") || "{}")) || void 0 === var_l_1 ? void 0 :
   var_l_1.recentSongs, var_j = null === (var_d = document.querySelector(".media-content .item-title")) ||
   void 0 === var_d ? void 0 : var_d.textContent, var_C = null === (var_h = document.querySelector(
-  ".media-content h3")) || void 0 === var_h ? void 0 : var_h.textContent, var_B = `${var_j}
-  
-  
-   - ${var_C}
-  
-  
-  `, var_e.filename = null !== (var_y = null !== (var_m = null === (var_v = null == var_f ?
+  ".media-content h3")) || void 0 === var_h ? void 0 : var_h.textContent, var_B = `${var_j}- ${var_C}`, var_e.filename = null !== (var_y = null !== (var_m = null === (var_v = null == var_f ?
   void 0 : var_f.find(param_t_2 => param_t_2 && var_g.includes(param_t_2.encodeId))) ||
   void 0 === var_v ? void 0 : var_v.alias) && void 0 !== var_m ?
   var_m : var_B) && void 0 !== var_y ? var_y : var_e.filename, param_t_1.a(2, []);

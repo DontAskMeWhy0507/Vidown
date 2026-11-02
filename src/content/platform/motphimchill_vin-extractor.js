@@ -221,13 +221,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 === var_t ? void 0 : var_t.innerText,
   var_i = null === (var_e = document.querySelector("h1 span.chapter-name")) ||
   void 0 === var_e ? void 0 : var_e.innerText,
-  var_o_1 = var_r && var_i ? `${var_r}
-  
-  
-   - ${var_i}
-  
-  
-  ` : document.title,
+  var_o_1 = var_r && var_i ? `${var_r}- ${var_i}` : document.title,
   var_a_1 = Object(dep_url_utils.f)(list_u[0].url);
   return var_a_1.type = "video", var_a_1.filename = var_o_1, [var_a_1];
   }

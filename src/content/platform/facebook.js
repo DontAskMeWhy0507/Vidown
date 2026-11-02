@@ -195,10 +195,11 @@ export default function(module, exports, require) {
         file: "facebook/messenger-audio"
       });
       window.addEventListener("message", function(event) {
-        if ("facebook-messenger-audio" === event.data.type) {
+        if (!event || event.origin !== window.location.origin) return;
+        if (event.data && "facebook-messenger-audio" === event.data.type) {
           messengerAudioMap.set(event.data.url, event.data);
         }
-        if ("facebook-messenger-audio-revoked" === event.data.type) {
+        if (event.data && "facebook-messenger-audio-revoked" === event.data.type) {
           messengerAudioMap.delete(event.data.url);
         }
       });

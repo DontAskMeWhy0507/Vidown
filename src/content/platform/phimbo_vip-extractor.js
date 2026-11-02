@@ -32,13 +32,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   num_l < var_f;
   num_l++) {
   var var_d = var_a.content[num_l];
-  list_c.push(`#EXTINF:${var_d.extinf},`), list_c.push(`${var_u}
-  
-  
-  ${var_d.url}
-  
-  
-  .html`);
+  list_c.push(`#EXTINF:${var_d.extinf},`), list_c.push(`${var_u}${var_d.url}.html`);
   }
   return list_c.push("#EXT-X-ENDLIST"), delete var_s.referrer, var_s.skipReferrer = !0,
   var_s.play_list = list_c.join("\n"), var_s.extraData = {

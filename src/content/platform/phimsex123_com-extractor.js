@@ -296,39 +296,9 @@ export default function (moduleObj, exportsObj, requireFn) {
   "#EXT-X-MEDIA-SEQUENCE:0"], num_s = 0;
   num_s < param_t_2.segments.length;
   num_s++) 1 == param_i ? (list_a.push("#EXTINF:" + param_t_2.segments[num_s].inf.duration),
-  list_a.push(`${param_r}
-  
-  
-  /uploads/hls/${param_e}
-  
-  
-  /${param_n}
-  
-  
-  -${param_t_2.segments[num_s].byteRange.length}
-  
-  
-  @${param_t_2.segments[num_s].byteRange.offset}
-  
-  
-  .txt` + (param_o.ms > 0 ? "?ms=" + param_o.ms : ""))) :
+  list_a.push(`${param_r}/uploads/hls/${param_e}/${param_n}-${param_t_2.segments[num_s].byteRange.length}@${param_t_2.segments[num_s].byteRange.offset}.txt` + (param_o.ms > 0 ? "?ms=" + param_o.ms : ""))) :
   (list_a.push("#EXTINF:" + param_t_2.segments[num_s].inf.duration), list_a.push(
-  `${param_r}
-  
-  
-  /uploads/hls/${param_e}
-  
-  
-  /r/${param_n}
-  
-  
-  -${param_t_2.segments[num_s].byteRange.length}
-  
-  
-  @${param_t_2.segments[num_s].byteRange.offset}
-  
-  
-  .txt` + (param_o.ms > 0 ? "?ms=" + param_o.ms : "")));
+  `${param_r}/uploads/hls/${param_e}/r/${param_n}-${param_t_2.segments[num_s].byteRange.length}@${param_t_2.segments[num_s].byteRange.offset}.txt` + (param_o.ms > 0 ? "?ms=" + param_o.ms : "")));
   return list_a.push("#EXT-X-ENDLIST"), list_a.join("\n");
   }
   catch (var_t) {

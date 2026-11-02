@@ -282,22 +282,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_e = param_t.url,
   var_r = new URL(var_e),
   var_n = var_r.searchParams.get("id");
-  return var_e = `${var_r.protocol}
-  
-  
-  //${var_r.host}
-  
-  
-  /hls/${var_n}
-  
-  
-  /${var_n}
-  
-  
-  ?v=${Date.now()}
-  
-  
-  `;
+  return var_e = `${var_r.protocol}//${var_r.host}/hls/${var_n}/${var_n}?v=${Date.now()}`;
   }
   ,
   mediaObjectChange: param_t => {

@@ -26,13 +26,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_r = var_e_1.href,
   var_i = Object(dep_url_utils.f)(var_r);
   return var_i.identifier = param_t_1.songId, var_i.altUrl = param_t_1.MP3FilePath,
-  var_i.filename = `${param_t_1.songName}
-  
-  
-   - ${param_t_1.artistName}
-  
-  
-  `, var_i.type = "audio", var_i.ext = "mp3", var_i.exts = ["mp3"], var_i;
+  var_i.filename = `${param_t_1.songName}- ${param_t_1.artistName}`, var_i.type = "audio", var_i.ext = "mp3", var_i.exts = ["mp3"], var_i;
   }
   );
   }

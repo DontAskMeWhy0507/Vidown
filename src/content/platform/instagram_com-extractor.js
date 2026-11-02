@@ -258,14 +258,8 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 : var_c_1.trim();
   var var_I = null == var_O ? void 0 : var_O.querySelector('[role="presentation"] [dir="auto"] span');
   if (var_I) return `${null === (var_l = var_I.innerText) ||
-  void 0 === var_l ? void 0 : var_l.trim()}
-  
-  
-   - ${(null === (var_f_1 = location.pathname.match(/reel\/([a-z0-9\-_]+)\/?/i)) ||
-  void 0 === var_f_1 ? void 0 : var_f_1[1]) || Date.now()}
-  
-  
-  `;
+  void 0 === var_l ? void 0 : var_l.trim()}- ${(null === (var_f_1 = location.pathname.match(/reel\/([a-z0-9\-_]+)\/?/i)) ||
+  void 0 === var_f_1 ? void 0 : var_f_1[1]) || Date.now()}`;
   }
   if (location.pathname.startsWith("/stories/")) {
   var var_j = null === (var_d = param_t.closest("section")) ||
@@ -294,13 +288,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 === var_g ? void 0 : var_g.querySelector("section + div>div+span span")) ||
   void 0 === var_b ? void 0 : var_b.innerText) || void 0 === var_w ?
   void 0 : var_w.trim();
-  return var_P ? `${var_U}
-  
-  
-   - ${var_P}
-  
-  
-  ` : var_U;
+  return var_P ? `${var_U}- ${var_P}` : var_U;
   }
   var var_N = null === (var__ = null === (var_A = var_O.querySelector('a[href] span[dir="auto"]')) ||
   void 0 === var_A ? void 0 : var_A.innerText) || void 0 === var__ ?
@@ -541,13 +529,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_r_1 = Object(dep_url_utils.f)(param_t_2.src);
   var_r_1.type = "video", var_r_1.filename = var_c_1, var_r_1.resolution = param_t_2.configHeight + "p";
   var var_n = Object(dep_dom_utils.getBestFitResolution)(param_t_2.configHeight) ||
-  `${param_t_2.configWidth}
-  
-  
-  x${param_t_2.configHeight}
-  
-  
-  ` || var_r_1.resolution;
+  `${param_t_2.configWidth}x${param_t_2.configHeight}` || var_r_1.resolution;
   return var_r_1.quality = null === (var_e_1 = dep_media_constants.r[var_n + "p"]) ||
   void 0 === var_e_1 ? void 0 : var_e_1.label, var_r_1;
   }

@@ -210,19 +210,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_e = Object(dep_url_utils.f)(param_t.link);
   return var_e.type = "video", var_e.ext = "mp4" === param_t.type ?
   "mp4" : "m3u8", var_e.exts = [var_e.ext], var_e.referrer = location.href, var_e.filename = param_t.name ?
-  `${document.title}
-  
-  
-   [${param_t.name}
-  
-  
-  ]` : document.title, param_t.id && (var_e.identifier = `${param_t.id}
-  
-  
-  -${param_t.name || param_t.link}
-  
-  
-  `), var_e;
+  `${document.title}[${param_t.name}]` : document.title, param_t.id && (var_e.identifier = `${param_t.id}-${param_t.name || param_t.link}`), var_e;
   }
   var obj_d = {
   getDomains: () => ["phimtv."],

@@ -419,13 +419,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_i = param_t.variant.replace("playlist.m3u8", "").slice(0, -1),
   var_o = param_t.segmentUri.replace(".png", ""),
   var_a = new URL(`/${param_t.videoId}/${var_i}/${var_o}.png`, var_n).href;
-  str_e = `/redirector/${var_E.Default}
-  
-  
-  ?ref=${var_a}
-  
-  
-  `;
+  str_e = `/redirector/${var_E.Default}?ref=${var_a}`;
   }
   return new URL(str_e, param_t.blockDomain).href;
   }
@@ -560,13 +554,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_r = param_t.response;
   try {
   var var_o = JSON.parse(var_r),
-  var_a = `${var_o.segmentDomains[0]}
-  
-  
-  /segment/${var_e.id}
-  
-  
-  /`,
+  var_a = `${var_o.segmentDomains[0]}/segment/${var_e.id}/`,
   num_s = 0;
   return var_o.playlists.mediaPlaylists.map(param_t_1 => {
   var var_r_1,
@@ -576,13 +564,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   , var_e);
   return var_c_1.play_list = param_t_1.source.replace(/,\\n(?=segment)|,undefined\n\d*\w\//g,
-  `,\n${var_a}
-  
-  
-  ${var_u}
-  
-  
-  /`).replace(/segment-/g, "").replace(/\.ts/g, ".html"), var_c_1.resolution = var_u,
+  `,\n${var_a}${var_u}/`).replace(/segment-/g, "").replace(/\.ts/g, ".html"), var_c_1.resolution = var_u,
   var_c_1.quality = Object(dep_dom_utils.i18n)(null === (var_r_1 = dep_media_constants.r[var_u]) ||
   void 0 === var_r_1 ? void 0 : var_r_1.i18n_label), var_c_1._hls = !0, var_c_1.url = var_a + (
   var_u + "/") + param_t_1.segments[0].uri.replace(/[\s\S]*segment-/g, "").replace(
@@ -659,22 +641,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   "#EXT-X-VERSION:3"), var_g_1.push("#EXT-X-TARGETDURATION:11"), var_g_1.push("#EXT-X-MEDIA-SEQUENCE:1"),
   var_g_1.push("#EXT-X-PLAYLIST-TYPE:VOD"), var_b_1 = 0;
   var_b_1 < var_m.segments.length;
-  var_b_1++) var_w_1 = var_m.segments[var_b_1], var_A_1 = `${var_d_1.block.segmentDomains[0]}
-  
-  
-  /storage/${var_o}
-  
-  
-  /${var_m.key}
-  
-  
-  /${var_w_1.key}
-  
-  
-  .${var_w_1.ext}
-  
-  
-  `, var_g_1.push(`#EXTINF:${var_w_1.duration},`), var_g_1.push(var_A_1);
+  var_b_1++) var_w_1 = var_m.segments[var_b_1], var_A_1 = `${var_d_1.block.segmentDomains[0]}/storage/${var_o}/${var_m.key}/${var_w_1.key}.${var_w_1.ext}`, var_g_1.push(`#EXTINF:${var_w_1.duration},`), var_g_1.push(var_A_1);
   var_g_1.push("#EXT-X-ENDLIST"), var_y_1.play_list = var_g_1.join("\n"), var_y_1.ext = "m3u8",
   var_y_1.exts = ["m3u8"], var_y_1.type = "video", var_y_1.filename = var_d_1.video.title,
   var_h_1.push(var_y_1);

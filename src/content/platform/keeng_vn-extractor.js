@@ -231,13 +231,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_e_1 = param_t_2.download_url_lossless,
   var_r_1 = param_t_2.download_url_web,
   var_i = param_t_2.download_url,
-  var_o = `${param_t_2.name}
-  
-  
-   - ${param_t_2.singer}
-  
-  
-  `,
+  var_o = `${param_t_2.name}- ${param_t_2.singer}`,
   list_s = [];
   return var_e_1 && list_s.push(var_h(var_e_1, "Lossless", "lossless", var_o)), var_r_1 ?
   list_s.push(var_h(var_r_1, Object(dep_dom_utils.i18n)(dep_media_constants.r["480p"].i18n_label),
@@ -247,13 +241,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   ).flat(1), param_t_1.a(2, var_l);
   case 1:
   return var_f = var_c.cache_path, var_d = Object(dep_url_utils.f)(new URL(var_f,
-  "https://musicmd1.keeng.vn").href), var_p = var_c.name ? `${var_c.name}
-  
-  
-   - ${var_c.singer}
-  
-  
-  ` : var_e.filename || document.title, var_d.filename = var_p, var_d.fixName = var_p,
+  "https://musicmd1.keeng.vn").href), var_p = var_c.name ? `${var_c.name}- ${var_c.singer}` : var_e.filename || document.title, var_d.filename = var_p, var_d.fixName = var_p,
   var_d.type = "video", param_t_1.n = 2, fetch(var_d.url).then(param_t_2 => param_t_2.text(
   ));
   case 2:

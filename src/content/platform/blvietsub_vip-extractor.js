@@ -320,13 +320,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_c_1 = (null === (var_n = null === (var_r = document.querySelector("h1")) ||
   void 0 === var_r ? void 0 : var_r.textContent) || void 0 === var_n ?
   void 0 : var_n.trim()) || document.title;
-  return str_o ? `${var_c_1}
-  
-  
-   - Tập ${str_o}
-  
-  
-  ` : var_c_1;
+  return str_o ? `${var_c_1}- Tập ${str_o}` : var_c_1;
   }
   var obj__ = {
   getDomains: () => ["blvietsub."],
@@ -453,19 +447,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   catch (var_t_1) {
   var_c_2 = var_d_2;
   }
-  var var_h_2 = `${var_e.protocol}
-  
-  
-  //${var_e.host}
-  
-  
-  ${var_e.pathname}
-  
-  
-  ${param_t_2.BaseURL.replaceAll("&amp;", "&")}
-  
-  
-  `,
+  var var_h_2 = `${var_e.protocol}//${var_e.host}${var_e.pathname}${param_t_2.BaseURL.replaceAll("&amp;", "&")}`,
   var_p_1 = (() => {
   var var_t_1,
   var_r_2,
@@ -478,19 +460,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   ) || (null === (var_r_2 = var_y.slice(-1)) || void 0 === var_r_2 ?
   void 0 : var_r_2[0]);
-  if (var_i) return `${var_e.protocol}
-  
-  
-  //${var_e.host}
-  
-  
-  ${var_e.pathname}
-  
-  
-  ${var_i.BaseURL.replaceAll("&amp;", "&")}
-  
-  
-  `;
+  if (var_i) return `${var_e.protocol}//${var_e.host}${var_e.pathname}${var_i.BaseURL.replaceAll("&amp;", "&")}`;
   }
   )(),
   var_v_2 = var_p_1 ? {

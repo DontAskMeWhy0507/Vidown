@@ -14,13 +14,13 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
 ## Build Pipeline & Artifact Invariants
 
 - **Original Baseline Bundle**: 2,404,925 bytes (630 B CSS + 2,404,295 B Webpack IIFE).
-- **Current Shipped Built Bundle**: 2,351,383 bytes.
-- **Net Raw Code Reduction**: 53,542 bytes (Gate 5 target $\ge 50,000$ B met per owner ruling).
+- **Current Shipped Built Bundle**: 2,350,233 bytes.
+- **Net Raw Code Reduction**: 54,692 bytes (Gate 5 target $\ge 50,000$ B met per owner ruling).
 - **Vendor Optimizations (Milestone 2)**:
   - `bn.js` 6-to-1 deduplication: canonical `src/content/vendor/elliptic/module-126.js` (43,355 B committed git blob) preserved; 5 duplicate instances replaced with 103 B alias stubs, saving 216,015 B raw.
   - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates inlined generator copies in `content-script.js`, saving 342,202 B raw.
   - Third-party libraries cleanly isolated in `src/content/vendor/` (`cryptojs`, `qrcode`, `stream`, `fast-xml-parser`, `mustache`, `eventemitter3`, `buffer`, `shims`, `parser`, `elliptic`).
-- **Release Package**: `dist/savior-extension-v3.0.1.zip` is ~1.08 MB (1,135,232 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
+- **Release Package**: `dist/savior-extension-v3.0.1.zip` is ~1.08 MB (1,135,758 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
 
 ---
 
@@ -97,6 +97,16 @@ node tests/test_golden_behavior.js
 ├── scripts/                      # Build pipelines (build_content_script, build_background, build_common, build_inject, package_release)
 └── dist/                         # Release packages (savior-extension-v3.0.1.zip)
 ```
+
+---
+
+## Security Notes & Standing Trade-Offs
+
+- **YouTube & DASH Deciphering**: Evaluates site-player deciphering logic in the page's MAIN world and establishes a pass-through Trusted Types default policy. This reflects standard browser media extraction design (bounded strictly to the sites' own player code) to unpack signature and PoToken tokens.
+- **Dynamic Code Execution in `helper-655`**: Module `src/content/platform/helper-655.js` evaluates stored parser expressions (`eval(this.code)`) and is deliberately preserved as the sole unrenamed module to prevent symbol collision or parser breakage.
+- **Inert Cốc Cốc Remote-Rules Path**: Legacy AdGuard remote-rule endpoints (`browser.coccoc.com`) in background service worker logic are 100% neutralized and inert via the runtime fetch shim in `background.chrome.js` (requests return empty dummy rules without contacting remote servers).
+- **Native Helper Allowed Origins**: The native messaging host manifest (`com.savior.helper.json`) pins the active RSA-2048 Chrome Extension ID (`nnjbdidmmnecdmcllkcaajboplpcimcf`). If the extension public key is regenerated in the future, the host installer must be re-executed.
+- **Multilingual UI**: Certain user interface strings across the popup, downloads manager, and native status reporting intentionally remain in Vietnamese by deliberate product choice.
 
 ---
 

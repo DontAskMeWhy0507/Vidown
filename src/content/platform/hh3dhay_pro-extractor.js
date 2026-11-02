@@ -495,13 +495,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   "#playlist, ul.playlist")) || void 0 === var_n ? void 0 : var_n.querySelector(
   "li.active")) || void 0 === var_i ? void 0 : var_i.innerText) ||
   void 0 === var_o ? void 0 : var_o.trim();
-  return var_s.fixName = `${var_c}
-  
-  
-   - ${var_l_1 || Date.now()}
-  
-  
-  `, var_s.ext = "m3u8", var_s.exts = ["m3u8"], var_s.type = "video", [var_s];
+  return var_s.fixName = `${var_c}- ${var_l_1 || Date.now()}`, var_s.ext = "m3u8", var_s.exts = ["m3u8"], var_s.type = "video", [var_s];
   }
   }
   , {

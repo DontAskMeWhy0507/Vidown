@@ -291,22 +291,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_a_2.startsWith("#EXT-X-TARGETDURATION") && (str_n = var_a_2.split(":")[1]),
   var_a_2.startsWith("http") && list_r.push(`<SegmentURL media="${var_a_2}" />`);
   }
-  return list_i.push(`<AdaptationSet mimeType="video/mp4" codecs="${var_p}
-  
-  
-  ">`), list_i.push(`<Representation mimeType="video/mp4" frameRate="24" bandwidth="${var_m}
-  
-  
-  " codecs="avc1.4d401f" width="${var_g}
-  
-  
-  " height="${var_b}
-  
-  
-  ">`), list_i.push(`<SegmentList duration="${str_n}
-  
-  
-  ">`), list_i.push(...list_r), list_i.push("</SegmentList>"), list_i.push(
+  return list_i.push(`<AdaptationSet mimeType="video/mp4" codecs="${var_p}">`), list_i.push(`<Representation mimeType="video/mp4" frameRate="24" bandwidth="${var_m}" codecs="avc1.4d401f" width="${var_g}" height="${var_b}">`), list_i.push(`<SegmentList duration="${str_n}">`), list_i.push(...list_r), list_i.push("</SegmentList>"), list_i.push(
   "</Representation>"), list_i.push("</AdaptationSet>"), Promise.resolve(list_i);
   }
   ), var_k = fetch(var_w).then(param_t_2 => param_t_2.text()).then(param_t_2 => {
@@ -318,20 +303,8 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_a_2.startsWith("#EXT-X-TARGETDURATION") && (str_i = var_a_2.split(":")[1]),
   var_a_2.startsWith("http") && list_n.push(`<SegmentURL media="${var_a_2}" />`);
   }
-  return list_r.push(`<AdaptationSet lang="${var_A}
-  
-  
-  " mimeType="audio/mp4" codecs="${var_v}
-  
-  
-  " bitmovin:label="English stereo">`), list_r.push(`<Representation mimeType="audio/mp4" codecs="${var_v}
-  
-  
-  " audioSamplingRate="48000" startWithSAP="1" bandwidth="98414">`), list_r.push(
-  `<SegmentList duration="${str_i}
-  
-  
-  ">`), list_r.push(...list_n), list_r.push("</SegmentList>"), list_r.push(
+  return list_r.push(`<AdaptationSet lang="${var_A}" mimeType="audio/mp4" codecs="${var_v}" bitmovin:label="English stereo">`), list_r.push(`<Representation mimeType="audio/mp4" codecs="${var_v}" audioSamplingRate="48000" startWithSAP="1" bandwidth="98414">`), list_r.push(
+  `<SegmentList duration="${str_i}">`), list_r.push(...list_n), list_r.push("</SegmentList>"), list_r.push(
   "</Representation>"), list_r.push("</AdaptationSet>"), Promise.resolve(list_r);
   }
   ), var_M = ['<?xml version="1.0" encoding="UTF-8" standalone="yes"?>', '<MPD profiles="urn:mpeg:dash:profile:isoff-main:2011" type="static" availabilityStartTime="2015-08-04T09:33:14.000Z" publishTime="2015-08-04T10:47:32.000Z" mediaPresentationDuration="P0Y0M0DT0H3M30.000S" minBufferTime="P0Y0M0DT0H0M1.000S" bitmovin:version="1.6.0" xmlns:ns2="http://www.w3.org/1999/xlink" xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:bitmovin="http://www.bitmovin.net/mpd/2015">',

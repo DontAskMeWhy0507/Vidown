@@ -321,25 +321,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_v = param_t_1.height,
   var_m_1 = param_t_1.bitrate,
   var_y = var_v / 9 * 16;
-  list_o.push(`<AdaptationSet mimeType="video/mp4" codecs="${var_u_1}
-  
-  
-  ">`), list_o.push(`<Representation mimeType="video/mp4" frameRate="${var_c_2}
-  
-  
-  " bandwidth="${var_m_1}
-  
-  
-  " codecs="avc1.4d401f" width="${var_y}
-  
-  
-  " height="${var_v}
-  
-  
-  ">`), list_o.push(`<SegmentList duration="${var_d_1}
-  
-  
-  ">`), list_o.push(...var_h.map(param_t_2 => {
+  list_o.push(`<AdaptationSet mimeType="video/mp4" codecs="${var_u_1}">`), list_o.push(`<Representation mimeType="video/mp4" frameRate="${var_c_2}" bandwidth="${var_m_1}" codecs="avc1.4d401f" width="${var_y}" height="${var_v}">`), list_o.push(`<SegmentList duration="${var_d_1}">`), list_o.push(...var_h.map(param_t_2 => {
   var var_r_2,
   list_n = [...var_l_1],
   var_o_1 = var_f(Object(dep_url_utils.a)(new URL(var_e.url), (var_p ||
@@ -370,25 +352,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var__ = var_g.base_url,
   var_E = var_g.bitrate,
   var_S = var_g.mime_type;
-  list_o.push(`<AdaptationSet lang="vi" mimeType="${var_S}
-  
-  
-  " codecs="${var_b}
-  
-  
-  " bitmovin:label="English stereo">`), list_o.push(`<Representation mimeType="${var_S}
-  
-  
-  " codecs="${var_b}
-  
-  
-  " audioSamplingRate="48000" startWithSAP="1" bandwidth="${var_E}
-  
-  
-  ">`), list_o.push(`<SegmentList duration="${var_w}
-  
-  
-  ">`), list_o.push(...var_A.map(param_t_2 => {
+  list_o.push(`<AdaptationSet lang="vi" mimeType="${var_S}" codecs="${var_b}" bitmovin:label="English stereo">`), list_o.push(`<Representation mimeType="${var_S}" codecs="${var_b}" audioSamplingRate="48000" startWithSAP="1" bandwidth="${var_E}">`), list_o.push(`<SegmentList duration="${var_w}">`), list_o.push(...var_A.map(param_t_2 => {
   var var_r_2,
   list_n = [...var_l_1],
   var_o_1 = var_f(Object(dep_url_utils.a)(new URL(var_e.url), (var__ ||

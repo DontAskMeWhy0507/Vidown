@@ -595,10 +595,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   return var_a.match(/helvid\.[a-z0-9]+\/hash.php\?.+/i) ? (var_n.ext = "m3u8", var_n.exts = ["m3u8"],
   var_n.referrer = var_n.url, var_n.filename = (null === (var_r = document.querySelector(
-  `a[href="${location.href}
-  
-  
-  "]`)) || void 0 === var_r ? void 0 : var_r.title) ||
+  `a[href="${location.href}"]`)) || void 0 === var_r ? void 0 : var_r.title) ||
   document.title, "video") : var_a.match(/helvid\.[a-z0-9]+\/play\/token_hash\?.+/i) ?
   (var_n.ext = "m3u8", var_n.exts = ["m3u8"], var_n.referrer = var_n.url, "video") :
   (var_n.ext = "mp4", var_n.exts = ["mp4"], var_n.type);

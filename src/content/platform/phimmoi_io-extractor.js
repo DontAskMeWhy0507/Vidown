@@ -327,16 +327,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   ) switch (param_t_1.n) {
   case 0:
   if (var_r = var_e.split("/"), var_a = (var_r.pop() || var_r.pop()) &&
-  var_r.pop(), var_s = `${var_r[0]}
-  
-  
-  //${var_r[2]}
-  
-  
-  /u/0/get_video_info?docid=${var_a}
-  
-  
-  `, list_m.includes(var_s)) {
+  var_r.pop(), var_s = `${var_r[0]}//${var_r[2]}/u/0/get_video_info?docid=${var_a}`, list_m.includes(var_s)) {
   param_t_1.n = 2;
   break;
   }

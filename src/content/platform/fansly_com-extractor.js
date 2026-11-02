@@ -13,18 +13,9 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_o = document.querySelector(".stream iframe"),
   var_a = (null === (var_r = null === (var_e = null === (var_t = null == var_o ?
   void 0 : var_o.closest(".stream")) || void 0 === var_t ? void 0 :
-  var_t.querySelector(`.server_option [data-embed="${var_o.src}
-  
-  
-  "]`)) || void 0 === var_e ? void 0 : var_e.innerText) ||
+  var_t.querySelector(`.server_option [data-embed="${var_o.src}"]`)) || void 0 === var_e ? void 0 : var_e.innerText) ||
   void 0 === var_r ? void 0 : var_r.trim()) || "_",
-  var_s = `${document.title}
-  
-  
-   ${var_a}
-  
-  
-  `;
+  var_s = `${document.title}${var_a}`;
   str_i != var_s && (str_i = var_s, var_n = void 0);
   }
   ,

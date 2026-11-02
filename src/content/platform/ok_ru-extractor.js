@@ -46,13 +46,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 : var_o.querySelector('wm-card-details [slot="info"] .artists, wm-card-details [slot="info"] [data-tsid="artist"]')) ||
   void 0 === var_n_1 ? void 0 : var_n_1.innerText) || void 0 === var_i_1 ?
   void 0 : var_i_1.trim();
-  if (var_a && var_s) return `${var_a}
-  
-  
-   - ${var_s}
-  
-  
-  `;
+  if (var_a && var_s) return `${var_a}- ${var_s}`;
   }
   (var_e);
   return "stream" !== var_i.filename && var_i.filename != var_r ?
@@ -88,16 +82,10 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_s = document.querySelector("wm-player wm-card-details"),
   var_u = `${null === (var_r = null === (var_e = null == var_s ?
   void 0 : var_s.querySelector('[slot="title"] .name')) || void 0 === var_e ?
-  void 0 : var_e.innerText) || void 0 === var_r ? void 0 : var_r.trim()}
-  
-  
-   - ${null === (var_o = null === (var_n_1 = null == var_s ?
+  void 0 : var_e.innerText) || void 0 === var_r ? void 0 : var_r.trim()}- ${null === (var_o = null === (var_n_1 = null == var_s ?
   void 0 : var_s.querySelector(".artists")) || void 0 === var_n_1 ?
   void 0 : var_n_1.innerText) || void 0 === var_o ? void 0 :
-  var_o.trim()}
-  
-  
-  `;
+  var_o.trim()}`;
   param_t.fixName = var_u, var_i = param_t, EE.emit("widget.forceUpdate");
   }
   return !0;

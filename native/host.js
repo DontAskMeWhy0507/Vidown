@@ -422,10 +422,23 @@ function handleMessage(msg) {
       } catch (_) {
         folderPath = DOWNLOADS_DIR;
       }
-      const openCmd = isWin ? `explorer.exe "${folderPath}"` : (isMac ? `open "${folderPath}"` : `xdg-open "${folderPath}"`);
-      exec(openCmd, (err) => {
-        sendMessage({ action: 'openFolderResult', success: !err });
-      });
+      try {
+        let child;
+        if (isWin) {
+          child = spawn('explorer.exe', [folderPath], { windowsHide: true, detached: true });
+        } else if (isMac) {
+          child = spawn('open', [folderPath], { detached: true });
+        } else {
+          child = spawn('xdg-open', [folderPath], { detached: true });
+        }
+        child.on('error', (err) => {
+          logHost(`openFolder error: ${err.message}`);
+        });
+        child.unref();
+        sendMessage({ action: 'openFolderResult', success: true });
+      } catch (err) {
+        sendMessage({ action: 'openFolderResult', success: false });
+      }
       break;
     }
 

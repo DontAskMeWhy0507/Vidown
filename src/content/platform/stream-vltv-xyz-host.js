@@ -204,13 +204,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   param_e_1.n = 3;
   break;
   }
-  return var_s = var_a[1], var_u = `${location.origin}
-  
-  
-  /m3u8/${var_s}
-  
-  
-  /playlist`, param_r.requestedUrls.push(location.href), param_e_1.n = 2, fetch(
+  return var_s = var_a[1], var_u = `${location.origin}/m3u8/${var_s}/playlist`, param_r.requestedUrls.push(location.href), param_e_1.n = 2, fetch(
   var_u, {
   headers: {
   Referer: location.href

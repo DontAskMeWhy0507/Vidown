@@ -260,7 +260,7 @@
   "45": {
     "path": "crypto/token-hash-util.js",
     "sha256": "fd732c345376cad326a8b26433e01712e12b87d7d6c14ecb2c73d091ceada771",
-    "size": 23331,
+    "size": 23205,
     "fileSize": 23205
   },
   "46": {
@@ -662,7 +662,7 @@
   "113": {
     "path": "detector/media-target-resolver.js",
     "sha256": "83ca390b9678c1a31dad65ed0a71d9465163b91c8b2025887165e47c8fb99caa",
-    "size": 8070,
+    "size": 8061,
     "fileSize": 8061
   },
   "114": {
@@ -698,7 +698,7 @@
   "119": {
     "path": "platform/vimeo_com-extractor.js",
     "sha256": "49423ca8bb2bfc707781b782af852b77e6944e0eae239a0a4cc6900c371be3fa",
-    "size": 26007,
+    "size": 25998,
     "fileSize": 25998
   },
   "120": {
@@ -764,7 +764,7 @@
   "133": {
     "path": "platform/phephim_net-extractor.js",
     "sha256": "0772ce18c25a7ecf7a6cd000402efadcabe055a619c28ebf1df113787c003038",
-    "size": 12032,
+    "size": 11987,
     "fileSize": 11987
   },
   "134": {
@@ -1015,9 +1015,9 @@
   },
   "182": {
     "path": "platform/24h_com_vn-extractor.js",
-    "sha256": "234541dc408664a4f1e8d275bc6c84745b5c009e119b2453fa008e9923711790",
-    "size": 8581,
-    "fileSize": 8581
+    "sha256": "fc6d926bb7529084226127745dd9e1f6990de7cdf362931fffc84d6b352f209d",
+    "size": 8563,
+    "fileSize": 8563
   },
   "183": {
     "path": "platform/2phimhay_com-extractor.js",
@@ -1027,15 +1027,15 @@
   },
   "184": {
     "path": "platform/9animes_org-extractor.js",
-    "sha256": "846ce4e85e04e16cfaef36e0f26618fa77a747ac98c2f1cfc915e4155c4f2b75",
-    "size": 8626,
-    "fileSize": 8608
+    "sha256": "89372911354055cb03e438d8fa5e4add00d2ea3984fa4792b9aab368cb0c8a54",
+    "size": 8570,
+    "fileSize": 8570
   },
   "185": {
     "path": "platform/amazon-extractor.js",
-    "sha256": "abd931e84bc169e6dea2ee2c40f3caa38e53db9f640a3d3266fb2d02af1ca981",
-    "size": 1169,
-    "fileSize": 1169
+    "sha256": "4d4ad50d28995bfa62e650b3584607c550b6c98fb8c10121d7f39a5924f5b0bc",
+    "size": 1160,
+    "fileSize": 1160
   },
   "186": {
     "path": "platform/anhquangdaytoantct_vn-extractor.js",
@@ -1045,9 +1045,9 @@
   },
   "187": {
     "path": "platform/ani24vn_com-extractor.js",
-    "sha256": "866b9c39b8b03b7f9d44d258fc1f3d8117f84b268fa02ad43691dc957e35fc67",
-    "size": 10270,
-    "fileSize": 10270
+    "sha256": "3823c7d1e45feda83cec37a627c41c08127fc7e34b6e0d17c5905d7b9b9fce4b",
+    "size": 10242,
+    "fileSize": 10242
   },
   "188": {
     "path": "platform/ani4u_org-extractor.js",
@@ -1123,15 +1123,15 @@
   },
   "200": {
     "path": "platform/animetvn_com-extractor.js",
-    "sha256": "19a7a07a416bffab3ca3ec4b7881229393c04b3baaaaf0bce9781a27f308d3ab",
-    "size": 9310,
-    "fileSize": 9220
+    "sha256": "a6cc83622f3fa1d7f4b0aa43c690a761e0dc5ece5293370cecd7794b026a1648",
+    "size": 9175,
+    "fileSize": 9175
   },
   "201": {
     "path": "platform/animevi_net-extractor.js",
-    "sha256": "4383a8cb5efc60cb1bef62d0699e4cfa189b82e96e06552f038ac2293ee92754",
-    "size": 13912,
-    "fileSize": 13912
+    "sha256": "e89e957ffca58507fb2a03d1fb8ef6fb6921c508ce546a63bc50f1c2f85458c2",
+    "size": 13893,
+    "fileSize": 13893
   },
   "202": {
     "path": "platform/aniwatch_mom-extractor.js",
@@ -1159,15 +1159,15 @@
   },
   "206": {
     "path": "platform/artlist_io-extractor.js",
-    "sha256": "ef8a22f44afbdf9a78f95b155e29740f8613f0a3db9eed2218c2bd76f42c464b",
-    "size": 3180,
-    "fileSize": 3180
+    "sha256": "f29c4fe33344e770819971d6139aee3703bc828b128b87826aaad21bce03fba0",
+    "size": 3161,
+    "fileSize": 3161
   },
   "207": {
     "path": "platform/artstation_com-extractor.js",
-    "sha256": "0cf5dc9fbb7413f2473d39bdfc166da28dcd2ac7681e0b0f140ce1623f59d90d",
-    "size": 3477,
-    "fileSize": 3441
+    "sha256": "4b181baba397f397c3f79e05452f14abfa754b1ab01a24fdc26c7ef6fde47d9b",
+    "size": 3423,
+    "fileSize": 3423
   },
   "208": {
     "path": "vendor/module-208.js",
@@ -1184,7 +1184,7 @@
   "210": {
     "path": "platform/autopro_com_vn-extractor.js",
     "sha256": "771d9f16b43a5dcdffa4915e42d3f4cb44deae53c7cdcdd582a0848409c9a04b",
-    "size": 1007,
+    "size": 995,
     "fileSize": 995
   },
   "211": {
@@ -1196,7 +1196,7 @@
   "212": {
     "path": "platform/bbc_com-extractor.js",
     "sha256": "86fe8ed13908b79cd069ea7d9fa4e7ae1de5803a30215b03f7d409ef26b5d91b",
-    "size": 12508,
+    "size": 12469,
     "fileSize": 12469
   },
   "213": {
@@ -1225,9 +1225,9 @@
   },
   "217": {
     "path": "platform/blvietsub_vip-extractor.js",
-    "sha256": "b4d4786ee37b73087824db6c1241d2be84a98d0c2451d69cf7bd4ac05791a64e",
-    "size": 16576,
-    "fileSize": 16576
+    "sha256": "e0558d1fc739dbfcda5c914fcdf62d4416eaf3e4739185bda2d410e90f6f55a7",
+    "size": 16485,
+    "fileSize": 16485
   },
   "218": {
     "path": "platform/boyfriendtv_com-extractor.js",
@@ -1274,7 +1274,7 @@
   "225": {
     "path": "platform/dantri_com_vn-extractor.js",
     "sha256": "a80b962c21668a21418ad9f2cddec3c5ac0992e65da1769df4b53ee7c1ed00e3",
-    "size": 11705,
+    "size": 11696,
     "fileSize": 11696
   },
   "226": {
@@ -1292,7 +1292,7 @@
   "228": {
     "path": "platform/dongphim-extractor.js",
     "sha256": "5083f46d58bef2a16a5ef59bf4d7c50c27a733299fcc1c19bb40cb0a0d0d551f",
-    "size": 7700,
+    "size": 7673,
     "fileSize": 7673
   },
   "229": {
@@ -1303,9 +1303,9 @@
   },
   "230": {
     "path": "platform/elolms-edu_vn-extractor.js",
-    "sha256": "9db37ce4196c5832a88136930c9a1b18254e979902a33cb75f257b5c85ba8a40",
-    "size": 15519,
-    "fileSize": 15501
+    "sha256": "b79490a8f0e3e8b1ef3beb357f371cb8b7c9d5d8ff58ce5c2755b80337f7e547",
+    "size": 15393,
+    "fileSize": 15393
   },
   "231": {
     "path": "platform/ephimmoi_net-extractor.js",
@@ -1315,26 +1315,26 @@
   },
   "232": {
     "path": "platform/facebook.js",
-    "sha256": "f7fd435a40758eb4bbae058d53837fd23da1af9dc9ddfe7c5f16442a1962c975",
-    "size": 41655,
-    "fileSize": 41655
+    "sha256": "4eeff6b800a8ad336f4c176558816d25fdb0e1909cce5e7ca35470596e0638cb",
+    "size": 41754,
+    "fileSize": 41754
   },
   "233": {
     "path": "platform/fansly_com-extractor.js",
-    "sha256": "db58b45ec67fb680d6da2968c46b0438c7b51c81d7af0853497aa0a728697a76",
-    "size": 2142,
-    "fileSize": 2142
+    "sha256": "b02f3444f34547c3c3b2a33e0d5268ff431bb562461fd8ede6a14db2a9a59100",
+    "size": 2114,
+    "fileSize": 2114
   },
   "234": {
     "path": "platform/forvo_com-extractor.js",
     "sha256": "19390589fcc53110d1ed5c73c4e6481b6be0c2af10dc157aa1e6ae0c6a6059cd",
-    "size": 1918,
+    "size": 1891,
     "fileSize": 1891
   },
   "235": {
     "path": "platform/fptplay_vn-extractor.js",
     "sha256": "5dac7c52bd6dad0cc0077843f3d35b1bd2ff9069e4b246162f071c2cd2105576",
-    "size": 5284,
+    "size": 5245,
     "fileSize": 5245
   },
   "236": {
@@ -1375,15 +1375,15 @@
   },
   "242": {
     "path": "platform/hentaiz-extractor.js",
-    "sha256": "657b6f47985c5678aa574981ef13919268adf75a07b591cf5b4240c7c93a211c",
-    "size": 21686,
-    "fileSize": 21623
+    "sha256": "c34eb6cea75f6b5ed7ebcbcc5d3854dfb427b66ddea66b00363d4cdcc0268b3c",
+    "size": 21524,
+    "fileSize": 21524
   },
   "243": {
     "path": "platform/hh3dhay_pro-extractor.js",
-    "sha256": "481c898cca4c19cb24ff6e8b3d7ef44d153e2acddc943aee00ef7ecdb45265e8",
-    "size": 14890,
-    "fileSize": 14890
+    "sha256": "867a71ff4a2503ea45e23dcee8fa68ca6ba11571f519a399e1767d1b242e0393",
+    "size": 14871,
+    "fileSize": 14871
   },
   "244": {
     "path": "platform/hhkungfu_tv-extractor.js",
@@ -1447,15 +1447,15 @@
   },
   "254": {
     "path": "platform/instagram_com-extractor.js",
-    "sha256": "56aa306eec00e1ae4dd0fe100ce4d83c6771b3925ef842f7840f8d24a5b19074",
-    "size": 20592,
-    "fileSize": 20574
+    "sha256": "10b772ae87fb50393c21394926b257113fead09b32c6368033ec3968400eb3fd",
+    "size": 20518,
+    "fileSize": 20518
   },
   "255": {
     "path": "platform/iqiyi_com-extractor.js",
-    "sha256": "cf2609aeaa67f78e2b3e9eec9dbd345a2d19d69e77e4243956e5000dcbc94d92",
-    "size": 10256,
-    "fileSize": 10202
+    "sha256": "7ee577003f9a436461bcf55c7c19730c56c6000f8cc5f192a424947697ae35e4",
+    "size": 10166,
+    "fileSize": 10166
   },
   "256": {
     "path": "platform/istockphoto_com-extractor.js",
@@ -1495,14 +1495,14 @@
   },
   "262": {
     "path": "platform/keeng_vn-extractor.js",
-    "sha256": "4db5d1d73f93e99bbabe0b6c4ec659929bba7b721e51d3a6b74b4a36ee53f38d",
-    "size": 10922,
-    "fileSize": 10895
+    "sha256": "18dedef3e55c33fa565a92f76d19d22a38b4e7d7bad8fd6ea648ab26dcf16b04",
+    "size": 10857,
+    "fileSize": 10857
   },
   "263": {
     "path": "platform/kenh14_vn-extractor.js",
     "sha256": "e0047a78ea40ea3b6aeba42580a6fddd08f88fb7a31764f41452ad33871d1cfb",
-    "size": 5981,
+    "size": 5954,
     "fileSize": 5954
   },
   "264": {
@@ -1519,9 +1519,9 @@
   },
   "266": {
     "path": "platform/ktcgkpv_org-extractor.js",
-    "sha256": "adac54208434b0b678c340187501f59b9f901fec404fcef1dc8856be06087f6d",
-    "size": 7756,
-    "fileSize": 7756
+    "sha256": "2c2884855a290dbea04dda6fd9c84f461def02a8e34a74ab4c3b18fdfdf39a8a",
+    "size": 7738,
+    "fileSize": 7738
   },
   "267": {
     "path": "platform/kuaishou_com-extractor.js",
@@ -1537,9 +1537,9 @@
   },
   "269": {
     "path": "platform/linkedin_com-extractor.js",
-    "sha256": "1785fbb9a42e120ea81ceff37f9a51c35c59fc037b0871d1951031ca7b765ee4",
-    "size": 13619,
-    "fileSize": 13598
+    "sha256": "efce7c480e5603924b3bbdd268254f3089f7dea9ebdb0caad2d671caf0142fcc",
+    "size": 13571,
+    "fileSize": 13571
   },
   "270": {
     "path": "vendor/module-270.js",
@@ -1603,15 +1603,15 @@
   },
   "280": {
     "path": "platform/motphimchill_vin-extractor.js",
-    "sha256": "33d7ae2f7da18d979d7cc52b07ed7584f8b7e52da209a536b86e1c88527c9f6d",
-    "size": 6961,
-    "fileSize": 6961
+    "sha256": "318500ebfcb2f0fc11f9900b49c83ac40d675ad442240095b8ffc5cff44a2fec",
+    "size": 6942,
+    "fileSize": 6942
   },
   "281": {
     "path": "platform/motphimtv_com-extractor.js",
-    "sha256": "69ee414e1884106f216ee24e33d7fd1ee2c812d9176fb2e1031bc09b3f09dd73",
-    "size": 14339,
-    "fileSize": 14330
+    "sha256": "40387a8a8d904c343456f9a8e2c35d27a194634dda778612cd384ff09022e3f8",
+    "size": 14312,
+    "fileSize": 14312
   },
   "282": {
     "path": "platform/mrgay_com-extractor.js",
@@ -1681,15 +1681,15 @@
   },
   "293": {
     "path": "platform/nhac_vn-extractor.js",
-    "sha256": "f94b24eecc1ae543c67dea45d53fa0631ebfb11b79ee8eb8ba94c525087c9520",
-    "size": 11804,
-    "fileSize": 11804
+    "sha256": "87459ba0b9a25e4c59cf1be383417c87f57b55d10817dc23f38cf706b05c6390",
+    "size": 11768,
+    "fileSize": 11768
   },
   "294": {
     "path": "platform/nhaccuatui-extractor.js",
-    "sha256": "c2dd6f170471b5b3ac7cd1f716ebc7d63425364561f0d7003400b2c1ff8f1728",
-    "size": 14173,
-    "fileSize": 14173
+    "sha256": "04ab9e4e9b50c87e2630dfc2bea3bcb27caa7d4f0323510b9cce2accc6ddf4d7",
+    "size": 14137,
+    "fileSize": 14137
   },
   "295": {
     "path": "platform/nimo_tv-extractor.js",
@@ -1705,9 +1705,9 @@
   },
   "297": {
     "path": "platform/ok_ru-extractor.js",
-    "sha256": "4fe7bb557795adc67a2af3d0be7d22d03be20741c1c75ec8d3416540c6920bc9",
-    "size": 3801,
-    "fileSize": 3801
+    "sha256": "617abe6b1ba4a0f4c38bc09265184a011e74e3bb37d3eb15d450926563e0a179",
+    "size": 3763,
+    "fileSize": 3763
   },
   "298": {
     "path": "platform/onflix-extractor.js",
@@ -1724,7 +1724,7 @@
   "300": {
     "path": "platform/pexels_com-extractor.js",
     "sha256": "9531f07c6f2476af1c17d6f0bef8e6a25befd51f5739651f7451dae2f8de3b6d",
-    "size": 11567,
+    "size": 11558,
     "fileSize": 11558
   },
   "301": {
@@ -1736,7 +1736,7 @@
   "302": {
     "path": "platform/phim33_us-extractor.js",
     "sha256": "8c21633a72b6624d1dafc6369cef019d27e752c8cd752e5648cfb71c9d0518be",
-    "size": 7118,
+    "size": 7109,
     "fileSize": 7109
   },
   "303": {
@@ -1747,9 +1747,9 @@
   },
   "304": {
     "path": "platform/phimbo_vip-extractor.js",
-    "sha256": "1ea320e886a591d118a1a27edd69c1e322b263b137193b7f48c08b5fb2660e07",
-    "size": 2190,
-    "fileSize": 2181
+    "sha256": "bb39bc9b1ec51c8850a6ccb98bad73a9c877f82ab4b3b85c4f7c69396aa7fe25",
+    "size": 2163,
+    "fileSize": 2163
   },
   "305": {
     "path": "platform/phimbom_click-extractor.js",
@@ -1759,9 +1759,9 @@
   },
   "306": {
     "path": "platform/phimbro_com-extractor.js",
-    "sha256": "3c9abd02bb99b7093055efbcadde670aeb4eef11a7184b19b6bee8bad6649fd1",
-    "size": 1663,
-    "fileSize": 1663
+    "sha256": "d45177dddc7b42ee369e3fb4ac04a139bf9dc08bb21fa5401c87f0cd3b3bf437",
+    "size": 1654,
+    "fileSize": 1654
   },
   "307": {
     "path": "platform/phimchill_tv-extractor.js",
@@ -1789,9 +1789,9 @@
   },
   "311": {
     "path": "platform/phimmoi_io-extractor.js",
-    "sha256": "4ec0c2a67f9750325e73810cc91073cf5c8c390b5914f64d83a7bb54ad97ddc9",
-    "size": 14474,
-    "fileSize": 14474
+    "sha256": "89ea725ed4016f94ba4539a6afc4b072e09d7ba48f291ba57646768d70c38c01",
+    "size": 14447,
+    "fileSize": 14447
   },
   "312": {
     "path": "platform/phimmoichillec-extractor.js",
@@ -1814,7 +1814,7 @@
   "315": {
     "path": "platform/phimsex69_xyz-extractor.js",
     "sha256": "d3fe8073b60c321f6456b780c33f4f4f3c12ba0ce6d1a0a7d75b2ebde6ef50e4",
-    "size": 1429,
+    "size": 1366,
     "fileSize": 1366
   },
   "316": {
@@ -1831,9 +1831,9 @@
   },
   "318": {
     "path": "platform/phimtv_cv-extractor.js",
-    "sha256": "60031656fad53600d76da74f9e04b4e1a4e698ba9de0caecbcdaa6a1c949253c",
-    "size": 10600,
-    "fileSize": 10600
+    "sha256": "5cca94629bb3e992f25136680d2ed501e50192ecb31f8a1c3c6eaa21f4ca15e7",
+    "size": 10563,
+    "fileSize": 10563
   },
   "319": {
     "path": "platform/pinterest_com-extractor.js",
@@ -1922,14 +1922,14 @@
   "333": {
     "path": "platform/sexviet88_com-extractor.js",
     "sha256": "17b2b0f1d5047f5c74d4431c3118ec120b899dfbb35e3371c77e6dcec46efc34",
-    "size": 7665,
+    "size": 7656,
     "fileSize": 7656
   },
   "334": {
     "path": "platform/sexvietz_tv-extractor.js",
-    "sha256": "79ef4da7834580d5fd9c8544ec278d9682ac96c07f746c173536d1f873078bbc",
-    "size": 10068,
-    "fileSize": 9987
+    "sha256": "ad8fab50bebd31f6666b532ccd91907a840de417cdd18ce5781fe9bfd3f3272e",
+    "size": 9933,
+    "fileSize": 9933
   },
   "335": {
     "path": "platform/sflix_ps-extractor.js",
@@ -2030,7 +2030,7 @@
   "351": {
     "path": "platform/thanhnien_vn-extractor.js",
     "sha256": "4e74f8840a6d82351328c9030e82b0107a3b233f594b255e7093e8c07a9a9359",
-    "size": 11545,
+    "size": 11527,
     "fileSize": 11527
   },
   "352": {
@@ -2072,13 +2072,13 @@
   "358": {
     "path": "platform/tv_naver_com-extractor.js",
     "sha256": "ed017383bcfee9ad71cd3c60782ec3d33bfc086b4dd8634057bebd42e41efd27",
-    "size": 11038,
+    "size": 11002,
     "fileSize": 11002
   },
   "359": {
     "path": "platform/tvhay_org-extractor.js",
     "sha256": "ef45eef878b47ffe88b6bafb0df07c92dfc28c846a14cc50e8aadb9b8adb58f1",
-    "size": 10828,
+    "size": 10783,
     "fileSize": 10783
   },
   "360": {
@@ -2108,7 +2108,7 @@
   "364": {
     "path": "platform/uncommon_sites-extractor.js",
     "sha256": "0be173d1a2130c1203dca13ddfcc3484fe74d63c4cada7bbccf2fdb13da69154",
-    "size": 19183,
+    "size": 19173,
     "fileSize": 19173
   },
   "365": {
@@ -2150,7 +2150,7 @@
   "371": {
     "path": "platform/video_mocha_com_vn-extractor.js",
     "sha256": "844fdb3c9c41b3f1cf60c3a30ddd7a2b8ceb21aab6ebf72d14d23dc5e0877277",
-    "size": 6910,
+    "size": 6901,
     "fileSize": 6901
   },
   "372": {
@@ -2168,7 +2168,7 @@
   "374": {
     "path": "platform/vieon_vn-extractor.js",
     "sha256": "597ca8fa34adeaa8f00a7700edeee7e341b4f94d0d975a2f9e10243cb29aa9e5",
-    "size": 4404,
+    "size": 4365,
     "fileSize": 4365
   },
   "375": {
@@ -2192,7 +2192,7 @@
   "378": {
     "path": "platform/vkvideo_ru-extractor.js",
     "sha256": "33e28c7ee76775bb3398221fca38e0c5d040285e66d0e4d4ffce6b18eaf7f760",
-    "size": 8917,
+    "size": 8890,
     "fileSize": 8890
   },
   "379": {
@@ -2252,7 +2252,7 @@
   "388": {
     "path": "platform/vtv16_info-extractor.js",
     "sha256": "a6f82c15eb4521534683add56cd6eed070a15753812a0c5d1170a71d4494a9a1",
-    "size": 629,
+    "size": 593,
     "fileSize": 593
   },
   "389": {
@@ -2282,7 +2282,7 @@
   "393": {
     "path": "platform/xhamster_com-extractor.js",
     "sha256": "b9944e9dbcdb35d7cf47ab9d04a0d52600189711a357c0c295640f89a4da3768",
-    "size": 8924,
+    "size": 8915,
     "fileSize": 8915
   },
   "394": {
@@ -2335,9 +2335,9 @@
   },
   "402": {
     "path": "platform/zingmp3_vn-extractor.js",
-    "sha256": "d6c1327662de2cf77adee8f29edca981d2b2791bb76db09cdbd34a71506abe4f",
-    "size": 12809,
-    "fileSize": 12809
+    "sha256": "dc51c222d132cd3cd8b923f04d1d90e62511198d873e8f7895e89557f3c44c45",
+    "size": 12790,
+    "fileSize": 12790
   },
   "403": {
     "path": "platform/zphimmoi_com-extractor.js",
@@ -2563,9 +2563,9 @@
   },
   "444": {
     "path": "platform/bilutv_co-extractor.js",
-    "sha256": "7051afd53bb1fa700696bfd26837c396db15ddc5e4e0fd46aeaac144b18f1e4d",
-    "size": 12250,
-    "fileSize": 12232
+    "sha256": "44f979e3c3ee922f74a552394bed249dab1aeea12177cf0f34e1f424bf5b0e82",
+    "size": 12151,
+    "fileSize": 12151
   },
   "445": {
     "path": "vendor/module-445.js",
@@ -2575,9 +2575,9 @@
   },
   "446": {
     "path": "platform/phimdinhcao_com-extractor.js",
-    "sha256": "e78ab14028401d1f7e68f8f66e9bce005a7052283313e4ac23d8b00fc9b6542c",
-    "size": 18512,
-    "fileSize": 18512
+    "sha256": "81494b8bfa889533d25474b2323002b36055d5767fe02129b3595d40910212e1",
+    "size": 18503,
+    "fileSize": 18503
   },
   "447": {
     "path": "vendor/module-447.js",
@@ -2587,14 +2587,14 @@
   },
   "448": {
     "path": "platform/phimsex123_com-extractor.js",
-    "sha256": "1b984ad9817f91936999a7b8680cec4fa612b57bd1984011dd8a1cb91d3db734",
-    "size": 9660,
-    "fileSize": 9642
+    "sha256": "4ffac5e16adc869487f0421d304af5e5eb5e0d2bf109c91f7f61f1c9bbd4e502",
+    "size": 9552,
+    "fileSize": 9552
   },
   "449": {
     "path": "platform/xemphim_club-extractor.js",
     "sha256": "e9291c5f3dd0b6c7b2ad6d06aebbdeaf7d6ccffed4dd993927400490e1f1856f",
-    "size": 16904,
+    "size": 16886,
     "fileSize": 16886
   },
   "450": {
@@ -3728,7 +3728,7 @@
   "678": {
     "path": "platform/hlss-xyz-host.js",
     "sha256": "26813574670dacf036e52a754c780f687fda42d6f9a07c7f9d99641af7a38053",
-    "size": 7455,
+    "size": 7446,
     "fileSize": 7446
   },
   "679": {
@@ -3823,9 +3823,9 @@
   },
   "694": {
     "path": "platform/stream-vltv-xyz-host.js",
-    "sha256": "64d5cba174ff419a3b4828b668770132280c4a008a7ee255973adfa44147620a",
-    "size": 7013,
-    "fileSize": 7013
+    "sha256": "1a28b876e367df45edd4198de370101c47f00646e2bf52469dc48ccb548968f5",
+    "size": 6995,
+    "fileSize": 6995
   },
   "695": {
     "path": "vendor/module-695.js",
@@ -3848,7 +3848,7 @@
   "698": {
     "path": "platform/vnstream-host.js",
     "sha256": "75a71ebcd854560e7e306abe0849aff59b0c224798c59128282415f7b7cfa2bf",
-    "size": 629,
+    "size": 611,
     "fileSize": 611
   },
   "699": {

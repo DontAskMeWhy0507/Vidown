@@ -279,20 +279,8 @@ export default function (moduleObj, exportsObj, requireFn) {
   ext: (null === (var_u_1 = null === (var_s_1 = param_e.stream) ||
   void 0 === var_s_1 ? void 0 : var_s_1.match(/\.(\w+)\?/)) ||
   void 0 === var_u_1 ? void 0 : var_u_1[1]) || "mp3",
-  filename: `${param_t.name}
-  
-  
-  ${param_t.artistName ? " - " + param_t.artistName : ""}
-  
-  
-  ` || document.title,
-  title: `${param_t.name}
-  
-  
-  ${param_t.artistName ? " - " + param_t.artistName : ""}
-  
-  
-  ` || document.title,
+  filename: `${param_t.name}${param_t.artistName ? " - " + param_t.artistName : ""}` || document.title,
+  title: `${param_t.name}${param_t.artistName ? " - " + param_t.artistName : ""}` || document.title,
   quality: var_l_1,
   i18n_quality: var_c_1,
   resolution: param_e.typeUI,
