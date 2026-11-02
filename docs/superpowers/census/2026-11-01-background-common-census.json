@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-01T12:59:35.967Z",
+  "generatedAt": "2026-11-02T01:58:54.334Z",
   "background": {
     "file": "background.js",
     "totalSlots": 741,
@@ -13,7 +13,9 @@
         "start": 1481,
         "end": 47879,
         "size": 46398,
-        "category": "messaging"
+        "category": "messaging",
+        "path": "messaging/dom-utils.js",
+        "fileSize": 47776
       },
       "1": {
         "id": 1,
@@ -21,7 +23,9 @@
         "start": 47881,
         "end": 64177,
         "size": 16296,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/media-constants.js",
+        "fileSize": 16700
       },
       "2": {
         "id": 2,
@@ -33,7 +37,9 @@
         "start": 64180,
         "end": 81186,
         "size": 17006,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/url-utils.js",
+        "fileSize": 18087
       },
       "4": {
         "id": 4,
@@ -41,7 +47,9 @@
         "start": 81188,
         "end": 88393,
         "size": 7205,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/crypto-core.js",
+        "fileSize": 7288
       },
       "5": {
         "id": 5,
@@ -49,7 +57,9 @@
         "start": 88395,
         "end": 99057,
         "size": 10662,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/metrics-logger.js",
+        "fileSize": 9766
       },
       "6": {
         "id": 6,
@@ -61,7 +71,9 @@
         "start": 99060,
         "end": 101547,
         "size": 2487,
-        "category": "storage"
+        "category": "storage",
+        "path": "storage/settings-manager.js",
+        "fileSize": 2609
       },
       "8": {
         "id": 8,
@@ -69,7 +81,9 @@
         "start": 101549,
         "end": 108343,
         "size": 6794,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/cipher-base.js",
+        "fileSize": 8271
       },
       "9": {
         "id": 9,
@@ -77,7 +91,9 @@
         "start": 108345,
         "end": 123952,
         "size": 15607,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/quality-helper.js",
+        "fileSize": 16145
       },
       "10": {
         "id": 10,
@@ -85,7 +101,9 @@
         "start": 123954,
         "end": 130423,
         "size": 6469,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/url-validator.js",
+        "fileSize": 7219
       },
       "11": {
         "id": 11,
@@ -93,7 +111,9 @@
         "start": 130425,
         "end": 132612,
         "size": 2187,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/feature-flags.js",
+        "fileSize": 2431
       },
       "12": {
         "id": 12,
@@ -105,7 +125,9 @@
         "start": 132615,
         "end": 132837,
         "size": 222,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/global-context.js",
+        "fileSize": 366
       },
       "14": {
         "id": 14,
@@ -117,7 +139,9 @@
         "start": 132840,
         "end": 133429,
         "size": 589,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/util-inherits.js",
+        "fileSize": 713
       },
       "16": {
         "id": 16,
@@ -125,7 +149,9 @@
         "start": 133431,
         "end": 133796,
         "size": 365,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/crypto-bundle.js",
+        "fileSize": 785
       },
       "17": {
         "id": 17,
@@ -133,7 +159,9 @@
         "start": 133798,
         "end": 134774,
         "size": 976,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/hmac-core.js",
+        "fileSize": 1374
       },
       "18": {
         "id": 18,
@@ -141,7 +169,9 @@
         "start": 134776,
         "end": 136416,
         "size": 1640,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/enc-base64.js",
+        "fileSize": 2010
       },
       "19": {
         "id": 19,
@@ -149,7 +179,9 @@
         "start": 136418,
         "end": 141847,
         "size": 5429,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/enc-utf16.js",
+        "fileSize": 8295
       },
       "20": {
         "id": 20,
@@ -165,7 +197,9 @@
         "start": 141851,
         "end": 162474,
         "size": 20623,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/media-parser.js",
+        "fileSize": 21363
       },
       "23": {
         "id": 23,
@@ -177,7 +211,9 @@
         "start": 162477,
         "end": 237119,
         "size": 74642,
-        "category": "storage"
+        "category": "storage",
+        "path": "storage/hls-parser.js",
+        "fileSize": 70068
       },
       "25": {
         "id": 25,
@@ -185,7 +221,9 @@
         "start": 237121,
         "end": 238372,
         "size": 1251,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/base64-js.js",
+        "fileSize": 1726
       },
       "26": {
         "id": 26,
@@ -193,7 +231,9 @@
         "start": 238374,
         "end": 239237,
         "size": 863,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/crypto-x64.js",
+        "fileSize": 1208
       },
       "27": {
         "id": 27,
@@ -201,7 +241,9 @@
         "start": 239239,
         "end": 276787,
         "size": 37548,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/ieee754-buffer.js",
+        "fileSize": 42851
       },
       "28": {
         "id": 28,
@@ -213,7 +255,9 @@
         "start": 276790,
         "end": 278236,
         "size": 1446,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/string-decoder.js",
+        "fileSize": 1915
       },
       "30": {
         "id": 30,
@@ -221,7 +265,9 @@
         "start": 278238,
         "end": 279941,
         "size": 1703,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/core-util-is.js",
+        "fileSize": 2201
       },
       "31": {
         "id": 31,
@@ -233,7 +279,9 @@
         "start": 279944,
         "end": 282786,
         "size": 2842,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/process-shim.js",
+        "fileSize": 3245
       },
       "33": {
         "id": 33,
@@ -241,7 +289,9 @@
         "start": 282788,
         "end": 303583,
         "size": 20795,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/url-matcher.js",
+        "fileSize": 18962
       },
       "34": {
         "id": 34,
@@ -249,7 +299,9 @@
         "start": 303585,
         "end": 306366,
         "size": 2781,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/cipher-core.js",
+        "fileSize": 3452
       },
       "35": {
         "id": 35,
@@ -257,7 +309,9 @@
         "start": 306368,
         "end": 307428,
         "size": 1060,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mode-cfb.js",
+        "fileSize": 1371
       },
       "36": {
         "id": 36,
@@ -265,7 +319,9 @@
         "start": 307430,
         "end": 308715,
         "size": 1285,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/safe-buffer.js",
+        "fileSize": 1285
       },
       "37": {
         "id": 37,
@@ -273,7 +329,9 @@
         "start": 308717,
         "end": 544235,
         "size": 235518,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/ast-parser.js",
+        "fileSize": 238722
       },
       "38": {
         "id": 38,
@@ -281,7 +339,9 @@
         "start": 544237,
         "end": 550618,
         "size": 6381,
-        "category": "messaging"
+        "category": "messaging",
+        "path": "messaging/regenerator-runtime.js",
+        "fileSize": 6614
       },
       "39": {
         "id": 39,
@@ -293,7 +353,9 @@
         "start": 550621,
         "end": 552389,
         "size": 1768,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-pkcs7.js",
+        "fileSize": 2370
       },
       "41": {
         "id": 41,
@@ -301,7 +363,9 @@
         "start": 552391,
         "end": 559940,
         "size": 7549,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/sha512.js",
+        "fileSize": 8722
       },
       "42": {
         "id": 42,
@@ -309,7 +373,9 @@
         "start": 559942,
         "end": 569723,
         "size": 9781,
-        "category": "events"
+        "category": "events",
+        "path": "events/event-emitter.js",
+        "fileSize": 11344
       },
       "43": {
         "id": 43,
@@ -317,7 +383,9 @@
         "start": 569725,
         "end": 583156,
         "size": 13431,
-        "category": "storage"
+        "category": "storage",
+        "path": "storage/ab-test-provider.js",
+        "fileSize": 13343
       },
       "44": {
         "id": 44,
@@ -333,7 +401,9 @@
         "start": 583160,
         "end": 589624,
         "size": 6464,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-isarray.js",
+        "fileSize": 6839
       },
       "47": {
         "id": 47,
@@ -341,7 +411,9 @@
         "start": 589626,
         "end": 589795,
         "size": 169,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-internal-buffer.js",
+        "fileSize": 420
       },
       "48": {
         "id": 48,
@@ -349,7 +421,9 @@
         "start": 589797,
         "end": 590917,
         "size": 1120,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-events-shim.js",
+        "fileSize": 1596
       },
       "49": {
         "id": 49,
@@ -357,7 +431,9 @@
         "start": 590919,
         "end": 603328,
         "size": 12409,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-writable.js",
+        "fileSize": 13709
       },
       "50": {
         "id": 50,
@@ -365,7 +441,9 @@
         "start": 603330,
         "end": 603348,
         "size": 18,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/crypto-types.js",
+        "fileSize": 130
       },
       "51": {
         "id": 51,
@@ -373,7 +451,9 @@
         "start": 603350,
         "end": 604311,
         "size": 961,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/lib-typedarrays.js",
+        "fileSize": 1205
       },
       "52": {
         "id": 52,
@@ -381,7 +461,9 @@
         "start": 604313,
         "end": 605553,
         "size": 1240,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/enc-hex.js",
+        "fileSize": 1612
       },
       "53": {
         "id": 53,
@@ -389,7 +471,9 @@
         "start": 605555,
         "end": 607346,
         "size": 1791,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/enc-base64url.js",
+        "fileSize": 2214
       },
       "54": {
         "id": 54,
@@ -397,7 +481,9 @@
         "start": 607348,
         "end": 607914,
         "size": 566,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/cipher-params.js",
+        "fileSize": 807
       },
       "55": {
         "id": 55,
@@ -405,7 +491,9 @@
         "start": 607916,
         "end": 608724,
         "size": 808,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/sha384.js",
+        "fileSize": 1119
       },
       "56": {
         "id": 56,
@@ -413,7 +501,9 @@
         "start": 608726,
         "end": 613571,
         "size": 4845,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/sha256.js",
+        "fileSize": 5397
       },
       "57": {
         "id": 57,
@@ -421,7 +511,9 @@
         "start": 613573,
         "end": 619382,
         "size": 5809,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/sha224.js",
+        "fileSize": 6887
       },
       "58": {
         "id": 58,
@@ -429,7 +521,9 @@
         "start": 619384,
         "end": 620569,
         "size": 1185,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-ansix923.js",
+        "fileSize": 1642
       },
       "59": {
         "id": 59,
@@ -437,7 +531,9 @@
         "start": 620571,
         "end": 621494,
         "size": 923,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mode-cfb-8bit.js",
+        "fileSize": 1248
       },
       "60": {
         "id": 60,
@@ -445,7 +541,9 @@
         "start": 621496,
         "end": 622101,
         "size": 605,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mode-ofb.js",
+        "fileSize": 884
       },
       "61": {
         "id": 61,
@@ -453,7 +551,9 @@
         "start": 622103,
         "end": 623610,
         "size": 1507,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/mode-ctr.js",
+        "fileSize": 1686
       },
       "62": {
         "id": 62,
@@ -461,7 +561,9 @@
         "start": 623612,
         "end": 624160,
         "size": 548,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mode-ecb.js",
+        "fileSize": 805
       },
       "63": {
         "id": 63,
@@ -469,7 +571,9 @@
         "start": 624162,
         "end": 624527,
         "size": 365,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mode-cbc.js",
+        "fileSize": 589
       },
       "64": {
         "id": 64,
@@ -477,7 +581,9 @@
         "start": 624529,
         "end": 624960,
         "size": 431,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-ansix923-2.js",
+        "fileSize": 683
       },
       "65": {
         "id": 65,
@@ -485,7 +591,9 @@
         "start": 624962,
         "end": 625356,
         "size": 394,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/aes.js",
+        "fileSize": 613
       },
       "66": {
         "id": 66,
@@ -493,7 +601,9 @@
         "start": 625358,
         "end": 625677,
         "size": 319,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/sha1-hmac.js",
+        "fileSize": 511
       },
       "67": {
         "id": 67,
@@ -501,7 +611,9 @@
         "start": 625679,
         "end": 626158,
         "size": 479,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-zero.js",
+        "fileSize": 695
       },
       "68": {
         "id": 68,
@@ -509,7 +621,9 @@
         "start": 626160,
         "end": 626320,
         "size": 160,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-nopadding.js",
+        "fileSize": 325
       },
       "69": {
         "id": 69,
@@ -517,7 +631,9 @@
         "start": 626322,
         "end": 626691,
         "size": 369,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-iso10126.js",
+        "fileSize": 580
       },
       "70": {
         "id": 70,
@@ -525,7 +641,9 @@
         "start": 626693,
         "end": 630856,
         "size": 4163,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/pbkdf2.js",
+        "fileSize": 5461
       },
       "71": {
         "id": 71,
@@ -533,7 +651,9 @@
         "start": 630858,
         "end": 630880,
         "size": 22,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/evpkdf.js",
+        "fileSize": 135
       },
       "72": {
         "id": 72,
@@ -541,7 +661,9 @@
         "start": 630882,
         "end": 630904,
         "size": 22,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/rc4.js",
+        "fileSize": 132
       },
       "73": {
         "id": 73,
@@ -549,7 +671,9 @@
         "start": 630906,
         "end": 630928,
         "size": 22,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/rabbit.js",
+        "fileSize": 135
       },
       "74": {
         "id": 74,
@@ -557,7 +681,9 @@
         "start": 630930,
         "end": 630952,
         "size": 22,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/blowfish.js",
+        "fileSize": 137
       },
       "75": {
         "id": 75,
@@ -565,7 +691,9 @@
         "start": 630954,
         "end": 630976,
         "size": 22,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/tripledes.js",
+        "fileSize": 138
       },
       "76": {
         "id": 76,
@@ -573,7 +701,9 @@
         "start": 630978,
         "end": 635501,
         "size": 4523,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-destroy.js",
+        "fileSize": 7063
       },
       "77": {
         "id": 77,
@@ -585,7 +715,9 @@
         "start": 635504,
         "end": 637013,
         "size": 1509,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/env-context.js",
+        "fileSize": 1860
       },
       "79": {
         "id": 79,
@@ -593,7 +725,9 @@
         "start": 637015,
         "end": 641893,
         "size": 4878,
-        "category": "events"
+        "category": "events",
+        "path": "events/event-emitter-3.js",
+        "fileSize": 5852
       },
       "80": {
         "id": 80,
@@ -613,7 +747,9 @@
         "start": 641898,
         "end": 643411,
         "size": 1513,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-base.js",
+        "fileSize": 1907
       },
       "84": {
         "id": 84,
@@ -621,7 +757,9 @@
         "start": 643413,
         "end": 663270,
         "size": 19857,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-readable.js",
+        "fileSize": 20988
       },
       "85": {
         "id": 85,
@@ -629,7 +767,9 @@
         "start": 663272,
         "end": 663328,
         "size": 56,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-internal-state.js",
+        "fileSize": 199
       },
       "86": {
         "id": 86,
@@ -637,7 +777,9 @@
         "start": 663330,
         "end": 665286,
         "size": 1956,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-buffer-list.js",
+        "fileSize": 1965
       },
       "87": {
         "id": 87,
@@ -645,7 +787,9 @@
         "start": 665288,
         "end": 668128,
         "size": 2840,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-passthrough.js",
+        "fileSize": 3386
       },
       "88": {
         "id": 88,
@@ -665,7 +809,9 @@
         "start": 668133,
         "end": 668902,
         "size": 769,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-uint8array.js",
+        "fileSize": 875
       },
       "92": {
         "id": 92,
@@ -689,7 +835,9 @@
         "start": 668908,
         "end": 669393,
         "size": 485,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-96.js",
+        "fileSize": 578
       },
       "97": {
         "id": 97,
@@ -697,7 +845,9 @@
         "start": 669395,
         "end": 669632,
         "size": 237,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-finished.js",
+        "fileSize": 432
       },
       "98": {
         "id": 98,
@@ -705,7 +855,9 @@
         "start": 669634,
         "end": 672459,
         "size": 2825,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-98.js",
+        "fileSize": 3322
       },
       "99": {
         "id": 99,
@@ -713,7 +865,9 @@
         "start": 672461,
         "end": 674758,
         "size": 2297,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-99.js",
+        "fileSize": 3224
       },
       "100": {
         "id": 100,
@@ -721,7 +875,9 @@
         "start": 674760,
         "end": 676805,
         "size": 2045,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-100.js",
+        "fileSize": 2704
       },
       "101": {
         "id": 101,
@@ -729,7 +885,9 @@
         "start": 676807,
         "end": 676942,
         "size": 135,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-101.js",
+        "fileSize": 262
       },
       "102": {
         "id": 102,
@@ -737,7 +895,9 @@
         "start": 676944,
         "end": 677079,
         "size": 135,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-end-of-stream.js",
+        "fileSize": 289
       },
       "103": {
         "id": 103,
@@ -745,7 +905,9 @@
         "start": 677081,
         "end": 677099,
         "size": 18,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-util.js",
+        "fileSize": 132
       },
       "104": {
         "id": 104,
@@ -753,7 +915,9 @@
         "start": 677101,
         "end": 679164,
         "size": 2063,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-readable-stream.js",
+        "fileSize": 2277
       },
       "105": {
         "id": 105,
@@ -761,7 +925,9 @@
         "start": 679166,
         "end": 679184,
         "size": 18,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-pipeline.js",
+        "fileSize": 136
       },
       "106": {
         "id": 106,
@@ -769,7 +935,9 @@
         "start": 679186,
         "end": 682852,
         "size": 3666,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-wrapper.js",
+        "fileSize": 3452
       },
       "107": {
         "id": 107,
@@ -777,7 +945,9 @@
         "start": 682854,
         "end": 683974,
         "size": 1120,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-107.js",
+        "fileSize": 1572
       },
       "108": {
         "id": 108,
@@ -785,7 +955,9 @@
         "start": 683976,
         "end": 684296,
         "size": 320,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-108.js",
+        "fileSize": 589
       },
       "109": {
         "id": 109,
@@ -793,7 +965,9 @@
         "start": 684298,
         "end": 684341,
         "size": 43,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-listener-shim.js",
+        "fileSize": 189
       },
       "110": {
         "id": 110,
@@ -801,7 +975,9 @@
         "start": 684343,
         "end": 684386,
         "size": 43,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-sink.js",
+        "fileSize": 180
       },
       "111": {
         "id": 111,
@@ -809,7 +985,9 @@
         "start": 684388,
         "end": 684441,
         "size": 53,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-duplex-pair.js",
+        "fileSize": 197
       },
       "112": {
         "id": 112,
@@ -817,7 +995,9 @@
         "start": 684443,
         "end": 684498,
         "size": 55,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-async-iterator.js",
+        "fileSize": 202
       },
       "113": {
         "id": 113,
@@ -833,7 +1013,9 @@
         "start": 684502,
         "end": 684566,
         "size": 64,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-115.js",
+        "fileSize": 181
       },
       "116": {
         "id": 116,
@@ -861,7 +1043,9 @@
         "start": 684573,
         "end": 684674,
         "size": 101,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-121.js",
+        "fileSize": 252
       },
       "122": {
         "id": 122,
@@ -877,7 +1061,9 @@
         "start": 684678,
         "end": 694404,
         "size": 9726,
-        "category": "tabs"
+        "category": "tabs",
+        "path": "tabs/tab-lifecycle-tracker.js",
+        "fileSize": 10007
       },
       "125": {
         "id": 125,
@@ -901,7 +1087,9 @@
         "start": 694410,
         "end": 694572,
         "size": 162,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-129.js",
+        "fileSize": 344
       },
       "130": {
         "id": 130,
@@ -933,7 +1121,9 @@
         "start": 694580,
         "end": 694790,
         "size": 210,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-136.js",
+        "fileSize": 338
       },
       "137": {
         "id": 137,
@@ -941,7 +1131,9 @@
         "start": 694792,
         "end": 694870,
         "size": 78,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-137.js",
+        "fileSize": 195
       },
       "138": {
         "id": 138,
@@ -957,7 +1149,9 @@
         "start": 694874,
         "end": 706449,
         "size": 11575,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/encrypted-stream-decipherer.js",
+        "fileSize": 13362
       },
       "141": {
         "id": 141,
@@ -965,7 +1159,9 @@
         "start": 706451,
         "end": 706723,
         "size": 272,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-141.js",
+        "fileSize": 539
       },
       "142": {
         "id": 142,
@@ -973,7 +1169,9 @@
         "start": 706725,
         "end": 706804,
         "size": 79,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-142.js",
+        "fileSize": 196
       },
       "143": {
         "id": 143,
@@ -993,7 +1191,9 @@
         "start": 706809,
         "end": 708514,
         "size": 1705,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-highwatermark.js",
+        "fileSize": 2261
       },
       "147": {
         "id": 147,
@@ -1017,7 +1217,9 @@
         "start": 708520,
         "end": 708821,
         "size": 301,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-151.js",
+        "fileSize": 603
       },
       "152": {
         "id": 152,
@@ -1025,7 +1227,9 @@
         "start": 708823,
         "end": 708884,
         "size": 61,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-152.js",
+        "fileSize": 178
       },
       "153": {
         "id": 153,
@@ -1033,7 +1237,9 @@
         "start": 708886,
         "end": 709004,
         "size": 118,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-153.js",
+        "fileSize": 237
       },
       "154": {
         "id": 154,
@@ -1041,7 +1247,9 @@
         "start": 709006,
         "end": 709103,
         "size": 97,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-154.js",
+        "fileSize": 248
       },
       "155": {
         "id": 155,
@@ -1069,7 +1277,9 @@
         "start": 709110,
         "end": 712137,
         "size": 3027,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/download-event-sink.js",
+        "fileSize": 3655
       },
       "161": {
         "id": 161,
@@ -1097,7 +1307,9 @@
         "start": 712144,
         "end": 712210,
         "size": 66,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-166.js",
+        "fileSize": 183
       },
       "167": {
         "id": 167,
@@ -1105,7 +1317,9 @@
         "start": 712212,
         "end": 713501,
         "size": 1289,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-167.js",
+        "fileSize": 1398
       },
       "168": {
         "id": 168,
@@ -1113,7 +1327,9 @@
         "start": 713503,
         "end": 713866,
         "size": 363,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-168.js",
+        "fileSize": 667
       },
       "169": {
         "id": 169,
@@ -1121,7 +1337,9 @@
         "start": 713868,
         "end": 714012,
         "size": 144,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-169.js",
+        "fileSize": 397
       },
       "170": {
         "id": 170,
@@ -1145,7 +1363,9 @@
         "start": 714018,
         "end": 721811,
         "size": 7793,
-        "category": "events"
+        "category": "events",
+        "path": "events/download-event-router.js",
+        "fileSize": 7766
       },
       "175": {
         "id": 175,
@@ -1153,7 +1373,9 @@
         "start": 721813,
         "end": 737467,
         "size": 15654,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/request-header-manager.js",
+        "fileSize": 17053
       },
       "176": {
         "id": 176,
@@ -1169,7 +1391,9 @@
         "start": 737471,
         "end": 823474,
         "size": 86003,
-        "category": "entry"
+        "category": "entry",
+        "path": "entry/service-worker-entry.js",
+        "fileSize": 65028
       },
       "179": {
         "id": 179,
@@ -1177,7 +1401,9 @@
         "start": 823476,
         "end": 823706,
         "size": 230,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/download-file-namer.js",
+        "fileSize": 426
       },
       "180": {
         "id": 180,
@@ -2089,7 +2315,9 @@
         "start": 823934,
         "end": 823994,
         "size": 60,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-406.js",
+        "fileSize": 177
       },
       "407": {
         "id": 407,
@@ -2097,7 +2325,9 @@
         "start": 823996,
         "end": 824060,
         "size": 64,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-407.js",
+        "fileSize": 181
       },
       "408": {
         "id": 408,
@@ -2105,7 +2335,9 @@
         "start": 824062,
         "end": 824127,
         "size": 65,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-408.js",
+        "fileSize": 182
       },
       "409": {
         "id": 409,
@@ -2113,7 +2345,9 @@
         "start": 824129,
         "end": 824198,
         "size": 69,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-409.js",
+        "fileSize": 186
       },
       "410": {
         "id": 410,
@@ -2121,7 +2355,9 @@
         "start": 824200,
         "end": 824263,
         "size": 63,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-410.js",
+        "fileSize": 180
       },
       "411": {
         "id": 411,
@@ -2129,7 +2365,9 @@
         "start": 824265,
         "end": 824328,
         "size": 63,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-411.js",
+        "fileSize": 180
       },
       "412": {
         "id": 412,
@@ -2137,7 +2375,9 @@
         "start": 824330,
         "end": 824395,
         "size": 65,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-412.js",
+        "fileSize": 182
       },
       "413": {
         "id": 413,
@@ -2145,7 +2385,9 @@
         "start": 824397,
         "end": 824460,
         "size": 63,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-413.js",
+        "fileSize": 180
       },
       "414": {
         "id": 414,
@@ -2153,7 +2395,9 @@
         "start": 824462,
         "end": 824525,
         "size": 63,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-414.js",
+        "fileSize": 180
       },
       "415": {
         "id": 415,
@@ -2161,7 +2405,9 @@
         "start": 824527,
         "end": 824590,
         "size": 63,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-415.js",
+        "fileSize": 180
       },
       "416": {
         "id": 416,
@@ -2169,7 +2415,9 @@
         "start": 824592,
         "end": 824657,
         "size": 65,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-416.js",
+        "fileSize": 182
       },
       "417": {
         "id": 417,
@@ -2177,7 +2425,9 @@
         "start": 824659,
         "end": 824869,
         "size": 210,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-417.js",
+        "fileSize": 375
       },
       "418": {
         "id": 418,
@@ -2185,7 +2435,9 @@
         "start": 824871,
         "end": 824979,
         "size": 108,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-418.js",
+        "fileSize": 241
       },
       "419": {
         "id": 419,
@@ -2193,7 +2445,9 @@
         "start": 824981,
         "end": 825067,
         "size": 86,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-419.js",
+        "fileSize": 203
       },
       "420": {
         "id": 420,
@@ -2201,7 +2455,9 @@
         "start": 825069,
         "end": 825349,
         "size": 280,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-420.js",
+        "fileSize": 445
       },
       "421": {
         "id": 421,
@@ -2209,7 +2465,9 @@
         "start": 825351,
         "end": 825860,
         "size": 509,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-421.js",
+        "fileSize": 803
       },
       "422": {
         "id": 422,
@@ -2217,7 +2475,9 @@
         "start": 825862,
         "end": 827374,
         "size": 1512,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-422.js",
+        "fileSize": 1961
       },
       "423": {
         "id": 423,
@@ -2225,7 +2485,9 @@
         "start": 827376,
         "end": 827488,
         "size": 112,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-423.js",
+        "fileSize": 231
       },
       "424": {
         "id": 424,
@@ -2233,7 +2495,9 @@
         "start": 827490,
         "end": 827653,
         "size": 163,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/helper-424.js",
+        "fileSize": 330
       },
       "425": {
         "id": 425,
@@ -2293,7 +2557,9 @@
         "start": 827668,
         "end": 827773,
         "size": 105,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/webrequest-filter.js",
+        "fileSize": 265
       },
       "439": {
         "id": 439,
@@ -2301,7 +2567,9 @@
         "start": 827775,
         "end": 828895,
         "size": 1120,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/request-matcher.js",
+        "fileSize": 1578
       },
       "440": {
         "id": 440,
@@ -2309,7 +2577,9 @@
         "start": 828897,
         "end": 829262,
         "size": 365,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/network-monitor.js",
+        "fileSize": 520
       },
       "441": {
         "id": 441,
@@ -2317,7 +2587,9 @@
         "start": 829264,
         "end": 833418,
         "size": 4154,
-        "category": "events"
+        "category": "events",
+        "path": "events/media-capture-events.js",
+        "fileSize": 5052
       },
       "442": {
         "id": 442,
@@ -2381,7 +2653,9 @@
         "start": 833434,
         "end": 852535,
         "size": 19101,
-        "category": "downloads"
+        "category": "downloads",
+        "path": "downloads/download-manager.js",
+        "fileSize": 18620
       },
       "457": {
         "id": 457,
@@ -2581,7 +2855,9 @@
         "start": 852585,
         "end": 893238,
         "size": 40653,
-        "category": "events"
+        "category": "events",
+        "path": "events/media-protocol-handler.js",
+        "fileSize": 33735
       },
       "506": {
         "id": 506,
@@ -2589,7 +2865,9 @@
         "start": 893240,
         "end": 894596,
         "size": 1356,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/dash-stream-orchestrator.js",
+        "fileSize": 1982
       },
       "507": {
         "id": 507,
@@ -2597,7 +2875,9 @@
         "start": 894598,
         "end": 895943,
         "size": 1345,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-retry-policy.js",
+        "fileSize": 1696
       },
       "508": {
         "id": 508,
@@ -2605,7 +2885,9 @@
         "start": 895945,
         "end": 901627,
         "size": 5682,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-codec-events.js",
+        "fileSize": 5608
       },
       "509": {
         "id": 509,
@@ -2613,7 +2895,9 @@
         "start": 901629,
         "end": 901802,
         "size": 173,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/media-fragment-assembler.js",
+        "fileSize": 400
       },
       "510": {
         "id": 510,
@@ -2621,7 +2905,9 @@
         "start": 901804,
         "end": 921666,
         "size": 19862,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-readable-duplex.js",
+        "fileSize": 21057
       },
       "511": {
         "id": 511,
@@ -2629,7 +2915,9 @@
         "start": 921668,
         "end": 921724,
         "size": 56,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-internal-stub.js",
+        "fileSize": 199
       },
       "512": {
         "id": 512,
@@ -2637,7 +2925,9 @@
         "start": 921726,
         "end": 923682,
         "size": 1956,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-buffer-queue.js",
+        "fileSize": 1967
       },
       "513": {
         "id": 513,
@@ -2645,7 +2935,9 @@
         "start": 923684,
         "end": 936098,
         "size": 12414,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-writable-duplex.js",
+        "fileSize": 13722
       },
       "514": {
         "id": 514,
@@ -2653,7 +2945,9 @@
         "start": 936100,
         "end": 938941,
         "size": 2841,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-transform.js",
+        "fileSize": 3426
       },
       "515": {
         "id": 515,
@@ -2661,7 +2955,9 @@
         "start": 938943,
         "end": 951748,
         "size": 12805,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-downloader-factory.js",
+        "fileSize": 14333
       },
       "516": {
         "id": 516,
@@ -2669,7 +2965,9 @@
         "start": 951750,
         "end": 952456,
         "size": 706,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/cookie-auth-provider.js",
+        "fileSize": 1099
       },
       "517": {
         "id": 517,
@@ -2677,7 +2975,9 @@
         "start": 952458,
         "end": 953459,
         "size": 1001,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/credential-store.js",
+        "fileSize": 1404
       },
       "518": {
         "id": 518,
@@ -2685,7 +2985,9 @@
         "start": 953461,
         "end": 961739,
         "size": 8278,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/auth-header-injector.js",
+        "fileSize": 9834
       },
       "519": {
         "id": 519,
@@ -2693,7 +2995,9 @@
         "start": 961741,
         "end": 963362,
         "size": 1621,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/bandwidth-throttler.js",
+        "fileSize": 1613
       },
       "520": {
         "id": 520,
@@ -2701,7 +3005,9 @@
         "start": 963364,
         "end": 967315,
         "size": 3951,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/task-queue-scheduler.js",
+        "fileSize": 5260
       },
       "521": {
         "id": 521,
@@ -2709,7 +3015,9 @@
         "start": 967317,
         "end": 968483,
         "size": 1166,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/priority-queue.js",
+        "fileSize": 1478
       },
       "522": {
         "id": 522,
@@ -2717,7 +3025,9 @@
         "start": 968485,
         "end": 969416,
         "size": 931,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/event-serializer.js",
+        "fileSize": 1212
       },
       "523": {
         "id": 523,
@@ -2725,7 +3035,9 @@
         "start": 969418,
         "end": 973324,
         "size": 3906,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/network-error-handler.js",
+        "fileSize": 5030
       },
       "524": {
         "id": 524,
@@ -2733,7 +3045,9 @@
         "start": 973326,
         "end": 974386,
         "size": 1060,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/socket-timeout-tracker.js",
+        "fileSize": 1175
       },
       "525": {
         "id": 525,
@@ -2789,7 +3103,9 @@
         "start": 974400,
         "end": 974476,
         "size": 76,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/background-bootstrap-glue.js",
+        "fileSize": 258
       },
       "538": {
         "id": 538,
@@ -2797,7 +3113,9 @@
         "start": 974478,
         "end": 979111,
         "size": 4633,
-        "category": "events"
+        "category": "events",
+        "path": "events/background-event-hub.js",
+        "fileSize": 5640
       },
       "539": {
         "id": 539,
@@ -2805,7 +3123,9 @@
         "start": 979113,
         "end": 980062,
         "size": 949,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/telemetry-reporter.js",
+        "fileSize": 1086
       },
       "540": {
         "id": 540,
@@ -2821,7 +3141,9 @@
         "start": 980066,
         "end": 1046916,
         "size": 66850,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/user-preference-sync.js",
+        "fileSize": 67207
       },
       "543": {
         "id": 543,
@@ -3477,7 +3799,9 @@
         "start": 1047080,
         "end": 1057696,
         "size": 10616,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-pipeline-controller.js",
+        "fileSize": 13812
       },
       "706": {
         "id": 706,
@@ -3485,7 +3809,9 @@
         "start": 1057698,
         "end": 1058827,
         "size": 1129,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/content-type-filter.js",
+        "fileSize": 1477
       },
       "707": {
         "id": 707,
@@ -3493,7 +3819,9 @@
         "start": 1058829,
         "end": 1060298,
         "size": 1469,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/range-header-parser.js",
+        "fileSize": 1796
       },
       "708": {
         "id": 708,
@@ -3501,7 +3829,9 @@
         "start": 1060300,
         "end": 1067786,
         "size": 7486,
-        "category": "events"
+        "category": "events",
+        "path": "events/stream-chunk-parser.js",
+        "fileSize": 7871
       },
       "709": {
         "id": 709,
@@ -3509,7 +3839,9 @@
         "start": 1067788,
         "end": 1067923,
         "size": 135,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-state-observer.js",
+        "fileSize": 271
       },
       "710": {
         "id": 710,
@@ -3517,7 +3849,9 @@
         "start": 1067925,
         "end": 1067943,
         "size": 18,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-backpressure-guard.js",
+        "fileSize": 114
       },
       "711": {
         "id": 711,
@@ -3525,7 +3859,9 @@
         "start": 1067945,
         "end": 1070009,
         "size": 2064,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-flow-controller.js",
+        "fileSize": 2300
       },
       "712": {
         "id": 712,
@@ -3533,7 +3869,9 @@
         "start": 1070011,
         "end": 1070029,
         "size": 18,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-drain-listener.js",
+        "fileSize": 122
       },
       "713": {
         "id": 713,
@@ -3541,7 +3879,9 @@
         "start": 1070031,
         "end": 1070352,
         "size": 321,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-pipe-orchestrator.js",
+        "fileSize": 601
       },
       "714": {
         "id": 714,
@@ -3549,7 +3889,9 @@
         "start": 1070354,
         "end": 1070934,
         "size": 580,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/stream-encoding-handler.js",
+        "fileSize": 781
       },
       "715": {
         "id": 715,
@@ -3557,7 +3899,9 @@
         "start": 1070936,
         "end": 1071238,
         "size": 302,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/hls-manifest-fetcher.js",
+        "fileSize": 446
       },
       "716": {
         "id": 716,
@@ -3565,7 +3909,9 @@
         "start": 1071240,
         "end": 1073052,
         "size": 1812,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/dash-mpd-fetcher.js",
+        "fileSize": 1797
       },
       "717": {
         "id": 717,
@@ -3573,7 +3919,9 @@
         "start": 1073054,
         "end": 1078778,
         "size": 5724,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/segment-url-resolver.js",
+        "fileSize": 6348
       },
       "718": {
         "id": 718,
@@ -3581,7 +3929,9 @@
         "start": 1078780,
         "end": 1078941,
         "size": 161,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/signed-url-refresher.js",
+        "fileSize": 416
       },
       "719": {
         "id": 719,
@@ -3589,7 +3939,9 @@
         "start": 1078943,
         "end": 1086843,
         "size": 7900,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/cdn-token-provider.js",
+        "fileSize": 9870
       },
       "720": {
         "id": 720,
@@ -3597,7 +3949,9 @@
         "start": 1086845,
         "end": 1086863,
         "size": 18,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/referrer-header-policy.js",
+        "fileSize": 125
       },
       "721": {
         "id": 721,
@@ -3605,7 +3959,9 @@
         "start": 1086865,
         "end": 1088291,
         "size": 1426,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/session-cookie-resolver.js",
+        "fileSize": 1741
       },
       "722": {
         "id": 722,
@@ -3613,7 +3969,9 @@
         "start": 1088293,
         "end": 1089766,
         "size": 1473,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/cross-origin-authenticator.js",
+        "fileSize": 2042
       },
       "723": {
         "id": 723,
@@ -3621,7 +3979,9 @@
         "start": 1089768,
         "end": 1100903,
         "size": 11135,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/jwt-auth-verifier.js",
+        "fileSize": 12610
       },
       "724": {
         "id": 724,
@@ -3629,7 +3989,9 @@
         "start": 1100905,
         "end": 1101496,
         "size": 591,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/download-job-coordinator.js",
+        "fileSize": 1069
       },
       "725": {
         "id": 725,
@@ -3637,7 +3999,9 @@
         "start": 1101498,
         "end": 1112161,
         "size": 10663,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/disk-space-monitor.js",
+        "fileSize": 9514
       },
       "726": {
         "id": 726,
@@ -3645,7 +4009,9 @@
         "start": 1112163,
         "end": 1122244,
         "size": 10081,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/download-watchdog.js",
+        "fileSize": 11439
       },
       "727": {
         "id": 727,
@@ -3653,7 +4019,9 @@
         "start": 1122246,
         "end": 1125073,
         "size": 2827,
-        "category": "events"
+        "category": "events",
+        "path": "events/event-listener-bridge.js",
+        "fileSize": 2665
       },
       "728": {
         "id": 728,
@@ -3661,7 +4029,9 @@
         "start": 1125075,
         "end": 1130107,
         "size": 5032,
-        "category": "events"
+        "category": "events",
+        "path": "events/message-event-dispatcher.js",
+        "fileSize": 4604
       },
       "729": {
         "id": 729,
@@ -3669,7 +4039,9 @@
         "start": 1130109,
         "end": 1131045,
         "size": 936,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/runtime-state-serializer.js",
+        "fileSize": 1016
       },
       "730": {
         "id": 730,
@@ -3677,7 +4049,9 @@
         "start": 1131047,
         "end": 1134237,
         "size": 3190,
-        "category": "tabs"
+        "category": "tabs",
+        "path": "tabs/tab-query-helper.js",
+        "fileSize": 3418
       },
       "731": {
         "id": 731,
@@ -3721,9 +4095,13 @@
         "start": 1134248,
         "end": 1151184,
         "size": 16936,
-        "category": "tabs"
+        "category": "tabs",
+        "path": "tabs/tab-media-observer.js",
+        "fileSize": 17191
       }
-    }
+    },
+    "baselineBundleSize": 1154528,
+    "currentBuiltBundleSize": 1185532
   },
   "common": {
     "file": "common.js",
@@ -3735,337 +4113,435 @@
         "start": 1487,
         "end": 50999,
         "size": 49512,
-        "category": "core-utils"
+        "category": "core-utils",
+        "path": "core-utils/dom-utils.js",
+        "fileSize": 47777
       },
       "1": {
         "id": 1,
         "start": 51006,
         "end": 68050,
         "size": 17044,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/media-constants.js",
+        "fileSize": 16700
       },
       "3": {
         "id": 3,
         "start": 160151,
         "end": 178341,
         "size": 18190,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/url-utils.js",
+        "fileSize": 18087
       },
       "4": {
         "id": 4,
         "start": 452395,
         "end": 460108,
         "size": 7713,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/crypto-core.js",
+        "fileSize": 7288
       },
       "5": {
         "id": 5,
         "start": 469912,
         "end": 481158,
         "size": 11246,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/metrics-logger.js",
+        "fileSize": 9766
       },
       "8": {
         "id": 8,
         "start": 510882,
         "end": 518228,
         "size": 7346,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/cipher-base.js",
+        "fileSize": 8271
       },
       "11": {
         "id": 11,
         "start": 68058,
         "end": 70387,
         "size": 2329,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/feature-flags.js",
+        "fileSize": 2431
       },
       "13": {
         "id": 13,
         "start": 70395,
         "end": 70643,
         "size": 248,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/global-context.js",
+        "fileSize": 366
       },
       "16": {
         "id": 16,
         "start": 70651,
         "end": 71092,
         "size": 441,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/crypto-bundle.js",
+        "fileSize": 785
       },
       "17": {
         "id": 17,
         "start": 71100,
         "end": 72178,
         "size": 1078,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/hmac-core.js",
+        "fileSize": 1374
       },
       "18": {
         "id": 18,
         "start": 72186,
         "end": 73950,
         "size": 1764,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/enc-base64.js",
+        "fileSize": 2010
       },
       "19": {
         "id": 19,
         "start": 73958,
         "end": 79703,
         "size": 5745,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/enc-utf16.js",
+        "fileSize": 8295
       },
       "24": {
         "id": 24,
         "start": 79711,
         "end": 159191,
         "size": 79480,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/hls-parser.js",
+        "fileSize": 70070
       },
       "26": {
         "id": 26,
         "start": 159199,
         "end": 160144,
         "size": 945,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/crypto-x64.js",
+        "fileSize": 1208
       },
       "34": {
         "id": 34,
         "start": 178349,
         "end": 181336,
         "size": 2987,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/cipher-core.js",
+        "fileSize": 3452
       },
       "35": {
         "id": 35,
         "start": 181344,
         "end": 182498,
         "size": 1154,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mode-cfb.js",
+        "fileSize": 1371
       },
       "37": {
         "id": 37,
         "start": 182506,
         "end": 432868,
         "size": 250362,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/ast-parser.js",
+        "fileSize": 238722
       },
       "38": {
         "id": 38,
         "start": 432876,
         "end": 439781,
         "size": 6905,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/regenerator-runtime.js",
+        "fileSize": 6614
       },
       "39": {
         "id": 39,
         "start": 439789,
         "end": 452388,
         "size": 12599,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mustache-template.js",
+        "fileSize": 12385
       },
       "40": {
         "id": 40,
         "start": 460116,
         "end": 462020,
         "size": 1904,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-pkcs7.js",
+        "fileSize": 2370
       },
       "41": {
         "id": 41,
         "start": 462028,
         "end": 469905,
         "size": 7877,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/sha512.js",
+        "fileSize": 8722
       },
       "50": {
         "id": 50,
         "start": 481166,
         "end": 481184,
         "size": 18,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/crypto-types.js",
+        "fileSize": 130
       },
       "51": {
         "id": 51,
         "start": 481192,
         "end": 482205,
         "size": 1013,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/lib-typedarrays.js",
+        "fileSize": 1205
       },
       "52": {
         "id": 52,
         "start": 482213,
         "end": 483541,
         "size": 1328,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/enc-hex.js",
+        "fileSize": 1612
       },
       "53": {
         "id": 53,
         "start": 483549,
         "end": 485466,
         "size": 1917,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/enc-base64url.js",
+        "fileSize": 2214
       },
       "54": {
         "id": 54,
         "start": 485474,
         "end": 486090,
         "size": 616,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/cipher-params.js",
+        "fileSize": 807
       },
       "55": {
         "id": 55,
         "start": 486098,
         "end": 486966,
         "size": 868,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/sha384.js",
+        "fileSize": 1119
       },
       "56": {
         "id": 56,
         "start": 486974,
         "end": 492167,
         "size": 5193,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/sha256.js",
+        "fileSize": 5397
       },
       "57": {
         "id": 57,
         "start": 492175,
         "end": 498236,
         "size": 6061,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/sha224.js",
+        "fileSize": 6887
       },
       "58": {
         "id": 58,
         "start": 498244,
         "end": 499545,
         "size": 1301,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-ansix923.js",
+        "fileSize": 1642
       },
       "59": {
         "id": 59,
         "start": 499553,
         "end": 500556,
         "size": 1003,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mode-cfb-8bit.js",
+        "fileSize": 1248
       },
       "60": {
         "id": 60,
         "start": 500564,
         "end": 501219,
         "size": 655,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mode-ofb.js",
+        "fileSize": 884
       },
       "61": {
         "id": 61,
         "start": 501227,
         "end": 502866,
         "size": 1639,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/mode-ctr.js",
+        "fileSize": 1686
       },
       "62": {
         "id": 62,
         "start": 502874,
         "end": 503468,
         "size": 594,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mode-ecb.js",
+        "fileSize": 805
       },
       "63": {
         "id": 63,
         "start": 503476,
         "end": 503871,
         "size": 395,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/mode-cbc.js",
+        "fileSize": 589
       },
       "64": {
         "id": 64,
         "start": 503879,
         "end": 504350,
         "size": 471,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-ansix923-2.js",
+        "fileSize": 683
       },
       "65": {
         "id": 65,
         "start": 504358,
         "end": 504784,
         "size": 426,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/aes.js",
+        "fileSize": 613
       },
       "66": {
         "id": 66,
         "start": 504792,
         "end": 505141,
         "size": 349,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/sha1-hmac.js",
+        "fileSize": 511
       },
       "67": {
         "id": 67,
         "start": 505149,
         "end": 505672,
         "size": 523,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-zero.js",
+        "fileSize": 695
       },
       "68": {
         "id": 68,
         "start": 505680,
         "end": 505858,
         "size": 178,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-nopadding.js",
+        "fileSize": 325
       },
       "69": {
         "id": 69,
         "start": 505866,
         "end": 506277,
         "size": 411,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/pad-iso10126.js",
+        "fileSize": 580
       },
       "70": {
         "id": 70,
         "start": 506285,
         "end": 510700,
         "size": 4415,
-        "category": "crypto"
+        "category": "crypto",
+        "path": "crypto/pbkdf2.js",
+        "fileSize": 5461
       },
       "71": {
         "id": 71,
         "start": 510708,
         "end": 510729,
         "size": 21,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/evpkdf.js",
+        "fileSize": 135
       },
       "72": {
         "id": 72,
         "start": 510737,
         "end": 510758,
         "size": 21,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/rc4.js",
+        "fileSize": 132
       },
       "73": {
         "id": 73,
         "start": 510766,
         "end": 510787,
         "size": 21,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/rabbit.js",
+        "fileSize": 135
       },
       "74": {
         "id": 74,
         "start": 510825,
         "end": 510846,
         "size": 21,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/blowfish.js",
+        "fileSize": 137
       },
       "75": {
         "id": 75,
         "start": 510854,
         "end": 510875,
         "size": 21,
-        "category": "utilities"
+        "category": "utilities",
+        "path": "utilities/tripledes.js",
+        "fileSize": 138
       },
       "736": {
         "id": 736,
         "start": 510796,
         "end": 510817,
         "size": 21,
-        "category": "entry"
+        "category": "entry",
+        "path": "entry/common-entry.js",
+        "fileSize": 125
       }
-    }
+    },
+    "baselineBundleSize": 518794,
+    "currentBuiltBundleSize": 501606
   }
 }

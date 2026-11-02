@@ -22,7 +22,7 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
   - `bn.js` 6-to-1 deduplication: canonical `src/content/vendor/elliptic/module-126.js` (43,355 B committed git blob) preserved; 5 duplicate instances replaced with 103 B alias stubs, saving 216,015 B raw.
   - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates inlined generator copies in `content-script.js`, saving 342,202 B raw.
   - Third-party libraries cleanly isolated in `src/content/vendor/` (`cryptojs`, `qrcode`, `stream`, `fast-xml-parser`, `mustache`, `eventemitter3`, `buffer`, `shims`, `parser`, `elliptic`).
-- **Release Package**: `dist/savior-extension-v2.4.65.zip` is ~1.08 MB (1,127,566 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
+- **Release Package**: `dist/savior-extension-v2.4.65.zip` is ~1.08 MB (1,135,722 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
 
 ---
 
@@ -65,8 +65,8 @@ node tests/test_golden_behavior.js
 ```
 ├── manifest.json                 # Chrome Manifest V3 manifest
 ├── content-script.js             # Shipped production content script bundle (2,352,581 B)
-├── background.js                 # Shipped background service worker bundle (1,154,528 B)
-├── common.js                     # Shipped common runtime utility bundle (518,794 B)
+├── background.js                 # Shipped background service worker bundle (1,185,532 B)
+├── common.js                     # Shipped common runtime utility bundle (501,606 B)
 ├── inject/                       # Shipped main-world site extractors
 ├── src/
 │   ├── content/                  # Modular content script sources (649 modules)
