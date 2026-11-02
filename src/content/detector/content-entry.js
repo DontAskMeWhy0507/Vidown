@@ -34,7 +34,7 @@ export default function(module, exports, require) {
                   EE.emit("widget.request_matched", bufferedMatches);
                   bufferedMatches = [];
                   batchTimer = undefined;
-                }, 1000);
+                }, 200);
               }
             }
           };

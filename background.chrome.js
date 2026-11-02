@@ -2747,7 +2747,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'ping': {
-      sendResponse({ status: 'ok', version: '3.0.1' });
+      sendResponse({ status: 'ok', version: '3.0.2' });
       return false;
     }
 
@@ -2814,7 +2814,7 @@ if (chrome.runtime.onMessageExternal) {
     }
 
     if (req.action === 'ping' || req.type === 'ping') {
-      sendResponse({ status: 'ok', version: '3.0.1' });
+      sendResponse({ status: 'ok', version: '3.0.2' });
       return false;
     }
 

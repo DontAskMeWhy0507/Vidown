@@ -336,7 +336,7 @@ function handleMessage(msg) {
       sendMessage({
         status: 'ok',
         action: 'pong',
-        version: '3.0.1',
+        version: '3.0.2',
         downloadsDir: DOWNLOADS_DIR,
         hasFfmpeg: fs.existsSync(FFMPEG_PATH),
         hasYtDlp: fs.existsSync(YTDLP_PATH)
