@@ -1015,9 +1015,9 @@
   },
   "182": {
     "path": "platform/24h_com_vn-extractor.js",
-    "sha256": "fc6d926bb7529084226127745dd9e1f6990de7cdf362931fffc84d6b352f209d",
-    "size": 8563,
-    "fileSize": 8563
+    "sha256": "7cb97b44aadf2c8ccf6519acb3d03e0f9459fd50412e14498d15fe8fe3041034",
+    "size": 6349,
+    "fileSize": 6349
   },
   "183": {
     "path": "platform/2phimhay_com-extractor.js",
