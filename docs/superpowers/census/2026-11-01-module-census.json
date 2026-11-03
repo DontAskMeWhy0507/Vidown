@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-11-02T11:10:44.216Z",
   "baselineBundleSize": 2404925,
-  "currentBuiltBundleSize": 2350246,
+  "currentBuiltBundleSize": 2331526,
   "totalSlots": 776,
   "realModulesCount": 649,
   "holesCount": 127,
@@ -3046,7 +3046,7 @@
       "start": 578115,
       "end": 591956,
       "size": 13841,
-      "fileSize": 25998,
+      "fileSize": 14902,
       "requires": [
         0,
         1,
@@ -4389,7 +4389,7 @@
       "start": 927183,
       "end": 930995,
       "size": 3812,
-      "fileSize": 7852,
+      "fileSize": 2602,
       "requires": [
         0,
         1,
@@ -4950,7 +4950,7 @@
       "start": 1022260,
       "end": 1028421,
       "size": 6161,
-      "fileSize": 11696,
+      "fileSize": 5353,
       "requires": [],
       "hasRegenerator": true,
       "isBnCopy": false,
@@ -4991,7 +4991,7 @@
       "start": 1031789,
       "end": 1035424,
       "size": 3635,
-      "fileSize": 7673,
+      "fileSize": 2078,
       "requires": [
         0,
         1,
@@ -5825,7 +5825,7 @@
       "start": 1196641,
       "end": 1204269,
       "size": 7628,
-      "fileSize": 14312,
+      "fileSize": 9069,
       "requires": [
         0,
         1,
@@ -6226,7 +6226,7 @@
       "start": 1268607,
       "end": 1275829,
       "size": 7222,
-      "fileSize": 13734,
+      "fileSize": 8613,
       "requires": [
         0,
         1,

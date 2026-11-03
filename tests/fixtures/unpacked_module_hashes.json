@@ -697,8 +697,8 @@
   },
   "119": {
     "path": "platform/vimeo_com-extractor.js",
-    "sha256": "49423ca8bb2bfc707781b782af852b77e6944e0eae239a0a4cc6900c371be3fa",
-    "size": 25998,
+    "sha256": "8e4a72e55b00e9f605cca1ce379c7f5f1b84cc36c04000514c07b1a8fe965def",
+    "size": 14902,
     "fileSize": 25998
   },
   "120": {
@@ -1063,8 +1063,8 @@
   },
   "190": {
     "path": "platform/anime47_com-extractor.js",
-    "sha256": "ccc82657a8aa83e39e45032638d32185ed18eafc17eee3b9a2ea6b0d899c695a",
-    "size": 7852,
+    "sha256": "d693712f37cb90b414dd67d2778f69ecec12949deb82ec8a7914caa8ce98ed62",
+    "size": 2602,
     "fileSize": 7852
   },
   "191": {
@@ -1273,8 +1273,8 @@
   },
   "225": {
     "path": "platform/dantri_com_vn-extractor.js",
-    "sha256": "a80b962c21668a21418ad9f2cddec3c5ac0992e65da1769df4b53ee7c1ed00e3",
-    "size": 11696,
+    "sha256": "cb32a9be2d7f54e3720b5b66ee40f7cb6d2f8499983081f2244880d8ada85d2e",
+    "size": 5353,
     "fileSize": 11696
   },
   "226": {
@@ -1291,8 +1291,8 @@
   },
   "228": {
     "path": "platform/dongphim-extractor.js",
-    "sha256": "5083f46d58bef2a16a5ef59bf4d7c50c27a733299fcc1c19bb40cb0a0d0d551f",
-    "size": 7673,
+    "sha256": "adc316028ff776990fcab5665c7488dcab59eafce48e4aacc5c722670f7ed7bd",
+    "size": 2078,
     "fileSize": 7673
   },
   "229": {
@@ -1609,8 +1609,8 @@
   },
   "281": {
     "path": "platform/motphimtv_com-extractor.js",
-    "sha256": "40387a8a8d904c343456f9a8e2c35d27a194634dda778612cd384ff09022e3f8",
-    "size": 14312,
+    "sha256": "1e63c77171f758ca9a6604cd92c8b42bc968ad28ee800b383ca945d7ac7f8a81",
+    "size": 9069,
     "fileSize": 14312
   },
   "282": {
@@ -1765,8 +1765,8 @@
   },
   "307": {
     "path": "platform/phimchill_tv-extractor.js",
-    "sha256": "10c4b96638e5af308c0291e5d22dd88d3dcf159f57a3fc410729b34e2fbb206f",
-    "size": 13734,
+    "sha256": "a20f052cba714d9a28a70e2f8adebfc3cadbc7c5d42095f875ffc6474b88a178",
+    "size": 8613,
     "fileSize": 13734
   },
   "308": {
