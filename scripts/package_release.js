@@ -89,7 +89,10 @@ const EXCLUDED_FILES = new Set([
   // Legacy DNR rule redirecting to a non-existent /app.js — unreferenced
   'rules.json',
   '_sec_scan.js', // dev scratch utility
-  'options-banner-with-skip-video.jpg' // banner variant of the removed skip-video feature
+  'options-banner-with-skip-video.jpg', // banner variant of the removed skip-video feature
+  '.env',
+  'audit_bundle.txt',
+  'audit_report.txt'
 ]);
 
 function shouldExclude(relPath) {
@@ -97,6 +100,9 @@ function shouldExclude(relPath) {
   const segments = normalized.split('/');
   const fileName = segments[segments.length - 1];
   const ext = path.extname(fileName).toLowerCase();
+  if (fileName.startsWith('.env') || fileName === 'audit_bundle.txt' || fileName.endsWith('.bak') || fileName.endsWith('.tmp')) {
+    return true;
+  }
 
   // Specifically exclude orphan root popup files
   if (normalized === 'popup.html' || normalized === 'popup.js') {
@@ -179,6 +185,27 @@ function dosDateTime(d = new Date()) {
   return { time, date };
 }
 
+// Precomputed CRC32 table (IEEE 802.3) for backward-compatible packaging on Node < 20.15 / Node 18
+const CRC_TABLE = new Uint32Array(256);
+for (let i = 0; i < 256; i++) {
+  let c = i;
+  for (let k = 0; k < 8; k++) {
+    c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+  }
+  CRC_TABLE[i] = c >>> 0;
+}
+
+function calculateCRC32(buf) {
+  if (typeof zlib.crc32 === 'function') {
+    return (zlib.crc32(buf)) >>> 0;
+  }
+  let crc = 0xFFFFFFFF;
+  for (let i = 0; i < buf.length; i++) {
+    crc = (crc >>> 8) ^ CRC_TABLE[(crc ^ buf[i]) & 0xFF];
+  }
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+
 function buildZip(files, outputPath) {
   const localChunks = [];
   const cdChunks = [];
@@ -189,7 +216,7 @@ function buildZip(files, outputPath) {
     const nameBuf = Buffer.from(f.relPath, 'utf8');
     const content = fs.readFileSync(f.fullPath);
     const uncompressedSize = content.length;
-    const crc = (zlib.crc32(content)) >>> 0;
+    const crc = calculateCRC32(content);
 
     let method = 8; // Deflate
     let compressed = zlib.deflateRawSync(content, { level: 9 });

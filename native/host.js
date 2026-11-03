@@ -11,6 +11,16 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 
+const {
+  sanitizeFilename,
+  resolveOutputDir,
+  createJobFileContext,
+  findAvailableOutputPath,
+  publishJobFile,
+  cleanupJobStaging,
+  validateRelayCoverage
+} = require('./lib/output-files');
+
 const isWin = process.platform === 'win32';
 const isMac = process.platform === 'darwin';
 
@@ -124,9 +134,9 @@ function sanitizeForLog(value) {
   try {
     let s = typeof value === 'string' ? value : JSON.stringify(value);
     if (!s) return s;
-    s = s.replace(/"cookie"\s*:\s*"(?:[^"\\]|\\.)*"/gi, '"cookie":"<redacted>"');
-    s = s.replace(/"set-cookie"\s*:\s*"(?:[^"\\]|\\.)*"/gi, '"set-cookie":"<redacted>"');
-    s = s.replace(/((?:signature|sig|token|auth|key|exp|nonce|n|rand)=[A-Za-z0-9_%\-\.]{8,})/gi, '$1=<redacted>');
+    s = s.replace(/"(cookie|set-cookie|authorization)"\s*:\s*"(?:[^"\\]|\\.)*"/gi, '"$1":"<redacted>"');
+    s = s.replace(/(\b(?:cookie|set-cookie|authorization):\s*)([^\r\n]+)/gi, '$1<redacted>');
+    s = s.replace(/((?:[?&]|\b)(?:signature|sig|token|auth|key|exp|nonce|n|rand)=)([^&\s"'>]+)/gi, '$1<redacted>');
     return s;
   } catch (_) {
     return '<unloggable>';
@@ -233,15 +243,13 @@ function startStreamRelayJob(msg) {
     // A previous relay still holds the pipe: drop it cleanly first.
     try { cleanupStreamJob(true); } catch (e) {}
   }
-  let safeTitle = (msg.title || 'video').replace(/[<>:"/\\|?*]/g, '_').replace(/[\s.]+$/, '').trim().slice(0, 150).replace(/[\s.]+$/, '');
-  if (!safeTitle) safeTitle = `Video_${Date.now()}`;
-  const finalFilename = msg.filename || `${safeTitle}.mp4`;
   const targetDir = resolveTargetDir(msg.outputDir);
+  const finalFilename = sanitizeFilename(msg.filename || msg.title || 'video', 'mp4');
   const outPath = path.join(targetDir, finalFilename);
   const part = partPathFor(outPath);
   try {
     const fd = fs.openSync(part, 'w');
-    activeStreamJob = { taskId: msg.taskId, fd, outPath, partPath: part, bytesWritten: 0, total: 0 };
+    activeStreamJob = { taskId: msg.taskId, fd, outPath, partPath: part, bytesWritten: 0, total: 0, intervals: [] };
     if (msg.taskId) activeTaskId = msg.taskId;
     logHost(`Stream relay started (task ${msg.taskId}) → "${part}"`);
     sendMessage({ action: 'streamReady', taskId: msg.taskId, ok: true });
@@ -266,12 +274,18 @@ function handleStreamChunk(msg) {
     // Multi-threaded relays send each batch at an explicit file offset so
     // parallel workers may land out of order; positional writes handle both.
     const off = Number(msg.offset);
+    let startPos = 0;
     if (Number.isFinite(off) && off >= 0) {
       fs.writeSync(activeStreamJob.fd, buf, 0, buf.length, off);
+      startPos = off;
     } else {
+      startPos = activeStreamJob.bytesWritten;
       fs.writeSync(activeStreamJob.fd, buf);
     }
     activeStreamJob.bytesWritten += buf.length;
+    if (activeStreamJob.intervals) {
+      activeStreamJob.intervals.push([startPos, startPos + buf.length - 1]);
+    }
     if (msg.total) activeStreamJob.total = msg.total;
     // The ack doubles as a service-worker keepalive signal.
     sendMessage({
@@ -312,6 +326,7 @@ function finishStreamJob(msg) {
     if (job.total > 0) {
       const written = fs.statSync(job.partPath).size;
       if (written !== job.total) throw new Error(`size mismatch: wrote ${written} of ${job.total} bytes`);
+      validateRelayCoverage(job.intervals, job.total);
     }
     if (!finalizePartFile(job.outPath)) throw new Error('rename failed');
     logHost(`Stream relay completed: "${job.outPath}" (${job.bytesWritten} bytes)`);
@@ -668,9 +683,14 @@ function handleMessage(msg) {
     }
 
     case 'cancel': {
-      logHost(`Received cancel command from extension.`);
-      if (activeStreamJob) {
+      if (activeStreamJob && (!msg.taskId || String(msg.taskId) === String(activeStreamJob.taskId))) {
         try { cleanupStreamJob(true); } catch (e) {}
+      }
+      const cancelTaskId = msg.taskId;
+      if (cancelTaskId && activeTaskId && String(cancelTaskId) !== String(activeTaskId)) {
+        logHost(`Cancel ignored: requested taskId (${cancelTaskId}) does not match activeTaskId (${activeTaskId})`);
+        sendMessage({ action: 'cancelled', taskId: cancelTaskId, ignored: true });
+        break;
       }
       if (activeMultiThreadJob) {
         try { activeMultiThreadJob.cancel(); } catch (e) {}
@@ -687,7 +707,7 @@ function handleMessage(msg) {
         } catch (e) {}
         activeProcess = null;
       }
-      sendMessage({ action: 'cancelled' });
+      sendMessage({ action: 'cancelled', taskId: cancelTaskId || activeTaskId });
       break;
     }
 
@@ -782,8 +802,30 @@ function partPathFor(outPath) {
 function finalizePartFile(outPath) {
   const part = partPathFor(outPath);
   try {
-    if (fs.existsSync(part)) fs.renameSync(part, outPath);
-    return fs.existsSync(outPath);
+    if (!fs.existsSync(part)) return false;
+    const targetDir = path.dirname(outPath);
+    const filename = path.basename(outPath);
+    const dest = findAvailableOutputPath(targetDir, filename);
+    let attempts = 0;
+    while (attempts < 5) {
+      try {
+        if (dest === outPath) {
+          fs.renameSync(part, outPath);
+        } else {
+          fs.renameSync(part, dest);
+        }
+        return fs.existsSync(dest);
+      } catch (err) {
+        attempts++;
+        if (err.code === 'EEXIST' || err.code === 'EPERM' || err.code === 'EBUSY') {
+          const start = Date.now();
+          while (Date.now() - start < 40) {}
+        } else {
+          break;
+        }
+      }
+    }
+    return false;
   } catch (e) {
     logHost(`finalizePartFile failed for "${outPath}": ${e.message}`);
     return false;
@@ -905,14 +947,28 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
         const blockChunks = [];
 
         const req = client.get(u, { headers: reqHeaders, agent }, (res) => {
+          // Socket idle timeout (30s): if server stops sending body, abort
+          res.setTimeout(30000, () => {
+            res.destroy(new Error('RESPONSE_BODY_TIMEOUT'));
+          });
           if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
             activeReqs.delete(req);
             res.destroy();
-            url = new URL(res.headers.location, url).href;
+            const nextUrl = new URL(res.headers.location, url).href;
+            const origHost = new URL(url).hostname;
+            const targetHost = new URL(nextUrl).hostname;
+            if (!isSameOriginOrSubdomain(origHost, targetHost)) {
+              delete reqHeaders.Cookie;
+              delete reqHeaders.cookie;
+              delete reqHeaders.Authorization;
+              delete reqHeaders.authorization;
+            }
+            url = nextUrl;
             return fetchBlock(block, retryCount).then(blockResolve);
           }
 
-          if (res.statusCode === 200 && block.blockIdx > 0) {
+          // Block requests MUST return 206 Partial Content. Reject 200 on chunked block requests.
+          if ((res.statusCode === 200 && block.blockIdx > 0) || (res.statusCode === 200 && totalBlocks > 1)) {
             activeReqs.delete(req);
             res.destroy();
             hasError = true;
@@ -920,7 +976,22 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
             return reject(new Error(`Server does not support HTTP Range requests (returned 200 on block ${block.blockIdx})`));
           }
 
-          if (res.statusCode !== 206 && res.statusCode !== 200) {
+          if (res.statusCode === 206) {
+            const cr = res.headers['content-range'];
+            if (cr) {
+              const m = String(cr).match(/^bytes\s+(\d+)-(\d+)\/(\d+|\*)$/i);
+              if (m) {
+                const rStart = parseInt(m[1], 10);
+                if (rStart !== currentWritePos) {
+                  activeReqs.delete(req);
+                  res.destroy();
+                  hasError = true;
+                  cleanup();
+                  return reject(new Error(`Content-Range start mismatch: expected ${currentWritePos}, got ${rStart}`));
+                }
+              }
+            }
+          } else if (res.statusCode !== 200) {
             activeReqs.delete(req);
             res.destroy();
             if (retryCount < 4 && !isAborted) {
@@ -994,6 +1065,9 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
           }
         });
 
+        req.setTimeout(15000, () => {
+          req.destroy(new Error('CONNECT_TIMEOUT'));
+        });
         activeReqs.add(req);
       });
     }
@@ -1200,7 +1274,7 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
     if (err && err.message === 'USER_CANCELED') {
       logHost(`Multi-thread download canceled by user: "${outPath}"`);
       cleanupPartialFiles(outPath);
-      try { if (fs.existsSync(outPath)) fs.unlinkSync(outPath); } catch (_) {}
+      /* Never unlink outPath on cancel to preserve user files */
       sendMessage({ action: 'cancelled' });
       return;
     }
@@ -2086,11 +2160,7 @@ async function startFfmpegDirectStream(req) {
         });
       } else {
         cleanupPartialFiles(outPath);
-        try {
-          if (fs.existsSync(outPath) && fs.statSync(outPath).size <= 1000) {
-            fs.unlinkSync(outPath);
-          }
-        } catch (_) {}
+        /* Never delete existing file on mux error */
         const is403 = /403|Forbidden|Access Denied/i.test(errOutput);
         const errLines = errOutput.split('\n').filter(l => l.trim() && !l.startsWith('ffmpeg version') && !l.startsWith('  built with') && !l.startsWith('  configuration:'));
         const shortErr = is403

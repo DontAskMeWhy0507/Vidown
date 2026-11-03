@@ -32,6 +32,8 @@ console.log('\n[Test 2] Runtime Queue Execution & Deadlock Elimination');
 function createSandboxedServiceWorker() {
   const postedMessages = [];
   let portMessageHandler = null;
+  const activeTimers = new Set();
+  const activeIntervals = new Set();
 
   const mockPort = {
     postMessage: (msg) => {
@@ -58,11 +60,23 @@ function createSandboxedServiceWorker() {
       info: () => {}
     },
     setTimeout: (fn, ms) => {
-      return setTimeout(fn, ms);
+      const t = setTimeout(fn, ms);
+      activeTimers.add(t);
+      return t;
     },
-    clearTimeout,
-    setInterval,
-    clearInterval,
+    clearTimeout: (t) => {
+      activeTimers.delete(t);
+      clearTimeout(t);
+    },
+    setInterval: (fn, ms) => {
+      const i = setInterval(fn, ms);
+      activeIntervals.add(i);
+      return i;
+    },
+    clearInterval: (i) => {
+      activeIntervals.delete(i);
+      clearInterval(i);
+    },
     Map,
     Set,
     Array,
@@ -137,7 +151,13 @@ function createSandboxedServiceWorker() {
     getActiveDownloads: () => vm.runInContext('activeDownloads', context),
     getNativeDownloadQueue: () => vm.runInContext('nativeDownloadQueue', context),
     startNativeDownload: (params, cb) => vm.runInContext('startNativeDownload', context)(params, cb),
-    processNextQueuedNativeDownload: () => vm.runInContext('processNextQueuedNativeDownload', context)()
+    processNextQueuedNativeDownload: () => vm.runInContext('processNextQueuedNativeDownload', context)(),
+    destroy: () => {
+      for (const i of activeIntervals) clearInterval(i);
+      activeIntervals.clear();
+      for (const t of activeTimers) clearTimeout(t);
+      activeTimers.clear();
+    }
   };
 }
 
@@ -276,3 +296,8 @@ console.log('✓ Test 4: Next queued job starts successfully when previous job f
 console.log('\n======================================================');
 console.log('ALL NATIVE QUEUE DEADLOCK FIX TESTS PASSED! 🎉');
 console.log('======================================================');
+
+// Teardown sandboxes
+sw.destroy();
+sw3.destroy();
+sw4.destroy();

@@ -773,6 +773,20 @@ function hasActiveTaskForUrl(url) {
   return false;
 }
 
+// In-flight URL deduplication tracker to prevent duplicate concurrent download requests (e.g. Save As popups)
+const inFlightBrowserDownloads = new Map();
+
+function isUrlRecentlyRequested(u) {
+  if (!u) return false;
+  const now = Date.now();
+  if (inFlightBrowserDownloads.has(u) && (now - inFlightBrowserDownloads.get(u) < 4000)) {
+    return true;
+  }
+  inFlightBrowserDownloads.set(u, now);
+  setTimeout(() => inFlightBrowserDownloads.delete(u), 5000);
+  return false;
+}
+
 function startBrowserDownload(options, callback) {
   if (options && options.taskId && purgedTaskIds.has(String(options.taskId))) {
     console.log(`[Savior] startBrowserDownload called for purged task ${options.taskId}, dropping.`);
@@ -781,6 +795,12 @@ function startBrowserDownload(options, callback) {
   }
   const targetUrl = options.videoUrl || options.url;
   if (!targetUrl) {
+    if (typeof callback === 'function') callback(null);
+    return false;
+  }
+
+  if (isUrlRecentlyRequested(targetUrl)) {
+    console.log('[Savior] Duplicate browser download suppressed in-flight:', targetUrl);
     if (typeof callback === 'function') callback(null);
     return false;
   }
@@ -856,7 +876,14 @@ function startCocCocSessionDownload(options, callback) {
     return false;
   }
   const targetUrl = options && (options.videoUrl || options.url);
-  if (!targetUrl) {
+  if (!targetUrl || isBogusStreamUrl(targetUrl, options.pageUrl || options.referrer)) {
+    console.warn('[Savior] startCocCocSessionDownload rejected empty or bogus target:', targetUrl);
+    if (typeof callback === 'function') callback(null);
+    return false;
+  }
+
+  if (isUrlRecentlyRequested(targetUrl)) {
+    console.log('[Savior] Duplicate session download suppressed in-flight:', targetUrl);
     if (typeof callback === 'function') callback(null);
     return false;
   }
@@ -1427,8 +1454,12 @@ function isBogusStreamUrl(url, pageUrl) {
     }
     // Check for presence of media signatures
     const hasMediaExt = /\.(mp4|m3u8|mpd|webm|mkv|mov|ts|m4s|mp3|m4a|aac|flac|wav|ogg)(\?|$)/i.test(clean);
-    const hasMediaMime = /mime=(video|audio)|format=(m3u8|mpd|mp4)|type=(m3u8|mpd|mp4)|amplify_video|videoplayback/i.test(clean);
-    if (!hasMediaExt && !hasMediaMime && !clean.includes('/m3u8/') && !clean.includes('/hls/')) {
+    const hasMediaMime = /mime(_type)?=(video|audio)|format=(m3u8|mpd|mp4)|type=(m3u8|mpd|mp4)|amplify_video|videoplayback|media_type=video/i.test(clean);
+    const hasStreamSignature = hasMediaExt || hasMediaMime ||
+      clean.includes('/m3u8/') || clean.includes('/hls/') || clean.includes('/video/tos/') ||
+      clean.includes('tiktokcdn.com') || clean.includes('byteoversea.com') || clean.includes('ibytedtos.com') ||
+      clean.includes('googlevideo.com') || clean.includes('fbcdn.net') || clean.includes('cdninstagram.com');
+    if (!hasStreamSignature) {
       return true;
     }
   } catch (_) {
@@ -1968,7 +1999,10 @@ function startStreamRelayDownload(downloadParams, callback) {
     downloadParams.url = resolvedTarget;
     downloadParams.videoUrl = resolvedTarget;
   }
-  if (!targetUrl || !/^https?:\/\//i.test(targetUrl)) return false;
+  if (!targetUrl || !/^https?:\/\//i.test(targetUrl) || isBogusStreamUrl(targetUrl, effectivePage)) {
+    console.warn('[Savior] Stream Relay rejected bogus or non-stream URL:', targetUrl);
+    return false;
+  }
   // Playlists need FFmpeg to demux — relaying one would save the playlist
   // text as the output file. Those keep their existing fallback path.
   if (/\.m3u8(\?|$)|\.mpd(\?|$)|format=m3u8|type=m3u8/i.test(targetUrl)) return false;
@@ -2166,12 +2200,35 @@ function startStreamRelayDownload(downloadParams, callback) {
       const headers = {};
       if (task.referer) headers['Referer'] = task.referer;
 
+      const isCdnStream = /tiktokcdn\.com|byteoversea\.com|ibytedtos\.com|akamaized\.net|fbcdn\.net|googlevideo\.com/i.test(targetUrl);
+      const fetchCreds = isCdnStream ? 'omit' : 'include'; // Uses credentials: 'include' for same-origin session streams
+
+      const fetchWithTimeout = async (url, opts = {}, timeoutMs = 15000) => {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(new Error('CONNECT_TIMEOUT')), timeoutMs);
+        const parentSignal = opts.signal;
+        const onParentAbort = () => ctrl.abort(parentSignal.reason);
+        if (parentSignal) {
+          if (parentSignal.aborted) {
+            clearTimeout(timer);
+            throw parentSignal.reason || new Error('Aborted');
+          }
+          parentSignal.addEventListener('abort', onParentAbort, { once: true });
+        }
+        try {
+          return await fetch(url, { ...opts, signal: ctrl.signal });
+        } finally {
+          clearTimeout(timer);
+          if (parentSignal) parentSignal.removeEventListener('abort', onParentAbort);
+        }
+      };
+
       // Probe with a 1-byte Range request: cheap, and it reveals both the
       // exact total size (content-range) and whether the CDN serves partial
       // content — the gate for the multi-threaded path below.
       let rangeCapable = false;
       let probeOk = false;
-      const probe = await fetch(targetUrl, { credentials: 'include', headers: { ...headers, Range: 'bytes=0-0' }, signal: abortCtrl.signal });
+      const probe = await fetchWithTimeout(targetUrl, { credentials: fetchCreds, headers: { ...headers, Range: 'bytes=0-0' }, signal: abortCtrl.signal }, 12000);
       if (probe.ok) {
         const ptype = String(probe.headers.get('content-type') || '').toLowerCase();
         if (ptype.includes('text/html')) throw new Error('STREAM_HTML_RESPONSE');
@@ -2195,7 +2252,7 @@ function startStreamRelayDownload(downloadParams, callback) {
           if (start >= total) break;
           const end = Math.min(total - 1, start + slice - 1);
           jobs.push((async () => {
-            const r = await fetch(targetUrl, { credentials: 'include', headers: { ...headers, Range: `bytes=${start}-${end}` }, signal: abortCtrl.signal });
+            const r = await fetchWithTimeout(targetUrl, { credentials: fetchCreds, headers: { ...headers, Range: `bytes=${start}-${end}` }, signal: abortCtrl.signal }, 25000);
             if (!r.ok && r.status !== 206) throw new Error('HTTP ' + r.status);
             await pumpBody(r.body, start);
           })());
@@ -2206,7 +2263,7 @@ function startStreamRelayDownload(downloadParams, callback) {
       }
 
       // Single stream: small file, or the CDN ignores Range headers.
-      const resp = await fetch(targetUrl, { credentials: 'include', headers, signal: abortCtrl.signal });
+      const resp = await fetchWithTimeout(targetUrl, { credentials: fetchCreds, headers, signal: abortCtrl.signal }, 25000);
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const ctype = String(resp.headers.get('content-type') || '').toLowerCase();
       if (ctype.includes('text/html')) throw new Error('STREAM_HTML_RESPONSE');
@@ -2220,11 +2277,17 @@ function startStreamRelayDownload(downloadParams, callback) {
       if (activeDownloads.has(fakeId)) {
         activeDownloads.delete(fakeId);
         const opts = task.params;
-        if (isSessionProtectedStream(opts) && !opts._relayFailed) {
+        if (isSessionProtectedStream(opts) && !opts._relayFailed && !isBogusStreamUrl(opts.url || opts.videoUrl, opts.pageUrl)) {
           opts._relayFailed = true;
           startCocCocSessionDownload(opts);
         } else {
-          updateDownloadHistory({ id: fakeId, state: 'error', error: String(err.message || err), speed: '' });
+          const userErr = err && err.message === 'CONNECT_TIMEOUT'
+            ? 'Kết nối luồng tải bị quá thời gian (Timeout). Vui lòng thử lại sau khi video đã phát.'
+            : (err && err.message === 'STREAM_HTML_RESPONSE'
+                ? 'Liên kết không phải luồng video hợp lệ. Vui lòng bấm phát video để Vidown nhận diện.'
+                : String(err && (err.message || err) || 'Lỗi kết nối'));
+          updateDownloadHistory({ id: fakeId, state: 'error', error: userErr, speed: '' });
+          broadcastTaskEvent({ action: 'nativeError', taskId: fakeId, error: userErr });
           setActionBadge('!', '#ef4444');
         }
       }
@@ -2264,8 +2327,15 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         .trim();
       const safeFilename = `${baseTitle}.${ext}`;
 
+      const rawUrl = params.url || params.videoUrl || '';
+      if (isUrlRecentlyRequested(rawUrl)) {
+        console.log('[Savior] Duplicate download action suppressed in-flight:', rawUrl);
+        sendResponse({ success: true, duplicate: true });
+        return false;
+      }
+
       const opts = {
-        url: params.url || params.videoUrl || '',
+        url: rawUrl,
         videoUrl: params.videoUrl || params.url || '',
         audioUrl: params.audioUrl || '',
         filename: safeFilename,
@@ -2366,6 +2436,15 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       const qIdx = nativeDownloadQueue.findIndex(q => q.params && (String(q.params.taskId) === strTargetId || String(q.params.id) === strTargetId));
       if (qIdx !== -1) {
         nativeDownloadQueue.splice(qIdx, 1);
+        if (targetId) {
+          activeDownloads.delete(targetId);
+          activeDownloads.delete(strTargetId);
+          updateDownloadHistory({ id: targetId, state: 'canceled', error: 'Người dùng đã hủy', speed: 'Đã hủy' });
+          broadcastTaskEvent({ action: 'nativeCanceled', taskId: targetId });
+        }
+        if (activeDownloads.size === 0) setActionBadge('');
+        sendResponse({ success: true, queuedOnly: true });
+        return false;
       }
 
       // 2. Cancel and remove from active downloads
@@ -2396,7 +2475,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         }
         if (nativeHit) {
           const port = getOrCreateNativePort();
-          if (port) port.postMessage({ action: 'cancel' });
+          if (port) port.postMessage({ action: 'cancel', taskId: targetId });
         }
         if (activeDownloads.size === 0) setActionBadge('');
       };
@@ -2440,7 +2519,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
       if (hadNativeJob) {
         const port = getOrCreateNativePort();
-        if (port) port.postMessage({ action: 'cancel' });
+        if (port) port.postMessage({ action: 'cancel', taskId: targetId });
       }
 
       if (targetId) {
@@ -2637,7 +2716,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
       if (hadNativeJob) {
         const port = getOrCreateNativePort();
-        if (port) port.postMessage({ action: 'cancel' });
+        if (port) port.postMessage({ action: 'cancel', taskId: targetId });
       }
 
       // Immediately trigger next download in queue
@@ -2747,7 +2826,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'ping': {
-      sendResponse({ status: 'ok', version: '3.0.2' });
+      sendResponse({ status: 'ok', version: chrome.runtime?.getManifest?.()?.version || '3.0.3' });
       return false;
     }
 
@@ -2814,7 +2893,7 @@ if (chrome.runtime.onMessageExternal) {
     }
 
     if (req.action === 'ping' || req.type === 'ping') {
-      sendResponse({ status: 'ok', version: '3.0.2' });
+      sendResponse({ status: 'ok', version: chrome.runtime?.getManifest?.()?.version || '3.0.3' });
       return false;
     }
 
@@ -2927,6 +3006,11 @@ chrome.downloads.download = function(options, callback) {
   const reqUrl = options ? (options.videoUrl || options.url) : '';
   const effPage = options ? (options.pageUrl || options.referrer) : '';
   if (reqUrl) {
+    if (isUrlRecentlyRequested(reqUrl)) {
+      console.log('[Savior] Duplicate download call suppressed in-flight:', reqUrl);
+      if (typeof callback === 'function') callback(null);
+      return;
+    }
     for (const [id, t] of activeDownloads.entries()) {
       const tAudio = t.audioUrl || (t.params && t.params.audioUrl) || '';
       const samePageAndTitle = Boolean(
@@ -2939,6 +3023,28 @@ chrome.downloads.download = function(options, callback) {
         return;
       }
     }
+  }
+
+  // Reject bogus webpage targets upfront so they never hang at 1% or save HTML
+  if (!reqUrl || isBogusStreamUrl(reqUrl, effPage)) {
+    console.warn('[Savior] chrome.downloads.download rejected bogus media target:', reqUrl);
+    const taskId = options.taskId || `bogus_${Date.now()}`;
+    const errText = 'Không tìm thấy luồng video. Vui lòng bấm phát video để Vidown nhận diện luồng tải.';
+    updateDownloadHistory({
+      id: taskId,
+      title: options.title || options.filename || 'Video',
+      filename: options.filename || 'video.mp4',
+      url: reqUrl,
+      pageUrl: effPage,
+      type: 'video',
+      state: 'error',
+      error: errText,
+      startTime: Date.now()
+    });
+    setActionBadge('!', '#ef4444');
+    broadcastTaskEvent({ action: 'nativeError', taskId, error: errText });
+    if (typeof callback === 'function') callback(null);
+    return;
   }
 
   // 1. Session-protected streams (TikTok, Douyin): route directly to Stream Relay
@@ -3020,7 +3126,7 @@ chrome.downloads.cancel = function(downloadId, callback) {
       return _origCancel(downloadId, callback);
     }
     const port = getOrCreateNativePort();
-    if (port) port.postMessage({ action: 'cancel' });
+    if (port) port.postMessage({ action: 'cancel', taskId: targetId });
     if (typeof callback === 'function') callback();
     return;
   }

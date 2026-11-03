@@ -1,3 +1,4 @@
+(() => {
 /**
  * TikTok Video Data Extractor (Main World)
  * Traverses React Fiber internals to extract video bitrates, download addresses,
@@ -152,3 +153,5 @@ for (let i = 0; i < links.length; i++) {
     }
   }
 }
+
+})();

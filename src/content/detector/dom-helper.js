@@ -137,32 +137,41 @@ export default function(module, exports, require) {
   }
 
   function findMediaContainerElement(targetElement) {
+    if (!targetElement) return targetElement;
     if (targetElement.tagName === "IFRAME") return targetElement;
     if (targetElement.tagName === "IMG") return targetElement;
 
     var matchedElement = targetElement;
-    for (var parentElement = targetElement.parentElement; parentElement && parentElement.parentElement && parentElement.tagName !== "BODY";) {
-      if (isPositionOverlapping(targetElement, parentElement) && isSizeMatching(targetElement, parentElement)) {
-        matchedElement = parentElement;
+    if (typeof targetElement.getBoundingClientRect !== "function") return matchedElement;
+
+    var childRect = targetElement.getBoundingClientRect();
+    if (!childRect || (childRect.width === 0 && childRect.height === 0)) {
+      return matchedElement;
+    }
+
+    var childCenterX = childRect.left + childRect.width / 2;
+    var childCenterY = childRect.top + childRect.height / 2;
+    var depth = 0;
+    var maxDepth = 10;
+
+    for (var parentElement = targetElement.parentElement; parentElement && parentElement.parentElement && parentElement.tagName !== "BODY" && depth < maxDepth;) {
+      depth++;
+      if (typeof parentElement.getBoundingClientRect === "function") {
+        var parentRect = parentElement.getBoundingClientRect();
+        if (parentRect) {
+          var sizeMatch = Math.abs(parentRect.width - childRect.width) < 3 && Math.abs(parentRect.height - childRect.height) < 3;
+          var posOverlap = (
+            childRect.height > parentRect.height ||
+            childRect.width > parentRect.width ||
+            (Math.abs(childCenterY - parentRect.top - parentRect.height / 2) < 3 &&
+              Math.abs(childCenterX - parentRect.left - parentRect.width / 2) < 3)
+          );
+          if (posOverlap && sizeMatch) {
+            matchedElement = parentElement;
+          }
+        }
       }
       parentElement = parentElement.parentElement;
-    }
-
-    function isPositionOverlapping(childNode, parentNode) {
-      var childRect = childNode.getBoundingClientRect();
-      var parentRect = parentNode.getBoundingClientRect();
-      return (
-        childRect.height > parentRect.height ||
-        childRect.width > parentRect.width ||
-        (Math.abs(childRect.top + childRect.height / 2 - parentRect.top - parentRect.height / 2) < 3 &&
-          Math.abs(childRect.left + childRect.width / 2 - parentRect.left - parentRect.width / 2) < 3)
-      );
-    }
-
-    function isSizeMatching(childNode, parentNode) {
-      var childRect = childNode.getBoundingClientRect();
-      var parentRect = parentNode.getBoundingClientRect();
-      return Math.abs(parentRect.width - childRect.width) < 3 && Math.abs(parentRect.height - childRect.height) < 3;
     }
 
     return matchedElement;

@@ -20,7 +20,7 @@ Vidown is a media detection and downloader browser extension for Chrome Manifest
   - `bn.js` 6-to-1 deduplication: canonical `src/content/vendor/elliptic/module-126.js` (43,355 B committed git blob) preserved; 5 duplicate instances replaced with 103 B alias stubs, saving 216,015 B raw.
   - `regenerator-runtime` deduplication: shared core in `src/content/vendor/regenerator-core.js` (2,564 B committed git blob); eliminates inlined generator copies in `content-script.js`, saving 342,202 B raw.
   - Third-party libraries cleanly isolated in `src/content/vendor/` (`cryptojs`, `qrcode`, `stream`, `fast-xml-parser`, `mustache`, `eventemitter3`, `buffer`, `shims`, `parser`, `elliptic`).
-- **Release Package**: `dist/savior-extension-v3.0.2.zip` is ~1.08 MB (1,135,411 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
+- **Release Package**: `dist/savior-extension-v3.0.3.zip` is ~1.08 MB (1,135,411 bytes, strictly $\le 1.15$ MB ceiling) containing 66 verified entries with 0 `node_modules` and 0 executables.
 
 ---
 
@@ -95,7 +95,7 @@ node tests/test_golden_behavior.js
 │   ├── inject/                   # Source main-world extractors (synced to inject/ via build:inject)
 ├── tests/                        # Automated regression, golden characterization & oracle suites
 ├── scripts/                      # Build pipelines (build_content_script, build_background, build_common, build_inject, package_release)
-└── dist/                         # Release packages (savior-extension-v3.0.2.zip)
+└── dist/                         # Release packages (savior-extension-v3.0.3.zip)
 ```
 
 ---

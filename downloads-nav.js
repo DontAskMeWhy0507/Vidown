@@ -104,6 +104,7 @@
   // ==========================================
   if (!isExtensionPage && typeof window !== 'undefined' && window.performance && window.performance.getEntriesByType) {
     const reportedUrls = new Set();
+    const reportedStreamKeys = new Set();
     let scanCursor = 0;
 
     // Default buffer caps at 250 entries; heavy pages exhaust it in seconds and
@@ -140,14 +141,40 @@
         return;
       }
 
-      const isM3u8 = lower.includes('.m3u8') || lower.includes('mime=application/x-mpegurl');
+      const isM3u8 = lower.includes('.m3u8') || lower.includes('mime=application/x-mpegurl') || lower.includes('application/vnd.apple.mpegurl');
       const isMpd = lower.includes('.mpd') || lower.includes('mime=application/dash+xml');
-      const isMedia = lower.includes('.mp4?') || lower.endsWith('.mp4') || lower.endsWith('.webm');
+      const isMedia = lower.includes('.mp4') ||
+        lower.includes('.webm') ||
+        lower.includes('.m4v') ||
+        lower.includes('mime_type=video_mp4') ||
+        lower.includes('mime_type=video%2fmp4') ||
+        lower.includes('mime=video') ||
+        lower.includes('/video/tos/');
+      const isAudio = !isMedia && (lower.includes('.mp3') || lower.includes('.m4a') || lower.includes('.aac') || lower.includes('mime=audio'));
 
-      if (isM3u8 || isMpd || (isMedia && entry.initiatorType === 'media')) {
+      if (isM3u8 || isMpd || isMedia || isAudio) {
+        let streamKey = u;
+        try {
+          const parsed = new URL(u);
+          parsed.searchParams.delete('range');
+          parsed.searchParams.delete('bytestart');
+          parsed.searchParams.delete('byteend');
+          parsed.searchParams.delete('subrange');
+          parsed.searchParams.delete('sq');
+          parsed.searchParams.delete('rn');
+          streamKey = parsed.origin + parsed.pathname;
+        } catch (_) {
+          streamKey = u.split('?')[0];
+        }
+
+        // Deduplicate streaming chunk ranges so playback is never interrupted by floods
+        if (reportedStreamKeys.has(streamKey)) return;
+        reportedStreamKeys.add(streamKey);
         reportedUrls.add(u);
-        const format = isM3u8 ? 'M3U8' : (isMpd ? 'MPD' : 'MP4');
-        const ext = isM3u8 ? 'm3u8' : (isMpd ? 'mpd' : 'mp4');
+
+        const format = isM3u8 ? 'M3U8' : (isMpd ? 'MPD' : (lower.includes('.webm') ? 'WEBM' : (isAudio ? 'MP3' : 'MP4')));
+        const ext = isM3u8 ? 'm3u8' : (isMpd ? 'mpd' : (lower.includes('.webm') ? 'webm' : (isAudio ? 'mp3' : 'mp4')));
+        const type = isAudio ? 'audio' : 'video';
         let title = (document.title || 'Video').trim();
         try {
           const og = document.querySelector('meta[property="og:title"], meta[name="twitter:title"]');
@@ -170,7 +197,7 @@
           title: title,
           ext: ext,
           exts: [ext],
-          type: 'video',
+          type: type,
           isPlaylist: isM3u8 || isMpd
         };
 

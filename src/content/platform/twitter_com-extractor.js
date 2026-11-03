@@ -202,7 +202,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   getCustomParent: param_t => param_t.closest('[data-testid="videoComponent"]'),
   processRequestIds(param_t) {
   var var_e,
-  var_r = null === (var_e = param_t.url.match(/video\.twimg\.com\/.+video\/(\d+)(\/pu)?\/pl\/[a-z0-9\-_]+\.m3u8/i)) ||
+  var_r = null === (var_e = param_t.url.match(/video\.twimg\.com\/.+video\/(\d+)/i)) ||
   void 0 === var_e ? void 0 : var_e[1];
   return var_r && (param_t.origin || (param_t.origin = "https://" + param_t.host),
   obj_l[var_r] = param_t), !0;
@@ -289,6 +289,29 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_s = var_r.getAttribute("savior-twitter-vid");
   case 6:
   if (!var_s || !obj_l[var_s]) {
+  try {
+    var rawSource = var_r.getAttribute("savior-twitter-source");
+    if (rawSource) {
+      var parsedSource = JSON.parse(rawSource);
+      var streamUrl = parsedSource.url || parsedSource.stream_url;
+      if (streamUrl) {
+        var item = Object(dep_dom_utils.f)(streamUrl);
+        item.fixName = obj_u[var_e] || document.title;
+        item.filename = item.fixName;
+        item.ext = streamUrl.includes(".m3u8") ? "m3u8" : "mp4";
+        item.exts = [item.ext];
+        item.type = "video";
+        return param_t_1.a(2, [item]);
+      }
+    }
+  } catch (_) {}
+  if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
+    var twSniffed = window.__saviorSniffedMedia.find(m => m && m.url && m.url.includes("video.twimg.com"));
+    if (twSniffed) {
+      twSniffed.fixName = obj_u[var_e] || twSniffed.filename || document.title;
+      return param_t_1.a(2, [twSniffed]);
+    }
+  }
   param_t_1.n = 7;
   break;
   }

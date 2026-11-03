@@ -1,3 +1,4 @@
+(() => {
 /**
  * LinkedIn Video Manifest Extractor (Main World)
  * Inspects parent element's videojs/player instance for HLS manifest URL.
@@ -17,3 +18,4 @@ if (videos) {
     }
   });
 }
+})();

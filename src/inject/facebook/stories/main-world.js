@@ -1,3 +1,4 @@
+(() => {
 /**
  * Facebook Stories Video Extractor (Main World)
  * Detects the currently active Story video and extracts direct HD/SD MP4 URLs or DASH manifests from React Fiber internals.
@@ -92,3 +93,4 @@ if (activeVideo) {
   }
   document.head.setAttribute('savior-story-url', storyUrl || '');
 }
+})();

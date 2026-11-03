@@ -66,22 +66,33 @@
   // Guard Picture-in-Picture Permissions Policy violations in documents/iframes where disabled
   try {
     if (typeof document !== 'undefined') {
-      const isPipAllowed = () => {
-        try {
-          if (document.permissionsPolicy && typeof document.permissionsPolicy.allowsFeature === 'function') {
-            if (!document.permissionsPolicy.allowsFeature('picture-in-picture')) return false;
-          } else if (document.featurePolicy && typeof document.featurePolicy.allowsFeature === 'function') {
-            if (!document.featurePolicy.allowsFeature('picture-in-picture')) return false;
-          }
-          return Boolean(document.pictureInPictureEnabled);
-        } catch (_) {
-          return false;
-        }
-      };
-
       const docProto = (typeof Document !== 'undefined' && Document.prototype) ? Document.prototype : document;
       const origPipElementDesc = Object.getOwnPropertyDescriptor(docProto, 'pictureInPictureElement') || Object.getOwnPropertyDescriptor(document, 'pictureInPictureElement');
       const origPipEnabledDesc = Object.getOwnPropertyDescriptor(docProto, 'pictureInPictureEnabled') || Object.getOwnPropertyDescriptor(document, 'pictureInPictureEnabled');
+
+      let _pipAllowedCached = null;
+      const isPipAllowed = () => {
+        if (_pipAllowedCached !== null) return _pipAllowedCached;
+        try {
+          if (document.permissionsPolicy && typeof document.permissionsPolicy.allowsFeature === 'function') {
+            if (!document.permissionsPolicy.allowsFeature('picture-in-picture')) {
+              _pipAllowedCached = false;
+              return false;
+            }
+          } else if (document.featurePolicy && typeof document.featurePolicy.allowsFeature === 'function') {
+            if (!document.featurePolicy.allowsFeature('picture-in-picture')) {
+              _pipAllowedCached = false;
+              return false;
+            }
+          }
+          const rawEnabled = origPipEnabledDesc && origPipEnabledDesc.get ? origPipEnabledDesc.get.call(document) : document.pictureInPictureEnabled;
+          _pipAllowedCached = Boolean(rawEnabled);
+          return _pipAllowedCached;
+        } catch (_) {
+          _pipAllowedCached = false;
+          return false;
+        }
+      };
 
       const definePipProp = (target, propName, getterFn) => {
         try {

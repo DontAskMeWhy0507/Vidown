@@ -1,3 +1,4 @@
+(() => {
 /**
  * Douyin Video Metadata Extractor (Main World)
  * Traverses React Fiber internals to extract Aweme video info from Douyin player components.
@@ -56,3 +57,4 @@ for (let i = 0; i < targetVideos.length; i++) {
     container.setAttribute('data-aweme-info', JSON.stringify(awemeInfo));
   }
 }
+})();

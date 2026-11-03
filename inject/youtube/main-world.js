@@ -1,3 +1,4 @@
+(() => {
 /**
  * YouTube Format N-Parameter Decipherer (Main World)
  * Evaluates the n-parameter transform function extracted from YouTube base.js to prevent video throttling.
@@ -47,4 +48,5 @@
       formats: []
     }));
   }
+})();
 })();

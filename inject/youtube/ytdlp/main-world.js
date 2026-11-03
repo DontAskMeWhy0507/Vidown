@@ -1,3 +1,4 @@
+(() => {
 /**
  * YouTube yt-dlp Compatibility Decipherer (Main World)
  * Executes base.js signature and n-parameter challenge functions for yt-dlp challenges.
@@ -67,3 +68,4 @@
     console.groupEnd();
   }
 }
+})();

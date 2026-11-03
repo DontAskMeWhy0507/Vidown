@@ -1,3 +1,4 @@
+(() => {
 /**
  * TodayPlus DRM Key Decryptor (Main World)
  * Bridges encrypted HLS AES key bytes with the page's Emscripten WebAssembly module (window.Module.ccall).
@@ -64,3 +65,4 @@ keyElements.forEach((el) => {
     console.error('[Vidown] Error processing TodayPlus DRM key:', error);
   }
 });
+})();

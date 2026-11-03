@@ -772,6 +772,8 @@ export default function(module, exports, require) {
                     storyMedia = Object(urlUtils.f)(`https://www.facebook.com/stories/${videoId}/${storyId}`);
                     storyMedia.params = { videoId: videoId, storyId: storyId };
                     storyMedia.type = "video";
+                    storyMedia.ext = "mp4";
+                    storyMedia.exts = ["mp4"];
                     storyMedia.facebookType = "story";
                     return ctx.a(2, [storyMedia]);
                 }
@@ -792,7 +794,7 @@ export default function(module, exports, require) {
       {
         checkUrl: function(info) {
           var url = info.url;
-          return !document.getElementById("chatsidebarsheet") && (url.includes("blob://") || !url);
+          return !document.getElementById("chatsidebarsheet") && (url.includes("blob:") || url.includes("blob://") || !url);
         },
         getUrl: function() {
           return "https://www.facebook.com/api/graphql/";
@@ -881,6 +883,9 @@ export default function(module, exports, require) {
                       if (videoIdEl) {
                         var vid = videoIdEl.getAttribute("data-video-id");
                         mediaObject.identifier = vid || void 0;
+                      }
+                      if (!mediaObject.identifier) {
+                        mediaObject.identifier = node.getAttribute("savior-vid") || void 0;
                       }
                     }
                     var profileLink = articleRoot?.querySelector('div[data-ad-rendering-role="profile_name"] a');

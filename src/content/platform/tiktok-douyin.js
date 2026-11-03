@@ -165,30 +165,13 @@ export default function(module, exports, require) {
   }
 
   function injectTikTokMainWorldScript() {
-    return asyncRunner1(void 0, void 0, void 0, c().m(function injectGenerator() {
-      return c().w(function(step) {
-        for (;;) switch (step.n) {
-          case 0:
-            if (!inFlightInjectMap["tiktok_inject"]) {
-              step.n = 1;
-              break;
-            }
-            return step.a(2);
-          case 1:
-            inFlightInjectMap["tiktok_inject"] = true;
-            step.n = 2;
-            return domHelper.h({
-              type: "run_isolated_script",
-              data: {
-                target: "inject/tiktok/index.js",
-                codeUrl: "inject/tiktok/main-world.js"
-              }
-            });
-          case 2:
-            return step.a(2);
-        }
-      }, injectGenerator);
-    }));
+    return Promise.race([
+      cryptoUtils.sendMessage({
+        type: mediaConstants.b.SCRIPTING.INJECT,
+        file: "tiktok"
+      }),
+      cryptoUtils.sleep(800)
+    ]);
   }
 
   function parseAwemeVideoAttribute(videoElement) {
@@ -360,6 +343,8 @@ export default function(module, exports, require) {
     return match ? match[1] : null;
   }
 
+  var getCurrentTikTokVideoId = () => getTikTokVideoIdFromUrl(location.href);
+
   function isTikTokAnchorLink(anchorElement) {
     return Boolean(anchorElement && anchorElement.href && TIKTOK_VIDEO_URL_REGEX.test(anchorElement.href));
   }
@@ -442,9 +427,10 @@ export default function(module, exports, require) {
       thumbnail = findCoverImage(parentElem.querySelector("img[src], img[srcset]"));
       parentElem = parentElem.parentElement;
     }
+    var s = mainVideo?.src, streamUrl = (s && /^https?:\/\//i.test(s) && !s.includes("tiktok.com/")) ? s : "";
     return {
       id: videoId,
-      url: location.href,
+      url: streamUrl,
       type: "video",
       ext: "mp4",
       exts: ["mp4"],
@@ -1092,10 +1078,19 @@ export default function(module, exports, require) {
       }
       return true;
     } : function(requestItem) {
-      var parsedUrl = new URL(requestItem.url);
+      var parsedUrl;
+      try {
+        parsedUrl = new URL(requestItem.url);
+      } catch (_) {
+        return false;
+      }
       var videoId = parsedUrl.pathname.match(/\/video\/tos\/.*\/(\w+)/i)?.[1];
       if (videoId && !douyinResolvedCache[videoId]) {
         douyinResolvedCache[videoId] = requestItem;
+      }
+      var pageVidMatch = location.pathname.match(/\/video\/(\d+)/i);
+      if (pageVidMatch && pageVidMatch[1] && !douyinResolvedCache[pageVidMatch[1]]) {
+        douyinResolvedCache[pageVidMatch[1]] = requestItem;
       }
       return true;
     },
@@ -1357,9 +1352,9 @@ export default function(module, exports, require) {
         },
         getUrl: function(item) {
           var meta = scrapeTikTokAnchorPreviewMeta(item.node);
-          return meta ? [{
+          return (meta && meta.url && meta.url !== location.href && !meta.url.startsWith("blob:")) ? [{
             id: meta.id,
-            url: meta.url || location.href,
+            url: meta.url,
             type: meta.type || "video",
             ext: meta.ext || "mp4",
             exts: meta.exts || ["mp4"],
@@ -1579,10 +1574,21 @@ export default function(module, exports, require) {
                     mediaObj.url = fetchedDetail;
                   }
                 case 4:
-                  if (!mediaObj.url?.startsWith("blob:")) {
-                    mediaObj.ext = "mp4";
-                    mediaObj.exts = ["mp4"];
+                  if (mediaObj.url?.startsWith("blob:")) {
+                    if (douyinResolvedCache[videoId]) {
+                      mediaObj.url = douyinResolvedCache[videoId].url;
+                    } else if (typeof window !== "undefined" && window.__saviorSniffedMedia?.length) {
+                      var sniffed = window.__saviorSniffedMedia.find(function(m) {
+                        return m && m.url && (m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4"));
+                      }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
+                      if (sniffed?.url) {
+                        mediaObj.url = sniffed.url;
+                      }
+                    }
                   }
+                  mediaObj.ext = mediaObj.ext || "mp4";
+                  mediaObj.exts = mediaObj.exts || ["mp4"];
+                  mediaObj.type = "video";
                   return step.a(2, "video");
               }
             }, tiktokMediaChangeGenerator);

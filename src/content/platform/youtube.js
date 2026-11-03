@@ -158,9 +158,29 @@ export default function(module, exports, require) {
 
   function isLiveStream() {
     if (location.pathname.startsWith("/shorts/")) return false;
+    // Fast DOM markers without forced layout reflow
+    if (document.querySelector('meta[itemprop="isLiveBroadcast"][content="true"]')) return true;
+    if (document.querySelector('ytd-watch-flexy[is-live]')) return true;
     var viewerCountEl = Object(cryptoUtils.query)(".viewer-count.ytg-watch-footer");
+    if (viewerCountEl) return true;
     var liveBadgeEl = Object(cryptoUtils.query)(".ytp-chrome-bottom .ytp-live-badge");
-    return !(!viewerCountEl && (!liveBadgeEl || "none" === window.getComputedStyle(liveBadgeEl).display));
+    if (liveBadgeEl) {
+      if (liveBadgeEl.offsetParent !== null && !liveBadgeEl.classList.contains("ytp-live-badge-hidden") && !liveBadgeEl.hasAttribute("disabled") && liveBadgeEl.style.display !== "none") {
+        return true;
+      }
+    }
+    try {
+      var scripts = document.querySelectorAll("script");
+      for (var i = 0; i < scripts.length; i++) {
+        var text = scripts[i].textContent;
+        if (text && text.length > 50 && text.includes("ytInitialPlayerResponse") && text.includes('"isLiveBroadcast":true')) {
+          if (!text.includes('"endDate":') || text.includes('"isLive":true')) {
+            return true;
+          }
+        }
+      }
+    } catch (_) {}
+    return false;
   }
 
   var youtubeProvider = {
@@ -297,7 +317,7 @@ export default function(module, exports, require) {
         mediaObjectChange: function(info) {
           var node = info.node;
           var mediaObject = info.mediaObject;
-          if (!document.documentElement.innerHTML.match(/("duration":"PT0S").+?("isLiveBroadcast":true)/g)) {
+          if (!isLiveStream()) {
             mediaObject.cacheUrl = node.src;
             mediaObject.ext = "mp4";
             mediaObject.exts = ["mp4"];
@@ -321,7 +341,7 @@ export default function(module, exports, require) {
         mediaObjectChange: function(info) {
           var mediaObject = info.mediaObject;
           var node = info.node;
-          if (!document.documentElement.innerHTML.match(/("duration":"PT0S").+?("isLiveBroadcast":true)/g)) {
+          if (!isLiveStream()) {
             mediaObject.ext = "mp4";
             mediaObject.exts = ["mp4"];
             mediaObject.cacheUrl = node.src;
@@ -435,7 +455,7 @@ export default function(module, exports, require) {
       var defaultIds = info.defaultIds;
       var index = info.index;
       if ((null == urlMatch ? void 0 : urlMatch.match(/\/search\/audio\/[\s\-_+]+\.mp3/i)) ||
-          document.documentElement.innerHTML.match(/("isLiveBroadcast":true)+((?!endDate)+[\s\S])*$/g)) {
+          isLiveStream()) {
         defaultIds.splice(index, 1);
       }
     },

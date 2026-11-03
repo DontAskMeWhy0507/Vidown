@@ -61,9 +61,9 @@
   },
   "12": {
     "path": "detector/dom-helper.js",
-    "sha256": "e3439f16e508cb5f3a82dd6d3049c1c9a3f49854746cfe477488debbbf52af56",
-    "size": 12413,
-    "fileSize": 12413
+    "sha256": "505afa0d3e87f33e8c32d2534b2c320b54c3505b9556e9104a56b866fd06ba68",
+    "size": 12675,
+    "fileSize": 12675
   },
   "13": {
     "path": "vendor/shims/module-13.js",
@@ -703,9 +703,9 @@
   },
   "120": {
     "path": "platform/youtube.js",
-    "sha256": "e98db0af52a67af348585a74e77b5e0bdfaaf35de02511bc4976179526b44e56",
-    "size": 19995,
-    "fileSize": 19995
+    "sha256": "4d5d3d6c87e567ceae8722d1ad91e15fe03ddf06e9ea491d468bae29ffb51b6f",
+    "size": 20619,
+    "fileSize": 20619
   },
   "121": {
     "path": "platform/helper-121.js",
@@ -991,9 +991,9 @@
   },
   "176": {
     "path": "detector/dom-scanner.js",
-    "sha256": "39d290d8e0e22e1c3a23191d61d87742629e74601a5cc986388eee2ae923777d",
-    "size": 13281,
-    "fileSize": 13281
+    "sha256": "8b8f08b9a02f968541c9a30c1a21bf133bc7c611f1afe9e8f54924ed58b7082b",
+    "size": 17481,
+    "fileSize": 17481
   },
   "177": {
     "path": "detector/extractor-registry-index.js",
@@ -1315,9 +1315,9 @@
   },
   "232": {
     "path": "platform/facebook.js",
-    "sha256": "4eeff6b800a8ad336f4c176558816d25fdb0e1909cce5e7ca35470596e0638cb",
-    "size": 41754,
-    "fileSize": 41754
+    "sha256": "43a0713842fa474dcc66bbe02eda8b33a94c38421979cbf24dc7f9eacf8bedad",
+    "size": 42039,
+    "fileSize": 42039
   },
   "233": {
     "path": "platform/fansly_com-extractor.js",
@@ -1855,9 +1855,9 @@
   },
   "322": {
     "path": "platform/reddit-extractor.js",
-    "sha256": "68d20eadb1ddceec266ec512c29b90a1fa4344c1ec833b8a40dad2326861c8eb",
-    "size": 509,
-    "fileSize": 509
+    "sha256": "88907d88eb9f4f643246a4e48f4f56f91fa2c4637dc25cbe113900a60b133a24",
+    "size": 586,
+    "fileSize": 586
   },
   "323": {
     "path": "platform/riki_edu_vn-extractor.js",
@@ -2095,9 +2095,9 @@
   },
   "362": {
     "path": "platform/twitter_com-extractor.js",
-    "sha256": "b2a2b37333cace11cf5f735bf59bc44156ecfd1bc32efe701519b3d5babfb283",
-    "size": 9604,
-    "fileSize": 9604
+    "sha256": "4390d86a16258ee2552a02777bc9e0f8d272e3ae4ceb8bc663a00cbd46d38410",
+    "size": 10518,
+    "fileSize": 10518
   },
   "363": {
     "path": "platform/ub_net-extractor.js",
@@ -2551,9 +2551,9 @@
   },
   "442": {
     "path": "platform/tiktok-douyin.js",
-    "sha256": "627a5397df495ea886892d493312e024f5e08085d48687d122e75b14310da5db",
-    "size": 72069,
-    "fileSize": 72069
+    "sha256": "d29b083eec9273faceeadac3c79fd6f89c0c41c1e57fd8367bd2e53cbff7b302",
+    "size": 72792,
+    "fileSize": 72792
   },
   "443": {
     "path": "vendor/elliptic/module-443.js",
@@ -2917,9 +2917,9 @@
   },
   "543": {
     "path": "detector/content-entry.js",
-    "sha256": "abfd0cca51996a1849f1f7960362bceb6202ef0d7df9d9cb4c88a12487576e0a",
-    "size": 11022,
-    "fileSize": 11022
+    "sha256": "0e61deeffa5dfdf263a7690f3109f5a894a268f037f57b7727cd18e4e1e741c4",
+    "size": 11312,
+    "fileSize": 11312
   },
   "544": {
     "path": "vendor/qrcode/module-544.js",

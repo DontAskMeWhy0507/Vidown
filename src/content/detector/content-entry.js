@@ -256,17 +256,21 @@ export default function(module, exports, require) {
           });
 
           var previousLocationHref = document.location.href;
+          var checkLocationChange = function() {
+            if (previousLocationHref !== document.location.href) {
+              EE.emit("location.href.changed", {
+                old: previousLocationHref,
+                new: location.href
+              });
+              previousLocationHref = document.location.href;
+            }
+          };
+          window.addEventListener("popstate", checkLocationChange);
+          window.addEventListener("hashchange", checkLocationChange);
+          window.addEventListener("yt-navigate-finish", checkLocationChange);
           (window || globalContext).onload = function() {
-            var bodyElement = document.querySelector("body");
-            new MutationObserver(() => {
-              if (previousLocationHref !== document.location.href) {
-                EE.emit("location.href.changed", {
-                  old: previousLocationHref,
-                  new: location.href
-                });
-                previousLocationHref = document.location.href;
-              }
-            }).observe(bodyElement, { childList: true, subtree: true });
+            var headElement = document.querySelector("head") || document.documentElement;
+            new MutationObserver(checkLocationChange).observe(headElement, { childList: true, subtree: true });
           };
         } catch (bootstrapError) {
           console.log("Caught", bootstrapError);

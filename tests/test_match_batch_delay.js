@@ -1,7 +1,7 @@
 /**
  * tests/test_match_batch_delay.js
  *
- * Regression suite for the v3.0.2 faster-button change:
+ * Regression suite for the v3.0.3 faster-button change:
  * the matched-request batching delay in the content entry must stay at
  * 200 ms (lowered from 1000 ms so the download widget learns about
  * matched media sooner), and the batching semantics must stay intact:
@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
 
-console.log('=== TEST SUITE: MATCH BATCH DELAY (v3.0.2) ===\n');
+console.log('=== TEST SUITE: MATCH BATCH DELAY (v3.0.3) ===\n');
 
 const entryPath = path.resolve(__dirname, '..', 'src', 'content', 'detector', 'content-entry.js');
 assert.ok(fs.existsSync(entryPath), 'src/content/detector/content-entry.js must exist');

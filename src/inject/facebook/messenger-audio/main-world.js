@@ -1,3 +1,4 @@
+(() => {
 /**
  * Facebook Messenger Voice Message Interceptor (Main World)
  * Hooks URL.createObjectURL and URL.revokeObjectURL to capture audio blobs and durations.
@@ -54,3 +55,4 @@ try {
 } catch (error) {
   console.error('[Vidown] Messenger audio hook error:', error);
 }
+})();

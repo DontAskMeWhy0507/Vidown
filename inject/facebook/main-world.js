@@ -1,3 +1,4 @@
+(() => {
 /**
  * Facebook Video Metadata Extractor (Main World)
  * Traverses React Fiber internals to extract Facebook video FBID, DASH manifest URL,
@@ -95,3 +96,4 @@ for (let i = 0; i < videos.length; i++) {
     // Ignore extraction errors
   }
 }
+})();

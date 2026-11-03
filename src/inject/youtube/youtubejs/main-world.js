@@ -1,3 +1,4 @@
+(() => {
 {
   let s = {
     IOS: {
@@ -188,3 +189,4 @@ return exportedVars`;
     console.groupEnd();
   }
 }
+})();

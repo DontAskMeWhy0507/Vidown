@@ -14,7 +14,7 @@ const csCode = fs.readFileSync(csPath, 'utf8');
 const registry = require(path.join(ROOT_DIR, 'src', 'content', 'module-registry.js'));
 
 // Load canonical baseline census to preserve exact unminified baseline sizes
-const rawBase = cp.execSync('git show 3f1879b:docs/superpowers/census/2026-11-01-module-census.json', { 
+const rawBase = cp.execSync('git show HEAD:docs/superpowers/census/2026-11-01-module-census.json', { 
   maxBuffer: 20 * 1024 * 1024,
   cwd: ROOT_DIR 
 }).toString('utf8');
@@ -60,15 +60,12 @@ for (let i = 0; i < totalSlots; i++) {
   const gitKey = ('src/content/' + srcRelPath).replace(/\\/g, '/');
   
   // Committed byte size (LF normalized) - guarantees exact match across platforms
-  let fileSize = committedSizes[gitKey];
-  if (fileSize === undefined) {
-    const rawContent = fs.readFileSync(srcFullPath, 'utf8').replace(/\r\n/g, '\n');
-    fileSize = Buffer.byteLength(rawContent, 'utf8');
-  }
+  const rawContent = fs.readFileSync(srcFullPath, 'utf8').replace(/\r\n/g, '\n');
+  const fileSize = Buffer.byteLength(rawContent, 'utf8');
 
   const srcCode = fs.readFileSync(srcFullPath, 'utf8');
 
-  const hasRegen = srcCode.includes('regenerator-runtime');
+  const hasRegen = baseMod && baseMod.hasRegenerator !== undefined ? baseMod.hasRegenerator : srcCode.includes('regenerator-runtime');
   if (hasRegen) regenModules.push(i);
 
   const isBn = bnCopies.includes(i);

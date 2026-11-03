@@ -1,3 +1,4 @@
+(() => {
 /**
  * Instagram Video Detail Extractor (Main World)
  * Traverses React Fiber internals to extract video manifest, dashInfo, and HD/SD sources from Instagram posts, Reels, and Stories.
@@ -251,3 +252,4 @@ try {
     };
   }
 } catch {}
+})();

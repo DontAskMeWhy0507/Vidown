@@ -2,7 +2,7 @@
 
 - Date: 2026-11-01
 - Baseline original bundle size: 2,404,925 bytes (630 B CSS prefetcher + 2,404,295 B Webpack IIFE)
-- Current built bundle size: 2352581 bytes
+- Current built bundle size: 2354925 bytes
 - Total Webpack slots: 776
 - Real function modules: 649
 - Holes (null slots): 127
@@ -56,7 +56,7 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
   - Trigger: StreamFree main-world player decrypts `#ENC-AESGCM` streams and writes the resolved m3u8 playlist to the DOM.
 - **Consumer Code Site:** `inject/stream_free/index.js` (line 4)
   - Code: `var e = document.body.getAttribute("savior-m3u8");`
-  - Relay: Relayed via `chrome.runtime.sendMessage({ type: "script_executed", data: { origin: "streamfree", m3u8: e } })` to StreamFree detector adapters (`src/content/detector/module-94.js` and `src/content/detector/extractor-registry-2.js`).
+  - Relay: Relayed via `chrome.runtime.sendMessage({ type: "script_executed", data: { origin: "streamfree", m3u8: e } })` to StreamFree detector adapters (`src/content/detector/module-94.js` and `src/content/detector/module-564.js`).
 
 ### 2. `savior-decoded-content`
 - **Constructor Code Site:** `inject/animevietsub/main-world.js` (line 8)
@@ -89,8 +89,8 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 | Module ID | Baseline Size (Bytes) | Split File Size (Bytes) | Reachable | Regenerator | bn.js Copy | Direct Callers Count |
 |:---|:---|:---|:---|:---|:---|:---|
 | 37 | 119308 | 119694 | Yes | No | No | 2 |
-| 541 | 110571 | 110611 | Yes | Yes | No | 1 |
-| 161 | 77663 | 77687 | No | No | No | 1 |
+| 541 | 110571 | 139222 | Yes | Yes | No | 1 |
+| 161 | 77663 | 137480 | No | No | No | 1 |
 | 89 | 45516 | 45562 | Yes | Yes | No | 4 |
 | 433 | 44315 | 44364 | No | No | No | 3 |
 | 443 | 43900 | 43949 | No | Yes | No | 0 |
@@ -101,21 +101,10 @@ The 4 dynamic bridge attributes connect main-world page script injectors with is
 | 652 | 43306 | 103 | No | No | Yes | 1 |
 | 668 | 43306 | 103 | No | No | Yes | 1 |
 | 24 | 40290 | 56523 | Yes | No | No | 2 |
-| 442 | 39532 | 72069 | No | Yes | No | 0 |
-| 6 | 39279 | 39315 | Yes | Yes | No | 80 |
-| 0 | 27593 | 27855 | Yes | Yes | No | 117 |
-| 163 | 27190 | 27230 | No | No | No | 1 |
-| 741 | 26931 | 26971 | No | Yes | No | 0 |
+| 442 | 39532 | 72792 | No | Yes | No | 0 |
+| 6 | 39279 | 54668 | Yes | Yes | No | 80 |
+| 0 | 27593 | 39799 | Yes | Yes | No | 117 |
+| 163 | 27190 | 30767 | No | No | No | 1 |
+| 741 | 26931 | 52242 | No | Yes | No | 0 |
 | 643 | 26151 | 26200 | No | No | No | 1 |
-| 162 | 25596 | 25638 | No | No | No | 1 |
-
----
-
-## 4. Vendored Machinery Embedded in Renamed Modules
-
-The following renamed custom modules embed inlined vendored helper machinery (retaining their upstream MIT licence comments) rather than being external third-party libraries as a whole:
-- `src/content/detector/dash-parser.js` (Module 28): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
-- `src/content/detector/dom-helper.js` (Module 12): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
-- `src/content/detector/url-utils.js` (Module 3): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
-- `src/content/providers/ab-test-provider.js` (Module 43): Inlined `regenerator-runtime` helper machinery (`regeneratorCore()` / `asyncRunner`) with MIT licence header.
-- `src/content/platform/tiktok-douyin.js` (Module 442): Inlined `regenerator-runtime` helper machinery (3 copies `c`, `w`, `V`) with MIT licence header, deduplicated to `_saviorRegen` in `content-script.js`.
+| 162 | 25596 | 28763 | No | No | No | 1 |

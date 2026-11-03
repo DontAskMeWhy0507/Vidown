@@ -1,3 +1,5 @@
+const activeTimers = new Set();
+const activeIntervals = new Set();
 /**
  * Test Suite: Settings Split-Brain Fix & popupOpened Message Handling
  * 
@@ -134,10 +136,24 @@ const sandboxContext = {
   },
   console: { log: () => {}, warn: () => {}, error: () => {} },
   importScripts: () => {},
-  setTimeout: setTimeout,
-  clearTimeout: clearTimeout,
-  setInterval: setInterval,
-  clearInterval: clearInterval,
+  setTimeout: (fn, ms) => {
+    const t = setTimeout(fn, ms);
+    activeTimers.add(t);
+    return t;
+  },
+  clearTimeout: (t) => {
+    activeTimers.delete(t);
+    clearTimeout(t);
+  },
+  setInterval: (fn, ms) => {
+    const i = setInterval(fn, ms);
+    activeIntervals.add(i);
+    return i;
+  },
+  clearInterval: (i) => {
+    activeIntervals.delete(i);
+    clearInterval(i);
+  },
   URL: URL,
   Date: Date,
   Math: Math
@@ -173,3 +189,9 @@ console.log('✓ Test 3 Passed: package.json and release packaging script verifi
 console.log('\n=============================================================');
 console.log('🎉 ALL SETTINGS SPLIT-BRAIN & POPUP-OPENED TESTS PASSED!');
 console.log('=============================================================\n');
+
+// Clean up all active timers and intervals created by background.chrome.js
+for (const i of activeIntervals) clearInterval(i);
+activeIntervals.clear();
+for (const t of activeTimers) clearTimeout(t);
+activeTimers.clear();

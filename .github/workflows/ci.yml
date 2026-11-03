@@ -44,6 +44,8 @@ jobs:
               passed++;
             } catch (err) {
               console.error('FAIL: ' + f);
+              if (err.stdout && err.stdout.length) console.error(err.stdout.toString());
+              if (err.stderr && err.stderr.length) console.error(err.stderr.toString());
               failed++;
             }
           }

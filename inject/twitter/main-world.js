@@ -1,3 +1,4 @@
+(() => {
 /**
  * Twitter / X Video Metadata Extractor (Main World)
  * Traverses React Fiber internals to extract video contentId and stream sources.
@@ -40,3 +41,4 @@ const videos = document.querySelectorAll('video');
 for (let i = 0; i < videos.length; i++) {
   extractTwitterVideoMetadata(videos[i]);
 }
+})();

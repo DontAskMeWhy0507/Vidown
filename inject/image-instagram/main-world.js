@@ -1,3 +1,4 @@
+(() => {
 /**
  * Instagram Image PK Extractor (Main World)
  * Traverses React Fiber internals to extract media PK (primary key) and carousel parent ID for high-res photos.
@@ -71,3 +72,4 @@ if (scannedImages) {
     img.setAttribute('image-instagram-pk', pk || '');
   });
 }
+})();

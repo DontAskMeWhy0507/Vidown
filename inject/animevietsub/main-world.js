@@ -1,3 +1,4 @@
+(() => {
 /**
  * AnimeVietSub Playlist & URL Cipher Decryptor (Main World)
  * Fetches playlist.m3u8, invokes _avsDecryptM3u8, and decrypts AES-CTR encrypted segment URLs.
@@ -113,3 +114,4 @@ function base64ToUint8Array(base64String) {
   console.error('[Vidown] AnimeVietSub main-world error:', error);
   setDecodedContent('');
 });
+})();

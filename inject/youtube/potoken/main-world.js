@@ -1,3 +1,4 @@
+(() => {
 /**
  * YouTube Proof-of-Origin Token (PoToken) Extractor (Main World)
  *
@@ -298,4 +299,5 @@
   } else {
     console.error("Could not find InnerTube attestation challenge in page HTML (ytAtN). YouTube may have changed the page.");
   }
+})();
 })();

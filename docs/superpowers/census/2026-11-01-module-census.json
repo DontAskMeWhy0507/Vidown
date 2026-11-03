@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-01T04:09:52.778Z",
+  "generatedAt": "2026-11-02T11:10:44.216Z",
   "baselineBundleSize": 2404925,
-  "currentBuiltBundleSize": 2350233,
+  "currentBuiltBundleSize": 2354925,
   "totalSlots": 776,
   "realModulesCount": 649,
   "holesCount": 127,
@@ -18,33 +18,6 @@
     668
   ],
   "regeneratorModulesCount": 163,
-  "vendoredMachineryNotes": [
-    {
-      "moduleId": 28,
-      "path": "detector/dash-parser.js",
-      "machinery": "inlined regenerator-runtime helper machinery (MIT)"
-    },
-    {
-      "moduleId": 12,
-      "path": "detector/dom-helper.js",
-      "machinery": "inlined regenerator-runtime helper machinery (MIT)"
-    },
-    {
-      "moduleId": 3,
-      "path": "detector/url-utils.js",
-      "machinery": "inlined regenerator-runtime helper machinery (MIT)"
-    },
-    {
-      "moduleId": 43,
-      "path": "providers/ab-test-provider.js",
-      "machinery": "inlined regenerator-runtime helper machinery (MIT)"
-    },
-    {
-      "moduleId": 442,
-      "path": "platform/tiktok-douyin.js",
-      "machinery": "inlined regenerator-runtime helper machinery (MIT) (3 copies c, w, V deduplicated to _saviorRegen in content-script.js)"
-    }
-  ],
   "module37Analysis": {
     "id": 37,
     "bundleSize": 119308,
@@ -268,8 +241,7 @@
         700,
         741
       ],
-      "reachableFromEntry": true,
-      "path": "core/dom-utils.js"
+      "reachableFromEntry": true
     },
     "1": {
       "id": 1,
@@ -389,8 +361,7 @@
         687,
         741
       ],
-      "reachableFromEntry": true,
-      "path": "detector/media-constants.js"
+      "reachableFromEntry": true
     },
     "2": {
       "id": 2,
@@ -486,8 +457,7 @@
         690,
         696
       ],
-      "reachableFromEntry": true,
-      "path": "detector/url-utils.js"
+      "reachableFromEntry": true
     },
     "4": {
       "id": 4,
@@ -534,8 +504,7 @@
         69,
         70
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-4.js"
+      "reachableFromEntry": true
     },
     "5": {
       "id": 5,
@@ -558,8 +527,7 @@
         176,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "detector/metrics-logger.js"
+      "reachableFromEntry": true
     },
     "6": {
       "id": 6,
@@ -661,8 +629,7 @@
         690,
         696
       ],
-      "reachableFromEntry": true,
-      "path": "core/media-sniffer.js"
+      "reachableFromEntry": true
     },
     "7": {
       "id": 7,
@@ -686,9 +653,7 @@
         541,
         543
       ],
-      "reachableFromEntry": true,
-      "file": "widget/settings-manager.js",
-      "path": "widget/settings-manager.js"
+      "reachableFromEntry": true
     },
     "8": {
       "id": 8,
@@ -718,8 +683,7 @@
         69,
         70
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-8.js"
+      "reachableFromEntry": true
     },
     "9": {
       "id": 9,
@@ -760,8 +724,7 @@
         387,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "detector/quality-helper.js"
+      "reachableFromEntry": true
     },
     "10": {
       "id": 10,
@@ -792,8 +755,7 @@
         28,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "detector/feature-flags.js"
+      "reachableFromEntry": true
     },
     "12": {
       "id": 12,
@@ -801,7 +763,7 @@
       "start": 125112,
       "end": 134026,
       "size": 8914,
-      "fileSize": 12413,
+      "fileSize": 12675,
       "requires": [
         0,
         33
@@ -828,8 +790,7 @@
         525,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "detector/dom-helper.js"
+      "reachableFromEntry": true
     },
     "13": {
       "id": 13,
@@ -868,8 +829,7 @@
         600,
         674
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-13.js"
+      "reachableFromEntry": true
     },
     "14": {
       "id": 14,
@@ -908,8 +868,7 @@
         387,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "core/format-resolver.js"
+      "reachableFromEntry": true
     },
     "15": {
       "id": 15,
@@ -973,8 +932,7 @@
         660,
         662
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-15.js"
+      "reachableFromEntry": true
     },
     "16": {
       "id": 16,
@@ -1029,8 +987,7 @@
         162,
         163
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-16.js"
+      "reachableFromEntry": true
     },
     "17": {
       "id": 17,
@@ -1051,8 +1008,7 @@
         16,
         70
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-17.js"
+      "reachableFromEntry": true
     },
     "18": {
       "id": 18,
@@ -1070,8 +1026,7 @@
         16,
         70
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-18.js"
+      "reachableFromEntry": true
     },
     "19": {
       "id": 19,
@@ -1089,8 +1044,7 @@
         16,
         70
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-19.js"
+      "reachableFromEntry": true
     },
     "20": {
       "id": 20,
@@ -1124,8 +1078,7 @@
         446,
         680
       ],
-      "reachableFromEntry": false,
-      "path": "detector/network-monitor.js"
+      "reachableFromEntry": false
     },
     "21": {
       "id": 21,
@@ -1141,9 +1094,7 @@
         176,
         541
       ],
-      "reachableFromEntry": true,
-      "file": "widget/dom-constants.js",
-      "path": "widget/dom-constants.js"
+      "reachableFromEntry": true
     },
     "22": {
       "id": 22,
@@ -1158,8 +1109,7 @@
       "callers": [
         33
       ],
-      "reachableFromEntry": true,
-      "path": "detector/media-parser.js"
+      "reachableFromEntry": true
     },
     "23": {
       "id": 23,
@@ -1190,8 +1140,7 @@
         403,
         446
       ],
-      "reachableFromEntry": false,
-      "path": "platform/extractor-url-merger.js"
+      "reachableFromEntry": false
     },
     "24": {
       "id": 24,
@@ -1211,8 +1160,7 @@
         0,
         89
       ],
-      "reachableFromEntry": true,
-      "path": "detector/hls-parser.js"
+      "reachableFromEntry": true
     },
     "25": {
       "id": 25,
@@ -1270,8 +1218,7 @@
         673,
         674
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/buffer/module-25.js"
+      "reachableFromEntry": true
     },
     "26": {
       "id": 26,
@@ -1291,8 +1238,7 @@
         55,
         56
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-26.js"
+      "reachableFromEntry": true
     },
     "27": {
       "id": 27,
@@ -1329,8 +1275,7 @@
         660,
         667
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/buffer/module-27.js"
+      "reachableFromEntry": true
     },
     "28": {
       "id": 28,
@@ -1367,8 +1312,7 @@
         375,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "detector/dash-parser.js"
+      "reachableFromEntry": true
     },
     "29": {
       "id": 29,
@@ -1399,8 +1343,7 @@
         593,
         629
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-29.js"
+      "reachableFromEntry": true
     },
     "30": {
       "id": 30,
@@ -1425,8 +1368,7 @@
         87,
         110
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-30.js"
+      "reachableFromEntry": true
     },
     "31": {
       "id": 31,
@@ -1456,8 +1398,7 @@
         364,
         403
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/stream-cipher-helper.js"
+      "reachableFromEntry": false
     },
     "32": {
       "id": 32,
@@ -1483,8 +1424,7 @@
         525,
         674
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-32.js"
+      "reachableFromEntry": true
     },
     "33": {
       "id": 33,
@@ -1508,8 +1448,7 @@
         541,
         543
       ],
-      "reachableFromEntry": true,
-      "path": "detector/url-matcher.js"
+      "reachableFromEntry": true
     },
     "34": {
       "id": 34,
@@ -1528,8 +1467,7 @@
         54,
         58
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-34.js"
+      "reachableFromEntry": true
     },
     "35": {
       "id": 35,
@@ -1548,8 +1486,7 @@
         17,
         58
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-35.js"
+      "reachableFromEntry": true
     },
     "36": {
       "id": 36,
@@ -1577,8 +1514,7 @@
         489,
         490
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-36.js"
+      "reachableFromEntry": true
     },
     "37": {
       "id": 37,
@@ -1594,8 +1530,7 @@
         24,
         89
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/parser/module-37.js"
+      "reachableFromEntry": true
     },
     "38": {
       "id": 38,
@@ -1610,8 +1545,7 @@
       "callers": [
         5
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/module-38.js"
+      "reachableFromEntry": true
     },
     "39": {
       "id": 39,
@@ -1627,8 +1561,7 @@
         164,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/mustache/module-39.js"
+      "reachableFromEntry": true
     },
     "40": {
       "id": 40,
@@ -1646,8 +1579,7 @@
         16,
         17
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-40.js"
+      "reachableFromEntry": true
     },
     "41": {
       "id": 41,
@@ -1666,8 +1598,7 @@
         16,
         55
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-41.js"
+      "reachableFromEntry": true
     },
     "42": {
       "id": 42,
@@ -1688,8 +1619,7 @@
         487,
         488
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-42.js"
+      "reachableFromEntry": true
     },
     "43": {
       "id": 43,
@@ -1708,8 +1638,7 @@
       "callers": [
         33
       ],
-      "reachableFromEntry": true,
-      "path": "providers/ab-test-provider.js"
+      "reachableFromEntry": true
     },
     "44": {
       "id": 44,
@@ -1738,8 +1667,7 @@
         307,
         374
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/fast-xml-parser/module-44.js"
+      "reachableFromEntry": true
     },
     "45": {
       "id": 45,
@@ -1764,8 +1692,7 @@
         330,
         359
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/token-hash-util.js"
+      "reachableFromEntry": false
     },
     "46": {
       "id": 46,
@@ -1785,8 +1712,7 @@
         462,
         487
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-46.js"
+      "reachableFromEntry": true
     },
     "47": {
       "id": 47,
@@ -1809,8 +1735,7 @@
         111,
         112
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-47.js"
+      "reachableFromEntry": true
     },
     "48": {
       "id": 48,
@@ -1829,8 +1754,7 @@
         84,
         104
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-48.js"
+      "reachableFromEntry": true
     },
     "49": {
       "id": 49,
@@ -1859,8 +1783,7 @@
         47,
         109
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-49.js"
+      "reachableFromEntry": true
     },
     "50": {
       "id": 50,
@@ -1875,8 +1798,7 @@
       "callers": [
         4
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-50.js"
+      "reachableFromEntry": true
     },
     "51": {
       "id": 51,
@@ -1893,8 +1815,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-51.js"
+      "reachableFromEntry": true
     },
     "52": {
       "id": 52,
@@ -1911,8 +1832,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-52.js"
+      "reachableFromEntry": true
     },
     "53": {
       "id": 53,
@@ -1929,8 +1849,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-53.js"
+      "reachableFromEntry": true
     },
     "54": {
       "id": 54,
@@ -1948,8 +1867,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-54.js"
+      "reachableFromEntry": true
     },
     "55": {
       "id": 55,
@@ -1968,8 +1886,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-55.js"
+      "reachableFromEntry": true
     },
     "56": {
       "id": 56,
@@ -1987,8 +1904,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-56.js"
+      "reachableFromEntry": true
     },
     "57": {
       "id": 57,
@@ -2005,8 +1921,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-57.js"
+      "reachableFromEntry": true
     },
     "58": {
       "id": 58,
@@ -2025,8 +1940,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-58.js"
+      "reachableFromEntry": true
     },
     "59": {
       "id": 59,
@@ -2044,8 +1958,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-59.js"
+      "reachableFromEntry": true
     },
     "60": {
       "id": 60,
@@ -2063,8 +1976,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-60.js"
+      "reachableFromEntry": true
     },
     "61": {
       "id": 61,
@@ -2082,8 +1994,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-61.js"
+      "reachableFromEntry": true
     },
     "62": {
       "id": 62,
@@ -2101,8 +2012,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-62.js"
+      "reachableFromEntry": true
     },
     "63": {
       "id": 63,
@@ -2120,8 +2030,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-63.js"
+      "reachableFromEntry": true
     },
     "64": {
       "id": 64,
@@ -2139,8 +2048,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-64.js"
+      "reachableFromEntry": true
     },
     "65": {
       "id": 65,
@@ -2158,8 +2066,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-65.js"
+      "reachableFromEntry": true
     },
     "66": {
       "id": 66,
@@ -2177,8 +2084,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-66.js"
+      "reachableFromEntry": true
     },
     "67": {
       "id": 67,
@@ -2196,8 +2102,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-67.js"
+      "reachableFromEntry": true
     },
     "68": {
       "id": 68,
@@ -2215,8 +2120,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-68.js"
+      "reachableFromEntry": true
     },
     "69": {
       "id": 69,
@@ -2234,8 +2138,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-69.js"
+      "reachableFromEntry": true
     },
     "70": {
       "id": 70,
@@ -2256,8 +2159,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-70.js"
+      "reachableFromEntry": true
     },
     "71": {
       "id": 71,
@@ -2272,8 +2174,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-71.js"
+      "reachableFromEntry": true
     },
     "72": {
       "id": 72,
@@ -2288,8 +2189,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-72.js"
+      "reachableFromEntry": true
     },
     "73": {
       "id": 73,
@@ -2304,8 +2204,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-73.js"
+      "reachableFromEntry": true
     },
     "74": {
       "id": 74,
@@ -2320,8 +2219,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-74.js"
+      "reachableFromEntry": true
     },
     "75": {
       "id": 75,
@@ -2336,8 +2234,7 @@
       "callers": [
         16
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/cryptojs/module-75.js"
+      "reachableFromEntry": true
     },
     "76": {
       "id": 76,
@@ -2359,8 +2256,7 @@
         171,
         470
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-76.js"
+      "reachableFromEntry": true
     },
     "77": {
       "id": 77,
@@ -2375,8 +2271,7 @@
       "callers": [
         6
       ],
-      "reachableFromEntry": true,
-      "path": "core/object-assign.js"
+      "reachableFromEntry": true
     },
     "78": {
       "id": 78,
@@ -2397,8 +2292,7 @@
         465,
         490
       ],
-      "reachableFromEntry": true,
-      "path": "core/env-context.js"
+      "reachableFromEntry": true
     },
     "79": {
       "id": 79,
@@ -2414,8 +2308,7 @@
         97,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/eventemitter3/module-79.js"
+      "reachableFromEntry": true
     },
     "80": {
       "id": 80,
@@ -2433,8 +2326,7 @@
         358,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "detector/filename-sanitizer.js"
+      "reachableFromEntry": true
     },
     "81": {
       "id": 81,
@@ -2454,8 +2346,7 @@
         119,
         224
       ],
-      "reachableFromEntry": false,
-      "path": "detector/url-filter.js"
+      "reachableFromEntry": false
     },
     "82": {
       "id": 82,
@@ -2470,8 +2361,7 @@
       "callers": [
         164
       ],
-      "reachableFromEntry": true,
-      "path": "core/array-filter.js"
+      "reachableFromEntry": true
     },
     "83": {
       "id": 83,
@@ -2495,8 +2385,7 @@
         98,
         130
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-83.js"
+      "reachableFromEntry": true
     },
     "84": {
       "id": 84,
@@ -2527,8 +2416,7 @@
         30,
         47
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-84.js"
+      "reachableFromEntry": true
     },
     "85": {
       "id": 85,
@@ -2546,8 +2434,7 @@
         49,
         84
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-85.js"
+      "reachableFromEntry": true
     },
     "86": {
       "id": 86,
@@ -2565,8 +2452,7 @@
         49,
         84
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-86.js"
+      "reachableFromEntry": true
     },
     "87": {
       "id": 87,
@@ -2586,8 +2472,7 @@
         47,
         108
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-87.js"
+      "reachableFromEntry": true
     },
     "88": {
       "id": 88,
@@ -2608,8 +2493,7 @@
         196,
         197
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/fast-xml-parser/module-88.js"
+      "reachableFromEntry": true
     },
     "89": {
       "id": 89,
@@ -2634,8 +2518,7 @@
         541,
         700
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/parser/module-89.js"
+      "reachableFromEntry": true
     },
     "90": {
       "id": 90,
@@ -2655,8 +2538,7 @@
         89,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "detector/youtube-formats.js"
+      "reachableFromEntry": true
     },
     "91": {
       "id": 91,
@@ -2675,8 +2557,7 @@
         465,
         490
       ],
-      "reachableFromEntry": true,
-      "path": "core/storage-helper.js"
+      "reachableFromEntry": true
     },
     "92": {
       "id": 92,
@@ -2694,8 +2575,7 @@
         176,
         541
       ],
-      "reachableFromEntry": true,
-      "path": "core/site-data.js"
+      "reachableFromEntry": true
     },
     "93": {
       "id": 93,
@@ -2712,8 +2592,7 @@
       "callers": [
         118
       ],
-      "reachableFromEntry": true,
-      "path": "core/global-context.js"
+      "reachableFromEntry": true
     },
     "94": {
       "id": 94,
@@ -2733,8 +2612,7 @@
         246,
         250
       ],
-      "reachableFromEntry": false,
-      "path": "detector/request-interceptor.js"
+      "reachableFromEntry": false
     },
     "95": {
       "id": 95,
@@ -2767,8 +2645,7 @@
         652,
         668
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-96.js"
+      "reachableFromEntry": false
     },
     "97": {
       "id": 97,
@@ -2786,8 +2663,7 @@
       "callers": [
         543
       ],
-      "reachableFromEntry": true,
-      "path": "core/event-bus-init.js"
+      "reachableFromEntry": true
     },
     "98": {
       "id": 98,
@@ -2806,8 +2682,7 @@
       "callers": [
         76
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-98.js"
+      "reachableFromEntry": true
     },
     "99": {
       "id": 99,
@@ -2822,8 +2697,7 @@
       "callers": [
         27
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-99.js"
+      "reachableFromEntry": true
     },
     "100": {
       "id": 100,
@@ -2838,8 +2712,7 @@
       "callers": [
         27
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-100.js"
+      "reachableFromEntry": true
     },
     "101": {
       "id": 101,
@@ -2854,8 +2727,7 @@
       "callers": [
         27
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-101.js"
+      "reachableFromEntry": true
     },
     "102": {
       "id": 102,
@@ -2870,8 +2742,7 @@
       "callers": [
         84
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-102.js"
+      "reachableFromEntry": true
     },
     "103": {
       "id": 103,
@@ -2886,8 +2757,7 @@
       "callers": [
         84
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-103.js"
+      "reachableFromEntry": true
     },
     "104": {
       "id": 104,
@@ -2905,8 +2775,7 @@
       "callers": [
         84
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-104.js"
+      "reachableFromEntry": true
     },
     "105": {
       "id": 105,
@@ -2921,8 +2790,7 @@
       "callers": [
         104
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-105.js"
+      "reachableFromEntry": true
     },
     "106": {
       "id": 106,
@@ -2940,8 +2808,7 @@
       "callers": [
         78
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-106.js"
+      "reachableFromEntry": true
     },
     "107": {
       "id": 107,
@@ -2958,8 +2825,7 @@
       "callers": [
         46
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-107.js"
+      "reachableFromEntry": true
     },
     "108": {
       "id": 108,
@@ -2978,8 +2844,7 @@
       "callers": [
         47
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-108.js"
+      "reachableFromEntry": true
     },
     "109": {
       "id": 109,
@@ -2996,8 +2861,7 @@
       "callers": [
         83
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-109.js"
+      "reachableFromEntry": true
     },
     "110": {
       "id": 110,
@@ -3014,8 +2878,7 @@
       "callers": [
         83
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-110.js"
+      "reachableFromEntry": true
     },
     "111": {
       "id": 111,
@@ -3032,8 +2895,7 @@
       "callers": [
         83
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-111.js"
+      "reachableFromEntry": true
     },
     "112": {
       "id": 112,
@@ -3050,8 +2912,7 @@
       "callers": [
         83
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/stream/module-112.js"
+      "reachableFromEntry": true
     },
     "113": {
       "id": 113,
@@ -3069,8 +2930,7 @@
         242,
         329
       ],
-      "reachableFromEntry": false,
-      "path": "detector/media-target-resolver.js"
+      "reachableFromEntry": false
     },
     "114": {
       "id": 114,
@@ -3085,8 +2945,7 @@
       "callers": [
         31
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/url-decryption-provider.js"
+      "reachableFromEntry": false
     },
     "115": {
       "id": 115,
@@ -3105,8 +2964,7 @@
         583,
         584
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-115.js"
+      "reachableFromEntry": false
     },
     "116": {
       "id": 116,
@@ -3132,8 +2990,7 @@
         645,
         657
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-116.js"
+      "reachableFromEntry": false
     },
     "117": {
       "id": 117,
@@ -3163,8 +3020,7 @@
         649,
         650
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-117.js"
+      "reachableFromEntry": false
     },
     "118": {
       "id": 118,
@@ -3182,8 +3038,7 @@
       "callers": [
         6
       ],
-      "reachableFromEntry": true,
-      "path": "core/stream-helper.js"
+      "reachableFromEntry": true
     },
     "119": {
       "id": 119,
@@ -3207,8 +3062,7 @@
         149,
         325
       ],
-      "reachableFromEntry": false,
-      "path": "platform/vimeo_com-extractor.js"
+      "reachableFromEntry": false
     },
     "120": {
       "id": 120,
@@ -3216,7 +3070,7 @@
       "start": 591957,
       "end": 601262,
       "size": 9305,
-      "fileSize": 19995,
+      "fileSize": 20619,
       "requires": [
         0,
         1,
@@ -3233,8 +3087,7 @@
       "callers": [
         266
       ],
-      "reachableFromEntry": false,
-      "path": "platform/youtube.js"
+      "reachableFromEntry": false
     },
     "121": {
       "id": 121,
@@ -3255,8 +3108,7 @@
         424,
         586
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-121.js"
+      "reachableFromEntry": false
     },
     "122": {
       "id": 122,
@@ -3283,8 +3135,7 @@
         641,
         642
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-122.js"
+      "reachableFromEntry": false
     },
     "123": {
       "id": 123,
@@ -3299,8 +3150,7 @@
       "callers": [
         164
       ],
-      "reachableFromEntry": true,
-      "path": "core/async-helper.js"
+      "reachableFromEntry": true
     },
     "124": {
       "id": 124,
@@ -3331,8 +3181,7 @@
         195,
         196
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/fast-xml-parser/module-125.js"
+      "reachableFromEntry": true
     },
     "126": {
       "id": 126,
@@ -3358,8 +3207,7 @@
         647,
         650
       ],
-      "reachableFromEntry": false,
-      "path": "vendor/elliptic/module-126.js"
+      "reachableFromEntry": false
     },
     "127": {
       "id": 127,
@@ -3379,8 +3227,7 @@
       "callers": [
         243
       ],
-      "reachableFromEntry": false,
-      "path": "platform/dailymotion-extractor.js"
+      "reachableFromEntry": false
     },
     "128": {
       "id": 128,
@@ -3400,8 +3247,7 @@
         445,
         677
       ],
-      "reachableFromEntry": false,
-      "path": "detector/dom-mutation-watcher.js"
+      "reachableFromEntry": false
     },
     "129": {
       "id": 129,
@@ -3422,8 +3268,7 @@
         583,
         584
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-129.js"
+      "reachableFromEntry": false
     },
     "130": {
       "id": 130,
@@ -3451,8 +3296,7 @@
         606,
         614
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-130.js"
+      "reachableFromEntry": false
     },
     "131": {
       "id": 131,
@@ -3493,8 +3337,7 @@
       "callers": [
         687
       ],
-      "reachableFromEntry": false,
-      "path": "platform/phephim_net-extractor.js"
+      "reachableFromEntry": false
     },
     "134": {
       "id": 134,
@@ -3515,8 +3358,7 @@
         556,
         560
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-134.js"
+      "reachableFromEntry": true
     },
     "135": {
       "id": 135,
@@ -3540,8 +3382,7 @@
         559,
         560
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-135.js"
+      "reachableFromEntry": true
     },
     "136": {
       "id": 136,
@@ -3559,8 +3400,7 @@
         584,
         585
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-136.js"
+      "reachableFromEntry": false
     },
     "137": {
       "id": 137,
@@ -3577,8 +3417,7 @@
         141,
         169
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-137.js"
+      "reachableFromEntry": false
     },
     "138": {
       "id": 138,
@@ -3596,9 +3435,7 @@
         119,
         541
       ],
-      "reachableFromEntry": true,
-      "file": "widget/overlay-styles.js",
-      "path": "widget/overlay-styles.js"
+      "reachableFromEntry": true
     },
     "139": {
       "id": 139,
@@ -3622,8 +3459,7 @@
         671,
         674
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-139.js"
+      "reachableFromEntry": false
     },
     "140": {
       "id": 140,
@@ -3665,8 +3501,7 @@
         151,
         583
       ],
-      "reachableFromEntry": false,
-      "path": "platform/encrypted-stream-decipherer.js"
+      "reachableFromEntry": false
     },
     "141": {
       "id": 141,
@@ -3688,8 +3523,7 @@
         421,
         582
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-141.js"
+      "reachableFromEntry": false
     },
     "142": {
       "id": 142,
@@ -3706,8 +3540,7 @@
         169,
         586
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-142.js"
+      "reachableFromEntry": false
     },
     "143": {
       "id": 143,
@@ -3731,8 +3564,7 @@
         466,
         588
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-143.js"
+      "reachableFromEntry": false
     },
     "144": {
       "id": 144,
@@ -3755,8 +3587,7 @@
         596,
         597
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-144.js"
+      "reachableFromEntry": false
     },
     "145": {
       "id": 145,
@@ -3780,8 +3611,7 @@
         491,
         624
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-145.js"
+      "reachableFromEntry": false
     },
     "146": {
       "id": 146,
@@ -3809,8 +3639,7 @@
       "callers": [
         31
       ],
-      "reachableFromEntry": false,
-      "path": "platform/streamc_xyz-host.js"
+      "reachableFromEntry": false
     },
     "148": {
       "id": 148,
@@ -3825,8 +3654,7 @@
       "callers": [
         138
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-148.js"
+      "reachableFromEntry": true
     },
     "149": {
       "id": 149,
@@ -3842,8 +3670,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/theyounglove_com-ts-extractor.js"
+      "reachableFromEntry": false
     },
     "150": {
       "id": 150,
@@ -3868,8 +3695,7 @@
         671,
         673
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-150.js"
+      "reachableFromEntry": false
     },
     "151": {
       "id": 151,
@@ -3889,8 +3715,7 @@
         577,
         741
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-151.js"
+      "reachableFromEntry": false
     },
     "152": {
       "id": 152,
@@ -3906,8 +3731,7 @@
         140,
         154
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-152.js"
+      "reachableFromEntry": false
     },
     "153": {
       "id": 153,
@@ -3923,8 +3747,7 @@
         140,
         168
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-153.js"
+      "reachableFromEntry": false
     },
     "154": {
       "id": 154,
@@ -3942,8 +3765,7 @@
         140,
         168
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-154.js"
+      "reachableFromEntry": false
     },
     "155": {
       "id": 155,
@@ -3964,8 +3786,7 @@
         609,
         612
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-155.js"
+      "reachableFromEntry": false
     },
     "156": {
       "id": 156,
@@ -3987,8 +3808,7 @@
         638,
         641
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-156.js"
+      "reachableFromEntry": false
     },
     "157": {
       "id": 157,
@@ -4014,8 +3834,7 @@
         654,
         663
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-157.js"
+      "reachableFromEntry": false
     },
     "158": {
       "id": 158,
@@ -4036,8 +3855,7 @@
         497,
         657
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-158.js"
+      "reachableFromEntry": false
     },
     "159": {
       "id": 159,
@@ -4074,8 +3892,7 @@
       "callers": [
         133
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/base64-decoder.js"
+      "reachableFromEntry": false
     },
     "162": {
       "id": 162,
@@ -4096,8 +3913,7 @@
       "callers": [
         387
       ],
-      "reachableFromEntry": false,
-      "path": "detector/content-type-analyzer.js"
+      "reachableFromEntry": false
     },
     "163": {
       "id": 163,
@@ -4118,8 +3934,7 @@
       "callers": [
         387
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/key-derivation-tool.js"
+      "reachableFromEntry": false
     },
     "164": {
       "id": 164,
@@ -4148,9 +3963,7 @@
       "callers": [
         541
       ],
-      "reachableFromEntry": true,
-      "file": "widget/download-list.js",
-      "path": "widget/download-list.js"
+      "reachableFromEntry": true
     },
     "165": {
       "id": 165,
@@ -4172,8 +3985,7 @@
         476,
         573
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-165.js"
+      "reachableFromEntry": false
     },
     "166": {
       "id": 166,
@@ -4189,8 +4001,7 @@
         140,
         584
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-166.js"
+      "reachableFromEntry": false
     },
     "167": {
       "id": 167,
@@ -4206,8 +4017,7 @@
         420,
         587
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-167.js"
+      "reachableFromEntry": false
     },
     "168": {
       "id": 168,
@@ -4227,8 +4037,7 @@
         140,
         577
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-168.js"
+      "reachableFromEntry": false
     },
     "169": {
       "id": 169,
@@ -4249,8 +4058,7 @@
         141,
         586
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-169.js"
+      "reachableFromEntry": false
     },
     "170": {
       "id": 170,
@@ -4270,8 +4078,7 @@
         606,
         614
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/signature-verifier.js"
+      "reachableFromEntry": false
     },
     "171": {
       "id": 171,
@@ -4292,8 +4099,7 @@
         614,
         665
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-171.js"
+      "reachableFromEntry": false
     },
     "172": {
       "id": 172,
@@ -4314,8 +4120,7 @@
         635,
         636
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-172.js"
+      "reachableFromEntry": false
     },
     "173": {
       "id": 173,
@@ -4340,8 +4145,7 @@
         671,
         673
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-173.js"
+      "reachableFromEntry": false
     },
     "174": {
       "id": 174,
@@ -4369,7 +4173,7 @@
       "start": 881412,
       "end": 893571,
       "size": 12159,
-      "fileSize": 13281,
+      "fileSize": 17481,
       "requires": [
         0,
         1,
@@ -4385,8 +4189,7 @@
         541,
         543
       ],
-      "reachableFromEntry": true,
-      "path": "detector/dom-scanner.js"
+      "reachableFromEntry": true
     },
     "177": {
       "id": 177,
@@ -4403,8 +4206,7 @@
       "callers": [
         527
       ],
-      "reachableFromEntry": true,
-      "path": "detector/extractor-registry-index.js"
+      "reachableFromEntry": true
     },
     "178": {
       "id": 178,
@@ -4439,8 +4241,7 @@
       "callers": [
         92
       ],
-      "reachableFromEntry": true,
-      "path": "detector/extractor-registry-1.js"
+      "reachableFromEntry": true
     },
     "181": {
       "id": 181,
@@ -4457,8 +4258,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/123av_com-extractor.js"
+      "reachableFromEntry": false
     },
     "182": {
       "id": 182,
@@ -4473,8 +4273,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/24h_com_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "183": {
       "id": 183,
@@ -4487,8 +4286,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/2phimhay_com-extractor.js"
+      "reachableFromEntry": false
     },
     "184": {
       "id": 184,
@@ -4505,8 +4303,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/9animes_org-extractor.js"
+      "reachableFromEntry": false
     },
     "185": {
       "id": 185,
@@ -4519,8 +4316,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/amazon-extractor.js"
+      "reachableFromEntry": false
     },
     "186": {
       "id": 186,
@@ -4533,8 +4329,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/anhquangdaytoantct_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "187": {
       "id": 187,
@@ -4552,8 +4347,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ani24vn_com-extractor.js"
+      "reachableFromEntry": false
     },
     "188": {
       "id": 188,
@@ -4572,8 +4366,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ani4u_org-extractor.js"
+      "reachableFromEntry": false
     },
     "189": {
       "id": 189,
@@ -4588,8 +4381,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/anikenji_live-extractor.js"
+      "reachableFromEntry": false
     },
     "190": {
       "id": 190,
@@ -4607,8 +4399,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/anime47_com-extractor.js"
+      "reachableFromEntry": false
     },
     "191": {
       "id": 191,
@@ -4625,8 +4416,7 @@
       "callers": [
         44
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/fast-xml-parser/module-191.js"
+      "reachableFromEntry": true
     },
     "192": {
       "id": 192,
@@ -4641,8 +4431,7 @@
       "callers": [
         125
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/fast-xml-parser/module-192.js"
+      "reachableFromEntry": true
     },
     "193": {
       "id": 193,
@@ -4657,8 +4446,7 @@
       "callers": [
         125
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/fast-xml-parser/module-193.js"
+      "reachableFromEntry": true
     },
     "194": {
       "id": 194,
@@ -4675,8 +4463,7 @@
       "callers": [
         44
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/fast-xml-parser/module-194.js"
+      "reachableFromEntry": true
     },
     "195": {
       "id": 195,
@@ -4694,8 +4481,7 @@
       "callers": [
         44
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/fast-xml-parser/module-195.js"
+      "reachableFromEntry": true
     },
     "196": {
       "id": 196,
@@ -4713,8 +4499,7 @@
       "callers": [
         44
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/fast-xml-parser/module-196.js"
+      "reachableFromEntry": true
     },
     "197": {
       "id": 197,
@@ -4731,8 +4516,7 @@
       "callers": [
         44
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/fast-xml-parser/module-197.js"
+      "reachableFromEntry": true
     },
     "198": {
       "id": 198,
@@ -4749,8 +4533,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/animehay-extractor.js"
+      "reachableFromEntry": false
     },
     "199": {
       "id": 199,
@@ -4767,8 +4550,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/animet_net-extractor.js"
+      "reachableFromEntry": false
     },
     "200": {
       "id": 200,
@@ -4786,8 +4568,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/animetvn_com-extractor.js"
+      "reachableFromEntry": false
     },
     "201": {
       "id": 201,
@@ -4805,8 +4586,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/animevi_net-extractor.js"
+      "reachableFromEntry": false
     },
     "202": {
       "id": 202,
@@ -4823,8 +4603,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/aniwatch_mom-extractor.js"
+      "reachableFromEntry": false
     },
     "203": {
       "id": 203,
@@ -4837,8 +4616,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/app-strength-muscleandmotion_com-extractor.js"
+      "reachableFromEntry": false
     },
     "204": {
       "id": 204,
@@ -4851,8 +4629,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/archive_org-extractor.js"
+      "reachableFromEntry": false
     },
     "205": {
       "id": 205,
@@ -4865,8 +4642,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/artgrid_io-extractor.js"
+      "reachableFromEntry": false
     },
     "206": {
       "id": 206,
@@ -4883,8 +4659,7 @@
       "callers": [
         741
       ],
-      "reachableFromEntry": false,
-      "path": "platform/artlist_io-extractor.js"
+      "reachableFromEntry": false
     },
     "207": {
       "id": 207,
@@ -4903,8 +4678,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/artstation_com-extractor.js"
+      "reachableFromEntry": false
     },
     "208": {
       "id": 208,
@@ -4920,8 +4694,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-208.js"
+      "reachableFromEntry": false
     },
     "209": {
       "id": 209,
@@ -4936,8 +4709,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/audioonlysites-extractor.js"
+      "reachableFromEntry": false
     },
     "210": {
       "id": 210,
@@ -4950,8 +4722,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/autopro_com_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "211": {
       "id": 211,
@@ -4964,8 +4735,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/balkanarchitect_com-extractor.js"
+      "reachableFromEntry": false
     },
     "212": {
       "id": 212,
@@ -4985,8 +4755,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/bbc_com-extractor.js"
+      "reachableFromEntry": false
     },
     "213": {
       "id": 213,
@@ -4999,8 +4768,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/bestjavporn_com-extractor.js"
+      "reachableFromEntry": false
     },
     "214": {
       "id": 214,
@@ -5016,8 +4784,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/bilibili_com-extractor.js"
+      "reachableFromEntry": false
     },
     "215": {
       "id": 215,
@@ -5036,8 +4803,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/bilutvx_net-extractor.js"
+      "reachableFromEntry": false
     },
     "216": {
       "id": 216,
@@ -5056,8 +4822,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/biphim_co-extractor.js"
+      "reachableFromEntry": false
     },
     "217": {
       "id": 217,
@@ -5076,8 +4841,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/blvietsub_vip-extractor.js"
+      "reachableFromEntry": false
     },
     "218": {
       "id": 218,
@@ -5092,8 +4856,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/boyfriendtv_com-extractor.js"
+      "reachableFromEntry": false
     },
     "219": {
       "id": 219,
@@ -5106,8 +4869,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/brightcove_net-extractor.js"
+      "reachableFromEntry": false
     },
     "220": {
       "id": 220,
@@ -5120,8 +4882,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/bschool_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "221": {
       "id": 221,
@@ -5134,8 +4895,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/capcut-extractor.js"
+      "reachableFromEntry": false
     },
     "222": {
       "id": 222,
@@ -5148,8 +4908,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/cnn_com-extractor.js"
+      "reachableFromEntry": false
     },
     "223": {
       "id": 223,
@@ -5162,8 +4921,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/craftsy_com-extractor.js"
+      "reachableFromEntry": false
     },
     "224": {
       "id": 224,
@@ -5184,8 +4942,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/d-id_com-extractor.js"
+      "reachableFromEntry": false
     },
     "225": {
       "id": 225,
@@ -5198,8 +4955,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/dantri_com_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "226": {
       "id": 226,
@@ -5214,8 +4970,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-226.js"
+      "reachableFromEntry": false
     },
     "227": {
       "id": 227,
@@ -5228,8 +4983,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/docbao_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "228": {
       "id": 228,
@@ -5249,8 +5003,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/dongphim-extractor.js"
+      "reachableFromEntry": false
     },
     "229": {
       "id": 229,
@@ -5265,8 +5018,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/echo360-extractor.js"
+      "reachableFromEntry": false
     },
     "230": {
       "id": 230,
@@ -5286,8 +5038,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/elolms-edu_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "231": {
       "id": 231,
@@ -5304,8 +5055,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ephimmoi_net-extractor.js"
+      "reachableFromEntry": false
     },
     "232": {
       "id": 232,
@@ -5313,7 +5063,7 @@
       "start": 1049918,
       "end": 1069850,
       "size": 19932,
-      "fileSize": 41754,
+      "fileSize": 42039,
       "requires": [
         0,
         1,
@@ -5324,8 +5074,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/facebook.js"
+      "reachableFromEntry": false
     },
     "233": {
       "id": 233,
@@ -5338,8 +5087,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/fansly_com-extractor.js"
+      "reachableFromEntry": false
     },
     "234": {
       "id": 234,
@@ -5354,8 +5102,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/forvo_com-extractor.js"
+      "reachableFromEntry": false
     },
     "235": {
       "id": 235,
@@ -5375,8 +5122,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/fptplay_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "236": {
       "id": 236,
@@ -5391,8 +5137,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/fr_pornhub_com-extractor.js"
+      "reachableFromEntry": false
     },
     "237": {
       "id": 237,
@@ -5405,8 +5150,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/gay_tsunami-extractor.js"
+      "reachableFromEntry": false
     },
     "238": {
       "id": 238,
@@ -5419,8 +5163,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/gocphim_net-extractor.js"
+      "reachableFromEntry": false
     },
     "239": {
       "id": 239,
@@ -5433,8 +5176,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hailuoai_video-extractor.js"
+      "reachableFromEntry": false
     },
     "240": {
       "id": 240,
@@ -5449,8 +5191,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hayko_tv-extractor.js"
+      "reachableFromEntry": false
     },
     "241": {
       "id": 241,
@@ -5466,8 +5207,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hentaivip_video-extractor.js"
+      "reachableFromEntry": false
     },
     "242": {
       "id": 242,
@@ -5487,8 +5227,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hentaiz-extractor.js"
+      "reachableFromEntry": false
     },
     "243": {
       "id": 243,
@@ -5509,8 +5248,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hh3dhay_pro-extractor.js"
+      "reachableFromEntry": false
     },
     "244": {
       "id": 244,
@@ -5527,8 +5265,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hhkungfu_tv-extractor.js"
+      "reachableFromEntry": false
     },
     "245": {
       "id": 245,
@@ -5547,8 +5284,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hhninja-extractor.js"
+      "reachableFromEntry": false
     },
     "246": {
       "id": 246,
@@ -5563,8 +5299,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hhpanda-extractor.js"
+      "reachableFromEntry": false
     },
     "247": {
       "id": 247,
@@ -5580,8 +5315,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hhtm-extractor.js"
+      "reachableFromEntry": false
     },
     "248": {
       "id": 248,
@@ -5597,8 +5331,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hianime_to-extractor.js"
+      "reachableFromEntry": false
     },
     "249": {
       "id": 249,
@@ -5613,8 +5346,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hk-ancillaries-extractor.js"
+      "reachableFromEntry": false
     },
     "250": {
       "id": 250,
@@ -5629,8 +5361,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hoathinh3d-extractor.js"
+      "reachableFromEntry": false
     },
     "251": {
       "id": 251,
@@ -5643,8 +5374,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hotphimvns_com-extractor.js"
+      "reachableFromEntry": false
     },
     "252": {
       "id": 252,
@@ -5660,8 +5390,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hydra_slug-extractor.js"
+      "reachableFromEntry": false
     },
     "253": {
       "id": 253,
@@ -5674,8 +5403,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ibomma_net-extractor.js"
+      "reachableFromEntry": false
     },
     "254": {
       "id": 254,
@@ -5694,8 +5422,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/instagram_com-extractor.js"
+      "reachableFromEntry": false
     },
     "255": {
       "id": 255,
@@ -5710,8 +5437,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/iqiyi_com-extractor.js"
+      "reachableFromEntry": false
     },
     "256": {
       "id": 256,
@@ -5724,8 +5450,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/istockphoto_com-extractor.js"
+      "reachableFromEntry": false
     },
     "257": {
       "id": 257,
@@ -5738,8 +5463,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/japxtube_com-extractor.js"
+      "reachableFromEntry": false
     },
     "258": {
       "id": 258,
@@ -5755,8 +5479,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/javhdporn_net-extractor.js"
+      "reachableFromEntry": false
     },
     "259": {
       "id": 259,
@@ -5771,8 +5494,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-259.js"
+      "reachableFromEntry": false
     },
     "260": {
       "id": 260,
@@ -5789,8 +5511,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/javmost_xyz-extractor.js"
+      "reachableFromEntry": false
     },
     "261": {
       "id": 261,
@@ -5805,8 +5526,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/javphe_cc-extractor.js"
+      "reachableFromEntry": false
     },
     "262": {
       "id": 262,
@@ -5824,8 +5544,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/keeng_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "263": {
       "id": 263,
@@ -5838,8 +5557,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/kenh14_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "264": {
       "id": 264,
@@ -5856,8 +5574,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/khanacademy_org-extractor.js"
+      "reachableFromEntry": false
     },
     "265": {
       "id": 265,
@@ -5870,8 +5587,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/khophimhay_co-extractor.js"
+      "reachableFromEntry": false
     },
     "266": {
       "id": 266,
@@ -5888,8 +5604,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ktcgkpv_org-extractor.js"
+      "reachableFromEntry": false
     },
     "267": {
       "id": 267,
@@ -5902,8 +5617,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/kuaishou_com-extractor.js"
+      "reachableFromEntry": false
     },
     "268": {
       "id": 268,
@@ -5918,8 +5632,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/lazi_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "269": {
       "id": 269,
@@ -5937,8 +5650,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/linkedin_com-extractor.js"
+      "reachableFromEntry": false
     },
     "270": {
       "id": 270,
@@ -5953,8 +5665,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-270.js"
+      "reachableFromEntry": false
     },
     "271": {
       "id": 271,
@@ -5969,8 +5680,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/lpe360-extractor.js"
+      "reachableFromEntry": false
     },
     "272": {
       "id": 272,
@@ -5986,8 +5696,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/luotphimtv_com-extractor.js"
+      "reachableFromEntry": false
     },
     "273": {
       "id": 273,
@@ -6004,8 +5713,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/luphim_com-extractor.js"
+      "reachableFromEntry": false
     },
     "274": {
       "id": 274,
@@ -6018,8 +5726,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/mad20_io-extractor.js"
+      "reachableFromEntry": false
     },
     "275": {
       "id": 275,
@@ -6034,8 +5741,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/mapstudy-extractor.js"
+      "reachableFromEntry": false
     },
     "276": {
       "id": 276,
@@ -6051,8 +5757,7 @@
         162,
         163
       ],
-      "reachableFromEntry": false,
-      "path": "platform/mitom2live_tv-extractor.js"
+      "reachableFromEntry": false
     },
     "277": {
       "id": 277,
@@ -6067,8 +5772,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-277.js"
+      "reachableFromEntry": false
     },
     "278": {
       "id": 278,
@@ -6081,8 +5785,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/monfansubvn_com-extractor.js"
+      "reachableFromEntry": false
     },
     "279": {
       "id": 279,
@@ -6098,8 +5801,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/motphim2_com-extractor.js"
+      "reachableFromEntry": false
     },
     "280": {
       "id": 280,
@@ -6115,8 +5817,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/motphimchill_vin-extractor.js"
+      "reachableFromEntry": false
     },
     "281": {
       "id": 281,
@@ -6137,8 +5838,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/motphimtv_com-extractor.js"
+      "reachableFromEntry": false
     },
     "282": {
       "id": 282,
@@ -6151,8 +5851,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/mrgay_com-extractor.js"
+      "reachableFromEntry": false
     },
     "283": {
       "id": 283,
@@ -6165,8 +5864,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/msn_com-extractor.js"
+      "reachableFromEntry": false
     },
     "284": {
       "id": 284,
@@ -6181,8 +5879,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-284.js"
+      "reachableFromEntry": false
     },
     "285": {
       "id": 285,
@@ -6195,8 +5892,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/myclip_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "286": {
       "id": 286,
@@ -6211,8 +5907,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/mydio_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "287": {
       "id": 287,
@@ -6225,8 +5920,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/mypikpak_com-extractor.js"
+      "reachableFromEntry": false
     },
     "288": {
       "id": 288,
@@ -6241,8 +5935,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-288.js"
+      "reachableFromEntry": false
     },
     "289": {
       "id": 289,
@@ -6255,8 +5948,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/netflix_com-extractor.js"
+      "reachableFromEntry": false
     },
     "290": {
       "id": 290,
@@ -6271,8 +5963,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/news-zing_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "291": {
       "id": 291,
@@ -6289,8 +5980,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/newsiqra_com-extractor.js"
+      "reachableFromEntry": false
     },
     "292": {
       "id": 292,
@@ -6305,8 +5995,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ngamvn_net-extractor.js"
+      "reachableFromEntry": false
     },
     "293": {
       "id": 293,
@@ -6323,8 +6012,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/nhac_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "294": {
       "id": 294,
@@ -6341,8 +6029,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/nhaccuatui-extractor.js"
+      "reachableFromEntry": false
     },
     "295": {
       "id": 295,
@@ -6361,8 +6048,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/nimo_tv-extractor.js"
+      "reachableFromEntry": false
     },
     "296": {
       "id": 296,
@@ -6378,8 +6064,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/njav_tv-extractor.js"
+      "reachableFromEntry": false
     },
     "297": {
       "id": 297,
@@ -6394,8 +6079,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ok_ru-extractor.js"
+      "reachableFromEntry": false
     },
     "298": {
       "id": 298,
@@ -6411,8 +6095,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/onflix-extractor.js"
+      "reachableFromEntry": false
     },
     "299": {
       "id": 299,
@@ -6425,8 +6108,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/oxfordlearnersdictionaries_com-extractor.js"
+      "reachableFromEntry": false
     },
     "300": {
       "id": 300,
@@ -6443,8 +6125,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/pexels_com-extractor.js"
+      "reachableFromEntry": false
     },
     "301": {
       "id": 301,
@@ -6461,8 +6142,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phatphapungdung_com-extractor.js"
+      "reachableFromEntry": false
     },
     "302": {
       "id": 302,
@@ -6480,8 +6160,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phim33_us-extractor.js"
+      "reachableFromEntry": false
     },
     "303": {
       "id": 303,
@@ -6496,8 +6175,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phim_vkoolzz_net-extractor.js"
+      "reachableFromEntry": false
     },
     "304": {
       "id": 304,
@@ -6512,8 +6190,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimbo_vip-extractor.js"
+      "reachableFromEntry": false
     },
     "305": {
       "id": 305,
@@ -6526,8 +6203,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimbom_click-extractor.js"
+      "reachableFromEntry": false
     },
     "306": {
       "id": 306,
@@ -6542,8 +6218,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimbro_com-extractor.js"
+      "reachableFromEntry": false
     },
     "307": {
       "id": 307,
@@ -6565,8 +6240,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimchill_tv-extractor.js"
+      "reachableFromEntry": false
     },
     "308": {
       "id": 308,
@@ -6579,8 +6253,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimdacap_net-extractor.js"
+      "reachableFromEntry": false
     },
     "309": {
       "id": 309,
@@ -6598,8 +6271,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimhdcss-extractor.js"
+      "reachableFromEntry": false
     },
     "310": {
       "id": 310,
@@ -6614,8 +6286,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimlenlut_tv-extractor.js"
+      "reachableFromEntry": false
     },
     "311": {
       "id": 311,
@@ -6634,8 +6305,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimmoi_io-extractor.js"
+      "reachableFromEntry": false
     },
     "312": {
       "id": 312,
@@ -6650,8 +6320,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimmoichillec-extractor.js"
+      "reachableFromEntry": false
     },
     "313": {
       "id": 313,
@@ -6668,8 +6337,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimmoichillee_pro-extractor.js"
+      "reachableFromEntry": false
     },
     "314": {
       "id": 314,
@@ -6682,8 +6350,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimsea_com-extractor.js"
+      "reachableFromEntry": false
     },
     "315": {
       "id": 315,
@@ -6696,8 +6363,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimsex69_xyz-extractor.js"
+      "reachableFromEntry": false
     },
     "316": {
       "id": 316,
@@ -6715,8 +6381,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimsexhay3x_net-extractor.js"
+      "reachableFromEntry": false
     },
     "317": {
       "id": 317,
@@ -6731,8 +6396,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimsexsub-extractor.js"
+      "reachableFromEntry": false
     },
     "318": {
       "id": 318,
@@ -6748,8 +6412,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimtv_cv-extractor.js"
+      "reachableFromEntry": false
     },
     "319": {
       "id": 319,
@@ -6762,8 +6425,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/pinterest_com-extractor.js"
+      "reachableFromEntry": false
     },
     "320": {
       "id": 320,
@@ -6779,8 +6441,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/pops_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "321": {
       "id": 321,
@@ -6793,8 +6454,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/rachelsenglishacademy_com-extractor.js"
+      "reachableFromEntry": false
     },
     "322": {
       "id": 322,
@@ -6802,15 +6462,14 @@
       "start": 1316852,
       "end": 1317130,
       "size": 278,
-      "fileSize": 509,
+      "fileSize": 586,
       "requires": [
         12
       ],
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/reddit-extractor.js"
+      "reachableFromEntry": false
     },
     "323": {
       "id": 323,
@@ -6826,8 +6485,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/riki_edu_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "324": {
       "id": 324,
@@ -6840,8 +6498,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/rophim-extractor.js"
+      "reachableFromEntry": false
     },
     "325": {
       "id": 325,
@@ -6856,8 +6513,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/rosenfeldmedia_com-extractor.js"
+      "reachableFromEntry": false
     },
     "326": {
       "id": 326,
@@ -6870,8 +6526,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/rule34video-extractor.js"
+      "reachableFromEntry": false
     },
     "327": {
       "id": 327,
@@ -6887,8 +6542,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/saigonphim_net-extractor.js"
+      "reachableFromEntry": false
     },
     "328": {
       "id": 328,
@@ -6901,8 +6555,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sex_damxx-extractor.js"
+      "reachableFromEntry": false
     },
     "329": {
       "id": 329,
@@ -6920,8 +6573,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sexgai_tube-extractor.js"
+      "reachableFromEntry": false
     },
     "330": {
       "id": 330,
@@ -6942,8 +6594,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sexhihi_org-extractor.js"
+      "reachableFromEntry": false
     },
     "331": {
       "id": 331,
@@ -6959,8 +6610,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sexnung_pro-extractor.js"
+      "reachableFromEntry": false
     },
     "332": {
       "id": 332,
@@ -6973,8 +6623,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sextop_net-extractor.js"
+      "reachableFromEntry": false
     },
     "333": {
       "id": 333,
@@ -6989,8 +6638,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sexviet88_com-extractor.js"
+      "reachableFromEntry": false
     },
     "334": {
       "id": 334,
@@ -7003,8 +6651,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sexvietz_tv-extractor.js"
+      "reachableFromEntry": false
     },
     "335": {
       "id": 335,
@@ -7020,8 +6667,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sflix_ps-extractor.js"
+      "reachableFromEntry": false
     },
     "336": {
       "id": 336,
@@ -7034,8 +6680,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sharepoint_com-extractor.js"
+      "reachableFromEntry": false
     },
     "337": {
       "id": 337,
@@ -7048,8 +6693,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/shutterstock_com-extractor.js"
+      "reachableFromEntry": false
     },
     "338": {
       "id": 338,
@@ -7066,8 +6710,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sieukhungz_net-extractor.js"
+      "reachableFromEntry": false
     },
     "339": {
       "id": 339,
@@ -7084,8 +6727,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sieutamphim_com-extractor.js"
+      "reachableFromEntry": false
     },
     "340": {
       "id": 340,
@@ -7100,8 +6742,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/skool_com-extractor.js"
+      "reachableFromEntry": false
     },
     "341": {
       "id": 341,
@@ -7116,8 +6757,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/socolive_tv-extractor.js"
+      "reachableFromEntry": false
     },
     "342": {
       "id": 342,
@@ -7134,8 +6774,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/soundcloud-extractor.js"
+      "reachableFromEntry": false
     },
     "343": {
       "id": 343,
@@ -7150,8 +6789,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/soundcloudmp3_cc-extractor.js"
+      "reachableFromEntry": false
     },
     "344": {
       "id": 344,
@@ -7164,8 +6802,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/spankbang_live-extractor.js"
+      "reachableFromEntry": false
     },
     "345": {
       "id": 345,
@@ -7181,8 +6818,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ssphim_net-extractor.js"
+      "reachableFromEntry": false
     },
     "346": {
       "id": 346,
@@ -7197,8 +6833,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/subnhanhcx-extractor.js"
+      "reachableFromEntry": false
     },
     "347": {
       "id": 347,
@@ -7216,8 +6851,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/supjav_com-extractor.js"
+      "reachableFromEntry": false
     },
     "348": {
       "id": 348,
@@ -7230,8 +6864,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sxyprn_com-extractor.js"
+      "reachableFromEntry": false
     },
     "349": {
       "id": 349,
@@ -7244,8 +6877,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/telegram_org-extractor.js"
+      "reachableFromEntry": false
     },
     "350": {
       "id": 350,
@@ -7261,8 +6893,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-350.js"
+      "reachableFromEntry": false
     },
     "351": {
       "id": 351,
@@ -7279,8 +6910,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/thanhnien_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "352": {
       "id": 352,
@@ -7295,8 +6925,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/thaolejp-extractor.js"
+      "reachableFromEntry": false
     },
     "353": {
       "id": 353,
@@ -7309,8 +6938,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/tienganh123_com-extractor.js"
+      "reachableFromEntry": false
     },
     "354": {
       "id": 354,
@@ -7325,8 +6953,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-354.js"
+      "reachableFromEntry": false
     },
     "355": {
       "id": 355,
@@ -7343,8 +6970,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-355.js"
+      "reachableFromEntry": false
     },
     "356": {
       "id": 356,
@@ -7357,8 +6983,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/truyenaudiocv_org-extractor.js"
+      "reachableFromEntry": false
     },
     "357": {
       "id": 357,
@@ -7371,8 +6996,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/tse_edu-extractor.js"
+      "reachableFromEntry": false
     },
     "358": {
       "id": 358,
@@ -7391,8 +7015,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/tv_naver_com-extractor.js"
+      "reachableFromEntry": false
     },
     "359": {
       "id": 359,
@@ -7409,8 +7032,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/tvhay_org-extractor.js"
+      "reachableFromEntry": false
     },
     "360": {
       "id": 360,
@@ -7425,8 +7047,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/tvzingvn_com-extractor.js"
+      "reachableFromEntry": false
     },
     "361": {
       "id": 361,
@@ -7441,8 +7062,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/twitch_tv-extractor.js"
+      "reachableFromEntry": false
     },
     "362": {
       "id": 362,
@@ -7450,7 +7070,7 @@
       "start": 1411611,
       "end": 1416533,
       "size": 4922,
-      "fileSize": 9604,
+      "fileSize": 10518,
       "requires": [
         0,
         28
@@ -7458,8 +7078,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/twitter_com-extractor.js"
+      "reachableFromEntry": false
     },
     "363": {
       "id": 363,
@@ -7472,8 +7091,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ub_net-extractor.js"
+      "reachableFromEntry": false
     },
     "364": {
       "id": 364,
@@ -7492,8 +7110,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/uncommon_sites-extractor.js"
+      "reachableFromEntry": false
     },
     "365": {
       "id": 365,
@@ -7510,8 +7127,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/v_douyu_com-extractor.js"
+      "reachableFromEntry": false
     },
     "366": {
       "id": 366,
@@ -7526,8 +7142,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/v_youku_com-extractor.js"
+      "reachableFromEntry": false
     },
     "367": {
       "id": 367,
@@ -7540,8 +7155,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vaophim_info-extractor.js"
+      "reachableFromEntry": false
     },
     "368": {
       "id": 368,
@@ -7557,8 +7171,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vatlyhadong_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "369": {
       "id": 369,
@@ -7575,8 +7188,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vgt_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "370": {
       "id": 370,
@@ -7589,8 +7201,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/video_afamily_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "371": {
       "id": 371,
@@ -7605,8 +7216,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/video_mocha_com_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "372": {
       "id": 372,
@@ -7619,8 +7229,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/videocelebs-extractor.js"
+      "reachableFromEntry": false
     },
     "373": {
       "id": 373,
@@ -7633,8 +7242,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/videojs_github_io-extractor.js"
+      "reachableFromEntry": false
     },
     "374": {
       "id": 374,
@@ -7653,8 +7261,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vieon_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "375": {
       "id": 375,
@@ -7669,8 +7276,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vietgiaitri_com-extractor.js"
+      "reachableFromEntry": false
     },
     "376": {
       "id": 376,
@@ -7685,8 +7291,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vjav_com-extractor.js"
+      "reachableFromEntry": false
     },
     "377": {
       "id": 377,
@@ -7699,8 +7304,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vk_com-extractor.js"
+      "reachableFromEntry": false
     },
     "378": {
       "id": 378,
@@ -7717,8 +7321,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vkvideo_ru-extractor.js"
+      "reachableFromEntry": false
     },
     "379": {
       "id": 379,
@@ -7731,8 +7334,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vlphimsex_xyz-extractor.js"
+      "reachableFromEntry": false
     },
     "380": {
       "id": 380,
@@ -7749,8 +7351,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vlxx_moe-extractor.js"
+      "reachableFromEntry": false
     },
     "381": {
       "id": 381,
@@ -7763,8 +7364,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vnexpress_net-extractor.js"
+      "reachableFromEntry": false
     },
     "382": {
       "id": 382,
@@ -7779,8 +7379,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vnxx3_app-extractor.js"
+      "reachableFromEntry": false
     },
     "383": {
       "id": 383,
@@ -7793,8 +7392,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/voh_com_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "384": {
       "id": 384,
@@ -7807,8 +7405,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vphimmoizz_net-extractor.js"
+      "reachableFromEntry": false
     },
     "385": {
       "id": 385,
@@ -7824,8 +7421,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vphimzz_net-extractor.js"
+      "reachableFromEntry": false
     },
     "386": {
       "id": 386,
@@ -7838,8 +7434,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vtc_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "387": {
       "id": 387,
@@ -7861,8 +7456,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vtv-extractor.js"
+      "reachableFromEntry": false
     },
     "388": {
       "id": 388,
@@ -7875,8 +7469,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vtv16_info-extractor.js"
+      "reachableFromEntry": false
     },
     "389": {
       "id": 389,
@@ -7889,8 +7482,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vuighe_net-extractor.js"
+      "reachableFromEntry": false
     },
     "390": {
       "id": 390,
@@ -7905,8 +7497,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/waka_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "391": {
       "id": 391,
@@ -7919,8 +7510,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/weibo_com-extractor.js"
+      "reachableFromEntry": false
     },
     "392": {
       "id": 392,
@@ -7935,8 +7525,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/xemphimvn2_com-extractor.js"
+      "reachableFromEntry": false
     },
     "393": {
       "id": 393,
@@ -7953,8 +7542,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/xhamster_com-extractor.js"
+      "reachableFromEntry": false
     },
     "394": {
       "id": 394,
@@ -7971,8 +7559,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-394.js"
+      "reachableFromEntry": false
     },
     "395": {
       "id": 395,
@@ -7985,8 +7572,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/xiaohongshu_com-extractor.js"
+      "reachableFromEntry": false
     },
     "396": {
       "id": 396,
@@ -7999,8 +7585,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/xnhau_show-extractor.js"
+      "reachableFromEntry": false
     },
     "397": {
       "id": 397,
@@ -8016,8 +7601,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/xnxxvn_me-extractor.js"
+      "reachableFromEntry": false
     },
     "398": {
       "id": 398,
@@ -8033,8 +7617,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/xvideos-extractor.js"
+      "reachableFromEntry": false
     },
     "399": {
       "id": 399,
@@ -8047,8 +7630,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/xxphimsex_pro-extractor.js"
+      "reachableFromEntry": false
     },
     "400": {
       "id": 400,
@@ -8063,8 +7645,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/yiihuu_com-extractor.js"
+      "reachableFromEntry": false
     },
     "401": {
       "id": 401,
@@ -8077,8 +7658,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/you_porn-extractor.js"
+      "reachableFromEntry": false
     },
     "402": {
       "id": 402,
@@ -8096,8 +7676,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/zingmp3_vn-extractor.js"
+      "reachableFromEntry": false
     },
     "403": {
       "id": 403,
@@ -8117,8 +7696,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/zphimmoi_com-extractor.js"
+      "reachableFromEntry": false
     },
     "404": {
       "id": 404,
@@ -8135,8 +7713,7 @@
         545,
         554
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-404.js"
+      "reachableFromEntry": true
     },
     "405": {
       "id": 405,
@@ -8157,8 +7734,7 @@
         469,
         475
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-405.js"
+      "reachableFromEntry": false
     },
     "406": {
       "id": 406,
@@ -8173,8 +7749,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-406.js"
+      "reachableFromEntry": false
     },
     "407": {
       "id": 407,
@@ -8189,8 +7764,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-407.js"
+      "reachableFromEntry": false
     },
     "408": {
       "id": 408,
@@ -8205,8 +7779,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-408.js"
+      "reachableFromEntry": false
     },
     "409": {
       "id": 409,
@@ -8221,8 +7794,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-409.js"
+      "reachableFromEntry": false
     },
     "410": {
       "id": 410,
@@ -8237,8 +7809,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-410.js"
+      "reachableFromEntry": false
     },
     "411": {
       "id": 411,
@@ -8253,8 +7824,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-411.js"
+      "reachableFromEntry": false
     },
     "412": {
       "id": 412,
@@ -8269,8 +7839,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-412.js"
+      "reachableFromEntry": false
     },
     "413": {
       "id": 413,
@@ -8285,8 +7854,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-413.js"
+      "reachableFromEntry": false
     },
     "414": {
       "id": 414,
@@ -8301,8 +7869,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-414.js"
+      "reachableFromEntry": false
     },
     "415": {
       "id": 415,
@@ -8317,8 +7884,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-415.js"
+      "reachableFromEntry": false
     },
     "416": {
       "id": 416,
@@ -8333,8 +7899,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-416.js"
+      "reachableFromEntry": false
     },
     "417": {
       "id": 417,
@@ -8351,8 +7916,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-417.js"
+      "reachableFromEntry": false
     },
     "418": {
       "id": 418,
@@ -8367,8 +7931,7 @@
       "callers": [
         417
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-418.js"
+      "reachableFromEntry": false
     },
     "419": {
       "id": 419,
@@ -8383,8 +7946,7 @@
       "callers": [
         129
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-419.js"
+      "reachableFromEntry": false
     },
     "420": {
       "id": 420,
@@ -8401,8 +7963,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-420.js"
+      "reachableFromEntry": false
     },
     "421": {
       "id": 421,
@@ -8420,8 +7981,7 @@
       "callers": [
         168
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-421.js"
+      "reachableFromEntry": false
     },
     "422": {
       "id": 422,
@@ -8436,8 +7996,7 @@
       "callers": [
         121
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-422.js"
+      "reachableFromEntry": false
     },
     "423": {
       "id": 423,
@@ -8452,8 +8011,7 @@
       "callers": [
         169
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-423.js"
+      "reachableFromEntry": false
     },
     "424": {
       "id": 424,
@@ -8470,8 +8028,7 @@
       "callers": [
         140
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-424.js"
+      "reachableFromEntry": false
     },
     "425": {
       "id": 425,
@@ -8490,8 +8047,7 @@
         465,
         591
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-425.js"
+      "reachableFromEntry": false
     },
     "426": {
       "id": 426,
@@ -8515,8 +8071,7 @@
         469,
         475
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-426.js"
+      "reachableFromEntry": false
     },
     "427": {
       "id": 427,
@@ -8535,8 +8090,7 @@
         603,
         605
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-427.js"
+      "reachableFromEntry": false
     },
     "428": {
       "id": 428,
@@ -8557,8 +8111,7 @@
         601,
         665
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-428.js"
+      "reachableFromEntry": false
     },
     "429": {
       "id": 429,
@@ -8584,8 +8137,7 @@
         606,
         614
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-429.js"
+      "reachableFromEntry": false
     },
     "430": {
       "id": 430,
@@ -8604,8 +8156,7 @@
         486,
         644
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-430.js"
+      "reachableFromEntry": false
     },
     "431": {
       "id": 431,
@@ -8624,8 +8175,7 @@
         490,
         627
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-431.js"
+      "reachableFromEntry": false
     },
     "432": {
       "id": 432,
@@ -8646,8 +8196,7 @@
         671,
         673
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-432.js"
+      "reachableFromEntry": false
     },
     "433": {
       "id": 433,
@@ -8667,8 +8216,7 @@
         630,
         666
       ],
-      "reachableFromEntry": false,
-      "path": "vendor/elliptic/module-433.js"
+      "reachableFromEntry": false
     },
     "434": {
       "id": 434,
@@ -8693,8 +8241,7 @@
         666,
         667
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-434.js"
+      "reachableFromEntry": false
     },
     "435": {
       "id": 435,
@@ -8716,8 +8263,7 @@
         644,
         648
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-435.js"
+      "reachableFromEntry": false
     },
     "436": {
       "id": 436,
@@ -8740,8 +8286,7 @@
         645,
         648
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-436.js"
+      "reachableFromEntry": false
     },
     "437": {
       "id": 437,
@@ -8761,8 +8306,7 @@
         671,
         673
       ],
-      "reachableFromEntry": false,
-      "path": "vendor/elliptic/module-437.js"
+      "reachableFromEntry": false
     },
     "438": {
       "id": 438,
@@ -8810,7 +8354,7 @@
       "start": 1619236,
       "end": 1658768,
       "size": 39532,
-      "fileSize": 72069,
+      "fileSize": 72792,
       "requires": [
         0,
         1,
@@ -8820,8 +8364,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/tiktok-douyin.js"
+      "reachableFromEntry": false
     },
     "443": {
       "id": 443,
@@ -8836,8 +8379,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/elliptic/module-443.js"
+      "reachableFromEntry": false
     },
     "444": {
       "id": 444,
@@ -8853,8 +8395,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/bilutv_co-extractor.js"
+      "reachableFromEntry": false
     },
     "445": {
       "id": 445,
@@ -8872,8 +8413,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-445.js"
+      "reachableFromEntry": false
     },
     "446": {
       "id": 446,
@@ -8893,8 +8433,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimdinhcao_com-extractor.js"
+      "reachableFromEntry": false
     },
     "447": {
       "id": 447,
@@ -8907,8 +8446,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-447.js"
+      "reachableFromEntry": false
     },
     "448": {
       "id": 448,
@@ -8924,8 +8462,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/phimsex123_com-extractor.js"
+      "reachableFromEntry": false
     },
     "449": {
       "id": 449,
@@ -8941,8 +8478,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/xemphim_club-extractor.js"
+      "reachableFromEntry": false
     },
     "450": {
       "id": 450,
@@ -8957,8 +8493,7 @@
       "callers": [
         525
       ],
-      "reachableFromEntry": true,
-      "path": "detector/player-host-mapping.js"
+      "reachableFromEntry": true
     },
     "451": {
       "id": 451,
@@ -8985,8 +8520,7 @@
       "callers": [
         571
       ],
-      "reachableFromEntry": false,
-      "path": "platform/github.js"
+      "reachableFromEntry": false
     },
     "452": {
       "id": 452,
@@ -9064,8 +8598,7 @@
         545,
         554
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-458.js"
+      "reachableFromEntry": true
     },
     "459": {
       "id": 459,
@@ -9081,8 +8614,7 @@
         135,
         554
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-459.js"
+      "reachableFromEntry": true
     },
     "460": {
       "id": 460,
@@ -9098,8 +8630,7 @@
         135,
         556
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-460.js"
+      "reachableFromEntry": true
     },
     "461": {
       "id": 461,
@@ -9115,8 +8646,7 @@
         562,
         563
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-461.js"
+      "reachableFromEntry": true
     },
     "462": {
       "id": 462,
@@ -9147,8 +8677,7 @@
         143,
         588
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-462.js"
+      "reachableFromEntry": false
     },
     "463": {
       "id": 463,
@@ -9166,8 +8695,7 @@
         462,
         465
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-463.js"
+      "reachableFromEntry": false
     },
     "464": {
       "id": 464,
@@ -9185,8 +8713,7 @@
         462,
         465
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-464.js"
+      "reachableFromEntry": false
     },
     "465": {
       "id": 465,
@@ -9214,8 +8741,7 @@
         143,
         588
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-465.js"
+      "reachableFromEntry": false
     },
     "466": {
       "id": 466,
@@ -9235,8 +8761,7 @@
         588,
         593
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-466.js"
+      "reachableFromEntry": false
     },
     "467": {
       "id": 467,
@@ -9256,8 +8781,7 @@
         426,
         596
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-467.js"
+      "reachableFromEntry": false
     },
     "468": {
       "id": 468,
@@ -9277,8 +8801,7 @@
         426,
         597
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-468.js"
+      "reachableFromEntry": false
     },
     "469": {
       "id": 469,
@@ -9302,8 +8825,7 @@
         451,
         630
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-469.js"
+      "reachableFromEntry": false
     },
     "470": {
       "id": 470,
@@ -9321,8 +8843,7 @@
         469,
         475
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-470.js"
+      "reachableFromEntry": false
     },
     "471": {
       "id": 471,
@@ -9338,8 +8859,7 @@
         599,
         623
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-471.js"
+      "reachableFromEntry": false
     },
     "472": {
       "id": 472,
@@ -9358,8 +8878,7 @@
         173,
         451
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-472.js"
+      "reachableFromEntry": false
     },
     "473": {
       "id": 473,
@@ -9375,8 +8894,7 @@
         475,
         600
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-473.js"
+      "reachableFromEntry": false
     },
     "474": {
       "id": 474,
@@ -9395,8 +8913,7 @@
         475,
         600
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-474.js"
+      "reachableFromEntry": false
     },
     "475": {
       "id": 475,
@@ -9420,8 +8937,7 @@
         472,
         600
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-475.js"
+      "reachableFromEntry": false
     },
     "476": {
       "id": 476,
@@ -9440,8 +8956,7 @@
         475,
         600
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-476.js"
+      "reachableFromEntry": false
     },
     "477": {
       "id": 477,
@@ -9457,8 +8972,7 @@
         478,
         603
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-477.js"
+      "reachableFromEntry": false
     },
     "478": {
       "id": 478,
@@ -9479,8 +8993,7 @@
         603,
         605
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-478.js"
+      "reachableFromEntry": false
     },
     "479": {
       "id": 479,
@@ -9499,8 +9012,7 @@
       "callers": [
         429
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-479.js"
+      "reachableFromEntry": false
     },
     "480": {
       "id": 480,
@@ -9516,8 +9028,7 @@
         479,
         482
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-480.js"
+      "reachableFromEntry": false
     },
     "481": {
       "id": 481,
@@ -9533,8 +9044,7 @@
         428,
         429
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/aes-stream-decipherer-1.js"
+      "reachableFromEntry": false
     },
     "482": {
       "id": 482,
@@ -9558,8 +9068,7 @@
         606,
         614
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/aes-stream-decipherer-2.js"
+      "reachableFromEntry": false
     },
     "483": {
       "id": 483,
@@ -9580,8 +9089,7 @@
         606,
         614
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/aes-stream-decipherer-3.js"
+      "reachableFromEntry": false
     },
     "484": {
       "id": 484,
@@ -9601,8 +9109,7 @@
         616,
         622
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-484.js"
+      "reachableFromEntry": false
     },
     "485": {
       "id": 485,
@@ -9621,8 +9128,7 @@
         484,
         622
       ],
-      "reachableFromEntry": false,
-      "path": "vendor/elliptic/module-485.js"
+      "reachableFromEntry": false
     },
     "486": {
       "id": 486,
@@ -9641,8 +9147,7 @@
         484,
         622
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-486.js"
+      "reachableFromEntry": false
     },
     "487": {
       "id": 487,
@@ -9673,8 +9178,7 @@
         145,
         624
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-487.js"
+      "reachableFromEntry": false
     },
     "488": {
       "id": 488,
@@ -9692,8 +9196,7 @@
         487,
         490
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-488.js"
+      "reachableFromEntry": false
     },
     "489": {
       "id": 489,
@@ -9711,8 +9214,7 @@
         487,
         490
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-489.js"
+      "reachableFromEntry": false
     },
     "490": {
       "id": 490,
@@ -9740,8 +9242,7 @@
         145,
         624
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-490.js"
+      "reachableFromEntry": false
     },
     "491": {
       "id": 491,
@@ -9761,8 +9262,7 @@
         624,
         629
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-491.js"
+      "reachableFromEntry": false
     },
     "492": {
       "id": 492,
@@ -9778,8 +9278,7 @@
         117,
         645
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-492.js"
+      "reachableFromEntry": false
     },
     "493": {
       "id": 493,
@@ -9800,8 +9299,7 @@
         434,
         435
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-493.js"
+      "reachableFromEntry": false
     },
     "494": {
       "id": 494,
@@ -9819,8 +9317,7 @@
         495,
         638
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-494.js"
+      "reachableFromEntry": false
     },
     "495": {
       "id": 495,
@@ -9841,8 +9338,7 @@
         637,
         639
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-495.js"
+      "reachableFromEntry": false
     },
     "496": {
       "id": 496,
@@ -9862,8 +9358,7 @@
         637,
         640
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-496.js"
+      "reachableFromEntry": false
     },
     "497": {
       "id": 497,
@@ -9882,8 +9377,7 @@
       "callers": [
         158
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-497.js"
+      "reachableFromEntry": false
     },
     "498": {
       "id": 498,
@@ -9901,8 +9395,7 @@
         157,
         658
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-498.js"
+      "reachableFromEntry": false
     },
     "499": {
       "id": 499,
@@ -9921,8 +9414,7 @@
         659,
         660
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-499.js"
+      "reachableFromEntry": false
     },
     "500": {
       "id": 500,
@@ -9942,8 +9434,7 @@
         661,
         662
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-500.js"
+      "reachableFromEntry": false
     },
     "501": {
       "id": 501,
@@ -9959,8 +9450,7 @@
         630,
         666
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-501.js"
+      "reachableFromEntry": false
     },
     "502": {
       "id": 502,
@@ -9979,8 +9469,7 @@
         671,
         673
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-502.js"
+      "reachableFromEntry": false
     },
     "503": {
       "id": 503,
@@ -9997,8 +9486,7 @@
         673,
         741
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-503.js"
+      "reachableFromEntry": false
     },
     "504": {
       "id": 504,
@@ -10017,8 +9505,7 @@
         671,
         673
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-504.js"
+      "reachableFromEntry": false
     },
     "505": {
       "id": 505,
@@ -10237,8 +9724,7 @@
       "callers": [
         541
       ],
-      "reachableFromEntry": true,
-      "path": "widget/floating-bar-manager.js"
+      "reachableFromEntry": true
     },
     "526": {
       "id": 526,
@@ -10258,8 +9744,7 @@
       "callers": [
         541
       ],
-      "reachableFromEntry": true,
-      "path": "widget/qr-code-wrapper.js"
+      "reachableFromEntry": true
     },
     "527": {
       "id": 527,
@@ -10276,8 +9761,7 @@
       "callers": [
         543
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/module-527.js"
+      "reachableFromEntry": true
     },
     "528": {
       "id": 528,
@@ -10450,9 +9934,7 @@
       "callers": [
         543
       ],
-      "reachableFromEntry": true,
-      "file": "widget/widget-manager.js",
-      "path": "widget/widget-manager.js"
+      "reachableFromEntry": true
     },
     "542": {
       "id": 542,
@@ -10470,7 +9952,7 @@
       "start": 1993551,
       "end": 2001839,
       "size": 8288,
-      "fileSize": 11022,
+      "fileSize": 11312,
       "requires": [
         7,
         13,
@@ -10483,8 +9965,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": true,
-      "path": "detector/content-entry.js"
+      "reachableFromEntry": true
     },
     "544": {
       "id": 544,
@@ -10499,8 +9980,7 @@
       "callers": [
         526
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-544.js"
+      "reachableFromEntry": true
     },
     "545": {
       "id": 545,
@@ -10529,8 +10009,7 @@
       "callers": [
         526
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-545.js"
+      "reachableFromEntry": true
     },
     "546": {
       "id": 546,
@@ -10545,8 +10024,7 @@
       "callers": [
         545
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-546.js"
+      "reachableFromEntry": true
     },
     "547": {
       "id": 547,
@@ -10561,8 +10039,7 @@
       "callers": [
         545
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-547.js"
+      "reachableFromEntry": true
     },
     "548": {
       "id": 548,
@@ -10579,8 +10056,7 @@
       "callers": [
         545
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-548.js"
+      "reachableFromEntry": true
     },
     "549": {
       "id": 549,
@@ -10597,8 +10073,7 @@
       "callers": [
         545
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-549.js"
+      "reachableFromEntry": true
     },
     "550": {
       "id": 550,
@@ -10613,8 +10088,7 @@
       "callers": [
         545
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-550.js"
+      "reachableFromEntry": true
     },
     "551": {
       "id": 551,
@@ -10631,8 +10105,7 @@
       "callers": [
         545
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-551.js"
+      "reachableFromEntry": true
     },
     "552": {
       "id": 552,
@@ -10649,8 +10122,7 @@
       "callers": [
         551
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-552.js"
+      "reachableFromEntry": true
     },
     "553": {
       "id": 553,
@@ -10665,8 +10137,7 @@
       "callers": [
         552
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-553.js"
+      "reachableFromEntry": true
     },
     "554": {
       "id": 554,
@@ -10687,8 +10158,7 @@
       "callers": [
         545
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-554.js"
+      "reachableFromEntry": true
     },
     "555": {
       "id": 555,
@@ -10705,8 +10175,7 @@
       "callers": [
         545
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-555.js"
+      "reachableFromEntry": true
     },
     "556": {
       "id": 556,
@@ -10730,8 +10199,7 @@
       "callers": [
         545
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-556.js"
+      "reachableFromEntry": true
     },
     "557": {
       "id": 557,
@@ -10748,8 +10216,7 @@
       "callers": [
         556
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-557.js"
+      "reachableFromEntry": true
     },
     "558": {
       "id": 558,
@@ -10766,8 +10233,7 @@
       "callers": [
         556
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-558.js"
+      "reachableFromEntry": true
     },
     "559": {
       "id": 559,
@@ -10784,8 +10250,7 @@
       "callers": [
         556
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-559.js"
+      "reachableFromEntry": true
     },
     "560": {
       "id": 560,
@@ -10803,8 +10268,7 @@
       "callers": [
         556
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-560.js"
+      "reachableFromEntry": true
     },
     "561": {
       "id": 561,
@@ -10819,8 +10283,7 @@
       "callers": [
         556
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-561.js"
+      "reachableFromEntry": true
     },
     "562": {
       "id": 562,
@@ -10837,8 +10300,7 @@
       "callers": [
         526
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-562.js"
+      "reachableFromEntry": true
     },
     "563": {
       "id": 563,
@@ -10855,8 +10317,7 @@
       "callers": [
         526
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/qrcode/module-563.js"
+      "reachableFromEntry": true
     },
     "564": {
       "id": 564,
@@ -10871,8 +10332,7 @@
       "callers": [
         177
       ],
-      "reachableFromEntry": true,
-      "path": "detector/extractor-registry-2.js"
+      "reachableFromEntry": true
     },
     "565": {
       "id": 565,
@@ -10885,8 +10345,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/5000-years_org-host.js"
+      "reachableFromEntry": false
     },
     "566": {
       "id": 566,
@@ -10899,8 +10358,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/fetch_data-host.js"
+      "reachableFromEntry": false
     },
     "567": {
       "id": 567,
@@ -10913,8 +10371,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-567.js"
+      "reachableFromEntry": false
     },
     "568": {
       "id": 568,
@@ -10930,8 +10387,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/asianpinay_com-host.js"
+      "reachableFromEntry": false
     },
     "569": {
       "id": 569,
@@ -10944,8 +10400,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/cdn-xvideos-xnxx-xyz-host.js"
+      "reachableFromEntry": false
     },
     "570": {
       "id": 570,
@@ -10958,8 +10413,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-570.js"
+      "reachableFromEntry": false
     },
     "571": {
       "id": 571,
@@ -10975,8 +10429,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-571.js"
+      "reachableFromEntry": false
     },
     "572": {
       "id": 572,
@@ -10996,8 +10449,7 @@
       "callers": [
         405
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-572.js"
+      "reachableFromEntry": false
     },
     "573": {
       "id": 573,
@@ -11015,8 +10467,7 @@
       "callers": [
         572
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-573.js"
+      "reachableFromEntry": false
     },
     "574": {
       "id": 574,
@@ -11031,8 +10482,7 @@
       "callers": [
         165
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-574.js"
+      "reachableFromEntry": false
     },
     "575": {
       "id": 575,
@@ -11051,8 +10501,7 @@
       "callers": [
         165
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-575.js"
+      "reachableFromEntry": false
     },
     "576": {
       "id": 576,
@@ -11069,8 +10518,7 @@
       "callers": [
         575
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-576.js"
+      "reachableFromEntry": false
     },
     "577": {
       "id": 577,
@@ -11094,8 +10542,7 @@
       "callers": [
         576
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-577.js"
+      "reachableFromEntry": false
     },
     "578": {
       "id": 578,
@@ -11112,8 +10559,7 @@
       "callers": [
         577
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-578.js"
+      "reachableFromEntry": false
     },
     "579": {
       "id": 579,
@@ -11128,8 +10574,7 @@
       "callers": [
         578
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-579.js"
+      "reachableFromEntry": false
     },
     "580": {
       "id": 580,
@@ -11147,8 +10592,7 @@
       "callers": [
         577
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-580.js"
+      "reachableFromEntry": false
     },
     "581": {
       "id": 581,
@@ -11163,8 +10607,7 @@
       "callers": [
         580
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-581.js"
+      "reachableFromEntry": false
     },
     "582": {
       "id": 582,
@@ -11184,8 +10627,7 @@
       "callers": [
         577
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-582.js"
+      "reachableFromEntry": false
     },
     "583": {
       "id": 583,
@@ -11206,8 +10648,7 @@
       "callers": [
         582
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-583.js"
+      "reachableFromEntry": false
     },
     "584": {
       "id": 584,
@@ -11227,8 +10668,7 @@
       "callers": [
         583
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-584.js"
+      "reachableFromEntry": false
     },
     "585": {
       "id": 585,
@@ -11245,8 +10685,7 @@
       "callers": [
         583
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-585.js"
+      "reachableFromEntry": false
     },
     "586": {
       "id": 586,
@@ -11265,8 +10704,7 @@
       "callers": [
         582
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-586.js"
+      "reachableFromEntry": false
     },
     "587": {
       "id": 587,
@@ -11283,8 +10721,7 @@
       "callers": [
         577
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-587.js"
+      "reachableFromEntry": false
     },
     "588": {
       "id": 588,
@@ -11305,8 +10742,7 @@
       "callers": [
         572
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-588.js"
+      "reachableFromEntry": false
     },
     "589": {
       "id": 589,
@@ -11321,8 +10757,7 @@
       "callers": [
         462
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-589.js"
+      "reachableFromEntry": false
     },
     "590": {
       "id": 590,
@@ -11337,8 +10772,7 @@
       "callers": [
         462
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-590.js"
+      "reachableFromEntry": false
     },
     "591": {
       "id": 591,
@@ -11356,8 +10790,7 @@
       "callers": [
         462
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-591.js"
+      "reachableFromEntry": false
     },
     "592": {
       "id": 592,
@@ -11372,8 +10805,7 @@
       "callers": [
         591
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-592.js"
+      "reachableFromEntry": false
     },
     "593": {
       "id": 593,
@@ -11392,8 +10824,7 @@
       "callers": [
         588
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-593.js"
+      "reachableFromEntry": false
     },
     "594": {
       "id": 594,
@@ -11412,8 +10843,7 @@
       "callers": [
         426
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-594.js"
+      "reachableFromEntry": false
     },
     "595": {
       "id": 595,
@@ -11432,8 +10862,7 @@
       "callers": [
         426
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-595.js"
+      "reachableFromEntry": false
     },
     "596": {
       "id": 596,
@@ -11453,8 +10882,7 @@
       "callers": [
         426
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-596.js"
+      "reachableFromEntry": false
     },
     "597": {
       "id": 597,
@@ -11474,8 +10902,7 @@
       "callers": [
         426
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-597.js"
+      "reachableFromEntry": false
     },
     "598": {
       "id": 598,
@@ -11494,8 +10921,7 @@
       "callers": [
         469
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-598.js"
+      "reachableFromEntry": false
     },
     "599": {
       "id": 599,
@@ -11512,8 +10938,7 @@
       "callers": [
         451
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-599.js"
+      "reachableFromEntry": false
     },
     "600": {
       "id": 600,
@@ -11535,8 +10960,7 @@
       "callers": [
         472
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-600.js"
+      "reachableFromEntry": false
     },
     "601": {
       "id": 601,
@@ -11557,8 +10981,7 @@
       "callers": [
         451
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-601.js"
+      "reachableFromEntry": false
     },
     "602": {
       "id": 602,
@@ -11578,8 +11001,7 @@
       "callers": [
         601
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-602.js"
+      "reachableFromEntry": false
     },
     "603": {
       "id": 603,
@@ -11600,8 +11022,7 @@
       "callers": [
         602
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-603.js"
+      "reachableFromEntry": false
     },
     "604": {
       "id": 604,
@@ -11619,8 +11040,7 @@
       "callers": [
         603
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-604.js"
+      "reachableFromEntry": false
     },
     "605": {
       "id": 605,
@@ -11640,8 +11060,7 @@
       "callers": [
         603
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-605.js"
+      "reachableFromEntry": false
     },
     "606": {
       "id": 606,
@@ -11665,8 +11084,7 @@
       "callers": [
         428
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/hls-key-loader.js"
+      "reachableFromEntry": false
     },
     "607": {
       "id": 607,
@@ -11681,8 +11099,7 @@
       "callers": [
         429
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-607.js"
+      "reachableFromEntry": false
     },
     "608": {
       "id": 608,
@@ -11699,8 +11116,7 @@
       "callers": [
         429
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-608.js"
+      "reachableFromEntry": false
     },
     "609": {
       "id": 609,
@@ -11718,8 +11134,7 @@
       "callers": [
         429
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-609.js"
+      "reachableFromEntry": false
     },
     "610": {
       "id": 610,
@@ -11736,8 +11151,7 @@
       "callers": [
         429
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-610.js"
+      "reachableFromEntry": false
     },
     "611": {
       "id": 611,
@@ -11754,8 +11168,7 @@
       "callers": [
         429
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-611.js"
+      "reachableFromEntry": false
     },
     "612": {
       "id": 612,
@@ -11773,8 +11186,7 @@
       "callers": [
         429
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-612.js"
+      "reachableFromEntry": false
     },
     "613": {
       "id": 613,
@@ -11791,8 +11203,7 @@
       "callers": [
         482
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-613.js"
+      "reachableFromEntry": false
     },
     "614": {
       "id": 614,
@@ -11816,8 +11227,7 @@
       "callers": [
         428
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/segment-decryptor.js"
+      "reachableFromEntry": false
     },
     "615": {
       "id": 615,
@@ -11832,8 +11242,7 @@
       "callers": [
         601
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-615.js"
+      "reachableFromEntry": false
     },
     "616": {
       "id": 616,
@@ -11853,8 +11262,7 @@
       "callers": [
         451
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-616.js"
+      "reachableFromEntry": false
     },
     "617": {
       "id": 617,
@@ -11869,8 +11277,7 @@
       "callers": [
         485
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-617.js"
+      "reachableFromEntry": false
     },
     "618": {
       "id": 618,
@@ -11888,8 +11295,7 @@
       "callers": [
         486
       ],
-      "reachableFromEntry": false,
-      "path": "vendor/elliptic/module-618.js"
+      "reachableFromEntry": false
     },
     "619": {
       "id": 619,
@@ -11904,8 +11310,7 @@
       "callers": [
         618
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-619.js"
+      "reachableFromEntry": false
     },
     "620": {
       "id": 620,
@@ -11920,8 +11325,7 @@
       "callers": [
         430
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-620.js"
+      "reachableFromEntry": false
     },
     "621": {
       "id": 621,
@@ -11936,8 +11340,7 @@
       "callers": [
         616
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-621.js"
+      "reachableFromEntry": false
     },
     "622": {
       "id": 622,
@@ -11958,8 +11361,7 @@
       "callers": [
         616
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-622.js"
+      "reachableFromEntry": false
     },
     "623": {
       "id": 623,
@@ -11982,8 +11384,7 @@
       "callers": [
         451
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-623.js"
+      "reachableFromEntry": false
     },
     "624": {
       "id": 624,
@@ -12004,8 +11405,7 @@
       "callers": [
         623
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-624.js"
+      "reachableFromEntry": false
     },
     "625": {
       "id": 625,
@@ -12020,8 +11420,7 @@
       "callers": [
         487
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-625.js"
+      "reachableFromEntry": false
     },
     "626": {
       "id": 626,
@@ -12036,8 +11435,7 @@
       "callers": [
         487
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-626.js"
+      "reachableFromEntry": false
     },
     "627": {
       "id": 627,
@@ -12055,8 +11453,7 @@
       "callers": [
         487
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-627.js"
+      "reachableFromEntry": false
     },
     "628": {
       "id": 628,
@@ -12071,8 +11468,7 @@
       "callers": [
         627
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-628.js"
+      "reachableFromEntry": false
     },
     "629": {
       "id": 629,
@@ -12091,8 +11487,7 @@
       "callers": [
         624
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-629.js"
+      "reachableFromEntry": false
     },
     "630": {
       "id": 630,
@@ -12115,8 +11510,7 @@
       "callers": [
         623
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-630.js"
+      "reachableFromEntry": false
     },
     "631": {
       "id": 631,
@@ -12131,8 +11525,7 @@
       "callers": [
         433
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-631.js"
+      "reachableFromEntry": false
     },
     "632": {
       "id": 632,
@@ -12147,8 +11540,7 @@
       "callers": [
         434
       ],
-      "reachableFromEntry": false,
-      "path": "platform/github-1.js"
+      "reachableFromEntry": false
     },
     "633": {
       "id": 633,
@@ -12163,8 +11555,7 @@
       "callers": [
         126
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-633.js"
+      "reachableFromEntry": false
     },
     "634": {
       "id": 634,
@@ -12184,8 +11575,7 @@
       "callers": [
         493
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-634.js"
+      "reachableFromEntry": false
     },
     "635": {
       "id": 635,
@@ -12205,8 +11595,7 @@
       "callers": [
         493
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-635.js"
+      "reachableFromEntry": false
     },
     "636": {
       "id": 636,
@@ -12226,8 +11615,7 @@
       "callers": [
         493
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-636.js"
+      "reachableFromEntry": false
     },
     "637": {
       "id": 637,
@@ -12248,8 +11636,7 @@
       "callers": [
         436
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-637.js"
+      "reachableFromEntry": false
     },
     "638": {
       "id": 638,
@@ -12268,8 +11655,7 @@
       "callers": [
         637
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-638.js"
+      "reachableFromEntry": false
     },
     "639": {
       "id": 639,
@@ -12287,8 +11673,7 @@
       "callers": [
         637
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-639.js"
+      "reachableFromEntry": false
     },
     "640": {
       "id": 640,
@@ -12306,8 +11691,7 @@
       "callers": [
         637
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-640.js"
+      "reachableFromEntry": false
     },
     "641": {
       "id": 641,
@@ -12325,8 +11709,7 @@
       "callers": [
         436
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-641.js"
+      "reachableFromEntry": false
     },
     "642": {
       "id": 642,
@@ -12344,8 +11727,7 @@
       "callers": [
         436
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-642.js"
+      "reachableFromEntry": false
     },
     "643": {
       "id": 643,
@@ -12360,8 +11742,7 @@
       "callers": [
         435
       ],
-      "reachableFromEntry": false,
-      "path": "vendor/elliptic/module-643.js"
+      "reachableFromEntry": false
     },
     "644": {
       "id": 644,
@@ -12384,8 +11765,7 @@
       "callers": [
         434
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-644.js"
+      "reachableFromEntry": false
     },
     "645": {
       "id": 645,
@@ -12404,8 +11784,7 @@
       "callers": [
         644
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-645.js"
+      "reachableFromEntry": false
     },
     "646": {
       "id": 646,
@@ -12423,8 +11802,7 @@
       "callers": [
         644
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-646.js"
+      "reachableFromEntry": false
     },
     "647": {
       "id": 647,
@@ -12442,8 +11820,7 @@
       "callers": [
         644
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-647.js"
+      "reachableFromEntry": false
     },
     "648": {
       "id": 648,
@@ -12464,8 +11841,7 @@
       "callers": [
         434
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-648.js"
+      "reachableFromEntry": false
     },
     "649": {
       "id": 649,
@@ -12482,8 +11858,7 @@
       "callers": [
         648
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-649.js"
+      "reachableFromEntry": false
     },
     "650": {
       "id": 650,
@@ -12501,8 +11876,7 @@
       "callers": [
         648
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-650.js"
+      "reachableFromEntry": false
     },
     "651": {
       "id": 651,
@@ -12520,8 +11894,7 @@
       "callers": [
         173
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-651.js"
+      "reachableFromEntry": false
     },
     "652": {
       "id": 652,
@@ -12539,8 +11912,7 @@
       "callers": [
         157
       ],
-      "reachableFromEntry": false,
-      "path": "vendor/elliptic/module-652.js"
+      "reachableFromEntry": false
     },
     "653": {
       "id": 653,
@@ -12555,8 +11927,7 @@
       "callers": [
         652
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-653.js"
+      "reachableFromEntry": false
     },
     "654": {
       "id": 654,
@@ -12575,8 +11946,7 @@
       "callers": [
         157
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-654.js"
+      "reachableFromEntry": false
     },
     "655": {
       "id": 655,
@@ -12591,8 +11961,7 @@
       "callers": [
         654
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-655.js"
+      "reachableFromEntry": false
     },
     "656": {
       "id": 656,
@@ -12609,8 +11978,7 @@
       "callers": [
         158
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-656.js"
+      "reachableFromEntry": false
     },
     "657": {
       "id": 657,
@@ -12628,8 +11996,7 @@
       "callers": [
         158
       ],
-      "reachableFromEntry": false,
-      "path": "detector/stream-url-normalizer.js"
+      "reachableFromEntry": false
     },
     "658": {
       "id": 658,
@@ -12646,8 +12013,7 @@
       "callers": [
         498
       ],
-      "reachableFromEntry": false,
-      "path": "detector/media-manifest-checker.js"
+      "reachableFromEntry": false
     },
     "659": {
       "id": 659,
@@ -12665,8 +12031,7 @@
       "callers": [
         157
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-659.js"
+      "reachableFromEntry": false
     },
     "660": {
       "id": 660,
@@ -12685,8 +12050,7 @@
       "callers": [
         659
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-660.js"
+      "reachableFromEntry": false
     },
     "661": {
       "id": 661,
@@ -12704,8 +12068,7 @@
       "callers": [
         157
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-661.js"
+      "reachableFromEntry": false
     },
     "662": {
       "id": 662,
@@ -12723,8 +12086,7 @@
       "callers": [
         661
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-662.js"
+      "reachableFromEntry": false
     },
     "663": {
       "id": 663,
@@ -12741,8 +12103,7 @@
       "callers": [
         651
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-663.js"
+      "reachableFromEntry": false
     },
     "664": {
       "id": 664,
@@ -12757,8 +12118,7 @@
       "callers": [
         173
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-664.js"
+      "reachableFromEntry": false
     },
     "665": {
       "id": 665,
@@ -12777,8 +12137,7 @@
       "callers": [
         173
       ],
-      "reachableFromEntry": false,
-      "path": "crypto/crypto-digest-helper.js"
+      "reachableFromEntry": false
     },
     "666": {
       "id": 666,
@@ -12799,8 +12158,7 @@
       "callers": [
         623
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-666.js"
+      "reachableFromEntry": false
     },
     "667": {
       "id": 667,
@@ -12819,8 +12177,7 @@
       "callers": [
         451
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-667.js"
+      "reachableFromEntry": false
     },
     "668": {
       "id": 668,
@@ -12838,8 +12195,7 @@
       "callers": [
         667
       ],
-      "reachableFromEntry": false,
-      "path": "vendor/elliptic/module-668.js"
+      "reachableFromEntry": false
     },
     "669": {
       "id": 669,
@@ -12854,8 +12210,7 @@
       "callers": [
         668
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-669.js"
+      "reachableFromEntry": false
     },
     "670": {
       "id": 670,
@@ -12873,8 +12228,7 @@
       "callers": [
         451
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-670.js"
+      "reachableFromEntry": false
     },
     "671": {
       "id": 671,
@@ -12899,8 +12253,7 @@
       "callers": [
         670
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-671.js"
+      "reachableFromEntry": false
     },
     "672": {
       "id": 672,
@@ -12915,8 +12268,7 @@
       "callers": [
         437
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-672.js"
+      "reachableFromEntry": false
     },
     "673": {
       "id": 673,
@@ -12940,8 +12292,7 @@
       "callers": [
         670
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-673.js"
+      "reachableFromEntry": false
     },
     "674": {
       "id": 674,
@@ -12961,8 +12312,7 @@
       "callers": [
         451
       ],
-      "reachableFromEntry": false,
-      "path": "platform/helper-674.js"
+      "reachableFromEntry": false
     },
     "675": {
       "id": 675,
@@ -12975,8 +12325,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/emturbovid-com-host.js"
+      "reachableFromEntry": false
     },
     "676": {
       "id": 676,
@@ -12991,8 +12340,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/fileone-host.js"
+      "reachableFromEntry": false
     },
     "677": {
       "id": 677,
@@ -13007,8 +12355,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-677.js"
+      "reachableFromEntry": false
     },
     "678": {
       "id": 678,
@@ -13021,8 +12368,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hlss-xyz-host.js"
+      "reachableFromEntry": false
     },
     "679": {
       "id": 679,
@@ -13038,8 +12384,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-679.js"
+      "reachableFromEntry": false
     },
     "680": {
       "id": 680,
@@ -13054,8 +12399,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ok-ru-host.js"
+      "reachableFromEntry": false
     },
     "681": {
       "id": 681,
@@ -13068,8 +12412,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/opstream-com-host.js"
+      "reachableFromEntry": false
     },
     "682": {
       "id": 682,
@@ -13085,8 +12428,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/play-hidestream-com-host.js"
+      "reachableFromEntry": false
     },
     "683": {
       "id": 683,
@@ -13099,8 +12441,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-683.js"
+      "reachableFromEntry": false
     },
     "684": {
       "id": 684,
@@ -13113,8 +12454,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/play-sonar-cdn-com-host.js"
+      "reachableFromEntry": false
     },
     "685": {
       "id": 685,
@@ -13129,8 +12469,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/player-asianfans-net-host.js"
+      "reachableFromEntry": false
     },
     "686": {
       "id": 686,
@@ -13143,8 +12482,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-686.js"
+      "reachableFromEntry": false
     },
     "687": {
       "id": 687,
@@ -13161,8 +12499,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/playngon-net-host.js"
+      "reachableFromEntry": false
     },
     "688": {
       "id": 688,
@@ -13175,8 +12512,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/proxy-playphim-info-host.js"
+      "reachableFromEntry": false
     },
     "689": {
       "id": 689,
@@ -13191,8 +12527,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/pzc-phimmoi-net-host.js"
+      "reachableFromEntry": false
     },
     "690": {
       "id": 690,
@@ -13208,8 +12543,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/rophim_me-host.js"
+      "reachableFromEntry": false
     },
     "691": {
       "id": 691,
@@ -13222,8 +12556,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/sieukhung-host.js"
+      "reachableFromEntry": false
     },
     "692": {
       "id": 692,
@@ -13236,8 +12569,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/ss-zembed-net-host.js"
+      "reachableFromEntry": false
     },
     "693": {
       "id": 693,
@@ -13250,8 +12582,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-693.js"
+      "reachableFromEntry": false
     },
     "694": {
       "id": 694,
@@ -13266,8 +12597,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/stream-vltv-xyz-host.js"
+      "reachableFromEntry": false
     },
     "695": {
       "id": 695,
@@ -13280,8 +12610,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "vendor/module-695.js"
+      "reachableFromEntry": false
     },
     "696": {
       "id": 696,
@@ -13297,8 +12626,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/videostr_net-host.js"
+      "reachableFromEntry": false
     },
     "697": {
       "id": 697,
@@ -13311,8 +12639,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vimeo-host.js"
+      "reachableFromEntry": false
     },
     "698": {
       "id": 698,
@@ -13325,8 +12652,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vnstream-host.js"
+      "reachableFromEntry": false
     },
     "699": {
       "id": 699,
@@ -13341,8 +12667,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/vuviphim-net-host.js"
+      "reachableFromEntry": false
     },
     "700": {
       "id": 700,
@@ -13358,8 +12683,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/youtube-host.js"
+      "reachableFromEntry": false
     },
     "701": {
       "id": 701,
@@ -13779,8 +13103,7 @@
       "hasRegenerator": true,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/hydrax-host.js"
+      "reachableFromEntry": false
     },
     "742": {
       "id": 742,
@@ -13793,8 +13116,7 @@
       "hasRegenerator": false,
       "isBnCopy": false,
       "callers": [],
-      "reachableFromEntry": false,
-      "path": "platform/motchill-host.js"
+      "reachableFromEntry": false
     },
     "743": {
       "id": 743,
@@ -13809,8 +13131,7 @@
       "callers": [
         541
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-743.js"
+      "reachableFromEntry": true
     },
     "744": {
       "id": 744,
@@ -13975,8 +13296,7 @@
       "callers": [
         541
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-759.js"
+      "reachableFromEntry": true
     },
     "760": {
       "id": 760,
@@ -14141,8 +13461,7 @@
       "callers": [
         541
       ],
-      "reachableFromEntry": true,
-      "path": "vendor/shims/module-775.js"
+      "reachableFromEntry": true
     }
   }
 }

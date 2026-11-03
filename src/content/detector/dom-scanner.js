@@ -178,7 +178,32 @@ export default function(module, exports, require) {
         }
       },
 
+      _hasPossibleImageMutations(mutationRecords) {
+        for (var i = 0; i < mutationRecords.length; i++) {
+          var rec = mutationRecords[i];
+          if (rec.type === "attributes") {
+            var attr = rec.attributeName;
+            if (attr === "src" || attr === "data-src" || attr === "srcset") return true;
+          } else {
+            var target = rec.target;
+            if (target && target.tagName === "IMG") return true;
+            for (var a = 0; a < rec.addedNodes.length; a++) {
+              var an = rec.addedNodes[a];
+              if (an.nodeType === 1 && (an.tagName === "IMG" || an.firstElementChild)) return true;
+            }
+            for (var r = 0; r < rec.removedNodes.length; r++) {
+              var rn = rec.removedNodes[r];
+              if (rn.nodeType === 1 && (rn.tagName === "IMG" || rn.firstElementChild)) return true;
+            }
+          }
+        }
+        return false;
+      },
+
       async imageHandler(mutationRecords) {
+        if (!this._hasPossibleImageMutations(mutationRecords)) {
+          return;
+        }
         if (!this.downloadImageAbTest) {
           this.downloadImageAbTest = utils.sendMessage({
             type: mediaConstants.b.GET_ABTEST,
@@ -242,49 +267,115 @@ export default function(module, exports, require) {
         }
       },
 
+      _hasPossibleMediaMutations(records) {
+        if (!records || !records.length) return false;
+        var mediaTags = this.mediaTags;
+        for (var i = 0; i < records.length; i++) {
+          var rec = records[i];
+          if (rec.type === "attributes") {
+            var tag = rec.target?.tagName ? rec.target.tagName.toLowerCase() : "";
+            if (mediaTags.includes(tag) || tag === "video" || tag === "audio" || tag === "source") {
+              return true;
+            }
+          } else if (rec.type === "childList") {
+            for (var a = 0; a < rec.addedNodes.length; a++) {
+              var an = rec.addedNodes[a];
+              if (an.nodeType === 1) {
+                var atag = an.tagName.toLowerCase();
+                if (mediaTags.includes(atag) || atag === "video" || atag === "audio" || atag === "source") {
+                  return true;
+                }
+                if (an.firstElementChild && (an.querySelector("video, audio, embed, object") || (this.siteData?.isValidVideoNode && this.siteData.isValidVideoNode(an)))) {
+                  return true;
+                }
+              }
+            }
+            for (var r = 0; r < rec.removedNodes.length; r++) {
+              var rn = rec.removedNodes[r];
+              if (rn.nodeType === 1) {
+                var rtag = rn.tagName.toLowerCase();
+                if (mediaTags.includes(rtag) || rtag === "video" || rtag === "audio" || rtag === "source") {
+                  return true;
+                }
+                if (rn.firstElementChild && rn.querySelector("video, audio, embed, object")) {
+                  return true;
+                }
+              }
+            }
+          }
+        }
+        return false;
+      },
+
       videoHandler(mutationRecords) {
-        var addedMedia = this.siteData?.getCustomElement?.call(this.siteData) ?? [];
+        var hasMutations = this._hasPossibleMediaMutations(mutationRecords);
+        var addedMedia = [];
         var removedMedia = [];
-        this.siteData?.forceUpdate?.call(this.siteData);
+
+        var now = Date.now();
+        if (!this._lastForceUpdate || now - this._lastForceUpdate > 300) {
+          this._lastForceUpdate = now;
+          this.siteData?.forceUpdate?.call(this.siteData);
+        }
+
+        if (this.siteData?.getCustomElement) {
+          var customElements = this.siteData.getCustomElement();
+          if (customElements && customElements.length) {
+            addedMedia.push(...customElements);
+          }
+        }
+
+        if (!hasMutations && !addedMedia.length) {
+          return;
+        }
+
+        var mediaSelector = this._mediaSelector || (this._mediaSelector = this.mediaTags.join(", "));
 
         mutationRecords.forEach((record) => {
           var targetElement = record.target;
+          var targetTag = targetElement.tagName ? targetElement.tagName.toLowerCase() : "";
           if (
             record.type === "attributes" &&
             record.attributeName === "src" &&
-            this.mediaTags.includes(targetElement.tagName.toLowerCase())
+            this.mediaTags.includes(targetTag)
           ) {
             removedMedia.push(targetElement);
             addedMedia.push(targetElement);
           } else {
             record.removedNodes.forEach((nodeItem) => {
-              if (nodeItem.tagName && this.mediaTags.indexOf(nodeItem.tagName.toLowerCase()) !== -1) {
+              var nodeTag = nodeItem.tagName ? nodeItem.tagName.toLowerCase() : "";
+              if (nodeTag && this.mediaTags.indexOf(nodeTag) !== -1) {
                 removedMedia.push(nodeItem);
               } else {
                 if (
-                  targetElement.tagName.toLowerCase() === "video" &&
+                  targetTag === "video" &&
                   !removedMedia.includes(targetElement) &&
-                  nodeItem.tagName?.toLowerCase() === "source"
+                  nodeTag === "source"
                 ) {
                   removedMedia.push(targetElement);
                 }
-                var nestedMedia = utils.queryAll(this.mediaTags.join(", "), nodeItem);
-                removedMedia.push(...nestedMedia);
+                if (nodeItem.firstElementChild) {
+                  var nestedMedia = utils.queryAll(mediaSelector, nodeItem);
+                  removedMedia.push(...nestedMedia);
+                }
               }
             });
             record.addedNodes.forEach((nodeItem) => {
-              if (nodeItem.tagName && this.mediaTags.indexOf(nodeItem.tagName.toLowerCase()) !== -1) {
+              var nodeTag = nodeItem.tagName ? nodeItem.tagName.toLowerCase() : "";
+              if (nodeTag && this.mediaTags.indexOf(nodeTag) !== -1) {
                 addedMedia.push(nodeItem);
               } else {
                 if (
-                  targetElement.tagName.toLowerCase() === "video" &&
+                  targetTag === "video" &&
                   !addedMedia.includes(targetElement) &&
-                  nodeItem.tagName?.toLowerCase() === "source"
+                  nodeTag === "source"
                 ) {
                   addedMedia.push(targetElement);
                 }
-                var nestedMedia = utils.queryAll(this.mediaTags.join(", "), nodeItem);
-                addedMedia.push(...nestedMedia);
+                if (nodeItem.firstElementChild) {
+                  var nestedMedia = utils.queryAll(mediaSelector, nodeItem);
+                  addedMedia.push(...nestedMedia);
+                }
               }
             });
           }
@@ -301,8 +392,27 @@ export default function(module, exports, require) {
       },
 
       handleDomChanged(mutationRecords) {
-        this.videoHandler(mutationRecords);
-        this.imageHandler(mutationRecords);
+        if (!this._pendingMutations) {
+          this._pendingMutations = [];
+        }
+        if (this._pendingMutations.length < 500) {
+          this._pendingMutations.push(...mutationRecords);
+        }
+        if (this._domThrottleTimer) return;
+
+        var scheduleFrame = (typeof requestAnimationFrame === "function")
+          ? requestAnimationFrame
+          : (fn) => setTimeout(fn, 16);
+
+        this._domThrottleTimer = scheduleFrame(() => {
+          this._domThrottleTimer = null;
+          var records = this._pendingMutations;
+          this._pendingMutations = null;
+          if (records && records.length) {
+            this.videoHandler(records);
+            this.imageHandler(records);
+          }
+        });
       },
 
       nodeChangedNotifier(addedNodes = [], removedNodes = []) {
