@@ -21,7 +21,6 @@
       ],
       "js": [
         "context-guard.js",
-        "common.js",
         "content-script.js",
         "downloads-nav.js"
       ],

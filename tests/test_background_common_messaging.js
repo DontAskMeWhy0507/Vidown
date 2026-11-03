@@ -5,24 +5,24 @@ const vm = require('vm');
 
 console.log('=== TEST SUITE: BACKGROUND & COMMON REAL ORACLE MESSAGING ===\n');
 
-// 1. Verify Common-Before-Content Ordering Contract in manifest.json
-console.log('1. Verifying common-before-content ordering in manifest.json...');
+// 1. Verify content-script order in manifest.json
+console.log('1. Verifying content-script load order in manifest.json...');
 const manifestPath = path.resolve(__dirname, '../manifest.json');
 assert.ok(fs.existsSync(manifestPath), 'manifest.json must exist');
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
 assert.ok(manifest.content_scripts && manifest.content_scripts.length > 0, 'Must define content_scripts');
 const contentScriptsJs = manifest.content_scripts[0].js;
-const commonIdx = contentScriptsJs.indexOf('common.js');
+const guardIdx = contentScriptsJs.indexOf('context-guard.js');
 const contentIdx = contentScriptsJs.indexOf('content-script.js');
 
-assert.ok(commonIdx !== -1, 'common.js must be in content_scripts');
+assert.ok(guardIdx !== -1, 'context-guard.js must be in content_scripts');
 assert.ok(contentIdx !== -1, 'content-script.js must be in content_scripts');
 assert.ok(
-  commonIdx < contentIdx,
-  `common.js (index ${commonIdx}) must strictly precede content-script.js (index ${contentIdx}) in manifest load order`
+  guardIdx < contentIdx,
+  `context-guard.js (index ${guardIdx}) must strictly precede content-script.js (index ${contentIdx}) in manifest load order`
 );
-console.log(`PASS: Load order verified: common.js (#${commonIdx}) loads before content-script.js (#${contentIdx})! ✅\n`);
+console.log(`PASS: Load order verified: context-guard.js (#${guardIdx}) loads before content-script.js (#${contentIdx})! ✅\n`);
 
 // 2. Build Chrome Runtime Proxy Mock Harness
 const registeredListeners = {};

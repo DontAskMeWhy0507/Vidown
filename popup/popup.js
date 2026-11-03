@@ -706,19 +706,11 @@ document.addEventListener('DOMContentLoaded', () => {
           showToast('Tệp đã bị xóa hoặc di chuyển ngoài ổ đĩa!');
         }
         loadRecentDownloads();
-        // Dual-pass reload to eliminate storage write race condition
-        if (msg.action === 'complete' || msg.action === 'nativeComplete') {
-          setTimeout(loadRecentDownloads, 80);
-          setTimeout(loadRecentDownloads, 300);
-        }
+        // Direct single load on terminal events
+        // No redundant dual-pass timeouts to prevent UI flicker.
       }
     });
   }
 
-  // Heartbeat sync while active downloads exist
-  setInterval(() => {
-    if (recentMediaList && recentMediaList.querySelector('.status-badge.downloading')) {
-      loadRecentDownloads();
-    }
-  }, 1000);
+  // Event-driven progress: individual nativeProgress messages update the active card in place without re-rendering.
 });

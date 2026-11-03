@@ -1601,18 +1601,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Auto-Sync 3: Heartbeat interval (syncs every 800ms while any download is running)
-  setInterval(async () => {
-    const hasActive = allItems.some(it => it.state === 'downloading');
-    if (hasActive) {
-      try {
-        const data = await chrome.storage.local.get(['downloadHistory']);
-        if (data && Array.isArray(data.downloadHistory)) {
-          syncHistoryUpdatesInPlace(data.downloadHistory);
-        }
-      } catch (_) {}
-    }
-  }, 800);
+  // Auto-Sync 3: Event-driven fallback sync (storage listener handles live updates)
+  // Heartbeat polling removed in favor of direct delta events to prevent UI jitter and unnecessary CPU consumption.
 
   // Initial load
   loadDownloads();

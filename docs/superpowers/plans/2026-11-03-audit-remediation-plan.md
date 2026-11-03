@@ -1,5 +1,7 @@
 # Kế hoạch sửa lỗi sau audit Vidown ngày 3 tháng 11 năm 2026
 
+Phạm vi tài liệu này là backlog lỗi độ tin cậy. Theo mục tiêu người dùng đã làm rõ, kế hoạch chính hiện là [Kế hoạch làm Vidown mượt nhẹ và dễ hiểu](2026-11-03-smooth-lightweight-readable-code-plan.md), ưu tiên giảm việc runtime, bỏ phần thừa và làm rõ source nghiệp vụ.
+
 Mục tiêu là xử lý 10 vấn đề đã xác nhận trong audit, ưu tiên bảo vệ file người dùng, hủy đúng tác vụ, bảo vệ cookie và bảo đảm file tải xuống có dữ liệu đầy đủ. Sau mỗi nhóm thay đổi phải có test hành vi tái hiện lỗi cũ và chứng minh hành vi mới.
 
 Trạng thái: kế hoạch triển khai. Các checkbox chưa được đánh dấu hoàn tất. Việc tạo tài liệu này không bao gồm triển khai bản sửa hoặc phát hành extension.
