@@ -65,6 +65,7 @@ const bootstrap = `${sharedRegenDeclaration}\n!function(t){var e={};function r(n
 // 4. Transform using esbuild
 const minPrefetcher = esbuild.transformSync(prefetcherCode, {
   target: 'chrome116',
+  sourcefile: 'src/content/entry/index.js',
   minifyWhitespace: !isDev,
   minifySyntax: false,
   minifyIdentifiers: false,
@@ -74,6 +75,7 @@ const minPrefetcher = esbuild.transformSync(prefetcherCode, {
 
 const minBootstrap = esbuild.transformSync(bootstrap, {
   target: 'chrome116',
+  sourcefile: 'src/content/bootstrap.js',
   minifyWhitespace: !isDev,
   minifySyntax: !isDev,
   minifyIdentifiers: false,
