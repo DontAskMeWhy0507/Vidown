@@ -20,7 +20,8 @@ function sanitizeFilename(rawFilename, defaultExt = 'mp4') {
   }
 
   // 1. Take only basename
-  let name = path.basename(rawFilename.trim());
+  const normalized = rawFilename.trim().replace(/\\/g, '/');
+  let name = path.posix.basename(normalized);
 
   // 2. Strip NUL bytes, control characters, Windows ADS (:stream), separators
   name = name.replace(/[\x00-\x1f\x7f<>:"/\\|?*]/g, '_');
