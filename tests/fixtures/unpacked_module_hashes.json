@@ -991,9 +991,9 @@
   },
   "176": {
     "path": "detector/dom-scanner.js",
-    "sha256": "8b8f08b9a02f968541c9a30c1a21bf133bc7c611f1afe9e8f54924ed58b7082b",
-    "size": 17481,
-    "fileSize": 17481
+    "sha256": "32d6497b2f7e3b5089f4f5ecde4394ccfcae67d783f970794801cbfcfa796361",
+    "size": 18934,
+    "fileSize": 18934
   },
   "177": {
     "path": "detector/extractor-registry-index.js",
@@ -2917,9 +2917,9 @@
   },
   "543": {
     "path": "detector/content-entry.js",
-    "sha256": "0e61deeffa5dfdf263a7690f3109f5a894a268f037f57b7727cd18e4e1e741c4",
-    "size": 11312,
-    "fileSize": 11312
+    "sha256": "3f9a0e2e05a4d5b04728c7ad0680004ba14fe3911ce25f85e2bcecceb7451028",
+    "size": 11490,
+    "fileSize": 11490
   },
   "544": {
     "path": "vendor/qrcode/module-544.js",

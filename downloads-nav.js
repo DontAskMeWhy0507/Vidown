@@ -103,6 +103,8 @@
   // page costs O(new entries), not a full rescan per resource event.
   // ==========================================
   if (!isExtensionPage && typeof window !== 'undefined' && window.performance && window.performance.getEntriesByType) {
+    if (window.__saviorStreamSnifferActive) return;
+    window.__saviorStreamSnifferActive = true;
     const reportedUrls = new Set();
     const reportedStreamKeys = new Set();
     let scanCursor = 0;

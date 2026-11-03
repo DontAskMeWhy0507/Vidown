@@ -24,15 +24,18 @@ export default function(module, exports, require) {
 
           var queueMatchedRequests = (matchPayload) => {
             if (matchPayload.result) {
-              if (Array.isArray(matchPayload.result)) {
-                bufferedMatches.push(...matchPayload.result);
+              var newItems = Array.isArray(matchPayload.result) ? matchPayload.result : [matchPayload.result];
+              if (!batchTimer && !bufferedMatches.length) {
+                EE.emit("widget.request_matched", newItems);
               } else {
-                bufferedMatches.push(matchPayload.result);
+                bufferedMatches.push(...newItems);
               }
               if (!batchTimer) {
                 batchTimer = setTimeout(() => {
-                  EE.emit("widget.request_matched", bufferedMatches);
-                  bufferedMatches = [];
+                  if (bufferedMatches.length) {
+                    EE.emit("widget.request_matched", bufferedMatches);
+                    bufferedMatches = [];
+                  }
                   batchTimer = undefined;
                 }, 200);
               }

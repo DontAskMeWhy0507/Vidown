@@ -28,6 +28,25 @@
         "<all_urls>"
       ],
       "run_at": "document_idle"
+    },
+    {
+      "all_frames": true,
+      "exclude_matches": [
+        "file://*",
+        "*://*.g.doubleclick.net/*",
+        "*://*.challenges.cloudflare.com/*",
+        "*://*.recaptcha.net/*",
+        "*://*.google.com/recaptcha/*",
+        "*://*.hcaptcha.com/*",
+        "*://*.youtube.com/live_chat*"
+      ],
+      "js": [
+        "stream-sniffer.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_start"
     }
   ],
   "default_locale": "en",

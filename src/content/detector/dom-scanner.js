@@ -141,6 +141,9 @@ export default function(module, exports, require) {
       },
 
       async runImageDetection() {
+        if (settingsManager.a.get("image_download_enabled") === false || settingsManager.a.get("imageDownloadEnabled") === false) {
+          return;
+        }
         if (!this.downloadImageAbTest) {
           this.downloadImageAbTest = utils.sendMessage({
             type: mediaConstants.b.GET_ABTEST,
@@ -201,6 +204,9 @@ export default function(module, exports, require) {
       },
 
       async imageHandler(mutationRecords) {
+        if (settingsManager.a.get("image_download_enabled") === false || settingsManager.a.get("imageDownloadEnabled") === false) {
+          return;
+        }
         if (!this._hasPossibleImageMutations(mutationRecords)) {
           return;
         }
@@ -343,6 +349,7 @@ export default function(module, exports, require) {
             addedMedia.push(targetElement);
           } else {
             record.removedNodes.forEach((nodeItem) => {
+              if (nodeItem.nodeType !== 1) return;
               var nodeTag = nodeItem.tagName ? nodeItem.tagName.toLowerCase() : "";
               if (nodeTag && this.mediaTags.indexOf(nodeTag) !== -1) {
                 removedMedia.push(nodeItem);
@@ -361,6 +368,7 @@ export default function(module, exports, require) {
               }
             });
             record.addedNodes.forEach((nodeItem) => {
+              if (nodeItem.nodeType !== 1) return;
               var nodeTag = nodeItem.tagName ? nodeItem.tagName.toLowerCase() : "";
               if (nodeTag && this.mediaTags.indexOf(nodeTag) !== -1) {
                 addedMedia.push(nodeItem);
@@ -392,11 +400,36 @@ export default function(module, exports, require) {
       },
 
       handleDomChanged(mutationRecords) {
+        if (!mutationRecords || !mutationRecords.length) return;
+        var relevantRecords = [];
+        for (var i = 0; i < mutationRecords.length; i++) {
+          var rec = mutationRecords[i];
+          if (rec.type === "characterData") continue;
+          if (rec.type === "attributes") {
+            if (!rec.target || rec.target.nodeType !== 1) continue;
+            relevantRecords.push(rec);
+          } else if (rec.type === "childList") {
+            var hasElementNode = false;
+            for (var a = 0; a < rec.addedNodes.length; a++) {
+              if (rec.addedNodes[a].nodeType === 1) { hasElementNode = true; break; }
+            }
+            if (!hasElementNode) {
+              for (var r = 0; r < rec.removedNodes.length; r++) {
+                if (rec.removedNodes[r].nodeType === 1) { hasElementNode = true; break; }
+              }
+            }
+            if (hasElementNode) {
+              relevantRecords.push(rec);
+            }
+          }
+        }
+        if (!relevantRecords.length) return;
+
         if (!this._pendingMutations) {
           this._pendingMutations = [];
         }
         if (this._pendingMutations.length < 500) {
-          this._pendingMutations.push(...mutationRecords);
+          this._pendingMutations.push(...relevantRecords);
         }
         if (this._domThrottleTimer) return;
 
