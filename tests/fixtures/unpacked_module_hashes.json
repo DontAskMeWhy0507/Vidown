@@ -1111,9 +1111,9 @@
   },
   "198": {
     "path": "platform/animehay-extractor.js",
-    "sha256": "3a4f61f213da0871c6b80b571b7a3ef9efa90c891d433c3b4c33e2df9f01dd6a",
-    "size": 10276,
-    "fileSize": 10276
+    "sha256": "481e85e4a82d67765a5f3aff64c9c16d278141d4b2be3cda666e2f2d377cad4b",
+    "size": 4791,
+    "fileSize": 4791
   },
   "199": {
     "path": "platform/animet_net-extractor.js",
@@ -1501,9 +1501,9 @@
   },
   "263": {
     "path": "platform/kenh14_vn-extractor.js",
-    "sha256": "e0047a78ea40ea3b6aeba42580a6fddd08f88fb7a31764f41452ad33871d1cfb",
-    "size": 5954,
-    "fileSize": 5954
+    "sha256": "f336655288088486ea82b791d93476bc5f2255a918c73da61815105a23dae68c",
+    "size": 5291,
+    "fileSize": 5291
   },
   "264": {
     "path": "platform/khanacademy_org-extractor.js",
