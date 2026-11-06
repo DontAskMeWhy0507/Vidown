@@ -26,27 +26,28 @@ function findMediaPk(element) {
       current = current.parentElement;
     }
 
-    function searchProps(node) {
-      if (!node) return null;
+    function searchProps(node, depth = 0) {
+      if (!node || depth > 3) return null;
       try {
         const pk = node?.mediaFragmentKey?.pk || node?.media?.pk || node?.media?.carouselParentId;
         if (pk) return pk;
 
         if (Array.isArray(node.children)) {
-          for (let i = 0; i < node.children.length; i++) {
+          const limit = Math.min(node.children.length, 10);
+          for (let i = 0; i < limit; i++) {
             const child = node.children[i];
-            if (typeof child === 'object') {
-              const res = searchProps(child);
+            if (typeof child === 'object' && child !== null) {
+              const res = searchProps(child, depth + 1);
               if (res) return res;
             }
           }
         }
-        if (typeof node.children === 'object') {
-          const res = searchProps(node.children);
+        if (typeof node.children === 'object' && node.children !== null) {
+          const res = searchProps(node.children, depth + 1);
           if (res) return res;
         }
         if (node.props) {
-          const res = searchProps(node.props);
+          const res = searchProps(node.props, depth + 1);
           if (res) return res;
         }
       } catch {
@@ -55,8 +56,9 @@ function findMediaPk(element) {
       return null;
     }
 
-    for (let i = 0; i < ancestors.length; i++) {
-      const pk = searchProps(ancestors[i]?.['__reactProps' + fiberSuffix]);
+    const maxAncestors = Math.min(ancestors.length, 8);
+    for (let i = 0; i < maxAncestors; i++) {
+      const pk = searchProps(ancestors[i]?.['__reactProps' + fiberSuffix], 0);
       if (pk) return pk;
     }
     return null;

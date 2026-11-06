@@ -194,7 +194,11 @@ export default function(module, exports, r) {
               c.n = 3;
               break;
             }
-            return c.a(2, w2);
+            if (w2.length > 0) {
+              return c.a(2, w2);
+            }
+            c.n = 3;
+            break;
           case 3:
             if (A2 = w2 || d) {
               c.n = 4;
@@ -806,7 +810,7 @@ export default function(module, exports, r) {
     }
     bindListener(el) {
       var ev, r2, nd, opt, arg, st, url;
-      null === (ev = this.$parent) || void 0 === ev || ev.addEventListener("mouseover", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseOver)), this.parent && this.parent.$node && this.parent.$node !== this.$parent && (this.parent.$node.addEventListener("mouseover", this.onFocused, true), this.parent.$node.addEventListener("mousemove", this.onFocused, { passive: true, capture: true }), this.parent.$node.addEventListener("mouseout", this.onBlur, true)), this.$parent && this.$parent.addEventListener("mousemove", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseMove)), this.$el.addEventListener("mouseover", this.onWidgetFocused), null === (nd = this.$parent) || void 0 === nd || nd.addEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseOut)), this.$el.addEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.useCaptureOnMouseOut)), null === (url = null === (st = this.parent.siteData) || void 0 === st ? void 0 : st.onBehaviorBined) || void 0 === url || url.call(st, this);
+      null === (ev = this.$parent) || void 0 === ev || (ev.addEventListener("mouseover", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseOver)), ev.addEventListener("click", this.onFocused, { passive: true, capture: true }), ev.addEventListener("pointerdown", this.onFocused, { passive: true, capture: true })), this.parent && this.parent.$node && this.parent.$node !== this.$parent && (this.parent.$node.addEventListener("mouseover", this.onFocused, true), this.parent.$node.addEventListener("mousemove", this.onFocused, { passive: true, capture: true }), this.parent.$node.addEventListener("click", this.onFocused, { passive: true, capture: true }), this.parent.$node.addEventListener("pointerdown", this.onFocused, { passive: true, capture: true }), this.parent.$node.addEventListener("mouseout", this.onBlur, true)), this.$parent && this.$parent.addEventListener("mousemove", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseMove)), this.$el.addEventListener("mouseover", this.onWidgetFocused), null === (nd = this.$parent) || void 0 === nd || nd.addEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseOut)), this.$el.addEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.useCaptureOnMouseOut)), null === (url = null === (st = this.parent.siteData) || void 0 === st ? void 0 : st.onBehaviorBined) || void 0 === url || url.call(st, this);
     }
     destroy() {
       var el, ev, r2, nd, opt, arg;
@@ -821,7 +825,7 @@ export default function(module, exports, r) {
           this._scrollRafId = null;
         }
       }
-      this.isDestroyed = true, clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), clearTimeout(this.mouseStayTimeout), this.parent && this.parent.$node && this.parent.$node !== this.$parent && (this.parent.$node.removeEventListener("mouseover", this.onFocused, true), this.parent.$node.removeEventListener("mousemove", this.onFocused, true), this.parent.$node.removeEventListener("mouseout", this.onBlur, true)), this.$parent && this.$el && (this.$parent.removeEventListener("mouseover", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.useCaptureOnMouseOver)), this.$parent.removeEventListener("mousemove", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.useCaptureOnMouseMove)), this.$el.removeEventListener("mouseover", this.onWidgetFocused), null === (ev = this.$parent) || void 0 === ev || ev.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseMove)), this.mouseMoveActive = false, this.$el.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (nd = this.parent.getSiteData()) || void 0 === nd ? void 0 : nd.useCaptureOnMouseMove)), this.$parent.removeEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseOut)), this.$el.removeEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.useCaptureOnMouseOut))), this.debouncedUpdateParent.destroy();
+      this.isDestroyed = true, clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), clearTimeout(this.mouseStayTimeout), this.parent && this.parent.$node && this.parent.$node !== this.$parent && (this.parent.$node.removeEventListener("mouseover", this.onFocused, true), this.parent.$node.removeEventListener("mousemove", this.onFocused, true), this.parent.$node.removeEventListener("click", this.onFocused, true), this.parent.$node.removeEventListener("pointerdown", this.onFocused, true), this.parent.$node.removeEventListener("mouseout", this.onBlur, true)), this.$parent && this.$el && (this.$parent.removeEventListener("mouseover", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.useCaptureOnMouseOver)), this.$parent.removeEventListener("click", this.onFocused, true), this.$parent.removeEventListener("pointerdown", this.onFocused, true), this.$parent.removeEventListener("mousemove", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.useCaptureOnMouseMove)), this.$el.removeEventListener("mouseover", this.onWidgetFocused), null === (ev = this.$parent) || void 0 === ev || ev.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseMove)), this.mouseMoveActive = false, this.$el.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (nd = this.parent.getSiteData()) || void 0 === nd ? void 0 : nd.useCaptureOnMouseMove)), this.$parent.removeEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseOut)), this.$el.removeEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.useCaptureOnMouseOut))), this.debouncedUpdateParent.destroy();
     }
     getSiteWidgetConfig() {
       return domConstants.f.find((el) => {
@@ -1601,7 +1605,11 @@ ${t2.text}`;
       }
       this.repeatWhileEnabled(() => {
         Object(dropdownHelper.b)(document, this.parent.$node);
-      }, 1e3), this.$el = Object(coreUtils.query)(this.el, el), null === (ev = this.$el) || void 0 === ev || ev.addEventListener("click", this.fetchDownloads, { once: true }), null === (r2 = this.$el) || void 0 === r2 || r2.addEventListener("click", this.onClick);
+      }, 1e3), this.$el = Object(coreUtils.query)(this.el, el), null === (ev = this.$el) || void 0 === ev || ev.addEventListener("click", () => {
+        if (!this.state.downloads || !this.state.downloads.length) {
+          this.fetchDownloads();
+        }
+      }), null === (r2 = this.$el) || void 0 === r2 || r2.addEventListener("click", this.onClick);
       var opt = Object(coreUtils.query)("dropdown-box", this.$el);
       opt && (null === (nd = Object(coreUtils.query)("#mobile-transfer-closer", opt)) || void 0 === nd || nd.addEventListener("click", this.close)), null == opt || opt.addEventListener("click", (t2) => {
         t2.stopPropagation();
@@ -1686,9 +1694,18 @@ ${t2.text}`;
         return mt().w((function(l) {
           for (; ; ) switch (l.p = l.n) {
             case 0:
-              if (this.state.downloads && this.state.downloads.length || this.state.isGettingDownloads || !(null === (ev = this.state.mediaObjects) || void 0 === ev ? void 0 : ev.length)) {
+              if (this.state.downloads && this.state.downloads.length || this.state.isGettingDownloads) {
                 l.n = 7;
                 break;
+              }
+              if (!(null === (ev = this.state.mediaObjects) || void 0 === ev ? void 0 : ev.length)) {
+                if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
+                  LazyMediaTracker.processRequest(window.__saviorSniffedMedia);
+                  this.state.mediaObjects = enrichMediaMeta(window.__saviorSniffedMedia);
+                } else {
+                  l.n = 7;
+                  break;
+                }
               }
               if (detectorLogger.a.log("ButtonClicked", detectorLogger.a.BUTTON_FAKE_QUALITY), this.setState({ isGettingDownloads: true }), f = getMediaProvider(), !(null === (r2 = null == f ? void 0 : f.findItemRoot) || void 0 === r2 ? void 0 : r2.call(f, this.parent.$node)) || !f.resolveItemFromNode) {
                 l.n = 5;
@@ -1734,7 +1751,13 @@ ${t2.text}`;
     }
     onClick(t) {
       var ev, r2, nd;
-      (null === (ev = null == t ? void 0 : t.target) || void 0 === ev ? void 0 : ev.disabled) || (null === (r2 = null == t ? void 0 : t.target) || void 0 === r2 ? void 0 : r2.hasAttribute("disabled")) || (null === (nd = null == t ? void 0 : t.target) || void 0 === nd ? void 0 : nd.classList.contains("disabled")) || false || this.setState({ opening: !this.state.opening });
+      if (!((null === (ev = null == t ? void 0 : t.target) || void 0 === ev ? void 0 : ev.disabled) || (null === (r2 = null == t ? void 0 : t.target) || void 0 === r2 ? void 0 : r2.hasAttribute("disabled")) || (null === (nd = null == t ? void 0 : t.target) || void 0 === nd ? void 0 : nd.classList.contains("disabled")))) {
+        var willOpen = !this.state.opening;
+        this.setState({ opening: willOpen });
+        if (willOpen && (!this.state.downloads || !this.state.downloads.length)) {
+          this.fetchDownloads(t);
+        }
+      }
     }
     close(el) {
       this.setState({ opening: false });

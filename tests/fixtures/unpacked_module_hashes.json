@@ -1447,8 +1447,8 @@
   },
   "254": {
     "path": "platform/instagram_com-extractor.js",
-    "sha256": "10b772ae87fb50393c21394926b257113fead09b32c6368033ec3968400eb3fd",
-    "size": 20518,
+    "sha256": "fd6b2a0bc18ef7a7d774f29103caeb5ab90a9adfcc45f11174ecb58b5102d80a",
+    "size": 20773,
     "fileSize": 20518
   },
   "255": {
@@ -2551,8 +2551,8 @@
   },
   "442": {
     "path": "platform/tiktok-douyin.js",
-    "sha256": "eccbb89e2840656ed4c92c391988f1f1a7366a6ec4db5d9da4537e8f8b92613e",
-    "size": 72786,
+    "sha256": "2d92a7a65b5db7249d10c21c3d7a9da6b3ae83b5be53eb10cd6093931d2ac127",
+    "size": 73688,
     "fileSize": 72792
   },
   "443": {
@@ -2911,8 +2911,8 @@
   },
   "541": {
     "path": "widget/widget-manager.js",
-    "sha256": "bdcebb9284954632d21b335df52e63cb5bc9f6721b4fcce67ae254a1088eff46",
-    "size": 143806,
+    "sha256": "1d6fc54ee59d7ee967fbc40024b6ae0c8b92b5db9504c3dec0ed5132309478e9",
+    "size": 145228,
     "fileSize": 139222
   },
   "543": {

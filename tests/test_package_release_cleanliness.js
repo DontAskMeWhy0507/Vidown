@@ -184,6 +184,30 @@ for (const req of requiredEntries) {
 
 console.log('✓ Test 4: All zip entries strictly verified: 0 executables, 0 logs, 0 forbidden directories, all required files present.\n');
 
+// 5. Inspect unpacked extension folder artifact
+console.log('[Test 5] Inspecting unpacked extension directory in dist/unpacked...');
+const UNPACKED_DIR = path.join(DIST_DIR, 'unpacked');
+assert.ok(fs.existsSync(UNPACKED_DIR), `Unpacked extension directory must exist at ${UNPACKED_DIR}`);
+assert.ok(fs.statSync(UNPACKED_DIR).isDirectory(), 'dist/unpacked must be a directory');
+
+const requiredUnpackedFiles = [
+  'manifest.json',
+  'background.chrome.js',
+  'content-script.js',
+  path.join('popup', 'popup.html'),
+  path.join('popup', 'popup.js'),
+  path.join('downloads', 'downloads.html'),
+  path.join('downloads', 'downloads.js')
+];
+
+for (const reqFile of requiredUnpackedFiles) {
+  assert.ok(
+    fs.existsSync(path.join(UNPACKED_DIR, reqFile)),
+    `Required file missing from unpacked dist directory: ${reqFile}`
+  );
+}
+console.log('✓ Test 5: Unpacked extension directory verified with required files present.\n');
+
 console.log('======================================================');
 console.log('ALL PACKAGING & RELEASE CLEANLINESS TESTS PASSED! 🎉');
 console.log('======================================================');

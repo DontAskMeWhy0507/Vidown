@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-11-02T11:10:44.216Z",
   "baselineBundleSize": 2404925,
-  "currentBuiltBundleSize": 2337485,
+  "currentBuiltBundleSize": 2339303,
   "totalSlots": 776,
   "realModulesCount": 649,
   "holesCount": 127,
@@ -5411,7 +5411,7 @@
       "start": 1123136,
       "end": 1134654,
       "size": 11518,
-      "fileSize": 20518,
+      "fileSize": 20773,
       "requires": [
         0,
         1,
@@ -8354,7 +8354,7 @@
       "start": 1619236,
       "end": 1658768,
       "size": 39532,
-      "fileSize": 72786,
+      "fileSize": 73688,
       "requires": [
         0,
         1,
@@ -9899,7 +9899,7 @@
       "start": 1882978,
       "end": 1993549,
       "size": 110571,
-      "fileSize": 143806,
+      "fileSize": 145228,
       "requires": [
         0,
         1,

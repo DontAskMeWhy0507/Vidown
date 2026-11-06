@@ -11,4 +11,8 @@ docs/superpowers/
 node_modules/
 dist/unpacked_bg/
 dist/unpacked_cs/
+dist/unpacked/
+test_downloads/
+.agents/
+TEST_READY.md
 audit_bundle.txt

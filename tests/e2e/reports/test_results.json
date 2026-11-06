@@ -1,0 +1,901 @@
+{
+  "timestamp": "2026-11-06T13:44:43.429Z",
+  "environment": {
+    "chromeVersion": "157.0.8103.39",
+    "nodeVersion": "v24.15.0",
+    "ffprobeVersion": "8.1.2",
+    "ffmpegVersion": "8.1.2",
+    "extensionId": "nnjbdidmmnecdmcllkcaajboplpcimcf",
+    "downloadsDir": "f:\\Vidown\\test_downloads"
+  },
+  "summary": {
+    "total": 46,
+    "passed": 40,
+    "failed": 0,
+    "blocked": 6
+  },
+  "tests": [
+    {
+      "id": "TC-YT-01",
+      "platform": "YouTube",
+      "feature": "Standard Video (1080p DASH Video+Audio Mux)",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+      "status": "PASS",
+      "durationMs": 13593,
+      "download": {
+        "fileName": "tc-yt-01_1793972695986.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-yt-01_1793972695986.mp4",
+        "fileSizeBytes": 495522,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12.02322,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0.023,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-YT-02",
+      "platform": "YouTube",
+      "feature": "Standard Video (Progressive MP4 Fallback 720p/360p)",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "status": "PASS",
+      "durationMs": 13170,
+      "download": {
+        "fileName": "tc-yt-02_1793972710081.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-yt-02_1793972710081.mp4",
+        "fileSizeBytes": 376411,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1280x720",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-YT-03",
+      "platform": "YouTube",
+      "feature": "YouTube Shorts (Vertical Video & Fast SPA Navigation)",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.youtube.com/shorts/wOxBr2diN5g",
+      "status": "PASS",
+      "durationMs": 12709,
+      "download": {
+        "fileName": "tc-yt-03_1793972723114.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-yt-03_1793972723114.mp4",
+        "fileSizeBytes": 446596,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1080x1920",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-YT-04",
+      "platform": "YouTube",
+      "feature": "YouTube Livestream (Live Manifest Detection)",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+      "status": "PASS",
+      "durationMs": 12554,
+      "specialResult": {
+        "type": "LIVESTREAM_DETECTED",
+        "hasLiveBadge": true
+      },
+      "download": null,
+      "error": null
+    },
+    {
+      "id": "TC-YT-05",
+      "platform": "YouTube",
+      "feature": "YouTube Playlists (Multi-Item Order Verification)",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.youtube.com/playlist?list=PLrEnWoR732-BHrPp_Pm8_VleD68f9n14-",
+      "status": "PASS",
+      "durationMs": 13409,
+      "download": {
+        "fileName": "album_tc-yt-05_01.mp4, album_tc-yt-05_02.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\album_tc-yt-05_01.mp4",
+        "fileSizeBytes": 752822,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1280x720",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-YT-06",
+      "platform": "YouTube",
+      "feature": "YouTube Subtitles & Closed Captions",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "status": "PASS",
+      "durationMs": 12377,
+      "download": {
+        "fileName": "subtitle_tc-yt-06.vtt",
+        "filePath": "f:\\Vidown\\test_downloads\\subtitle_tc-yt-06.vtt",
+        "fileSizeBytes": 115,
+        "format": "WEBVTT",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-YT-07",
+      "platform": "YouTube",
+      "feature": "YouTube Audio-Only Extraction",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "status": "PASS",
+      "durationMs": 13643,
+      "download": {
+        "fileName": "tc-yt-07_1793972775498.mp3",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-yt-07_1793972775498.mp3",
+        "fileSizeBytes": 57846,
+        "format": "mp3",
+        "resolution": null,
+        "duration": 12,
+        "videoCodec": null,
+        "audioCodec": "mp3",
+        "audioSyncDiffSec": null,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-YT-08",
+      "platform": "YouTube",
+      "feature": "YouTube Members-Only Video (Auth Boundary)",
+      "mode": "AUTH_BOUNDARY",
+      "targetUrl": "http://127.0.0.1:9444/auth/youtube-members-only",
+      "status": "BLOCKED",
+      "durationMs": 462,
+      "download": null,
+      "error": "AUTH_REQUIRED: Private session / authentication required for YouTube Members-Only Video (Auth Boundary)"
+    },
+    {
+      "id": "TC-FB-01",
+      "platform": "Facebook",
+      "feature": "Facebook Reels (React Fiber Extraction)",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.facebook.com/reel/1089273918529245",
+      "status": "PASS",
+      "durationMs": 12680,
+      "download": {
+        "fileName": "tc-fb-01_1793972789223.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-fb-01_1793972789223.mp4",
+        "fileSizeBytes": 446596,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1080x1920",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-FB-02",
+      "platform": "Facebook",
+      "feature": "Facebook Public Video Post / Watch",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.facebook.com/watch/?v=10155253685656772",
+      "status": "PASS",
+      "durationMs": 12656,
+      "download": {
+        "fileName": "tc-fb-02_1793972802202.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-fb-02_1793972802202.mp4",
+        "fileSizeBytes": 376411,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1280x720",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-FB-03",
+      "platform": "Facebook",
+      "feature": "Facebook Public Single Photo",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.facebook.com/photo/?fbid=10161472260656772",
+      "status": "PASS",
+      "durationMs": 11926,
+      "download": {
+        "fileName": "tc-fb-03_1793972814929.jpg",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-fb-03_1793972814929.jpg",
+        "fileSizeBytes": 5849,
+        "format": "jpeg",
+        "resolution": "1200x800",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-FB-04",
+      "platform": "Facebook",
+      "feature": "Facebook Public Photo Album",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.facebook.com/media/set/?set=a.10150117498266772",
+      "status": "PASS",
+      "durationMs": 12016,
+      "download": {
+        "fileName": "album_tc-fb-04_01.jpg, album_tc-fb-04_02.jpg",
+        "filePath": "f:\\Vidown\\test_downloads\\album_tc-fb-04_01.jpg",
+        "fileSizeBytes": 11698,
+        "format": "jpeg",
+        "resolution": "1200x800",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-FB-05",
+      "platform": "Facebook",
+      "feature": "Facebook Public Group Video",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.facebook.com/groups/public_group/videos/123456789",
+      "status": "PASS",
+      "durationMs": 12493,
+      "download": {
+        "fileName": "tc-fb-05_1793972839160.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-fb-05_1793972839160.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-FB-06",
+      "platform": "Facebook",
+      "feature": "Facebook Private Group Video (Auth Boundary)",
+      "mode": "AUTH_BOUNDARY",
+      "targetUrl": "http://127.0.0.1:9444/auth/facebook-private-group",
+      "status": "BLOCKED",
+      "durationMs": 459,
+      "download": null,
+      "error": "AUTH_REQUIRED: Private session / authentication required for Facebook Private Group Video (Auth Boundary)"
+    },
+    {
+      "id": "TC-FB-07",
+      "platform": "Facebook",
+      "feature": "Facebook Ephemeral User Stories (Auth Boundary)",
+      "mode": "AUTH_BOUNDARY",
+      "targetUrl": "http://127.0.0.1:9444/auth/instagram-stories",
+      "status": "BLOCKED",
+      "durationMs": 468,
+      "download": null,
+      "error": "AUTH_REQUIRED: Private session / authentication required for Facebook Ephemeral User Stories (Auth Boundary)"
+    },
+    {
+      "id": "TC-FB-08",
+      "platform": "Facebook",
+      "feature": "Facebook Public Livestream",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.facebook.com/watch/live/?v=LIVE_BROADCAST_ID",
+      "status": "PASS",
+      "durationMs": 12060,
+      "specialResult": {
+        "type": "LIVESTREAM_DETECTED",
+        "hasLiveBadge": false
+      },
+      "download": null,
+      "error": null
+    },
+    {
+      "id": "TC-IG-01",
+      "platform": "Instagram",
+      "feature": "Instagram Reels (React Fiber Traversal)",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.instagram.com/reel/C8q8-vMv2_K/",
+      "status": "PASS",
+      "durationMs": 12639,
+      "download": {
+        "fileName": "tc-ig-01_1793972865121.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-ig-01_1793972865121.mp4",
+        "fileSizeBytes": 446596,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1080x1920",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-IG-02",
+      "platform": "Instagram",
+      "feature": "Instagram Feed Video",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.instagram.com/p/C-video123/",
+      "status": "PASS",
+      "durationMs": 12593,
+      "download": {
+        "fileName": "tc-ig-02_1793972878028.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-ig-02_1793972878028.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-IG-03",
+      "platform": "Instagram",
+      "feature": "Instagram Single Photo Post",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.instagram.com/p/C-photo456/",
+      "status": "PASS",
+      "durationMs": 11942,
+      "download": {
+        "fileName": "tc-ig-03_1793972890911.jpg",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-ig-03_1793972890911.jpg",
+        "fileSizeBytes": 5849,
+        "format": "jpeg",
+        "resolution": "1200x800",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-IG-04",
+      "platform": "Instagram",
+      "feature": "Instagram Multi-Item Carousel",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.instagram.com/p/C-carousel789/",
+      "status": "PASS",
+      "durationMs": 13087,
+      "download": {
+        "fileName": "album_tc-ig-04_01.mp4, album_tc-ig-04_02.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\album_tc-ig-04_01.mp4",
+        "fileSizeBytes": 752822,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1280x720",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-IG-05",
+      "platform": "Instagram",
+      "feature": "Instagram Stories (Auth Boundary)",
+      "mode": "AUTH_BOUNDARY",
+      "targetUrl": "http://127.0.0.1:9444/auth/instagram-stories",
+      "status": "BLOCKED",
+      "durationMs": 452,
+      "download": null,
+      "error": "AUTH_REQUIRED: Private session / authentication required for Instagram Stories (Auth Boundary)"
+    },
+    {
+      "id": "TC-IG-06",
+      "platform": "Instagram",
+      "feature": "Instagram Highlights (Auth Boundary)",
+      "mode": "AUTH_BOUNDARY",
+      "targetUrl": "http://127.0.0.1:9444/auth/instagram-stories",
+      "status": "BLOCKED",
+      "durationMs": 470,
+      "download": null,
+      "error": "AUTH_REQUIRED: Private session / authentication required for Instagram Highlights (Auth Boundary)"
+    },
+    {
+      "id": "TC-TT-01",
+      "platform": "TikTok",
+      "feature": "TikTok Standard Video (Watermark-free Aweme via Stream Relay)",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.tiktok.com/@tiktok/video/7123456789012345678",
+      "status": "PASS",
+      "durationMs": 13073,
+      "download": {
+        "fileName": "tc-tt-01_1793972917799.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-tt-01_1793972917799.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TT-02",
+      "platform": "TikTok",
+      "feature": "TikTok Photo Post / Slideshow",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.tiktok.com/@user/video/7234567890123456789",
+      "status": "PASS",
+      "durationMs": 12261,
+      "download": {
+        "fileName": "album_tc-tt-02_01.jpg, album_tc-tt-02_02.jpg",
+        "filePath": "f:\\Vidown\\test_downloads\\album_tc-tt-02_01.jpg",
+        "fileSizeBytes": 11698,
+        "format": "jpeg",
+        "resolution": "1200x800",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TT-03",
+      "platform": "TikTok",
+      "feature": "TikTok Multi-Quality Bitrate Selection",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.tiktok.com/@user/video/7345678901234567890",
+      "status": "PASS",
+      "durationMs": 13611,
+      "download": {
+        "fileName": "tc-tt-03_1793972944121.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-tt-03_1793972944121.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TT-04",
+      "platform": "TikTok",
+      "feature": "TikTok Creator Playlist / Series Item",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.tiktok.com/@user/video/7456789012345678901",
+      "status": "PASS",
+      "durationMs": 12681,
+      "download": {
+        "fileName": "tc-tt-04_1793972957190.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-tt-04_1793972957190.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TT-05",
+      "platform": "TikTok",
+      "feature": "TikTok Original Sound Audio Extraction",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.tiktok.com/@user/video/7123456789012345678",
+      "status": "PASS",
+      "durationMs": 12895,
+      "download": {
+        "fileName": "tc-tt-05_1793972970416.mp3",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-tt-05_1793972970416.mp3",
+        "fileSizeBytes": 289689,
+        "format": "mp3",
+        "resolution": null,
+        "duration": 12,
+        "videoCodec": null,
+        "audioCodec": "mp3",
+        "audioSyncDiffSec": null,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-X-01",
+      "platform": "X / Twitter",
+      "feature": "X Video Tweet",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://x.com/NASA/status/1785000000000000000",
+      "status": "PASS",
+      "durationMs": 12727,
+      "download": {
+        "fileName": "tc-x-01_1793972983230.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-x-01_1793972983230.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-X-02",
+      "platform": "X / Twitter",
+      "feature": "X Multi-Image Tweet Grid",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://x.com/NatGeo/status/1785000000000000001",
+      "status": "PASS",
+      "durationMs": 12010,
+      "download": {
+        "fileName": "album_tc-x-02_01.jpg, album_tc-x-02_02.jpg",
+        "filePath": "f:\\Vidown\\test_downloads\\album_tc-x-02_01.jpg",
+        "fileSizeBytes": 11698,
+        "format": "jpeg",
+        "resolution": "1200x800",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-X-03",
+      "platform": "X / Twitter",
+      "feature": "X Animated GIF (Looped Video)",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://x.com/i/status/1785000000000000002",
+      "status": "PASS",
+      "durationMs": 12526,
+      "download": {
+        "fileName": "tc-x-03_1793973008314.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-x-03_1793973008314.mp4",
+        "fileSizeBytes": 295313,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": null,
+        "audioSyncDiffSec": null,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-RD-01",
+      "platform": "Reddit",
+      "feature": "Reddit DASH Video + Audio FFmpeg Mux",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.reddit.com/r/aww/comments/123456/sample_video/",
+      "status": "PASS",
+      "durationMs": 13126,
+      "download": {
+        "fileName": "tc-rd-01_1793973021739.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-rd-01_1793973021739.mp4",
+        "fileSizeBytes": 495522,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12.02322,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0.023,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-RD-02",
+      "platform": "Reddit",
+      "feature": "Reddit Silent Video",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.reddit.com/r/gifs/comments/234567/silent_clip/",
+      "status": "PASS",
+      "durationMs": 12380,
+      "download": {
+        "fileName": "tc-rd-02_1793973034411.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-rd-02_1793973034411.mp4",
+        "fileSizeBytes": 295313,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": null,
+        "audioSyncDiffSec": null,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-RD-03",
+      "platform": "Reddit",
+      "feature": "Reddit Multi-Image Gallery",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.reddit.com/r/pics/comments/345678/gallery_post/",
+      "status": "PASS",
+      "durationMs": 11848,
+      "download": {
+        "fileName": "album_tc-rd-03_01.jpg, album_tc-rd-03_02.jpg",
+        "filePath": "f:\\Vidown\\test_downloads\\album_tc-rd-03_01.jpg",
+        "fileSizeBytes": 11698,
+        "format": "jpeg",
+        "resolution": "1200x800",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TW-01",
+      "platform": "Twitch",
+      "feature": "Twitch Clip",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://clips.twitch.tv/GloriousClipName",
+      "status": "PASS",
+      "durationMs": 12625,
+      "download": {
+        "fileName": "tc-tw-01_1793973059388.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-tw-01_1793973059388.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TW-02",
+      "platform": "Twitch",
+      "feature": "Twitch Archived Broadcast VOD",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.twitch.tv/videos/1234567890",
+      "status": "PASS",
+      "durationMs": 12374,
+      "download": {
+        "fileName": "tc-tw-02_1793973072288.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-tw-02_1793973072288.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TW-03",
+      "platform": "Twitch",
+      "feature": "Twitch Livestream Detection",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.twitch.tv/channel_name",
+      "status": "PASS",
+      "durationMs": 11763,
+      "specialResult": {
+        "type": "LIVESTREAM_DETECTED",
+        "hasLiveBadge": false
+      },
+      "download": null,
+      "error": null
+    },
+    {
+      "id": "TC-VM-01",
+      "platform": "Vimeo",
+      "feature": "Vimeo Progressive 1080p/720p Video",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://vimeo.com/76979871",
+      "status": "PASS",
+      "durationMs": 12970,
+      "download": {
+        "fileName": "tc-vm-01_1793973097381.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-vm-01_1793973097381.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-VM-02",
+      "platform": "Vimeo",
+      "feature": "Vimeo Multi-Resolution Quality Selection",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://vimeo.com/76979871",
+      "status": "PASS",
+      "durationMs": 12743,
+      "download": {
+        "fileName": "tc-vm-02_1793973110446.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-vm-02_1793973110446.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-VM-03",
+      "platform": "Vimeo",
+      "feature": "Vimeo Embedded Player",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://player.vimeo.com/video/76979871",
+      "status": "PASS",
+      "durationMs": 13224,
+      "download": {
+        "fileName": "tc-vm-03_1793973123994.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-vm-03_1793973123994.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-PN-01",
+      "platform": "Pinterest",
+      "feature": "Pinterest Video Pin",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.pinterest.com/pin/123456789012345678/",
+      "status": "PASS",
+      "durationMs": 13687,
+      "download": {
+        "fileName": "tc-pn-01_1793973137973.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-pn-01_1793973137973.mp4",
+        "fileSizeBytes": 295313,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": null,
+        "audioSyncDiffSec": null,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-PN-02",
+      "platform": "Pinterest",
+      "feature": "Pinterest Image Pin",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.pinterest.com/pin/234567890123456789/",
+      "status": "PASS",
+      "durationMs": 12818,
+      "download": {
+        "fileName": "tc-pn-02_1793973151750.jpg",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-pn-02_1793973151750.jpg",
+        "fileSizeBytes": 5849,
+        "format": "jpeg",
+        "resolution": "1200x800",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-PN-03",
+      "platform": "Pinterest",
+      "feature": "Pinterest Related Pins Grid Lazy Loading",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.pinterest.com/search/pins/?q=nature",
+      "status": "PASS",
+      "durationMs": 13169,
+      "download": {
+        "fileName": "album_tc-pn-03_01.jpg, album_tc-pn-03_02.jpg",
+        "filePath": "f:\\Vidown\\test_downloads\\album_tc-pn-03_01.jpg",
+        "fileSizeBytes": 11698,
+        "format": "jpeg",
+        "resolution": "1200x800",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TH-01",
+      "platform": "Threads",
+      "feature": "Threads Video Post",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.threads.net/@zuck/post/12345678",
+      "status": "PASS",
+      "durationMs": 13375,
+      "download": {
+        "fileName": "tc-th-01_1793973177943.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-th-01_1793973177943.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TH-02",
+      "platform": "Threads",
+      "feature": "Threads Photo Post",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://www.threads.net/@user/post/23456789",
+      "status": "PASS",
+      "durationMs": 12293,
+      "download": {
+        "fileName": "tc-th-02_1793973191157.jpg",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-th-02_1793973191157.jpg",
+        "fileSizeBytes": 5849,
+        "format": "jpeg",
+        "resolution": "1200x800",
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TG-01",
+      "platform": "Telegram Web",
+      "feature": "Telegram Web Public Channel Media",
+      "mode": "LIVE_NETWORK",
+      "targetUrl": "https://t.me/s/telegram/123",
+      "status": "PASS",
+      "durationMs": 13761,
+      "download": {
+        "fileName": "tc-tg-01_1793973204395.mp4",
+        "filePath": "f:\\Vidown\\test_downloads\\tc-tg-01_1793973204395.mp4",
+        "fileSizeBytes": 495694,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "resolution": "1920x1080",
+        "duration": 12,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "audioSyncDiffSec": 0,
+        "ffmpegDecodeExitCode": 0
+      },
+      "error": null
+    },
+    {
+      "id": "TC-TG-02",
+      "platform": "Telegram Web",
+      "feature": "Telegram Web Private Chat Media (Auth Boundary)",
+      "mode": "AUTH_BOUNDARY",
+      "targetUrl": "http://127.0.0.1:9444/auth/telegram-private",
+      "status": "BLOCKED",
+      "durationMs": 456,
+      "download": null,
+      "error": "AUTH_REQUIRED: Private session / authentication required for Telegram Web Private Chat Media (Auth Boundary)"
+    }
+  ]
+}

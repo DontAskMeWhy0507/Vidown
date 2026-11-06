@@ -83,7 +83,15 @@ const EXCLUDED_DIRS = new Set([
   'core', // experimental Universal Media Core — unwired, excluded from build per release plan
   'native', // native messaging helper ships separately (host.js, installers, manifests)
   '.zcode', // local agent session data
-  'types'
+  'types',
+  'test_downloads', // E2E downloaded test media files
+  '.agents',        // agent session metadata and handoffs
+  '.tmp',
+  'tmp',
+  'temp',
+  '.cache',
+  'coverage',
+  '.nyc_output'
 ]);
 
 const EXCLUDED_EXTENSIONS = new Set([
@@ -91,7 +99,8 @@ const EXCLUDED_EXTENSIONS = new Set([
   '.bat',
   '.sh',
   '.cmd',
-  '.log'
+  '.log',
+  '.md' // Zero markdown files in release distribution
 ]);
 
 const EXCLUDED_FILES = new Set([
@@ -104,6 +113,7 @@ const EXCLUDED_FILES = new Set([
   'README.md',
   'CONTRIBUTING.md',
   'NOTICE.md',
+  'TEST_READY.md', // Verification marker
   // Disabled SERP/onboarding stubs (22-byte placeholders, zero references)
   'fb-scrapper.js',
   'gads-scrapper.js',
@@ -125,7 +135,7 @@ function shouldExclude(relPath) {
   const segments = normalized.split('/');
   const fileName = segments[segments.length - 1];
   const ext = path.extname(fileName).toLowerCase();
-  if (fileName.startsWith('.env') || fileName === 'audit_bundle.txt' || fileName === 'audit_report.txt' || fileName.endsWith('.bak') || fileName.endsWith('.tmp')) {
+  if (fileName.startsWith('.env') || fileName === 'audit_bundle.txt' || fileName === 'audit_report.txt' || fileName.endsWith('.bak') || fileName.endsWith('.tmp') || fileName.endsWith('.part')) {
     return true;
   }
 
@@ -134,9 +144,9 @@ function shouldExclude(relPath) {
     return true;
   }
 
-  // Check excluded directory names in path
+  // Check excluded directory names in path or hidden dirs
   for (const seg of segments.slice(0, -1)) {
-    if (EXCLUDED_DIRS.has(seg)) {
+    if (EXCLUDED_DIRS.has(seg) || seg.startsWith('.')) {
       return true;
     }
   }
@@ -161,8 +171,8 @@ function shouldExclude(relPath) {
     return true;
   }
 
-  // Check git files
-  if (fileName.startsWith('.git')) {
+  // Check hidden files
+  if (fileName.startsWith('.')) {
     return true;
   }
 
@@ -180,7 +190,7 @@ function collectFiles(dir, baseDir = ROOT_DIR) {
     if (entry.isDirectory()) {
       const normalizedRel = relPath.replace(/\\/g, '/');
       const dirName = entry.name;
-      if (EXCLUDED_DIRS.has(dirName) || normalizedRel === 'native/bin') {
+      if (EXCLUDED_DIRS.has(dirName) || dirName.startsWith('.') || normalizedRel === 'native/bin') {
         continue;
       }
       fileList = fileList.concat(collectFiles(fullPath, baseDir));
@@ -362,7 +372,7 @@ function validateZip(zipPath) {
     if (EXCLUDED_EXTENSIONS.has(ext)) {
       throw new Error(`Packaging validation failed: forbidden file found in zip: ${entry}`);
     }
-    if (entry.startsWith('native/bin/') || entry.startsWith('tests/') || entry.startsWith('docs/')) {
+    if (entry.startsWith('native/bin/') || entry.startsWith('tests/') || entry.startsWith('docs/') || entry.startsWith('test_downloads/') || entry.startsWith('.agents/')) {
       throw new Error(`Packaging validation failed: forbidden directory in zip: ${entry}`);
     }
     if (entry === 'popup.html' || entry === 'popup.js') {
@@ -385,6 +395,20 @@ function validateZip(zipPath) {
 console.log(`Packaging VidManager Extension v${version} for Chrome Web Store...`);
 const filesToPackage = collectFiles(ROOT_DIR);
 console.log(`Collected ${filesToPackage.length} clean extension files.`);
+
+// Materialize unpacked extension directory in dist/unpacked/
+const UNPACKED_DIR = path.join(DIST_DIR, 'unpacked');
+if (fs.existsSync(UNPACKED_DIR)) {
+  fs.rmSync(UNPACKED_DIR, { recursive: true, force: true });
+}
+fs.mkdirSync(UNPACKED_DIR, { recursive: true });
+
+for (const file of filesToPackage) {
+  const destPath = path.join(UNPACKED_DIR, file.relPath);
+  fs.mkdirSync(path.dirname(destPath), { recursive: true });
+  fs.copyFileSync(file.fullPath, destPath);
+}
+console.log(`Successfully generated unpacked extension directory: ${path.relative(ROOT_DIR, UNPACKED_DIR)} (${filesToPackage.length} files);`);
 
 // A previous zip may be held open by Explorer/7-Zip/antivirus (EBUSY on write).
 // Clear it when possible; if it stays locked, fall back to a standby name so

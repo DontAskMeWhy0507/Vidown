@@ -1518,6 +1518,19 @@ export default function(module, exports, require) {
                     step.n = 14;
                     break;
                   }
+                  if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
+                    var sniffed = window.__saviorSniffedMedia.find(function(m) {
+                      return m && m.url && (m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4"));
+                    }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
+                    if (sniffed && sniffed.url) {
+                      var fallbackMedia = urlUtils.f(sniffed.url);
+                      fallbackMedia.filename = sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || document.title;
+                      fallbackMedia.ext = "mp4";
+                      fallbackMedia.exts = ["mp4"];
+                      fallbackMedia.type = "video";
+                      return step.a(2, [fallbackMedia]);
+                    }
+                  }
                   return step.a(2, []);
                 case 14:
                   return step.a(2, targetUrl);

@@ -309,7 +309,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   ,
   shouldWidgetAttachToParentNode: param_t => "IMG" === param_t.tagName,
   getImageNode: param_t => Object(dep_dom_helper.l)(param_t) &&
-  param_t.closest("._aagu") ? param_t : null,
+  (param_t.closest("._aagu") || param_t.closest("article") || param_t.closest('div[class*="_aag"]') || param_t.closest('[role="presentation"]') || param_t.closest('[role="dialog"]') || (param_t.src && (param_t.src.includes("cdninstagram.com") || param_t.src.includes("fbcdn.net")))) ? param_t : null,
   shouldShowWidgetForImage: () => !0,
   parse: {
   sources: [{
