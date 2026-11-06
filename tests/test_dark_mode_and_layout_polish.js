@@ -18,6 +18,7 @@ assert.ok(dlCss.includes('.top-nav'), 'downloads.css dark mode must style .top-n
 // 2. popup.css supports prefers-color-scheme: dark and wraps .card-meta
 assert.ok(popupCss.includes('@media (prefers-color-scheme: dark)'), 'popup.css must support dark mode');
 assert.ok(/\.card-meta\s*\{[^}]*flex-wrap:\s*wrap/.test(popupCss), '.card-meta must wrap to prevent overflow');
+assert.ok(!/body\s*\{[^}]*#f8fafc/.test(popupCss), 'popup.css body must use var(--bg-main), not hardcoded #f8fafc');
 
 // 3. content-script.css removes Microsoft CDN @font-face and widens .download-box
 assert.ok(!contentCss.includes('c.s-microsoft.com'), 'content-script.css must not load fonts from c.s-microsoft.com');
