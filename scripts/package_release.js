@@ -16,6 +16,7 @@
  *  - package*.json
  *  - scripts/
  *  - Orphan root popup.html, popup.js
+ *  - common.js, README.md, CONTRIBUTING.md, NOTICE.md, types/, audit_bundle.txt
  * 
  * Verifications:
  *  - Zero executables (.exe, .bat, .sh, .cmd)
@@ -27,6 +28,7 @@
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
+const child_process = require('child_process');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const MANIFEST_PATH = path.join(ROOT_DIR, 'manifest.json');
@@ -39,9 +41,27 @@ if (!fs.existsSync(MANIFEST_PATH)) {
 }
 
 const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
-const version = manifest.version || '3.0.2';
+const version = manifest.version || '3.1.0';
 const ZIP_NAME = `savior-extension-v${version}.zip`;
 const ZIP_PATH = path.join(DIST_DIR, ZIP_NAME);
+
+// Ensure clean production bundles if sourcemaps are present
+function ensureCleanProductionBundles() {
+  const csPath = path.join(ROOT_DIR, 'content-script.js');
+  const bgPath = path.join(ROOT_DIR, 'background.js');
+  const mapRegex = /\/\/#\s*sourceMappingURL=/m;
+  const csHasMap = fs.existsSync(csPath) && mapRegex.test(fs.readFileSync(csPath, 'utf8'));
+  const bgHasMap = fs.existsSync(bgPath) && mapRegex.test(fs.readFileSync(bgPath, 'utf8'));
+
+  if (csHasMap || bgHasMap) {
+    console.log('Detected development sourcemap directive in content-script.js or background.js. Rebuilding production bundles...');
+    child_process.execFileSync(process.execPath, [path.join(ROOT_DIR, 'scripts', 'build_common.js')], { stdio: 'inherit' });
+    child_process.execFileSync(process.execPath, [path.join(ROOT_DIR, 'scripts', 'build_background.js')], { stdio: 'inherit' });
+    child_process.execFileSync(process.execPath, [path.join(ROOT_DIR, 'scripts', 'build_content_script.js')], { stdio: 'inherit' });
+    child_process.execFileSync(process.execPath, [path.join(ROOT_DIR, 'scripts', 'build_inject.js')], { stdio: 'inherit' });
+  }
+}
+ensureCleanProductionBundles();
 
 // Ensure dist directory exists
 if (!fs.existsSync(DIST_DIR)) {
@@ -62,7 +82,8 @@ const EXCLUDED_DIRS = new Set([
   'bin', // matches native/bin
   'core', // experimental Universal Media Core — unwired, excluded from build per release plan
   'native', // native messaging helper ships separately (host.js, installers, manifests)
-  '.zcode' // local agent session data
+  '.zcode', // local agent session data
+  'types'
 ]);
 
 const EXCLUDED_EXTENSIONS = new Set([
@@ -79,6 +100,10 @@ const EXCLUDED_FILES = new Set([
   '.gitignore',
   '.DS_Store',
   'Thumbs.db',
+  'common.js',
+  'README.md',
+  'CONTRIBUTING.md',
+  'NOTICE.md',
   // Disabled SERP/onboarding stubs (22-byte placeholders, zero references)
   'fb-scrapper.js',
   'gads-scrapper.js',
@@ -100,7 +125,7 @@ function shouldExclude(relPath) {
   const segments = normalized.split('/');
   const fileName = segments[segments.length - 1];
   const ext = path.extname(fileName).toLowerCase();
-  if (fileName.startsWith('.env') || fileName === 'audit_bundle.txt' || fileName.endsWith('.bak') || fileName.endsWith('.tmp')) {
+  if (fileName.startsWith('.env') || fileName === 'audit_bundle.txt' || fileName === 'audit_report.txt' || fileName.endsWith('.bak') || fileName.endsWith('.tmp')) {
     return true;
   }
 
@@ -169,16 +194,26 @@ function collectFiles(dir, baseDir = ROOT_DIR) {
     }
   }
 
+  fileList.sort((a, b) => a.relPath.localeCompare(b.relPath));
   return fileList;
 }
 
-function dosDateTime(d = new Date()) {
-  const year = d.getFullYear();
-  const month = d.getMonth() + 1;
-  const day = d.getDate();
-  const hours = d.getHours();
-  const minutes = d.getMinutes();
-  const seconds = Math.floor(d.getSeconds() / 2);
+function dosDateTime(d) {
+  let dateObj;
+  if (process.env.SOURCE_DATE_EPOCH) {
+    dateObj = new Date(parseInt(process.env.SOURCE_DATE_EPOCH, 10) * 1000);
+  } else if (d instanceof Date) {
+    dateObj = d;
+  } else {
+    // Deterministic timestamp: 1980-01-01 00:00:00 UTC
+    dateObj = new Date(Date.UTC(1980, 0, 1, 0, 0, 0));
+  }
+  const year = dateObj.getUTCFullYear();
+  const month = dateObj.getUTCMonth() + 1;
+  const day = dateObj.getUTCDate();
+  const hours = dateObj.getUTCHours();
+  const minutes = dateObj.getUTCMinutes();
+  const seconds = Math.floor(dateObj.getUTCSeconds() / 2);
 
   const time = (hours << 11) | (minutes << 5) | seconds;
   const date = ((year - 1980) << 9) | (month << 5) | day;

@@ -3,6 +3,10 @@
   "version": "3.1.0",
   "description": "VidManager Media Downloader Extension",
   "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "build:common": "node scripts/build_common.js",
     "build:background": "node scripts/build_background.js",
@@ -11,6 +15,7 @@
     "build:dev": "node scripts/build_common.js --dev && node scripts/build_background.js --dev && node scripts/build_content_script.js --dev && node scripts/build_inject.js",
     "build": "npm run build:common && npm run build:background && npm run build:content && npm run build:inject && npm run package",
     "test": "node scripts/test_runner.js",
+    "sync:integrity": "node scripts/sync_module_integrity.js",
     "package": "node scripts/package_release.js"
   },
   "devDependencies": {

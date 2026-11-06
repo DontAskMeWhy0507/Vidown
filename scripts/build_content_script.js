@@ -7,7 +7,7 @@
  * 1. Reads the CSS prefetcher header from src/content/entry/index.js.
  * 2. Assembles the 776-slot module array mapped via src/content/module-registry.js.
  * 3. Wraps the module array into the classic Webpack IIFE bootstrap (entry module 543).
- * 4. Compiles using esbuild (supports --dev for unminified output + sourcemaps).
+ * 4. Compiles using esbuild (supports --dev for unminified output + per-module indexed sourcemaps).
  */
 
 const fs = require('fs');
@@ -31,59 +31,136 @@ if (section2Idx === -1) {
 }
 const prefetcherCode = entrySource.slice(0, section2Idx).trim();
 
-// 2. Read each module
-const slotCodes = [];
-const regenPattern = /function\s+([a-zA-Z0-9_$]+)\s*\(\)\s*\{\s*\/\*!\s*regenerator-runtime[\s\S]*?\(\s*\1\s*=\s*function\s*\(\)\s*\{\s*return\s*\{\s*w:\s*[a-zA-Z0-9_$]+\s*,\s*m:\s*[a-zA-Z0-9_$]+\s*\}\s*;?\s*\}\s*\)\s*\(\s*\)\s*;?\s*\}/g;
-let deduplicatedRegenCount = 0;
-
-for (let i = 0; i < 776; i++) {
-  if (!registry.modules[i]) {
-    slotCodes.push('null');
-  } else {
-    const p = path.join(CONTENT_DIR, registry.modules[i]);
-    let c = fs.readFileSync(p, 'utf8');
-    c = c.replace(/^export default\s+/m, '').replace(/^module\.exports\s*=\s*/m, '').trim();
-    if (c.endsWith(';')) c = c.slice(0, -1);
-    if (regenPattern.test(c)) {
-      c = c.replace(regenPattern, 'var $1 = _saviorRegen;');
-      deduplicatedRegenCount++;
-    }
-    slotCodes.push(c);
-  }
-}
-console.log(`Deduplicated inlined regenerator-runtime in ${deduplicatedRegenCount} modules.`);
-
-const arrayCode = '[' + slotCodes.join(',') + ']';
-
-// 3. Webpack bootstrap with canonical shared regenerator-core
+// Shared canonical regenerator-core
 const regenCorePath = path.join(CONTENT_DIR, 'vendor', 'regenerator-core.js');
 const regenCoreCode = fs.readFileSync(regenCorePath, 'utf8').replace('module.exports =', 'return');
 const sharedRegenDeclaration = `var _saviorRegen = (function(){${regenCoreCode}})();`;
 
-const bootstrap = `${sharedRegenDeclaration}\n!function(t){var e={};function r(n){if(e[n])return e[n].exports;var i=e[n]={i:n,l:!1,exports:{}};return t[n].call(i.exports,i,i.exports,r),i.l=!0,i.exports}r.m=t,r.c=e,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)r.d(n,i,function(e){return t[e]}.bind(null,i));return n},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="./",r(r.s=543)}(${arrayCode});`;
+const regenPattern = /function\s+([a-zA-Z0-9_$]+)\s*\(\)\s*\{\s*\/\*!\s*regenerator-runtime[\s\S]*?\(\s*\1\s*=\s*function\s*\(\)\s*\{\s*return\s*\{\s*w:\s*[a-zA-Z0-9_$]+\s*,\s*m:\s*[a-zA-Z0-9_$]+\s*\}\s*;?\s*\}\s*\)\s*\(\s*\)\s*;?\s*\}/g;
 
-// 4. Transform using esbuild
-const minPrefetcher = esbuild.transformSync(prefetcherCode, {
-  target: 'chrome116',
-  sourcefile: 'src/content/entry/index.js',
-  minifyWhitespace: !isDev,
-  minifySyntax: false,
-  minifyIdentifiers: false,
-  sourcemap: isDev ? 'inline' : false,
-  legalComments: 'none'
-}).code;
+let finalCode;
 
-const minBootstrap = esbuild.transformSync(bootstrap, {
-  target: 'chrome116',
-  sourcefile: 'src/content/bootstrap.js',
-  minifyWhitespace: !isDev,
-  minifySyntax: !isDev,
-  minifyIdentifiers: false,
-  sourcemap: isDev ? 'inline' : false,
-  legalComments: 'none'
-}).code;
+if (isDev) {
+  const lines = [];
+  const sections = [];
 
-const finalCode = minPrefetcher + '\n' + minBootstrap;
+  // Prefetcher
+  const prefTrans = esbuild.transformSync(prefetcherCode, {
+    target: 'chrome116',
+    sourcefile: 'src/content/entry/index.js',
+    sourcemap: 'external',
+    minify: false,
+    legalComments: 'none'
+  });
+  sections.push({
+    offset: { line: lines.length, column: 0 },
+    map: JSON.parse(prefTrans.map)
+  });
+  lines.push(...prefTrans.code.trim().split('\n'));
+
+  // Shared regenerator runtime and Webpack bootstrap header
+  lines.push(sharedRegenDeclaration);
+  lines.push('!function(t){var e={};function r(n){if(e[n])return e[n].exports;var i=e[n]={i:n,l:!1,exports:{}};return t[n].call(i.exports,i,i.exports,r),i.l=!0,i.exports}r.m=t,r.c=e,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)r.d(n,i,function(e){return t[e]}.bind(null,i));return n},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="./",r(r.s=543)}([');
+
+  let deduplicatedRegenCount = 0;
+  for (let i = 0; i < 776; i++) {
+    const isLast = (i === 775);
+    if (!registry.modules[i]) {
+      lines.push('null' + (isLast ? '' : ','));
+    } else {
+      const relPath = registry.modules[i].replace(/\\/g, '/');
+      const p = path.join(CONTENT_DIR, relPath);
+      let c = fs.readFileSync(p, 'utf8');
+      c = c.replace(/^export default\s+/m, '').replace(/^module\.exports\s*=\s*/m, '').trim();
+      if (c.endsWith(';')) c = c.slice(0, -1);
+      if (regenPattern.test(c)) {
+        c = c.replace(regenPattern, 'var $1 = _saviorRegen;');
+        deduplicatedRegenCount++;
+      }
+
+      const res = esbuild.transformSync('(' + c + ')', {
+        sourcefile: 'src/content/' + relPath,
+        sourcemap: 'external',
+        target: 'chrome116'
+      });
+
+      let cleanCode = res.code.trim();
+      if (cleanCode.endsWith(';')) cleanCode = cleanCode.slice(0, -1);
+
+      const startLine = lines.length;
+      sections.push({
+        offset: { line: startLine, column: 0 },
+        map: JSON.parse(res.map)
+      });
+
+      const mLines = cleanCode.split('\n');
+      for (let m = 0; m < mLines.length; m++) {
+        const isLastLine = (m === mLines.length - 1);
+        lines.push(mLines[m] + (isLastLine && !isLast ? ',' : ''));
+      }
+    }
+  }
+  console.log(`Deduplicated inlined regenerator-runtime in ${deduplicatedRegenCount} modules.`);
+
+  lines.push(']);');
+  lines.push('');
+
+  const indexMap = {
+    version: 3,
+    file: 'content-script.js',
+    sections: sections
+  };
+  lines.push('//# sourceMappingURL=data:application/json;base64,' + Buffer.from(JSON.stringify(indexMap)).toString('base64'));
+
+  finalCode = lines.join('\n');
+} else {
+  // Read each module for production
+  const slotCodes = [];
+  let deduplicatedRegenCount = 0;
+
+  for (let i = 0; i < 776; i++) {
+    if (!registry.modules[i]) {
+      slotCodes.push('null');
+    } else {
+      const p = path.join(CONTENT_DIR, registry.modules[i]);
+      let c = fs.readFileSync(p, 'utf8');
+      c = c.replace(/^export default\s+/m, '').replace(/^module\.exports\s*=\s*/m, '').trim();
+      if (c.endsWith(';')) c = c.slice(0, -1);
+      if (regenPattern.test(c)) {
+        c = c.replace(regenPattern, 'var $1 = _saviorRegen;');
+        deduplicatedRegenCount++;
+      }
+      slotCodes.push(c);
+    }
+  }
+  console.log(`Deduplicated inlined regenerator-runtime in ${deduplicatedRegenCount} modules.`);
+
+  const arrayCode = '[' + slotCodes.join(',') + ']';
+  const bootstrap = `${sharedRegenDeclaration}\n!function(t){var e={};function r(n){if(e[n])return e[n].exports;var i=e[n]={i:n,l:!1,exports:{}};return t[n].call(i.exports,i,i.exports,r),i.l=!0,i.exports}r.m=t,r.c=e,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)r.d(n,i,function(e){return t[e]}.bind(null,i));return n},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="./",r(r.s=543)}(${arrayCode});`;
+
+  const minPrefetcher = esbuild.transformSync(prefetcherCode, {
+    target: 'chrome116',
+    sourcefile: 'src/content/entry/index.js',
+    minifyWhitespace: true,
+    minifySyntax: false,
+    minifyIdentifiers: false,
+    sourcemap: false,
+    legalComments: 'none'
+  }).code;
+
+  const minBootstrap = esbuild.transformSync(bootstrap, {
+    target: 'chrome116',
+    sourcefile: 'src/content/bootstrap.js',
+    minifyWhitespace: true,
+    minifySyntax: true,
+    minifyIdentifiers: false,
+    sourcemap: false,
+    legalComments: 'none'
+  }).code;
+
+  finalCode = minPrefetcher + '\n' + minBootstrap;
+}
+
 const outPath = path.join(ROOT_DIR, 'content-script.js');
 fs.writeFileSync(outPath, finalCode, 'utf8');
 

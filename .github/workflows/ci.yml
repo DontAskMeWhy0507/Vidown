@@ -26,29 +26,10 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build extension from sources
         run: npm run build
 
       - name: Run verification test suites
-        run: |
-          node -e "
-          const fs = require('fs');
-          const cp = require('child_process');
-          const files = fs.readdirSync('tests').filter(f => f.startsWith('test_') && f.endsWith('.js'));
-          let passed = 0, failed = 0;
-          for (const f of files) {
-            try {
-              cp.execSync('node tests/' + f, { stdio: 'pipe' });
-              passed++;
-            } catch (err) {
-              console.error('FAIL: ' + f);
-              if (err.stdout && err.stdout.length) console.error(err.stdout.toString());
-              if (err.stderr && err.stderr.length) console.error(err.stderr.toString());
-              failed++;
-            }
-          }
-          console.log('\nCI TEST SUMMARY: ' + passed + ' passed, ' + failed + ' failed.');
-          if (failed > 0) process.exit(1);
-          "
+        run: npm test

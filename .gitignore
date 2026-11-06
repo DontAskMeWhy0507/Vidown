@@ -5,9 +5,10 @@ native/host.exe
 *.log
 native/*.log
 .superpowers/
+docs/superpowers/
 .zcode/
 *.part
 node_modules/
 dist/unpacked_bg/
 dist/unpacked_cs/
-
+audit_bundle.txt
