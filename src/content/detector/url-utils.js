@@ -273,23 +273,39 @@ export default function(module, exports, require) {
   }
 
   function probeContentType(targetUrl) {
-    return asyncRunner(this, void 0, void 0, regeneratorCore().m(function generatorFn() {
-      var abortCtrl, fetchResponse, contentType;
-      return regeneratorCore().w(function iteratorStep(stepState) {
-        for (;;) switch (stepState.n) {
-          case 0:
-            abortCtrl = new AbortController();
-            stepState.n = 1;
-            return fetch(targetUrl, { signal: abortCtrl.signal });
-          case 1:
-            fetchResponse = stepState.v;
-            contentType = fetchResponse.headers.get("content-type");
-            abortCtrl.abort();
-            var typeSegments = contentType ? contentType.split("/") : void 0;
-            return stepState.a(2, typeSegments ? typeSegments[1] : void 0);
-        }
-      }, generatorFn);
-    }));
+    if (typeof targetUrl === "string") {
+      var match = targetUrl.match(/\.(jpg|jpeg|png|webp|gif|svg|avif)(?:\?|$)/i);
+      if (match) {
+        var ext = match[1].toLowerCase();
+        return Promise.resolve(ext === "jpeg" ? "jpg" : ext);
+      }
+    }
+    return new Promise(function(resolve) {
+      try {
+        var abortCtrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+        var timeout = setTimeout(function() {
+          if (abortCtrl) {
+            try { abortCtrl.abort(); } catch (_) {}
+          }
+          resolve("jpg");
+        }, 1500);
+
+        fetch(targetUrl, { method: "HEAD", signal: abortCtrl ? abortCtrl.signal : undefined })
+          .then(function(res) {
+            clearTimeout(timeout);
+            var ct = res.headers.get("content-type");
+            var parts = ct ? ct.split("/") : null;
+            var foundExt = parts && parts[1] ? parts[1].split(";")[0].trim().toLowerCase() : "jpg";
+            resolve(foundExt === "jpeg" ? "jpg" : foundExt);
+          })
+          .catch(function() {
+            clearTimeout(timeout);
+            resolve("jpg");
+          });
+      } catch (_) {
+        resolve("jpg");
+      }
+    });
   }
 
   function buildUrlWithQuery(urlDescriptor) {

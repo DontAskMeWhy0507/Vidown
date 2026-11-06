@@ -13,8 +13,8 @@
   },
   "3": {
     "path": "detector/url-utils.js",
-    "sha256": "1c1cf529f6b44671c150834844c6cc9dc11cd0691613953b879af099ce00a390",
-    "size": 16295,
+    "sha256": "544b52a8d53976a03d36931c1be303280bf8777fb24acb2a53c04c4c8be64f53",
+    "size": 16732,
     "fileSize": 16295
   },
   "4": {
@@ -37,8 +37,8 @@
   },
   "7": {
     "path": "widget/settings-manager.js",
-    "sha256": "dad49ef33bea0012f582870a724a39101febaf5a4151440bdac9597f32d13ced",
-    "size": 4851,
+    "sha256": "138fa9104e05d848b928b78f7b815d862c82eb3d71e031bbc1335117dde2fb5c",
+    "size": 10505,
     "fileSize": 4077
   },
   "8": {
@@ -2551,8 +2551,8 @@
   },
   "442": {
     "path": "platform/tiktok-douyin.js",
-    "sha256": "2d92a7a65b5db7249d10c21c3d7a9da6b3ae83b5be53eb10cd6093931d2ac127",
-    "size": 73688,
+    "sha256": "bd4c67284ad33b489fa9ef969796a84305af85e7fa774ccdd5588990e52dff88",
+    "size": 74758,
     "fileSize": 72792
   },
   "443": {
@@ -2911,8 +2911,8 @@
   },
   "541": {
     "path": "widget/widget-manager.js",
-    "sha256": "1d6fc54ee59d7ee967fbc40024b6ae0c8b92b5db9504c3dec0ed5132309478e9",
-    "size": 145228,
+    "sha256": "9b95c2eff3065781b30f183c775c6db19c780239ecc918e8cc23b45ca8842613",
+    "size": 149435,
     "fileSize": 139222
   },
   "543": {

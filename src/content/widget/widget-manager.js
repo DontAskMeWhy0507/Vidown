@@ -1389,8 +1389,55 @@ ${t2.text}`;
       return this.eventRegistry || (this.eventRegistry = /* @__PURE__ */ new Map()), this.eventRegistry;
     }
     render() {
-      var el, ev, r2 = { i18n_select_audio_channel_title: Object(coreUtils.i18n)("select_audio_channel_title"), media_list: (null === (el = this.state.renderDownloads[0]) || void 0 === el ? void 0 : el.media) || [], audio_channel: null === (ev = this.state.renderDownloads[0]) || void 0 === ev ? void 0 : ev.audio_channel }, nd = settingsManager.a.get("template-media") || "", opt = document.createElement("div");
-      opt.innerHTML = lodash.a.render(nd, r2), this.$el = opt.firstElementChild;
+      var el, ev, r2 = { i18n_select_audio_channel_title: Object(coreUtils.i18n)("select_audio_channel_title"), media_list: (null === (el = this.state.renderDownloads[0]) || void 0 === el ? void 0 : el.media) || [], audio_channel: null === (ev = this.state.renderDownloads[0]) || void 0 === ev ? void 0 : ev.audio_channel };
+      if ((!r2.media_list || !r2.media_list.length) && this.state.downloadScopes && this.state.downloadScopes[0] && this.state.downloadScopes[0].scopeDownloads && this.state.downloadScopes[0].scopeDownloads.length) {
+        var flatMedia = this.state.downloadScopes[0].scopeDownloads;
+        var groupMap = {};
+        flatMedia.forEach((item) => {
+          var t = item.type || "video";
+          if (!groupMap[t]) groupMap[t] = {
+            type: t,
+            i18n_type: Object(coreUtils.i18n)("media_fields_type_" + t) || t.toUpperCase(),
+            type_icon: "",
+            media: []
+          };
+          groupMap[t].media.push(item);
+        });
+        r2.media_list = Object.values(groupMap);
+      }
+      var nd = settingsManager.a.get("template-media") || "", opt = document.createElement("div");
+      try {
+        opt.innerHTML = lodash.a.render(nd, r2);
+        this.$el = opt.firstElementChild;
+      } catch (err) {
+        console.warn("[Savior] template-media render error:", err);
+      }
+      if (!this.$el) {
+        this.$el = document.createElement("panel");
+        this.$el.setAttribute("value", "media");
+        this.$el.className = "media-download-panel quality-selector-box";
+      }
+      if (!this.$el.querySelector(".extension-box, .quality-label") && r2.media_list && r2.media_list.length) {
+        r2.media_list.forEach((bucket) => {
+          var box = document.createElement("div");
+          box.className = "extension-box";
+          var lbl = document.createElement("div");
+          lbl.className = "extensions-label";
+          lbl.innerHTML = "<strong>" + (bucket.i18n_type || bucket.type || "VIDEO") + "</strong>";
+          box.appendChild(lbl);
+          (bucket.media || []).forEach((m) => {
+            var q = document.createElement("div");
+            q.id = "media_" + (m.id || Math.random().toString(36).slice(2));
+            q.setAttribute("data-id", m.id || "");
+            q.setAttribute("data-quality-value", (m.ext || "mp4") + "/" + (m.quality || "HD"));
+            q.className = "quality-label j-quality";
+            var resSpan = m.resolution ? '<span class="media-sub-info info-resolution">' + m.resolution + '</span>' : '';
+            q.innerHTML = '<strong class="media-name ' + (m.type || "video") + '">' + (m.i18n_quality || m.quality || "Default") + '</strong><p class="media-sub-wrap ' + (m.resolution ? "with-resolution" : "") + '">' + resSpan + '<span class="media-sub-info info-ext">.' + (m.ext || "mp4") + '</span></p>';
+            box.appendChild(q);
+          });
+          this.$el.appendChild(box);
+        });
+      }
     }
     _eventListener() {
       var el, ev, r2, nd, idx, opt, arg, s = this;
@@ -1622,7 +1669,9 @@ ${t2.text}`;
         var nd = this.parent, o = nd.getComponent("transferMobile"), a = Object(coreUtils.query)("#downloads", this.$el), st = Object(coreUtils.query)("dropdown-box", this.$el), u = Object(coreUtils.query)(".tooltip", this.$el), cfg = Object(coreUtils.query)("#downloads-media", this.$el);
         if (this.state.isGettingDownloads) null == a || a.setAttribute("data-panel", "loading");
         else if (this.state.downloads && this.state.downloads.length > 0) {
-          if (null == a || a.setAttribute("data-panel", "media"), (null === (ev = this.previousState) || void 0 === ev ? void 0 : ev.downloads) != this.state.downloads) {
+          null == a || a.setAttribute("data-panel", "media");
+          var needsMount = !this.selection || !this.selection.$el || !this.$el.contains(this.selection.$el) || ((null === (ev = this.previousState) || void 0 === ev ? void 0 : ev.downloads) != this.state.downloads);
+          if (needsMount) {
             this.selection && this.selection.destroy();
             var len = JSON.parse(JSON.stringify(this.state.downloads)), f = new QualityMenuDropdown(nd.EE, len, false, false, this.state.buttonClicked);
             f.setOnItemClick((t2, e2) => wt(this, void 0, void 0, mt().m((function r3() {
@@ -1639,8 +1688,19 @@ ${t2.text}`;
                     return r4.a(2);
                 }
               }), r3, this);
-            })))), f.setOnClose(this.close.bind(this)), this.selection = f, f.$el.id = "downloads-media", f.$el.setAttribute("id", "downloads-media"), null == cfg || cfg.replaceWith(f.$el);
-            var dom = f.state.renderDownloads.length;
+            })))), f.setOnClose(this.close.bind(this)), this.selection = f;
+            if (f.$el) {
+              f.$el.id = "downloads-media";
+              f.$el.setAttribute("id", "downloads-media");
+              if (cfg && this.$el.contains(cfg)) {
+                cfg.replaceWith(f.$el);
+              } else if (a) {
+                var oldMedia = Object(coreUtils.query)("panel[value='media']", a) || Object(coreUtils.query)("#downloads-media", a);
+                if (oldMedia) oldMedia.replaceWith(f.$el);
+                else a.appendChild(f.$el);
+              }
+            }
+            var dom = (f.state && f.state.renderDownloads) ? f.state.renderDownloads.length : 1;
             this.$el.setAttribute("data-media-count", dom + "");
           }
         } else null == a || a.setAttribute("data-panel", "no-media");
@@ -1703,8 +1763,21 @@ ${t2.text}`;
                   LazyMediaTracker.processRequest(window.__saviorSniffedMedia);
                   this.state.mediaObjects = enrichMediaMeta(window.__saviorSniffedMedia);
                 } else {
-                  l.n = 7;
-                  break;
+                  var directVideoTag = this.parent && this.parent.$node ? ("VIDEO" === this.parent.$node.tagName ? this.parent.$node : this.parent.$node.querySelector("video")) : null;
+                  if (directVideoTag && (directVideoTag.currentSrc || directVideoTag.src)) {
+                    var vSrc = directVideoTag.currentSrc || directVideoTag.src;
+                    var directMediaObj = [{
+                      url: vSrc,
+                      ext: "mp4",
+                      quality: "HD",
+                      resolution: (directVideoTag.videoWidth && directVideoTag.videoHeight) ? (directVideoTag.videoWidth + "x" + directVideoTag.videoHeight) : "720p",
+                      type: "video"
+                    }];
+                    this.state.mediaObjects = enrichMediaMeta(directMediaObj);
+                  } else {
+                    l.n = 7;
+                    break;
+                  }
                 }
               }
               if (detectorLogger.a.log("ButtonClicked", detectorLogger.a.BUTTON_FAKE_QUALITY), this.setState({ isGettingDownloads: true }), f = getMediaProvider(), !(null === (r2 = null == f ? void 0 : f.findItemRoot) || void 0 === r2 ? void 0 : r2.call(f, this.parent.$node)) || !f.resolveItemFromNode) {
@@ -1735,6 +1808,9 @@ ${t2.text}`;
               return l.n = 6, LazyMediaTracker.getDownloadsByMediaObjects(this.state.mediaObjects);
             case 6:
               g2 = (g2 = l.v).filter((t2) => Object(coreUtils.isValidData)(t2)), b2 = gt(g2);
+              if ((!g2 || !g2.length) && this.state.mediaObjects && this.state.mediaObjects.length) {
+                g2 = this.state.mediaObjects.filter((t2) => Object(coreUtils.isValidData)(t2));
+              }
               try {
                 for (b2.s(); !(w2 = b2.n()).done; ) A2 = w2.value, (null === (st = null === (arg = this.state.mediaObjects) || void 0 === arg ? void 0 : arg[0]) || void 0 === st ? void 0 : st.thumbnail) && (A2.thumbnail = null === (url = this.state.mediaObjects) || void 0 === url ? void 0 : url[0].thumbnail), Object(saviorConstants.B)(A2.ext) && ("audio" === A2.type ? A2.ext = "mp3" : "subtitles" === A2.type ? (_2 = (null === (cfg = A2.quality) || void 0 === cfg ? void 0 : cfg.split(".").pop()) || "srt", A2.ext = _2) : A2.ext = "mp4", A2.hasOwnProperty("_hls") || (A2._hls = true));
               } catch (t2) {
@@ -1756,6 +1832,8 @@ ${t2.text}`;
         this.setState({ opening: willOpen });
         if (willOpen && (!this.state.downloads || !this.state.downloads.length)) {
           this.fetchDownloads(t);
+        } else if (willOpen && this.state.downloads && this.state.downloads.length) {
+          this.render();
         }
       }
     }

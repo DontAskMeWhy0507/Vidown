@@ -593,13 +593,32 @@ export default function(module, exports, require) {
             }
             return step.a(2, parsedBitrates);
           case 4:
-            currentVid = getTikTokItemId(videoNode);
-            if (!currentVid || currentVid !== getCurrentTikTokVideoId()) {
-              step.n = 5;
-              break;
+            currentVid = getTikTokItemId(videoNode) || getCurrentTikTokVideoId();
+            if (currentVid) {
+              var scrapedData = scrapeUniversalDataById(currentVid, resolvedTitle || document.title);
+              if (scrapedData && scrapedData.length) {
+                return step.a(2, scrapedData);
+              }
             }
-            return step.a(2, scrapeUniversalDataById(currentVid, resolvedTitle || document.title));
+            step.n = 5;
+            break;
           case 5:
+            var directVideo = videoNode && "VIDEO" === videoNode.tagName ? videoNode : (itemRoot ? itemRoot.querySelector("video") : null);
+            var directSrc = directVideo ? (directVideo.currentSrc || directVideo.src) : null;
+            if (directSrc && typeof directSrc === "string" && directSrc.startsWith("http")) {
+              return step.a(2, [{
+                url: directSrc,
+                ext: "mp4",
+                quality: "HD",
+                resolution: (directVideo.videoWidth && directVideo.videoHeight) ? (directVideo.videoWidth + "x" + directVideo.videoHeight) : "720p",
+                type: "video",
+                title: resolvedTitle || document.title,
+                id: currentVid || ("tt_" + Date.now())
+              }]);
+            }
+            if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
+              return step.a(2, window.__saviorSniffedMedia);
+            }
             return step.a(2, []);
         }
       }, resolveGenerator);
