@@ -349,7 +349,7 @@ export default function(module, exports, require) {
                   if (payload.filename && payload.filename.match(/\.yt_srt$/i)) {
                     logger.a.log("Download", logger.a.DOWNLOAD_SUBTITLES);
                   }
-                  if ("subtitles" !== payload.type || ("m3u8" !== defaultRes.ext && !payload.hls)) {
+                  if ("subtitles" !== payload.type || ("m3u8" !== downloadItem.ext && !payload.hls)) {
                     ctx.n = 8;
                     break;
                   }
@@ -621,11 +621,11 @@ export default function(module, exports, require) {
               btnEl.setAttribute("disabled", "true");
             }
           });
-
-          for (var scopeI = 0; scopeI < this.state.downloadScopes.length; ++scopeI) {
-            this._sizeQueue.push({ scopeIndex: scopeI, index: this.state.downloadScopes[scopeI].index });
-          }
         });
+
+        for (var scopeI = 0; scopeI < this.state.downloadScopes.length; ++scopeI) {
+          this._sizeQueue.push({ scopeIndex: scopeI, index: this.state.downloadScopes[scopeI].index });
+        }
 
         if (this.isPopUp) {
           utils.query("#popup-closer", this.$el)?.addEventListener("click", () => {

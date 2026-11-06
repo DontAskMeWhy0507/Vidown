@@ -15,7 +15,7 @@ console.log('=== TEST SUITE: MEDIA DETECTION SPEED ===\n');
 
 const read = (p) => fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
 const cs = read('content-script.js');
-const nav = read('downloads-nav.js');
+const nav = read('stream-sniffer.js');
 
 // 1. Widget scrape: first run + interval at 1s (was 5s)
 assert.ok(

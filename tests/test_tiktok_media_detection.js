@@ -6,7 +6,7 @@ console.log('=== TEST SUITE: TIKTOK MEDIA DETECTION & VIDEO PLAYBACK LAG OPTIMIZ
 
 const tiktokSrc = fs.readFileSync(path.join(__dirname, '../src/content/platform/tiktok-douyin.js'), 'utf8');
 const tiktokInject = fs.readFileSync(path.join(__dirname, '../src/inject/tiktok/main-world.js'), 'utf8');
-const downloadsNav = fs.readFileSync(path.join(__dirname, '../downloads-nav.js'), 'utf8');
+const downloadsNav = fs.readFileSync(path.join(__dirname, '../stream-sniffer.js'), 'utf8');
 const contextGuard = fs.readFileSync(path.join(__dirname, '../context-guard.js'), 'utf8');
 const domScanner = fs.readFileSync(path.join(__dirname, '../src/content/detector/dom-scanner.js'), 'utf8');
 

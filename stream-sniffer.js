@@ -172,6 +172,7 @@
         scanDomMedia();
       }, { once: true });
     }
+    setTimeout(scanBufferedEntries, 1500);
     setTimeout(() => { scanBufferedEntries(); scanDomMedia(); }, 1000);
     setTimeout(() => { scanBufferedEntries(); scanDomMedia(); }, 2500);
     setTimeout(() => { scanBufferedEntries(); scanDomMedia(); }, 5000);

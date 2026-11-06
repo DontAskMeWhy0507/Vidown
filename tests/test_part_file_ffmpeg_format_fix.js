@@ -63,7 +63,7 @@ console.log('PASS: atomic .part → final rename helper present.');
 const nav = fs.readFileSync(path.join(__dirname, '..', 'downloads-nav.js'), 'utf8');
 assert.ok(nav.includes('e.composedPath'), 'downloads-nav must walk the composed path');
 assert.ok(nav.includes("'savior-host'"), 'downloads-nav must recognize the savior-host shadow root');
-assert.ok(nav.includes("node.id === 'other-feature'"), 'downloads-nav must find #other-feature inside shadow DOM');
+assert.ok(nav.includes("node.id === 'open-settings'"), 'downloads-nav must find #other-feature inside shadow DOM');
 console.log('PASS: ⋮ button click is detected through the widget shadow DOM.');
 
 // 7. Native probe guard must reset on disconnect (no permanent browser fallback)

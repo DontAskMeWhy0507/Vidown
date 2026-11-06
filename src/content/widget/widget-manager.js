@@ -767,6 +767,17 @@ export default function(module, exports, r) {
     }
     bind() {
       this.showWidget = this.showWidget.bind(this), this.hideWidget = this.hideWidget.bind(this), this.onFocused = this.onFocused.bind(this), this.onWidgetFocused = this.onWidgetFocused.bind(this), this.onMouseMove = this.onMouseMove.bind(this), this.onBlur = this.onBlur.bind(this), this.updateParent = this.updateParent.bind(this), this.debouncedUpdateParent = Object(coreUtils.debounce)(this.updateParent), this.debouncedLogShow = Object(coreUtils.debounce)(this.logShow), this.$parent = this.parent.$parent, this.isDismissed = this.parent.sharedState.isDismissed, this.isVertical = false, this.resizeObserver = new ResizeObserver((el) => el.forEach(() => this.debouncedUpdateParent())), this.resizeObserver.observe(this.parent.$node);
+      this.onWindowScroll = () => {
+        if (this.isDestroyed || this.isDismissed || !this.$el || this.$el.classList.contains("hidden")) return;
+        if (this._scrollRafId) return;
+        this._scrollRafId = requestAnimationFrame(() => {
+          this._scrollRafId = null;
+          if (!this.isDestroyed && this.$el && !this.$el.classList.contains("hidden")) {
+            this.updatePosition();
+          }
+        });
+      };
+      window.addEventListener("scroll", this.onWindowScroll, { passive: true, capture: true });
     }
     firstPaint(el) {
       this.$el = this.parent.$el;
@@ -775,6 +786,7 @@ export default function(module, exports, r) {
         return K().w((function(t3) {
           for (; ; ) switch (t3.n) {
             case 0:
+              if (this.parent && this.parent.$node) this.parent.$node.dataset.saviorDismissed = "true";
               this.hasImage ? detectorLogger.a.log("ButtonClickedWithImage", detectorLogger.a.BUTTON_HIDE_WITH_IMAGE) : detectorLogger.a.log("ButtonClicked", detectorLogger.a.BUTTON_HIDE), SaviorWidgetController.unmountCurrentWidget(), EE.emit("widget.toast.open", { message: Object(coreUtils.i18n)("widget_panel_hidden") }), this.destroy();
             case 1:
               return t3.a(2);
@@ -798,6 +810,13 @@ export default function(module, exports, r) {
     }
     destroy() {
       var el, ev, r2, nd, opt, arg;
+      if (this.onWindowScroll) {
+        window.removeEventListener("scroll", this.onWindowScroll, { capture: true });
+        if (this._scrollRafId) {
+          cancelAnimationFrame(this._scrollRafId);
+          this._scrollRafId = null;
+        }
+      }
       this.isDestroyed = true, clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), clearTimeout(this.mouseStayTimeout), this.parent && this.parent.$node && this.parent.$node !== this.$parent && (this.parent.$node.removeEventListener("mouseover", this.onFocused, true), this.parent.$node.removeEventListener("mousemove", this.onFocused, true), this.parent.$node.removeEventListener("mouseout", this.onBlur, true)), this.$parent && this.$el && (this.$parent.removeEventListener("mouseover", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.useCaptureOnMouseOver)), this.$parent.removeEventListener("mousemove", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.useCaptureOnMouseMove)), this.$el.removeEventListener("mouseover", this.onWidgetFocused), null === (ev = this.$parent) || void 0 === ev || ev.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseMove)), this.mouseMoveActive = false, this.$el.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (nd = this.parent.getSiteData()) || void 0 === nd ? void 0 : nd.useCaptureOnMouseMove)), this.$parent.removeEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseOut)), this.$el.removeEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.useCaptureOnMouseOut))), this.debouncedUpdateParent.destroy();
     }
     getSiteWidgetConfig() {
@@ -1719,7 +1738,21 @@ ${t2.text}`;
       var ev = t.message, r2 = t.closable, idx = void 0 !== r2 && r2, opt = t.duration, arg = void 0 === opt ? 2e3 : opt, st = t.onAttached, url = t.onDetached;
       this.message = ev, this.closable = idx, this.duration = arg, this.id = "toast_" + Date.now(), this.onAttached = st, this.onDetached = url;
       var cfg = Object(domHelper.a)("toast", "toast");
-      cfg.id = this.id, cfg.innerHTML = `<toast-message>${ev}</toast-message>${idx ? '<toast-closer><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.33333 15.5448L4.45514 14.6666L9.12181 9.99993L4.45514 5.33327L5.33333 4.45508L9.99999 9.12174L14.6667 4.45508L15.5448 5.33327L10.8782 9.99993L15.5448 14.6666L14.6667 15.5448L9.99999 10.8781L5.33333 15.5448Z" fill="currentColor"/></svg></toast-closer>' : ""}`, this.$el = cfg;
+      cfg.id = this.id;
+      var msgEl = document.createElement("toast-message");
+      if (typeof ev === "string" && /<[a-z][\s\S]*>/i.test(ev)) {
+        var sanitized = ev.replace(/<\/?(?:script|iframe|object|embed|svg|img|style|link|meta)[\s\S]*?>/gi, "");
+        msgEl.innerHTML = sanitized;
+      } else {
+        msgEl.textContent = String(ev == null ? "" : ev);
+      }
+      cfg.appendChild(msgEl);
+      if (idx) {
+        var closer = document.createElement("toast-closer");
+        closer.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.33333 15.5448L4.45514 14.6666L9.12181 9.99993L4.45514 5.33327L5.33333 4.45508L9.99999 9.12174L14.6667 4.45508L15.5448 5.33327L10.8782 9.99993L15.5448 14.6666L14.6667 15.5448L9.99999 10.8781L5.33333 15.5448Z" fill="currentColor"/></svg>';
+        cfg.appendChild(closer);
+      }
+      this.$el = cfg;
     }
     attach() {
       var el;
@@ -2002,7 +2035,12 @@ ${t2.text}`;
       if (urlMatcher.a.check(this.$node, "hide-widget")) return true;
       if (this.isImage && !(null === (ev = null === (el = this.getSiteData()) || void 0 === el ? void 0 : el.shouldShowWidgetForImage) || void 0 === ev ? void 0 : ev.call(el, this.$node))) return true;
       (!this.$parent || !this.$parent.isConnected) && (this.$parent = null !== (arg = null === (idx = null === (r2 = this.siteData) || void 0 === r2 ? void 0 : r2.getCustomParent) || void 0 === idx ? void 0 : idx.call(r2, this.$node)) && void 0 !== arg ? arg : Object(domHelper.d)(this.$node));
-      var msg = urlMatcher.a.shouldWidgetAttachToParentNode(location.hostname) || (null === (url = null === (st = this.getSiteData()) || void 0 === st ? void 0 : st.shouldWidgetAttachToParentNode) || void 0 === url ? void 0 : url.call(st, this.$node)) ? this.$parent : this.$node, y = msg.offsetWidth, g2 = false;
+      var msg = urlMatcher.a.shouldWidgetAttachToParentNode(location.hostname) || (null === (url = null === (st = this.getSiteData()) || void 0 === st ? void 0 : st.shouldWidgetAttachToParentNode) || void 0 === url ? void 0 : url.call(st, this.$node)) ? this.$parent : this.$node;
+      if ((msg.dataset && msg.dataset.saviorDismissed === "true") || (this.$node && this.$node.dataset && this.$node.dataset.saviorDismissed === "true")) return true;
+      if (document.pictureInPictureElement === msg || document.pictureInPictureElement === this.$node) return true;
+      var beh = this.getComponent("behavior");
+      if (beh) beh.isVertical = false;
+      var y = msg.offsetWidth, g2 = false;
       msg.offsetHeight > y && y < domConstants.b && (this.getComponent("behavior").isVertical = true, g2 = true);
       var b2 = this.$node;
       "none" == this.$parent.style.display && (b2 = this.$parent.parentElement || this.$parent);

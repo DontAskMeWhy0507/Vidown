@@ -60,6 +60,10 @@ export default function(module, exports, require) {
   var DEFAULT_WIDGET_WIDTH = 150;
 
   var PLATFORM_POSITION_RULES = [
+    { rx: /^https?:\/\/(www\.)?youtube.com\/shorts\//i, x: 16, y: 56 },
+    { rx: /^https?:\/\/(www\.)?tiktok.com\//i, x: 16, y: 56 },
+    { rx: /^https?:\/\/(www\.)?douyin\.com\//i, x: 16, y: 56 },
+    { rx: /^https?:\/\/(www\.)?instagram\.com\/(reels?|stories)\//i, x: 16, y: 56 },
     { rx: /(www\.)?facebook\.com\/reel/i, x: 48 },
     { rx: /(www\.)?facebook\.com\/stories/i, x: 50 },
     {

@@ -6,7 +6,7 @@ const vm = require('vm');
 console.log('=== TEST SUITE: FLOATING BAR DETECTION & GRAY BUTTON FIX ===\n');
 
 const cs = fs.readFileSync(path.join(__dirname, '../content-script.js'), 'utf8');
-const nav = fs.readFileSync(path.join(__dirname, '../downloads-nav.js'), 'utf8');
+const nav = fs.readFileSync(path.join(__dirname, '../stream-sniffer.js'), 'utf8');
 const bg = fs.readFileSync(path.join(__dirname, '../background.chrome.js'), 'utf8');
 
 // 1. Verify downloads-nav.js Performance sniffer emits to window.EE and caches on window.__saviorSniffedMedia

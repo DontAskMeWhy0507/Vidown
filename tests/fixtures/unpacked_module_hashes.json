@@ -115,8 +115,8 @@
   },
   "21": {
     "path": "widget/dom-constants.js",
-    "sha256": "3110495e11f08c1abcde31fc5352bb2b1ab3c8446ef13c9f994c0df82c0e69ef",
-    "size": 3938,
+    "sha256": "49ef7fafbb8660d93abc3b06892cec299f296e8cd92bb478f69563a35de0e688",
+    "size": 4222,
     "fileSize": 3938
   },
   "22": {
@@ -931,8 +931,8 @@
   },
   "164": {
     "path": "widget/download-list.js",
-    "sha256": "17463441d95a9f77022fef2da212403c773866fb7bb88610a75d43f2ba66585c",
-    "size": 34545,
+    "sha256": "e05d0c0655422778333b535f2ea42170885532858b34c18282d1230c6ac6d9a8",
+    "size": 34541,
     "fileSize": 34545
   },
   "165": {
@@ -2911,8 +2911,8 @@
   },
   "541": {
     "path": "widget/widget-manager.js",
-    "sha256": "a31f759114b9c2ff8709ea677cf69d660c847347b15e2ac5fcd1042e1642a8a6",
-    "size": 141418,
+    "sha256": "53722a956910ac1d3e4e6f4b5e79f924020595c5ebdd35c5c10b802f825931b1",
+    "size": 143133,
     "fileSize": 139222
   },
   "543": {
