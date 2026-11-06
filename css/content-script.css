@@ -1719,7 +1719,7 @@ button.play-now-btn:active {
   transition: opacity 0.15s ease;
   visibility: visible;
   opacity: 1;
-  padding-bottom: 4px;
+  padding-bottom: 0;
 }
 .widget-attach {
   display: flex;

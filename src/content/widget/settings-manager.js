@@ -66,10 +66,21 @@ export default function(module, exports, require) {
       var self = this;
       return new Promise(resolve => {
         self._storage.get(null, storedValues => {
-          self._options = storedValues;
+          self._options = storedValues || {};
           self.loaded = true;
           self._migratePreferredQualityLevel();
-          resolve(storedValues);
+          if (!self._options["template-widget"] && typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.sendMessage) {
+            try {
+              chrome.runtime.sendMessage({ action: "requestDefaultTemplates" }, res => {
+                if (res && res.templates) {
+                  Object.assign(self._options, res.templates);
+                }
+                resolve(self._options);
+              });
+              return;
+            } catch (_) {}
+          }
+          resolve(self._options);
         });
       });
     }
@@ -96,7 +107,7 @@ export default function(module, exports, require) {
           : this._options.onPageButtonsEnabled;
         return isVisible !== undefined ? isVisible : true;
       }
-      return this.loaded && key in this._options ? this._options[key] : this._default[key];
+      return this.loaded && key in this._options && this._options[key] !== undefined ? this._options[key] : this._default[key];
     }
 
     has(key) {

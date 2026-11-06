@@ -209,13 +209,19 @@ export default function(module, exports, require) {
   }
 
   function checkCustomPlayerAttributes(targetElement) {
-    if (["v.douyu.com", "www.twitch.tv"].includes(location.host)) return true;
-    var srcAttribute = targetElement.getAttribute("src");
-    if (targetElement.tagName.toLowerCase() === "video") {
+    var tag = targetElement && targetElement.tagName ? targetElement.tagName.toLowerCase() : "";
+    if (tag === "video") {
+      if (["v.douyu.com", "www.twitch.tv", "www.youtube.com", "m.youtube.com", "music.youtube.com"].includes(location.host) || location.host.includes("youtube.com")) {
+        return true;
+      }
+      var srcAttribute = targetElement.getAttribute("src");
       return Boolean((srcAttribute && srcAttribute !== "blob:null") || targetElement.querySelector("source"));
     }
-    if (targetElement.tagName.toLowerCase() !== "iframe") return false;
-    return !location.href.includes(srcAttribute);
+    if (location.host.includes("youtube.com")) return false;
+    if (["v.douyu.com", "www.twitch.tv"].includes(location.host)) return true;
+    if (tag !== "iframe") return false;
+    var iframeSrc = targetElement.getAttribute("src");
+    return Boolean(iframeSrc && !location.href.includes(iframeSrc));
   }
 
   function isBlockedByFilter(targetElement) {

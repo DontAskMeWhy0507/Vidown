@@ -145,10 +145,7 @@ export default function(module, exports, require) {
           return;
         }
         if (!this.downloadImageAbTest) {
-          this.downloadImageAbTest = utils.sendMessage({
-            type: mediaConstants.b.GET_ABTEST,
-            testName: "downloadImageAllSites"
-          });
+          this.downloadImageAbTest = Promise.resolve({ groupName: "downloadImageAllSites" });
         }
         var testResult = await this.downloadImageAbTest;
         if (!testResult.groupName && !this.siteData?.getImageNode) {
@@ -211,10 +208,7 @@ export default function(module, exports, require) {
           return;
         }
         if (!this.downloadImageAbTest) {
-          this.downloadImageAbTest = utils.sendMessage({
-            type: mediaConstants.b.GET_ABTEST,
-            testName: "downloadImageAllSites"
-          });
+          this.downloadImageAbTest = Promise.resolve({ groupName: "downloadImageAllSites" });
         }
         var testResult = await this.downloadImageAbTest;
         if (!testResult.groupName && !this.siteData?.getImageNode) {

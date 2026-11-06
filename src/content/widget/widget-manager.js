@@ -794,11 +794,11 @@ export default function(module, exports, r) {
     }
     bindListener(el) {
       var ev, r2, nd, opt, arg, st, url;
-      null === (ev = this.$parent) || void 0 === ev || ev.addEventListener("mouseover", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseOver)), this.parent && this.parent.$node && this.parent.$node !== this.$parent && (this.parent.$node.addEventListener("mouseover", this.onFocused, true), this.parent.$node.addEventListener("mouseout", this.onBlur, true)), this.$el.addEventListener("mouseover", this.onWidgetFocused), null === (nd = this.$parent) || void 0 === nd || nd.addEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseOut)), this.$el.addEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.useCaptureOnMouseOut)), null === (url = null === (st = this.parent.siteData) || void 0 === st ? void 0 : st.onBehaviorBined) || void 0 === url || url.call(st, this);
+      null === (ev = this.$parent) || void 0 === ev || ev.addEventListener("mouseover", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseOver)), this.parent && this.parent.$node && this.parent.$node !== this.$parent && (this.parent.$node.addEventListener("mouseover", this.onFocused, true), this.parent.$node.addEventListener("mousemove", this.onFocused, { passive: true, capture: true }), this.parent.$node.addEventListener("mouseout", this.onBlur, true)), this.$parent && this.$parent.addEventListener("mousemove", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseMove)), this.$el.addEventListener("mouseover", this.onWidgetFocused), null === (nd = this.$parent) || void 0 === nd || nd.addEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseOut)), this.$el.addEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.useCaptureOnMouseOut)), null === (url = null === (st = this.parent.siteData) || void 0 === st ? void 0 : st.onBehaviorBined) || void 0 === url || url.call(st, this);
     }
     destroy() {
       var el, ev, r2, nd, opt, arg;
-      this.isDestroyed = true, clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), clearTimeout(this.mouseStayTimeout), this.parent && this.parent.$node && this.parent.$node !== this.$parent && (this.parent.$node.removeEventListener("mouseover", this.onFocused, true), this.parent.$node.removeEventListener("mouseout", this.onBlur, true)), this.$parent && this.$el && (this.$parent.removeEventListener("mouseover", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.useCaptureOnMouseOver)), this.$el.removeEventListener("mouseover", this.onWidgetFocused), null === (ev = this.$parent) || void 0 === ev || ev.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseMove)), this.mouseMoveActive = false, this.$el.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (nd = this.parent.getSiteData()) || void 0 === nd ? void 0 : nd.useCaptureOnMouseMove)), this.$parent.removeEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseOut)), this.$el.removeEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.useCaptureOnMouseOut))), this.debouncedUpdateParent.destroy();
+      this.isDestroyed = true, clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), clearTimeout(this.mouseStayTimeout), this.parent && this.parent.$node && this.parent.$node !== this.$parent && (this.parent.$node.removeEventListener("mouseover", this.onFocused, true), this.parent.$node.removeEventListener("mousemove", this.onFocused, true), this.parent.$node.removeEventListener("mouseout", this.onBlur, true)), this.$parent && this.$el && (this.$parent.removeEventListener("mouseover", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.useCaptureOnMouseOver)), this.$parent.removeEventListener("mousemove", this.onFocused, Object(coreUtils.beDefinedOr)(true)(null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.useCaptureOnMouseMove)), this.$el.removeEventListener("mouseover", this.onWidgetFocused), null === (ev = this.$parent) || void 0 === ev || ev.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseMove)), this.mouseMoveActive = false, this.$el.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (nd = this.parent.getSiteData()) || void 0 === nd ? void 0 : nd.useCaptureOnMouseMove)), this.$parent.removeEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseOut)), this.$el.removeEventListener("mouseout", this.onBlur, Object(coreUtils.beDefinedOr)(true)(null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.useCaptureOnMouseOut))), this.debouncedUpdateParent.destroy();
     }
     getSiteWidgetConfig() {
       return domConstants.f.find((el) => {
@@ -824,6 +824,24 @@ export default function(module, exports, r) {
     logShow() {
       detectorLogger.a.log("PageShown", detectorLogger.a.PAGE_CONTENT_SHOW_CONTROLS);
     }
+    hasActiveInteraction() {
+      var dl = this.parent.getComponent("download");
+      var of = this.parent.getComponent("otherFeature");
+      var tm = this.parent.getComponent("transferMobile");
+      var cc = this.parent.getComponent("clientChooser");
+      var isOpening = Boolean(
+        (dl && dl.state && dl.state.opening) ||
+        (of && of.state && of.state.opening) ||
+        (tm && tm.state && tm.state.opening) ||
+        (cc && cc.state && cc.state.opening)
+      );
+      if (isOpening) return true;
+      if (!this.$el) return false;
+      var hasOpenDom = Boolean(
+        this.$el.querySelector("dropdown-box:not([hidden]), .expansion-box:not([hidden])")
+      );
+      return hasOpenDom;
+    }
     onWidgetFocused() {
       clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), clearTimeout(this.mouseStayTimeout), this.showWidget();
     }
@@ -832,15 +850,36 @@ export default function(module, exports, r) {
       !settingsManager.a.get("on_page_buttons") || this.parent.shouldHideWidget() || this.isDismissed || this.isDestroyed || (this.mouseMoveActive || (null === (ev = this.$parent) || void 0 === ev || ev.addEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseMove)), null === (nd = this.$el) || void 0 === nd || nd.addEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseMove))), this.mouseMoveActive = true, this.showWidget(), clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), this.debouncedLogShow(), SaviorWidgetController.mountWidget(this.parent), this.updatePosition() && this.updateParent(), el && this.onMouseMove(el), null === (st = null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.onFocused) || void 0 === st || st.call(arg, this));
     }
     onMouseMove(t) {
-      var ev;
-      clearTimeout(this.mouseStayTimeout), clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), this.showWidget(), !t || (null === (ev = t.path) || void 0 === ev ? void 0 : ev.slice(0, t.path.length - 2).some((t2) => {
-        var e2;
-        return null === (e2 = null == t2 ? void 0 : t2.matches) || void 0 === e2 ? void 0 : e2.call(t2, this.el);
-      })) || t.target == SaviorWidgetController.$host || t.currentTarget == this.parent.$el || this.parent.$el.querySelector("#onboard-nmp:not([hidden]") || (this.mouseStayTimeout = setTimeout(this.hideWidget, 3e3));
+      clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), this.showWidget();
+      var isOverWidget = Boolean(
+        this.$el && t && (
+          t.target === this.$el ||
+          this.$el.contains(t.target) ||
+          (typeof t.composedPath === "function" && t.composedPath().includes(this.$el))
+        )
+      );
+      if (isOverWidget || this.hasActiveInteraction()) {
+        clearTimeout(this.mouseStayTimeout);
+        return;
+      }
+      clearTimeout(this.mouseStayTimeout);
+      this.mouseStayTimeout = setTimeout(() => this.hideWidget(), 2000);
     }
     onBlur(t) {
-      var ev, r2, nd, opt, arg;
-      clearTimeout(this.mouseStayTimeout), clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), t && null != t.target && t.relatedTarget != SaviorWidgetController.$host && !this.parent.$el.querySelector("#onboard-nmp:not([hidden]") && (Object(coreUtils.beDefinedOr)(false)(null === (ev = this.parent.getSiteData()) || void 0 === ev ? void 0 : ev.stopPropagationOnMouseOut) && (null == t || t.stopImmediatePropagation(), null == t || t.stopPropagation()), this.mouseMoveActive && (null === (r2 = this.$parent) || void 0 === r2 || r2.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (nd = this.parent.getSiteData()) || void 0 === nd ? void 0 : nd.useCaptureOnMouseMove)), null === (opt = this.$el) || void 0 === opt || opt.removeEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.useCaptureOnMouseMove))), this.mouseMoveActive = false, this.timeout = setTimeout(this.hideWidget, 500));
+      if (this.hasActiveInteraction()) return;
+      var rel = t && (t.relatedTarget || t.toElement);
+      if (this.$el && rel && (rel === this.$el || this.$el.contains(rel))) return;
+      if (this.$parent && rel && (rel === this.$parent || this.$parent.contains(rel))) {
+        clearTimeout(this.timeout);
+        clearTimeout(this.timeoutAnimation);
+        clearTimeout(this.mouseStayTimeout);
+        this.mouseStayTimeout = setTimeout(() => this.hideWidget(), 2000);
+        return;
+      }
+      clearTimeout(this.timeout);
+      clearTimeout(this.timeoutAnimation);
+      clearTimeout(this.mouseStayTimeout);
+      this.timeout = setTimeout(() => this.hideWidget(), 400);
     }
     showWidget() {
       var el, ev, r2, nd = !(arguments.length > 0 && void 0 !== arguments[0]) || arguments[0];
@@ -869,6 +908,7 @@ export default function(module, exports, r) {
     }
     hideWidget() {
       var el, ev;
+      if (this.hasActiveInteraction()) return Promise.resolve();
       return Z(this, void 0, void 0, K().m((function r2() {
         return K().w((function(r3) {
           for (; ; ) switch (r3.n) {
@@ -892,12 +932,29 @@ export default function(module, exports, r) {
     updatePosition() {
       var el, ev, r2, idx, arg, st, url, cfg;
       if (this.$el) {
-        var len, fn = urlMatcher.a.shouldWidgetAttachToParentNode(location.hostname) || (null === (ev = null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.shouldWidgetAttachToParentNode) || void 0 === ev ? void 0 : ev.call(el, this.parent.$node)) ? this.$parent.getBoundingClientRect() : this.parent.$node.getBoundingClientRect(), dom = fn.top, hdr = fn.left, prop = fn.right, v = dom - this.$el.clientHeight, msg = this.isVertical ? prop - this.$el.clientWidth : hdr, ctx = Object(domHelper.j)(this.parent.$node);
-        if (ctx) len = "fixed", v < 0 && (v = 0);
-        else {
-          len = "absolute", location.href.includes("https://hk-ancillaries.s3.amazonaws.com/") && (msg += (null === (arg = null === (idx = null === (r2 = this.parent.$node.ownerDocument) || void 0 === r2 ? void 0 : r2.defaultView) || void 0 === idx ? void 0 : idx.frameElement) || void 0 === arg ? void 0 : arg.getBoundingClientRect().x) || 0, v += (null === (cfg = null === (url = null === (st = this.parent.$node.ownerDocument) || void 0 === st ? void 0 : st.defaultView) || void 0 === url ? void 0 : url.frameElement) || void 0 === cfg ? void 0 : cfg.getBoundingClientRect().y) || 0), v += window.pageYOffset, msg += window.pageXOffset;
-          var g2 = ["#cinematics-full-bleed-container", "#player-full-bleed-container", "#full-bleed-container"].join(","), b2 = this.parent.$node.closest(g2);
-          (v < 0 || b2) && (v = dom + window.pageYOffset);
+        var isYt = location.host.includes("youtube.com");
+        var len, fn = urlMatcher.a.shouldWidgetAttachToParentNode(location.hostname) || (null === (ev = null === (el = this.parent.getSiteData()) || void 0 === el ? void 0 : el.shouldWidgetAttachToParentNode) || void 0 === ev ? void 0 : ev.call(el, this.parent.$node)) ? this.$parent.getBoundingClientRect() : this.parent.$node.getBoundingClientRect(), dom = fn.top, hdr = fn.left, prop = fn.right, widgetH = this.$el.clientHeight || (this.$el.firstElementChild && this.$el.firstElementChild.clientHeight) || 36, v = dom - widgetH, msg = this.isVertical ? prop - this.$el.clientWidth : hdr, ctx = Object(domHelper.j)(this.parent.$node);
+        if (ctx) {
+          len = "fixed";
+          if (this.elementHasControl()) {
+            v = dom + this.getWidgetVerticalMove();
+            msg = hdr + this.getWidgetHorizontalMove();
+          } else if (v < 0) {
+            v = Math.max(0, dom < 0 ? 0 : v);
+          }
+        } else {
+          len = "absolute";
+          var xFrameOffset = 0, yFrameOffset = 0;
+          location.href.includes("https://hk-ancillaries.s3.amazonaws.com/") && (xFrameOffset = (null === (arg = null === (idx = null === (r2 = this.parent.$node.ownerDocument) || void 0 === r2 ? void 0 : r2.defaultView) || void 0 === idx ? void 0 : idx.frameElement) || void 0 === arg ? void 0 : arg.getBoundingClientRect().x) || 0, yFrameOffset = (null === (cfg = null === (url = null === (st = this.parent.$node.ownerDocument) || void 0 === st ? void 0 : st.defaultView) || void 0 === url ? void 0 : url.frameElement) || void 0 === cfg ? void 0 : cfg.getBoundingClientRect().y) || 0);
+          var videoTop = dom + window.pageYOffset + yFrameOffset;
+          var aboveTop = videoTop - widgetH;
+          if (this.elementHasControl()) {
+            v = videoTop + this.getWidgetVerticalMove();
+            msg = (this.isVertical ? prop - this.$el.clientWidth : hdr) + window.pageXOffset + xFrameOffset + this.getWidgetHorizontalMove();
+          } else {
+            v = aboveTop < 0 ? videoTop : aboveTop;
+            msg = (this.isVertical ? prop - this.$el.clientWidth : hdr) + window.pageXOffset + xFrameOffset;
+          }
         }
         return this.$el.style = `position: ${len}; top: ${v}px; left: ${msg}px`, ctx;
       }
@@ -1898,18 +1955,31 @@ ${t2.text}`;
       var A2 = { behavior: new WidgetContainer(domConstants.h.Savior, this, void 0, { hasImage: this.isImage }), toggleLight: new CinemaModeComponent(domConstants.h.ToggleLightButton, this, { isLightOff: this.sharedState.isLightOffGlobal, isHidden: this.isImage }), otherFeature: new DownloadBtnComp(domConstants.h.OtherFeatureButton, this), download: new MainDownloadComponent(domConstants.h.DownloadButton, this), skipVideo: new SkipVideoAdComponent(domConstants.h.SkipVideoButton, this, { isHidden: this.$node.hasAttribute("savior-scanned-img") }) };
       SaviorWidgetController.siteDismissed() ? (null === (prop = this.getComponent("behavior")) || void 0 === prop || prop.destroy(), null === (val = this.getComponent("otherFeature")) || void 0 === val || val.destroy(), null === (msg = this.getComponent("toggleLight")) || void 0 === msg || msg.destroy(), null === (ctx = this.getComponent("pin")) || void 0 === ctx || ctx.destroy(), null === (g2 = this.getComponent("transferMobile")) || void 0 === g2 || g2.destroy()) : A2.transferMobile = new TransferComp(domConstants.h.TransferMobileWrapper, this), w2 && (A2.pin = new PipComponent(domConstants.h.PinButton, this, { opening: document.pictureInPictureElement == this.$node })), widgetConfigOptions && (A2.clientChooser = new SettingsMenuComp(domConstants.h.ChangeYoutubeClientButton, this)), super.components = A2, this.fetchDownloads = this.fetchDownloads.bind(this), this.onForceUpdate = this.onForceUpdate.bind(this), this.runChilds((t2) => {
         t2.bind();
-      }), this.isWindow = "Windows" === (null === (b2 = window.navigator.userAgentData) || void 0 === b2 ? void 0 : b2.platform), this.state = {}, EE.on("widget.forceUpdate", this.onForceUpdate), settingsManager.a.has("image_download_enabled") && "IMG" == this.$node.nodeName && (this.autoHideWidget = !settingsManager.a.get("image_download_enabled")), this.shouldHideWidget(true) || Object(coreUtils.sendMessage)({ type: saviorConstants.b.GET_ABTEST, testName: "skipVideo" }).then((t2) => {
-        this.isSkipVideoEnabled = false, this.render(), super._bindListener(this.$node);
-      });
+      }), this.isWindow = "Windows" === (null === (b2 = window.navigator.userAgentData) || void 0 === b2 ? void 0 : b2.platform), this.state = {}, EE.on("widget.forceUpdate", this.onForceUpdate), settingsManager.a.has("image_download_enabled") && "IMG" == this.$node.nodeName && (this.autoHideWidget = !settingsManager.a.get("image_download_enabled")), this.isSkipVideoEnabled = false, this.render(), super._bindListener(this.$node);
+      try {
+        if (this.$node.matches(":hover") || (this.$parent && this.$parent.matches(":hover"))) {
+          var behavior = this.getComponent("behavior");
+          null == behavior || behavior.onFocused();
+        }
+      } catch (_e) {}
     }
     firstPaint(el) {
       var ev, r2, arg = (Object(domHelper.m)(this.$node) || (null === (r2 = null === (ev = this.getSiteData()) || void 0 === ev ? void 0 : ev.isValidVideoNode) || void 0 === r2 ? void 0 : r2.call(ev, this.$node))) && settingsManager.a.get("detach_enabled") && !urlMatcher.a.checkRegex(location.href, "disallow-pip");
-      this.$el.innerHTML = lodash.a.render(settingsManager.a.get("template-widget"), { i18n_close_tooltip: Object(coreUtils.i18n)("widget_hide_panel"), i18n_download_tooltip: Object(coreUtils.i18n)("widget_no_media_found"), i18n_download_box_header_title: Object(coreUtils.i18n)("widget_download_box_title"), i18n_no_media_found_widget: Object(coreUtils.i18n)("widget_no_media_found"), i18n_downloading_media: Object(coreUtils.i18n)("widget_downloading_media"), i18n_mobile_button: Object(coreUtils.i18n)("mobile_button"), i18n_pip_button: Object(coreUtils.i18n)("popup_pip_button"), i18n_switch: Object(coreUtils.i18n)(this.sharedState.isLightOffGlobal ? "turn_on_light" : "turn_off_light"), i18n_other_feature: Object(coreUtils.i18n)("widget_other_options"), i18n_hide_panel: Object(coreUtils.i18n)("widget_hide_panel"), i18n_hide_panel_on_site: Object(coreUtils.i18n)("widget_hide_panel_on_site", location.host), i18n_go_to_settings: Object(coreUtils.i18n)("widget_go_to_settings"), has_pip: arg, no_downloads: true, has_mobile: false, has_client_chooser: widgetConfigOptions, youtube_clients: widgetConfigOptions ? Object.keys(settingsModule90.a) : void 0, current_youtube_client: parserModule89.a.client, has_skip_video: this.isSkipVideoEnabled, skip_video_title: Object(coreUtils.i18n)("skip_video"), skip_video_description: Object(coreUtils.i18n)("skip_video_description") });
+      this.$el.innerHTML = lodash.a.render(settingsManager.a.get("template-widget"), { i18n_close_tooltip: Object(coreUtils.i18n)("widget_hide_panel"), i18n_download_tooltip: Object(coreUtils.i18n)("widget_no_media_found"), i18n_download_box_header_title: Object(coreUtils.i18n)("widget_download_box_title"), i18n_no_media_found_widget: Object(coreUtils.i18n)("widget_no_media_found"), i18n_downloading_media: Object(coreUtils.i18n)("widget_downloading_media"), i18n_mobile_button: Object(coreUtils.i18n)("mobile_button"), i18n_pip_button: Object(coreUtils.i18n)("popup_pip_button"), i18n_switch: Object(coreUtils.i18n)(this.sharedState.isLightOffGlobal ? "turn_on_light" : "turn_off_light"), i18n_other_feature: Object(coreUtils.i18n)("widget_other_options"), i18n_hide_panel: Object(coreUtils.i18n)("widget_hide_panel"), i18n_hide_panel_on_site: Object(coreUtils.i18n)("widget_hide_panel_on_site", location.host), i18n_go_to_settings: Object(coreUtils.i18n)("widget_go_to_settings"), has_pip: arg, no_downloads: false, has_mobile: false, has_client_chooser: widgetConfigOptions, youtube_clients: widgetConfigOptions ? Object.keys(settingsModule90.a) : void 0, current_youtube_client: parserModule89.a.client, has_skip_video: this.isSkipVideoEnabled, skip_video_title: Object(coreUtils.i18n)("skip_video"), skip_video_description: Object(coreUtils.i18n)("skip_video_description") });
     }
     onForceUpdate() {
       LazyMediaTracker.getMediaObjectsFromNode(this.$node).then((el) => {
         var ev;
-        this.$el.innerHTML = "", el = enrichMediaMeta((null == el ? void 0 : el.filter((t2) => !!t2)) || []), this.setState({}), null === (ev = this.getComponent("download")) || void 0 === ev || ev.setState({ mediaObjects: el, downloads: null, opening: false });
+        el = enrichMediaMeta((null == el ? void 0 : el.filter((t2) => !!t2)) || []);
+        null === (ev = this.getComponent("download")) || void 0 === ev || ev.setState({ mediaObjects: el, downloads: null, opening: false });
+        this.activeOmnibox(el);
+        var behavior = this.getComponent("behavior");
+        null == behavior || behavior.updateParent();
+        try {
+          if (this.$node.matches(":hover") || (this.$parent && this.$parent.matches(":hover"))) {
+            null == behavior || behavior.onFocused();
+          }
+        } catch (_e) {}
       });
     }
     updateParent() {
@@ -1930,7 +2000,7 @@ ${t2.text}`;
       if (Object(domHelper.h)()) return true;
       if (urlMatcher.a.check(this.$node, "hide-widget")) return true;
       if (this.isImage && !(null === (ev = null === (el = this.getSiteData()) || void 0 === el ? void 0 : el.shouldShowWidgetForImage) || void 0 === ev ? void 0 : ev.call(el, this.$node))) return true;
-      this.$parent || (this.$parent = null !== (arg = null === (idx = null === (r2 = this.siteData) || void 0 === r2 ? void 0 : r2.getCustomParent) || void 0 === idx ? void 0 : idx.call(r2, this.$node)) && void 0 !== arg ? arg : Object(domHelper.d)(this.$node));
+      (!this.$parent || !this.$parent.isConnected) && (this.$parent = null !== (arg = null === (idx = null === (r2 = this.siteData) || void 0 === r2 ? void 0 : r2.getCustomParent) || void 0 === idx ? void 0 : idx.call(r2, this.$node)) && void 0 !== arg ? arg : Object(domHelper.d)(this.$node));
       var msg = urlMatcher.a.shouldWidgetAttachToParentNode(location.hostname) || (null === (url = null === (st = this.getSiteData()) || void 0 === st ? void 0 : st.shouldWidgetAttachToParentNode) || void 0 === url ? void 0 : url.call(st, this.$node)) ? this.$parent : this.$node, y = msg.offsetWidth, g2 = false;
       msg.offsetHeight > y && y < domConstants.b && (this.getComponent("behavior").isVertical = true, g2 = true);
       var b2 = this.$node;
@@ -2016,6 +2086,7 @@ ${t2.text}`;
         LazyMediaTracker.processRequest(t2) && EE.emit("widget.updateMedia");
       }), EE.on("location.href.changed", () => {
         LazyMediaTracker.refreshIds();
+        EE.emit("widget.forceUpdate");
       }), EE.on("widget.toast.open", (t2) => {
         var e2 = new ToastNotification({ message: t2.message, closable: t2.closable, duration: t2.duration, onAttached: t2.onAttached, onDetached: (t3) => {
           var e3 = this.toasts.findIndex((e4) => e4.id == t3);

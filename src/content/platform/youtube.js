@@ -205,6 +205,9 @@ export default function(module, exports, require) {
       return false;
     },
     isValidVideoNode: function(node) {
+      if (!node || !node.tagName || node.tagName.toLowerCase() !== "video") {
+        return false;
+      }
       var channelPlayerRenderer, watchAnchor;
       if (node.getAttribute("data-no-fullscreen") && "string" != typeof node.getAttribute("loop") && !location.href.includes("youtube.com/shorts/")) {
         return false;
@@ -246,6 +249,7 @@ export default function(module, exports, require) {
           var currentCount = sharedStorage.a.get(mediaConstants.A) || 0;
           sharedStorage.a.set(mediaConstants.A, currentCount + 1);
         }
+        EE.emit("widget.forceUpdate");
       }
       if (location.href.match(/(www\.)?youtube\.com\/shorts\//i) && !isRefreshScheduled) {
         isRefreshScheduled = true;

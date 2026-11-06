@@ -37,8 +37,8 @@
   },
   "7": {
     "path": "widget/settings-manager.js",
-    "sha256": "d14066a801735d19e279fc9d83d84cd3dc0cd7daa4cba975ae99f4543ef729f6",
-    "size": 4077,
+    "sha256": "d8dbe1c997d6bb2c8bbf10e798e64b6b0508e583955a0d38b19a649de1da8f68",
+    "size": 4603,
     "fileSize": 4077
   },
   "8": {
@@ -61,8 +61,8 @@
   },
   "12": {
     "path": "detector/dom-helper.js",
-    "sha256": "505afa0d3e87f33e8c32d2534b2c320b54c3505b9556e9104a56b866fd06ba68",
-    "size": 12675,
+    "sha256": "7353803422edbaa042c0f23b59892824d1f8e590b8daadf4a01e43b375400cda",
+    "size": 13042,
     "fileSize": 12675
   },
   "13": {
@@ -703,8 +703,8 @@
   },
   "120": {
     "path": "platform/youtube.js",
-    "sha256": "4d5d3d6c87e567ceae8722d1ad91e15fe03ddf06e9ea491d468bae29ffb51b6f",
-    "size": 20619,
+    "sha256": "76a4aeba41c3d057f9de5ecc02e1f09d7140386b7012f14511464602ef682f57",
+    "size": 20766,
     "fileSize": 20619
   },
   "121": {
@@ -991,8 +991,8 @@
   },
   "176": {
     "path": "detector/dom-scanner.js",
-    "sha256": "32d6497b2f7e3b5089f4f5ecde4394ccfcae67d783f970794801cbfcfa796361",
-    "size": 18934,
+    "sha256": "10d37aecdd02518239e20264b0d998271328a4b773ab3cdd375847b27bd7e7ad",
+    "size": 18794,
     "fileSize": 18934
   },
   "177": {
@@ -2911,8 +2911,8 @@
   },
   "541": {
     "path": "widget/widget-manager.js",
-    "sha256": "0101723e9f249be49f8a863671e02c8d4a7ee11108d1f9fc7d86a352e2f32c3b",
-    "size": 139222,
+    "sha256": "fef078bf21899e8c20f82a18b8bd85cf3837df1f95f8c2b8226bb7b6e05cd8f4",
+    "size": 141378,
     "fileSize": 139222
   },
   "543": {

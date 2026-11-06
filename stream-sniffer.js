@@ -145,12 +145,47 @@
       } catch (_) {}
     }
 
-    scanBufferedEntries();
-    if (document.readyState !== 'complete') {
-      window.addEventListener('load', () => scanBufferedEntries(), { once: true });
+    function scanDomMedia() {
+      try {
+        const mediaNodes = document.querySelectorAll('video, audio, source');
+        for (let i = 0; i < mediaNodes.length; i++) {
+          const node = mediaNodes[i];
+          const src = node.currentSrc || node.src || (typeof node.getAttribute === 'function' ? node.getAttribute('src') : null);
+          if (src && typeof src === 'string' && !src.startsWith('blob:') && !src.startsWith('data:')) {
+            inspectEntry({ name: src });
+          }
+        }
+      } catch (_) {}
     }
-    setTimeout(scanBufferedEntries, 1500);
-    setTimeout(scanBufferedEntries, 4000);
+
+    scanBufferedEntries();
+    scanDomMedia();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        scanBufferedEntries();
+        scanDomMedia();
+      }, { once: true });
+    }
+    if (document.readyState !== 'complete') {
+      window.addEventListener('load', () => {
+        scanBufferedEntries();
+        scanDomMedia();
+      }, { once: true });
+    }
+    setTimeout(() => { scanBufferedEntries(); scanDomMedia(); }, 1000);
+    setTimeout(() => { scanBufferedEntries(); scanDomMedia(); }, 2500);
+    setTimeout(() => { scanBufferedEntries(); scanDomMedia(); }, 5000);
+
+    try {
+      ['loadedmetadata', 'canplay', 'play'].forEach((evt) => {
+        document.addEventListener(evt, scanDomMedia, true);
+      });
+      document.addEventListener('mouseover', (e) => {
+        if (e.target && (e.target.nodeName === 'VIDEO' || e.target.nodeName === 'AUDIO' || (e.target.querySelector && e.target.querySelector('video, audio')))) {
+          scanDomMedia();
+        }
+      }, { passive: true });
+    } catch (_) {}
 
     if (typeof PerformanceObserver !== 'undefined') {
       try {
