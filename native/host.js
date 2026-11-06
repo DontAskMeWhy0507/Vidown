@@ -426,10 +426,11 @@ function finishStreamJob(msg) {
       if (written !== job.total) throw new Error(`size mismatch: wrote ${written} of ${job.total} bytes`);
       validateRelayCoverage(job.intervals, job.total);
     }
-    if (!finalizePartFile(job.outPath)) throw new Error('rename failed');
-    logHost(`Stream relay completed: "${job.outPath}" (${job.bytesWritten} bytes)`);
+    const publishedPath = finalizePartFile(job.outPath);
+    if (!publishedPath) throw new Error('rename failed');
+    logHost(`Stream relay completed: "${publishedPath}" (${job.bytesWritten} bytes)`);
     sendMessage({ action: 'progress', taskId: msg.taskId, percent: '100%', speed: 'Hoàn thành', eta: '', size: formatBytes(job.bytesWritten) });
-    sendMessage({ action: 'complete', taskId: msg.taskId, outputFile: path.basename(job.outPath), downloadsDir: path.dirname(job.outPath) });
+    sendMessage({ action: 'complete', taskId: msg.taskId, outputFile: path.basename(publishedPath), outputPath: publishedPath, downloadsDir: path.dirname(publishedPath) });
   } catch (e) {
     try { if (job.fd !== null) fs.closeSync(job.fd); } catch (_) {}
     try { if (fs.existsSync(job.partPath)) fs.unlinkSync(job.partPath); } catch (_) {}
@@ -889,7 +890,7 @@ function finalizePartFile(outPath) {
         } else {
           fs.renameSync(part, dest);
         }
-        return fs.existsSync(dest);
+        return fs.existsSync(dest) ? dest : false;
       } catch (err) {
         attempts++;
         if (err.code === 'EEXIST' || err.code === 'EPERM' || err.code === 'EBUSY') {
@@ -1001,11 +1002,12 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
             return reject(err);
           }
         }
-        if (!finalizePartFile(outPath)) {
+        const publishedPath = finalizePartFile(outPath);
+        if (!publishedPath) {
           hasError = true;
           return reject(new Error('Failed to finalize downloaded file'));
         }
-        resolve();
+        resolve(publishedPath);
       }
     }
 
@@ -1225,7 +1227,8 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
       res.pipe(fileStream);
       fileStream.on('finish', () => {
         // Stream fully flushed: promote .part to the final name atomically.
-        if (finalizePartFile(outPath)) return resolve();
+        const publishedPath = finalizePartFile(outPath);
+        if (publishedPath) return resolve(publishedPath);
         reject(new Error('Failed to finalize downloaded file'));
       });
       fileStream.on('error', (err) => {
@@ -1283,6 +1286,7 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
 
   sendMessage({
     action: 'progress',
+    taskId: req.taskId,
     percent: '1%',
     speed: 'Đang kết nối luồng tải đa luồng...',
     eta: '',
@@ -1296,6 +1300,7 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
     const onProgress = (prog) => {
       sendMessage({
         action: 'progress',
+        taskId: req.taskId,
         percent: prog.percent,
         speed: prog.speed,
         eta: '',
@@ -1303,9 +1308,10 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
       });
     };
 
+    let publishedPath = null;
     if (probe.supported && probe.size > 512 * 1024) {
       logHost(`Starting 10-thread Range download for ${outPath} (${probe.size} bytes)`);
-      await downloadFileMultiThread({
+      publishedPath = await downloadFileMultiThread({
         url: probe.url || targetUrl,
         outPath,
         headers: reqHeaders,
@@ -1316,7 +1322,7 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
       });
     } else {
       logHost(`Server Range not supported or small file. Starting single-stream download for ${outPath}`);
-      await downloadFileSingleStream({
+      publishedPath = await downloadFileSingleStream({
         url: probe.url || targetUrl,
         outPath,
         headers: reqHeaders,
@@ -1326,13 +1332,15 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
     }
 
     activeMultiThreadJob = null;
-    logHost(`Multi-thread download completed successfully: "${outPath}"`);
+    logHost(`Multi-thread download completed successfully: "${publishedPath || outPath}"`);
     if (typeof onComplete === 'function') {
-      onComplete(probe);
+      onComplete(probe, publishedPath);
       return;
     }
+    const finalOut = publishedPath || outPath;
     sendMessage({
       action: 'progress',
+      taskId: req.taskId,
       percent: '100%',
       speed: 'Hoàn thành',
       eta: '',
@@ -1340,9 +1348,11 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
     });
     sendMessage({
       action: 'complete',
+      taskId: req.taskId,
       percent: '100%',
-      outputFile: path.basename(outPath),
-      downloadsDir: path.dirname(outPath)
+      outputFile: path.basename(finalOut),
+      outputPath: finalOut,
+      downloadsDir: path.dirname(finalOut)
     });
   } catch (err) {
     activeMultiThreadJob = null;
@@ -1350,7 +1360,7 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
       logHost(`Multi-thread download canceled by user: "${outPath}"`);
       cleanupPartialFiles(outPath);
       /* Never unlink outPath on cancel to preserve user files */
-      sendMessage({ action: 'cancelled' });
+      sendMessage({ action: 'cancelled', taskId: req.taskId });
       return;
     }
     logHost(`Multi-thread download error: ${err.message}. Triggering fallback.`);
@@ -1358,7 +1368,7 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
     if (typeof onFallback === 'function') {
       onFallback(err);
     } else {
-      sendMessage({ action: 'error', error: err.message });
+      sendMessage({ action: 'error', taskId: req.taskId, error: err.message });
     }
   }
 }
@@ -1497,6 +1507,7 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
       }
       sendMessage({
         action: 'progress',
+        taskId: req.taskId,
         percent: percent || '',
         speed: computedSpeed || (percent ? '' : 'Đang ghép luồng (FFmpeg)...'),
         eta: '',
@@ -1513,9 +1524,12 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
       return;
     }
     if (activeProcess === proc) activeProcess = null;
-    if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 1000 && finalizePartFile(outPath)) {
+    let publishedPath;
+    if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 1000 && (publishedPath = finalizePartFile(outPath))) {
+      const publishedName = path.basename(publishedPath);
       sendMessage({
         action: 'progress',
+        taskId: req.taskId,
         percent: '100%',
         speed: 'Hoàn thành',
         eta: '',
@@ -1523,7 +1537,9 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
       });
       sendMessage({
         action: 'complete',
-        outputFile: finalFilename,
+        taskId: req.taskId,
+        outputFile: publishedName,
+        outputPath: publishedPath,
         downloadsDir: targetDir
       });
     } else {
@@ -1531,6 +1547,7 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
       const shortErr = errLines.slice(-3).join(' ').trim() || `FFmpeg code ${code}`;
       sendMessage({
         action: 'error',
+        taskId: req.taskId,
         error: shortErr
       });
     }
@@ -1538,7 +1555,7 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
 
   proc.on('error', (err) => {
     if (activeProcess === proc) activeProcess = null;
-    sendMessage({ action: 'error', error: err.message });
+    sendMessage({ action: 'error', taskId: req.taskId, error: err.message });
   });
 }
 
@@ -1650,6 +1667,7 @@ async function startFfmpegMux(req) {
 
   sendMessage({
     action: 'progress',
+    taskId: req.taskId,
     percent: '1%',
     speed: 'Đang kết nối đa luồng (Video + Audio)...',
     eta: '',
@@ -1687,6 +1705,7 @@ async function startFfmpegMux(req) {
       const pct = totalCombined > 0 ? `${Math.min(98, Math.floor((currentDownloaded / totalCombined) * 100))}%` : '';
       sendMessage({
         action: 'progress',
+        taskId: req.taskId,
         percent: pct,
         speed: speedStr || (pct ? '' : 'Đang tải đa luồng...'),
         eta: '',
@@ -1758,6 +1777,7 @@ async function startFfmpegMux(req) {
 
     sendMessage({
       action: 'progress',
+      taskId: req.taskId,
       percent: '99%',
       speed: 'Đang ghép luồng cục bộ...',
       eta: '',
@@ -1806,23 +1826,29 @@ async function startFfmpegMux(req) {
         return;
       }
 
-      if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 1000 && finalizePartFile(outPath)) {
+      let publishedPath;
+      if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 1000 && (publishedPath = finalizePartFile(outPath))) {
+        const publishedName = path.basename(publishedPath);
         sendMessage({
           action: 'progress',
+          taskId: req.taskId,
           percent: '100%',
           speed: 'Hoàn thành',
           eta: '',
-          size: formatBytes(fs.statSync(outPath).size)
+          size: formatBytes(fs.statSync(publishedPath).size)
         });
         sendMessage({
           action: 'complete',
-          outputFile: finalFilename,
+          taskId: req.taskId,
+          outputFile: publishedName,
+          outputPath: publishedPath,
           downloadsDir: targetDir
         });
       } else {
         const shortErr = muxErr.split('\n').filter(l => l.trim() && !l.startsWith('ffmpeg version')).slice(-2).join(' ') || `FFmpeg code ${code}`;
         sendMessage({
           action: 'error',
+          taskId: req.taskId,
           error: `Lỗi ghép video/audio: ${shortErr}`
         });
       }
@@ -1831,7 +1857,7 @@ async function startFfmpegMux(req) {
     proc.on('error', (err) => {
       try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
       if (activeProcess === proc) activeProcess = null;
-      sendMessage({ action: 'error', error: err.message });
+      sendMessage({ action: 'error', taskId: req.taskId, error: err.message });
     });
 
   } catch (err) {
@@ -1839,7 +1865,7 @@ async function startFfmpegMux(req) {
     try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
     if (err && err.message === 'USER_CANCELED') {
       logHost(`Mux Range download canceled by user.`);
-      sendMessage({ action: 'cancelled' });
+      sendMessage({ action: 'cancelled', taskId: req.taskId });
       return;
     }
     logHost(`Mux Range download failed: ${err.message}. Retrying via direct FFmpeg stream.`);
@@ -1886,6 +1912,10 @@ async function startFfmpegDirectStream(req) {
     try { activeProcess.kill(); } catch (e) {}
     activeProcess = null;
   }
+  if (activeMultiThreadJob && typeof activeMultiThreadJob.cancel === 'function') {
+    try { activeMultiThreadJob.cancel(); } catch (e) {}
+    activeMultiThreadJob = null;
+  }
   // Prefer a direct media/CDN URL over a watch-page URL: TikTok flows can
   // deliver videoUrl = the tiktok.com/@user/video/... PAGE while url holds the
   // actual signed stream. Opening the page in FFmpeg is always an I/O error.
@@ -1909,7 +1939,7 @@ async function startFfmpegDirectStream(req) {
     targetUrl = cleanFbCdnUrl(direct || candidates[0] || '');
   }
   if (!targetUrl) {
-    sendMessage({ action: 'error', error: 'Không tìm thấy URL tải video' });
+    sendMessage({ action: 'error', taskId: req.taskId, error: 'Không tìm thấy URL tải video' });
     return;
   }
 
@@ -1957,6 +1987,7 @@ async function startFfmpegDirectStream(req) {
 
   sendMessage({
     action: 'progress',
+    taskId: req.taskId,
     percent: '1%',
     speed: 'Đang chuẩn bị luồng video (FFmpeg)...',
     eta: '',
@@ -1983,7 +2014,7 @@ async function startFfmpegDirectStream(req) {
       // Verify that the response is actually an HLS playlist (#EXTM3U)
       if (!playlistText || !playlistText.includes('#EXTM3U')) {
         logHost(`Invalid playlist response: Does not contain #EXTM3U`);
-        sendMessage({ action: 'error', error: 'Máy chủ trả về luồng không hợp lệ (không phải định dạng HLS playlist).' });
+        sendMessage({ action: 'error', taskId: req.taskId, error: 'Máy chủ trả về luồng không hợp lệ (không phải định dạng HLS playlist).' });
         return;
       }
 
@@ -2213,6 +2244,7 @@ async function startFfmpegDirectStream(req) {
 
           sendMessage({
             action: 'progress',
+            taskId: req.taskId,
             percent: pctStr,
             speed: computedSpeed || speed || '',
             eta: '',
@@ -2234,9 +2266,12 @@ async function startFfmpegDirectStream(req) {
         try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
       }
 
-      if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 1000 && finalizePartFile(outPath)) {
+      let publishedPath;
+      if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 1000 && (publishedPath = finalizePartFile(outPath))) {
+        const publishedName = path.basename(publishedPath);
         sendMessage({
           action: 'progress',
+          taskId: req.taskId,
           percent: '100%',
           speed: 'Hoàn thành',
           eta: '',
@@ -2244,7 +2279,9 @@ async function startFfmpegDirectStream(req) {
         });
         sendMessage({
           action: 'complete',
-          outputFile: finalFilename,
+          taskId: req.taskId,
+          outputFile: publishedName,
+          outputPath: publishedPath,
           downloadsDir: targetDir
         });
       } else {
@@ -2257,6 +2294,7 @@ async function startFfmpegDirectStream(req) {
           : `Lỗi tải luồng: ${(errLines.slice(-3).join(' ').trim() || `FFmpeg code ${code}`).slice(0, 150)}`;
         sendMessage({
           action: 'error',
+          taskId: req.taskId,
           error: shortErr
         });
       }
@@ -2267,7 +2305,7 @@ async function startFfmpegDirectStream(req) {
       if (tempSessionDir && fs.existsSync(tempSessionDir)) {
         try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
       }
-      sendMessage({ action: 'error', error: err.message });
+      sendMessage({ action: 'error', taskId: req.taskId, error: err.message });
     });
   }
 
@@ -2287,6 +2325,7 @@ async function startFfmpegDirectStream(req) {
         // Source stream downloaded locally! Now convert to MP3 via local FFmpeg in < 1 second
         sendMessage({
           action: 'progress',
+          taskId: req.taskId,
           percent: '99%',
           speed: 'Đang chuyển đổi MP3...',
           eta: '',
@@ -2310,18 +2349,20 @@ async function startFfmpegDirectStream(req) {
         cProc.on('close', (code) => {
           try { fs.rmSync(tempMediaFile, { force: true }); } catch (e) {}
           if (activeProcess === cProc) activeProcess = null;
-          if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 100 && finalizePartFile(outPath)) {
-            sendMessage({ action: 'progress', percent: '100%', speed: 'Hoàn thành', eta: '', size: formatBytes(fs.statSync(outPath).size) });
-            sendMessage({ action: 'complete', outputFile: finalFilename, downloadsDir: targetDir });
+          let publishedPath;
+          if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 100 && (publishedPath = finalizePartFile(outPath))) {
+            const publishedName = path.basename(publishedPath);
+            sendMessage({ action: 'progress', taskId: req.taskId, percent: '100%', speed: 'Hoàn thành', eta: '', size: formatBytes(fs.statSync(publishedPath).size) });
+            sendMessage({ action: 'complete', taskId: req.taskId, outputFile: publishedName, outputPath: publishedPath, downloadsDir: targetDir });
           } else {
             cleanupPartialFiles(outPath);
-            sendMessage({ action: 'error', error: `Lỗi chuyển đổi MP3 (code ${code})` });
+            sendMessage({ action: 'error', taskId: req.taskId, error: `Lỗi chuyển đổi MP3 (code ${code})` });
           }
         });
         cProc.on('error', (err) => {
           try { fs.rmSync(tempMediaFile, { force: true }); } catch (e) {}
           if (activeProcess === cProc) activeProcess = null;
-          sendMessage({ action: 'error', error: err.message });
+          sendMessage({ action: 'error', taskId: req.taskId, error: err.message });
         });
       });
       return;
@@ -2333,6 +2374,7 @@ async function startFfmpegDirectStream(req) {
       if (err && /HTTP\s+(401|403|404)\b/i.test(String(err.message || err))) {
         sendMessage({
           action: 'error',
+          taskId: req.taskId,
           error: `${err.message}. Liên kết tải có thể đã hết hạn; hãy mở lại video và lấy luồng mới.`
         });
         return;

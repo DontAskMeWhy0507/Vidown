@@ -522,9 +522,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   protocol: var_n.protocol,
   host: var_n.host,
   pathname: var_n.pathname,
-  filename: `${var_a_1}
-  .${var_s_1}
-  `,
+  filename: `${var_a_1}.${var_s_1}`,
   ext: var_s_1,
   exts: [var_s_1],
   hash: var_n.hash,

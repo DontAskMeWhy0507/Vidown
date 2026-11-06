@@ -64,7 +64,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   cleanFbUrl(param_e, param_t) {
   setTimeout(() => {
-  this.cleanFbUrl(param_e, param_t);
+  this.removeFbUrl(param_e, param_t);
   }
   , 15000);
   }

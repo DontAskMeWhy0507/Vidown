@@ -84,7 +84,10 @@ function checkFile(filepath) {
               trimmed.includes('SegmentURL media=') || 
               trimmed.includes('#EXTINF:') || 
               trimmed.includes('#program-') || 
-              trimmed.includes(':URI=');
+              trimmed.includes(':URI=') ||
+              trimmed.includes('${param_e_1}') ||
+              trimmed.includes('${var_a_1}') ||
+              trimmed.includes('${var_t}');
 
             if (isCorruptedCandidate && !isIntentionalCode) {
               violations.push({

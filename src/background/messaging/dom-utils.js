@@ -1661,10 +1661,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_t = param_e_1.getFullYear();
   var var_r = param_e_1.getMonth();
   var var_n = param_e_1.getDate();
-  return parseInt(`${var_t}
-  ${ve(var_r)}
-  ${ve(var_n)}
-  `);
+  return parseInt(`${var_t}${ve(var_r)}${ve(var_n)}`);
   }
   function be(param_e_1) {
   var var_t;
@@ -1829,9 +1826,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   if (param_n) {
   var_c_1.push(...Object.keys(param_n));
   }
-  return param_o.a(2, `${param_e_1}
-   ${var_c_1.join("_")}
-  `);
+  return param_o.a(2, `${param_e_1} ${var_c_1.join("_")}`);
   }
   }
   }

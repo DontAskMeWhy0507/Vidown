@@ -1735,10 +1735,7 @@
   var var_t = param_e_1.getFullYear();
   var var_n = param_e_1.getMonth();
   var var_r = param_e_1.getDate();
-  return parseInt(`${var_t}
-  ${ve(var_n)}
-  ${ve(var_r)}
-  `);
+  return parseInt(`${var_t}${ve(var_n)}${ve(var_r)}`);
   }
   function be(param_e_1) {
   var var_t;
@@ -1903,9 +1900,7 @@
   if (param_r) {
   var_c_1.push(...Object.keys(param_r));
   }
-  return param_o.a(2, `${param_e_1}
-   ${var_c_1.join("_")}
-  `);
+  return param_o.a(2, `${param_e_1} ${var_c_1.join("_")}`);
   }
   }
   }
@@ -2947,9 +2942,7 @@
   protocol: var_r.protocol,
   host: var_r.host,
   pathname: var_r.pathname,
-  filename: `${var_a_1}
-  .${var_s_1}
-  `,
+  filename: `${var_a_1}.${var_s_1}`,
   ext: var_s_1,
   exts: [var_s_1],
   hash: var_r.hash,

@@ -480,9 +480,9 @@ try {
     try { if (typeof self !== 'undefined') self.fakeIdCounter = fakeIdCounter; } catch (_) {}
 
     // SW Cold-Start Guard: do not blindly overwrite active browser downloads to error (Task 4)
-    const checkItemState = (item) => {
+    function checkItemState(item) {
       return new Promise((resolve) => {
-        if (!item || (item.state !== 'downloading' && item.state !== 'in_progress')) {
+        if (!item || (item.state !== 'downloading' && item.state !== 'in_progress' && item.state !== 'queued')) {
           return resolve(item);
         }
         if (item.chromeId && chrome.downloads && typeof chrome.downloads.search === 'function') {
@@ -3170,6 +3170,15 @@ chrome.downloads.play = function(downloadId) {
 
 // Intercept cancel
 chrome.downloads.cancel = function(downloadId, callback) {
+  const strId = String(downloadId || '');
+  const qIdx = nativeDownloadQueue.findIndex(q => q.params && (String(q.params.taskId) === strId || String(q.params.id) === strId));
+  if (qIdx !== -1) {
+    nativeDownloadQueue.splice(qIdx, 1);
+    activeDownloads.delete(downloadId);
+    updateDownloadHistory({ id: downloadId, state: 'canceled', speed: 'Canceled' });
+    if (typeof callback === 'function') callback();
+    return;
+  }
   if (activeDownloads.has(downloadId)) {
     const t = activeDownloads.get(downloadId);
     activeDownloads.delete(downloadId);
@@ -3177,7 +3186,8 @@ chrome.downloads.cancel = function(downloadId, callback) {
       return _origCancel(downloadId, callback);
     }
     const port = getOrCreateNativePort();
-    if (port) port.postMessage({ action: 'cancel', taskId: targetId });
+    if (port) port.postMessage({ action: 'cancel', taskId: downloadId });
+    updateDownloadHistory({ id: downloadId, state: 'canceled', speed: 'Canceled' });
     if (typeof callback === 'function') callback();
     return;
   }
