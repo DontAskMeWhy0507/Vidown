@@ -87,7 +87,7 @@ export default function(module, exports, require) {
 
       _eventListener() {
         var self = this;
-        EE.on("widget.show_playnow", event => {
+        this._onShowPlaynow = event => {
           var params = event.params;
           var scopeMedia = self.state.renderDownloads[params.scopeIndex]?.media || [];
           for (var group of scopeMedia) {
@@ -101,9 +101,9 @@ export default function(module, exports, require) {
             }
           }
           self.setState();
-        });
+        };
 
-        EE.on("widget.download_canceled", event => {
+        this._onDownloadCanceled = event => {
           var params = event.params;
           var scopeMedia = self.state.renderDownloads[params.scopeIndex]?.media || [];
           for (var group of scopeMedia) {
@@ -118,9 +118,9 @@ export default function(module, exports, require) {
             }
           }
           self.setState();
-        });
+        };
 
-        EE.on("download_list.download_result", event => {
+        this._onDownloadResult = event => {
           var scopeMedia = self.state.renderDownloads[event.scopeIndex]?.media || [];
           for (var group of scopeMedia) {
             var matched = group.media.find(m => m.id === event.id && m.url === event.url);
@@ -130,9 +130,9 @@ export default function(module, exports, require) {
             break;
           }
           self.setState();
-        });
+        };
 
-        EE.on("preferred-quality-level.changed", () => {
+        this._onPreferredQualityChanged = () => {
           var preferredLevel = settings.a.get("preferred_quality_level");
           var remembered = settings.a.get("prefer_last_quality") && settings.a.get("preferred_quality:" + preferredLevel);
 
@@ -149,11 +149,35 @@ export default function(module, exports, require) {
             }
           });
           self.setState();
-        });
+        };
+
+        EE.on("widget.show_playnow", this._onShowPlaynow);
+        EE.on("widget.download_canceled", this._onDownloadCanceled);
+        EE.on("download_list.download_result", this._onDownloadResult);
+        EE.on("preferred-quality-level.changed", this._onPreferredQualityChanged);
 
         this.EE.emit("download-list.videos-count", this.state.downloadScopes?.length);
         if ((this.state.downloadScopes?.[0]?.scopeDownloads?.length || 0) > 0) {
           this.EE.emit("download-list.first-scope", this.state.downloadScopes[0]);
+        }
+      }
+
+      destroy() {
+        if (this._onShowPlaynow) {
+          EE.off("widget.show_playnow", this._onShowPlaynow);
+          this._onShowPlaynow = null;
+        }
+        if (this._onDownloadCanceled) {
+          EE.off("widget.download_canceled", this._onDownloadCanceled);
+          this._onDownloadCanceled = null;
+        }
+        if (this._onDownloadResult) {
+          EE.off("download_list.download_result", this._onDownloadResult);
+          this._onDownloadResult = null;
+        }
+        if (this._onPreferredQualityChanged) {
+          EE.off("preferred-quality-level.changed", this._onPreferredQualityChanged);
+          this._onPreferredQualityChanged = null;
         }
       }
 

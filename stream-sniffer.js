@@ -181,9 +181,14 @@
       ['loadedmetadata', 'canplay', 'play'].forEach((evt) => {
         document.addEventListener(evt, scanDomMedia, true);
       });
+      let lastMouseoverScan = 0;
       document.addEventListener('mouseover', (e) => {
-        if (e.target && (e.target.nodeName === 'VIDEO' || e.target.nodeName === 'AUDIO' || (e.target.querySelector && e.target.querySelector('video, audio')))) {
-          scanDomMedia();
+        if (e.target && (e.target.tagName === 'VIDEO' || e.target.tagName === 'AUDIO')) {
+          const now = Date.now();
+          if (now - lastMouseoverScan >= 2000) {
+            lastMouseoverScan = now;
+            scanDomMedia();
+          }
         }
       }, { passive: true });
     } catch (_) {}

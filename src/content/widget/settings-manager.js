@@ -10,10 +10,12 @@ export default function(module, exports, require) {
       this._storage = chrome.storage.local;
       this._handlerMap = new Map();
       this._options = {};
-      this._default = {
+      this._defaultSettings = {
         detach_enabled: false,
         on_page_buttons: true,
+        onPageButtonsEnabled: true,
         image_download_enabled: true,
+        imageDownloadEnabled: true,
         min_stream_size: 30720,
         prefer_last_quality: true,
         last_quality: void 0,
@@ -27,8 +29,11 @@ export default function(module, exports, require) {
         skip_video_enabled: true,
         video_changed: false,
         ADLIST_CUSTOM_RULE: {},
-        [mediaConstants.o]: []
+        [mediaConstants.o]: [],
+        "template-widget": void 0,
+        youtube_anti_adblocker_onboarding_shown_count: 0
       };
+      this._default = this._defaultSettings;
       this.loaded = false;
 
       var self = this;
@@ -65,7 +70,7 @@ export default function(module, exports, require) {
     load() {
       var self = this;
       return new Promise(resolve => {
-        self._storage.get(null, storedValues => {
+        self._storage.get(Object.keys(self._defaultSettings), storedValues => {
           self._options = storedValues || {};
           self.loaded = true;
           self._migratePreferredQualityLevel();

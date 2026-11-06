@@ -1,4 +1,6 @@
 (() => {
+if (window.__saviorIgMainWorldActive) { if (typeof window.__saviorIgReExtract === 'function') window.__saviorIgReExtract(); return; } window.__saviorIgMainWorldActive = true;
+
 /**
  * Instagram Video Detail Extractor (Main World)
  * Traverses React Fiber internals to extract video manifest, dashInfo, and HD/SD sources from Instagram posts, Reels, and Stories.
@@ -172,15 +174,25 @@ function updateVideo(video) {
   } catch {}
 }
 
-function reExtractAll() {
+let reExtractTimer = null;
+function runReExtractAll() {
   const videos = document.querySelectorAll('video');
   if (videos) {
     Array.from(videos).filter(Boolean).forEach(updateVideo);
   }
 }
 
+function reExtractAll() {
+  if (reExtractTimer) clearTimeout(reExtractTimer);
+  reExtractTimer = setTimeout(() => {
+    reExtractTimer = null;
+    runReExtractAll();
+  }, 150);
+}
+window.__saviorIgReExtract = reExtractAll;
+
 // 1. Initial extraction
-reExtractAll();
+runReExtractAll();
 
 // 2. DOM MutationObserver to catch dynamic story containers and replaced video tags
 try {
@@ -191,7 +203,7 @@ try {
         shouldUpdate = true;
         break;
       }
-      if (m.type === 'attributes' && (m.attributeName === 'src' || m.attributeName === 'class')) {
+      if (m.type === 'attributes' && m.attributeName === 'src') {
         shouldUpdate = true;
         break;
       }
@@ -202,7 +214,7 @@ try {
   const attachObserver = () => {
     const target = document.body || document.documentElement;
     if (target) {
-      observer.observe(target, { childList: true, subtree: true, attributes: true, attributeFilter: ['src', 'class'] });
+      observer.observe(target, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
     }
   };
 
@@ -216,7 +228,7 @@ try {
 } catch {}
 
 // 3. Media playback and metadata events
-['play', 'playing', 'loadeddata', 'loadedmetadata', 'timeupdate'].forEach((evt) => {
+['play', 'playing', 'loadeddata', 'loadedmetadata'].forEach((evt) => {
   document.addEventListener(evt, (e) => {
     if (e.target && e.target.tagName === 'VIDEO') {
       updateVideo(e.target);

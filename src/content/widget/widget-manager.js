@@ -652,7 +652,7 @@ export default function(module, exports, r) {
       this.$el || (this.$el = Object(coreUtils.query)(this.el, this.parent.$el)), Object(coreUtils.devLog)("ToggleLightButton rendered"), this.$el && (this.$el.setAttribute("data-svg-control", this.state.isLightOff ? "on" : "off"), this.$el.querySelector(".tooltip, span").innerText = Object(coreUtils.i18n)(this.state.isLightOff ? "turn_on_light" : "turn_off_light"), this.state.isLightOff ? this.$el.classList.add("is-active") : this.$el.classList.remove("is-active")), this.shouldHide() ? null === (ev = this.$el) || void 0 === ev || ev.setAttribute("hidden", "") : null === (r2 = this.$el) || void 0 === r2 || r2.removeAttribute("hidden"), this.shouldDisable() ? null === (nd = this.$el) || void 0 === nd || nd.setAttribute("disabled", "") : null === (opt = this.$el) || void 0 === opt || opt.removeAttribute("disabled");
     }
     bindListener(el) {
-      console.log("WidgetId", this.parent.id), this.$backdrop.addEventListener("click", () => {
+      this.$backdrop.addEventListener("click", () => {
         this.parent.updateSharedState({ viewedWidgetId: null, isLightOffGlobal: false }), this.setState({ isLightOff: false }), this.handleLightOnOff(false);
       }), document.addEventListener("webkitfullscreenchange", this.fullscreenChanged), document.addEventListener("fullscreenchange", this.fullscreenChanged);
     }
@@ -810,6 +810,10 @@ export default function(module, exports, r) {
     }
     destroy() {
       var el, ev, r2, nd, opt, arg;
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+        this.resizeObserver = null;
+      }
       if (this.onWindowScroll) {
         window.removeEventListener("scroll", this.onWindowScroll, { capture: true });
         if (this._scrollRafId) {
@@ -869,6 +873,11 @@ export default function(module, exports, r) {
       !settingsManager.a.get("on_page_buttons") || this.parent.shouldHideWidget() || this.isDismissed || this.isDestroyed || (this.mouseMoveActive || (null === (ev = this.$parent) || void 0 === ev || ev.addEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (r2 = this.parent.getSiteData()) || void 0 === r2 ? void 0 : r2.useCaptureOnMouseMove)), null === (nd = this.$el) || void 0 === nd || nd.addEventListener("mousemove", this.onMouseMove, Object(coreUtils.beDefinedOr)(true)(null === (opt = this.parent.getSiteData()) || void 0 === opt ? void 0 : opt.useCaptureOnMouseMove))), this.mouseMoveActive = true, this.showWidget(), clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), this.debouncedLogShow(), SaviorWidgetController.mountWidget(this.parent), this.updatePosition() && this.updateParent(), el && this.onMouseMove(el), null === (st = null === (arg = this.parent.getSiteData()) || void 0 === arg ? void 0 : arg.onFocused) || void 0 === st || st.call(arg, this));
     }
     onMouseMove(t) {
+      var now = Date.now();
+      if (this._lastMouseMove && (now - this._lastMouseMove < 100)) {
+        return;
+      }
+      this._lastMouseMove = now;
       clearTimeout(this.timeout), clearTimeout(this.timeoutAnimation), this.showWidget();
       var isOverWidget = Boolean(
         this.$el && t && (
@@ -901,6 +910,9 @@ export default function(module, exports, r) {
       this.timeout = setTimeout(() => this.hideWidget(), 400);
     }
     showWidget() {
+      if (this.$el && !this.$el.hasAttribute("hidden") && this.$el.classList.contains("show")) {
+        return Promise.resolve();
+      }
       var el, ev, r2, nd = !(arguments.length > 0 && void 0 !== arguments[0]) || arguments[0];
       return Z(this, void 0, void 0, K().m((function urlMatcher2() {
         return K().w((function(o) {
@@ -912,7 +924,7 @@ export default function(module, exports, r) {
               }
               return o.a(2);
             case 1:
-              if (null === (el = this.$el) || void 0 === el || el.removeAttribute("hidden"), !nd) {
+              if (null === (el = this.$el) || void 0 === el || el.removeAttribute("hidden"), this.$el && this.$el.classList.add("show"), !nd) {
                 o.n = 2;
                 break;
               }
@@ -938,7 +950,7 @@ export default function(module, exports, r) {
               }
               return r3.a(2);
             case 1:
-              null === (ev = null === (el = this.$el) || void 0 === el ? void 0 : el.firstElementChild) || void 0 === ev || ev.classList.add("hidden"), this.timeoutAnimation = setTimeout(() => {
+              null === (ev = null === (el = this.$el) || void 0 === el ? void 0 : el.firstElementChild) || void 0 === ev || ev.classList.add("hidden"), this.$el && this.$el.classList.remove("show"), this.timeoutAnimation = setTimeout(() => {
                 var t2;
                 null === (t2 = this.$el) || void 0 === t2 || t2.setAttribute("hidden", "true");
               }, 150);
@@ -1517,6 +1529,7 @@ ${t2.text}`;
       }
     }
     destroy() {
+      super.destroy && super.destroy();
       this.getEventRegistry().forEach((el, ev) => {
         ev.removeEventListener("click", el);
       });
@@ -2156,6 +2169,7 @@ ${t2.text}`;
       var ev, r2 = qt(this.nodeWidgetMap.values());
       try {
         for (r2.s(); !(ev = r2.n()).done; ) {
+          this.widgetDownloadsMap.delete(ev.value);
           ev.value.destroy();
         }
       } catch (t2) {
@@ -2171,6 +2185,9 @@ ${t2.text}`;
       try {
         for (idx.s(); !(nd = idx.n()).done; ) {
           var opt = nd.value, arg = this.nodeWidgetMap.get(opt);
+          if (arg) {
+            this.widgetDownloadsMap.delete(arg);
+          }
           (null === (r2 = null === (ev = this.widget) || void 0 === ev ? void 0 : ev.$parent) || void 0 === r2 ? void 0 : r2.contains(null == arg ? void 0 : arg.$parent)) && this.unmountCurrentWidget(), null == arg || arg.destroy(), this.nodeWidgetMap.delete(opt);
         }
       } catch (t2) {
@@ -2191,7 +2208,7 @@ ${t2.text}`;
       }
       clearTimeout(this._timeoutCleanup), this._timeoutCleanup = setTimeout(() => {
         this.nodeWidgetMap.forEach((t2, e2) => {
-          e2.hasAttribute("savior-scanned-img") && e2.getAttribute("savior-scanned-img") === location.href || e2.isConnected || (this.nodeWidgetMap.delete(e2), t2.destroy());
+          e2.hasAttribute("savior-scanned-img") && e2.getAttribute("savior-scanned-img") === location.href || e2.isConnected || (this.nodeWidgetMap.delete(e2), this.widgetDownloadsMap.delete(t2), t2.destroy());
         });
       }, 42);
     }, mountWidget(el) {

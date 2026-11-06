@@ -214,7 +214,7 @@ export default function(module, exports, require) {
               step.n = 4;
               break;
             }
-            mediaFormat = domHelper.f(playUrl);
+            mediaFormat = urlUtils.f(playUrl);
             mediaFormat.filename = videoTitle;
             mediaFormat.ext = "mp4";
             mediaFormat.exts = ["mp4"];
@@ -1192,7 +1192,7 @@ export default function(module, exports, require) {
                 matchedItemModule = targetMedia.originVideoId ? sigiState?.ItemModule?.[targetMedia.originVideoId] :
                   sigiState?.ItemModule?.[sigiState?.ItemList?.f?.list?.[0] || sigiState?.ItemList?.foryou?.list?.[0] || sigiState?.ItemList?.video?.list?.[0]];
                 if (matchedItemModule) {
-                  singleParsedMedia = domHelper.f(matchedItemModule.video.playAddr);
+                  singleParsedMedia = urlUtils.f(matchedItemModule.video.playAddr);
                   singleParsedMedia.filename = matchedItemModule.desc;
                   singleParsedMedia.ext = "mp4";
                   singleParsedMedia.exts = ["mp4"];
@@ -1223,7 +1223,7 @@ export default function(module, exports, require) {
                 videoFormat = firstDisplay.videoFormat;
                 videoTitleClean = firstDisplay.videoCurrentPeriod + " - " + firstDisplay.videoTitle;
                 playInfoList = firstDisplay.videoPlayInfo.map(function(playItem) {
-                  var mediaNode = domHelper.f(playItem.main);
+                  var mediaNode = urlUtils.f(playItem.main);
                   var def = playItem.definition;
                   var qualLabel = mediaConstants.r[def]?.label || mediaConstants.r[playItem.height + "p"]?.label || mediaConstants.r["480p"].label;
                   return Object.assign(Object.assign({}, mediaNode), {
@@ -1327,7 +1327,7 @@ export default function(module, exports, require) {
                     imgSet.add(img.src);
                   });
                   step.n = 2;
-                  return domHelper.g({ url: activeImg.src, node: activeImg });
+                  return urlUtils.g({ url: activeImg.src, node: activeImg });
                 case 2:
                   mediaResult = step.v;
                   if (imgSet.size >= 2) {
@@ -1471,7 +1471,7 @@ export default function(module, exports, require) {
                   parsedBitrates = step.v;
                   if (parsedBitrates?.length) return step.a(2, parsedBitrates);
                 case 6:
-                  singlePlayMedia = domHelper.f(videoMeta.playAddr);
+                  singlePlayMedia = urlUtils.f(videoMeta.playAddr);
                   singlePlayMedia.resolution = videoMeta.ratio || videoMeta.definition;
                   singlePlayMedia.quality = mediaConstants.r[singlePlayMedia.resolution]?.label;
                   singlePlayMedia.filename = videoTitle;
@@ -1504,7 +1504,7 @@ export default function(module, exports, require) {
                   awemeBitrates = step.v;
                   if (awemeBitrates?.length) return step.a(2, awemeBitrates);
                 case 10:
-                  singleAwemeMedia = domHelper.f(awemeData.url);
+                  singleAwemeMedia = urlUtils.f(awemeData.url);
                   singleAwemeMedia.filename = videoTitle;
                   return step.a(2, [singleAwemeMedia]);
                 case 11:

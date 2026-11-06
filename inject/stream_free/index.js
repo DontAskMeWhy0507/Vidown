@@ -1,6 +1,11 @@
 {
+  let retries = 0;
   let t = setInterval(() => {
-    var e = document.body.getAttribute("savior-m3u8");
+    if (++retries > 20) {
+      clearInterval(t);
+      return;
+    }
+    var e = document.body ? document.body.getAttribute("savior-m3u8") : null;
     if (e) {
       clearInterval(t);
       chrome.runtime.sendMessage(null, {

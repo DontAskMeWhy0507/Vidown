@@ -3,6 +3,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
   requireFn.r(exportsObj);
   var dep_dom_utils = requireFn(0),
+  dep_url_utils = requireFn(3),
   dep_dash_parser = requireFn(28);
   function var_o() {
   /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var var_t,
@@ -295,7 +296,7 @@ export default function (moduleObj, exportsObj, requireFn) {
       var parsedSource = JSON.parse(rawSource);
       var streamUrl = parsedSource.url || parsedSource.stream_url;
       if (streamUrl) {
-        var item = Object(dep_dom_utils.f)(streamUrl);
+        var item = Object(dep_url_utils.f)(streamUrl);
         item.fixName = obj_u[var_e] || document.title;
         item.filename = item.fixName;
         item.ext = streamUrl.includes(".m3u8") ? "m3u8" : "mp4";

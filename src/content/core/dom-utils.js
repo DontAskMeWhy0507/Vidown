@@ -295,9 +295,14 @@ export default function(t, e, r) {
           for (; ; ) switch (e3.n) {
             case 0:
               return e3.a(2, new Promise((e4) => {
-                EE.emit("message.background.send", { type: "youtube_get_info", data: { method: "GET", url: t3 } }), EE.on("youtube_get_info_result", (r2) => {
-                  r2.data.url === t3 && e4(r2.data);
-                });
+                var onInfo = (r2) => {
+                  if (r2 && r2.data && r2.data.url === t3) {
+                    EE.off("youtube_get_info_result", onInfo);
+                    e4(r2.data);
+                  }
+                };
+                EE.on("youtube_get_info_result", onInfo);
+                EE.emit("message.background.send", { type: "youtube_get_info", data: { method: "GET", url: t3 } });
               }));
           }
         }), e2);
@@ -309,10 +314,15 @@ export default function(t, e, r) {
           for (; ; ) switch (e3.n) {
             case 0:
               return e3.a(2, new Promise((e4) => {
-                EE.emit("message.background.send", { type: "youtube_get_mpd_info", data: { url: t3, method: "GET" } }), EE.on("youtube_set_mpd_info", (t4) => {
+                var onMpd = (t4) => {
                   var r2, n2;
-                  t4 && "resolve" === (null === (r2 = t4.data) || void 0 === r2 ? void 0 : r2.success) && e4(null === (n2 = t4.data) || void 0 === n2 ? void 0 : n2.response);
-                });
+                  if (t4 && "resolve" === (null === (r2 = t4.data) || void 0 === r2 ? void 0 : r2.success)) {
+                    EE.off("youtube_set_mpd_info", onMpd);
+                    e4(null === (n2 = t4.data) || void 0 === n2 ? void 0 : n2.response);
+                  }
+                };
+                EE.on("youtube_set_mpd_info", onMpd);
+                EE.emit("message.background.send", { type: "youtube_get_mpd_info", data: { url: t3, method: "GET" } });
               }));
           }
         }), e2);
@@ -325,11 +335,16 @@ export default function(t, e, r) {
       }
       if (t2.IS_CONTENT_SCRIPT && !u2(r2)) {
         var c2 = "background_request." + G();
-        return EE.emit("message.background.send", { type: n.b.FETCH, data: { id: c2, method: e2, url: r2, params: i2, headers: o2, includeCredentials: a2, paramType: s2 } }), new Promise((t3, e3) => {
-          EE.on("background_request_result", (r3) => {
+        return new Promise((t3, e3) => {
+          var onRequestResult = (r3) => {
             var n2 = r3.data;
-            n2.id === c2 && ("resolve" === n2.success ? t3(n2.response) : e3(n2.response));
-          });
+            if (n2 && n2.id === c2) {
+              EE.off("background_request_result", onRequestResult);
+              "resolve" === n2.success ? t3(n2.response) : e3(n2.response);
+            }
+          };
+          EE.on("background_request_result", onRequestResult);
+          EE.emit("message.background.send", { type: n.b.FETCH, data: { id: c2, method: e2, url: r2, params: i2, headers: o2, includeCredentials: a2, paramType: s2 } });
         });
       }
       var l2 = null, f2 = new Headers();
@@ -368,14 +383,32 @@ export default function(t, e, r) {
     function T(t3) {
       return new Promise((e2) => {
         var r2 = G(), n2 = t3 + "_size";
-        function i2(i3, o2) {
-          i3 == r2 && (o2 ? e2(o2) : M(t3).then((t4) => {
-            e2(t4), EE.emit("media-provider.cache.put", G(), n2, t4);
-          }).catch(() => {
-            I({ url: JSON.stringify(t3), referrer: document.referrer || location.host || JSON.stringify(t3), error: "Error: Cannot get media size or media url is wrong" }), e2(null), EE.emit("media-provider.cache.put", G(), n2, null);
-          }));
+        var timeoutTimer = null;
+        function cleanup() {
+          if (timeoutTimer) {
+            clearTimeout(timeoutTimer);
+            timeoutTimer = null;
+          }
+          EE.off("media-provider.cache.hit", i2);
+          EE.off("media-provider.cache.miss", i2);
         }
-        EE.emit("media-provider.cache.get", r2, n2), EE.on("media-provider.cache.hit", i2), EE.on("media-provider.cache.miss", i2);
+        function i2(i3, o2) {
+          if (i3 == r2) {
+            cleanup();
+            o2 ? e2(o2) : M(t3).then((t4) => {
+              e2(t4), EE.emit("media-provider.cache.put", G(), n2, t4);
+            }).catch(() => {
+              I({ url: JSON.stringify(t3), referrer: document.referrer || location.host || JSON.stringify(t3), error: "Error: Cannot get media size or media url is wrong" }), e2(null), EE.emit("media-provider.cache.put", G(), n2, null);
+            });
+          }
+        }
+        timeoutTimer = setTimeout(() => {
+          cleanup();
+          e2(null);
+        }, 10000);
+        EE.on("media-provider.cache.hit", i2);
+        EE.on("media-provider.cache.miss", i2);
+        EE.emit("media-provider.cache.get", r2, n2);
       });
     }
     function I(t3) {
@@ -473,17 +506,29 @@ export default function(t, e, r) {
     function Q(t3) {
       return new Promise((e2) => {
         var r2 = t3.type + "_" + G();
-        t3.id = r2, chrome.runtime.sendMessage(t3), EE.on("utils.send_message_result", (t4) => {
-          t4.id === r2 && e2(t4.data);
-        });
+        var onMsgResult = (t4) => {
+          if (t4 && t4.id === r2) {
+            EE.off("utils.send_message_result", onMsgResult);
+            e2(t4.data);
+          }
+        };
+        t3.id = r2;
+        EE.on("utils.send_message_result", onMsgResult);
+        chrome.runtime.sendMessage(t3);
       });
     }
     function z(t3) {
       return new Promise((e2) => {
         var r2 = t3.type + "_" + G();
-        t3.id = r2, EE.emit("message.background.send", t3), EE.on("utils.send_message_result", (t4) => {
-          t4.id === r2 && e2(t4.data);
-        });
+        var onMsgResult = (t4) => {
+          if (t4 && t4.id === r2) {
+            EE.off("utils.send_message_result", onMsgResult);
+            e2(t4.data);
+          }
+        };
+        t3.id = r2;
+        EE.on("utils.send_message_result", onMsgResult);
+        EE.emit("message.background.send", t3);
       });
     }
     function H(t3) {

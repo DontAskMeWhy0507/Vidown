@@ -52,14 +52,25 @@ export default function(module, exports, require) {
 
           chrome.runtime.onMessage.addListener((incomingMessage, senderInfo, sendResponseCallback) => {
             var messageWithCallback = Object.assign({}, incomingMessage);
-            messageWithCallback.cb = sendResponseCallback;
-            EE.emit("message.received", messageWithCallback);
+            var innerTimer = null;
             if (incomingMessage && incomingMessage.type === "get_inner_data") {
-              setTimeout(() => {
+              innerTimer = setTimeout(() => {
                 try {
                   sendResponseCallback({ data: null, error: "timeout" });
                 } catch (timeoutError) {}
               }, 5000);
+            }
+            messageWithCallback.cb = (res) => {
+              if (innerTimer) {
+                clearTimeout(innerTimer);
+                innerTimer = null;
+              }
+              try {
+                sendResponseCallback(res);
+              } catch (_) {}
+            };
+            EE.emit("message.received", messageWithCallback);
+            if (incomingMessage && incomingMessage.type === "get_inner_data") {
               return true;
             }
             return false;
@@ -108,13 +119,23 @@ export default function(module, exports, require) {
                 EE.emit("background_request_result", receivedEvent);
                 break;
               case "get_inner_data": {
-                var innerResponse = { type: "return_inner_data", id: receivedEvent.id };
-                innerResponse.data = await iframeDataFetcher.a.getUrl(
-                  receivedEvent.url,
-                  receivedEvent.config,
-                  receivedEvent.frameUrl
-                );
-                receivedEvent.cb(innerResponse);
+                try {
+                  var innerResponse = { type: "return_inner_data", id: receivedEvent.id };
+                  innerResponse.data = await iframeDataFetcher.a.getUrl(
+                    receivedEvent.url,
+                    receivedEvent.config,
+                    receivedEvent.frameUrl
+                  );
+                  if (typeof receivedEvent.cb === "function") {
+                    receivedEvent.cb(innerResponse);
+                  }
+                } catch (innerError) {
+                  if (typeof receivedEvent.cb === "function") {
+                    try {
+                      receivedEvent.cb({ type: "return_inner_data", id: receivedEvent.id, data: null, error: String(innerError) });
+                    } catch (_) {}
+                  }
+                }
                 break;
               }
               case "return_inner_data":
@@ -271,10 +292,17 @@ export default function(module, exports, require) {
           window.addEventListener("popstate", checkLocationChange);
           window.addEventListener("hashchange", checkLocationChange);
           window.addEventListener("yt-navigate-finish", checkLocationChange);
-          (window || globalContext).onload = function() {
+          var attachHeadObserver = function() {
             var headElement = document.querySelector("head") || document.documentElement;
-            new MutationObserver(checkLocationChange).observe(headElement, { childList: true, subtree: true });
+            if (headElement) {
+              new MutationObserver(checkLocationChange).observe(headElement, { childList: true, subtree: true });
+            }
           };
+          if (document.readyState === "complete") {
+            attachHeadObserver();
+          } else {
+            window.addEventListener("load", attachHeadObserver, { once: true });
+          }
         } catch (bootstrapError) {
           console.log("Caught", bootstrapError);
         }

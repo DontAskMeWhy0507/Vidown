@@ -37,6 +37,12 @@
         }
         return res;
       } catch (_) {
+        const lastArg = args[args.length - 1];
+        if (typeof args[args.length - 1] === 'function') {
+          try {
+            args[args.length - 1](undefined);
+          } catch (_) {}
+        }
         return Promise.resolve();
       }
     };

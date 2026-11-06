@@ -1,8 +1,8 @@
 {
   "0": {
     "path": "core/dom-utils.js",
-    "sha256": "915bbc1a4a96a68a4aef10ed92952caddda576072feeafaad9cffa9a45478a9a",
-    "size": 39799,
+    "sha256": "c57b72c19294c26ed1e91a8ed58ef9d040577be5be0d4b523cf10b136792c859",
+    "size": 41058,
     "fileSize": 39799
   },
   "1": {
@@ -37,8 +37,8 @@
   },
   "7": {
     "path": "widget/settings-manager.js",
-    "sha256": "d8dbe1c997d6bb2c8bbf10e798e64b6b0508e583955a0d38b19a649de1da8f68",
-    "size": 4603,
+    "sha256": "dad49ef33bea0012f582870a724a39101febaf5a4151440bdac9597f32d13ced",
+    "size": 4851,
     "fileSize": 4077
   },
   "8": {
@@ -931,8 +931,8 @@
   },
   "164": {
     "path": "widget/download-list.js",
-    "sha256": "e05d0c0655422778333b535f2ea42170885532858b34c18282d1230c6ac6d9a8",
-    "size": 34541,
+    "sha256": "e0cbf521d10e4265c1e5d32faab29eb6333920303ee13e0bc6f4be9eeb0568dc",
+    "size": 35480,
     "fileSize": 34545
   },
   "165": {
@@ -2095,8 +2095,8 @@
   },
   "362": {
     "path": "platform/twitter_com-extractor.js",
-    "sha256": "4390d86a16258ee2552a02777bc9e0f8d272e3ae4ceb8bc663a00cbd46d38410",
-    "size": 10518,
+    "sha256": "dbd30de1ca900281bc3f6ed380d9c23060b15682453e8cae359c98efe3eca408",
+    "size": 10550,
     "fileSize": 10518
   },
   "363": {
@@ -2551,8 +2551,8 @@
   },
   "442": {
     "path": "platform/tiktok-douyin.js",
-    "sha256": "d29b083eec9273faceeadac3c79fd6f89c0c41c1e57fd8367bd2e53cbff7b302",
-    "size": 72792,
+    "sha256": "eccbb89e2840656ed4c92c391988f1f1a7366a6ec4db5d9da4537e8f8b92613e",
+    "size": 72786,
     "fileSize": 72792
   },
   "443": {
@@ -2911,14 +2911,14 @@
   },
   "541": {
     "path": "widget/widget-manager.js",
-    "sha256": "53722a956910ac1d3e4e6f4b5e79f924020595c5ebdd35c5c10b802f825931b1",
-    "size": 143133,
+    "sha256": "bdcebb9284954632d21b335df52e63cb5bc9f6721b4fcce67ae254a1088eff46",
+    "size": 143806,
     "fileSize": 139222
   },
   "543": {
     "path": "detector/content-entry.js",
-    "sha256": "3f9a0e2e05a4d5b04728c7ad0680004ba14fe3911ce25f85e2bcecceb7451028",
-    "size": 11490,
+    "sha256": "36d286747443fb071f13eeaa332ed393a5b14e9c25e482c2a2218d2e2e61a7af",
+    "size": 12544,
     "fileSize": 11490
   },
   "544": {
