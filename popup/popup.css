@@ -1,3 +1,124 @@
+:root {
+  --primary: #059669;
+  --primary-hover: #047857;
+  --primary-light: #ecfdf5;
+  --bg-main: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --border-color: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-sub: #64748b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #10b981;
+    --primary-hover: #059669;
+    --primary-light: rgba(16, 185, 129, 0.15);
+    --bg-main: #18191a;
+    --bg-surface: #242526;
+    --bg-card: #242526;
+    --bg-card-hover: #303031;
+    --border-color: #3e4042;
+    --text-main: #e4e6eb;
+    --text-muted: #b0b3b8;
+    --text-sub: #8a8d91;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+  }
+
+  .popup-header {
+    background: var(--bg-surface) !important;
+    border-bottom-color: var(--border-color) !important;
+  }
+
+  .brand-text h1 {
+    color: var(--text-main) !important;
+  }
+
+  .header-toggle-wrap {
+    background: var(--bg-card-hover) !important;
+    border-color: var(--border-color) !important;
+  }
+
+  .header-toggle-label {
+    color: var(--text-muted) !important;
+  }
+
+  .manager-shortcut-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+  }
+
+  .manager-shortcut-card:hover {
+    background: var(--bg-card-hover) !important;
+  }
+
+  .shortcut-title {
+    color: var(--text-main) !important;
+  }
+
+  .recent-heading {
+    color: var(--text-muted) !important;
+  }
+
+  .recent-badge-count {
+    background: var(--bg-card-hover) !important;
+    color: var(--text-sub) !important;
+  }
+
+  .recent-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+  }
+
+  .recent-card:hover {
+    background: var(--bg-card-hover) !important;
+  }
+
+  .card-icon {
+    background: var(--bg-surface) !important;
+    color: var(--text-sub) !important;
+  }
+
+  .card-title {
+    color: var(--text-main) !important;
+  }
+
+  .card-actions {
+    border-top-color: var(--border-color) !important;
+  }
+
+  .btn-card-action {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-main) !important;
+  }
+
+  .btn-card-action:hover {
+    background: var(--bg-card-hover) !important;
+  }
+
+  .empty-state {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+  }
+
+  .empty-title {
+    color: var(--text-main) !important;
+  }
+
+  .popup-footer {
+    background: var(--bg-surface) !important;
+    border-top-color: var(--border-color) !important;
+  }
+}
+
 /* VidManager Video Downloader - Popup CSS */
 * {
   margin: 0;
@@ -353,6 +474,9 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+  row-gap: 4px;
+  min-width: 0;
   margin-top: 2px;
   font-size: 11px;
   color: #64748b;
@@ -363,6 +487,10 @@ body {
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 4px;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .status-badge.completed {

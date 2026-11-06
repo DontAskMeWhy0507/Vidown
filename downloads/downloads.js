@@ -665,6 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const titleTxt = document.createElement('span');
       titleTxt.className = 'item-title-downloading';
       titleTxt.textContent = item.title || 'video.mp4';
+      titleTxt.title = item.title || '';
 
       const progInfo = document.createElement('span');
       progInfo.className = 'item-downloading-stats';

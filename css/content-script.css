@@ -3,31 +3,6 @@
   background-size: 20px 20px;
 }
 @charset "UTF-8";
-@font-face {
-  font-family: SegoeUI;
-  src: local("Segoe UI Light"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff2") format("woff2"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff") format("woff"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.ttf") format("truetype");
-  font-weight: 100;
-}
-@font-face {
-  font-family: SegoeUI;
-  src: local("Segoe UI Semilight"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff2") format("woff2"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff") format("woff"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.ttf") format("truetype");
-  font-weight: 200;
-}
-@font-face {
-  font-family: SegoeUI;
-  src: local("Segoe UI"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff2") format("woff2"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff") format("woff"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.ttf") format("truetype");
-  font-weight: 400;
-}
-@font-face {
-  font-family: SegoeUI;
-  src: local("Segoe UI Semibold"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.woff2") format("woff2"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.woff") format("woff"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.ttf") format("truetype");
-  font-weight: 600;
-}
-@font-face {
-  font-family: SegoeUI;
-  src: local("Segoe UI Bold"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.woff2") format("woff2"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.woff") format("woff"), url("//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.ttf") format("truetype");
-  font-weight: 700;
-}
 * {
   margin: 0;
   padding: 0;
@@ -632,7 +607,8 @@ modal-footer,
   display: none;
   background: #fff;
   width: 370px;
-  height: 155px;
+  min-height: 155px;
+  height: auto;
   left: 20px;
   top: 80px;
   position: absolute;
@@ -726,7 +702,8 @@ modal-footer,
   top: 20px;
   right: 40px;
   width: 280px;
-  height: 50px;
+  min-height: 50px;
+  height: auto;
   border: 1px solid #bbb;
   border-radius: 6px;
   background: #fff;
@@ -1232,8 +1209,8 @@ button.play-now-btn:active {
 .quality-selector-box .quality-label .media-name,
 .audio-channel-selector-box .quality-label .media-name {
   order: 0;
-  min-width: 108px;
-  max-width: 108px;
+  min-width: 116px;
+  max-width: 124px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -1243,7 +1220,7 @@ button.play-now-btn:active {
 }
 .quality-selector-box .quality-label .media-name:has(+ .with-resolution),
 .audio-channel-selector-box .quality-label .media-name:has(+ .with-resolution) {
-  max-width: 108px;
+  max-width: 124px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -1287,7 +1264,9 @@ button.play-now-btn:active {
 .audio-channel-selector-box .quality-label .media-sub-info.info-resolution,
 .quality-selector-box .quality-label .media-sub-info.info-size,
 .audio-channel-selector-box .quality-label .media-sub-info.info-size {
-  min-width: 48px;
+  min-width: 54px;
+  max-width: 68px;
+  text-align: right;
 }
 .quality-selector-box .quality-label.is-fast .media-name,
 .audio-channel-selector-box .quality-label.is-fast .media-name {
@@ -1905,7 +1884,7 @@ button.play-now-btn:active {
   transform: none;
 }
 .download-box {
-  width: 238px;
+  width: 268px;
 }
 .download-box-content-box {
   padding-top: 8px;
@@ -1956,7 +1935,8 @@ dropdown-box#onboard-nmp {
   background: #2f3033;
   color: #d6d6d6;
   width: 342px;
-  height: 152px;
+  min-height: 152px;
+  height: auto;
   transition: top 0.3s ease;
 }
 dropdown-box#onboard-nmp[hidden] {
