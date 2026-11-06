@@ -2964,6 +2964,19 @@ if (chrome.runtime.onMessageExternal) {
         return false;
       }
 
+      const safeExternalReq = {
+        action: req.action,
+        url: targetUrl,
+        videoUrl: req.videoUrl,
+        audioUrl: req.audioUrl,
+        title: req.title,
+        filename: req.filename,
+        quality: req.quality,
+        ext: req.ext,
+        pageUrl: sender && sender.url ? sender.url : ''
+      };
+      req = safeExternalReq;
+
       let started = false;
       if (isSessionProtectedStream(req) && nativeHelperAvailable && !req._relayFailed && !req.audioUrl && !req.convertToMp3 && !req.soundOnly) {
         started = startStreamRelayDownload(req);

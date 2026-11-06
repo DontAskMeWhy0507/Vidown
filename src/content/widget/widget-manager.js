@@ -1224,9 +1224,10 @@ export default function(module, exports, r) {
     destroy() {
     }
     shouldEnable() {
-      return "www.youtube.com" === location.host;
+      return false;
     }
   }
+  TransferComp.prototype.shouldEnable = function() { return false; };
   class DownloadBtnComp extends StateComponent {
     getDefaultState() {
       return { opening: false };

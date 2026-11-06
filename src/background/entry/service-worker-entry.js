@@ -1482,11 +1482,12 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   break;
   case "get_serp_config":
   chrome.storage.local.get(param_e_1 => {
+  var var_t = param_e_1 && param_e_1.otherControls ? param_e_1.otherControls.ab_test_data : undefined;
   param_r({
   status: "ok",
   data: {
-  gserpSelectors: param_e_1.gserpSelectors,
-  customControlFromServer: param_e_1.otherControls.ab_test_data
+  gserpSelectors: param_e_1 ? param_e_1.gserpSelectors : undefined,
+  customControlFromServer: var_t
   }
   }
   );
@@ -2301,6 +2302,9 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   );
   return param_T.a(3, 86);
   case 44:
+  if (typeof param_n.file !== "string" || !/^[a-z0-9_-]+(\/[a-z0-9_-]+)?$/i.test(param_n.file) || param_n.file.includes("..")) {
+  return param_T.a(3, 86);
+  }
   var_N = param_n.videoId || var_k;
   var_r.set(var_N, param_n.id);
   if (param_o.frameId) {
@@ -2657,6 +2661,17 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   case 79:
   return param_T.a(3, 86);
   case 80:
+  if (!param_o || !param_o.tab || !/^https:\/\/([a-z0-9-]+\.)?youtube\.com\//i.test(param_o.tab.url || "")) {
+  sendMessage(var_k, {
+  type: "return_inner_data",
+  data: {
+  id: param_n.id,
+  data: {}
+  }
+  }
+  , param_o ? param_o.frameId || 0 : 0);
+  return param_T.a(3, 86);
+  }
   chrome.cookies.getAll({
   url: "https://www.youtube.com"
   }

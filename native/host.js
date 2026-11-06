@@ -117,16 +117,6 @@ if (require.main === module) {
 }
 
 const LOG_FILE = path.join(__dirname, 'host_activity.log');
-function logHost(txt) {
-  try {
-    if (fs.existsSync(LOG_FILE) && fs.statSync(LOG_FILE).size > 300 * 1024) {
-      fs.writeFileSync(LOG_FILE, `[${new Date().toISOString()}] [Log truncated]\n`);
-    }
-    fs.appendFileSync(LOG_FILE, `[${new Date().toISOString()}] ${txt}\n`);
-  } catch (e) {}
-}
-
-logHost(`Savior Host started PID=${process.pid}`);
 
 // Redact credentials before anything reaches host_activity.log: session cookies
 // and signed-URL tokens must never be persisted next to the host binary.
@@ -136,12 +126,35 @@ function sanitizeForLog(value) {
     if (!s) return s;
     s = s.replace(/"(cookie|set-cookie|authorization)"\s*:\s*"(?:[^"\\]|\\.)*"/gi, '"$1":"<redacted>"');
     s = s.replace(/(\b(?:cookie|set-cookie|authorization):\s*)([^\r\n]+)/gi, '$1<redacted>');
-    s = s.replace(/((?:[?&]|\b)(?:signature|sig|token|auth|key|exp|nonce|n|rand)=)([^&\s"'>]+)/gi, '$1<redacted>');
+    s = s.replace(/((?:[?&]|\b)(?:sig|signature|lsig|s|token|auth|key|hdnea|Policy|Signature|Key-Pair-Id|ip|pot|exp|nonce|n|rand)=)([^&\s"'>\\]+)/gi, '$1<redacted>');
+    const homeCandidates = [process.env.USERPROFILE, process.env.HOME, os.homedir()].filter(Boolean);
+    for (const rawHome of homeCandidates) {
+      const normHome = String(rawHome).replace(/[\\/]+$/, '');
+      if (!normHome) continue;
+      const parts = normHome.split(/[\\/]+/).map(seg => seg.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      if (parts.length > 0) {
+        const homeRe = new RegExp(parts.join('(?:\\\\|/)+'), 'gi');
+        s = s.replace(homeRe, '~');
+      }
+    }
+    s = s.replace(/[A-Za-z]:(?:\\|\/)+Users(?:\\|\/)+[^\\/"'\s]+/g, '~');
     return s;
   } catch (_) {
     return '<unloggable>';
   }
 }
+
+function logHost(txt) {
+  try {
+    const safeTxt = sanitizeForLog(txt);
+    if (fs.existsSync(LOG_FILE) && fs.statSync(LOG_FILE).size > 300 * 1024) {
+      fs.writeFileSync(LOG_FILE, `[${new Date().toISOString()}] [Log truncated]\n`);
+    }
+    fs.appendFileSync(LOG_FILE, `[${new Date().toISOString()}] ${safeTxt}\n`);
+  } catch (e) {}
+}
+
+logHost(`Savior Host started PID=${process.pid}`);
 
 let testMessageHook = null;
 function setMessageHook(fn) {
@@ -220,7 +233,92 @@ function isExecutableFile(filePath) {
   // Windows launchers + macOS equivalents: .command/.sh execute in Terminal,
   // .dmg mounts, .pkg runs an installer, .app/.workflow launch — none of these
   // may be opened through the download manager's file launcher.
-  return /\.(exe|bat|cmd|msi|ps1|command|sh|dmg|pkg|app|jar|scpt|workflow)$/i.test(filePath.trim());
+  return /\.(exe|bat|cmd|msi|ps1|command|sh|dmg|pkg|app|jar|scpt|workflow|hta|vbs|lnk|scr|reg|js|wsf|wsh|pif|com)$/i.test(filePath.trim());
+}
+
+function isAllowedMediaFile(filePath) {
+  if (!filePath || typeof filePath !== 'string') return false;
+  return /\.(mp4|mkv|webm|mov|avi|flv|ts|m4v|3gp|mp3|m4a|aac|wav|flac|ogg|opus|wma|srt|vtt|jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(filePath.trim());
+}
+
+function sanitizeHeaderValue(val) {
+  if (val === null || val === undefined) return '';
+  return String(val).replace(/[\r\n\0]+/g, '').trim();
+}
+
+function isSafeRemoteHlsUrl(urlStr) {
+  if (!urlStr || typeof urlStr !== 'string') return false;
+  try {
+    const parsed = new URL(urlStr);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+    const host = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, '');
+    if (
+      host === 'localhost' ||
+      host.endsWith('.localhost') ||
+      host === '127.0.0.1' ||
+      host.startsWith('127.') ||
+      host === '0.0.0.0' ||
+      host === '::1' ||
+      host === '169.254.169.254' ||
+      host.startsWith('169.254.')
+    ) {
+      return false;
+    }
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function isPathInsideDir(filePath, dirPath) {
+  if (!filePath || !dirPath) return false;
+  try {
+    const resolvedFile = path.resolve(filePath);
+    const resolvedDir = path.resolve(dirPath);
+    const cmpFile = isWin ? resolvedFile.toLowerCase() : resolvedFile;
+    const cmpDir = isWin ? resolvedDir.toLowerCase() : resolvedDir;
+    if (cmpFile === cmpDir) return true;
+    const prefix = cmpDir.endsWith(path.sep) ? cmpDir : cmpDir + path.sep;
+    return cmpFile.startsWith(prefix);
+  } catch (_) {
+    return false;
+  }
+}
+
+function openPathWithSystem(resolvedFile, options = {}, callback = () => {}) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+  if (process.env.VIDOWN_TEST_RUNNER === '1' || require.main !== module) {
+    return callback(null);
+  }
+  const selectInExplorer = Boolean(options && options.selectInExplorer);
+  try {
+    let child;
+    if (isWin) {
+      // Spawns explorer.exe directly instead of spawn('cmd.exe', ['/c', 'start', '""', resolvedFile])
+      const args = selectInExplorer ? [`/select,${resolvedFile}`] : [resolvedFile];
+      child = spawn('explorer.exe', args, { windowsHide: true, detached: true });
+    } else if (isMac) {
+      // macOS Finder reveal (spawn('open', ['-R', filePath], { detached: true })) or launch
+      child = selectInExplorer
+        ? spawn('open', ['-R', resolvedFile], { detached: true })
+        : spawn('open', [resolvedFile], { detached: true });
+    } else {
+      const openTarget = selectInExplorer ? path.dirname(resolvedFile) : resolvedFile;
+      child = spawn('xdg-open', [openTarget], { detached: true });
+    }
+    if (child) {
+      child.on('error', (err) => {
+        logHost(`openPathWithSystem error: ${err.message}`);
+      });
+      if (typeof child.unref === 'function') child.unref();
+    }
+    return callback(null);
+  } catch (err) {
+    return callback(err);
+  }
 }
 
 // TaskId of the most recent download job — used to notify the extension when a
@@ -437,23 +535,10 @@ function handleMessage(msg) {
       } catch (_) {
         folderPath = DOWNLOADS_DIR;
       }
-      try {
-        let child;
-        if (isWin) {
-          child = spawn('explorer.exe', [folderPath], { windowsHide: true, detached: true });
-        } else if (isMac) {
-          child = spawn('open', [folderPath], { detached: true });
-        } else {
-          child = spawn('xdg-open', [folderPath], { detached: true });
-        }
-        child.on('error', (err) => {
-          logHost(`openFolder error: ${err.message}`);
-        });
-        child.unref();
-        sendMessage({ action: 'openFolderResult', success: true });
-      } catch (err) {
-        sendMessage({ action: 'openFolderResult', success: false });
-      }
+      openPathWithSystem(folderPath, { selectInExplorer: false }, (err) => {
+        if (err) logHost(`openFolder error: ${err.message}`);
+        sendMessage({ action: 'openFolderResult', success: !err });
+      });
       break;
     }
 
@@ -461,7 +546,8 @@ function handleMessage(msg) {
       let targetPath = msg.path || '';
       let filename = msg.filename || '';
       const taskId = msg.id || msg.taskId || null;
-      const baseDir = msg.downloadDir || msg.outputDir || DOWNLOADS_DIR;
+      const allowedTargetDir = resolveTargetDir(msg.outputDir || msg.customDownloadDir || msg.downloadDir);
+      const baseDir = allowedTargetDir || DOWNLOADS_DIR;
       logHost(`openFile requested: id="${taskId}", path="${targetPath}", filename="${filename}", baseDir="${baseDir}"`);
 
       // 1. Sanitize & clean quotes or URI encoding
@@ -474,14 +560,10 @@ function handleMessage(msg) {
         try { filename = decodeURIComponent(filename); } catch (_) {}
       }
 
-      // 2. Build search directories list
+      // 2. Build search directories list restricted to allowed directories
       const searchDirs = [];
       if (baseDir && !searchDirs.includes(baseDir)) searchDirs.push(baseDir);
       if (DOWNLOADS_DIR && !searchDirs.includes(DOWNLOADS_DIR)) searchDirs.push(DOWNLOADS_DIR);
-      if (targetPath && path.isAbsolute(targetPath)) {
-        const pDir = path.dirname(targetPath);
-        if (fs.existsSync(pDir) && !searchDirs.includes(pDir)) searchDirs.push(pDir);
-      }
 
       let resolvedFile = '';
 
@@ -549,7 +631,7 @@ function handleMessage(msg) {
               const files = fs.readdirSync(dir);
               for (const cand of candidates) {
                 const match = findBestFileMatch(cand, files);
-                if (match) {
+                if (match && isAllowedMediaFile(match)) {
                   resolvedFile = path.join(dir, match);
                   break;
                 }
@@ -561,6 +643,7 @@ function handleMessage(msg) {
                 if (baseNameWithoutExt.length >= 3) {
                   const match = files.find(f => {
                     if (f.endsWith('.part') || f.endsWith('.tmp') || f.endsWith('.crdownload') || f.endsWith('.ytdl')) return false;
+                    if (!isAllowedMediaFile(f)) return false;
                     return f.startsWith(baseNameWithoutExt) || f.includes(baseNameWithoutExt) || f.startsWith(baseNameWithoutExt.slice(0, 20));
                   });
                   if (match) {
@@ -576,16 +659,48 @@ function handleMessage(msg) {
       }
 
       if (resolvedFile && fs.existsSync(resolvedFile)) {
-        if (isExecutableFile(resolvedFile)) {
-          logHost(`openFile blocked executable launch: "${resolvedFile}"`);
+        if (isExecutableFile(resolvedFile) || !isAllowedMediaFile(resolvedFile)) {
+          logHost(`openFile blocked executable or non-media launch: "${resolvedFile}"`);
           const fallbackDir = path.dirname(resolvedFile);
-          if (isWin) {
-            spawn('explorer.exe', [`/select,${resolvedFile}`], { windowsHide: true, detached: true });
-          } else if (isMac) {
-            spawn('open', ['-R', resolvedFile], { detached: true });
-          } else {
-            spawn('xdg-open', [fallbackDir], { detached: true });
-          }
+          openPathWithSystem(resolvedFile, { selectInExplorer: true }, () => {
+            sendMessage({
+              action: 'openFileResult',
+              id: taskId,
+              taskId,
+              filename: filename || (targetPath ? path.basename(targetPath) : ''),
+              success: false,
+              openedFolder: true,
+              path: fallbackDir,
+              error: 'Direct execution of executable files is blocked for safety'
+            });
+          });
+          break;
+        }
+
+        const isInsideAllowed = searchDirs.some(dir => isPathInsideDir(resolvedFile, dir));
+        if (!isInsideAllowed) {
+          logHost(`openFile blocked path outside download directory: "${resolvedFile}"`);
+          sendMessage({
+            action: 'openFileResult',
+            id: taskId,
+            taskId,
+            filename: filename || (targetPath ? path.basename(targetPath) : ''),
+            success: false,
+            openedFolder: false,
+            path: baseDir,
+            error: 'File path outside download directory is blocked for safety'
+          });
+          break;
+        }
+
+        logHost(`openFile launching: "${resolvedFile}"`);
+        openPathWithSystem(resolvedFile, { selectInExplorer: false }, () => {
+          sendMessage({ action: 'openFileResult', id: taskId, taskId, success: true, path: resolvedFile });
+        });
+      } else {
+        const fallbackDir = fs.existsSync(baseDir) ? baseDir : DOWNLOADS_DIR;
+        logHost(`openFile fallback: opening folder "${fallbackDir}"`);
+        openPathWithSystem(fallbackDir, { selectInExplorer: false }, () => {
           sendMessage({
             action: 'openFileResult',
             id: taskId,
@@ -593,48 +708,17 @@ function handleMessage(msg) {
             filename: filename || (targetPath ? path.basename(targetPath) : ''),
             success: false,
             openedFolder: true,
+            fileNotFound: true,
             path: fallbackDir,
-            error: 'Direct execution of executable files is blocked for safety'
+            error: 'File not found'
           });
-          break;
-        }
-
-        logHost(`openFile launching: "${resolvedFile}"`);
-        if (isWin) {
-          spawn('cmd.exe', ['/c', 'start', '""', resolvedFile], { windowsHide: true, detached: true });
-        } else if (isMac) {
-          spawn('open', [resolvedFile], { detached: true });
-        } else {
-          spawn('xdg-open', [resolvedFile], { detached: true });
-        }
-        sendMessage({ action: 'openFileResult', id: taskId, taskId, success: true, path: resolvedFile });
-      } else {
-        const fallbackDir = fs.existsSync(baseDir) ? baseDir : DOWNLOADS_DIR;
-        logHost(`openFile fallback: opening folder "${fallbackDir}"`);
-        if (isWin) {
-          spawn('explorer.exe', [fallbackDir], { windowsHide: true, detached: true });
-        } else if (isMac) {
-          spawn('open', [fallbackDir], { detached: true });
-        } else {
-          spawn('xdg-open', [fallbackDir], { detached: true });
-        }
-        sendMessage({
-          action: 'openFileResult',
-          id: taskId,
-          taskId,
-          filename: filename || (targetPath ? path.basename(targetPath) : ''),
-          success: false,
-          openedFolder: true,
-          fileNotFound: true,
-          path: fallbackDir,
-          error: 'File not found'
         });
       }
       break;
     }
 
     case 'showInFolder': {
-      const baseDir = msg.downloadDir || msg.outputDir || DOWNLOADS_DIR;
+      const baseDir = resolveTargetDir(msg.downloadDir || msg.outputDir || msg.customDownloadDir) || DOWNLOADS_DIR;
       let filePath = msg.path || '';
       if (filePath) {
         filePath = filePath.replace(/^["']|["']$/g, '').trim();
@@ -661,24 +745,15 @@ function handleMessage(msg) {
         }
       }
       if (filePath && fs.existsSync(filePath)) {
-        if (isWin) {
-          spawn('explorer.exe', [`/select,${filePath}`], { windowsHide: true, detached: true });
-        } else if (isMac) {
-          spawn('open', ['-R', filePath], { detached: true });
-        } else {
-          spawn('xdg-open', [baseDir], { detached: true });
-        }
+        openPathWithSystem(filePath, { selectInExplorer: true }, () => {
+          sendMessage({ action: 'showInFolderResult', success: true });
+        });
       } else {
         const fallbackDir = fs.existsSync(baseDir) ? baseDir : DOWNLOADS_DIR;
-        if (isWin) {
-          spawn('explorer.exe', [fallbackDir], { windowsHide: true, detached: true });
-        } else if (isMac) {
-          spawn('open', [fallbackDir], { detached: true });
-        } else {
-          spawn('xdg-open', [fallbackDir], { detached: true });
-        }
+        openPathWithSystem(fallbackDir, { selectInExplorer: false }, () => {
+          sendMessage({ action: 'showInFolderResult', success: true });
+        });
       }
-      sendMessage({ action: 'showInFolderResult', success: true });
       break;
     }
 
@@ -1498,17 +1573,15 @@ async function startFfmpegMux(req) {
   let videoUrl = cleanFbCdnUrl(req.videoUrl || req.url);
   let audioUrl = cleanFbCdnUrl(req.audioUrl);
 
-  let safeTitle = (req.title || 'video').replace(/[<>:"/\\|?*]/g, '_').replace(/[\s.]+$/, '').trim().slice(0, 150).replace(/[\s.]+$/, '');
-  if (!safeTitle) safeTitle = `Video_${Date.now()}`;
-
   const targetDir = resolveTargetDir(req.outputDir);
-  const finalFilename = `${safeTitle}.mp4`;
+  const rawTitle = (req.filename || req.title || 'video').replace(/\.[a-z0-9]{2,5}$/i, '');
+  const finalFilename = sanitizeFilename(`${rawTitle}.mp4`, 'mp4');
   const outPath = path.join(targetDir, finalFilename);
 
-  let referer = resolveDefaultReferer(videoUrl, req.referer, req.pageUrl);
+  let referer = sanitizeHeaderValue(resolveDefaultReferer(videoUrl, req.referer, req.pageUrl));
   let origin = '';
   if (referer) {
-    try { origin = new URL(referer).origin; } catch (e) {}
+    try { origin = sanitizeHeaderValue(new URL(referer).origin); } catch (e) {}
   }
 
   let allowCookie = false;
@@ -1526,10 +1599,12 @@ async function startFfmpegMux(req) {
     } catch (_) {}
   }
 
+  const cleanMuxCookie = allowCookie && req.cookie ? sanitizeHeaderValue(req.cookie) : '';
+
   const rawHeadersStr = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\r\n' +
     (referer ? `Referer: ${referer}\r\n` : '') +
     (origin ? `Origin: ${origin}\r\n` : '') +
-    (allowCookie && req.cookie ? `Cookie: ${req.cookie}\r\n` : '') +
+    (cleanMuxCookie ? `Cookie: ${cleanMuxCookie}\r\n` : '') +
     'Accept: */*\r\n';
 
   const reqHeadersObj = {
@@ -1538,7 +1613,7 @@ async function startFfmpegMux(req) {
   };
   if (referer) reqHeadersObj['Referer'] = referer;
   if (origin) reqHeadersObj['Origin'] = origin;
-  if (allowCookie && req.cookie) reqHeadersObj['Cookie'] = req.cookie;
+  if (cleanMuxCookie) reqHeadersObj['Cookie'] = cleanMuxCookie;
 
   const tempSessionDir = path.join(os.tmpdir(), `savior_mux_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`);
   try {
@@ -1840,18 +1915,16 @@ async function startFfmpegDirectStream(req) {
 
   const isAudio = req.quality === 'audio' || req.soundOnly;
   const ext = isAudio ? 'mp3' : 'mp4';
-  let safeTitle = (req.title || 'video').replace(/[<>:"/\\|?*]/g, '_').replace(/[\s.]+$/, '').trim().slice(0, 150).replace(/[\s.]+$/, '');
-  if (!safeTitle) safeTitle = `Video_${Date.now()}`;
-
   const targetDir = resolveTargetDir(req.outputDir);
-  const finalFilename = `${safeTitle}.${ext}`;
+  const rawTitle = (req.filename || req.title || 'video').replace(/\.[a-z0-9]{2,5}$/i, '');
+  const finalFilename = sanitizeFilename(`${rawTitle}.${ext}`, ext);
   const outPath = path.join(targetDir, finalFilename);
 
-  let referer = resolveDefaultReferer(targetUrl, req.referer, req.pageUrl);
+  let referer = sanitizeHeaderValue(resolveDefaultReferer(targetUrl, req.referer, req.pageUrl));
 
   let origin = '';
   if (referer) {
-    try { origin = new URL(referer).origin; } catch (e) {}
+    try { origin = sanitizeHeaderValue(new URL(referer).origin); } catch (e) {}
   }
 
   let safeOrigin = '';
@@ -1861,7 +1934,7 @@ async function startFfmpegDirectStream(req) {
       const oHost = new URL(origin).hostname.toLowerCase();
       const isKnownCrossCdn = uHost.includes('fbcdn.net') || uHost.includes('tiktokcdn.com');
       if (uHost === oHost || uHost.endsWith('.' + oHost) || oHost.endsWith('.' + uHost) || isKnownCrossCdn) {
-        safeOrigin = origin;
+        safeOrigin = sanitizeHeaderValue(origin);
       }
     } catch (_) {}
   }
@@ -1871,7 +1944,7 @@ async function startFfmpegDirectStream(req) {
       const uHost = new URL(targetUrl).hostname.toLowerCase();
       const pHost = req.pageUrl ? new URL(req.pageUrl).hostname.toLowerCase() : '';
       if (pHost && (uHost === pHost || uHost.endsWith('.' + pHost) || pHost.endsWith('.' + uHost) || (uHost.includes('tiktok') && pHost.includes('tiktok')))) {
-        safeCookie = req.cookie;
+        safeCookie = sanitizeHeaderValue(req.cookie);
       }
     } catch (_) {}
   }
@@ -1937,8 +2010,12 @@ async function startFfmpegDirectStream(req) {
         }
         if (bestUri) {
           const resolvedMediaUrl = new URL(bestUri, targetUrl).href;
-          targetUrl = resolvedMediaUrl;
-          playlistText = await fetchHttpResource(resolvedMediaUrl, referer, false);
+          if (isSafeRemoteHlsUrl(resolvedMediaUrl)) {
+            targetUrl = resolvedMediaUrl;
+            playlistText = await fetchHttpResource(resolvedMediaUrl, referer, false);
+          } else {
+            logHost(`Blocked unsafe master HLS sub-playlist URL: ${resolvedMediaUrl}`);
+          }
         }
       }
 
@@ -1962,6 +2039,10 @@ async function startFfmpegDirectStream(req) {
           if (uriMatch) {
             const rawKeyUri = uriMatch[1];
             const absKeyUrl = new URL(rawKeyUri, targetUrl).href;
+            if (!isSafeRemoteHlsUrl(absKeyUrl)) {
+              logHost(`Blocked unsafe HLS key URL: ${absKeyUrl}`);
+              continue;
+            }
             try {
               logHost(`Fetching AES-128 key: ${absKeyUrl}`);
               const keyBytes = await fetchHttpResource(absKeyUrl, referer, true);
@@ -1979,6 +2060,10 @@ async function startFfmpegDirectStream(req) {
           if (uriMatch) {
             const rawMapUri = uriMatch[1];
             const absMapUrl = new URL(rawMapUri, targetUrl).href;
+            if (!isSafeRemoteHlsUrl(absMapUrl)) {
+              logHost(`Blocked unsafe HLS map URL: ${absMapUrl}`);
+              continue;
+            }
             if (hasEncryptionKey) {
               try {
                 logHost(`Fetching fMP4 initialization segment: ${absMapUrl}`);
@@ -1998,6 +2083,10 @@ async function startFfmpegDirectStream(req) {
           sanitizedLines.push(line);
         } else if (line.trim().length > 0 && !line.startsWith('#')) {
           const rawSegUrl = new URL(line.trim(), targetUrl).href;
+          if (!isSafeRemoteHlsUrl(rawSegUrl)) {
+            logHost(`Blocked unsafe HLS segment URL: ${rawSegUrl}`);
+            continue;
+          }
           sanitizedLines.push(rawSegUrl);
         } else {
           sanitizedLines.push(line);
@@ -2572,6 +2661,11 @@ if (typeof module !== 'undefined') {
     calculateChunks,
     isSameOriginOrSubdomain,
     isExecutableFile,
+    isAllowedMediaFile,
+    sanitizeForLog,
+    sanitizeHeaderValue,
+    isSafeRemoteHlsUrl,
+    openPathWithSystem,
     downloadFileMultiThread,
     handleMessage,
     setMessageHook,
