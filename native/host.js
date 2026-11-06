@@ -400,7 +400,7 @@ function handleStreamChunk(msg) {
       action: 'progress',
       taskId: msg.taskId,
       percent: pct,
-      speed: 'Đang tải qua Chrome...',
+      speed: 'Downloading via Chrome...',
       eta: '',
       size: activeStreamJob.total > 0
         ? `${formatBytes(activeStreamJob.bytesWritten)} / ${formatBytes(activeStreamJob.total)}`
@@ -429,7 +429,7 @@ function finishStreamJob(msg) {
     const publishedPath = finalizePartFile(job.outPath);
     if (!publishedPath) throw new Error('rename failed');
     logHost(`Stream relay completed: "${publishedPath}" (${job.bytesWritten} bytes)`);
-    sendMessage({ action: 'progress', taskId: msg.taskId, percent: '100%', speed: 'Hoàn thành', eta: '', size: formatBytes(job.bytesWritten) });
+    sendMessage({ action: 'progress', taskId: msg.taskId, percent: '100%', speed: 'Completed', eta: '', size: formatBytes(job.bytesWritten) });
     sendMessage({ action: 'complete', taskId: msg.taskId, outputFile: path.basename(publishedPath), outputPath: publishedPath, downloadsDir: path.dirname(publishedPath) });
   } catch (e) {
     try { if (job.fd !== null) fs.closeSync(job.fd); } catch (_) {}
@@ -494,7 +494,7 @@ function handleMessage(msg) {
 
     case 'browseFolder': {
       if (isWin) {
-        const psScript = `Add-Type -AssemblyName System.Windows.Forms; $f = New-Object System.Windows.Forms.FolderBrowserDialog; $f.Description = 'Chọn thư mục để lưu video tải về'; if ($f.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { Write-Output $f.SelectedPath }`;
+        const psScript = `Add-Type -AssemblyName System.Windows.Forms; $f = New-Object System.Windows.Forms.FolderBrowserDialog; $f.Description = 'Select folder to save downloaded videos'; if ($f.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { Write-Output $f.SelectedPath }`;
         exec(`powershell -NoProfile -Command "${psScript}"`, (err, stdout) => {
           const selected = (stdout || '').trim();
           sendMessage({
@@ -504,7 +504,7 @@ function handleMessage(msg) {
           });
         });
       } else if (isMac) {
-        const osaCmd = `osascript -e 'try' -e 'set folderPath to POSIX path of (choose folder with prompt "Chọn thư mục để lưu video tải về")' -e 'return folderPath' -e 'on error' -e 'return ""' -e 'end try'`;
+        const osaCmd = `osascript -e 'try' -e 'set folderPath to POSIX path of (choose folder with prompt "Select folder to save downloaded videos")' -e 'return folderPath' -e 'on error' -e 'return ""' -e 'end try'`;
         exec(osaCmd, (err, stdout) => {
           const selected = (stdout || '').trim();
           sendMessage({
@@ -1196,7 +1196,7 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
             try { fileStream.close(); } catch (_) {}
             try { fs.unlinkSync(partPath); } catch (_) {}
             try { req.destroy(); } catch (_) {}
-            return reject(new Error('Phát hiện luồng HLS m3u8 (cần FFmpeg giải mã)'));
+            return reject(new Error('HLS m3u8 stream detected (requires FFmpeg)'));
           }
           const cType = String(res.headers['content-type'] || '').toLowerCase();
           if ((headStr.startsWith('<!DOCTYPE') || headStr.startsWith('<html') || headStr.startsWith('{"status_code"')) &&
@@ -1204,7 +1204,7 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
             try { fileStream.close(); } catch (_) {}
             try { fs.unlinkSync(partPath); } catch (_) {}
             try { req.destroy(); } catch (_) {}
-            return reject(new Error('Tệp tải về không phải video (máy chủ trả về trang HTML/Lỗi API)'));
+            return reject(new Error('Downloaded file is not a video (server returned HTML/API error)'));
           }
         }
         downloadedBytes += c.length;
@@ -1288,7 +1288,7 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
     action: 'progress',
     taskId: req.taskId,
     percent: '1%',
-    speed: 'Đang kết nối luồng tải đa luồng...',
+    speed: 'Connecting multi-thread download...',
     eta: '',
     size: ''
   });
@@ -1342,7 +1342,7 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
       action: 'progress',
       taskId: req.taskId,
       percent: '100%',
-      speed: 'Hoàn thành',
+      speed: 'Completed',
       eta: '',
       size: formatBytes(probe.size || 0)
     });
@@ -1509,7 +1509,7 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
         action: 'progress',
         taskId: req.taskId,
         percent: percent || '',
-        speed: computedSpeed || (percent ? '' : 'Đang ghép luồng (FFmpeg)...'),
+        speed: computedSpeed || (percent ? '' : 'Muxing streams (FFmpeg)...'),
         eta: '',
         size: formatBytes(totalBytes)
       });
@@ -1531,7 +1531,7 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
         action: 'progress',
         taskId: req.taskId,
         percent: '100%',
-        speed: 'Hoàn thành',
+        speed: 'Completed',
         eta: '',
         size: ''
       });
@@ -1669,7 +1669,7 @@ async function startFfmpegMux(req) {
     action: 'progress',
     taskId: req.taskId,
     percent: '1%',
-    speed: 'Đang kết nối đa luồng (Video + Audio)...',
+    speed: 'Connecting multi-thread (Video + Audio)...',
     eta: '',
     size: ''
   });
@@ -1707,7 +1707,7 @@ async function startFfmpegMux(req) {
         action: 'progress',
         taskId: req.taskId,
         percent: pct,
-        speed: speedStr || (pct ? '' : 'Đang tải đa luồng...'),
+        speed: speedStr || (pct ? '' : 'Downloading multi-thread...'),
         eta: '',
         size: totalCombined > 0 ? `${formatBytes(currentDownloaded)} / ${formatBytes(totalCombined)}` : formatBytes(currentDownloaded)
       });
@@ -1779,7 +1779,7 @@ async function startFfmpegMux(req) {
       action: 'progress',
       taskId: req.taskId,
       percent: '99%',
-      speed: 'Đang ghép luồng cục bộ...',
+      speed: 'Muxing streams locally...',
       eta: '',
       size: formatBytes(totalCombined || (fs.statSync(tempVideoPath).size + (fs.existsSync(tempAudioPath) ? fs.statSync(tempAudioPath).size : 0)))
     });
@@ -1833,7 +1833,7 @@ async function startFfmpegMux(req) {
           action: 'progress',
           taskId: req.taskId,
           percent: '100%',
-          speed: 'Hoàn thành',
+          speed: 'Completed',
           eta: '',
           size: formatBytes(fs.statSync(publishedPath).size)
         });
@@ -1849,7 +1849,7 @@ async function startFfmpegMux(req) {
         sendMessage({
           action: 'error',
           taskId: req.taskId,
-          error: `Lỗi ghép video/audio: ${shortErr}`
+          error: `Video/audio muxing error: ${shortErr}`
         });
       }
     });
@@ -1939,7 +1939,7 @@ async function startFfmpegDirectStream(req) {
     targetUrl = cleanFbCdnUrl(direct || candidates[0] || '');
   }
   if (!targetUrl) {
-    sendMessage({ action: 'error', taskId: req.taskId, error: 'Không tìm thấy URL tải video' });
+    sendMessage({ action: 'error', taskId: req.taskId, error: 'Download URL not found' });
     return;
   }
 
@@ -1989,7 +1989,7 @@ async function startFfmpegDirectStream(req) {
     action: 'progress',
     taskId: req.taskId,
     percent: '1%',
-    speed: 'Đang chuẩn bị luồng video (FFmpeg)...',
+    speed: 'Preparing video stream (FFmpeg)...',
     eta: '',
     size: ''
   });
@@ -2014,7 +2014,7 @@ async function startFfmpegDirectStream(req) {
       // Verify that the response is actually an HLS playlist (#EXTM3U)
       if (!playlistText || !playlistText.includes('#EXTM3U')) {
         logHost(`Invalid playlist response: Does not contain #EXTM3U`);
-        sendMessage({ action: 'error', taskId: req.taskId, error: 'Máy chủ trả về luồng không hợp lệ (không phải định dạng HLS playlist).' });
+        sendMessage({ action: 'error', taskId: req.taskId, error: 'Server returned an invalid stream (not an HLS playlist format).' });
         return;
       }
 
@@ -2273,7 +2273,7 @@ async function startFfmpegDirectStream(req) {
           action: 'progress',
           taskId: req.taskId,
           percent: '100%',
-          speed: 'Hoàn thành',
+          speed: 'Completed',
           eta: '',
           size: ''
         });
@@ -2290,8 +2290,8 @@ async function startFfmpegDirectStream(req) {
         const is403 = /403|Forbidden|Access Denied/i.test(errOutput);
         const errLines = errOutput.split('\n').filter(l => l.trim() && !l.startsWith('ffmpeg version') && !l.startsWith('  built with') && !l.startsWith('  configuration:'));
         const shortErr = is403
-          ? 'Token luồng phim đã hết hạn hoặc bị từ chối truy cập (HTTP 403). Vui lòng tải lại trang để lấy luồng mới.'
-          : `Lỗi tải luồng: ${(errLines.slice(-3).join(' ').trim() || `FFmpeg code ${code}`).slice(0, 150)}`;
+          ? 'Stream token expired or access denied (HTTP 403). Please reload the page to get a new stream.'
+          : `Stream download error: ${(errLines.slice(-3).join(' ').trim() || `FFmpeg code ${code}`).slice(0, 150)}`;
         sendMessage({
           action: 'error',
           taskId: req.taskId,
@@ -2327,7 +2327,7 @@ async function startFfmpegDirectStream(req) {
           action: 'progress',
           taskId: req.taskId,
           percent: '99%',
-          speed: 'Đang chuyển đổi MP3...',
+          speed: 'Converting to MP3...',
           eta: '',
           size: ''
         });
@@ -2352,11 +2352,11 @@ async function startFfmpegDirectStream(req) {
           let publishedPath;
           if (code === 0 && fs.existsSync(partPathFor(outPath)) && fs.statSync(partPathFor(outPath)).size > 100 && (publishedPath = finalizePartFile(outPath))) {
             const publishedName = path.basename(publishedPath);
-            sendMessage({ action: 'progress', taskId: req.taskId, percent: '100%', speed: 'Hoàn thành', eta: '', size: formatBytes(fs.statSync(publishedPath).size) });
+            sendMessage({ action: 'progress', taskId: req.taskId, percent: '100%', speed: 'Completed', eta: '', size: formatBytes(fs.statSync(publishedPath).size) });
             sendMessage({ action: 'complete', taskId: req.taskId, outputFile: publishedName, outputPath: publishedPath, downloadsDir: targetDir });
           } else {
             cleanupPartialFiles(outPath);
-            sendMessage({ action: 'error', taskId: req.taskId, error: `Lỗi chuyển đổi MP3 (code ${code})` });
+            sendMessage({ action: 'error', taskId: req.taskId, error: `MP3 conversion error (code ${code})` });
           }
         });
         cProc.on('error', (err) => {
@@ -2375,7 +2375,7 @@ async function startFfmpegDirectStream(req) {
         sendMessage({
           action: 'error',
           taskId: req.taskId,
-          error: `${err.message}. Liên kết tải có thể đã hết hạn; hãy mở lại video và lấy luồng mới.`
+          error: `${err.message}. Download link may have expired; please reopen the video to get a new stream.`
         });
         return;
       }
@@ -2400,7 +2400,7 @@ function detectPlatformName(line, targetUrl = '') {
   if (line.includes('tiktok') || targetUrl.includes('tiktok')) return 'TikTok';
   if (line.includes('facebook') || targetUrl.includes('facebook') || targetUrl.includes('fb.watch')) return 'Facebook';
   if (line.includes('instagram') || targetUrl.includes('instagram')) return 'Instagram';
-  return 'máy chủ';
+  return 'server';
 }
 
 function checkIsYouTube(u) {
@@ -2641,19 +2641,19 @@ function parseProgressLine(line, targetUrl = '') {
 
   if (line.includes('Extracting URL') || line.includes('Downloading webpage') || line.includes('Downloading JSON metadata')) {
     const pName = detectPlatformName(line, targetUrl);
-    return { percent: '0%', speed: `Đang kết nối ${pName}...` };
+    return { percent: '0%', speed: `Connecting to ${pName}...` };
   }
   if (line.includes('player API JSON') || line.includes('initial data API') || line.includes('Downloading m3u8 information') || line.includes('Downloading video webpage')) {
-    return { percent: '0%', speed: 'Đang chuẩn bị luồng video...' };
+    return { percent: '0%', speed: 'Preparing video stream...' };
   }
   if (line.includes('Downloading 1 format') || line.includes('Destination:') || line.includes('[hlsnative]')) {
-    return { percent: '1%', speed: 'Bắt đầu tải stream...' };
+    return { percent: '1%', speed: 'Starting stream download...' };
   }
   if (line.includes('[Merger] Merging formats') || line.includes('Merging formats into')) {
-    return { percent: '99%', speed: 'Đang ghép âm thanh và hình ảnh (FFmpeg)...' };
+    return { percent: '99%', speed: 'Muxing video and audio (FFmpeg)...' };
   }
   if (line.includes('[ExtractAudio] Destination:') || line.includes('ExtractAudio')) {
-    return { percent: '99%', speed: 'Đang xuất file âm thanh MP3...' };
+    return { percent: '99%', speed: 'Exporting MP3 audio file...' };
   }
 
   return null;

@@ -67,57 +67,57 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function formatDate(timestamp) {
-    if (!timestamp) return 'Gần đây';
+    if (!timestamp) return 'Recent';
     const d = new Date(timestamp);
     const today = new Date();
     if (d.toDateString() === today.toDateString()) {
-      return `Hôm nay lúc ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      return `Today at ${d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
     }
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
     if (d.toDateString() === yesterday.toDateString()) {
-      return `Hôm qua lúc ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      return `Yesterday at ${d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
     }
-    return d.toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return d.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
 
-  // Format raw error into clean, understandable Vietnamese reason
+  // Format raw error into clean, understandable English reason
   function formatErrorMessage(raw) {
-    if (!raw) return 'Lỗi không xác định';
+    if (!raw) return 'Unknown error';
     const str = String(raw).trim();
 
     if (str.includes('Sign in to confirm') || str.includes('bot') || str.includes('n-challenge')) {
-      return 'YouTube yêu cầu xác minh bot hoặc tài khoản';
+      return 'YouTube requires bot verification or account login';
     }
     if (str.includes('Private video') || str.includes('This video is private')) {
-      return 'Video ở chế độ riêng tư (Private)';
+      return 'Video is private';
     }
     if (str.includes('Members-only')) {
-      return 'Video chỉ dành cho Hội viên có trả phí';
+      return 'Video is for paid members only';
     }
     if (str.includes('Video unavailable') || str.includes('This video is not available')) {
-      return 'Video không khả dụng hoặc đã bị gỡ';
+      return 'Video is unavailable or removed';
     }
     if (str.includes('403') || str.includes('Forbidden') || str.includes('SERVER_FORBIDDEN')) {
-      return 'Máy chủ từ chối kết nối (HTTP 403). Liên kết tải có thể đã hết hạn.';
+      return 'Server refused connection (HTTP 403). Download link may have expired.';
     }
     if (str.includes('NETWORK_FAILED') || str.includes('ECONNREFUSED') || str.includes('ENOTFOUND')) {
-      return 'Lỗi kết nối mạng Internet';
+      return 'Internet network connection error';
     }
     if (str.includes('FILE_ACCESS_DENIED') || str.includes('EACCES')) {
-      return 'Không có quyền lưu file vào thư mục đích';
+      return 'Permission denied saving to destination folder';
     }
     if (str.includes('disk full') || str.includes('ENOSPC')) {
-      return 'Ổ đĩa đầy, không đủ dung lượng lưu trữ';
+      return 'Disk full, not enough storage space';
     }
     if (str.includes('Host disconnected') || str.includes('Specified native messaging host not found')) {
-      return 'Native Helper chưa chạy hoặc bị ngắt kết nối';
+      return 'Native Helper is not running or disconnected';
     }
     if (str.includes('FFmpeg exited')) {
-      return 'Lỗi xử lý ghép file bằng FFmpeg';
+      return 'FFmpeg muxing error';
     }
-    if (str.includes('Unsupported URL') || str.includes('trang chủ') || str.includes('Chưa bắt được')) {
-      return 'Chưa bắt được luồng video (Bấm phát video rồi ấn tải lại)';
+    if (str.includes('Unsupported URL') || str.includes('homepage') || str.includes('stream not captured')) {
+      return 'Video stream not captured (Play the video and click Retry)';
     }
 
     const cleaned = str.replace(/^ERROR:\s*(\[[^\]]+\]\s*)?/i, '').split('\n')[0].trim();
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
               state = 'error';
             }
-            errorMessage = formatErrorMessage(cd.error || 'Gián đoạn');
+            errorMessage = formatErrorMessage(cd.error || 'Interrupted');
           }
 
           const totalBytes = cd.totalBytes > 0 ? cd.totalBytes : cd.fileSize || 0;
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item.state === 'complete') item.state = 'completed';
         if (item.state === 'interrupted' && item.error !== 'USER_CANCELED') item.state = 'error';
 
-        const isFinished = item.percent === '100%' || item.speed === 'Hoàn thành';
+        const isFinished = item.percent === '100%' || item.speed === 'Completed';
         if (isFinished) {
           item.state = 'completed';
         }
@@ -256,8 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
               item.percent = '100%';
             } else if (now - (item.startTime || 0) > 300000) {
               item.state = 'error';
-              item.error = 'Bị gián đoạn';
-              item.errorMessage = 'Bị gián đoạn';
+              item.error = 'Interrupted';
+              item.errorMessage = 'Interrupted';
             }
           }
         }
@@ -405,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getDateGroupHeading(timestamp) {
-    if (!timestamp || isNaN(new Date(timestamp).getTime())) return 'Gần đây';
+    if (!timestamp || isNaN(new Date(timestamp).getTime())) return 'Recent';
     const d = new Date(timestamp);
     const now = new Date();
 
@@ -413,16 +413,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const diffDays = Math.round((nowDate - dDate) / (1000 * 60 * 60 * 24));
 
-    const day = d.getDate();
-    const month = d.getMonth() + 1;
-    const year = d.getFullYear();
-
     if (diffDays === 0) {
-      return `Hôm nay, ${day} tháng ${month}, ${year}`;
+      return 'Today';
     } else if (diffDays === 1) {
-      return `Hôm qua, ${day} tháng ${month}, ${year}`;
+      return 'Yesterday';
     } else {
-      return `${day} tháng ${month}, ${year}`;
+      return d.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
   }
 
@@ -514,23 +510,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const itemCopy = document.createElement('div');
     itemCopy.className = 'menu-dropdown-item';
-    itemCopy.textContent = 'Sao chép liên kết tải xuống';
+    itemCopy.textContent = 'Copy download link';
     itemCopy.addEventListener('click', (e) => {
       e.stopPropagation();
       menu.remove();
       if (item.url) {
-        navigator.clipboard.writeText(item.url).then(() => showToast('Đã sao chép liên kết!')).catch(() => {});
+        navigator.clipboard.writeText(item.url).then(() => showToast('Link copied!')).catch(() => {});
       }
     });
 
     const itemDel = document.createElement('div');
     itemDel.className = 'menu-dropdown-item danger';
-    itemDel.textContent = item.state === 'downloading' ? 'Hủy tải xuống' : 'Xoá khỏi danh sách';
+    itemDel.textContent = item.state === 'downloading' ? 'Cancel download' : 'Remove from list';
     itemDel.addEventListener('click', (e) => {
       e.stopPropagation();
       menu.remove();
       if (item.state === 'downloading') {
-        if (confirm('Bạn có muốn hủy tải xuống video này không?')) {
+        if (confirm('Are you sure you want to cancel this download?')) {
           cancelDownloadItem(item);
         }
       } else {
@@ -553,20 +549,20 @@ document.addEventListener('DOMContentLoaded', () => {
   function openDownloadedItem(item) {
     if (!item) return;
     if (item.state === 'downloading') {
-      showToast(`Tệp đang được tải (${item.percent || '0%'}), vui lòng chờ...`);
+      showToast(`File is downloading (${item.percent || '0%'}), please wait...`);
       return;
     }
     if (item.state === 'canceled') {
-      showToast('Tệp đã bị hủy. Bấm Thử lại để tải lại.');
+      showToast('Download was canceled. Click Retry to download again.');
       return;
     }
     if (item.state === 'deleted') {
-      showToast('Tệp không còn trên đĩa. Bấm Thử lại để tải lại.');
+      showToast('File was moved or deleted from disk. Click Retry to download again.');
       return;
     }
 
     const title = item.title || 'video.mp4';
-    showToast(`Đang mở: ${title}...`);
+    showToast(`Opening: ${title}...`);
 
     chrome.runtime.sendMessage({
       action: 'openFile',
@@ -578,11 +574,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }, (res) => {
       if (chrome.runtime?.lastError) return;
       if (res && res.success) {
-        showToast(`Đang mở: ${title}`);
-      } else if (res && (res.fileNotFound || (res.error && res.error.includes('Không tìm thấy')))) {
+        showToast(`Opening: ${title}`);
+      } else if (res && (res.fileNotFound || (res.error && /not found|missing/i.test(res.error)))) {
         item.state = 'deleted';
         renderList();
-        showToast('Tệp không còn trên đĩa. Bấm Thử lại để tải lại.');
+        showToast('File was moved or deleted from disk. Click Retry to download again.');
       } else if (res && res.error) {
         showToast(res.error);
       }
@@ -594,11 +590,12 @@ document.addEventListener('DOMContentLoaded', () => {
     card.className = 'download-card';
     card.id = `card_${item.id}`;
 
-    const isDownloading = item.state === 'downloading' || item.state === 'in_progress';
+    const isQueued = item.state === 'queued';
+    const isDownloading = (item.state === 'downloading' || item.state === 'in_progress' || isQueued);
     const isError = item.state === 'error' || (item.state === 'interrupted' && item.error !== 'USER_CANCELED');
     const isDeleted = item.state === 'deleted' || item.fileMissing;
     const isCanceled = item.state === 'canceled' || item.state === 'cancelled' || item.error === 'USER_CANCELED';
-    const isCompleted = (item.state === 'completed' || item.state === 'complete') && !isDeleted && !isCanceled && !isError;
+    const isCompleted = (item.state === 'completed' || item.state === 'complete') && !isDeleted && !isCanceled && !isError && !isDownloading;
     const fn = (item.filename || item.title || '').toLowerCase();
     const isAudio = item.type === 'audio' || /\.(mp3|m4a|aac|flac|wav)$/i.test(fn);
     const isVideo = !isAudio && !/\.(exe|msi|zip|rar|7z|tar|gz)$/i.test(fn);
@@ -639,18 +636,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const statusTag = document.createElement('span');
       statusTag.className = 'item-status-tag error';
-      statusTag.textContent = 'Lỗi tải';
+      statusTag.textContent = 'Download error';
 
       topRow.append(titleMuted, statusTag);
     } else if (isDeleted) {
       const titleMuted = document.createElement('span');
       titleMuted.className = 'item-title-muted';
       titleMuted.textContent = item.title || 'video.mp4';
-      titleMuted.title = (item.title || '') + ' (Tệp không còn trên đĩa)';
+      titleMuted.title = (item.title || '') + ' (File not on disk)';
 
       const statusTag = document.createElement('span');
       statusTag.className = 'item-status-tag error';
-      statusTag.textContent = 'Đã xóa';
+      statusTag.textContent = 'Deleted';
 
       topRow.append(titleMuted, statusTag);
     } else if (isCanceled) {
@@ -661,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const statusTag = document.createElement('span');
       statusTag.className = 'item-status-tag';
-      statusTag.textContent = 'Đã hủy';
+      statusTag.textContent = 'Canceled';
 
       topRow.append(titleMuted, statusTag);
     } else if (isDownloading) {
@@ -671,9 +668,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const progInfo = document.createElement('span');
       progInfo.className = 'item-downloading-stats';
-      const spd = item.speed ? ` • ${item.speed}` : '';
-      const displayPct = (item.percent && item.percent.includes('%')) ? item.percent : (item.speed ? 'Đang tải...' : '0%');
-      progInfo.textContent = `${displayPct}${spd}`;
+      if (isQueued) {
+        progInfo.textContent = 'Queued...';
+      } else {
+        const spd = item.speed ? ` • ${item.speed}` : '';
+        const displayPct = (item.percent && item.percent.includes('%')) ? item.percent : (item.speed ? 'Downloading...' : '0%');
+        progInfo.textContent = `${displayPct}${spd}`;
+      }
 
       topRow.append(titleTxt, progInfo);
     }
@@ -699,7 +700,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnFolder = document.createElement('button');
       btnFolder.type = 'button';
       btnFolder.className = 'action-link-btn btn-show-folder';
-      btnFolder.textContent = 'Mở trong thư mục';
+      btnFolder.textContent = 'Show in folder';
       btnFolder.addEventListener('click', (e) => {
         e.stopPropagation();
         safeSendMessage({
@@ -714,7 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnPlay = document.createElement('button');
         btnPlay.type = 'button';
         btnPlay.className = 'action-link-btn btn-play-media';
-        btnPlay.textContent = 'Phát';
+        btnPlay.textContent = 'Play';
         btnPlay.addEventListener('click', (e) => {
           e.stopPropagation();
           openDownloadedItem(item);
@@ -733,7 +734,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnRetry.type = 'button';
       btnRetry.className = 'btn-retry-download';
       const mustRefresh = needsFreshMediaUrl(item);
-      btnRetry.textContent = mustRefresh ? 'Lấy lại luồng' : 'Thử lại';
+      btnRetry.textContent = mustRefresh ? 'Refresh stream' : 'Retry';
       btnRetry.addEventListener('click', (e) => {
         e.stopPropagation();
         if (mustRefresh) refreshMediaUrl(item); else retryDownload(item);
@@ -745,7 +746,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnRetry.type = 'button';
       btnRetry.className = 'btn-retry-download';
       const mustRefresh = needsFreshMediaUrl(item);
-      btnRetry.textContent = mustRefresh ? 'Lấy lại luồng' : 'Thử lại';
+      btnRetry.textContent = mustRefresh ? 'Refresh stream' : 'Retry';
       btnRetry.addEventListener('click', (e) => {
         e.stopPropagation();
         if (mustRefresh) refreshMediaUrl(item); else retryDownload(item);
@@ -770,9 +771,9 @@ document.addEventListener('DOMContentLoaded', () => {
       errIcon.appendChild(isCanceled ? createInfoSvg(13, 13, '#64748b') : createAlertSvg(13, 13, '#dc2626'));
       const errTitle = document.createElement('span');
       errTitle.className = 'error-badge-title';
-      errTitle.textContent = isCanceled ? 'Trạng thái:' : 'Nguyên nhân:';
+      errTitle.textContent = isCanceled ? 'Status:' : 'Reason:';
 
-      const shortErr = isCanceled ? 'Người dùng đã hủy' : (item.errorMessage || formatErrorMessage(item.error));
+      const shortErr = isCanceled ? 'User canceled' : (item.errorMessage || formatErrorMessage(item.error));
       const fullErr = String(item.error || item.errorMessage || shortErr);
 
       const errDesc = document.createElement('span');
@@ -787,8 +788,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnToggleErr = document.createElement('button');
         btnToggleErr.type = 'button';
         btnToggleErr.className = 'btn-toggle-error-detail';
-        btnToggleErr.textContent = 'Chi tiết';
-        btnToggleErr.title = 'Xem thông tin lỗi kỹ thuật đầy đủ';
+        btnToggleErr.textContent = 'Details';
+        btnToggleErr.title = 'View full technical error details';
 
         let isExpanded = false;
         const toggleDetail = (e) => {
@@ -797,11 +798,11 @@ document.addEventListener('DOMContentLoaded', () => {
           if (isExpanded) {
             errRow.classList.add('expanded');
             errDesc.textContent = fullErr;
-            btnToggleErr.textContent = 'Thu gọn';
+            btnToggleErr.textContent = 'Collapse';
           } else {
             errRow.classList.remove('expanded');
             errDesc.textContent = shortErr;
-            btnToggleErr.textContent = 'Chi tiết';
+            btnToggleErr.textContent = 'Details';
           }
         };
 
@@ -824,7 +825,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnMore = document.createElement('button');
     btnMore.type = 'button';
     btnMore.className = 'btn-card-more';
-    btnMore.title = 'Tùy chọn khác';
+    btnMore.title = 'More options';
     btnMore.appendChild(createMoreDotsSvg(14, 14, 'currentColor'));
     btnMore.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -834,12 +835,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnRemove = document.createElement('button');
     btnRemove.type = 'button';
     btnRemove.className = 'btn-card-remove';
-    btnRemove.title = isDownloading ? 'Hủy tải xuống' : 'Xóa khỏi danh sách';
+    btnRemove.title = isDownloading ? 'Cancel download' : 'Remove from list';
     btnRemove.appendChild(createRemoveSvg(12, 12, 'currentColor'));
     btnRemove.addEventListener('click', (e) => {
       e.stopPropagation();
       if (isDownloading) {
-        if (confirm('Bạn có muốn hủy tải xuống video này không?')) {
+        if (confirm('Are you sure you want to cancel this download?')) {
           cancelDownloadItem(item);
         }
       } else {
@@ -855,7 +856,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderList() {
     const filtered = getFilteredItems();
-    if (sectionStats) sectionStats.textContent = `${filtered.length} tệp`;
+    if (sectionStats) sectionStats.textContent = `${filtered.length} ${filtered.length === 1 ? 'file' : 'files'}`;
 
     if (filtered.length === 0) {
       downloadsContainer.replaceChildren();
@@ -902,16 +903,20 @@ document.addEventListener('DOMContentLoaded', () => {
       return true;
     }
 
-    if (item.state === 'downloading') {
+    if (item.state === 'downloading' || item.state === 'in_progress' || item.state === 'queued') {
       const progFill = card.querySelector('.item-progress-fill');
       if (progFill) {
         progFill.style.width = formatPercentWidth(item.percent);
       }
       const stats = card.querySelector('.item-downloading-stats');
       if (stats) {
-        const spd = item.speed ? ` • ${item.speed}` : '';
-        const displayPct = (item.percent && item.percent.includes('%')) ? item.percent : (item.speed ? 'Đang tải...' : '0%');
-        stats.textContent = `${displayPct}${spd}`;
+        if (item.state === 'queued') {
+          stats.textContent = 'Queued...';
+        } else {
+          const spd = item.speed ? ` • ${item.speed}` : '';
+          const displayPct = (item.percent && item.percent.includes('%')) ? item.percent : (item.speed ? 'Downloading...' : '0%');
+          stats.textContent = `${displayPct}${spd}`;
+        }
       }
       return true;
     }
@@ -925,7 +930,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Preserve the existing history ID so retry progress updates the same card.
     const retryTaskId = item.id;
     item.state = 'downloading';
-    item.speed = 'Đang kết nối lại...';
+    item.speed = 'Reconnecting...';
     delete item.error;
     delete item.errorMessage;
 
@@ -934,14 +939,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const found = list.find(it => it.id === item.id);
     if (found) {
       found.state = 'downloading';
-      found.speed = 'Đang kết nối lại...';
+      found.speed = 'Reconnecting...';
       delete found.error;
       delete found.errorMessage;
       await chrome.storage.local.set({ downloadHistory: list });
     }
 
     renderList();
-    showToast('Đang kết nối tải lại video...');
+    showToast('Connecting to retry download...');
 
     safeSendMessage({
       action: 'downloadNative',
@@ -973,14 +978,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function refreshMediaUrl(item) {
     const sourceUrl = item.pageUrl || item.referer;
     if (!sourceUrl || !/^https?:\/\//i.test(sourceUrl)) {
-      showToast('Không còn trang nguồn để lấy lại luồng. Hãy mở lại video và tải lại từ đó.');
+      showToast('No source page available to refresh stream. Please reopen the video and download again.');
       return;
     }
     safeSendMessage({ action: 'openSourcePage', url: sourceUrl }, (res) => {
       if (res && res.success) {
-        showToast('Đã mở video nguồn. Hãy phát video vài giây rồi bấm tải lại.');
+        showToast('Source video opened. Play for a few seconds then click retry.');
       } else {
-        showToast((res && res.error) || 'Không thể mở trang nguồn.');
+        showToast((res && res.error) || 'Could not open source page.');
       }
     });
   }
@@ -999,9 +1004,9 @@ document.addEventListener('DOMContentLoaded', () => {
       chromeId: item.chromeId
     });
     item.state = 'canceled';
-    item.error = 'Người dùng đã hủy';
-    item.errorMessage = 'Người dùng đã hủy';
-    item.speed = 'Đã hủy';
+    item.error = 'User canceled';
+    item.errorMessage = 'User canceled';
+    item.speed = 'Canceled';
 
     if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
       chrome.storage.local.get(['downloadHistory']).then(res => {
@@ -1009,16 +1014,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const entry = history.find(h => String(h.id) === String(item.id) || (h.chromeId && String(h.chromeId) === String(item.chromeId)));
         if (entry) {
           entry.state = 'canceled';
-          entry.error = 'Người dùng đã hủy';
-          entry.errorMessage = 'Người dùng đã hủy';
-          entry.speed = 'Đã hủy';
+          entry.error = 'User canceled';
+          entry.errorMessage = 'User canceled';
+          entry.speed = 'Canceled';
           chrome.storage.local.set({ downloadHistory: history });
         }
       }).catch(() => {});
     }
 
     renderList();
-    showToast('Đã hủy tải xuống');
+    showToast('Download canceled');
   }
 
   async function deleteItem(id) {
@@ -1075,7 +1080,7 @@ document.addEventListener('DOMContentLoaded', () => {
       await chrome.storage.local.set({ downloadHistory: sanitized });
     } catch (_) {}
 
-    showToast('Đã xoá mục tải xuống!');
+    showToast('Download item removed!');
   }
 
   // Filter switching
@@ -1085,11 +1090,11 @@ document.addEventListener('DOMContentLoaded', () => {
       item.classList.add('active');
       currentFilter = item.dataset.filter || 'all';
 
-      if (currentFilter === 'all') sectionTitle.textContent = 'Tất cả tệp tải xuống';
-      else if (currentFilter === 'downloading') sectionTitle.textContent = 'Đang tải xuống';
-      else if (currentFilter === 'completed') sectionTitle.textContent = 'Đã hoàn thành';
-      else if (currentFilter === 'video') sectionTitle.textContent = 'Video & Phim';
-      else if (currentFilter === 'audio') sectionTitle.textContent = 'Âm thanh & MP3';
+      if (currentFilter === 'all') sectionTitle.textContent = 'All Downloads';
+      else if (currentFilter === 'downloading') sectionTitle.textContent = 'Downloading';
+      else if (currentFilter === 'completed') sectionTitle.textContent = 'Completed';
+      else if (currentFilter === 'video') sectionTitle.textContent = 'Videos & Movies';
+      else if (currentFilter === 'audio') sectionTitle.textContent = 'Audio & MP3';
 
       renderList();
     });
@@ -1126,7 +1131,7 @@ document.addEventListener('DOMContentLoaded', () => {
           modalFolderPath.title = selectedPath;
         }
         chrome.storage.local.set({ customDownloadDir: selectedPath });
-        showToast('Đã đổi thư mục lưu!');
+        showToast('Download folder changed!');
       }
     });
   });
@@ -1167,7 +1172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (items.length === 0) {
       const empty = document.createElement('span');
       empty.style.cssText = 'font-size:12.5px;color:#9ca3af;';
-      empty.textContent = 'Chưa có website nào trong danh sách';
+      empty.textContent = 'No websites in list';
       settingsSiteList.appendChild(empty);
       return;
     }
@@ -1187,7 +1192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const del = document.createElement('button');
       del.type = 'button';
-      del.title = 'Xoá';
+      del.title = 'Remove';
       del.textContent = '✕';
       del.style.cssText = 'border:none;background:none;cursor:pointer;color:#ef4444;font-size:13px;padding:2px 6px;';
       del.addEventListener('click', () => {
@@ -1196,7 +1201,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const next = list.filter((d) => d !== domain);
           chrome.storage.local.set({ disable_savior_sites: next }, () => {
             renderSettingsSiteList(next);
-            showToast('Đã xoá ' + domain + ' khỏi danh sách');
+            showToast('Removed ' + domain + ' from list');
           });
         });
       });
@@ -1212,20 +1217,20 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/^www\./, '')
       .replace(/\/.*$/, '');
     if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(raw)) {
-      showToast('Tên miền không hợp lệ. Ví dụ: example.com');
+      showToast('Invalid domain name. Example: example.com');
       return;
     }
     chrome.storage.local.get(['disable_savior_sites'], (s) => {
       const list = Array.isArray(s.disable_savior_sites) ? s.disable_savior_sites : [];
       if (list.includes(raw)) {
-        showToast(raw + ' đã có trong danh sách');
+        showToast(raw + ' is already in the list');
         return;
       }
       const next = list.concat(raw);
       chrome.storage.local.set({ disable_savior_sites: next }, () => {
         settingSiteInput.value = '';
         renderSettingsSiteList(next);
-        showToast('Đã thêm ' + raw + ' — thanh tải nổi sẽ ẩn trên trang này');
+        showToast('Added ' + raw + ' — floating download toolbar will be hidden on this site');
       });
     });
   }
@@ -1308,7 +1313,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chrome.storage.local.set(settingsToSave, () => {
       if (showSuccessToast) {
-        showToast('Đã lưu cài đặt thành công!');
+        showToast('Settings saved successfully!');
       }
     });
   }
@@ -1352,7 +1357,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sidebarFolderPath.title = selectedPath;
           }
           chrome.storage.local.set({ customDownloadDir: selectedPath });
-          showToast('Đã đổi thư mục lưu!');
+          showToast('Download folder changed!');
         }
       });
     });
@@ -1366,7 +1371,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Clear all history
   btnClearAll.addEventListener('click', async () => {
-    if (confirm('Bạn có chắc muốn xoá toàn bộ lịch sử tải xuống không?')) {
+    if (confirm('Are you sure you want to clear all download history?')) {
       for (const it of allItems) {
         const strId = String(it.id || '');
         const strChromeId = it.chromeId ? String(it.chromeId) : '';
@@ -1387,7 +1392,7 @@ document.addEventListener('DOMContentLoaded', () => {
       await chrome.storage.local.set({ downloadHistory: [] });
       updateCounts();
       renderList();
-      showToast('Đã xoá toàn bộ lịch sử tải xuống!');
+      showToast('All download history cleared!');
     }
   });
 
@@ -1411,7 +1416,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (item.state === 'interrupted' && item.error !== 'USER_CANCELED') item.state = 'error';
       if (item.state === 'cancelled' || item.error === 'USER_CANCELED') item.state = 'canceled';
 
-      const isFinished = item.percent === '100%' || item.speed === 'Hoàn thành';
+      const isFinished = item.percent === '100%' || item.speed === 'Completed';
       if (isFinished && item.state !== 'canceled' && item.state !== 'deleted' && item.state !== 'error') {
         item.state = 'completed';
       }
@@ -1454,18 +1459,22 @@ document.addEventListener('DOMContentLoaded', () => {
           if (stateChanged) {
             const newCard = createDownloadCard(existing);
             card.replaceWith(newCard);
-          } else if (existing.state === 'downloading') {
+          } else if (existing.state === 'downloading' || existing.state === 'in_progress' || existing.state === 'queued') {
             const progFill = card.querySelector('.item-progress-fill');
             if (progFill) {
               progFill.style.width = formatPercentWidth(existing.percent);
             }
             const stats = card.querySelector('.item-downloading-stats');
             if (stats) {
-              const spd = existing.speed ? ` • ${existing.speed}` : '';
-              const displayPct = (existing.percent && existing.percent.includes('%'))
-                ? existing.percent
-                : (existing.speed ? 'Đang tải...' : '0%');
-              stats.textContent = `${displayPct}${spd}`;
+              if (existing.state === 'queued') {
+                stats.textContent = 'Queued...';
+              } else {
+                const spd = existing.speed ? ` • ${existing.speed}` : '';
+                const displayPct = (existing.percent && existing.percent.includes('%'))
+                  ? existing.percent
+                  : (existing.speed ? 'Downloading...' : '0%');
+                stats.textContent = `${displayPct}${spd}`;
+              }
             }
           } else if (existing.state === 'error') {
             const errDesc = card.querySelector('.error-badge-text');
@@ -1545,7 +1554,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateCounts();
     if (sectionStats) {
-      sectionStats.textContent = `${getFilteredItems().length} tệp`;
+      sectionStats.textContent = `${getFilteredItems().length} ${getFilteredItems().length === 1 ? 'file' : 'files'}`;
     }
   }
 
@@ -1563,7 +1572,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalFolderPath.textContent = newPath;
             modalFolderPath.title = newPath;
           }
-          showToast('Đã đổi thư mục lưu!');
+          showToast('Download folder changed!');
         }
       }
       if (changes.downloadHistory) {
@@ -1597,7 +1606,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         loadDownloads();
       }
-      showToast('Tệp không còn trên đĩa. Bấm Thử lại để tải lại.');
+      showToast('File was moved or deleted from disk. Click Retry to download again.');
     }
   });
 

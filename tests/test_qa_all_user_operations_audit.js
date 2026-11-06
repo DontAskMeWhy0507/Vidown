@@ -112,10 +112,10 @@ testCase('Test 7: getDateGroupHeading handles NaN or invalid timestamps without 
   
   // Evaluate the extracted function safely
   const fn = new Function('timestamp', funcMatch[1]);
-  assert.strictEqual(fn(null), 'Gần đây');
-  assert.strictEqual(fn(undefined), 'Gần đây');
-  assert.strictEqual(fn('invalid_date'), 'Gần đây');
-  assert.strictEqual(fn(NaN), 'Gần đây');
+  assert.strictEqual(fn(null), 'Recent');
+  assert.strictEqual(fn(undefined), 'Recent');
+  assert.strictEqual(fn('invalid_date'), 'Recent');
+  assert.strictEqual(fn(NaN), 'Recent');
 });
 
 // -------------------------------------------------------------

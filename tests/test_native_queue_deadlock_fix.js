@@ -203,7 +203,7 @@ assert.strictEqual(
   `Job 2 state in activeDownloads must be "queued", but got "${job2Task.state}"`
 );
 assert.strictEqual(job2Task.percent, '0%', 'Job 2 initial percent must be "0%"');
-assert.strictEqual(job2Task.speed, 'Đang xếp hàng chờ...', 'Job 2 initial speed must be "Đang xếp hàng chờ..."');
+assert.strictEqual(job2Task.speed, 'Queued...', 'Job 2 initial speed must be "Queued..."');
 
 // Step 3: Verify calling processNextQueuedNativeDownload while Job 1 is still downloading does NOT unblock Job 2
 sw.processNextQueuedNativeDownload();

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,15 +17,15 @@
         </div>
       </div>
       <div class="header-toggles-container">
-        <div class="header-toggle-wrap" title="Bật hoặc tắt thanh công cụ tải nổi trên video">
+        <div class="header-toggle-wrap" title="Toggle floating download toolbar on videos">
           <span class="header-toggle-label" id="label-toggle-toolbar">Video</span>
           <label class="toggle-switch">
             <input type="checkbox" id="toggle-onpage-bar" checked aria-labelledby="label-toggle-toolbar">
             <span class="toggle-slider"></span>
           </label>
         </div>
-        <div class="header-toggle-wrap" title="Bật hoặc tắt nút tải nổi trên hình ảnh">
-          <span class="header-toggle-label" id="label-toggle-image">Ảnh</span>
+        <div class="header-toggle-wrap" title="Toggle floating download button on images">
+          <span class="header-toggle-label" id="label-toggle-image">Image</span>
           <label class="toggle-switch">
             <input type="checkbox" id="toggle-image-bar" checked aria-labelledby="label-toggle-image">
             <span class="toggle-slider"></span>
@@ -39,8 +39,8 @@
       <!-- Section: Recently Downloaded Videos -->
       <section class="popup-section" id="section-recent">
         <div class="recent-header">
-          <span class="recent-heading">Các video vừa tải xuống</span>
-          <span class="recent-badge-count" id="recent-total-badge">0 video</span>
+          <span class="recent-heading">Recent Downloads</span>
+          <span class="recent-badge-count" id="recent-total-badge">0 videos</span>
         </div>
 
         <div class="recent-media-container" id="recent-media-list">
@@ -55,19 +55,19 @@
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
           </div>
-          <p class="empty-title">Chưa có video nào tải xuống</p>
-          <p class="empty-desc">Khi bạn tải video trên YouTube, Facebook, TikTok..., các tệp sẽ xuất hiện tại đây.</p>
+          <p class="empty-title">No downloads yet</p>
+          <p class="empty-desc">When you download videos on YouTube, Facebook, TikTok..., files will appear here.</p>
         </div>
       </section>
     </div>
 
     <!-- Prominent Bottom Manager Action Bar -->
     <footer class="popup-footer">
-      <button id="btn-footer-manager" class="btn-manager-action">Mở trang quản lý download</button>
+      <button id="btn-footer-manager" class="btn-manager-action">Open Download Manager</button>
     </footer>
 
     <!-- Toast Notification -->
-    <div class="toast" id="toast" style="display: none;">Thông báo</div>
+    <div class="toast" id="toast" style="display: none;">Notification</div>
   </div>
 
   <script src="popup.js"></script>

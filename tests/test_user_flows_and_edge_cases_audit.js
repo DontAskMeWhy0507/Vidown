@@ -20,7 +20,7 @@ const bgCode = fs.readFileSync(bgPath, 'utf8');
 
 // 1. Startup cleanup of stuck downloading items
 assert.ok(
-  bgCode.includes("errorMessage: 'Bị gián đoạn khi tắt trình duyệt'"),
+  bgCode.includes("errorMessage: 'Interrupted when browser closed'"),
   'background.chrome.js must sanitize stuck downloading tasks on boot'
 );
 console.log('✓ Test 1 Passed: Startup cleans up stuck downloading tasks into retryable error state.');

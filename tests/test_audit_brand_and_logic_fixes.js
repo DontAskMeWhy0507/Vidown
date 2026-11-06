@@ -7,7 +7,7 @@ console.log('Testing Brand leftovers and logic fixes...');
 // 1. Verify downloads.html has no Savior brand string in descriptions
 const downloadsHtml = fs.readFileSync(path.join(__dirname, '../downloads/downloads.html'), 'utf8');
 assert(!downloadsHtml.includes('nút tải Savior'), 'downloads.html must not contain "nút tải Savior"');
-assert(downloadsHtml.includes('nút tải VidManager'), 'downloads.html must contain "nút tải VidManager"');
+assert(downloadsHtml.includes('VidManager download button'), 'downloads.html must contain "VidManager download button"');
 
 // 2. Verify popup.css header branding
 const popupCss = fs.readFileSync(path.join(__dirname, '../popup/popup.css'), 'utf8');

@@ -7,7 +7,7 @@ console.log('=== TEST SUITE: INDEPENDENT VIDEO & IMAGE FLOATING BAR SETTINGS ===
 const downloadsHtml = fs.readFileSync('downloads/downloads.html', 'utf8');
 assert.ok(downloadsHtml.includes('id="setting-onpage-buttons"'), 'downloads.html must have setting-onpage-buttons');
 assert.ok(downloadsHtml.includes('id="setting-image-buttons"'), 'downloads.html must have setting-image-buttons');
-assert.ok(downloadsHtml.includes('Hiển thị nút tải nổi trên hình ảnh'), 'downloads.html must label image floating bar option');
+assert.ok(downloadsHtml.includes('Show floating download button on images'), 'downloads.html must label image floating bar option');
 console.log('✓ 1. downloads.html contains independent video and image toggle switches.');
 
 // 2. Verify downloads.js loads, saves, and auto-saves image_download_enabled

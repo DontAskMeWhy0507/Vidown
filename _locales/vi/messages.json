@@ -441,11 +441,11 @@
   },
   "pip_failed_to_find": {
     "description": "Notice for when we failed to locate player on the page.",
-    "message": "VidManager failed to detach this video"
+    "message": "Không thể ghim video này"
   },
   "pip_please_wait": {
-    "description": "When PiP doing it's magic",
-    "message": "Please wait..."
+    "description": "When PiP doing its magic",
+    "message": "Vui lòng chờ..."
   },
   "pip_tour_content": {
     "description": "PiP tour text - ask the user to try our product",
@@ -726,6 +726,10 @@
     "message": "Tải video, audio hoặc phụ đề"
   },
   "widget_download_tooltip_image_and_vid": {
+    "description": "Download button text but both image and video",
+    "message": "Tải video, audio, phụ đề hoặc ảnh"
+  },
+  "widget_download_tooltip_image_and_video": {
     "description": "Download button text but both image and video",
     "message": "Tải video, audio, phụ đề hoặc ảnh"
   },

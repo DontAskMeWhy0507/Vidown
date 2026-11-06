@@ -10,7 +10,7 @@ assert.ok(!popupHtml.includes('id="btn-header-manager"'), 'Must not have redunda
 assert.ok(!popupHtml.includes('id="btn-open-manager"'), 'Must not have redundant header button');
 
 // Count manager triggers
-const managerButtonMatches = (popupHtml.match(/Mở trang quản lý/gi) || []).length;
+const managerButtonMatches = (popupHtml.match(/Open Download Manager/gi) || []).length;
 assert.strictEqual(managerButtonMatches, 1, 'There must be exactly ONE text occurrence for opening Download Manager');
 console.log('✓ 1. popup.html has exactly 1 clean Download Manager button with zero duplicates.');
 

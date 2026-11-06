@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tệp đã tải xuống - VidManager</title>
+  <title>Downloads - VidManager</title>
   <link rel="stylesheet" href="downloads.css">
   <link rel="icon" type="image/svg+xml" href="../images/logo_cc.svg">
 </head>
@@ -15,7 +15,7 @@
         <img src="../images/logo_cc.svg" alt="VidManager" class="brand-icon" style="display: block; width: 26px; height: 26px; border-radius: 6px;">
         <div class="brand-text">
           <span class="brand-title">VidManager</span>
-          <span class="brand-sub">Tệp đã tải xuống</span>
+          <span class="brand-sub">Downloads</span>
         </div>
       </div>
 
@@ -26,17 +26,17 @@
             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
         </div>
-        <input type="text" id="search-input" placeholder="Tìm kiếm trong tệp tải xuống..." autocomplete="off">
+        <input type="text" id="search-input" placeholder="Search downloads..." autocomplete="off">
         <button id="btn-clear-search" class="btn-clear-search" style="display: none;">✕</button>
       </div>
 
       <div class="header-actions">
-        <button id="btn-open-folder" class="header-btn" title="Mở thư mục Downloads trong máy tính">
-          <span>Mở thư mục</span>
+        <button id="btn-open-folder" class="header-btn" title="Open Downloads folder">
+          <span>Open Folder</span>
         </button>
 
-        <button id="btn-clear-all" class="header-btn secondary" title="Xoá lịch sử tải xuống">
-          <span>Xoá lịch sử</span>
+        <button id="btn-clear-all" class="header-btn secondary" title="Clear download history">
+          <span>Clear History</span>
         </button>
       </div>
     </header>
@@ -67,18 +67,18 @@
       <!-- Main Download List Area: Centered column -->
       <main class="content-panel">
         <div class="content-header" style="display: none;">
-          <h2 id="section-title">Tất cả tệp tải xuống</h2>
-          <span class="section-stats" id="section-stats">0 tệp</span>
+          <h2 id="section-title">All Downloads</h2>
+          <span class="section-stats" id="section-stats">0 files</span>
         </div>
 
         <!-- Download Folder Setting Bar -->
         <div class="folder-setting-bar">
           <div class="folder-setting-info">
-            <span class="folder-setting-label">Thư mục tải về:</span>
-            <span class="folder-path-display" id="sidebar-folder-path" title="Thư mục lưu trữ Downloads">Downloads</span>
+            <span class="folder-setting-label">Download folder:</span>
+            <span class="folder-path-display" id="sidebar-folder-path" title="Download folder">Downloads</span>
           </div>
-          <button type="button" id="btn-change-folder" class="btn-change-folder" title="Đổi thư mục lưu trữ tải xuống">
-            Đổi thư mục...
+          <button type="button" id="btn-change-folder" class="btn-change-folder" title="Change download storage folder">
+            Change folder...
           </button>
         </div>
 
@@ -91,8 +91,8 @@
               <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
           </div>
-          <h3>Không có tệp tải xuống nào</h3>
-          <p id="empty-subtitle">Các tệp bạn tải về sẽ xuất hiện tại đây.</p>
+          <h3>No downloads found</h3>
+          <p id="empty-subtitle">Files you download will appear here.</p>
         </div>
 
         <!-- Download Items Container (Grouped by date) -->
@@ -102,7 +102,7 @@
       </main>
 
       <!-- Right Permanent Settings Panel (Always Visible) -->
-      <aside id="settings-modal" class="settings-sidebar" aria-label="Cài đặt tiện ích">
+      <aside id="settings-modal" class="settings-sidebar" aria-label="Extension Settings">
         <div class="settings-sidebar-inner">
           <div class="settings-sidebar-header">
             <div class="modal-title-wrap">
@@ -110,28 +110,28 @@
                 <circle cx="12" cy="12" r="3"></circle>
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
               </svg>
-              <h3>Cài đặt tải xuống</h3>
+              <h3>Download Settings</h3>
             </div>
           </div>
 
           <div class="modal-body settings-sidebar-body">
-            <!-- Setting: Thư mục tải về -->
+            <!-- Setting: Default download folder -->
             <div class="setting-item">
               <div class="setting-label-wrap">
-                <label class="setting-title">Thư mục tải về mặc định</label>
-                <span class="setting-desc">Tất cả video và âm thanh tải xuống sẽ được lưu tại đây</span>
+                <label class="setting-title">Default download folder</label>
+                <span class="setting-desc">All downloaded video and audio files will be saved here</span>
               </div>
               <div class="setting-folder-row">
                 <span id="modal-folder-path" class="folder-path-box">Downloads</span>
-                <button type="button" id="btn-modal-change-folder" class="btn-setting-action">Đổi...</button>
+                <button type="button" id="btn-modal-change-folder" class="btn-setting-action">Change...</button>
               </div>
             </div>
 
-            <!-- Setting: Nút trên video -->
+            <!-- Setting: Toolbar on videos -->
             <div class="setting-item">
               <div class="setting-label-wrap">
-                <label class="setting-title" for="setting-onpage-buttons">Hiển thị thanh tải nổi trên video</label>
-                <span class="setting-desc">Tự động gắn nút tải VidManager trên trình phát video (YouTube, Facebook, TikTok...)</span>
+                <label class="setting-title" for="setting-onpage-buttons">Show floating download toolbar on videos</label>
+                <span class="setting-desc">Automatically attach VidManager download button on video players (YouTube, Facebook, TikTok...)</span>
               </div>
               <label class="toggle-switch">
                 <input type="checkbox" id="setting-onpage-buttons" checked>
@@ -139,11 +139,11 @@
               </label>
             </div>
 
-            <!-- Setting: Nút trên hình ảnh -->
+            <!-- Setting: Button on images -->
             <div class="setting-item">
               <div class="setting-label-wrap">
-                <label class="setting-title" for="setting-image-buttons">Hiển thị nút tải nổi trên hình ảnh</label>
-                <span class="setting-desc">Tự động gắn nút tải khi rê chuột vào ảnh (Instagram, web...). Tắt nếu muốn duyệt ảnh không bị vướng</span>
+                <label class="setting-title" for="setting-image-buttons">Show floating download button on images</label>
+                <span class="setting-desc">Automatically show download button when hovering over images (Instagram, web...). Turn off to browse images uninterrupted</span>
               </div>
               <label class="toggle-switch">
                 <input type="checkbox" id="setting-image-buttons" checked>
@@ -151,11 +151,11 @@
               </label>
             </div>
 
-            <!-- Setting: Ngưỡng file nhỏ -->
+            <!-- Setting: Min size threshold -->
             <div class="setting-item">
               <div class="setting-label-wrap">
-                <label class="setting-title" for="setting-min-size">Bỏ qua file nhỏ hơn</label>
-                <span class="setting-desc">Không đề xuất các luồng media nhỏ hơn ngưỡng này</span>
+                <label class="setting-title" for="setting-min-size">Skip files smaller than</label>
+                <span class="setting-desc">Do not suggest media streams smaller than this threshold</span>
               </div>
               <div class="setting-folder-row" style="gap:10px;">
                 <input type="range" id="setting-min-size" min="0" max="3048000" step="1024" value="30720" style="flex:1;accent-color:#10b981;">
@@ -163,15 +163,15 @@
               </div>
             </div>
 
-            <!-- Setting: Site ẩn thanh tải nổi -->
+            <!-- Setting: Excluded sites -->
             <div class="setting-item" style="flex-direction:column;align-items:stretch;gap:8px;">
               <div class="setting-label-wrap">
-                <label class="setting-title">Website không hiện thanh tải nổi</label>
-                <span class="setting-desc">Thêm tên miền để tắt thanh tải nổi trên trang đó</span>
+                <label class="setting-title">Websites to hide floating toolbar</label>
+                <span class="setting-desc">Add domains to disable the floating toolbar on those sites</span>
               </div>
               <div class="setting-folder-row" style="gap:8px;">
                 <input type="text" id="setting-site-input" placeholder="example.com" style="flex:1;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;">
-                <button type="button" id="btn-add-site" class="btn-setting-action">Thêm</button>
+                <button type="button" id="btn-add-site" class="btn-setting-action">Add</button>
               </div>
               <div id="settings-site-list" style="display:flex;flex-direction:column;gap:6px;"></div>
             </div>
@@ -181,8 +181,8 @@
     </div>
   </div>
 
-    <!-- Toast notification -->
-    <div id="toast" class="toast"></div>
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
 
   <script src="downloads.js"></script>
 </body>

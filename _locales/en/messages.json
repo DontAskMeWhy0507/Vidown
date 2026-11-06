@@ -24,7 +24,7 @@
     "message": "<b>More than one feature... It is the Sidebar. </b><br>Facebook Messenger, Telegram, Skype and Zalo are all integrated on the sidebar for your extra convenience. Go chat now!"
   },
   "accept_vi": {
-    "message": "Đồng ý"
+    "message": "Agree"
   },
   "agree_button": {
     "description": "onboarding agree button text",
@@ -32,7 +32,7 @@
   },
   "agree_vi_button": {
     "description": "onboarding agree button text",
-    "message": "Đồng ý"
+    "message": "Agree"
   },
   "appDescription": {
     "message": "VidManager - Helps you download video and audio files instantly from any website."
@@ -45,7 +45,7 @@
     "message": "Skip"
   },
   "cancel_vi": {
-    "message": "Bỏ qua"
+    "message": "Cancel"
   },
   "chatgpt_desc_text": {
     "message": "<b>Catch up with the AI trend with VidManager Sidebar and ChatGPT</b><br>With a click, you can immediately meet the intelligent virtual chatbot in the Sidebar. Not only that, you can surf the web and chat with ChatGPT at the same time."
@@ -76,7 +76,7 @@
   },
   "explore_vi_button": {
     "description": "onboarding agree button text",
-    "message": "Khám phá"
+    "message": "Explore"
   },
   "image_tab": {
     "description": "Title of the image tab",
@@ -96,7 +96,7 @@
   },
   "later_vi_button": {
     "description": "onboarding later button text",
-    "message": "Để sau"
+    "message": "Later"
   },
   "loading_image": {
     "message": "Searching for Image..."
@@ -105,7 +105,7 @@
     "message": "Searching for Video/Audio..."
   },
   "login_button": {
-    "message": "Đăng nhập"
+    "message": "Sign in"
   },
   "media_fields_type_audio": {
     "description": "Audio media type",
@@ -164,46 +164,46 @@
     "message": "Do not show again"
   },
   "onboard_account_desc_A": {
-    "message": "Để đồng bộ dữ liệu đã lưu trên Google và dấu trang, mật khẩu trên mọi thiết bị"
+    "message": "To sync saved Google data, bookmarks, and passwords across all devices"
   },
   "onboard_account_desc_C": {
-    "message": "Để đồng bộ dấu trang và mật khẩu trên mọi thiết bị"
+    "message": "To sync bookmarks and passwords across all devices"
   },
   "onboard_account_title_A": {
-    "message": "Bạn có muốn đăng nhập luôn tài khoản VidManager?"
+    "message": "Do you want to sign in to your VidManager account?"
   },
   "onboard_account_title_B": {
-    "message": "Đăng nhập tài khoản VidManager để lưu các dữ liệu của bạn"
+    "message": "Sign in to VidManager to save your data"
   },
   "onboard_account_title_C": {
-    "message": "Dùng tài khoản Google đăng nhập VidManager?"
+    "message": "Use Google account to sign in to VidManager?"
   },
   "onboard_account_title_D": {
-    "message": "Đăng nhập tài khoản VidManager và đồng bộ dữ liệu giữa mọi thiết bị"
+    "message": "Sign in to VidManager and sync data across all devices"
   },
   "onboard_en_to_vi_desc_1": {
-    "message": "Dịch mọi loại văn bản bằng cách bôi đen và nhấn biểu tượng Dịch để xem kết quả"
+    "message": "Translate any text by highlighting it and clicking the Translate icon"
   },
   "onboard_en_to_vi_desc_2": {
-    "message": "VidManager giúp bạn dịch tiếng Anh, Trung, Hàn, Nhật và hơn 100 ngôn ngữ khác"
+    "message": "VidManager helps you translate English, Chinese, Korean, Japanese, and over 100 other languages"
   },
   "onboard_en_to_vi_desc_3": {
-    "message": "Bôi đen đoạn văn cần dịch và nhấn biểu tượng Dịch để xem kết quả. Siêu dễ!"
+    "message": "Highlight text to translate and click the Translate icon. Super easy!"
   },
   "onboard_en_to_vi_desc_4": {
-    "message": "Ngôn ngữ nào cũng chơi tuốt - VidManager giúp bạn dịch tiếng Anh, Trung, Hàn, Nhật và hơn 100 ngôn ngữ khác"
+    "message": "Translate any language - VidManager helps you translate English, Chinese, Korean, Japanese, and over 100 other languages"
   },
   "onboard_en_to_vi_title_1": {
-    "message": "Chỉ cần bôi đen, VidManager dịch ngay"
+    "message": "Just highlight, VidManager translates instantly"
   },
   "onboard_en_to_vi_title_2": {
-    "message": "Chỉ cần bôi đen, VidManager dịch ngay"
+    "message": "Just highlight, VidManager translates instantly"
   },
   "onboard_en_to_vi_title_3": {
-    "message": "Bôi đen nhanh tay - dịch ngay lập tức"
+    "message": "Highlight quickly - translate instantly"
   },
   "onboard_en_to_vi_title_4": {
-    "message": "Bôi đen nhanh tay - dịch ngay lập tức"
+    "message": "Highlight quickly - translate instantly"
   },
   "onboard_import_data_desc_1": {
     "message": "Transfer important data - bookmarks, passwords, and browsing history from other browsers to VidManager"
@@ -283,16 +283,16 @@
     "message": "Suggestion from VidManager"
   },
   "onboarding_ccmobile_movie_descText_adblock": {
-    "message": "<h5>Chặn quảng cáo trên cả điện thoại</h5><p>Tải app VidManager và tiếp tục xem phim không quảng cáo miễn phí</p>"
+    "message": "<h5>Block ads on mobile too</h5><p>Download the VidManager app and continue watching movies ad-free</p>"
   },
   "onboarding_ccmobile_movie_descText_watch": {
-    "message": "<h5>Tối ưu trải nghiệm xem video trên điện thoại</h5><p>Xem phim ‘đã’ hơn với Chế độ phim ảnh từ VidManager Mobile</p>"
+    "message": "<h5>Optimize video watching experience on mobile</h5><p>Watch movies better with Cinema Mode from VidManager Mobile</p>"
   },
   "onboarding_coccoctv_actionText": {
-    "message": "Tìm hiểu thêm"
+    "message": "Learn more"
   },
   "onboarding_coccoctv_title": {
-    "message": "Đề xuất từ VidManager"
+    "message": "Recommendations from VidManager"
   },
   "onboarding_new_mp_abort": {
     "message": "Skip"
@@ -323,13 +323,13 @@
   },
   "onboarding_ytb_mobile_actionText": {
     "description": "onboarding try button default text",
-    "message": "Thử ngay"
+    "message": "Try now"
   },
   "onboarding_ytb_mobile_descText_adblock": {
-    "message": "<h5>Chặn quảng cáo YouTube trên cả điện thoại</h5><p>Tải app VidManager và tiếp tục xem YouTube không quảng cáo miễn phí.</p>"
+    "message": "<h5>Block YouTube ads on mobile too</h5><p>Download the VidManager app and continue watching YouTube ad-free.</p>"
   },
   "onboarding_ytb_mobile_descText_playmusic": {
-    "message": "<h5>Nghe YouTube tắt màn hình trên điện thoại</h5><p>Dễ dàng nghe nhạc khi tắt màn hình với VidManager Mobile.</p>"
+    "message": "<h5>Listen to YouTube with screen off on mobile</h5><p>Easily listen to music with screen off using VidManager Mobile.</p>"
   },
   "options_automatic_download_quality": {
     "description": "Automatic download quality setting title",
@@ -726,6 +726,10 @@
     "message": "Download videos, audio or subtitles"
   },
   "widget_download_tooltip_image_and_vid": {
+    "description": "Download button text but both image and video",
+    "message": "Download videos, audio, subtitles or images"
+  },
+  "widget_download_tooltip_image_and_video": {
     "description": "Download button text but both image and video",
     "message": "Download videos, audio, subtitles or images"
   },

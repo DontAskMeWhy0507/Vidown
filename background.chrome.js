@@ -489,17 +489,17 @@ try {
           try {
             chrome.downloads.search({ id: Number(item.chromeId) }, (results) => {
               if (chrome.runtime && chrome.runtime.lastError) {
-                return resolve(item.isBrowserDownload ? item : { ...item, state: 'error', error: 'Bị gián đoạn', errorMessage: 'Bị gián đoạn khi tắt trình duyệt', speed: '' });
+                return resolve(item.isBrowserDownload ? item : { ...item, state: 'error', error: 'Interrupted', errorMessage: 'Interrupted when browser closed', speed: '' });
               }
               const d = results && results[0];
               if (d && d.state === 'in_progress') {
                 return resolve(item); // Still in progress in browser!
               } else if (d && d.state === 'complete') {
-                return resolve({ ...item, state: 'completed', percent: '100%', speed: 'Hoàn thành' });
+                return resolve({ ...item, state: 'completed', percent: '100%', speed: 'Completed' });
               } else if (item.isBrowserDownload && !d) {
-                return resolve({ ...item, state: 'error', error: 'Bị gián đoạn', errorMessage: 'Bị gián đoạn khi tắt trình duyệt', speed: '' });
+                return resolve({ ...item, state: 'error', error: 'Interrupted', errorMessage: 'Interrupted when browser closed', speed: '' });
               }
-              return resolve({ ...item, state: 'error', error: 'Bị gián đoạn', errorMessage: 'Bị gián đoạn khi tắt trình duyệt', speed: '' });
+              return resolve({ ...item, state: 'error', error: 'Interrupted', errorMessage: 'Interrupted when browser closed', speed: '' });
             });
             return;
           } catch (_) {
@@ -512,8 +512,8 @@ try {
         return resolve({
           ...item,
           state: 'error',
-          error: 'Bị gián đoạn',
-          errorMessage: 'Bị gián đoạn khi tắt trình duyệt',
+          error: 'Interrupted',
+          errorMessage: 'Interrupted when browser closed',
           speed: ''
         });
       });
@@ -743,7 +743,7 @@ function trackBrowserDownload(chromeId, options, filename, url) {
     params: options,
     state: 'downloading',
     percent: '1%',
-    speed: 'Đang tải (Trình duyệt)...',
+    speed: 'Downloading (Browser)...',
     size: '0 B',
     bytesReceived: 0,
     totalBytes: 0,
@@ -763,7 +763,7 @@ function trackBrowserDownload(chromeId, options, filename, url) {
     type: mediaType,
     state: 'downloading',
     percent: '1%',
-    speed: 'Đang tải (Trình duyệt)...',
+    speed: 'Downloading (Browser)...',
     size: '0 B',
     startTime: task.startTime
   });
@@ -773,7 +773,7 @@ function trackBrowserDownload(chromeId, options, filename, url) {
     action: 'nativeProgress',
     taskId: historyId,
     percent: '1%',
-    speed: 'Đang tải (Trình duyệt)...',
+    speed: 'Downloading (Browser)...',
     size: '0 B'
   });
 }
@@ -959,7 +959,7 @@ function startCocCocSessionDownload(options, callback) {
 
   const reportStartError = (error) => {
     const taskId = options.taskId || `start_error_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
-    const errorText = String(error && (error.message || error) || 'VidManager không thể bắt đầu tải tệp');
+    const errorText = String(error && (error.message || error) || 'VidManager could not start download');
     updateDownloadHistory({
       id: taskId,
       title: baseName,
@@ -1002,7 +1002,7 @@ function startCocCocSessionDownload(options, callback) {
           const nativeStarted = startNativeDownload(options, callback);
           if (nativeStarted) return;
         }
-        const reason = error || chrome.runtime.lastError || 'VidManager không trả về mã tải xuống';
+        const reason = error || chrome.runtime.lastError || 'VidManager did not return a download ID';
         console.warn('[VidManager] Session download failed:', reason && (reason.message || reason));
         reportStartError(reason);
         if (typeof callback === 'function') callback(null);
@@ -1014,7 +1014,7 @@ function startCocCocSessionDownload(options, callback) {
 
     function executeDownload() {
       timer = setTimeout(() => {
-        finish(null, 'VidManager không phản hồi yêu cầu tải trong 10 giây');
+        finish(null, 'VidManager did not respond to download request within 10 seconds');
       }, 10000);
 
       const result = _origDownload(nativeOptions, (chromeId) => {
@@ -1120,7 +1120,7 @@ try {
         task.state = 'completed';
         task.complete = true;
         task.percent = '100%';
-        task.speed = 'Hoàn thành';
+        task.speed = 'Completed';
         activeDownloads.delete(delta.id);
 
         setActionBadge('✓', '#10b981');
@@ -1133,7 +1133,7 @@ try {
           chromeId: delta.id,
           state: 'completed',
           percent: '100%',
-          speed: 'Hoàn thành',
+          speed: 'Completed',
           endTime: now,
           outputPath: task.outputPath || task.filename,
           outputFile: task.outputPath || task.filename
@@ -1165,7 +1165,7 @@ try {
           chromeId: delta.id,
           state: task.state,
           error: err,
-          speed: (err === 'USER_CANCELED') ? 'Đã hủy' : 'Gián đoạn'
+          speed: (err === 'USER_CANCELED') ? 'Canceled' : 'Interrupted'
         });
 
         broadcastTaskEvent({
@@ -1329,7 +1329,7 @@ function getOrCreateNativePort() {
             id: id,
             state: 'error',
             error: errorMsg.includes('not found') ? 'NATIVE_HELPER_NOT_FOUND' : errorMsg,
-            speed: 'Mất kết nối'
+            speed: 'Connection lost'
           });
           dispatchDownloadChanged({
             id: id,
@@ -1670,7 +1670,7 @@ function startNativeDownload(downloadParams, callback) {
         params: downloadParams,
         state: 'queued',
         percent: '0%',
-        speed: 'Đang xếp hàng chờ...',
+        speed: 'Queued...',
         size: '0 B',
         startTime: Date.now(),
         complete: false
@@ -1692,7 +1692,7 @@ function startNativeDownload(downloadParams, callback) {
         type: mediaType,
         state: 'queued',
         percent: '0%',
-        speed: 'Đang xếp hàng chờ...',
+        speed: 'Queued...',
         size: '0 B',
         startTime: task.startTime
       });
@@ -1701,7 +1701,7 @@ function startNativeDownload(downloadParams, callback) {
         action: 'nativeProgress',
         taskId: fakeId,
         percent: '0%',
-        speed: 'Đang xếp hàng chờ...',
+        speed: 'Queued...',
         size: '0 B'
       });
 
@@ -1745,7 +1745,7 @@ function startNativeDownload(downloadParams, callback) {
     params: downloadParams,
     state: 'downloading',
     percent: '1%',
-    speed: 'Bắt đầu kết nối...',
+    speed: 'Starting connection...',
     size: '0 B',
     startTime: Date.now(),
     complete: false
@@ -1768,7 +1768,7 @@ function startNativeDownload(downloadParams, callback) {
     type: mediaType,
     state: 'downloading',
     percent: '1%',
-    speed: 'Bắt đầu kết nối...',
+    speed: 'Starting connection...',
     size: '0 B',
     startTime: task.startTime
   });
@@ -1778,7 +1778,7 @@ function startNativeDownload(downloadParams, callback) {
     action: 'nativeProgress',
     taskId: fakeId,
     percent: '1%',
-    speed: 'Bắt đầu kết nối...',
+    speed: 'Starting connection...',
     size: '0 B'
   });
 
@@ -1824,7 +1824,7 @@ function startNativeDownload(downloadParams, callback) {
         id: fakeId,
         state: 'completed',
         percent: '100%',
-        speed: 'Hoàn thành',
+        speed: 'Completed',
         endTime: Date.now(),
         outputPath: msg.downloadsDir && msg.outputFile
           ? `${msg.downloadsDir}${msg.downloadsDir.includes('\\') ? '\\' : '/'}${msg.outputFile}`
@@ -1857,8 +1857,8 @@ function startNativeDownload(downloadParams, callback) {
         updateDownloadHistory({
           id: fakeId,
           state: 'canceled',
-          speed: 'Đã hủy',
-          error: 'Người dùng đã hủy'
+          speed: 'Canceled',
+          error: 'User canceled'
         });
       }
 
@@ -2065,7 +2065,7 @@ function startStreamRelayDownload(downloadParams, callback) {
     params: downloadParams,
     state: 'downloading',
     percent: '1%',
-    speed: 'Đang kết nối qua Chrome...',
+    speed: 'Connecting via Chrome...',
     size: '0 B',
     startTime: Date.now(),
     complete: false,
@@ -2111,7 +2111,7 @@ function startStreamRelayDownload(downloadParams, callback) {
       activeDownloads.delete(fakeId);
       port.onMessage.removeListener(messageHandler);
       updateDownloadHistory({
-        id: fakeId, state: 'completed', percent: '100%', speed: 'Hoàn thành', endTime: Date.now(),
+        id: fakeId, state: 'completed', percent: '100%', speed: 'Completed', endTime: Date.now(),
         outputPath: msg.downloadsDir && msg.outputFile ? `${msg.downloadsDir}${msg.downloadsDir.includes('\\') ? '\\' : '/'}${msg.outputFile}` : (msg.outputFile || safeFilename),
         outputFile: msg.outputFile || safeFilename
       });
@@ -2125,7 +2125,7 @@ function startStreamRelayDownload(downloadParams, callback) {
       activeDownloads.delete(fakeId);
       port.onMessage.removeListener(messageHandler);
       if (!purgedTaskIds.has(String(fakeId))) {
-        updateDownloadHistory({ id: fakeId, state: 'canceled', speed: 'Đã hủy', error: 'Người dùng đã hủy' });
+        updateDownloadHistory({ id: fakeId, state: 'canceled', speed: 'Canceled', error: 'User canceled' });
       }
       broadcastTaskEvent({ action: 'nativeCanceled', taskId: fakeId });
       setTimeout(processNextQueuedNativeDownload, 50);
@@ -2184,7 +2184,7 @@ function startStreamRelayDownload(downloadParams, callback) {
       if (now - lastProgressSent < 250) return;
       lastProgressSent = now;
       const pct = total > 0 ? Math.min(99, Math.floor((bytesRelayed / total) * 100)) + '%' : '';
-      updateDownloadHistory({ id: fakeId, percent: pct, speed: 'Đang tải qua Chrome...', size: total > 0 ? `${formatRelayBytes(bytesRelayed)} / ${formatRelayBytes(total)}` : formatRelayBytes(bytesRelayed) });
+      updateDownloadHistory({ id: fakeId, percent: pct, speed: 'Downloading via Chrome...', size: total > 0 ? `${formatRelayBytes(bytesRelayed)} / ${formatRelayBytes(total)}` : formatRelayBytes(bytesRelayed) });
     };
     const awaitWindowSlot = async () => {
       while (task._inFlight >= WINDOW && !abortCtrl.signal.aborted) {
@@ -2277,7 +2277,7 @@ function startStreamRelayDownload(downloadParams, callback) {
 
       if (rangeCapable && total >= MIN_SPLIT_SIZE) {
         // Multi-threaded: WORKERS parallel Range fetches, each pumping into
-        // its own slice of the file. One abort signal kills them all on Hủy.
+        // its own slice of the file. One abort signal kills them all on Cancel.
         const slice = Math.ceil(total / WORKERS);
         const jobs = [];
         for (let w = 0; w < WORKERS; w++) {
@@ -2315,10 +2315,10 @@ function startStreamRelayDownload(downloadParams, callback) {
           startCocCocSessionDownload(opts);
         } else {
           const userErr = err && err.message === 'CONNECT_TIMEOUT'
-            ? 'Kết nối luồng tải bị quá thời gian (Timeout). Vui lòng thử lại sau khi video đã phát.'
+            ? 'Download stream connection timed out. Please retry after playing video.'
             : (err && err.message === 'STREAM_HTML_RESPONSE'
-                ? 'Liên kết không phải luồng video hợp lệ. Vui lòng bấm phát video để Vidown nhận diện.'
-                : String(err && (err.message || err) || 'Lỗi kết nối'));
+                ? 'Link is not a valid video stream. Please play the video for VidManager to detect stream.'
+                : String(err && (err.message || err) || 'Connection error'));
           updateDownloadHistory({ id: fakeId, state: 'error', error: userErr, speed: '' });
           broadcastTaskEvent({ action: 'nativeError', taskId: fakeId, error: userErr });
           setActionBadge('!', '#ef4444');
@@ -2472,7 +2472,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         if (targetId) {
           activeDownloads.delete(targetId);
           activeDownloads.delete(strTargetId);
-          updateDownloadHistory({ id: targetId, state: 'canceled', error: 'Người dùng đã hủy', speed: 'Đã hủy' });
+          updateDownloadHistory({ id: targetId, state: 'canceled', error: 'User canceled', speed: 'Canceled' });
           broadcastTaskEvent({ action: 'nativeCanceled', taskId: targetId });
         }
         if (activeDownloads.size === 0) setActionBadge('');
@@ -2530,7 +2530,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       }
 
       // 2b. Kill every remaining task sharing a URL with the cancelled one —
-      // pressing Hủy must never leave half the video still downloading.
+      // pressing Cancel must never leave half the video still downloading.
       cancelSiblingsByUrl(siblingUrls);
 
       // The card's own task may already be gone (error/completed) while a
@@ -2556,7 +2556,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       }
 
       if (targetId) {
-        updateDownloadHistory({ id: targetId, state: 'canceled', error: 'Người dùng đã hủy', speed: 'Đã hủy' });
+        updateDownloadHistory({ id: targetId, state: 'canceled', error: 'User canceled', speed: 'Canceled' });
         broadcastTaskEvent({ action: 'nativeCanceled', taskId: targetId });
       }
 
@@ -2858,7 +2858,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         chrome.tabs.create({ url: req.url });
         sendResponse({ success: true });
       } else {
-        sendResponse({ success: false, error: 'Không có trang nguồn hợp lệ để lấy lại luồng' });
+        sendResponse({ success: false, error: 'No valid source page to refresh stream' });
       }
       return false;
     }
@@ -3080,7 +3080,7 @@ chrome.downloads.download = function(options, callback) {
   if (!reqUrl || isBogusStreamUrl(reqUrl, effPage)) {
     console.warn('[Savior] chrome.downloads.download rejected bogus media target:', reqUrl);
     const taskId = options.taskId || `bogus_${Date.now()}`;
-    const errText = 'Không tìm thấy luồng video. Vui lòng bấm phát video để Vidown nhận diện luồng tải.';
+    const errText = 'Video stream not found. Please play the video for VidManager to detect stream.';
     updateDownloadHistory({
       id: taskId,
       title: options.title || options.filename || 'Video',
