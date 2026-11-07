@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-11-02T11:10:44.216Z",
   "baselineBundleSize": 2404925,
-  "currentBuiltBundleSize": 2356518,
+  "currentBuiltBundleSize": 2356805,
   "totalSlots": 776,
   "realModulesCount": 649,
   "holesCount": 127,
@@ -742,7 +742,7 @@
       "start": 123649,
       "end": 125111,
       "size": 1462,
-      "fileSize": 3219,
+      "fileSize": 3549,
       "requires": [
         1,
         13
