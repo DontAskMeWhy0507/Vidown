@@ -215,7 +215,7 @@ function setupAnti403Rules() {
   if (!chrome.declarativeNetRequest || !chrome.declarativeNetRequest.updateSessionRules) return;
   try {
     chrome.declarativeNetRequest.updateSessionRules({
-      removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008].concat([1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023]),
+      removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008].concat([1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025]),
       addRules: [
         {
           id: 1001,
@@ -532,6 +532,36 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*instagram.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1024,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.tiktok.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.tiktok.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*tiktok.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1025,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.tiktok.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.tiktok.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*tiktokv.com/*',
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         }
@@ -1670,7 +1700,19 @@ function findBestStreamFromList(list) {
   });
   if (playlist) return playlist.url;
 
-  // Step 2: Fallback to direct media file, excluding chunks
+  // Step 2: Prioritize explicit video streams (MP4 / WebM / TOS CDN / video mime)
+  const videoStream = list.slice().reverse().find(s => {
+    if (!s || !s.url) return false;
+    const lu = s.url.toLowerCase();
+    const isVid = s.format === 'MP4' || s.format === 'WEBM' || s.type === 'video' ||
+      lu.includes('/video/tos/') || lu.includes('mime_type=video') || lu.includes('.mp4') || lu.includes('.webm') ||
+      lu.includes('tiktokcdn') || lu.includes('byteoversea') || lu.includes('tiktok.com');
+    const isChunk = /\.(otf|ttf|woff2?|jpe?g|png|webp|svg|gif|key|ts|m4s|css|js)(\?|$)/i.test(lu);
+    return isVid && !isChunk;
+  });
+  if (videoStream) return videoStream.url;
+
+  // Step 3: Fallback to direct media file, excluding chunks
   const direct = list.slice().reverse().find(s => {
     if (!s || !s.url) return false;
     const lu = s.url.toLowerCase();
@@ -2414,14 +2456,17 @@ function startStreamRelayDownload(downloadParams, callback) {
       port.onMessage.removeListener(messageHandler);
       activeDownloads.delete(fakeId);
       const opts = task.params;
-      if (isSessionProtectedStream(opts) && !opts._relayFailed) {
-        // Relay failed (HTML challenge / HTTP error): last resort is the
-        // Chrome session download, which still lands in the manager.
+      let fallbackStarted = false;
+      if (isSessionProtectedStream(opts) && !opts._relayFailed && !isBogusStreamUrl(opts.url || opts.videoUrl, opts.pageUrl)) {
         opts._relayFailed = true;
-        startCocCocSessionDownload(opts);
-      } else if (!opts._relayFailed && startBrowserDownload(opts)) {
-        opts._relayFailed = true; // relay failed → plain Chrome download as last resort
-      } else {
+        opts.taskId = fakeId;
+        fallbackStarted = startCocCocSessionDownload(opts);
+      } else if (!opts._relayFailed && !isBogusStreamUrl(opts.url || opts.videoUrl, opts.pageUrl)) {
+        opts._relayFailed = true;
+        opts.taskId = fakeId;
+        fallbackStarted = startBrowserDownload(opts);
+      }
+      if (!fallbackStarted) {
         updateDownloadHistory({ id: fakeId, state: 'error', error: msg.error || 'SERVER_BAD_CONTENT', speed: '' });
         setActionBadge('!', '#ef4444');
         broadcastTaskEvent({ action: 'nativeError', taskId: fakeId, error: msg.error || '' });
@@ -2526,7 +2571,15 @@ function startStreamRelayDownload(downloadParams, callback) {
           parentSignal.addEventListener('abort', onParentAbort, { once: true });
         }
         try {
-          return await fetch(url, { ...opts, signal: ctrl.signal });
+          try {
+            return await fetch(url, { ...opts, signal: ctrl.signal });
+          } catch (fetchErr) {
+            if (opts.credentials !== 'omit' && !ctrl.signal.aborted) {
+              console.warn('[Savior] Fetch failed with credentials, retrying with credentials: omit:', fetchErr && fetchErr.message);
+              return await fetch(url, { ...opts, credentials: 'omit', signal: ctrl.signal });
+            }
+            throw fetchErr;
+          }
         } finally {
           clearTimeout(timer);
           if (parentSignal) parentSignal.removeEventListener('abort', onParentAbort);
@@ -2607,10 +2660,13 @@ function startStreamRelayDownload(downloadParams, callback) {
       if (activeDownloads.has(fakeId)) {
         activeDownloads.delete(fakeId);
         const opts = task.params;
+        let fallbackStarted = false;
         if (isSessionProtectedStream(opts) && !opts._relayFailed && !isBogusStreamUrl(opts.url || opts.videoUrl, opts.pageUrl)) {
           opts._relayFailed = true;
-          startCocCocSessionDownload(opts);
-        } else {
+          opts.taskId = fakeId;
+          fallbackStarted = startCocCocSessionDownload(opts);
+        }
+        if (!fallbackStarted) {
           const userErr = err && err.message === 'CONNECT_TIMEOUT'
             ? 'Download stream connection timed out. Please retry after playing video.'
             : (err && err.message === 'STREAM_HTML_RESPONSE'
