@@ -542,8 +542,12 @@ export default function(t, e, r) {
     function $(t3) {
       var e2 = t3.title || t3.filename || document.title;
       "subtitles" == t3.type && (e2 = e2 + " (" + (t3.i18n_quality || t3.quality) + ")");
-      var r2 = "." + t3.ext;
-      return e2 = (e2 = (null == e2 ? void 0 : e2.replace(/\s+/g, " ").replace(/[/\\:*?"<>|\u200c\u200d]/g, "-")) + r2).match(/[*~]/gi) ? "_" + e2.replace(/[*~]/gi, ".") : e2;
+      var ext = t3.ext ? ("." + t3.ext) : "";
+      e2 = null == e2 ? void 0 : e2.replace(/\s+/g, " ").replace(/[/\\:*?"<>|\u200c\u200d]/g, "-");
+      if (ext && e2 && !e2.toLowerCase().endsWith(ext.toLowerCase())) {
+        e2 = e2 + ext;
+      }
+      return e2 && e2.match(/[*~]/gi) ? "_" + e2.replace(/[*~]/gi, ".") : e2;
     }
     function Y(t3) {
       var e2;

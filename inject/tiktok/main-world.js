@@ -50,6 +50,34 @@ function extractTikTokVideoId(urlOrHref) {
   return (String(urlOrHref || '').match(/\/video\/(\d+)/) || [])[1] || null;
 }
 
+function findTikTokContainer(element) {
+  if (!element) return null;
+  return element.closest(
+    '[data-e2e="feed-item"], [data-e2e="feed-video"], [data-e2e="user-post-item"], ' +
+    '[data-e2e="explore-item"], [data-e2e="recommend-list-item-container"], ' +
+    '[class*="DivItemContainer"], [class*="DivVideoFeed"], article'
+  ) || element.parentElement?.parentElement?.parentElement;
+}
+
+function extractVideoInfoFromFiberProps(props, targetId) {
+  if (!props) return null;
+  const item = props.item || props.itemStruct || props.itemInfo?.itemStruct || props.aweme || props;
+  const video = item.video || item.videoInfo || (props.bitrateInfo ? props : null);
+  if (!video) return null;
+  const bitrates = video.bitrateInfo || video.bitrates || [];
+  const playUrl = video.playAddr || video.playApi || video.downloadAddr || (Array.isArray(video.playAddr?.urlList) ? video.playAddr.urlList[0] : '') || '';
+  if (!bitrates.length && !playUrl) return null;
+  return {
+    bitrateInfo: bitrates,
+    url: playUrl,
+    downloadAddr: video.downloadAddr || playUrl,
+    ratio: video.ratio || video.definition || '720p',
+    desc: item.desc || props.desc || '',
+    id: String(item.id || video.id || targetId || ''),
+    cover: video.cover || video.originCover || ''
+  };
+}
+
 function findAwemeItemByVideoId(anchorElement) {
   const videoId = extractTikTokVideoId(anchorElement.href) || extractTikTokVideoId(anchorElement.getAttribute('href'));
   if (!videoId) return null;
@@ -67,6 +95,9 @@ function findAwemeItemByVideoId(anchorElement) {
         if (memoized?.id && String(memoized.id) === String(targetId) && (memoized.bitrateInfo?.length || memoized.videoInfo?.bitrateInfo?.length)) {
           return { kind: 'flat', props: memoized };
         }
+        if (memoized?.itemStruct?.id && String(memoized.itemStruct.id) === String(targetId)) {
+          return { kind: 'item', props: { item: memoized.itemStruct } };
+        }
         return searchFiberTree(node.child, targetId, currentDepth + 1) || searchFiberTree(node.sibling, targetId, currentDepth + 1);
       })(current[fiberKey], videoId, 0);
 
@@ -81,75 +112,109 @@ function setAwemeVideoData(element, data) {
   if (element && data) {
     try {
       element.setAttribute('data-aweme-video', JSON.stringify(data));
+      if (data.id) {
+        element.setAttribute('data-aweme-id', String(data.id));
+      }
     } catch {
       // Ignore serialization errors
     }
   }
 }
 
-// 1. Scan direct <video> tags and extract Aweme bitrate props
-const videos = document.querySelectorAll('video');
-for (let i = 0; i < videos.length; i++) {
-  const video = videos[i];
-  if (!video.hasAttribute('data-aweme-video')) {
-    const bitrateProps = findReactBitrateProps(video);
-    if (bitrateProps) {
-      setAwemeVideoData(video, bitrateProps);
-    }
-  }
-}
+window.__tiktokVideoMap = window.__tiktokVideoMap || {};
 
-// 2. Scan TikTok video anchor links and extract item/video details
+// 1. Scan TikTok video anchor links and extract item/video details
 const links = Array.from(document.querySelectorAll('a[href]')).filter((a) =>
-  /tiktok\.com\/@.+\/video.+/i.test(a.href)
+  /\/video\/\d+/i.test(a.href) || /tiktok\.com\/@.+\/video.+/i.test(a.href)
 );
 
 for (let i = 0; i < links.length; i++) {
   const link = links[i];
-  if (!link.hasAttribute('data-aweme-video')) {
-    const result = findAwemeItemByVideoId(link);
-    if (result) {
-      const kind = result.kind;
-      const props = result.props;
-      let videoInfo = null;
+  const videoId = extractTikTokVideoId(link.href) || extractTikTokVideoId(link.getAttribute('href'));
+  const result = findAwemeItemByVideoId(link);
+  if (result) {
+    const kind = result.kind;
+    const props = result.props;
+    let videoInfo = null;
 
-      if (kind === 'item' || props?.item?.video?.bitrateInfo?.length) {
-        const item = props.item || {};
-        const video = item.video || {};
-        if (video.bitrateInfo?.length) {
-          videoInfo = {
-            bitrateInfo: video.bitrateInfo,
-            url: video.playAddr || '',
-            downloadAddr: video.downloadAddr,
-            ratio: video.ratio || video.definition,
-            desc: item.desc,
-            id: item.id || video.id,
-            cover: video.cover || video.originCover || ''
-          };
-        }
-      } else {
-        const vi = props.videoInfo || {};
-        const bitrates = vi.bitrateInfo || props.bitrateInfo;
-        if (bitrates?.length) {
-          videoInfo = {
-            bitrateInfo: bitrates,
-            url: vi.playAddr || props.playUrl || '',
-            downloadAddr: vi.downloadAddr,
-            ratio: vi.ratio || vi.definition,
-            desc: props.desc,
-            id: props.id || vi.id,
-            cover: vi.cover || props.cover || ''
-          };
+    if (kind === 'item' || props?.item?.video?.bitrateInfo?.length) {
+      const item = props.item || {};
+      const video = item.video || {};
+      if (video.bitrateInfo?.length || video.playAddr) {
+        videoInfo = {
+          bitrateInfo: video.bitrateInfo || [],
+          url: video.playAddr || '',
+          downloadAddr: video.downloadAddr,
+          ratio: video.ratio || video.definition || '720p',
+          desc: item.desc || '',
+          id: String(item.id || video.id || videoId || ''),
+          cover: video.cover || video.originCover || ''
+        };
+      }
+    } else {
+      const vi = props.videoInfo || {};
+      const bitrates = vi.bitrateInfo || props.bitrateInfo;
+      if (bitrates?.length || vi.playAddr || props.playUrl) {
+        videoInfo = {
+          bitrateInfo: bitrates || [],
+          url: vi.playAddr || props.playUrl || '',
+          downloadAddr: vi.downloadAddr,
+          ratio: vi.ratio || vi.definition || '720p',
+          desc: props.desc || '',
+          id: String(props.id || vi.id || videoId || ''),
+          cover: vi.cover || props.cover || ''
+        };
+      }
+    }
+
+    if (videoInfo) {
+      if (videoInfo.id) {
+        window.__tiktokVideoMap[videoInfo.id] = videoInfo;
+      }
+      setAwemeVideoData(link, videoInfo);
+
+      const container = findTikTokContainer(link);
+      if (container) {
+        setAwemeVideoData(container, videoInfo);
+        const relatedVideos = container.querySelectorAll('video');
+        for (let j = 0; j < relatedVideos.length; j++) {
+          setAwemeVideoData(relatedVideos[j], videoInfo);
         }
       }
+    }
+  }
+}
 
-      if (videoInfo) {
-        setAwemeVideoData(link, videoInfo);
-        const childVideo = link.querySelector('video');
-        if (childVideo && !childVideo.hasAttribute('data-aweme-video')) {
-          setAwemeVideoData(childVideo, videoInfo);
+// 2. Scan direct <video> tags and ensure each is mapped to its specific video info
+const videos = document.querySelectorAll('video');
+for (let i = 0; i < videos.length; i++) {
+  const video = videos[i];
+  if (!video.hasAttribute('data-aweme-video')) {
+    // Check if parent container has an anchor
+    const container = findTikTokContainer(video);
+    const containerAnchor = container?.querySelector('a[href*="/video/"]');
+    if (containerAnchor) {
+      const vidId = extractTikTokVideoId(containerAnchor.href) || extractTikTokVideoId(containerAnchor.getAttribute('href'));
+      if (vidId && window.__tiktokVideoMap[vidId]) {
+        setAwemeVideoData(video, window.__tiktokVideoMap[vidId]);
+        continue;
+      }
+      const res = findAwemeItemByVideoId(containerAnchor);
+      if (res) {
+        const info = extractVideoInfoFromFiberProps(res.props, vidId);
+        if (info) {
+          if (info.id) window.__tiktokVideoMap[info.id] = info;
+          setAwemeVideoData(video, info);
+          setAwemeVideoData(containerAnchor, info);
+          if (container) setAwemeVideoData(container, info);
+          continue;
         }
       }
+    }
+
+    const bitrateProps = findReactBitrateProps(video);
+    if (bitrateProps) {
+      setAwemeVideoData(video, bitrateProps);
     }
   }
 }

@@ -712,11 +712,21 @@ export default function(module, exports, require) {
                     return Object(cryptoUtils.sleep)(500);
                   case 1:
                     videoIdContainer = node.closest("[data-video-id]");
-                    videoId = videoIdContainer?.getAttribute("data-video-id");
+                    videoId = videoIdContainer?.getAttribute("data-video-id") ||
+                      node.getAttribute("savior-vid") ||
+                      node.closest('a[href*="/reel/"]')?.getAttribute("href")?.match(/\/reel\/(\w+)/)?.[1] ||
+                      location.pathname.match(/\/reels?\/(\w+)/)?.[1];
                     spanDir = node.closest("[data-visualcompletion]")?.querySelector('span[dir="auto"]');
                     mediaObject.filename = spanDir ? (getNodeTextContent(spanDir) || spanDir.innerText.trim()) : document.title;
                     if (videoId) {
                       mediaObject.url = buildTahoeAsyncUrl(videoId);
+                    } else if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
+                      var fbSniffed = window.__saviorSniffedMedia.slice().reverse().find(function(m) {
+                        return m && m.url && m.url.includes("fbcdn.net");
+                      });
+                      if (fbSniffed && fbSniffed.url) {
+                        mediaObject.url = fbSniffed.url;
+                      }
                     }
                     mediaObject.ext = "m3u8";
                     mediaObject.exts = ["m3u8"];

@@ -294,7 +294,9 @@ export default function (moduleObj, exportsObj, requireFn) {
     var rawSource = var_r.getAttribute("savior-twitter-source");
     if (rawSource) {
       var parsedSource = JSON.parse(rawSource);
-      var streamUrl = parsedSource.url || parsedSource.stream_url;
+      var variants = (parsedSource.variants || parsedSource.videoInfo?.variants || []).slice();
+      var mp4Variants = variants.filter(v => v.content_type === "video/mp4" || (v.url && v.url.includes(".mp4"))).sort((a,b) => (b.bitrate || 0) - (a.bitrate || 0));
+      var streamUrl = parsedSource.url || parsedSource.stream_url || mp4Variants[0]?.url || (variants[0] && variants[0].url);
       if (streamUrl) {
         var item = Object(dep_url_utils.f)(streamUrl);
         item.fixName = obj_u[var_e] || document.title;
@@ -307,7 +309,11 @@ export default function (moduleObj, exportsObj, requireFn) {
     }
   } catch (_) {}
   if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-    var twSniffed = window.__saviorSniffedMedia.slice().reverse().find(m => m && m.url && m.url.includes("video.twimg.com"));
+    var twSniffed = window.__saviorSniffedMedia.slice().reverse().find(m => {
+      if (!m || !m.url || !m.url.includes("video.twimg.com")) return false;
+      if (var_s && m.url.includes(var_s)) return true;
+      return true;
+    });
     if (twSniffed) {
       twSniffed.fixName = obj_u[var_e] || twSniffed.filename || document.title;
       return param_t_1.a(2, [twSniffed]);

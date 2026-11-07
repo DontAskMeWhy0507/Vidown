@@ -1,8 +1,8 @@
 {
   "0": {
     "path": "core/dom-utils.js",
-    "sha256": "c57b72c19294c26ed1e91a8ed58ef9d040577be5be0d4b523cf10b136792c859",
-    "size": 41058,
+    "sha256": "81d1a6f1ab86e403fde7f51e416b2b126556e490291cb2f6151b13721131c614",
+    "size": 41180,
     "fileSize": 39799
   },
   "1": {
@@ -469,8 +469,8 @@
   },
   "80": {
     "path": "detector/filename-sanitizer.js",
-    "sha256": "618cb45d7ba37ae54c56188da379093f650ccad21ad21817ec6c293deb7e9ef5",
-    "size": 3097,
+    "sha256": "cd3be27494f9b153182a02439aca1ea2ba004d532ecb4e86eede90a43edf4d03",
+    "size": 3564,
     "fileSize": 3097
   },
   "81": {
@@ -1315,8 +1315,8 @@
   },
   "232": {
     "path": "platform/facebook.js",
-    "sha256": "f6322a8a225c222ba979ae0b1541c532bddd73e8296edb2e0b8ace87b246924a",
-    "size": 44089,
+    "sha256": "8165cd8a9b648d4c7310e10e6903448dd7701621fff88505e507cce746274bf5",
+    "size": 44802,
     "fileSize": 42039
   },
   "233": {
@@ -1447,8 +1447,8 @@
   },
   "254": {
     "path": "platform/instagram_com-extractor.js",
-    "sha256": "d46ea698fed73578c1b23b4937a389136e0410c52d0d609b81a3d7bccee353d1",
-    "size": 21230,
+    "sha256": "28bde1ce2e2ffda7a854f520f6c70dccb80e9d8bfb4b13e3bad3647f6fd16d96",
+    "size": 21301,
     "fileSize": 20518
   },
   "255": {
@@ -2095,8 +2095,8 @@
   },
   "362": {
     "path": "platform/twitter_com-extractor.js",
-    "sha256": "d2eeebfd2008ce51cd476a051a4456439fb6bae3f4daa1830179014ae28900b6",
-    "size": 10568,
+    "sha256": "1f09f897c96aa9bdedf120b51ba6ac26ef64cdde0d5e546cd015bbc6da447db7",
+    "size": 10999,
     "fileSize": 10518
   },
   "363": {
@@ -2551,8 +2551,8 @@
   },
   "442": {
     "path": "platform/tiktok-douyin.js",
-    "sha256": "37972606e8e9b1483b5bc4a559a6f1e7e37f9e0fb752157d0041f6b8dd50f47b",
-    "size": 79932,
+    "sha256": "32c411bfdc5da5253b12c5f49ce83b33d9b8393d90de5c00851de606c52a0a1c",
+    "size": 81992,
     "fileSize": 72792
   },
   "443": {
@@ -2911,8 +2911,8 @@
   },
   "541": {
     "path": "widget/widget-manager.js",
-    "sha256": "9b95c2eff3065781b30f183c775c6db19c780239ecc918e8cc23b45ca8842613",
-    "size": 149435,
+    "sha256": "21e21159b432752c5e654ddd54896af57596dde1871343c1d06185c9d0b891ed",
+    "size": 149756,
     "fileSize": 139222
   },
   "543": {

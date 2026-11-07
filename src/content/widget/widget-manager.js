@@ -1759,25 +1759,26 @@ ${t2.text}`;
                 break;
               }
               if (!(null === (ev = this.state.mediaObjects) || void 0 === ev ? void 0 : ev.length)) {
-                if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
+                var directVideoTag = this.parent && this.parent.$node ? ("VIDEO" === this.parent.$node.tagName ? this.parent.$node : this.parent.$node.querySelector("video")) : null;
+                if (directVideoTag && (directVideoTag.currentSrc || directVideoTag.src) && typeof directVideoTag.src === "string" && !directVideoTag.src.startsWith("blob:")) {
+                  var vSrc = directVideoTag.currentSrc || directVideoTag.src;
+                  var directMediaObj = [{
+                    url: vSrc,
+                    ext: "mp4",
+                    quality: "HD",
+                    resolution: (directVideoTag.videoWidth && directVideoTag.videoHeight) ? (directVideoTag.videoWidth + "x" + directVideoTag.videoHeight) : "720p",
+                    type: "video"
+                  }];
+                  this.state.mediaObjects = enrichMediaMeta(directMediaObj);
+                } else if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
                   LazyMediaTracker.processRequest(window.__saviorSniffedMedia);
-                  this.state.mediaObjects = enrichMediaMeta(window.__saviorSniffedMedia);
+                  var matchedSniffed = window.__saviorSniffedMedia.slice().reverse().find(function(m) {
+                    return m && m.url && !m.url.startsWith("blob:");
+                  }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
+                  this.state.mediaObjects = enrichMediaMeta(matchedSniffed ? [matchedSniffed] : window.__saviorSniffedMedia);
                 } else {
-                  var directVideoTag = this.parent && this.parent.$node ? ("VIDEO" === this.parent.$node.tagName ? this.parent.$node : this.parent.$node.querySelector("video")) : null;
-                  if (directVideoTag && (directVideoTag.currentSrc || directVideoTag.src)) {
-                    var vSrc = directVideoTag.currentSrc || directVideoTag.src;
-                    var directMediaObj = [{
-                      url: vSrc,
-                      ext: "mp4",
-                      quality: "HD",
-                      resolution: (directVideoTag.videoWidth && directVideoTag.videoHeight) ? (directVideoTag.videoWidth + "x" + directVideoTag.videoHeight) : "720p",
-                      type: "video"
-                    }];
-                    this.state.mediaObjects = enrichMediaMeta(directMediaObj);
-                  } else {
-                    l.n = 7;
-                    break;
-                  }
+                  l.n = 7;
+                  break;
                 }
               }
               if (detectorLogger.a.log("ButtonClicked", detectorLogger.a.BUTTON_FAKE_QUALITY), this.setState({ isGettingDownloads: true }), f = getMediaProvider(), !(null === (r2 = null == f ? void 0 : f.findItemRoot) || void 0 === r2 ? void 0 : r2.call(f, this.parent.$node)) || !f.resolveItemFromNode) {

@@ -3,13 +3,23 @@ export default function(module, exports, require) {
   "use strict";
 
   function countDigits(inputString) {
-    var digitMatches = inputString.match(/\d/g);
-    return digitMatches ? digitMatches.length : 0;
+    try {
+      var digitMatches = inputString.match(/\p{N}/gu);
+      return digitMatches ? digitMatches.length : 0;
+    } catch (_) {
+      var digitMatches = inputString.match(/\d/g);
+      return digitMatches ? digitMatches.length : 0;
+    }
   }
 
   function countLetters(inputString) {
-    var letterMatches = inputString.match(/[A-Za-z]/g);
-    return letterMatches ? letterMatches.length : 0;
+    try {
+      var letterMatches = inputString.match(/\p{L}/gu);
+      return letterMatches ? letterMatches.length : 0;
+    } catch (_) {
+      var letterMatches = inputString.match(/[A-Za-z\u00C0-\u024F\u1EA0-\u1EFF]/g);
+      return letterMatches ? letterMatches.length : 0;
+    }
   }
 
   function cleanMovieTitleKeywords(rawTitle) {
@@ -66,14 +76,19 @@ export default function(module, exports, require) {
       resolvedFallback = resolvedFallback.replace(/^\([0-9]+\)\s/, "");
     }
 
-    var strippedTitle = candidateTitle.replace(/[\W+_]/g, "");
+    var strippedTitle;
+    try {
+      strippedTitle = candidateTitle.replace(/[^\p{L}\p{N}]/gu, "");
+    } catch (_) {
+      strippedTitle = candidateTitle.replace(/[\W+_]/g, "");
+    }
     var strippedLength = strippedTitle.length;
     var numDigits = countDigits(strippedTitle);
     var numLetters = countLetters(strippedTitle);
     var digitRatio = strippedLength ? numDigits / strippedLength : 0;
     var letterRatio = strippedLength ? numLetters / strippedLength : 0;
 
-    if (0.99 > digitRatio + letterRatio) {
+    if (strippedLength > 0 && 0.99 > digitRatio + letterRatio) {
       return resolvedFallback;
     }
     if (digitRatio >= 0.5) {

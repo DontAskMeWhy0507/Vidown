@@ -213,13 +213,25 @@ export default function(module, exports, require) {
       return JSON.parse(videoElement.getAttribute("data-aweme-video"));
     } catch (parseErr) {
       return null;
-    } finally {
-      videoElement.removeAttribute("data-aweme-video");
     }
   }
 
   function getAwemeVideoData(videoElement, findMainVideoFn) {
     var awemeData = parseAwemeVideoAttribute(videoElement);
+    if (!awemeData && videoElement) {
+      var root = findTikTokItemRoot(videoElement);
+      if (root) {
+        awemeData = parseAwemeVideoAttribute(root) ||
+          parseAwemeVideoAttribute(root.querySelector("[data-aweme-video]")) ||
+          parseAwemeVideoAttribute(root.querySelector('a[href*="/video/"]'));
+      }
+    }
+    if (!awemeData && videoElement) {
+      var vidId = getTikTokItemId(videoElement);
+      if (vidId && typeof window !== "undefined" && window.__tiktokVideoMap && window.__tiktokVideoMap[vidId]) {
+        awemeData = window.__tiktokVideoMap[vidId];
+      }
+    }
     if (!awemeData && findMainVideoFn) {
       var mainVideo = findMainVideoFn(videoElement);
       if (mainVideo) {
@@ -389,12 +401,19 @@ export default function(module, exports, require) {
   }
 
   function getTikTokAnchorElement(videoElement) {
-    var parentAnchor = videoElement?.closest('a[href*="/video/"]');
+    if (!videoElement) return null;
+    var parentAnchor = videoElement.closest('a[href*="/video/"]');
     if (parentAnchor) return parentAnchor;
-    var container = videoElement?.closest('[data-e2e="user-post-item"], [data-e2e="feed-item"], [data-e2e="explore-item"]');
+    var container = findTikTokItemRoot(videoElement);
     if (container) {
       var links = findTikTokVideoLinks(container);
       if (links.length > 0) return links[0];
+    }
+    var cur = videoElement.parentElement;
+    for (var i = 0; i < 8 && cur; i++) {
+      var foundLink = cur.querySelector('a[href*="/video/"]');
+      if (foundLink && isTikTokAnchorLink(foundLink)) return foundLink;
+      cur = cur.parentElement;
     }
     return null;
   }
@@ -409,18 +428,27 @@ export default function(module, exports, require) {
   }
 
   function findTikTokItemRoot(videoElement) {
-    return videoElement?.closest('[data-e2e="feed-item"]') ||
-      videoElement?.closest('[data-e2e="user-post-item"]') ||
-      videoElement?.closest('[data-e2e="explore-item"]') ||
-      videoElement?.closest('[data-e2e="browse-video"]') ||
-      videoElement?.parentElement;
+    if (!videoElement) return null;
+    return videoElement.closest(
+      '[data-e2e="feed-item"], [data-e2e="feed-video"], [data-e2e="user-post-item"], ' +
+      '[data-e2e="explore-item"], [data-e2e="browse-video"], [data-e2e="recommend-list-item-container"], ' +
+      '[class*="DivItemContainer"], [class*="DivVideoFeed"], article'
+    ) || videoElement.parentElement;
   }
 
   function getTikTokItemId(element) {
+    if (!element) return null;
+    if (element.hasAttribute && element.hasAttribute("data-aweme-id")) {
+      return element.getAttribute("data-aweme-id");
+    }
     var container = findTikTokItemRoot(element);
-    if (!container) return null;
-    var dataE2e = container.getAttribute("data-e2e-vid") || container.getAttribute("data-e2e");
-    if (dataE2e && /\d+/.test(dataE2e)) return dataE2e.match(/\d+/)[0];
+    if (container) {
+      if (container.hasAttribute && container.hasAttribute("data-aweme-id")) {
+        return container.getAttribute("data-aweme-id");
+      }
+      var dataE2e = container.getAttribute("data-e2e-vid") || container.getAttribute("data-e2e");
+      if (dataE2e && /\d+/.test(dataE2e)) return dataE2e.match(/\d+/)[0];
+    }
     var link = getTikTokAnchorElement(element);
     return link ? getTikTokVideoIdFromUrl(link.href) : null;
   }
@@ -656,7 +684,15 @@ export default function(module, exports, require) {
               }]);
             }
             if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-              return step.a(2, window.__saviorSniffedMedia);
+              var targetVidId = currentVid || getTikTokItemId(videoNode);
+              var matchedMedia = window.__saviorSniffedMedia.slice().reverse().find(function(m) {
+                if (!m || !m.url) return false;
+                if (targetVidId && (m.url.includes(targetVidId) || m.feedVideoId === targetVidId)) return true;
+                return m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4") || m.url.includes("tiktokcdn");
+              }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
+              if (matchedMedia) {
+                return step.a(2, [Object.assign({}, matchedMedia, { filename: resolvedTitle || matchedMedia.filename || document.title })]);
+              }
             }
             return step.a(2, []);
         }
@@ -665,7 +701,7 @@ export default function(module, exports, require) {
   }
 
   var lazyBulkDownloadProvider = {
-    isActive: () => isTikTokExplorePage() || isTikTokUserPage(),
+    isActive: () => /^(www\.)?tiktok\.com$/i.test(location.host) || isTikTokExplorePage() || isTikTokUserPage(),
     collectPendingItems: () => {
       var seenIds = new Set();
       var items = [];
@@ -690,6 +726,7 @@ export default function(module, exports, require) {
     findItemRoot: node => findTikTokItemRoot(node),
     getItemIdFromNode: node => getTikTokItemId(node),
     getPreviewFromNode: node => scrapeTikTokAnchorPreviewMeta(node),
+    resolveItemFromNode: node => resolveTikTokVideoFromNode(node),
     resolveItemById: videoId => function(id) {
       return asyncRunner2(this, void 0, void 0, w().m(function resolveByIdGenerator() {
         var mainVid, parsedMedia, anchorElem;
@@ -1150,6 +1187,16 @@ export default function(module, exports, require) {
       if (pageVidMatch && pageVidMatch[1] && !douyinResolvedCache[pageVidMatch[1]]) {
         douyinResolvedCache[pageVidMatch[1]] = requestItem;
       }
+      try {
+        var activeVid = document.querySelector("video:not([paused])") || document.querySelector("video");
+        var activeVidId = activeVid ? getTikTokItemId(activeVid) : null;
+        if (activeVidId) {
+          if (!douyinResolvedCache[activeVidId]) {
+            douyinResolvedCache[activeVidId] = requestItem;
+          }
+          requestItem.feedVideoId = activeVidId;
+        }
+      } catch (_) {}
       douyinResolvedCache['latest'] = requestItem;
       if (typeof window !== "undefined") {
         window.__saviorSniffedMedia = window.__saviorSniffedMedia || [];
@@ -1320,28 +1367,12 @@ export default function(module, exports, require) {
                 if (!targetMedia.filename || !targetMedia.filename.length) {
                   targetMedia.filename = document.title;
                 }
-                var cleanEmojiFilename = targetMedia.filename.replace(
-                  new RegExp([
-                    "(?:[\\xA9\\xAE\\u203C\\u2049\\u2122\\u2139\\u2194-\\u2199\\u21A9\\u21AA\\u231A\\u231B\\u2328\\u23CF\\u23E9-\\u23F3\\u",
-                    "23F8-\\u23FA\\u24C2\\u25AA\\u25AB\\u25B6\\u25C0\\u25FB-\\u25FE\\u2600-\\u2604\\u260E\\u2611\\u2614\\u2615\\u2618\\u2",
-                    "61D\\u2620\\u2622\\u2623\\u2626\\u262A\\u262E\\u262F\\u2638-\\u263A\\u2640\\u2642\\u2648-\\u2653\\u265F\\u2660\\u266",
-                    "3\\u2665\\u2666\\u2668\\u267B\\u267E\\u267F\\u2692-\\u2697\\u2699\\u269B\\u269C\\u26A0\\u26A1\\u26A7\\u26AA\\u26AB\\u",
-                    "26B0\\u26B1\\u26BD\\u26BE\\u26C4\\u26C5\\u26C8\\u26CE\\u26CF\\u26D1\\u26D3\\u26D4\\u26E9\\u26EA\\u26F0-\\u26F5\\u26F",
-                    "7-\\u26FA\\u26FD\\u2702\\u2705\\u2708-\\u270D\\u270F\\u2712\\u2714\\u2716\\u271D\\u2721\\u2728\\u2733\\u2734\\u2744\\",
-                    "u2747\\u274C\\u274E\\u2753-\\u2755\\u2757\\u2763\\u2764\\u2795-\\u2797\\u27A1\\u27B0\\u27BF\\u2934\\u2935\\u2B05-\\u",
-                    "2B07\\u2B1B\\u2B1C\\u2B50\\u2B55\\u3030\\u303D\\u3297\\u3299]|\\uD83C[\\uDC04\\uDC2C-\\uDC2F\\uDC94-\\uDC9F\\uDCAF\\",
-                    "uDCB0\\uDCC0\\uDCCF\\uDCD0\\uDCF6-\\uDCFF\\uDD70\\uDD71\\uDD7E\\uDD7F\\uDD8E\\uDD91-\\uDD9A\\uDDAF-\\uDDFF\\uDE01-\\",
-                    "uDE0F\\uDE1A\\uDE2F\\uDE32-\\uDE3A\\uDE3C-\\uDE3F\\uDE49-\\uDE5F\\uDE66-\\uDF21\\uDF24-\\uDF93\\uDF96\\uDF97\\uDF99",
-                    "-\\uDF9B\\uDF9E-\\uDFF0\\uDFF3-\\uDFF5\\uDFF8-\\uDFFF]|\\uD83D[\\uDC00-\\uDCFD]|\\uD83C[\\uDFF7-\\uDFFA]|\\uD83D[\\",
-                    "uDCFF-\\uDD3D\\uDD49-\\uDD4E\\uDD50-\\uDD67\\uDD6F\\uDD70\\uDD73-\\uDD7A\\uDD87\\uDD8A-\\uDD8D\\uDD90\\uDD95\\uDD96",
-                    "\\uDDA4\\uDDA5\\uDDA8\\uDDB1\\uDDB2\\uDDBC\\uDDC2-\\uDDC4\\uDDD1-\\uDDD3\\uDDDC-\\uDDDE\\uDDE1\\uDDE3\\uDDE8\\uDDEF\\",
-                    "uDDF3\\uDDFA-\\uDE4F\\uDE80-\\uDEC5\\uDECB-\\uDED2\\uDED5-\\uDEE5\\uDEE9\\uDEEB-\\uDEF0\\uDEF3-\\uDEFF\\uDFDC-\\uDF",
-                    "F0]|\\uD83E[\\uDC0C-\\uDC0F\\uDC48-\\uDC4F\\uDC5A-\\uDC5F\\uDC88-\\uDC8F\\uDCAE\\uDCAF\\uDCBC-\\uDCBF\\uDCC2-\\uDCC",
-                    "F\\uDCD9-\\uDCFF\\uDD0C-\\uDD3A\\uDD3C-\\uDD45\\uDD47-\\uDDFF\\uDE58-\\uDE5F\\uDE6E-\\uDEFF]|\\uD83F[\\uDC00-\\uDFF",
-                    "D])"
-                  ].join(""), "g"),
-                  ""
-                );
+                var cleanEmojiFilename;
+                try {
+                  cleanEmojiFilename = targetMedia.filename.replace(/\p{Extended_Pictographic}/gu, "");
+                } catch (_) {
+                  cleanEmojiFilename = targetMedia.filename.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "");
+                }
                 if (0 === cleanEmojiFilename.length) {
                   targetMedia.filename = document.title;
                 }
@@ -1596,12 +1627,15 @@ export default function(module, exports, require) {
                     break;
                   }
                   if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-                    var sniffed = window.__saviorSniffedMedia.find(function(m) {
-                      return m && m.url && (m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4"));
+                    var targetVidId13 = getTikTokItemId(videoNode);
+                    var sniffed = window.__saviorSniffedMedia.slice().reverse().find(function(m) {
+                      if (!m || !m.url) return false;
+                      if (targetVidId13 && (m.url.includes(targetVidId13) || m.feedVideoId === targetVidId13)) return true;
+                      return m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4") || m.url.includes("tiktokcdn");
                     }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
                     if (sniffed && sniffed.url) {
                       var fallbackMedia = urlUtils.f(sniffed.url);
-                      fallbackMedia.filename = sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || document.title;
+                      fallbackMedia.filename = sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || (targetVidId13 ? ("tiktok_" + targetVidId13) : document.title);
                       fallbackMedia.ext = "mp4";
                       fallbackMedia.exts = ["mp4"];
                       fallbackMedia.type = "video";
@@ -1612,12 +1646,15 @@ export default function(module, exports, require) {
                 case 14:
                   var isBogusTargetUrl = !targetUrl || targetUrl.startsWith("blob:") || targetUrl === location.href || targetUrl === "https://www.tiktok.com/" || targetUrl === "https://www.tiktok.com";
                   if (isBogusTargetUrl && typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-                    var sMedia = window.__saviorSniffedMedia.find(function(m) {
-                      return m && m.url && (m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4") || m.url.includes("tiktokcdn"));
+                    var targetVidId14 = getTikTokItemId(videoNode);
+                    var sMedia = window.__saviorSniffedMedia.slice().reverse().find(function(m) {
+                      if (!m || !m.url) return false;
+                      if (targetVidId14 && (m.url.includes(targetVidId14) || m.feedVideoId === targetVidId14)) return true;
+                      return m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4") || m.url.includes("tiktokcdn");
                     }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
                     if (sMedia && sMedia.url) {
                       var fb = urlUtils.f(sMedia.url);
-                      fb.filename = sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || document.title;
+                      fb.filename = sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || (targetVidId14 ? ("tiktok_" + targetVidId14) : document.title);
                       fb.ext = "mp4";
                       fb.exts = ["mp4"];
                       fb.type = "video";
@@ -1645,20 +1682,29 @@ export default function(module, exports, require) {
                   var captionEl = itemRoot?.querySelector?.('[data-e2e$="video-desc"], [data-e2e$="browse-video-desc"], [data-e2e="video-desc"], [data-e2e="browse-video-desc"]');
                   var captionText = sanitizeVideoTitle(captionEl?.innerText || captionEl?.textContent);
                   var rootTitle = sanitizeVideoTitle(itemRoot);
-                  var resolvedTitle = captionText || (rootTitle && rootTitle !== document.title ? rootTitle : "") || postTitle;
-                  mediaObj.filename = resolvedTitle || sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || postTitle || mediaObj.filename;
+                  var resolvedTitle = captionText || (rootTitle && rootTitle !== document.title && rootTitle !== "TikTok - Make Your Day" ? rootTitle : "") || postTitle;
+                  mediaObj.filename = resolvedTitle || sanitizeVideoTitle(itemRoot) || postTitle || mediaObj.filename;
                   anchorElem = getTikTokAnchorElement(videoNode);
                   videoIdMatch = (anchorElem?.href || videoNode.closest('a[href*="/video/"]')?.getAttribute("href") || "").match(/\/video\/(\d+)/);
-                  videoId = extractXgPlayerId(videoNode) || videoIdMatch?.[1];
+                  videoId = extractXgPlayerId(videoNode) || videoIdMatch?.[1] || getTikTokItemId(videoNode);
                   if (!videoId) {
                     step.n = 4;
                     break;
                   }
                   mediaObj.originVideoId = videoId;
                   currentUrl = mediaObj.url;
-                  if (currentUrl && !currentUrl.match(/^blob:.*/) && currentUrl !== location.href) {
+                  if (currentUrl && !currentUrl.match(/^blob:.*/) && currentUrl !== location.href && !currentUrl.includes("tiktok.com/")) {
                     step.n = 4;
                     break;
+                  }
+                  if (typeof window !== "undefined" && window.__tiktokVideoMap && window.__tiktokVideoMap[videoId]) {
+                    var cachedMapItem = window.__tiktokVideoMap[videoId];
+                    if (cachedMapItem.url && !cachedMapItem.url.startsWith("blob:")) {
+                      mediaObj.url = cachedMapItem.url;
+                      if (cachedMapItem.desc) mediaObj.filename = sanitizeVideoTitle(cachedMapItem.desc);
+                      step.n = 4;
+                      break;
+                    }
                   }
                   if (douyinItemApiCache[videoId]) {
                     mediaObj.url = douyinItemApiCache[videoId];
@@ -1667,10 +1713,6 @@ export default function(module, exports, require) {
                   }
                   if (douyinResolvedCache[videoId]) {
                     mediaObj.url = douyinResolvedCache[videoId].url;
-                    step.n = 4;
-                    break;
-                  }
-                  if (anchorElem) {
                     step.n = 4;
                     break;
                   }
@@ -1692,19 +1734,25 @@ export default function(module, exports, require) {
                   if (isBogusTarget) {
                     if (videoId && douyinResolvedCache[videoId]) {
                       mediaObj.url = douyinResolvedCache[videoId].url;
-                    } else if (douyinResolvedCache['latest']?.url) {
-                      mediaObj.url = douyinResolvedCache['latest'].url;
+                    } else if (videoId && typeof window !== "undefined" && window.__tiktokVideoMap && window.__tiktokVideoMap[videoId]?.url) {
+                      mediaObj.url = window.__tiktokVideoMap[videoId].url;
                     } else if (typeof window !== "undefined" && window.__saviorSniffedMedia?.length) {
-                      var sniffed = window.__saviorSniffedMedia.find(function(m) {
-                        return m && m.url && (m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4") || m.url.includes("tiktokcdn"));
+                      var sniffed = window.__saviorSniffedMedia.slice().reverse().find(function(m) {
+                        if (!m || !m.url) return false;
+                        if (videoId && (m.url.includes(videoId) || m.feedVideoId === videoId)) return true;
+                        return m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4") || m.url.includes("tiktokcdn");
                       }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
                       if (sniffed?.url) {
                         mediaObj.url = sniffed.url;
                       }
+                    } else if (douyinResolvedCache['latest']?.url) {
+                      mediaObj.url = douyinResolvedCache['latest'].url;
                     }
                   }
                   if (!mediaObj.filename || mediaObj.filename === document.title || mediaObj.filename === "TikTok - Make Your Day") {
-                    var fallbackDesc = document.querySelector('[data-e2e$="video-desc"], [data-e2e$="browse-video-desc"]')?.innerText;
+                    var currentItemRoot = findTikTokItemRoot(videoNode);
+                    var currentCaption = currentItemRoot?.querySelector?.('[data-e2e$="video-desc"], [data-e2e$="browse-video-desc"], [data-e2e="video-desc"], [data-e2e="browse-video-desc"]')?.innerText;
+                    var fallbackDesc = currentCaption || document.querySelector('[data-e2e$="video-desc"], [data-e2e$="browse-video-desc"]')?.innerText;
                     var ogDesc = document.querySelector('meta[property="og:title"]')?.getAttribute("content");
                     mediaObj.filename = sanitizeVideoTitle(fallbackDesc) || sanitizeVideoTitle(ogDesc) || (videoId ? ("tiktok_" + videoId) : "tiktok_video");
                   }

@@ -1942,13 +1942,31 @@ function startNativeDownload(downloadParams, callback) {
   // a second task and the user got a stray .m4a next to their finished .mp4.
   // Skips the request's own placeholder (queued tasks are re-entered by the
   // queue drain with the same taskId).
+  const isGenericFeedTitle = (str) => {
+    if (!str || typeof str !== 'string') return true;
+    const lower = str.trim().toLowerCase();
+    return lower === 'tiktok - make your day' || lower === 'tiktok' || lower === 'facebook' ||
+      lower === 'x' || lower === 'twitter' || lower === 'instagram' || lower === 'youtube' ||
+      lower === 'video' || lower === 'videos' || lower === 'watch' || lower === 'untitled' ||
+      lower === 'null' || lower === 'undefined';
+  };
+  const isFeedPageUrl = (u) => {
+    try {
+      const p = new URL(u).pathname.toLowerCase();
+      return p === '/' || p === '' || p === '/feed' || p === '/foryou' || p === '/following' ||
+        p === '/explore' || p === '/reels' || p === '/watch' || p === '/home';
+    } catch (_) { return false; }
+  };
+
   for (const [dupId, t] of activeDownloads.entries()) {
     if (downloadParams.taskId && String(t.id) === String(downloadParams.taskId)) continue;
     const tAudio = t.audioUrl || (t.params && t.params.audioUrl) || '';
     const tVideo = t.url || '';
     const samePageAndTitle = Boolean(
       effectivePage && t.pageUrl && effectivePage === t.pageUrl &&
-      t.title && downloadParams.title && t.title.toLowerCase() === downloadParams.title.toLowerCase()
+      t.title && downloadParams.title && t.title.toLowerCase() === downloadParams.title.toLowerCase() &&
+      !isGenericFeedTitle(downloadParams.title) && !isFeedPageUrl(effectivePage) &&
+      (!targetUrl || !tVideo || targetUrl === tVideo)
     );
     const dupMatch = targetUrl === tAudio || targetUrl === tVideo ||
       (downloadParams.audioUrl && downloadParams.audioUrl === tAudio) ||
@@ -3453,7 +3471,9 @@ chrome.downloads.download = function(options, callback) {
       const tAudio = t.audioUrl || (t.params && t.params.audioUrl) || '';
       const samePageAndTitle = Boolean(
         effPage && t.pageUrl && effPage === t.pageUrl &&
-        options.filename && t.filename && options.filename.toLowerCase() === t.filename.toLowerCase()
+        options.filename && t.filename && options.filename.toLowerCase() === t.filename.toLowerCase() &&
+        !isGenericFeedTitle(options.filename) && !isFeedPageUrl(effPage) &&
+        (!reqUrl || !t.url || reqUrl === t.url)
       );
       if ((!options || !options.play_list) && (t.url === reqUrl || tAudio === reqUrl || (t.params && (t.params.videoUrl === reqUrl || t.params.url === reqUrl)) || samePageAndTitle)) {
         console.log('[Savior] Duplicate/trick download call ignored for active task:', id);
