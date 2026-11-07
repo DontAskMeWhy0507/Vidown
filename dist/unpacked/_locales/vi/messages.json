@@ -1,0 +1,767 @@
+{
+  "1_messenger_text": {
+    "description": "facebook first time description",
+    "message": "<b>Hơn cả một tính năng... Đó là thanh bên</b><br> Facebook Messenger, Telegram, Skype, Zalo đều được tích hợp vào thanh bên VidManager. Vào chat ngay thôi!"
+  },
+  "1_skype_text": {
+    "description": "skype first time description",
+    "message": "<b>Hơn cả một tính năng... Đó là thanh bên</b><br> Facebook Messenger, Telegram, Skype, Zalo đều được tích hợp vào thanh bên VidManager. Vào chat ngay thôi!"
+  },
+  "1_tele_text": {
+    "description": "tele first time description",
+    "message": "<b>Hơn cả một tính năng... Đó là thanh bên</b><br> Facebook Messenger, Telegram, Skype, Zalo đều được tích hợp vào thanh bên VidManager. Vào chat ngay thôi!"
+  },
+  "1_translate_text": {
+    "description": "translate first time description",
+    "message": "<b>Ngoại ngữ khó? Có thanh bên lo</b>  <br>Mở Google Dịch trong cửa sổ thanh bên để dịch ngoại ngữ nhanh hơn gấp 2 lần. Truy cập trong 1 click, không cần chuyển qua lại giữa nhiều tab."
+  },
+  "1_youtube_text": {
+    "description": "youtube first time description",
+    "message": "<b>Thanh bên mượt mà - Thưởng nhạc mê say</b><br> Thêm ngay YouTube vào thanh bên để nhanh chóng tìm và chơi video nhạc bạn thích!"
+  },
+  "1_zalo_text": {
+    "description": "zalo first time description",
+    "message": "<b>Hơn cả một tính năng... Đó là thanh bên</b><br> Facebook Messenger, Telegram, Skype, Zalo đều được tích hợp vào thanh bên VidManager. Vào chat ngay thôi!"
+  },
+  "accept_vi": {
+    "message": "Đồng ý"
+  },
+  "agree_button": {
+    "description": "onboarding agree button text",
+    "message": "Đồng ý"
+  },
+  "agree_vi_button": {
+    "description": "onboarding agree button text",
+    "message": "Đồng ý"
+  },
+  "appDescription": {
+    "message": "VidManager - Giúp bạn tải nhanh các tệp video, audio từ mọi trang web."
+  },
+  "appName": {
+    "message": "VidManager"
+  },
+  "cancel_button_text": {
+    "description": "onboarding cancel button text",
+    "message": "Bỏ qua"
+  },
+  "cancel_vi": {
+    "message": "Bỏ qua"
+  },
+  "chatgpt_desc_text": {
+    "message": "<b>Thanh bên tích hợp ChatGPT - Combo siêu tiện ích mới</b><br>Chỉ với một lần click, bạn đã gặp ngay trợ lý ảo thông minh tại Thanh bên. Bạn có thể vừa lướt web vừa nhắn tin cho ChatGPT đó."
+  },
+  "chatgpt_title_text": {
+    "message": ""
+  },
+  "download_all_images": {
+    "description": "Download all images",
+    "message": "Tất cả $number$ ảnh",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": 42
+      }
+    }
+  },
+  "download_current_image": {
+    "description": "Download current image",
+    "message": "Ảnh hiện tại"
+  },
+  "downloading_word": {
+    "description": "Just a single word",
+    "message": "Đang tải về"
+  },
+  "error_text": {
+    "message": "Lỗi"
+  },
+  "explore_vi_button": {
+    "description": "onboarding agree button text",
+    "message": "Khám phá"
+  },
+  "image_tab": {
+    "description": "Title of the image tab",
+    "message": "Hình ảnh"
+  },
+  "instant_actions_download_options": {
+    "description": "Options text for instant download button",
+    "message": "Hiển thị nút Tải về cho YouTube trên trang kết quả tìm kiếm"
+  },
+  "instant_actions_download_tooltip": {
+    "description": "Tooltip for download in one click button",
+    "message": "Tải video YouTube chỉ với một cú nhấp chuột"
+  },
+  "later_button": {
+    "description": "onboarding later button text",
+    "message": "Để sau"
+  },
+  "later_vi_button": {
+    "description": "onboarding later button text",
+    "message": "Để sau"
+  },
+  "loading_image": {
+    "message": "Đang tìm kiếm Hình ảnh..."
+  },
+  "loading_video_audio": {
+    "message": "Đang tìm kiếm Video/Audio..."
+  },
+  "login_button": {
+    "message": "Đăng nhập"
+  },
+  "media_fields_type_audio": {
+    "description": "Audio media type",
+    "message": "Audio"
+  },
+  "media_fields_type_audio_channel": {
+    "description": "Video audio channel",
+    "message": "Kênh âm thanh"
+  },
+  "media_fields_type_image": {
+    "description": "Image",
+    "message": "Ảnh"
+  },
+  "media_fields_type_no_watermark_video": {
+    "description": "No watermark video media type",
+    "message": "Video (không logo)"
+  },
+  "media_fields_type_stream": {
+    "description": "Stream media type",
+    "message": "Stream"
+  },
+  "media_fields_type_subtitles": {
+    "description": "Subtitles media title",
+    "message": "Phụ đề"
+  },
+  "media_fields_type_video": {
+    "description": "Video media type",
+    "message": "Video"
+  },
+  "mobile_button": {
+    "description": "Mobile button text",
+    "message": "Tải tệp về điện thoại"
+  },
+  "mobile_error_text": {
+    "description": "Text for error in mobile transfer panel",
+    "message": "Tệp không khả dụng."
+  },
+  "mobile_instruction_1": {
+    "description": "Text 2 in mobile panel",
+    "message": "Bước 1: Mở VidManager trên điện thoại"
+  },
+  "mobile_instruction_2": {
+    "description": "Text 3 in mobile panel",
+    "message": "Bước 2: Quét mã QR dưới đây"
+  },
+  "mobile_panel_footer": {
+    "description": "Text 4 in mobile panel",
+    "message": "Điện thoại của bạn chưa có trình duyệt VidManager?"
+  },
+  "mobile_panel_header": {
+    "description": "Text 1 in mobile panel",
+    "message": "Hướng dẫn tải tệp về điện thoại"
+  },
+  "not_show_again": {
+    "description": "onboarding do not show again checkbox text",
+    "message": "Không nhắc lại"
+  },
+  "onboard_account_desc_A": {
+    "message": "Để đồng bộ dữ liệu đã lưu trên Google và dấu trang, mật khẩu trên mọi thiết bị"
+  },
+  "onboard_account_desc_C": {
+    "message": "Để đồng bộ dấu trang và mật khẩu trên mọi thiết bị"
+  },
+  "onboard_account_title_A": {
+    "message": "Bạn có muốn đăng nhập luôn tài khoản VidManager?"
+  },
+  "onboard_account_title_B": {
+    "message": "Đăng nhập tài khoản VidManager để lưu các dữ liệu của bạn"
+  },
+  "onboard_account_title_C": {
+    "message": "Dùng tài khoản Google đăng nhập VidManager?"
+  },
+  "onboard_account_title_D": {
+    "message": "Đăng nhập tài khoản VidManager và đồng bộ dữ liệu giữa mọi thiết bị"
+  },
+  "onboard_en_to_vi_desc_1": {
+    "message": "Dịch mọi loại văn bản bằng cách bôi đen và nhấn biểu tượng Dịch để xem kết quả"
+  },
+  "onboard_en_to_vi_desc_2": {
+    "message": "VidManager giúp bạn dịch tiếng Anh, Trung, Hàn, Nhật và hơn 100 ngôn ngữ khác"
+  },
+  "onboard_en_to_vi_desc_3": {
+    "message": "Bôi đen đoạn văn cần dịch và nhấn biểu tượng Dịch để xem kết quả. Siêu dễ!"
+  },
+  "onboard_en_to_vi_desc_4": {
+    "message": "Ngôn ngữ nào cũng chơi tuốt - VidManager giúp bạn dịch tiếng Anh, Trung, Hàn, Nhật và hơn 100 ngôn ngữ khác"
+  },
+  "onboard_en_to_vi_title_1": {
+    "message": "Chỉ cần bôi đen, VidManager dịch ngay"
+  },
+  "onboard_en_to_vi_title_2": {
+    "message": "Chỉ cần bôi đen, VidManager dịch ngay"
+  },
+  "onboard_en_to_vi_title_3": {
+    "message": "Bôi đen nhanh tay - dịch ngay lập tức"
+  },
+  "onboard_en_to_vi_title_4": {
+    "message": "Bôi đen nhanh tay - dịch ngay lập tức"
+  },
+  "onboard_import_data_desc_1": {
+    "message": "Chuyển các dữ liệu quan trọng - dấu trang, mật khẩu, lịch sử web từ trình duyệt khác sang VidManager"
+  },
+  "onboard_import_data_desc_2": {
+    "message": "Giữ nguyên dấu trang, mật khẩu và dữ liệu bạn đã lưu trên Chrome để lướt web tiện hơn"
+  },
+  "onboard_import_data_desc_3": {
+    "message": "Giữ nguyên dấu trang, mật khẩu, lịch sử web bạn đã lưu trên trình duyệt khác để lướt web tiện hơn"
+  },
+  "onboard_import_data_title_1": {
+    "description": "Onboarding import data title",
+    "message": "Nhập dấu trang, mật khẩu đã lưu trên trình duyệt khác"
+  },
+  "onboard_import_data_title_2": {
+    "description": "Onboarding import data title",
+    "message": "Chuyển \"nhà\" từ Chrome sang VidManager"
+  },
+  "onboard_import_data_title_3": {
+    "description": "Onboarding import data title",
+    "message": "Chuyển \"nhà\" sang VidManager"
+  },
+  "onboard_set_default_br_desc_1": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Tự động chặn quảng cáo. Duyệt web nhanh và an toàn hơn."
+  },
+  "onboard_set_default_br_desc_2": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Trải nghiệm loạt tính năng nâng cao: Chặn quảng cáo, Thanh bên, Tải video, Ghim video"
+  },
+  "onboard_set_default_br_desc_3": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Đặt VidManager làm trình duyệt mặc định để tận hưởng tính năng Chặn quảng cáo, Thanh bên, Tải video và nhiều hơn nữa!"
+  },
+  "onboard_set_default_br_title_1": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Thử dùng VidManager làm trình duyệt mặc định?"
+  },
+  "onboard_set_default_br_title_2": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Lướt web sạch quảng cáo khi VidManager là trình duyệt mặc định"
+  },
+  "onboard_set_default_br_title_3": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Đa nhiệm hơn Chrome. Tối ưu hơn Chrome."
+  },
+  "onboard_set_default_br_title_4": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Ưu điểm khi đặt VidManager làm trình duyệt mặc định"
+  },
+  "onboard_sidepanel_big_description": {
+    "message": "Tải video, nhạc và ảnh dễ dàng"
+  },
+  "onboard_sidepanel_later": {
+    "message": "Nhắc tôi sau"
+  },
+  "onboard_sidepanel_small_description_1": {
+    "message": "Trải nghiệm tải video, âm thanh và ảnh trên trang dễ dàng chỉ với 1 click. Thử ngay nhé!"
+  },
+  "onboard_sidepanel_small_description_1_no_image": {
+    "message": "Trải nghiệm tải video và âm thanh trên trang dễ dàng chỉ với 1 click. Thử ngay nhé!"
+  },
+  "onboard_sidepanel_small_description_2": {
+    "message": "Trải nghiệm giao diện tải video và âm thanh mới, nay đã có thêm tính năng tải ảnh hàng loạt trên trang"
+  },
+  "onboard_sidepanel_small_description_2_no_image": {
+    "message": "Trải nghiệm giao diện tải video và âm thanh mới. Thử ngay nhé!"
+  },
+  "onboard_sidepanel_title": {
+    "message": "Đề xuất từ VidManager"
+  },
+  "onboard_sidepanel_try": {
+    "message": "Thử ngay"
+  },
+  "onboard_title": {
+    "description": "Onboarding title",
+    "message": "Đề xuất từ VidManager"
+  },
+  "onboarding_ccmobile_movie_descText_adblock": {
+    "message": "<h5>Chặn quảng cáo trên cả điện thoại</h5><p>Tải app VidManager và tiếp tục xem phim không quảng cáo miễn phí</p>"
+  },
+  "onboarding_ccmobile_movie_descText_watch": {
+    "message": "<h5>Tối ưu trải nghiệm xem video trên điện thoại</h5><p>Xem phim ‘đã’ hơn với Chế độ phim ảnh từ VidManager Mobile</p>"
+  },
+  "onboarding_coccoctv_actionText": {
+    "message": "Tìm hiểu thêm"
+  },
+  "onboarding_coccoctv_title": {
+    "message": "Đề xuất từ VidManager"
+  },
+  "onboarding_new_mp_abort": {
+    "message": "Bỏ qua"
+  },
+  "onboarding_new_mp_complete": {
+    "message": "Tôi đã hiểu"
+  },
+  "onboarding_new_mp_desc_1": {
+    "message": "Bạn có thể tải các tệp về máy miễn phí, nhanh gấp 8 lần"
+  },
+  "onboarding_new_mp_desc_2": {
+    "message": "Bạn có thể vừa xem video vừa sử dụng các ứng dụng khác"
+  },
+  "onboarding_new_mp_desc_3": {
+    "message": "VidManager đã tự động chặn quảng cáo để bạn xem video mà không bị làm phiền"
+  },
+  "onboarding_new_mp_next": {
+    "message": "Tiếp theo"
+  },
+  "onboarding_new_mp_title_1": {
+    "message": "Tải video, audio hoặc phụ đề bất kỳ"
+  },
+  "onboarding_new_mp_title_2": {
+    "message": "Ghim video trên cửa sổ nổi"
+  },
+  "onboarding_new_mp_title_3": {
+    "message": "Xem video không có quảng cáo"
+  },
+  "onboarding_ytb_mobile_actionText": {
+    "description": "onboarding try button default text",
+    "message": "Thử ngay"
+  },
+  "onboarding_ytb_mobile_descText_adblock": {
+    "message": "<h5>Chặn quảng cáo YouTube trên cả điện thoại</h5><p>Tải app VidManager và tiếp tục xem YouTube không quảng cáo miễn phí.</p>"
+  },
+  "onboarding_ytb_mobile_descText_playmusic": {
+    "message": "<h5>Nghe YouTube tắt màn hình trên điện thoại</h5><p>Dễ dàng nghe nhạc khi tắt màn hình với VidManager Mobile.</p>"
+  },
+  "options_automatic_download_quality": {
+    "description": "Automatic download quality setting title",
+    "message": "Chất lượng tải tự động"
+  },
+  "options_automatic_download_quality_desc": {
+    "description": "Automatic download quality setting description",
+    "message": "Nếu bạn không chọn chất lượng video trước khi tải ở Thanh bên, VidManager sẽ tự động tải theo tiêu chí sau đây:"
+  },
+  "options_close": {
+    "description": "Close button",
+    "message": "Đóng"
+  },
+  "options_dark_theme": {
+    "description": "Download in one click checkbox label",
+    "message": "Bật chế độ tối cho VidManager"
+  },
+  "options_enable_image_download": {
+    "message": "Hiển thị thanh công cụ tải ảnh bên cạnh các hình ảnh có thể tải xuống trên Instagram và TikTok"
+  },
+  "options_min_stream_size": {
+    "description": "Min stream size label",
+    "message": "Bỏ qua các tệp có dung lượng nhỏ hơn"
+  },
+  "options_one_click": {
+    "description": "Download in one click checkbox label",
+    "message": "Tải về sau một cú nhấp chuột"
+  },
+  "options_prefer_last_quality": {
+    "description": "Prefer last quality as initial quality selector checkbox label",
+    "message": "Ghi nhớ chất lượng tệp tải về của lần chọn gần nhất"
+  },
+  "options_save": {
+    "description": "Save button",
+    "message": "Lưu"
+  },
+  "options_save_and_close": {
+    "description": "Save and close button",
+    "message": "Lưu và đóng"
+  },
+  "options_show_3gp": {
+    "description": "Show 3gp checkbox in options",
+    "message": "Hiển thị định dạng 3gp"
+  },
+  "options_show_detach_button": {
+    "description": "Show detach button",
+    "message": "Hiển thị nút Ghim video trên thanh công cụ media"
+  },
+  "options_show_on_page_buttons": {
+    "description": "Show on page controls label",
+    "message": "Hiển thị thanh công cụ media bên cạnh tệp tin có thể tải về"
+  },
+  "options_show_skip_video_button": {
+    "description": "Show skip video button",
+    "message": "Hiển thị nút Đi đến cuối video"
+  },
+  "options_show_skip_video_button_description": {
+    "description": "Show skip video button description",
+    "message": "Trong trường hợp quảng cáo video không chặn được, bạn có thể chủ động ấn vào nút này để bỏ qua quảng cáo mà không cần chờ nó chạy hết"
+  },
+  "options_site_hide_widget_list_button_add": {
+    "message": "Thêm"
+  },
+  "options_site_hide_widget_list_empty": {
+    "message": "Chưa thêm trang web nào"
+  },
+  "options_site_hide_widget_list_title": {
+    "message": "Các trang web đã ẩn thanh công cụ đa phương tiện"
+  },
+  "options_site_popup_desc": {
+    "message": "Trang web được thêm sẽ không hiển thị thanh công cụ media"
+  },
+  "options_site_popup_input_helper": {
+    "message": "Vui lòng nhập địa chỉ hợp lệ"
+  },
+  "options_site_popup_input_helper_error_duplicate": {
+    "message": "Trang web đã được thêm vào danh sách"
+  },
+  "options_site_popup_input_label": {
+    "message": "Tên trang web"
+  },
+  "options_site_popup_input_placeholder": {
+    "message": "example.com"
+  },
+  "options_site_popup_primary_button": {
+    "message": "Thêm"
+  },
+  "options_site_popup_secondary_button": {
+    "message": "Huỷ"
+  },
+  "options_site_popup_title": {
+    "message": "Thêm trang web"
+  },
+  "options_skip_ads": {
+    "description": "Auto skip ads title",
+    "message": "Tự động bỏ qua quảng cáo khi phát video trên Youtube"
+  },
+  "options_skip_ads_desc": {
+    "description": "Auto skip ads description",
+    "message": "VidManager sẽ giúp bạn tự động ấn nút Bỏ qua quảng cáo ở những video cho phép trên Youtube"
+  },
+  "options_title": {
+    "description": "Options page title",
+    "message": "Cài đặt công cụ tải video & audio"
+  },
+  "page_action_title": {
+    "description": "Tooltip on pageAction hover",
+    "message": "Tải video & audio"
+  },
+  "pip_failed_to_find": {
+    "description": "Notice for when we failed to locate player on the page.",
+    "message": "Không thể ghim video này"
+  },
+  "pip_please_wait": {
+    "description": "When PiP doing its magic",
+    "message": "Vui lòng chờ..."
+  },
+  "pip_tour_content": {
+    "description": "PiP tour text - ask the user to try our product",
+    "message": "Bạn có thể tải phần âm thanh của các video trực tuyến (theo định dạng <strong>mp3</strong>)."
+  },
+  "pip_tour_title": {
+    "description": "PiP tour title",
+    "message": "Tải file mp3 chỉ bằng 1 click chuột"
+  },
+  "pip_tour_try_btn": {
+    "description": "PiP tour try now button",
+    "message": "Thử ngay!"
+  },
+  "play_now_click_to_play": {
+    "description": "Promote text in a tooltip",
+    "message": "Nhấp <a>Xem ngay</a> để thưởng thức video đã tải về ở cửa sổ nổi, ngay cả khi bạn đóng thẻ."
+  },
+  "play_now_do_not_show": {
+    "description": "Do not show tooltip again text",
+    "message": "Không hiển thị lại"
+  },
+  "play_now_per_second": {
+    "description": "A 'second' name",
+    "message": "giây"
+  },
+  "play_now_play_now": {
+    "description": "Play now button title",
+    "message": "Xem ngay"
+  },
+  "play_now_received_from": {
+    "description": "A 'from' word",
+    "message": "của"
+  },
+  "popup_audio_channel_label": {
+    "description": "Video audio channel",
+    "message": "Kênh"
+  },
+  "popup_check_all": {
+    "description": "Text for check all",
+    "message": "tất cả"
+  },
+  "popup_check_label": {
+    "description": "Label to check all or none",
+    "message": "Chọn:"
+  },
+  "popup_check_none": {
+    "description": "Text for check none",
+    "message": "bỏ chọn"
+  },
+  "popup_download": {
+    "description": "Download button text",
+    "message": "Tải về"
+  },
+  "popup_download_failed": {
+    "description": "Message is shown if download could not be started.",
+    "message": "Khởi động download không thành công. Hãy sử dụng định dạng và chất lượng khác."
+  },
+  "popup_download_selected": {
+    "description": "Download selected button text",
+    "message": "TẢI VỀ ĐÃ CHỌN"
+  },
+  "popup_download_starting": {
+    "description": "Wait for download button text",
+    "message": "Vui lòng chờ..."
+  },
+  "popup_how_many_media_found": {
+    "description": "Text saying how many media was found.",
+    "message": "$number$ tệp được tìm thấy",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": 42
+      }
+    }
+  },
+  "popup_no_media_found": {
+    "description": "Message shows in popup if there is no media to display.",
+    "message": "Xin lỗi, không tìm thấy phương tiện nào."
+  },
+  "popup_one_click": {
+    "description": "Download in one click checkbox label",
+    "message": "Tải về sau một cú nhấp chuột"
+  },
+  "popup_pip_button": {
+    "description": "Pip button text",
+    "message": "Ghim video"
+  },
+  "popup_preferred_quality": {
+    "description": "Preferred media quality select label",
+    "message": "Chất lượng tệp tải về ưa thích"
+  },
+  "popup_preferred_quality_hint": {
+    "description": "Preferred media quality as a hint for automatic download.",
+    "message": "Chất lượng:"
+  },
+  "popup_sound_only": {
+    "description": "Sound only text for quality selection",
+    "message": "(chỉ âm thanh)"
+  },
+  "popup_starting_download": {
+    "description": "Starting one-click download text",
+    "message": "Bắt đầu tải xuống"
+  },
+  "popup_title": {
+    "description": "Title of the omnibox popup",
+    "message": "Tệp sẽ tải về"
+  },
+  "popup_unpip_button": {
+    "description": "Unpip button text",
+    "message": "Bỏ ghim video"
+  },
+  "popup_welcome_button": {
+    "description": "Try it now button text",
+    "message": "Thử ngay!"
+  },
+  "popup_welcome_text": {
+    "description": "Welcome popup text",
+    "message": " Nếu bạn nhìn thấy biểu tượng này trên thanh địa chỉ, có nghĩa là có nội dung truyền thông trên trang web (như âm nhạc, đoạn phim ca nhạc hoặc phim), có thể được tải về."
+  },
+  "popup_welcome_title": {
+    "description": "Welcome popup title",
+    "message": "Đã tìm thấy phương tiện có thể tải xuống!"
+  },
+  "promote_serp_btn_check_result": {
+    "description": "Button check results",
+    "message": "Tìm kiếm với VidManager"
+  },
+  "promote_serp_btn_settings": {
+    "description": "Button browser settings",
+    "message": "Mở cài đặt tìm kiếm"
+  },
+  "promote_serp_desc": {
+    "description": "SERP promotion description text",
+    "message": "Anh chị VidManager thân mến, để giúp cho việc nâng cao chất lượng tìm kiếm, anh chị vui lòng dùng công cụ trình duyệt của chúng ta và phản hồi lại cho chúng tôi."
+  },
+  "ql_high": {
+    "description": "High automatic download quality",
+    "message": "Cao"
+  },
+  "ql_high_desc": {
+    "description": "High automatic download quality description",
+    "message": "Tự động chọn độ phân giải tốt nhất từ 1080p trở lên"
+  },
+  "ql_low": {
+    "description": "Low automatic download quality",
+    "message": "Thấp"
+  },
+  "ql_low_desc": {
+    "description": "Low automatic download quality description",
+    "message": "Tự động chọn độ phân giải tốt nhất dưới 360p"
+  },
+  "ql_medium": {
+    "description": "Legacy medium preference label",
+    "message": "Trung bình"
+  },
+  "ql_standard": {
+    "description": "Standard automatic download quality",
+    "message": "Tiêu chuẩn"
+  },
+  "ql_standard_desc": {
+    "description": "Standard automatic download quality description",
+    "message": "Tự động chọn độ phân giải tốt nhất từ 360p đến dưới 1080p"
+  },
+  "quality_4k_qfhd": {
+    "message": "4K QFHD"
+  },
+  "quality_4k_uhd": {
+    "message": "4K UHD"
+  },
+  "quality_8k_uhd": {
+    "message": "8K UHD"
+  },
+  "quality_fhd": {
+    "message": "Full HD"
+  },
+  "quality_hd": {
+    "message": "HD"
+  },
+  "quality_medium": {
+    "message": "Trung bình"
+  },
+  "quality_mobile": {
+    "message": "Di động"
+  },
+  "quality_qhd": {
+    "message": "2K QHD"
+  },
+  "quality_small": {
+    "message": "Thấp"
+  },
+  "quality_standard": {
+    "message": "Tiêu chuẩn"
+  },
+  "select_audio_channel_title": {
+    "description": "",
+    "message": "Chọn kênh âm thanh"
+  },
+  "set_as_default": {
+    "description": "onboarding set as default button text",
+    "message": "Đặt làm mặc định"
+  },
+  "sidepanel_quality_auto": {
+    "description": "Default quality label before retrieval",
+    "message": "Chất lượng (Tự động)"
+  },
+  "skip_video": {
+    "description": "Skip video",
+    "message": "Đi đến cuối video"
+  },
+  "skip_video_description": {
+    "description": "Skip video description",
+    "message": "Nếu video này là quảng cáo, tính năng này sẽ giúp bạn bỏ qua ngay mà không cần chờ"
+  },
+  "subtitles_auto_translated": {
+    "description": "Auto translated subtitles",
+    "message": "(dịch tự động)"
+  },
+  "subtitles_lang_de": {
+    "description": "German",
+    "message": "Tiếng Đức"
+  },
+  "subtitles_lang_en": {
+    "description": "English",
+    "message": "Tiếng Anh"
+  },
+  "subtitles_lang_fr": {
+    "description": "French",
+    "message": "Tiếng Pháp"
+  },
+  "subtitles_lang_ja": {
+    "description": "Japanese",
+    "message": "Tiếng Nhật"
+  },
+  "subtitles_lang_ko": {
+    "description": "Korean",
+    "message": "Tiếng Hàn"
+  },
+  "subtitles_lang_ru": {
+    "description": "Russian",
+    "message": "Tiếng Nga"
+  },
+  "subtitles_lang_vi": {
+    "description": "Vietnamese",
+    "message": "Tiếng Việt"
+  },
+  "subtitles_lang_zh_Hans": {
+    "description": "Chinese",
+    "message": "Tiếng Trung"
+  },
+  "try_now_button_text": {
+    "description": "onboarding try button default text",
+    "message": "Thử ngay"
+  },
+  "turn_off_light": {
+    "description": "Button turn light off",
+    "message": "Tắt đèn"
+  },
+  "turn_on_light": {
+    "description": "Button turn light on",
+    "message": "Bật đèn"
+  },
+  "video_audio_tab": {
+    "description": "Title of the video audio tab",
+    "message": "Video/Audio"
+  },
+  "widget_btn_gotit": {
+    "message": "Đã hiểu"
+  },
+  "widget_btn_learnmore": {
+    "message": "Tìm hiểu thêm"
+  },
+  "widget_download_box_title": {
+    "description": "",
+    "message": "Chọn tệp để tải"
+  },
+  "widget_download_tooltip": {
+    "description": "Download button text",
+    "message": "Tải video, audio hoặc phụ đề"
+  },
+  "widget_download_tooltip_image_and_vid": {
+    "description": "Download button text but both image and video",
+    "message": "Tải video, audio, phụ đề hoặc ảnh"
+  },
+  "widget_download_tooltip_image_and_video": {
+    "description": "Download button text but both image and video",
+    "message": "Tải video, audio, phụ đề hoặc ảnh"
+  },
+  "widget_download_tooltip_only_image": {
+    "description": "Download button text but only image",
+    "message": "Tải ảnh"
+  },
+  "widget_downloading_media": {
+    "description": "Message shows in widget when media is downloading",
+    "message": "Đang tải dữ liệu"
+  },
+  "widget_go_to_settings": {
+    "message": "Cài đặt"
+  },
+  "widget_hide_panel": {
+    "message": "Tạm ẩn thanh này"
+  },
+  "widget_hide_panel_on_site": {
+    "message": "Không hiển thị lại trên $1"
+  },
+  "widget_no_media_found": {
+    "description": "Message shows in popup if there is no media to display.",
+    "message": "Không tìm thấy tệp để tải"
+  },
+  "widget_other_options": {
+    "description": "Message shows in widget when user hover on three dots button",
+    "message": "Quản lý tải xuống"
+  },
+  "widget_panel_hidden": {
+    "message": "Đã tạm ẩn thanh (Tải lại trang để hiện lại)"
+  },
+  "widget_panel_hidden_on_site": {
+    "message": "Thanh công cụ Media sẽ không hiện lại trên $1. Vào <b data-action='openSettings'>Cài đặt</b> để bật lại."
+  }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VidManager - Video Downloader</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header: Clean Minimal Title & On-Page Toolbar Toggle -->
+    <header class="popup-header">
+      <div class="brand">
+        <img src="../images/logo_cc.svg" alt="VidManager Logo" class="brand-icon">
+        <div class="brand-text">
+          <h1>VidManager</h1>
+        </div>
+      </div>
+      <div class="header-toggles-container">
+        <div class="header-toggle-wrap" title="Toggle floating download toolbar on videos">
+          <span class="header-toggle-label" id="label-toggle-toolbar">Video</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-onpage-bar" checked aria-labelledby="label-toggle-toolbar">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="header-toggle-wrap" title="Toggle floating download button on images">
+          <span class="header-toggle-label" id="label-toggle-image">Image</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-image-bar" checked aria-labelledby="label-toggle-image">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <!-- Scrollable Body (Recent Downloads View) -->
+    <div class="popup-body">
+      <!-- Section: Recently Downloaded Videos -->
+      <section class="popup-section" id="section-recent">
+        <div class="recent-header">
+          <span class="recent-heading">Recent Downloads</span>
+          <span class="recent-badge-count" id="recent-total-badge">0 videos</span>
+        </div>
+
+        <div class="recent-media-container" id="recent-media-list">
+          <!-- Populated dynamically by popup.js -->
+        </div>
+
+        <div class="empty-state empty-recent" id="recent-empty-state" style="display: none;">
+          <div class="empty-icon-wrap">
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <p class="empty-title">No downloads yet</p>
+          <p class="empty-desc">When you download videos on YouTube, Facebook, TikTok..., files will appear here.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Prominent Bottom Manager Action Bar -->
+    <footer class="popup-footer">
+      <button id="btn-footer-manager" class="btn-manager-action">Open Download Manager</button>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast" style="display: none;">Notification</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

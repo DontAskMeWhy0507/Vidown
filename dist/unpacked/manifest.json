@@ -1,0 +1,100 @@
+{
+  "action": {
+    "default_icon": "images/savior_logo.png",
+    "default_title": "__MSG_page_action_title__",
+    "default_popup": "popup/popup.html"
+  },
+  "background": {
+    "service_worker": "background.chrome.js"
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "exclude_matches": [
+        "file://*",
+        "*://*.g.doubleclick.net/*",
+        "*://*.challenges.cloudflare.com/*",
+        "*://*.recaptcha.net/*",
+        "*://*.google.com/recaptcha/*",
+        "*://*.hcaptcha.com/*",
+        "*://*.youtube.com/live_chat*"
+      ],
+      "js": [
+        "context-guard.js",
+        "content-script.js",
+        "downloads-nav.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "all_frames": true,
+      "exclude_matches": [
+        "file://*",
+        "*://*.g.doubleclick.net/*",
+        "*://*.challenges.cloudflare.com/*",
+        "*://*.recaptcha.net/*",
+        "*://*.google.com/recaptcha/*",
+        "*://*.hcaptcha.com/*",
+        "*://*.youtube.com/live_chat*"
+      ],
+      "js": [
+        "stream-sniffer.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "default_locale": "en",
+  "description": "__MSG_appDescription__",
+  "externally_connectable": {
+    "matches": [
+      "https://*.youtube.com/*"
+    ]
+  },
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "icons": {
+    "48": "images/savior_logo.png",
+    "128": "images/savior_logo.png"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqf6vSoPYfmNDbNt5oHXiiTjNu6/NjnhGBwZGvzPxdoGs4Z+RM5W+kTJMsuUKhFeOiP4AcavftVOl56l8jq8LDQSl1zQlZ7z6y/3SbdinktuyaosJJ+W44rXbtYKjBls3R6yYx2B4nKoVi5IAI8htmJlL2ug0vGZKjl2a0oC8sLMA2qjCrwKCgRrpEO9x4C/fllmtyQl1bFldCdFFpJxKVPwFTAPRXPwgaQnmNc9BR6u/UyNGWyCpx1Sy94ZWnZf0wQh5Sz7yM9fngdp0A9xFzH1URUrWxalEAcj5eNA5rZb92EQ44BS6r1Rkb5FMgTqfY1Wd1MiIsm47I4eEW5Y+DwIDAQAB",
+  "manifest_version": 3,
+  "minimum_chrome_version": "116",
+  "name": "__MSG_appName__",
+  "permissions": [
+    "tabs",
+    "webNavigation",
+    "downloads",
+    "downloads.open",
+    "storage",
+    "cookies",
+    "scripting",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "webRequest",
+    "alarms",
+    "nativeMessaging"
+  ],
+  "version": "3.1.0",
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ],
+      "resources": [
+        "css/*",
+        "css/content-script.css",
+        "images/*",
+        "images/*.*"
+      ]
+    }
+  ]
+}

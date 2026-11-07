@@ -1,0 +1,767 @@
+{
+  "1_messenger_text": {
+    "message": "Buka Messenger",
+    "description": "facebook first time description"
+  },
+  "1_skype_text": {
+    "message": "Buka Skype",
+    "description": "skype first time description"
+  },
+  "1_tele_text": {
+    "message": "Buka Telegram",
+    "description": "tele first time description"
+  },
+  "1_translate_text": {
+    "message": "Terjemahkan",
+    "description": "translate first time description"
+  },
+  "1_youtube_text": {
+    "message": "Buka YouTube",
+    "description": "youtube first time description"
+  },
+  "1_zalo_text": {
+    "message": "Buka Zalo",
+    "description": "zalo first time description"
+  },
+  "accept_vi": {
+    "message": "Setuju"
+  },
+  "agree_button": {
+    "message": "Setuju",
+    "description": "onboarding agree button text"
+  },
+  "agree_vi_button": {
+    "message": "Setuju",
+    "description": "onboarding agree button text"
+  },
+  "appDescription": {
+    "message": "VidManager - Helps you download video and audio files instantly from any website."
+  },
+  "appName": {
+    "message": "VidManager"
+  },
+  "cancel_button_text": {
+    "message": "Batal",
+    "description": "onboarding cancel button text"
+  },
+  "cancel_vi": {
+    "message": "Batal"
+  },
+  "chatgpt_desc_text": {
+    "message": "<b>Catch up with the AI trend with VidManager Sidebar and ChatGPT</b><br>With a click, you can immediately meet the intelligent virtual chatbot in the Sidebar. Not only that, you can surf the web and chat with ChatGPT at the same time."
+  },
+  "chatgpt_title_text": {
+    "message": ""
+  },
+  "download_all_images": {
+    "description": "Download all images",
+    "message": "All $number$ images",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": 42
+      }
+    }
+  },
+  "download_current_image": {
+    "description": "Download current image",
+    "message": "Current image"
+  },
+  "downloading_word": {
+    "message": "Mengunduh",
+    "description": "Just a single word"
+  },
+  "error_text": {
+    "message": "Kesalahan"
+  },
+  "explore_vi_button": {
+    "message": "Jelajahi",
+    "description": "onboarding agree button text"
+  },
+  "image_tab": {
+    "message": "Gambar",
+    "description": "Title of the image tab"
+  },
+  "instant_actions_download_options": {
+    "message": "Opsi Unduhan",
+    "description": "Options text for instant download button"
+  },
+  "instant_actions_download_tooltip": {
+    "message": "Unduh media",
+    "description": "Tooltip for download in one click button"
+  },
+  "later_button": {
+    "message": "Nanti",
+    "description": "onboarding later button text"
+  },
+  "later_vi_button": {
+    "message": "Nanti",
+    "description": "onboarding later button text"
+  },
+  "loading_image": {
+    "message": "Searching for Image..."
+  },
+  "loading_video_audio": {
+    "message": "Searching for Video/Audio..."
+  },
+  "login_button": {
+    "message": "Masuk"
+  },
+  "media_fields_type_audio": {
+    "description": "Audio media type",
+    "message": "Audio"
+  },
+  "media_fields_type_audio_channel": {
+    "description": "Video audio channel",
+    "message": "Audio channel"
+  },
+  "media_fields_type_image": {
+    "description": "Image",
+    "message": "Image"
+  },
+  "media_fields_type_no_watermark_video": {
+    "description": "No watermark video media type",
+    "message": "Video (no watermark)"
+  },
+  "media_fields_type_stream": {
+    "description": "Stream media type",
+    "message": "Stream"
+  },
+  "media_fields_type_subtitles": {
+    "description": "Subtitles media title",
+    "message": "Subtitles"
+  },
+  "media_fields_type_video": {
+    "description": "Video media type",
+    "message": "Video"
+  },
+  "mobile_button": {
+    "description": "Mobile button text",
+    "message": "Download file to your phone"
+  },
+  "mobile_error_text": {
+    "description": "Text for error in mobile transfer panel",
+    "message": "Media is not available."
+  },
+  "mobile_instruction_1": {
+    "description": "Text 2 in mobile panel",
+    "message": "Step 1: Open VidManager Mobile"
+  },
+  "mobile_instruction_2": {
+    "description": "Text 3 in mobile panel",
+    "message": "Step 2: Scan the QR Code"
+  },
+  "mobile_panel_footer": {
+    "description": "Text 4 in mobile panel",
+    "message": "You haven't downloaded VidManager Mobile yet?"
+  },
+  "mobile_panel_header": {
+    "description": "Text 1 in mobile panel",
+    "message": "Download instructions"
+  },
+  "not_show_again": {
+    "description": "onboarding do not show again checkbox text",
+    "message": "Do not show again"
+  },
+  "onboard_account_desc_A": {
+    "message": "To sync saved Google data, bookmarks, and passwords across all devices"
+  },
+  "onboard_account_desc_C": {
+    "message": "To sync bookmarks and passwords across all devices"
+  },
+  "onboard_account_title_A": {
+    "message": "Do you want to sign in to your VidManager account?"
+  },
+  "onboard_account_title_B": {
+    "message": "Sign in to VidManager to save your data"
+  },
+  "onboard_account_title_C": {
+    "message": "Use Google account to sign in to VidManager?"
+  },
+  "onboard_account_title_D": {
+    "message": "Sign in to VidManager and sync data across all devices"
+  },
+  "onboard_en_to_vi_desc_1": {
+    "message": "Translate any text by highlighting it and clicking the Translate icon"
+  },
+  "onboard_en_to_vi_desc_2": {
+    "message": "VidManager helps you translate English, Chinese, Korean, Japanese, and over 100 other languages"
+  },
+  "onboard_en_to_vi_desc_3": {
+    "message": "Highlight text to translate and click the Translate icon. Super easy!"
+  },
+  "onboard_en_to_vi_desc_4": {
+    "message": "Translate any language - VidManager helps you translate English, Chinese, Korean, Japanese, and over 100 other languages"
+  },
+  "onboard_en_to_vi_title_1": {
+    "message": "Just highlight, VidManager translates instantly"
+  },
+  "onboard_en_to_vi_title_2": {
+    "message": "Just highlight, VidManager translates instantly"
+  },
+  "onboard_en_to_vi_title_3": {
+    "message": "Highlight quickly - translate instantly"
+  },
+  "onboard_en_to_vi_title_4": {
+    "message": "Highlight quickly - translate instantly"
+  },
+  "onboard_import_data_desc_1": {
+    "message": "Transfer important data - bookmarks, passwords, and browsing history from other browsers to VidManager"
+  },
+  "onboard_import_data_desc_2": {
+    "message": "Keep all your bookmarks, passwords, and saved data from Chrome for easier web access"
+  },
+  "onboard_import_data_desc_3": {
+    "message": "Keep all your bookmarks, passwords, and browsing history from other browsers for easier web access"
+  },
+  "onboard_import_data_title_1": {
+    "description": "Onboarding import data title",
+    "message": "Import bookmarks and saved passwords from other browsers"
+  },
+  "onboard_import_data_title_2": {
+    "description": "Onboarding import data title",
+    "message": "Move your \"house\" from Chrome to VidManager"
+  },
+  "onboard_import_data_title_3": {
+    "description": "Onboarding import data title",
+    "message": "Move your \"house\" to VidManager"
+  },
+  "onboard_set_default_br_desc_1": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Automatically block ads. Browse faster and more securely."
+  },
+  "onboard_set_default_br_desc_2": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Experience advanced features: Adblock, Sidebar, Download video, and more"
+  },
+  "onboard_set_default_br_desc_3": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Set VidManager as your default browser to enjoy Adblock, Sidebar, Download video, and more features!"
+  },
+  "onboard_set_default_br_title_1": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Want to try VidManager as your default browser?"
+  },
+  "onboard_set_default_br_title_2": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Ad-free browsing with VidManager as your default browser"
+  },
+  "onboard_set_default_br_title_3": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Better multitasking, more optimized than Chrome"
+  },
+  "onboard_set_default_br_title_4": {
+    "description": "Onboarding set default browser tittle",
+    "message": "Benefits of setting VidManager as your default browser"
+  },
+  "onboard_sidepanel_big_description": {
+    "message": "Easily download videos, music, and photos"
+  },
+  "onboard_sidepanel_later": {
+    "message": "Remind me later"
+  },
+  "onboard_sidepanel_small_description_1": {
+    "message": "Easily download videos, audio, and photos with just one click. Get started!"
+  },
+  "onboard_sidepanel_small_description_1_no_image": {
+    "message": "Easily download videos, and audio with just one click. Get started!"
+  },
+  "onboard_sidepanel_small_description_2": {
+    "message": "Experience the new video and audio download interface - now with bulk image downloads!"
+  },
+  "onboard_sidepanel_small_description_2_no_image": {
+    "message": "Experience the new video and audio download interface. Get started!"
+  },
+  "onboard_sidepanel_title": {
+    "message": "Suggested by VidManager"
+  },
+  "onboard_sidepanel_try": {
+    "message": "Try it"
+  },
+  "onboard_title": {
+    "description": "Onboarding title",
+    "message": "Suggestion from VidManager"
+  },
+  "onboarding_ccmobile_movie_descText_adblock": {
+    "message": "<h5>Block ads on mobile too</h5><p>Download the VidManager app and continue watching movies ad-free</p>"
+  },
+  "onboarding_ccmobile_movie_descText_watch": {
+    "message": "<h5>Optimize video watching experience on mobile</h5><p>Watch movies better with Cinema Mode from VidManager Mobile</p>"
+  },
+  "onboarding_coccoctv_actionText": {
+    "message": "Learn more"
+  },
+  "onboarding_coccoctv_title": {
+    "message": "Recommendations from VidManager"
+  },
+  "onboarding_new_mp_abort": {
+    "message": "Skip"
+  },
+  "onboarding_new_mp_complete": {
+    "message": "Got it"
+  },
+  "onboarding_new_mp_desc_1": {
+    "message": "You can download those files for free, 8 times faster than other browsers"
+  },
+  "onboarding_new_mp_desc_2": {
+    "message": "You can watch the video and use other apps at the same time"
+  },
+  "onboarding_new_mp_desc_3": {
+    "message": "Thanks to VidManager's automatic adblock, you can enjoy videos without being disturbed "
+  },
+  "onboarding_new_mp_next": {
+    "message": "Next"
+  },
+  "onboarding_new_mp_title_1": {
+    "message": "Download videos, audio or subtitles"
+  },
+  "onboarding_new_mp_title_2": {
+    "message": "Pin video in a floating window"
+  },
+  "onboarding_new_mp_title_3": {
+    "message": "Watch videos without ads"
+  },
+  "onboarding_ytb_mobile_actionText": {
+    "description": "onboarding try button default text",
+    "message": "Try now"
+  },
+  "onboarding_ytb_mobile_descText_adblock": {
+    "message": "<h5>Block YouTube ads on mobile too</h5><p>Download the VidManager app and continue watching YouTube ad-free.</p>"
+  },
+  "onboarding_ytb_mobile_descText_playmusic": {
+    "message": "<h5>Listen to YouTube with screen off on mobile</h5><p>Easily listen to music with screen off using VidManager Mobile.</p>"
+  },
+  "options_automatic_download_quality": {
+    "description": "Automatic download quality setting title",
+    "message": "Kualitas unduhan otomatis"
+  },
+  "options_automatic_download_quality_desc": {
+    "description": "Automatic download quality setting description",
+    "message": "Jika Anda tidak memilih kualitas video sebelum mengunduh di Side Panel, VidManager akan mengunduh secara otomatis menurut kriteria berikut:"
+  },
+  "options_close": {
+    "description": "Close button",
+    "message": "Close"
+  },
+  "options_dark_theme": {
+    "message": "Mode gelap",
+    "description": "Enable dark theme"
+  },
+  "options_enable_image_download": {
+    "message": "Display media panel alongside downloadable images on Instagram and TikTok"
+  },
+  "options_min_stream_size": {
+    "description": "Min stream size label",
+    "message": "Abaikan berkas yang lebih kecil dari"
+  },
+  "options_one_click": {
+    "description": "Download in one click checkbox label",
+    "message": "Download dalam sekali klik"
+  },
+  "options_prefer_last_quality": {
+    "description": "Prefer last quality as initial quality selector checkbox label",
+    "message": "Ingat kulitas media yang dipilih terakhir"
+  },
+  "options_save": {
+    "description": "Save button",
+    "message": "Save"
+  },
+  "options_save_and_close": {
+    "description": "Save and close button",
+    "message": "Simpan dan tutup"
+  },
+  "options_show_3gp": {
+    "description": "Show 3gp checkbox in options",
+    "message": "Tampilkan format 3gp"
+  },
+  "options_show_detach_button": {
+    "description": "Show detach button",
+    "message": "Izinkan penyematkan video"
+  },
+  "options_show_on_page_buttons": {
+    "description": "Show on page controls label",
+    "message": "Tampilkan tombol download didekat media yang bisa diunduh"
+  },
+  "options_show_skip_video_button": {
+    "description": "Show skip video button",
+    "message": "Show the “Skip Video” button"
+  },
+  "options_show_skip_video_button_description": {
+    "description": "Show skip video button description",
+    "message": "If a video ad cannot be blocked, you can manually click this button to skip the ad without waiting for it to finish playing"
+  },
+  "options_site_hide_widget_list_button_add": {
+    "message": "Add"
+  },
+  "options_site_hide_widget_list_empty": {
+    "message": "No website added"
+  },
+  "options_site_hide_widget_list_title": {
+    "message": "Websites that do not show Media panel"
+  },
+  "options_site_popup_desc": {
+    "message": "The media panel will not show on these websites"
+  },
+  "options_site_popup_input_helper": {
+    "message": "Please enter a valid domain"
+  },
+  "options_site_popup_input_helper_error_duplicate": {
+    "message": "This domain is already in the list"
+  },
+  "options_site_popup_input_label": {
+    "message": "Domain"
+  },
+  "options_site_popup_input_placeholder": {
+    "message": "example.com"
+  },
+  "options_site_popup_primary_button": {
+    "message": "Add"
+  },
+  "options_site_popup_secondary_button": {
+    "message": "Cancel"
+  },
+  "options_site_popup_title": {
+    "message": "Add website"
+  },
+  "options_skip_ads": {
+    "description": "Auto skip ads title",
+    "message": "Automatically skip ads when playing videos"
+  },
+  "options_skip_ads_desc": {
+    "description": "Auto skip ads description",
+    "message": "VidManager will helps you automatically click the Skip ads button on Youtube videos that allow skipping"
+  },
+  "options_title": {
+    "description": "Options page title",
+    "message": "Pilihan"
+  },
+  "page_action_title": {
+    "description": "Tooltip on pageAction hover",
+    "message": "Media yang bisa diunduh ditemukan!"
+  },
+  "pip_failed_to_find": {
+    "description": "Notice to show when we failed to locate player on the page.",
+    "message": "Tidak dapat melepaskan video ini"
+  },
+  "pip_please_wait": {
+    "description": "When PiP doing it's magic",
+    "message": "Pelepasan..."
+  },
+  "pip_tour_content": {
+    "description": "PiP tour text - ask the user to try our product",
+    "message": "Anda bisa mengunduh file audio menjadi <strong>mp3</strong> dan terpisah dari video."
+  },
+  "pip_tour_title": {
+    "description": "PiP tour title",
+    "message": "Download mp3 hanya dengan sekali klik"
+  },
+  "pip_tour_try_btn": {
+    "description": "PiP tour try now button",
+    "message": "Mengerti, coba sekarang"
+  },
+  "play_now_click_to_play": {
+    "description": "Promote text in a tooltip",
+    "message": "Klik <b>Putar sekarang</b> untuk melihat video yang diunduh sekarang!"
+  },
+  "play_now_do_not_show": {
+    "description": "Do not show tooltip again text",
+    "message": "Jangan tampilkan lagi"
+  },
+  "play_now_per_second": {
+    "description": "A 'second' name",
+    "message": "detik"
+  },
+  "play_now_play_now": {
+    "description": "Play now button title",
+    "message": "Putar Sekarang"
+  },
+  "play_now_received_from": {
+    "description": "A 'from' word",
+    "message": "dari"
+  },
+  "popup_audio_channel_label": {
+    "description": "Video audio channel",
+    "message": "Channel"
+  },
+  "popup_check_all": {
+    "description": "Text for check all",
+    "message": "Semua"
+  },
+  "popup_check_label": {
+    "description": "Label to check all or none",
+    "message": "Periksa:"
+  },
+  "popup_check_none": {
+    "description": "Text for check none",
+    "message": "tidak satupun"
+  },
+  "popup_download": {
+    "description": "Download button text",
+    "message": "DOWNLOAD"
+  },
+  "popup_download_failed": {
+    "description": "Message is shown if download could not be started.",
+    "message": "Download gagal untuk memulai. Coba dengan format dan kulitas yang berbeda."
+  },
+  "popup_download_selected": {
+    "description": "Download selected button text",
+    "message": "DOWNLOAD TERPILIH"
+  },
+  "popup_download_starting": {
+    "description": "Wait for download button text",
+    "message": "Mohon tunggu..."
+  },
+  "popup_how_many_media_found": {
+    "description": "Text saying how many media was found.",
+    "message": "$number$ media ditemukan",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": 42
+      }
+    }
+  },
+  "popup_no_media_found": {
+    "description": "Message shows in popup if there is no media to display.",
+    "message": "Media tidak ditemukan, maaf."
+  },
+  "popup_one_click": {
+    "description": "Download in one click checkbox label",
+    "message": "Download dengan sekali klik"
+  },
+  "popup_pip_button": {
+    "description": "Pip button text",
+    "message": "Pin"
+  },
+  "popup_preferred_quality": {
+    "description": "Preferred media quality select label",
+    "message": "Kualitas media yang dipilih"
+  },
+  "popup_preferred_quality_hint": {
+    "description": "Preferred media quality as a hint for automatic download.",
+    "message": "Kualitas yang dipilih:"
+  },
+  "popup_sound_only": {
+    "description": "Sound only text for quality selection",
+    "message": "(sound only)"
+  },
+  "popup_starting_download": {
+    "description": "Starting one-click download text",
+    "message": "Memulai download"
+  },
+  "popup_title": {
+    "description": "Title of the omnibox popup",
+    "message": "Download media files"
+  },
+  "popup_unpip_button": {
+    "description": "Unpip button text",
+    "message": "Unpin"
+  },
+  "popup_welcome_button": {
+    "description": "Try it now button text",
+    "message": "Coba Sekarang!"
+  },
+  "popup_welcome_text": {
+    "description": "Welcome popup text",
+    "message": "Jika anda melihat ikon ini di address-bar, ini berarti ada konten atau media di dalam halaman (seperti musik, video klip atau film), yang mana bisa diunduh."
+  },
+  "popup_welcome_title": {
+    "description": "Welcome popup title",
+    "message": "Media yang bisa diunduh ditemukan!"
+  },
+  "promote_serp_btn_check_result": {
+    "description": "Button check results",
+    "message": "Check results in VidManager"
+  },
+  "promote_serp_btn_settings": {
+    "description": "Button browser settings",
+    "message": "Search engine settings"
+  },
+  "promote_serp_desc": {
+    "description": "SERP promotion description text",
+    "message": "Dear VidManager user, please try to use our search engine for this query and report problems if any – it will be a great help in improving our search quality."
+  },
+  "ql_high": {
+    "description": "High automatic download quality",
+    "message": "Tinggi"
+  },
+  "ql_high_desc": {
+    "description": "High automatic download quality description",
+    "message": "Secara otomatis memilih resolusi terbaik dari 1080p ke atas"
+  },
+  "ql_low": {
+    "description": "Low automatic download quality",
+    "message": "Rendah"
+  },
+  "ql_low_desc": {
+    "description": "Low automatic download quality description",
+    "message": "Secara otomatis memilih resolusi terbaik di bawah 360p"
+  },
+  "ql_medium": {
+    "description": "Legacy medium preference label",
+    "message": "Menengah"
+  },
+  "ql_standard": {
+    "description": "Standard automatic download quality",
+    "message": "Standar"
+  },
+  "ql_standard_desc": {
+    "description": "Standard automatic download quality description",
+    "message": "Secara otomatis memilih resolusi terbaik dari 360p hingga di bawah 1080p"
+  },
+  "quality_4k_qfhd": {
+    "message": "4K QFHD"
+  },
+  "quality_4k_uhd": {
+    "message": "4K UHD"
+  },
+  "quality_8k_uhd": {
+    "message": "8K UHD"
+  },
+  "quality_fhd": {
+    "message": "Full HD"
+  },
+  "quality_hd": {
+    "message": "HD"
+  },
+  "quality_medium": {
+    "message": "Medium"
+  },
+  "quality_mobile": {
+    "message": "Mobile"
+  },
+  "quality_qhd": {
+    "message": "Quad HD"
+  },
+  "quality_small": {
+    "message": "Small"
+  },
+  "quality_standard": {
+    "message": "Standard"
+  },
+  "select_audio_channel_title": {
+    "description": "",
+    "message": "Select audio channel"
+  },
+  "set_as_default": {
+    "description": "onboarding set as default button text",
+    "message": "Set as default"
+  },
+  "sidepanel_quality_auto": {
+    "description": "Default quality label before retrieval",
+    "message": "Kualitas (Otomatis)"
+  },
+  "skip_video": {
+    "description": "Skip video",
+    "message": "Skip video"
+  },
+  "skip_video_description": {
+    "description": "Skip video description",
+    "message": "If this video is an ad, this feature lets you skip it instantly without waiting"
+  },
+  "subtitles_auto_translated": {
+    "description": "Auto translated subtitles",
+    "message": "(auto translated)"
+  },
+  "subtitles_lang_de": {
+    "description": "German",
+    "message": "German"
+  },
+  "subtitles_lang_en": {
+    "description": "English",
+    "message": "English"
+  },
+  "subtitles_lang_fr": {
+    "description": "French",
+    "message": "French"
+  },
+  "subtitles_lang_ja": {
+    "description": "Japanese",
+    "message": "Japanese"
+  },
+  "subtitles_lang_ko": {
+    "description": "Korean",
+    "message": "Korean"
+  },
+  "subtitles_lang_ru": {
+    "description": "Russian",
+    "message": "Russian"
+  },
+  "subtitles_lang_vi": {
+    "description": "Vietnamese",
+    "message": "Vietnamese"
+  },
+  "subtitles_lang_zh_Hans": {
+    "description": "Chinese",
+    "message": "Chinese"
+  },
+  "try_now_button_text": {
+    "description": "onboarding try button default text",
+    "message": "Try now"
+  },
+  "turn_off_light": {
+    "description": "Button turn light off",
+    "message": "Lights off"
+  },
+  "turn_on_light": {
+    "description": "Button turn light on",
+    "message": "Lights on"
+  },
+  "video_audio_tab": {
+    "description": "Title of the video audio tab",
+    "message": "Video/Audio"
+  },
+  "widget_btn_gotit": {
+    "message": "Got it"
+  },
+  "widget_btn_learnmore": {
+    "message": "Learn more"
+  },
+  "widget_download_box_title": {
+    "description": "",
+    "message": "Select to download"
+  },
+  "widget_download_tooltip": {
+    "description": "Download button text",
+    "message": "Download videos, audio or subtitles"
+  },
+  "widget_download_tooltip_image_and_vid": {
+    "description": "Download button text but both image and video",
+    "message": "Unduh video, audio, subtitle atau gambar"
+  },
+  "widget_download_tooltip_image_and_video": {
+    "description": "Download button text but both image and video",
+    "message": "Unduh video, audio, subtitle atau gambar"
+  },
+  "widget_download_tooltip_only_image": {
+    "description": "Download button text but only image",
+    "message": "Download images"
+  },
+  "widget_downloading_media": {
+    "description": "Message shows in widget when media is downloading",
+    "message": "Media Downloading"
+  },
+  "widget_go_to_settings": {
+    "message": "Settings"
+  },
+  "widget_hide_panel": {
+    "message": "Hide this panel"
+  },
+  "widget_hide_panel_on_site": {
+    "message": "Don't show again on $1"
+  },
+  "widget_no_media_found": {
+    "description": "Message shows in popup if there is no media to display.",
+    "message": "No media found"
+  },
+  "widget_other_options": {
+    "description": "Message shows in widget when user hover on three dots button",
+    "message": "Downloads Manager"
+  },
+  "widget_panel_hidden": {
+    "message": "Panel hidden (Reload page to show this panel)"
+  },
+  "widget_panel_hidden_on_site": {
+    "message": "The media panel will not reappear on $1. Please go to <b data-action='openSettings'>Settings</b> to enable it again."
+  }
+}

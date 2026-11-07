@@ -11,7 +11,7 @@ docs/superpowers/
 node_modules/
 dist/unpacked_bg/
 dist/unpacked_cs/
-dist/unpacked/
+dist/*.zip
 test_downloads/
 .agents/
 TEST_READY.md
