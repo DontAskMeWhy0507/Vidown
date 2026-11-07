@@ -34,10 +34,18 @@ async function run() {
   assert.strictEqual(err.message, 'TIMEOUT_EXCEEDED');
   console.log('✓ Test 1: Stalled request cleanly aborted upon socket timeout.');
 
+  if (typeof hangingServer.closeAllConnections === 'function') {
+    hangingServer.closeAllConnections();
+  }
   hangingServer.close();
   console.log('\n======================================================');
   console.log('ALL T07 TIMEOUT & ABORT TESTS PASSED! 🎉');
   console.log('======================================================\n');
 }
 
-run();
+run().then(() => {
+  process.exit(0);
+}).catch(err => {
+  console.error(err);
+  process.exit(1);
+});

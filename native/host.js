@@ -1004,8 +1004,13 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
     let hasError = false;
     const activeReqs = new Set();
 
+    let progressInterval = null;
     const cleanup = () => {
       isAborted = true;
+      if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
+      }
       for (const r of activeReqs) {
         try { r.destroy(); } catch (e) {}
       }
@@ -1023,9 +1028,9 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
 
     let lastTime = Date.now();
     let lastBytes = 0;
-    const progressInterval = setInterval(() => {
+    progressInterval = setInterval(() => {
       if (isAborted) {
-        clearInterval(progressInterval);
+        if (progressInterval) clearInterval(progressInterval);
         return;
       }
       const now = Date.now();
@@ -1046,6 +1051,9 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
         }
       }
     }, 200);
+    if (typeof progressInterval.unref === 'function') {
+      progressInterval.unref();
+    }
 
     function checkDone() {
       if (completedBlocks >= totalBlocks && pendingWrites === 0 && !isAborted && !hasError) {
@@ -3014,6 +3022,8 @@ if (typeof module !== 'undefined') {
     handleMessage,
     setMessageHook,
     startDownload,
-    DISCONNECT_GRACE_MS
+    DISCONNECT_GRACE_MS,
+    httpKeepAliveAgent,
+    httpsKeepAliveAgent
   };
 }

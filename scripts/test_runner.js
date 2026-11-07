@@ -25,6 +25,7 @@ function runSuite(file) {
     const stdout = cp.execFileSync(process.execPath, [fullPath], {
       stdio: ['pipe', 'pipe', 'pipe'],
       timeout: SUITE_TIMEOUT_MS,
+      killSignal: 'SIGKILL',
       windowsHide: true,
       env: { ...process.env, VIDOWN_TEST_RUNNER: '1' }
     });
