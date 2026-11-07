@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const isTaskActive = activeIds.has(item.id) || (activeItem && activeItem.id === item.id);
           // If task is not active in the background engine
           if (!isTaskActive) {
-            if (item.outputFile || item.outputPath || item.percent === '100%') {
+            if (isFinished || item.percent === '100%') {
               item.state = 'completed';
               item.percent = '100%';
             } else if (now - (item.startTime || 0) > 300000) {
@@ -932,6 +932,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const retryTaskId = item.id;
     item.state = 'downloading';
     item.speed = 'Reconnecting...';
+    item.percent = '0%';
+    delete item.outputFile;
+    delete item.outputPath;
+    delete item.endTime;
     delete item.error;
     delete item.errorMessage;
 
@@ -941,6 +945,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (found) {
       found.state = 'downloading';
       found.speed = 'Reconnecting...';
+      found.percent = '0%';
+      delete found.outputFile;
+      delete found.outputPath;
+      delete found.endTime;
       delete found.error;
       delete found.errorMessage;
       await chrome.storage.local.set({ downloadHistory: list });

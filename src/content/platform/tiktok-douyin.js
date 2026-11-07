@@ -62,11 +62,44 @@ export default function(module, exports, require) {
     return newArray;
   }
 
+  function regeneratorDefine(obj, key, val, enumerableFlag) {
+    var defineProp = Object.defineProperty;
+    try {
+      defineProp({}, "", {});
+    } catch (_) {
+      defineProp = 0;
+    }
+    regeneratorDefine = function(target, prop, value, nonEnum) {
+      function bindMethod(methodName, methodCode) {
+        regeneratorDefine(target, methodName, function(arg) {
+          return this._invoke(methodName, methodCode, arg);
+        });
+      }
+      if (prop) {
+        if (defineProp) {
+          defineProp(target, prop, {
+            value: value,
+            enumerable: !nonEnum,
+            configurable: !nonEnum,
+            writable: !nonEnum
+          });
+        } else {
+          target[prop] = value;
+        }
+      } else {
+        bindMethod("next", 0);
+        bindMethod("throw", 1);
+        bindMethod("return", 2);
+      }
+    };
+    regeneratorDefine(obj, key, val, enumerableFlag);
+  }
+
   function c() {/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
     var t, e, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", i = r.toStringTag || "@@toStringTag";
     function o(r, n, i, o) {
       var s = n && n.prototype instanceof c ? n : c, l = Object.create(s.prototype);
-      return l(l, "_invoke", function(r, n, i) {
+      return regeneratorDefine(l, "_invoke", function(r, n, i) {
         var o, s, u, c = 0, l = i || [], f = !1, d = {
           p: 0,
           n: 0,
@@ -115,14 +148,14 @@ export default function(module, exports, require) {
     function l() {}
     function f() {}
     e = Object.getPrototypeOf;
-    var d = [][n] ? e(e([][n]())) : (l(e = {}, n, (function() { return this; })), e);
+    var d = [][n] ? e(e([][n]())) : (regeneratorDefine(e = {}, n, (function() { return this; })), e);
     var h = f.prototype = c.prototype = Object.create(d);
     function p(t) {
-      return Object.setPrototypeOf ? Object.setPrototypeOf(t, f) : (t.__proto__ = f, l(t, i, "GeneratorFunction")), t.prototype = Object.create(h), t;
+      return Object.setPrototypeOf ? Object.setPrototypeOf(t, f) : (t.__proto__ = f, regeneratorDefine(t, i, "GeneratorFunction")), t.prototype = Object.create(h), t;
     }
-    return l.prototype = f, l(h, "constructor", f), l(f, "constructor", l), l.displayName = "GeneratorFunction",
-      l(f, i, "GeneratorFunction"), l(h), l(h, i, "Generator"), l(h, n, (function() { return this; })),
-      l(h, "toString", (function() { return "[object Generator]"; })),
+    return l.prototype = f, regeneratorDefine(h, "constructor", f), regeneratorDefine(f, "constructor", l), l.displayName = "GeneratorFunction",
+      regeneratorDefine(f, i, "GeneratorFunction"), regeneratorDefine(h), regeneratorDefine(h, i, "Generator"), regeneratorDefine(h, n, (function() { return this; })),
+      regeneratorDefine(h, "toString", (function() { return "[object Generator]"; })),
       (c=function(){return{w:o,m:p}})()}
 
   function l(context, args, extra, generatorFn) {
@@ -241,7 +274,7 @@ export default function(module, exports, require) {
     var t, e, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", i = r.toStringTag || "@@toStringTag";
     function o(r, n, i, o) {
       var s = n && n.prototype instanceof c ? n : c, l = Object.create(s.prototype);
-      return A(l, "_invoke", function(r, n, i) {
+      return regeneratorDefine(l, "_invoke", function(r, n, i) {
         var o, s, u, c = 0, l = i || [], f = !1, d = {
           p: 0,
           n: 0,
@@ -290,14 +323,14 @@ export default function(module, exports, require) {
     function l() {}
     function f() {}
     e = Object.getPrototypeOf;
-    var d = [][n] ? e(e([][n]())) : (A(e = {}, n, (function() { return this; })), e);
+    var d = [][n] ? e(e([][n]())) : (regeneratorDefine(e = {}, n, (function() { return this; })), e);
     var h = f.prototype = c.prototype = Object.create(d);
     function p(t) {
-      return Object.setPrototypeOf ? Object.setPrototypeOf(t, f) : (t.__proto__ = f, A(t, i, "GeneratorFunction")), t.prototype = Object.create(h), t;
+      return Object.setPrototypeOf ? Object.setPrototypeOf(t, f) : (t.__proto__ = f, regeneratorDefine(t, i, "GeneratorFunction")), t.prototype = Object.create(h), t;
     }
-    return l.prototype = f, A(h, "constructor", f), A(f, "constructor", l), l.displayName = "GeneratorFunction",
-      A(f, i, "GeneratorFunction"), A(h), A(h, i, "Generator"), A(h, n, (function() { return this; })),
-      A(h, "toString", (function() { return "[object Generator]"; })),
+    return l.prototype = f, regeneratorDefine(h, "constructor", f), regeneratorDefine(f, "constructor", l), l.displayName = "GeneratorFunction",
+      regeneratorDefine(f, i, "GeneratorFunction"), regeneratorDefine(h), regeneratorDefine(h, i, "Generator"), regeneratorDefine(h, n, (function() { return this; })),
+      regeneratorDefine(h, "toString", (function() { return "[object Generator]"; })),
       (w=function(){return{w:o,m:p}})()}
 
   function A(context, args, extra, generatorFn) {
@@ -350,7 +383,8 @@ export default function(module, exports, require) {
   }
 
   function findTikTokVideoLinks(rootElement) {
-    var anchorList = rootElement ? Array.from(rootElement.querySelectorAll('a[href*="/video/"]')) : [];
+    var scope = rootElement !== void 0 ? rootElement : (typeof document !== "undefined" ? document : null);
+    var anchorList = scope && scope.querySelectorAll ? Array.from(scope.querySelectorAll('a[href*="/video/"]')) : [];
     return anchorList.filter(isTikTokAnchorLink);
   }
 
@@ -557,7 +591,7 @@ export default function(module, exports, require) {
 
   function resolveTikTokVideoFromNode(videoNode) {
     return asyncRunner2(this, void 0, void 0, w().m(function resolveGenerator() {
-      var itemRoot, previewTitle, awemeData, resolvedTitle, parsedBitrates, currentVid;
+      var itemRoot, previewTitle, awemeData, resolvedTitle, parsedBitrates, currentVid, scrapedData;
       return w().w(function(step) {
         for (;;) switch (step.n) {
           case 0:
@@ -595,14 +629,19 @@ export default function(module, exports, require) {
           case 4:
             currentVid = getTikTokItemId(videoNode) || getCurrentTikTokVideoId();
             if (currentVid) {
-              var scrapedData = scrapeUniversalDataById(currentVid, resolvedTitle || document.title);
-              if (scrapedData && scrapedData.length) {
-                return step.a(2, scrapedData);
-              }
+              step.n = 5;
+              return scrapeUniversalDataById(currentVid, resolvedTitle || document.title);
             }
-            step.n = 5;
+            step.n = 6;
             break;
           case 5:
+            scrapedData = step.v;
+            if (scrapedData && scrapedData.length) {
+              return step.a(2, scrapedData);
+            }
+            step.n = 6;
+            break;
+          case 6:
             var directVideo = videoNode && "VIDEO" === videoNode.tagName ? videoNode : (itemRoot ? itemRoot.querySelector("video") : null);
             var directSrc = directVideo ? (directVideo.currentSrc || directVideo.src) : null;
             if (directSrc && typeof directSrc === "string" && directSrc.startsWith("http")) {
@@ -680,10 +719,10 @@ export default function(module, exports, require) {
             case 3:
               anchorElem = findTikTokVideoLinks().find(a => getTikTokItemId(a) === id);
               if (!anchorElem) {
-                step.n = 4;
-                break;
+                return step.a(2, []);
               }
-              return step.a(2, []);
+              step.n = 4;
+              break;
             case 4:
               return step.a(2, resolveTikTokVideoFromNode(anchorElem));
           }
@@ -705,7 +744,7 @@ export default function(module, exports, require) {
     var t, e, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", i = r.toStringTag || "@@toStringTag";
     function o(r, n, i, o) {
       var s = n && n.prototype instanceof c ? n : c, l = Object.create(s.prototype);
-      return $(l, "_invoke", function(r, n, i) {
+      return regeneratorDefine(l, "_invoke", function(r, n, i) {
         var o, s, u, c = 0, l = i || [], f = !1, d = {
           p: 0,
           n: 0,
@@ -754,14 +793,14 @@ export default function(module, exports, require) {
     function l() {}
     function f() {}
     e = Object.getPrototypeOf;
-    var d = [][n] ? e(e([][n]())) : ($(e = {}, n, (function() { return this; })), e);
+    var d = [][n] ? e(e([][n]())) : (regeneratorDefine(e = {}, n, (function() { return this; })), e);
     var h = f.prototype = c.prototype = Object.create(d);
     function p(t) {
-      return Object.setPrototypeOf ? Object.setPrototypeOf(t, f) : (t.__proto__ = f, $(t, i, "GeneratorFunction")), t.prototype = Object.create(h), t;
+      return Object.setPrototypeOf ? Object.setPrototypeOf(t, f) : (t.__proto__ = f, regeneratorDefine(t, i, "GeneratorFunction")), t.prototype = Object.create(h), t;
     }
-    return l.prototype = f, $(h, "constructor", f), $(f, "constructor", l), l.displayName = "GeneratorFunction",
-      $(f, i, "GeneratorFunction"), $(h), $(h, i, "Generator"), $(h, n, (function() { return this; })),
-      $(h, "toString", (function() { return "[object Generator]"; })),
+    return l.prototype = f, regeneratorDefine(h, "constructor", f), regeneratorDefine(f, "constructor", l), l.displayName = "GeneratorFunction",
+      regeneratorDefine(f, i, "GeneratorFunction"), regeneratorDefine(h), regeneratorDefine(h, i, "Generator"), regeneratorDefine(h, n, (function() { return this; })),
+      regeneratorDefine(h, "toString", (function() { return "[object Generator]"; })),
       (V=function(){return{w:o,m:p}})()}
 
   function $(context, args, extra, generatorFn) {
@@ -1234,17 +1273,29 @@ export default function(module, exports, require) {
                 } catch (decodeErr) {
                   renderJson = null;
                 }
-                matchedKey = Object.keys(renderJson || {}).find(function(keyName) {
+                if (!renderJson || typeof renderJson !== "object") {
+                  step.n = 4;
+                  break;
+                }
+                matchedKey = Object.keys(renderJson).find(function(keyName) {
                   var resObj = renderJson[keyName]?.playRes || renderJson[keyName];
                   return resObj?.awemeData?.aweme?.detail;
                 });
-                firstDisplay = (renderJson[matchedKey].playRes || renderJson[matchedKey]).firstDisplayData;
-                videoFormat = firstDisplay.videoFormat;
+                if (!matchedKey || !renderJson[matchedKey]) {
+                  step.n = 4;
+                  break;
+                }
+                firstDisplay = (renderJson[matchedKey].playRes || renderJson[matchedKey])?.firstDisplayData;
+                if (!firstDisplay || !Array.isArray(firstDisplay.videoPlayInfo)) {
+                  step.n = 4;
+                  break;
+                }
+                videoFormat = firstDisplay.videoFormat || "mp4";
                 videoTitleClean = firstDisplay.videoCurrentPeriod + " - " + firstDisplay.videoTitle;
                 playInfoList = firstDisplay.videoPlayInfo.map(function(playItem) {
                   var mediaNode = urlUtils.f(playItem.main);
                   var def = playItem.definition;
-                  var qualLabel = mediaConstants.r[def]?.label || mediaConstants.r[playItem.height + "p"]?.label || mediaConstants.r["480p"].label;
+                  var qualLabel = mediaConstants.r[def]?.label || mediaConstants.r[playItem.height + "p"]?.label || mediaConstants.r["480p"]?.label;
                   return Object.assign(Object.assign({}, mediaNode), {
                     ext: videoFormat,
                     exts: [videoFormat],
@@ -1643,7 +1694,7 @@ export default function(module, exports, require) {
                   containerNode = videoElement.closest(".xg-video-container");
                   detailTitle = containerNode?.parentElement?.querySelector(".video-info-detail .title span")?.innerText ||
                     containerNode?.closest(".player-fullscreen-show-interaction")?.parentElement?.nextSibling?.innerText?.replace("\n", "-");
-                  mediaObj.filename = detailTitle || postTitle || extractDouyinVideoNickname(videoElement) || document.title;
+                  mediaObj.filename = detailTitle || postTitle || extractDouyinPageTitle(videoElement) || document.title;
                   douyinVideoTitleCache[mediaObj.url] = mediaObj.filename;
                 }
                 if (mediaObj.url?.includes?.("sites/standalone/helpcenter_pc")) {

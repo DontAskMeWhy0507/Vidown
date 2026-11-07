@@ -216,10 +216,10 @@ export default function (moduleObj, exportsObj, requireFn) {
   "||coccoc.com/search##video[data-savior-token]", "@@www.blogger.com/video.g?*",
   "@@www.youtube.com/embed/*", "@@www.dmm.co.jp/service/*", /i1-kinhdoanh.vnecdn.net\/.+\/.+?\.gif/,
   "@@xh.video/*"];
-  var list_s = [/video\.fhan.*?\.fna\.fbcdn\.net/, "/.[\\s\\S]{0,100}dailymotion.*\\/frag\\(\\d+\\)\\//",
+  var list_s = ["/.[\\s\\S]{0,100}dailymotion.*\\/frag\\(\\d+\\)\\//",
   "||fb88.mp4", /https?:\/\/(!=redirector)\.googlevideo\.com\/videoplayback?.+&source=youtube.+/,
-  "||vimeocdn.com/", "||clip.vn/", "||subs.xemphimonlines.com/", "||dmxleo.dailymotion.com/",
-  "||nhacrap.tv/", "||nixcdn.com/", "||zdn.vn/", "/fptplay\\.net\\/.*?seg\\d*-frag\\d*/",
+  "||clip.vn/", "||subs.xemphimonlines.com/", "||dmxleo.dailymotion.com/",
+  "||nhacrap.tv/", "/fptplay\\.net\\/.*?seg\\d*-frag\\d*/",
   "/hlscache\\.fptplay\\.net(?:\\.vn)?\\//", "/49ef4358-e34d-484f-a18e-495cd9fe3817",
   "/75247339-7897-437d-9627-55b1a1528700", "http://www.phimmoi.net/resource/video/blank.mp4",
   "http://xemvtv.net/kaka/blank2.mp4", /https?:\/\/.+\.gvt1\.com\/videoplayback\/.+/,

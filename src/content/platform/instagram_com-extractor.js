@@ -191,13 +191,18 @@ export default function (moduleObj, exportsObj, requireFn) {
   );
   }
   ,
-  var_f = new Map(),
-  obj_d = {
-  "x-asbd-id": 198387,
-  "x-csrftoken": "xvl5U8HSBDNKZnlUyZpYttlfwNqlgyLX",
-  "x-ig-app-id": 936619743392459,
-  "x-ig-www-claim": "hmac.AR3pCgbC5oTDxbVJznk08d3AjTjWdiH1XAOV0VUdxuR-q5tY"
-  };
+  var_f = new Map();
+  function getDynamicInstagramHeaders() {
+    var match = typeof document !== "undefined" && document.cookie ? document.cookie.match(/csrftoken=([^;]+)/) : null;
+    var csrf = match ? match[1] : "xvl5U8HSBDNKZnlUyZpYttlfwNqlgyLX";
+    return {
+      "x-asbd-id": "198387",
+      "x-csrftoken": csrf,
+      "x-ig-app-id": "936619743392459",
+      "x-requested-with": "XMLHttpRequest"
+    };
+  }
+  var obj_d = getDynamicInstagramHeaders();
   function var_h(param_t) {
   var var_e,
   var_r = param_t.closest("article");
@@ -271,8 +276,9 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 === var_e_1 ? void 0 : var_e_1.startsWith("/stories/"));
   }
   );
-  return (null == var_C ? void 0 : var_C[1].innerText) ? var_C[1].innerText :
-  null == var_C ? void 0 : var_C[2].innerText;
+  return (var_C && var_C[1] && var_C[1].innerText) ? var_C[1].innerText.trim() :
+  (var_C && var_C[2] && var_C[2].innerText) ? var_C[2].innerText.trim() :
+  (var_C && var_C[0] && var_C[0].innerText) ? var_C[0].innerText.trim() : "";
   }
   if (var_x) return null === (var_h_1 = null == var_x ? void 0 :
   var_x.innerText) || void 0 === var_h_1 ? void 0 : var_h_1.trim().slice(0, 40);
@@ -391,7 +397,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   if (!var_c_1) {
   var var_l = /("|')media_id("|'):\s*("|')(.+?)("|'),/.exec(var_s);
   return var_l ? fetch(`https://i.instagram.com/api/v1/media/${var_l[4]}/info/`, {
-  headers: obj_d,
+  headers: getDynamicInstagramHeaders(),
   credentials: "include"
   }
   ).then(param_t_1 => param_t_1.json()).then(param_t_1 => {
@@ -409,9 +415,14 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_h_1 = /("|')video_versions("|'):\s*(.+?\]),/.exec(var_s);
   return var_h_1 ? JSON.parse(var_h_1[3]).map(param_t_1 => {
   var var_e_1 = Object(dep_url_utils.f)(param_t_1.url);
-  return var_e_1.resolution = param_t_1.height + "p", var_e_1.quality = Object(dep_dom_utils.i18n)(
-  dep_media_constants.r[var_e_1.resolution].i18n_label), var_e_1.filename = var_u_1,
-  var_e_1.ext = "mp4", var_e_1.exts = ["mp4"], var_e_1.type = "video", [var_e_1];
+  var_e_1.resolution = param_t_1.height + "p";
+  var qualConst = dep_media_constants.r[var_e_1.resolution];
+  var_e_1.quality = qualConst ? Object(dep_dom_utils.i18n)(qualConst.i18n_label) : var_e_1.resolution;
+  var_e_1.filename = var_u_1;
+  var_e_1.ext = "mp4";
+  var_e_1.exts = ["mp4"];
+  var_e_1.type = "video";
+  return var_e_1;
   }
   ) : void 0;
   }
@@ -584,7 +595,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   ,
   mediaObjectChange: param_t => {
   var var_e = param_t.mediaObject;
-  return var_e.headers = obj_d, var_e.includeCredentials = !0, "video";
+  return var_e.headers = getDynamicInstagramHeaders(), var_e.includeCredentials = !0, "video";
   }
   }
   ,

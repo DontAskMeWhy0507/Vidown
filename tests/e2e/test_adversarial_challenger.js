@@ -32,7 +32,8 @@ const { ChromeCDPClient } = require('./cdp_client');
 const { validateMediaFile, FFMPEG_BIN, FFPROBE_BIN } = require('./media_validator');
 const { PLATFORM_TEST_CASES } = require('./test_platforms');
 
-const STRESS_DOWNLOAD_DIR = path.resolve('f:\\Vidown\\test_downloads\\adversarial_stress');
+const os = require('os');
+const STRESS_DOWNLOAD_DIR = path.join(os.tmpdir(), 'vidown_test_downloads', 'adversarial_stress');
 const CDP_PORT = 9338;
 const FIXTURE_PORT = 9448;
 

@@ -170,8 +170,8 @@ async function runAdversarialSuite() {
   });
 
   await testCase('TC-ADV-11: Mid-stream truncated MP4 (sliced from real video)', async () => {
-    // Copy first 2048 bytes of real test video tc-yt-01
-    const sourceVideo = path.resolve('f:\\Vidown\\test_downloads\\tc-yt-01_1793967212513.mp4');
+    // Copy first 2048 bytes of real test video
+    const sourceVideo = path.resolve(__dirname, '../fixtures/media/sample_1080p.mp4');
     assert.ok(fs.existsSync(sourceVideo), 'Source test video must exist');
     const partialBuf = Buffer.alloc(2048);
     const fd = fs.openSync(sourceVideo, 'r');
@@ -199,7 +199,7 @@ async function runAdversarialSuite() {
 
   await testCase('TC-ADV-13: Tiny / below-threshold image rejection', async () => {
     // Find an existing image and require minDimension > actual dimension
-    const realImg = path.resolve('f:\\Vidown\\test_downloads\\tc-fb-03_1793967226215.jpg');
+    const realImg = path.resolve(__dirname, '../fixtures/media/sample_photo.jpg');
     assert.ok(fs.existsSync(realImg), 'Real test image must exist');
     const res = await validateMediaFile(realImg, { minDimension: 4000 });
     assert.strictEqual(res.valid, false, 'Image below minDimension must be rejected');
@@ -210,17 +210,17 @@ async function runAdversarialSuite() {
   // --- SCHEMA AND CONSTRAINT STRESS-TESTS ---
 
   await testCase('TC-ADV-14: Media failing minDuration threshold rejection', async () => {
-    const realVideo = path.resolve('f:\\Vidown\\test_downloads\\tc-yt-01_1793967212513.mp4');
+    const realVideo = path.resolve(__dirname, '../fixtures/media/sample_1080p.mp4');
     assert.ok(fs.existsSync(realVideo));
-    const res = await validateMediaFile(realVideo, { minDuration: 300 }); // Real video is 12s
+    const res = await validateMediaFile(realVideo, { minDuration: 300 }); // Real video is 10s
     assert.strictEqual(res.valid, false, 'Video shorter than minDuration must be rejected');
     assert.strictEqual(res.stage, 'ffprobe');
     assert.ok(res.error.includes('less than expected minimum'), `Got: ${res.error}`);
   });
 
   await testCase('TC-ADV-15: Video failing minHeight resolution threshold rejection', async () => {
-    // tc-yt-02 is 1280x720, demand 1440 (2K)
-    const video720 = path.resolve('f:\\Vidown\\test_downloads\\tc-yt-02_1793967215110.mp4');
+    // sample_720p is 1280x720, demand 1440 (2K)
+    const video720 = path.resolve(__dirname, '../fixtures/media/sample_720p.mp4');
     assert.ok(fs.existsSync(video720));
     const res = await validateMediaFile(video720, { minHeight: 1440 });
     assert.strictEqual(res.valid, false, '720p video demanding 1440p must be rejected');
@@ -229,7 +229,7 @@ async function runAdversarialSuite() {
   });
 
   await testCase('TC-ADV-16: Video failing expected videoCodec rejection', async () => {
-    const videoH264 = path.resolve('f:\\Vidown\\test_downloads\\tc-yt-01_1793967212513.mp4');
+    const videoH264 = path.resolve(__dirname, '../fixtures/media/sample_1080p.mp4');
     assert.ok(fs.existsSync(videoH264));
     const res = await validateMediaFile(videoH264, { videoCodec: 'vp9' }); // Real codec is h264
     assert.strictEqual(res.valid, false, 'Video with codec mismatch must be rejected');
@@ -238,7 +238,7 @@ async function runAdversarialSuite() {
   });
 
   await testCase('TC-ADV-17: Video failing expected audioCodec rejection', async () => {
-    const videoAac = path.resolve('f:\\Vidown\\test_downloads\\tc-yt-01_1793967212513.mp4');
+    const videoAac = path.resolve(__dirname, '../fixtures/media/sample_1080p.mp4');
     assert.ok(fs.existsSync(videoAac));
     const res = await validateMediaFile(videoAac, { audioCodec: 'flac' }); // Real codec is aac
     assert.strictEqual(res.valid, false, 'Video with audio codec mismatch must be rejected');
@@ -247,7 +247,7 @@ async function runAdversarialSuite() {
   });
 
   await testCase('TC-ADV-18: Audio-only file when video stream is strictly required', async () => {
-    const audioMp3 = path.resolve('f:\\Vidown\\test_downloads\\tc-yt-07_1793967220004.mp3');
+    const audioMp3 = path.resolve(__dirname, '../fixtures/media/sample_audio.mp3');
     assert.ok(fs.existsSync(audioMp3));
     const res = await validateMediaFile(audioMp3, { requireVideo: true });
     assert.strictEqual(res.valid, false, 'Audio file demanding video stream must be rejected');
@@ -256,8 +256,8 @@ async function runAdversarialSuite() {
   });
 
   await testCase('TC-ADV-19: Video with missing audio stream when hasAudio is required', async () => {
-    // tc-pn-01 is silent video (no audio stream)
-    const silentVideo = path.resolve('f:\\Vidown\\test_downloads\\tc-pn-01_1793967251503.mp4');
+    // sample_video_only is silent video (no audio stream)
+    const silentVideo = path.resolve(__dirname, '../fixtures/media/sample_video_only.mp4');
     assert.ok(fs.existsSync(silentVideo));
     const res = await validateMediaFile(silentVideo, { hasAudio: true });
     assert.strictEqual(res.valid, false, 'Silent video demanding audio stream must be rejected');

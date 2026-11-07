@@ -345,7 +345,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   var list_s = [4320, 3072, 2160, 2048, 1440, 1080, 720, 540, 480, 360, 320, 270,
   240, 144];
-  var list_c = [/^(.+\.)?nixcdn\.com/im, /^(.+\.)?vcmedia\.vn/i, /^(.+\.)?kenhhd\.tv/i];
+  var list_c = [/^(.+\.)?vcmedia\.vn/i, /^(.+\.)?kenhhd\.tv/i];
   var list_l = [/coccoc\.com\/sitemap\.xml/i];
   var list_u = [/m\.naver\.com\/\/?shorts/i];
   var str_d = "hidePermanent";

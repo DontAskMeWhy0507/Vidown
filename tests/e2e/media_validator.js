@@ -23,7 +23,8 @@ function resolveBinary(name) {
   }
 
   // 2. Bundled native helper bin
-  const bundled = path.resolve(__dirname, `../../native/bin/${name}.exe`);
+  const ext = process.platform === 'win32' ? '.exe' : '';
+  const bundled = path.resolve(__dirname, `../../native/bin/${name}${ext}`);
   if (fs.existsSync(bundled)) {
     return bundled;
   }

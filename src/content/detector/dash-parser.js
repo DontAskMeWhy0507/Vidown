@@ -159,30 +159,69 @@ export default function(module, exports, require) {
       fetch("https://www.youtube.com/" + metadata.html5player)
         .then(response => response.text())
         .then(playerScriptText => {
-          var cipherRegex = /([a-zA-Z]+)(=function\([a-z]\))({a=a.split\(""\);(?!var)+?([\s\S])+?(}))/;
-          var matchResult = playerScriptText.match(cipherRegex);
-          var specialCharRegex = new RegExp(/[!@#$%^&*_+]/g);
+          var decipherFunction = null;
+          try {
+            var cipherRegex = /([a-zA-Z0-9_$]+)=function\([a-z]\)\{a=a\.split\(""\);([\s\S]+?)\.join\(""\)\}/;
+            var matchResult = playerScriptText.match(cipherRegex);
+            if (matchResult) {
+              var body = matchResult[2];
+              var calls = body.split(";").map(s => s.trim()).filter(Boolean);
+              if (calls.length) {
+                var firstCall = calls[0];
+                var objMatch = firstCall.match(/([a-zA-Z0-9_$]+)\.([a-zA-Z0-9_$]+)\(/);
+                if (objMatch) {
+                  var objName = objMatch[1];
+                  var helperRegex = new RegExp("(?:var\\s+)?(" + objName.replace(/[$]/g, "\\$") + ")=\\{([\\s\\S]+?)\\};");
+                  var helperMatch = playerScriptText.match(helperRegex);
+                  if (helperMatch) {
+                    var helperBody = helperMatch[2];
+                    var methodDefs = helperBody.split("},").map(m => m.trim());
+                    var opMap = {};
+                    methodDefs.forEach(def => {
+                      var mNameMatch = def.match(/([a-zA-Z0-9_$]+):function/);
+                      if (!mNameMatch) return;
+                      var mName = mNameMatch[1];
+                      if (def.includes("reverse")) {
+                        opMap[mName] = "reverse";
+                      } else if (def.includes("splice") || def.includes("slice")) {
+                        opMap[mName] = "splice";
+                      } else {
+                        opMap[mName] = "swap";
+                      }
+                    });
 
-          if (!metadata.formats[0].url && metadata.formats[0].signatureCipher && matchResult) {
-            var rawFuncCode = matchResult[0];
-            var funcNameTokens = rawFuncCode.split(";")[1];
-            var funcName = funcNameTokens ? funcNameTokens.match(/\w+/g)[0] : void 0;
-            var subFuncRegex = new RegExp("(\\s|\\n\\r)+" + funcName + "={+?([\\s\\S])+?(};)", "g");
-            if (funcName && funcName.match(specialCharRegex)) {
-              subFuncRegex = new RegExp("(\\s|\\n\\r)+\\" + funcName + "={+?([\\s\\S])+?(};)", "g");
+                    decipherFunction = function(cipherStr) {
+                      if (!cipherStr || typeof cipherStr !== "string") return cipherStr;
+                      var a = cipherStr.split("");
+                      for (var i = 0; i < calls.length; i++) {
+                        var cMatch = calls[i].match(/([a-zA-Z0-9_$]+)\.([a-zA-Z0-9_$]+)\(a(?:,\s*(\d+))?\)/);
+                        if (!cMatch) continue;
+                        var fn = cMatch[2];
+                        var arg = cMatch[3] ? parseInt(cMatch[3], 10) : 0;
+                        var op = opMap[fn];
+                        if (op === "reverse") {
+                          a.reverse();
+                        } else if (op === "splice") {
+                          a.splice(0, arg);
+                        } else if (op === "swap") {
+                          var tmp = a[0];
+                          a[0] = a[arg % a.length];
+                          a[arg % a.length] = tmp;
+                        }
+                      }
+                      return a.join("");
+                    };
+                  }
+                }
+              }
             }
-            var subFuncMatch = playerScriptText.match(subFuncRegex);
-            var subFuncCode = subFuncMatch ? subFuncMatch[0] : "";
-            window.subFunc = window.eval(subFuncCode || "");
-
-            var replaceRegex = new RegExp("" + funcName, "g");
-            rawFuncCode = rawFuncCode.replace(replaceRegex, "window.subFunc");
-            if (rawFuncCode.match(specialCharRegex)) {
-              rawFuncCode = rawFuncCode.replace(/[!@#$%^&*_+]/g, "\\$&").replace(replaceRegex, "window.subFunc");
-            }
-            var decipherFunction = window.eval(rawFuncCode);
-            extractFormatsFromConfig(resolveFn, metadata, decipherFunction);
+          } catch (e) {
+            decipherFunction = null;
           }
+          extractFormatsFromConfig(resolveFn, metadata, decipherFunction);
+        })
+        .catch(() => {
+          extractFormatsFromConfig(resolveFn, metadata);
         });
       return;
     }
@@ -392,6 +431,7 @@ export default function(module, exports, require) {
       .filter(item => {
         var key = item.quality + "_" + item.resolution + "_" + item.ext;
         if (item.quality && item.quality.toLowerCase().includes("tiny")) return false;
+        if (dedupeSet.has(key)) return false;
         dedupeSet.add(key);
         return true;
       });

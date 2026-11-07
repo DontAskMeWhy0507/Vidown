@@ -215,7 +215,7 @@ function setupAnti403Rules() {
   if (!chrome.declarativeNetRequest || !chrome.declarativeNetRequest.updateSessionRules) return;
   try {
     chrome.declarativeNetRequest.updateSessionRules({
-      removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008].concat([1009, 1010]),
+      removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008].concat([1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023]),
       addRules: [
         {
           id: 1001,
@@ -229,6 +229,203 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*fbcdn.net/*',
+            initiatorDomains: ['facebook.com'],
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1011,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.instagram.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.instagram.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*fbcdn.net/*',
+            initiatorDomains: ['instagram.com'],
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1012,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.tiktok.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.tiktok.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*tiktokcdn-us.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1013,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.tiktok.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.tiktok.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*tiktokcdn-eu.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1014,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.douyin.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.douyin.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*douyinvod.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1015,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.douyin.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.douyin.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*zjcdn.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1016,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.douyin.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.douyin.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*bytevd.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1017,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.bilibili.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.bilibili.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*bilivideo.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1018,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.bilibili.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.bilibili.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*hdslb.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1019,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://x.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://x.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*twimg.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1020,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.xiaohongshu.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.xiaohongshu.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*xhscdn.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1021,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://weibo.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://weibo.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*weibocdn.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1022,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://vimeo.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://vimeo.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*vimeocdn.com/*',
+            resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1023,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://vimeo.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://vimeo.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*vod-progressive.akamaized.net/*',
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -642,11 +839,17 @@ function formatSpeed(bytesPerSec) {
 
 function requiresNativeHelper(options) {
   if (!options) return false;
-  const url = options.videoUrl || options.url || '';
+  const rawUrlObj = (options.url && typeof options.url === 'object' && !Array.isArray(options.url)) ? options.url : null;
+  const videoUrl = options.videoUrl || (rawUrlObj && rawUrlObj.videoUrl) || '';
+  const audioUrl = options.audioUrl || (rawUrlObj && rawUrlObj.audioUrl) || '';
+  const url = String(videoUrl || (typeof options.url === 'string' ? options.url : '') || '').toLowerCase();
   if (options.convertToMp3 || options.convertToMp4 || options.soundOnly || options.streamsNumber === -42 || options.streamsNumber === -43) {
     return true;
   }
-  if (options.videoUrl && options.audioUrl && options.videoUrl !== options.audioUrl) {
+  if (videoUrl && audioUrl && videoUrl !== audioUrl) {
+    return true;
+  }
+  if (options.play_list || options.playList || options.hls || options.isHls || options.isConversionStream) {
     return true;
   }
   if (
@@ -654,7 +857,9 @@ function requiresNativeHelper(options) {
     url.includes('/hls/') ||
     url.includes('format=m3u8') ||
     url.includes('type=m3u8') ||
-    url.includes('playlist')
+    url.includes('playlist') ||
+    url.includes('.mpd') ||
+    url.includes('/dash/')
   ) {
     return true;
   }
@@ -810,7 +1015,7 @@ function hasActiveTaskForUrl(url) {
 const inFlightBrowserDownloads = new Map();
 
 function isUrlRecentlyRequested(u) {
-  if (!u) return false;
+  if (!u || typeof u !== 'string' || /^https:\/\/(www\.)?google\.com\/?$/i.test(u)) return false;
   const now = Date.now();
   if (inFlightBrowserDownloads.has(u) && (now - inFlightBrowserDownloads.get(u) < 4000)) {
     return true;
@@ -828,6 +1033,11 @@ function startBrowserDownload(options, callback) {
   }
   const targetUrl = options.videoUrl || options.url;
   if (!targetUrl) {
+    if (typeof callback === 'function') callback(null);
+    return false;
+  }
+  if (requiresNativeHelper(options)) {
+    console.warn('[Savior] startBrowserDownload cannot process playlist, combined stream, or conversion without native helper:', targetUrl);
     if (typeof callback === 'function') callback(null);
     return false;
   }
@@ -1254,16 +1464,22 @@ function openOrFocusDownloadsManager() {
 // the 15s heartbeat already pings once connected).
 let nativeProbePromise = null;
 let nativeProbeSettled = false;
+let nativeProbeFinish = null;
 
 function probeNativeHelper() {
   if (nativeProbePromise) return nativeProbePromise;
   nativeProbePromise = new Promise((resolve) => {
+    let settled = false;
     const finish = (ok) => {
+      if (settled) return;
+      settled = true;
+      if (nativeProbeFinish === finish) nativeProbeFinish = null;
       nativeProbeSettled = true;
       nativeHelperAvailable = ok;
       if (!ok) console.log('[Savior] Native helper not detected.');
       resolve(ok);
     };
+    nativeProbeFinish = finish;
     try {
       const port = getOrCreateNativePort();
       if (!port) return finish(false);
@@ -1280,6 +1496,7 @@ function probeNativeHelper() {
 probeNativeHelper();
 
 async function ensureNativeHelperReady() {
+  if (nativeProbeSettled) return nativeHelperAvailable;
   if (nativeHelperAvailable && activeNativePort) return true;
   nativeProbePromise = null;
   try {
@@ -1313,6 +1530,11 @@ function getOrCreateNativePort() {
       console.warn('[Savior] Native host disconnected:', errorMsg);
       activeNativePort = null;
       nativeHelperAvailable = false;
+      if (typeof nativeProbeFinish === 'function') {
+        const fn = nativeProbeFinish;
+        nativeProbeFinish = null;
+        fn(false);
+      }
       nativeProbePromise = null;
       // Allow a fresh probe on the next attempt — otherwise the availability
       // guard in startNativeDownload keeps forcing browser fallback forever.
@@ -1381,7 +1603,22 @@ function processNextQueuedNativeDownload() {
     if (task) {
       task.state = 'downloading';
     }
-    startNativeDownload(next.params, next.callback);
+    const started = startNativeDownload(next.params, next.callback);
+    if (!started) {
+      console.warn('[Savior] Queued native download failed to start:', next.params);
+      if (task) {
+        task.state = 'error';
+        task.error = 'START_FAILED';
+        activeDownloads.delete(task.id);
+        updateDownloadHistory({
+          id: task.id,
+          state: 'error',
+          error: 'START_FAILED',
+          errorMessage: 'Failed to start download.'
+        });
+      }
+      setTimeout(processNextQueuedNativeDownload, 50);
+    }
   }
 }
 
@@ -1443,6 +1680,12 @@ function findBestStreamFromList(list) {
 }
 
 function isBogusStreamUrl(url, pageUrl) {
+  const options = arguments[2];
+  if (options && (options.play_list || options.playList)) return false;
+  if (url && typeof url === 'object' && !Array.isArray(url)) {
+    if (url.play_list || url.playList) return false;
+    url = url.videoUrl || url.url || '';
+  }
   if (Array.isArray(url)) url = url.find(u => typeof u === 'string' && u) || '';
   if (!url || typeof url !== 'string') return true;
   const clean = url.trim().toLowerCase();
@@ -1454,19 +1697,21 @@ function isBogusStreamUrl(url, pageUrl) {
     clean.includes('google.com/search') ||
     clean === 'https://google.com' ||
     clean === 'https://google.com/' ||
+    clean === 'https://www.google.com' ||
+    clean === 'https://www.google.com/' ||
     clean.includes('blob:a.a')
   ) {
     return true;
   }
-  // Static assets and non-media extensions
-  if (/\.(otf|ttf|woff2?|jpe?g|png|webp|svg|gif|key|css|js|json|xml|vtt|srt)(\?|$)/i.test(clean)) {
+  // Static assets and non-media extensions (exclude fonts, scripts, stylesheets, raw images)
+  if (/\.(otf|ttf|woff2?|jpe?g|png|webp|svg|gif|css|js)(\?|$)/i.test(clean)) {
     return true;
   }
   try {
     const parsed = new URL(url);
     const pathname = parsed.pathname.toLowerCase();
     // Bare origins, root, or index paths are webpages, not streams
-    if (!pathname || pathname === '/' || pathname === '/index.html' || pathname === '/index.php') {
+    if (!pathname || (pathname === '/' && !parsed.search) || pathname === '/index.html' || pathname === '/index.php') {
       return true;
     }
     // Equals the host webpage or its origin
@@ -1486,12 +1731,20 @@ function isBogusStreamUrl(url, pageUrl) {
       }
     }
     // Check for presence of media signatures
-    const hasMediaExt = /\.(mp4|m3u8|mpd|webm|mkv|mov|ts|m4s|mp3|m4a|aac|flac|wav|ogg)(\?|$)/i.test(clean);
+    const hasMediaExt = /\.(mp4|m3u8|mpd|webm|mkv|mov|ts|m4s|mp3|m4a|aac|flac|wav|ogg|vtt|srt)(\?|$)/i.test(clean);
     const hasMediaMime = /mime(_type)?=(video|audio)|format=(m3u8|mpd|mp4)|type=(m3u8|mpd|mp4)|amplify_video|videoplayback|media_type=video/i.test(clean);
     const hasStreamSignature = hasMediaExt || hasMediaMime ||
       clean.includes('/m3u8/') || clean.includes('/hls/') || clean.includes('/video/tos/') ||
       clean.includes('tiktokcdn.com') || clean.includes('byteoversea.com') || clean.includes('ibytedtos.com') ||
-      clean.includes('googlevideo.com') || clean.includes('fbcdn.net') || clean.includes('cdninstagram.com');
+      clean.includes('tiktokcdn-us.com') || clean.includes('tiktokcdn-eu.com') ||
+      clean.includes('douyinvod.com') || clean.includes('zjcdn.com') || clean.includes('bytevd.com') || clean.includes('bytedance.net') ||
+      clean.includes('googlevideo.com') || clean.includes('fbcdn.net') || clean.includes('cdninstagram.com') ||
+      clean.includes('bilivideo.com') || clean.includes('hdslb.com') || clean.includes('biliapi.net') ||
+      clean.includes('xhscdn.com') || clean.includes('weibocdn.com') || clean.includes('vimeocdn.com') ||
+      clean.includes('vod-progressive.akamaized.net') || clean.includes('dmcdn.net') ||
+      clean.includes('vkusercontents.com') || clean.includes('mycdn.me') || clean.includes('sndcdn.com') ||
+      clean.includes('zadn.vn') || clean.includes('zmdcdn.me') || clean.includes('nixcdn.com') ||
+      clean.includes('fptplay.net') || clean.includes('vieon.vn') || clean.includes('twimg.com');
     if (!hasStreamSignature) {
       return true;
     }
@@ -1544,33 +1797,45 @@ function resolveRealStreamForDownload(targetUrl, pageUrl, tabId) {
     if (found) return found;
   }
 
-  // 4. Fallback: Return the most recent stream found across all pages
-  for (const list of Array.from(sniffedStreamsByPage.values()).reverse()) {
-    const found = findBestStreamFromList(list);
-    if (found) return found;
-  }
-
   return targetUrl;
 }
 
 function startNativeDownload(downloadParams, callback) {
-  // Normalize stream sources to a single string: some bundle download flows
-  // (YouTube DASH) pass url/videoUrl as an ARRAY of candidate streams.
   const normalizeStreamField = (v) => {
+    if (!v) return '';
+    if (typeof v === 'string') return v;
     if (Array.isArray(v)) return v.find(u => typeof u === 'string' && u) || '';
-    return (typeof v === 'string') ? v : '';
+    return (typeof v === 'object') ? (v.videoUrl || v.url || '') : '';
   };
+  if (downloadParams.url && typeof downloadParams.url === 'object' && !Array.isArray(downloadParams.url) && !downloadParams.audioUrl && downloadParams.url.audioUrl) {
+    downloadParams.audioUrl = downloadParams.url.audioUrl;
+  }
   downloadParams.url = normalizeStreamField(downloadParams.url);
   downloadParams.videoUrl = normalizeStreamField(downloadParams.videoUrl);
   if (Array.isArray(downloadParams.audioUrl)) {
     downloadParams.audioUrl = downloadParams.audioUrl.find(u => typeof u === 'string' && u) || '';
+  } else if (downloadParams.audioUrl && typeof downloadParams.audioUrl === 'object') {
+    downloadParams.audioUrl = downloadParams.audioUrl.audioUrl || downloadParams.audioUrl.url || '';
   }
 
-  // Availability guard: once the boot probe has settled and the native host is
-  // known to be absent, fail fast so callers fall back to the browser download
-  // engine instead of creating tasks that die on port disconnect.
   if (nativeProbeSettled && !nativeHelperAvailable) {
-    console.warn('[Savior] Native helper unavailable (probe failed); using browser fallback');
+    console.warn('[Savior] Native helper unavailable (probe failed); checking if native host required');
+    const needsNative = requiresNativeHelper(downloadParams);
+    if (needsNative) {
+      const fakeId = downloadParams.taskId || ++fakeIdCounter;
+      updateDownloadHistory({
+        id: fakeId,
+        title: downloadParams.title || downloadParams.filename || 'video',
+        filename: downloadParams.filename || 'video.mp4',
+        url: downloadParams.videoUrl || downloadParams.url || '',
+        state: 'error',
+        error: 'NATIVE_HOST_REQUIRED',
+        errorMessage: 'VidManager Native Helper is required to download HLS/DASH streams and mux high-definition video.',
+        startTime: Date.now(),
+        endTime: Date.now()
+      });
+      if (typeof callback === 'function') callback(null);
+    }
     return false;
   }
   const port = getOrCreateNativePort();
@@ -1586,22 +1851,33 @@ function startNativeDownload(downloadParams, callback) {
     : (downloadParams.referrer && !downloadParams.referrer.startsWith('chrome-extension:')
         ? downloadParams.referrer
         : currentActiveTabUrl);
-  const resolvedTarget = resolveRealStreamForDownload(targetUrl, effectivePage, downloadParams.tabId);
-  if (resolvedTarget && resolvedTarget !== targetUrl) {
-    console.log(`[Savior] Swapped placeholder/blob url "${targetUrl}" with sniffed stream "${resolvedTarget}"`);
-    targetUrl = resolvedTarget;
-    downloadParams.url = resolvedTarget;
-    downloadParams.videoUrl = resolvedTarget;
-    if (resolvedTarget.includes('.m3u8')) {
-      downloadParams.isConversionStream = true;
+  const hasPlayList = Boolean(downloadParams.play_list || downloadParams.playList);
+  if (!hasPlayList) {
+    const resolvedTarget = resolveRealStreamForDownload(targetUrl, effectivePage, downloadParams.tabId);
+    if (resolvedTarget && resolvedTarget !== targetUrl) {
+      console.log(`[Savior] Swapped placeholder/blob url "${targetUrl}" with sniffed stream "${resolvedTarget}"`);
+      targetUrl = resolvedTarget;
+      downloadParams.url = resolvedTarget;
+      downloadParams.videoUrl = resolvedTarget;
+      if (resolvedTarget.includes('.m3u8')) {
+        downloadParams.isConversionStream = true;
+      }
     }
+  } else {
+    if (!targetUrl) {
+      targetUrl = 'https://www.google.com';
+      downloadParams.url = targetUrl;
+      downloadParams.videoUrl = targetUrl;
+    }
+    downloadParams.isConversionStream = true;
+    downloadParams.hls = true;
   }
 
   // The Cốc Cốc bundle fires a "pre-resolution" download request with empty
   // URLs (just the quality label) ~100ms before the real one arrives. Starting
   // a native task for it produced a ghost history card stuck at 1% plus a
   // pointless browser-fallback roundtrip. Nothing to download = no task.
-  if (!targetUrl || isBogusStreamUrl(targetUrl, effectivePage)) {
+  if (!targetUrl || isBogusStreamUrl(targetUrl, effectivePage, downloadParams)) {
     console.warn('[Savior] No downloadable stream URL resolved; skipping native download');
     return false;
   }
@@ -1971,12 +2247,14 @@ function startNativeDownload(downloadParams, callback) {
       url: downloadParams.url || '',
       videoUrl: downloadParams.videoUrl || downloadParams.url || '',
       audioUrl: downloadParams.audioUrl || '',
+      play_list: downloadParams.play_list || downloadParams.playList || '',
       title: safeFilename.replace(/\.[^.]+$/, ''),
       filename: safeFilename,
       referer: downloadParams.referrer || resolvedPageUrl,
       pageUrl: resolvedPageUrl,
       quality: downloadParams.convertToMp3 || downloadParams.soundOnly ? 'audio' : (downloadParams.quality || 'best'),
       soundOnly: Boolean(downloadParams.soundOnly),
+      convertToMp3: Boolean(downloadParams.convertToMp3 || downloadParams.soundOnly),
       cookie: downloadParams.cookie || sessionCookie || '',
       outputDir: downloadParams.outputDir || configuredDownloadDir || '',
       taskId: fakeId
@@ -2231,10 +2509,9 @@ function startStreamRelayDownload(downloadParams, callback) {
 
     try {
       const headers = {};
-      if (task.referer) headers['Referer'] = task.referer;
-
-      const isCdnStream = /tiktokcdn\.com|byteoversea\.com|ibytedtos\.com|akamaized\.net|fbcdn\.net|googlevideo\.com/i.test(targetUrl);
-      const fetchCreds = isCdnStream ? 'omit' : 'include'; // Uses credentials: 'include' for same-origin session streams
+      const isTikTokOrDouyin = /tiktok|douyin|byteoversea|ibytedtos|bytevd|zjcdn/i.test(targetUrl) || /tiktok\.com|douyin\.com/i.test(resolvedPageUrl);
+      const isCdnStream = !isTikTokOrDouyin && false;
+      const fetchCreds = isCdnStream ? 'omit' : 'include'; // Uses credentials: 'include' for same-origin and TikTok/Douyin session streams
 
       const fetchWithTimeout = async (url, opts = {}, timeoutMs = 15000) => {
         const ctrl = new AbortController();
@@ -2276,23 +2553,43 @@ function startStreamRelayDownload(downloadParams, callback) {
       if (!probeOk) throw new Error('HTTP ' + probe.status);
 
       if (rangeCapable && total >= MIN_SPLIT_SIZE) {
-        // Multi-threaded: WORKERS parallel Range fetches, each pumping into
-        // its own slice of the file. One abort signal kills them all on Cancel.
-        const slice = Math.ceil(total / WORKERS);
-        const jobs = [];
-        for (let w = 0; w < WORKERS; w++) {
-          const start = w * slice;
-          if (start >= total) break;
-          const end = Math.min(total - 1, start + slice - 1);
-          jobs.push((async () => {
-            const r = await fetchWithTimeout(targetUrl, { credentials: fetchCreds, headers: { ...headers, Range: `bytes=${start}-${end}` }, signal: abortCtrl.signal }, 25000);
-            if (!r.ok && r.status !== 206) throw new Error('HTTP ' + r.status);
-            await pumpBody(r.body, start);
-          })());
+        let fallbackToSingle = false;
+        try {
+          // Multi-threaded: WORKERS parallel Range fetches, each pumping into
+          // its own slice of the file. One abort signal kills them all on Cancel.
+          const slice = Math.ceil(total / WORKERS);
+          const splitAbortCtrl = new AbortController();
+          const onParentAbort = () => splitAbortCtrl.abort(abortCtrl.signal.reason);
+          abortCtrl.signal.addEventListener('abort', onParentAbort, { once: true });
+
+          const jobs = [];
+          for (let w = 0; w < WORKERS; w++) {
+            const start = w * slice;
+            if (start >= total) break;
+            const end = Math.min(total - 1, start + slice - 1);
+            jobs.push((async () => {
+              const r = await fetchWithTimeout(targetUrl, { credentials: fetchCreds, headers: { ...headers, Range: `bytes=${start}-${end}` }, signal: splitAbortCtrl.signal }, 25000);
+              if (r.status === 200) {
+                splitAbortCtrl.abort(new Error('RANGE_UNSUPPORTED_STATUS_200'));
+                throw new Error('RANGE_UNSUPPORTED_STATUS_200');
+              }
+              if (!r.ok || r.status !== 206) throw new Error('HTTP ' + r.status);
+              await pumpBody(r.body, start);
+            })());
+          }
+          await Promise.all(jobs);
+          port.postMessage({ action: 'streamEnd', taskId: fakeId });
+          return;
+        } catch (splitErr) {
+          if (abortCtrl.signal.aborted) return;
+          if (splitErr && (splitErr.message === 'RANGE_UNSUPPORTED_STATUS_200' || splitErr.name === 'RANGE_UNSUPPORTED_STATUS_200')) {
+            console.log('[Savior] Range request returned 200 OK; falling back to single stream');
+            bytesRelayed = 0;
+            fallbackToSingle = true;
+          } else {
+            throw splitErr;
+          }
         }
-        await Promise.all(jobs);
-        port.postMessage({ action: 'streamEnd', taskId: fakeId });
-        return;
       }
 
       // Single stream: small file, or the CDN ignores Range headers.
@@ -2360,17 +2657,19 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         .trim();
       const safeFilename = `${baseTitle}.${ext}`;
 
-      const rawUrl = params.url || params.videoUrl || '';
+      const rawUrl = (params.url && typeof params.url === 'object' ? params.url.videoUrl : params.url) || params.videoUrl || '';
       if (isUrlRecentlyRequested(rawUrl)) {
         console.log('[Savior] Duplicate download action suppressed in-flight:', rawUrl);
         sendResponse({ success: true, duplicate: true });
         return false;
       }
 
+      const urlObj = (params.url && typeof params.url === 'object' && !Array.isArray(params.url)) ? params.url : null;
       const opts = {
         url: rawUrl,
-        videoUrl: params.videoUrl || params.url || '',
-        audioUrl: params.audioUrl || '',
+        videoUrl: (urlObj ? urlObj.videoUrl : params.videoUrl) || rawUrl,
+        audioUrl: (urlObj && urlObj.audioUrl) || params.audioUrl || '',
+        play_list: params.play_list || params.playList || (req.data && (req.data.play_list || req.data.playList)) || '',
         filename: safeFilename,
         title: baseTitle,
         referrer: params.referrer || (sender && sender.tab && sender.tab.url) || '',
@@ -2380,13 +2679,29 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         tabId: (sender && sender.tab && sender.tab.id) || undefined
       };
       let started = false;
-      if (isSessionProtectedStream(opts) && nativeHelperAvailable && !opts._relayFailed && !opts.audioUrl && !opts.convertToMp3 && !opts.soundOnly) {
+      if (isSessionProtectedStream(opts) && nativeHelperAvailable && !opts._relayFailed && !opts.audioUrl && !opts.convertToMp3 && !opts.soundOnly && !opts.play_list) {
         started = startStreamRelayDownload(opts);
       }
-      if (!started) {
+      if (!started && nativeHelperAvailable) {
         started = startNativeDownload(opts);
       }
       if (!started) {
+        if (!nativeHelperAvailable && requiresNativeHelper(opts)) {
+          const fakeId = ++fakeIdCounter;
+          updateDownloadHistory({
+            id: fakeId,
+            title: baseTitle,
+            filename: safeFilename,
+            url: opts.videoUrl || opts.url || '',
+            state: 'error',
+            error: 'NATIVE_HOST_REQUIRED',
+            errorMessage: 'VidManager Native Helper is required to download HLS/DASH streams and mux high-definition video.',
+            startTime: Date.now(),
+            endTime: Date.now()
+          });
+          sendResponse({ success: false, error: 'NATIVE_HOST_REQUIRED' });
+          return false;
+        }
         if (isSessionProtectedStream(opts)) startCocCocSessionDownload(opts);
         else if (!opts._relayFailed && startStreamRelayDownload(opts)) { opts._relayFailed = true; }
         else startBrowserDownload(opts);
@@ -2880,9 +3195,8 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     default:
-      if (typeof sendResponse === 'function') {
-        sendResponse({ success: false, error: `Unhandled action: ${req.action}` });
-      }
+      // Return false without invoking sendResponse so subsequent listeners
+      // (such as service-worker-entry.js) can handle other message types asynchronously.
       return false;
   }
 });
@@ -3036,17 +3350,34 @@ chrome.downloads.download = function(options, callback) {
   }
 
   if (options) {
+    if (options.url && typeof options.url === 'object' && !Array.isArray(options.url)) {
+      if (!options.videoUrl && options.url.videoUrl) options.videoUrl = options.url.videoUrl;
+      if (!options.audioUrl && options.url.audioUrl) options.audioUrl = options.url.audioUrl;
+      options.url = options.videoUrl || options.url.url || '';
+    }
+    if (!options.play_list && options.playList) {
+      options.play_list = options.playList;
+    }
+    const hasPlaylist = Boolean(options.play_list);
     const rawReqUrl = options.videoUrl || options.url || '';
     const effectivePage = (options.pageUrl && !options.pageUrl.startsWith('chrome-extension:') && !options.pageUrl.startsWith('about:'))
       ? options.pageUrl
       : (options.referrer && !options.referrer.startsWith('chrome-extension:')
           ? options.referrer
           : currentActiveTabUrl);
-    const realStream = resolveRealStreamForDownload(rawReqUrl, effectivePage, options.tabId);
-    if (realStream && realStream !== rawReqUrl) {
-      console.log(`[Savior] Intercepted chrome.downloads.download: swapped placeholder "${rawReqUrl}" with "${realStream}"`);
-      options.url = realStream;
-      options.videoUrl = realStream;
+    if (!hasPlaylist) {
+      const realStream = resolveRealStreamForDownload(rawReqUrl, effectivePage, options.tabId);
+      if (realStream && realStream !== rawReqUrl) {
+        console.log(`[Savior] Intercepted chrome.downloads.download: swapped placeholder "${rawReqUrl}" with "${realStream}"`);
+        options.url = realStream;
+        options.videoUrl = realStream;
+        options.isConversionStream = true;
+      }
+    } else {
+      if (!options.url && !options.videoUrl) {
+        options.url = 'https://www.google.com';
+        options.videoUrl = 'https://www.google.com';
+      }
       options.isConversionStream = true;
     }
   }
@@ -3068,7 +3399,7 @@ chrome.downloads.download = function(options, callback) {
         effPage && t.pageUrl && effPage === t.pageUrl &&
         options.filename && t.filename && options.filename.toLowerCase() === t.filename.toLowerCase()
       );
-      if (t.url === reqUrl || tAudio === reqUrl || (t.params && (t.params.videoUrl === reqUrl || t.params.url === reqUrl)) || samePageAndTitle) {
+      if ((!options || !options.play_list) && (t.url === reqUrl || tAudio === reqUrl || (t.params && (t.params.videoUrl === reqUrl || t.params.url === reqUrl)) || samePageAndTitle)) {
         console.log('[Savior] Duplicate/trick download call ignored for active task:', id);
         if (typeof callback === 'function') callback(id);
         return;
@@ -3077,7 +3408,7 @@ chrome.downloads.download = function(options, callback) {
   }
 
   // Reject bogus webpage targets upfront so they never hang at 1% or save HTML
-  if (!reqUrl || isBogusStreamUrl(reqUrl, effPage)) {
+  if (!reqUrl || isBogusStreamUrl(reqUrl, effPage, options)) {
     console.warn('[Savior] chrome.downloads.download rejected bogus media target:', reqUrl);
     const taskId = options.taskId || `bogus_${Date.now()}`;
     const errText = 'Video stream not found. Please play the video for VidManager to detect stream.';
@@ -3102,7 +3433,7 @@ chrome.downloads.download = function(options, callback) {
   // so Chrome's network stack fetches the authenticated stream and Native Helper
   // writes it straight to disk — completely bypassing chrome.downloads.download
   // and eliminating Chrome's "Save As" popup!
-  if (isSessionProtectedStream(options) && nativeHelperAvailable && !options._relayFailed && !options.audioUrl && !options.convertToMp3 && !options.soundOnly) {
+  if (isSessionProtectedStream(options) && nativeHelperAvailable && !options._relayFailed && !options.audioUrl && !options.convertToMp3 && !options.soundOnly && !options.play_list) {
     const relayStarted = startStreamRelayDownload(options, callback);
     if (relayStarted) return;
   }
@@ -3112,6 +3443,29 @@ chrome.downloads.download = function(options, callback) {
   if (nativeHelperAvailable) {
     const started = startNativeDownload(options, callback);
     if (started) return;
+  } else if (requiresNativeHelper(options)) {
+    console.warn('[Savior] Native helper required but unavailable for:', options.videoUrl || options.url);
+    const fakeId = options.taskId || ++fakeIdCounter;
+    const baseTitle = (options.title || options.filename || 'video')
+      .replace(/\.[a-zA-Z0-9]+$/, '')
+      .replace(/[<>:"/\\|?*]/g, '_')
+      .trim();
+    const isAudio = Boolean(options.convertToMp3 || options.soundOnly);
+    const ext = isAudio ? 'mp3' : (options.ext || 'mp4');
+    const safeFilename = `${baseTitle}.${ext}`;
+    updateDownloadHistory({
+      id: fakeId,
+      title: baseTitle,
+      filename: safeFilename,
+      url: options.videoUrl || options.url || '',
+      state: 'error',
+      error: 'NATIVE_HOST_REQUIRED',
+      errorMessage: 'VidManager Native Helper is required to download HLS/DASH streams and mux high-definition video.',
+      startTime: Date.now(),
+      endTime: Date.now()
+    });
+    if (typeof callback === 'function') callback(null);
+    return;
   }
 
   // 2. Session-protected streams fallback when Native Helper is unavailable

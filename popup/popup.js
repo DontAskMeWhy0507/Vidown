@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item.state === 'downloading') {
           const isAct = activeTaskIds.includes(String(item.id)) || (item.chromeId && activeTaskIds.includes(String(item.chromeId)));
           if (!isAct) {
-            if (item.outputFile || item.outputPath || isFinished) {
+            if (isFinished) {
               item.state = 'completed';
               item.percent = '100%';
               storageNeedsHealing = true;
@@ -386,6 +386,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     item.state = 'downloading';
     item.speed = 'Reconnecting...';
+    item.percent = '0%';
+    delete item.outputFile;
+    delete item.outputPath;
+    delete item.endTime;
     delete item.error;
     delete item.errorMessage;
 
@@ -396,6 +400,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (found) {
           found.state = 'downloading';
           found.speed = 'Reconnecting...';
+          found.percent = '0%';
+          delete found.outputFile;
+          delete found.outputPath;
+          delete found.endTime;
           delete found.error;
           delete found.errorMessage;
           chrome.storage.local.set({ downloadHistory: list });

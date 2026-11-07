@@ -2313,7 +2313,7 @@ function (moduleObj, exportsObj, requireFn) {
   }
   var list_s = [4320, 3072, 2160, 2048, 1440, 1080, 720, 540, 480, 360, 320, 270,
   240, 144];
-  var list_c = [/^(.+\.)?nixcdn\.com/im, /^(.+\.)?vcmedia\.vn/i, /^(.+\.)?kenhhd\.tv/i];
+  var list_c = [/^(.+\.)?vcmedia\.vn/i, /^(.+\.)?kenhhd\.tv/i];
   var list_u = [/coccoc\.com\/sitemap\.xml/i];
   var list_l = [/m\.naver\.com\/\/?shorts/i];
   var str_d = "hidePermanent";
@@ -5747,10 +5747,10 @@ function (moduleObj, exportsObj, requireFn) {
   "||coccoc.com/search##video[data-savior-token]", "@@www.blogger.com/video.g?*",
   "@@www.youtube.com/embed/*", "@@www.dmm.co.jp/service/*", /i1-kinhdoanh.vnecdn.net\/.+\/.+?\.gif/,
   "@@xh.video/*"];
-  var list_s = [/video\.fhan.*?\.fna\.fbcdn\.net/, "/.[\\s\\S]{0,100}dailymotion.*\\/frag\\(\\d+\\)\\//",
+  var list_s = ["/.[\\s\\S]{0,100}dailymotion.*\\/frag\\(\\d+\\)\\//",
   "||fb88.mp4", /https?:\/\/(!=redirector)\.googlevideo\.com\/videoplayback?.+&source=youtube.+/,
-  "||vimeocdn.com/", "||clip.vn/", "||subs.xemphimonlines.com/", "||dmxleo.dailymotion.com/",
-  "||nhacrap.tv/", "||nixcdn.com/", "||zdn.vn/", "/fptplay\\.net\\/.*?seg\\d*-frag\\d*/",
+  "||clip.vn/", "||subs.xemphimonlines.com/", "||dmxleo.dailymotion.com/",
+  "||nhacrap.tv/", "/fptplay\\.net\\/.*?seg\\d*-frag\\d*/",
   "/hlscache\\.fptplay\\.net(?:\\.vn)?\\//", "/49ef4358-e34d-484f-a18e-495cd9fe3817",
   "/75247339-7897-437d-9627-55b1a1528700", "http://www.phimmoi.net/resource/video/blank.mp4",
   "http://xemvtv.net/kaka/blank2.mp4", /https?:\/\/.+\.gvt1\.com\/videoplayback\/.+/,

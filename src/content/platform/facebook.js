@@ -194,6 +194,10 @@ export default function(module, exports, require) {
         type: mediaConstants.b.SCRIPTING.INJECT,
         file: "facebook/messenger-audio"
       });
+      Object(cryptoUtils.sendMessage)({
+        type: mediaConstants.b.SCRIPTING.INJECT,
+        file: "facebook"
+      });
       window.addEventListener("message", function(event) {
         if (!event || event.origin !== window.location.origin) return;
         if (event.data && "facebook-messenger-audio" === event.data.type) {
@@ -878,6 +882,30 @@ export default function(module, exports, require) {
                       }
                     }
                   case 6:
+                    var saviorManifest = node.getAttribute("savior-manifest-url");
+                    var saviorDetailStr = node.getAttribute("savior-video-detail");
+                    var saviorDetail = null;
+                    try {
+                      if (saviorDetailStr) saviorDetail = JSON.parse(saviorDetailStr);
+                    } catch (e) {}
+
+                    var directFbUrl = saviorManifest || saviorDetail?.manifestUrl || saviorDetail?.hdSrc || saviorDetail?.sdSrc;
+                    if (directFbUrl) {
+                      mediaObject.url = directFbUrl;
+                      mediaObject.filename = extractFacebookPostTitle(articleRoot);
+                      if (directFbUrl.includes(".mpd") || directFbUrl.includes("dash")) {
+                        mediaObject.ext = "mpd";
+                        mediaObject.exts = ["mpd"];
+                      } else if (directFbUrl.includes(".m3u8")) {
+                        mediaObject.ext = "m3u8";
+                        mediaObject.exts = ["m3u8"];
+                      } else {
+                        mediaObject.ext = "mp4";
+                        mediaObject.exts = ["mp4"];
+                      }
+                      return ctx.a(2, "video");
+                    }
+
                     if (!mediaObject.identifier) {
                       var videoIdEl = node.closest("[data-video-id]");
                       if (videoIdEl) {
@@ -908,6 +936,17 @@ export default function(module, exports, require) {
                     var savedParts = savedUrlResp.url.split("/");
                     mediaObject.identifier = savedParts.pop() || savedParts.pop();
                   case 9:
+                    if (!mediaObject.identifier || mediaObject.identifier === "undefined") {
+                      var directSrc = node.currentSrc || node.src;
+                      if (directSrc && typeof directSrc === "string" && directSrc.startsWith("http") && !directSrc.startsWith("blob:")) {
+                        mediaObject.url = directSrc;
+                        mediaObject.filename = extractFacebookPostTitle(articleRoot);
+                        mediaObject.ext = "mp4";
+                        mediaObject.exts = ["mp4"];
+                        return ctx.a(2, "video");
+                      }
+                      return ctx.a(2);
+                    }
                     mediaObject.url = buildTahoeAsyncUrl(mediaObject.identifier);
                     mediaObject.filename = extractFacebookPostTitle(articleRoot);
                     mediaObject.ext = "m3u8";

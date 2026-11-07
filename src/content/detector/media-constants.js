@@ -64,7 +64,7 @@ export default function(module, exports, require) {
   }
 
   var QUALITY_HEIGHTS = [4320,3072,2160,2048,1440,1080,720,540,480,360,320,270,240,144];
-  var BLOCKED_HOST_PATTERNS = [/^(.+\.)?nixcdn\.com/im,/^(.+\.)?vcmedia\.vn/i,/^(.+\.)?kenhhd\.tv/i];
+  var BLOCKED_HOST_PATTERNS = [/^(.+\.)?vcmedia\.vn/i,/^(.+\.)?kenhhd\.tv/i];
   var SITEMAP_PATTERNS = [/coccoc\.com\/sitemap\.xml/i];
   var NAVER_SHORTS_PATTERNS = [/m\.naver\.com\/\/?shorts/i];
 

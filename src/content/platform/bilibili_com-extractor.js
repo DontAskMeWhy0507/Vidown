@@ -268,11 +268,11 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 === var_e_1 ? void 0 : var_e_1.label) || (null === (var_o_2 = var_a_1.support_formats.find(
   param_e => param_e.quality == param_t_1.id)) || void 0 === var_o_2 ?
   void 0 : var_o_2.display_desc) || var_s_1.resolution;
-  var var_u_1 = var_c.audio[0].baseUrl;
-  return var_s_1.url = {
+  var var_u_1 = (var_c.audio && var_c.audio[0]) ? var_c.audio[0].baseUrl : null;
+  return var_s_1.url = var_u_1 ? {
   audioUrl: var_u_1,
   videoUrl: param_t_1.baseUrl
-  }
+  } : param_t_1.baseUrl
   , var_s_1;
   }
   ) : (null === (var_e = var_c.audio) || void 0 === var_e ? void 0 :
@@ -319,10 +319,10 @@ export default function (moduleObj, exportsObj, requireFn) {
   void 0 === var_e_1 ? void 0 : var_e_1.label) || param_t_1.stream_info.desc_words;
   var var_u = null === (var_o_2 = var_a_1.audio_resource) ||
   void 0 === var_o_2 ? void 0 : var_o_2.find(param_e => param_e.quality == param_t_1.audio_quality);
-  return var_s_1.url = {
+  return var_s_1.url = (var_u && var_u.url) ? {
   audioUrl: var_u.url,
   videoUrl: param_t_1.video_resource.url
-  }
+  } : param_t_1.video_resource.url
   , var_s_1;
   }
   ) : (null === (var_e = var_a_1.audio_resource) || void 0 === var_e ?
@@ -374,10 +374,11 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_f = (null === (var_u = var_a_1.audio) || void 0 === var_u ?
   void 0 : var_u[param_e]) || (null === (var_c = var_a_1.audio) ||
   void 0 === var_c ? void 0 : var_c[0]);
-  return var_l_1.url = {
-  audioUrl: var_f.base_url || var_f.baseUrl,
+  var var_f_url = var_f ? (var_f.base_url || var_f.baseUrl) : null;
+  return var_l_1.url = var_f_url ? {
+  audioUrl: var_f_url,
   videoUrl: var_l_1.url
-  }
+  } : var_l_1.url
   , var_l_1;
   }
   ) : (null === (var_e = var_a_1.audio) || void 0 === var_e ?
@@ -526,12 +527,18 @@ export default function (moduleObj, exportsObj, requireFn) {
   (obj_g[var_A] = list_c[num_b]);
   }
   }
-  for (var var__ = Object.values(obj_g), var_E = var__[0], var_S = var__[0], num_O = 1;
-  num_O < var__.length;
-  num_O++) var__[num_O].size > var_E.size && (var_E = var__[num_O]), var__[num_O].size < var_S.size &&
-  (var_S = var__[num_O]);
-  return list_y[0].url.videoUrl = var_E.url, list_y[0].url.audioUrl = var_S.url,
-  list_y[0].url;
+  var var__ = Object.values(obj_g);
+  if (!var__.length || !var__[0]) return list_y[0] ? list_y[0].url : null;
+  var var_E = var__[0], var_S = var__[0];
+  for (var num_O = 1; num_O < var__.length; num_O++) {
+  var__[num_O].size > var_E.size && (var_E = var__[num_O]);
+  var__[num_O].size < var_S.size && (var_S = var__[num_O]);
+  }
+  if (!list_y[0]) return null;
+  if (typeof list_y[0].url !== "object" || !list_y[0].url) list_y[0].url = {};
+  list_y[0].url.videoUrl = var_E.url;
+  list_y[0].url.audioUrl = var_S.url;
+  return list_y[0].url;
   }
   }
   ,

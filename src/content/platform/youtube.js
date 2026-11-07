@@ -414,10 +414,9 @@ export default function(module, exports, require) {
                   }
                   titleLinkInPlayer = Object(cryptoUtils.query)(".ytp-title-link", playerContainer);
                   playerContainerNode = playerContainer;
-                  playerContainer = [];
                   if (!playabilityErrorEl ||
-                      (null == playerContainer.node ? void 0 : playerContainer.node.offsetWidth) !== playabilityErrorEl.offsetWidth ||
-                      (null == playerContainer.node ? void 0 : playerContainer.node.offsetHeight) !== playabilityErrorEl.offsetHeight) {
+                      (null == playerContainerNode.node ? void 0 : playerContainerNode.node.offsetWidth) !== playabilityErrorEl.offsetWidth ||
+                      (null == playerContainerNode.node ? void 0 : playerContainerNode.node.offsetHeight) !== playabilityErrorEl.offsetHeight) {
                     ctx.n = 4;
                     break;
                   }

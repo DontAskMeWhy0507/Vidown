@@ -307,7 +307,7 @@ export default function (moduleObj, exportsObj, requireFn) {
     }
   } catch (_) {}
   if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-    var twSniffed = window.__saviorSniffedMedia.find(m => m && m.url && m.url.includes("video.twimg.com"));
+    var twSniffed = window.__saviorSniffedMedia.slice().reverse().find(m => m && m.url && m.url.includes("video.twimg.com"));
     if (twSniffed) {
       twSniffed.fixName = obj_u[var_e] || twSniffed.filename || document.title;
       return param_t_1.a(2, [twSniffed]);
