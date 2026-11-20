@@ -404,13 +404,17 @@ async function runTests() {
     console.log('================================================================\n');
   } finally {
     host.setMessageHook(null);
+    if (host.httpKeepAliveAgent?.destroy) host.httpKeepAliveAgent.destroy();
+    if (host.httpsKeepAliveAgent?.destroy) host.httpsKeepAliveAgent.destroy();
     try {
       fs.rmSync(tmpTestDir, { recursive: true, force: true });
     } catch (_) {}
   }
 }
 
-runTests().catch(err => {
+runTests().then(() => {
+  process.exit(0);
+}).catch(err => {
   console.error('\n❌ Milestone 2 Test Suite Failed:', err);
   process.exit(1);
 });

@@ -74,7 +74,8 @@ export default function(module, exports, require) {
       };
     };
 
-    var featureFlags = detectFeatureFlags(globalContext.navigator.userAgent);
+    var userAgentStr = (globalContext && globalContext.navigator && globalContext.navigator.userAgent) ? globalContext.navigator.userAgent : (typeof navigator !== "undefined" && navigator && navigator.userAgent ? navigator.userAgent : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+    var featureFlags = detectFeatureFlags(userAgentStr);
     exports.a = featureFlags;
   }).call(this, require(13));
 }

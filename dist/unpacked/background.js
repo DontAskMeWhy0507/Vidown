@@ -1248,10 +1248,12 @@
   if (param_e_1.type == "subtitles") {
   var_t = var_t + " (" + (param_e_1.i18n_quality || param_e_1.quality) + ")";
   }
-  var var_r = "." + param_e_1.ext;
-  return var_t = (var_t = (var_t == null ? undefined : var_t.replace(/\s+/g, " ").replace(
-  /[/\\:*?"<>|\u200c\u200d]/g, "-")) + var_r).match(/[*~]/gi) ?
-  "_" + var_t.replace(/[*~]/gi, ".") : var_t;
+  var var_r = param_e_1.ext ? ("." + param_e_1.ext) : "";
+  var_t = var_t == null ? undefined : var_t.replace(/\s+/g, " ").replace(/[/\\:*?"<>|\u200c\u200d]/g, "-");
+  if (var_r && var_t && !var_t.toLowerCase().endsWith(var_r.toLowerCase())) {
+    var_t = var_t + var_r;
+  }
+  return var_t && var_t.match(/[*~]/gi) ? "_" + var_t.replace(/[*~]/gi, ".") : var_t;
   }
   function var_Q(param_e_1) {
   if (!param_e_1) {
@@ -5133,7 +5135,8 @@ function (moduleObj, exportsObj, requireFn) {
   NEW_MEDIA_DOWNLOAD: var_r(">= 151.0.0.0")
   };
   }
-  (param_e.navigator.userAgent);
+  var userAgentStr = (param_e && param_e.navigator && param_e.navigator.userAgent) ? param_e.navigator.userAgent : (typeof navigator !== "undefined" && navigator && navigator.userAgent ? navigator.userAgent : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+  var_a = var_a(userAgentStr);
   exportsObj.a = var_a;
   }
   ).call(this, requireFn(13));

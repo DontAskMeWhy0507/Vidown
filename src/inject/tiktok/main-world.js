@@ -18,7 +18,6 @@ function getReactFiberSuffix(element) {
 }
 
 function findReactBitrateProps(element) {
-  const expected = getDomVideoId(element) || extractTikTokVideoId(findAnchorForVideo(element)?.href);
   let suffix = ((el) => {
     while (el && el.nodeName !== 'BODY') {
       const s = getReactFiberSuffix(el);
@@ -30,16 +29,14 @@ function findReactBitrateProps(element) {
 
   let propsKey = '__reactProps' + suffix;
   let current = element;
-  while (current && current !== document.body && current.nodeName !== 'HTML') {
+  while (current && current.parentElement && current.parentElement.tagName !== 'ARTICLE' && current.parentElement.tagName !== 'HTML') {
     const children = current[propsKey]?.children || [];
     if (Array.isArray(children)) {
-      const matches = children.map(c=>c?.props).filter(p=>p && (p.bitrateInfo || p.videoInfo?.bitrateInfo || p.item?.video) &&
-        (expected ? String(p.id || p.itemId || p.videoId || p.item?.id || p.videoInfo?.id) === expected : current.querySelectorAll('video').length <= 1));
-      if (matches.length === 1) {
-        return formatAwemeItem({kind:matches[0].item?'item':'flat',props:matches[0]});
+      const match = children.find((c) => c?.props?.bitrateInfo);
+      if (match) {
+        return match.props;
       }
     }
-    if (current.tagName === 'ARTICLE' || current.querySelectorAll('video').length > 1) break;
     current = current.parentElement;
     if (!suffix && current) {
       suffix = getReactFiberSuffix(current);
@@ -53,13 +50,32 @@ function extractTikTokVideoId(urlOrHref) {
   return (String(urlOrHref || '').match(/\/video\/(\d+)/) || [])[1] || null;
 }
 
-function getDomVideoId(element) {
-  for (let current=element,depth=0; current && current!==document.body && depth<8; current=current.parentElement,depth++) {
-    const id=(current.id || '').match(/^xgwrapper-.*?-(\d{18,20})$/)?.[1];
-    if(id)return id;
-    if(current.tagName==='ARTICLE' || current.querySelectorAll('video').length>1)break;
-  }
-  return null;
+function findTikTokContainer(element) {
+  if (!element) return null;
+  return element.closest(
+    '[data-e2e="feed-item"], [data-e2e="feed-video"], [data-e2e="user-post-item"], ' +
+    '[data-e2e="explore-item"], [data-e2e="recommend-list-item-container"], ' +
+    '[class*="DivItemContainer"], [class*="DivVideoFeed"], article'
+  ) || element.parentElement?.parentElement?.parentElement;
+}
+
+function extractVideoInfoFromFiberProps(props, targetId) {
+  if (!props) return null;
+  const item = props.item || props.itemStruct || props.itemInfo?.itemStruct || props.aweme || props;
+  const video = item.video || item.videoInfo || (props.bitrateInfo ? props : null);
+  if (!video) return null;
+  const bitrates = video.bitrateInfo || video.bitrates || [];
+  const playUrl = video.playAddr || video.playApi || video.downloadAddr || (Array.isArray(video.playAddr?.urlList) ? video.playAddr.urlList[0] : '') || '';
+  if (!bitrates.length && !playUrl) return null;
+  return {
+    bitrateInfo: bitrates,
+    url: playUrl,
+    downloadAddr: video.downloadAddr || playUrl,
+    ratio: video.ratio || video.definition || '720p',
+    desc: item.desc || props.desc || '',
+    id: String(item.id || video.id || targetId || ''),
+    cover: video.cover || video.originCover || ''
+  };
 }
 
 function findAwemeItemByVideoId(anchorElement) {
@@ -73,11 +89,14 @@ function findAwemeItemByVideoId(anchorElement) {
       const found = (function searchFiberTree(node, targetId, currentDepth) {
         if (!node || currentDepth > 50) return null;
         const memoized = node.memoizedProps || node.pendingProps;
-        if (memoized?.item?.id && String(memoized.item.id) === String(targetId) && (memoized.item.video?.bitrateInfo?.length || memoized.item.video?.playAddr || memoized.item.video?.PlayAddr)) {
+        if (memoized?.item?.id && String(memoized.item.id) === String(targetId) && memoized.item.video?.bitrateInfo?.length) {
           return { kind: 'item', props: memoized };
         }
-        if (memoized?.id && String(memoized.id) === String(targetId) && (memoized.bitrateInfo?.length || memoized.videoInfo?.bitrateInfo?.length || memoized.videoInfo?.playAddr || memoized.playUrl)) {
+        if (memoized?.id && String(memoized.id) === String(targetId) && (memoized.bitrateInfo?.length || memoized.videoInfo?.bitrateInfo?.length)) {
           return { kind: 'flat', props: memoized };
+        }
+        if (memoized?.itemStruct?.id && String(memoized.itemStruct.id) === String(targetId)) {
+          return { kind: 'item', props: { item: memoized.itemStruct } };
         }
         return searchFiberTree(node.child, targetId, currentDepth + 1) || searchFiberTree(node.sibling, targetId, currentDepth + 1);
       })(current[fiberKey], videoId, 0);
@@ -89,48 +108,11 @@ function findAwemeItemByVideoId(anchorElement) {
   return null;
 }
 
-function formatAwemeItem(result) {
-  if (!result) return null;
-  const kind = result.kind;
-  const props = result.props;
-  if (kind === 'item' || props?.item?.video?.bitrateInfo?.length) {
-    const item = props.item || {};
-    const video = item.video || {};
-    if (video.bitrateInfo?.length || video.playAddr || video.PlayAddr) {
-      return {
-        bitrateInfo: video.bitrateInfo,
-        url: video.playAddr || video.PlayAddr || '',
-        downloadAddr: video.downloadAddr,
-        ratio: video.ratio || video.definition,
-        desc: item.desc,
-        id: item.id || video.id,
-        cover: video.cover || video.originCover || ''
-      };
-    }
-  } else {
-    const vi = props.videoInfo || {};
-    const bitrates = vi.bitrateInfo || props.bitrateInfo;
-    if (bitrates?.length || vi.playAddr || vi.PlayAddr || props.playUrl || props.url) {
-      return {
-        bitrateInfo: bitrates,
-        url: vi.playAddr || vi.PlayAddr || props.playUrl || props.url || '',
-        downloadAddr: vi.downloadAddr,
-        ratio: vi.ratio || vi.definition,
-        desc: props.desc,
-        id: props.id || vi.id,
-        cover: vi.cover || props.cover || ''
-      };
-    }
-  }
-  return null;
-}
-
 function setAwemeVideoData(element, data) {
   if (element && data) {
     try {
       element.setAttribute('data-aweme-video', JSON.stringify(data));
       if (data.id) {
-        element.setAttribute('data-video-id', String(data.id));
         element.setAttribute('data-aweme-id', String(data.id));
       }
     } catch {
@@ -139,144 +121,117 @@ function setAwemeVideoData(element, data) {
   }
 }
 
-function findFeedContainer(element) {
-  if (!element) return null;
-  const selector = '[data-e2e="feed-item"], [data-e2e="recommend-list-item-container"], [data-e2e="explore-item"], [data-e2e="user-post-item"], [data-e2e="browse-video"], [class*="ItemContainer"], [class*="VideoContainer"], [class*="PlayerContainer"], article';
-  const closestContainer = element.closest ? element.closest(selector) : null;
-  if (closestContainer && closestContainer.querySelectorAll('video').length <= 1) return closestContainer;
+window.__tiktokVideoMap = window.__tiktokVideoMap || {};
 
-  let parent = element.parentElement;
-  for (let i = 0; i < 8 && parent && parent !== document.body; i++) {
-    if (parent.querySelectorAll('video').length > 1) break;
-    if (parent.querySelector && parent.querySelector('a[href*="/video/"]') && parent.querySelectorAll('video').length <= 1) {
-      return parent;
-    }
-    parent = parent.parentElement;
-  }
-  return element.parentElement || null;
-}
+// 1. Scan TikTok video anchor links and extract item/video details
+const links = Array.from(document.querySelectorAll('a[href]')).filter((a) =>
+  /\/video\/\d+/i.test(a.href) || /tiktok\.com\/@.+\/video.+/i.test(a.href)
+);
 
-function findVideoForAnchor(link) {
-  const container = findFeedContainer(link);
-  if (container) {
-    const vids = container.querySelectorAll('video');
-    if (vids.length === 1) return vids[0];
-    if (vids.length > 1) {
-      for (let i = 0; i < vids.length; i++) {
-        if (vids[i].closest('a') === link || link.contains(vids[i])) return vids[i];
+for (let i = 0; i < links.length; i++) {
+  const link = links[i];
+  const videoId = extractTikTokVideoId(link.href) || extractTikTokVideoId(link.getAttribute('href'));
+  const result = findAwemeItemByVideoId(link);
+  if (result) {
+    const kind = result.kind;
+    const props = result.props;
+    let videoInfo = null;
+
+    if (kind === 'item' || props?.item?.video?.bitrateInfo?.length) {
+      const item = props.item || {};
+      const video = item.video || {};
+      if (video.bitrateInfo?.length || video.playAddr) {
+        videoInfo = {
+          bitrateInfo: video.bitrateInfo || [],
+          url: video.playAddr || '',
+          downloadAddr: video.downloadAddr,
+          ratio: video.ratio || video.definition || '720p',
+          desc: item.desc || '',
+          id: String(item.id || video.id || videoId || ''),
+          cover: video.cover || video.originCover || ''
+        };
       }
-      return null; // Ambiguous containers must never stamp the first unrelated video.
+    } else {
+      const vi = props.videoInfo || {};
+      const bitrates = vi.bitrateInfo || props.bitrateInfo;
+      if (bitrates?.length || vi.playAddr || props.playUrl) {
+        videoInfo = {
+          bitrateInfo: bitrates || [],
+          url: vi.playAddr || props.playUrl || '',
+          downloadAddr: vi.downloadAddr,
+          ratio: vi.ratio || vi.definition || '720p',
+          desc: props.desc || '',
+          id: String(props.id || vi.id || videoId || ''),
+          cover: vi.cover || props.cover || ''
+        };
+      }
+    }
+
+    if (videoInfo) {
+      if (videoInfo.id) {
+        window.__tiktokVideoMap[videoInfo.id] = videoInfo;
+      }
+      setAwemeVideoData(link, videoInfo);
+
+      const container = findTikTokContainer(link);
+      if (container) {
+        setAwemeVideoData(container, videoInfo);
+        const relatedVideos = container.querySelectorAll('video');
+        for (let j = 0; j < relatedVideos.length; j++) {
+          setAwemeVideoData(relatedVideos[j], videoInfo);
+        }
+      }
     }
   }
-  let parent = link.parentElement;
-  for (let i = 0; i < 8 && parent && parent !== document.body; i++) {
-    const vids = parent.querySelectorAll('video');
-    if (vids.length === 1) return vids[0];
-    parent = parent.parentElement;
-  }
-  return null;
 }
 
-function findAnchorForVideo(video) {
-  const expected = getDomVideoId(video);
-  const directAnchor = video.closest ? video.closest('a[href*="/video/"]') : null;
-  if (directAnchor && (!expected || extractTikTokVideoId(directAnchor.href) === expected)) return directAnchor;
-  let parent = video.parentElement;
-  for (let i = 0; i < 8 && parent && parent !== document.body; i++) {
-    const links = Array.from(parent.querySelectorAll('a[href*="/video/"]'));
-    const exact = expected && links.find(link=>extractTikTokVideoId(link.href)===expected);
-    if(exact)return exact;
-    if(parent.querySelectorAll('video').length>1)break;
-    const ids=new Set(links.map(link=>extractTikTokVideoId(link.href)));
-    if(ids.size===1 && (!expected || ids.has(expected)))return links[0];
-    parent = parent.parentElement;
-  }
-  return null;
-}
-
-const videoSources = new WeakMap();
-function scanVideos() {
-  const videos = document.querySelectorAll('video');
-  for (let i = 0; i < videos.length; i++) {
-    const video = videos[i];
-    const expected = getDomVideoId(video) || extractTikTokVideoId(findAnchorForVideo(video)?.href);
-    const source = [video.currentSrc || video.src || '',video.poster || '',expected || ''].join('|');
-    if (videoSources.has(video) && videoSources.get(video) !== source) {
-      video.removeAttribute('data-aweme-video');
-      video.removeAttribute('data-video-id');
-      video.removeAttribute('data-aweme-id');
-    }
-    videoSources.set(video, source);
-    if (expected && video.hasAttribute('data-aweme-video')) {
-      try { if (String(JSON.parse(video.getAttribute('data-aweme-video')).id || '') !== expected) video.removeAttribute('data-aweme-video'); }
-      catch (_) { video.removeAttribute('data-aweme-video'); }
-    }
-    if (!video.hasAttribute('data-aweme-video')) {
-      const bitrateProps = findReactBitrateProps(video);
-      if (bitrateProps) {
-        setAwemeVideoData(video, bitrateProps);
+// 2. Scan direct <video> tags and ensure each is mapped to its specific video info
+const videos = document.querySelectorAll('video');
+for (let i = 0; i < videos.length; i++) {
+  const video = videos[i];
+  if (!video.hasAttribute('data-aweme-video')) {
+    // Check if parent container has an anchor
+    const container = findTikTokContainer(video);
+    const containerAnchor = container?.querySelector('a[href*="/video/"]');
+    if (containerAnchor) {
+      const vidId = extractTikTokVideoId(containerAnchor.href) || extractTikTokVideoId(containerAnchor.getAttribute('href'));
+      if (vidId && window.__tiktokVideoMap[vidId]) {
+        setAwemeVideoData(video, window.__tiktokVideoMap[vidId]);
         continue;
       }
-      const anchor = findAnchorForVideo(video);
-      if (anchor) {
-        const result = findAwemeItemByVideoId(anchor);
-        if (result) {
-          const videoInfo = formatAwemeItem(result);
-          if (videoInfo) {
-            setAwemeVideoData(video, videoInfo);
-            setAwemeVideoData(anchor, videoInfo);
-          }
+      const res = findAwemeItemByVideoId(containerAnchor);
+      if (res) {
+        const info = extractVideoInfoFromFiberProps(res.props, vidId);
+        if (info) {
+          if (info.id) window.__tiktokVideoMap[info.id] = info;
+          setAwemeVideoData(video, info);
+          setAwemeVideoData(containerAnchor, info);
+          if (container) setAwemeVideoData(container, info);
+          continue;
         }
       }
     }
-  }
-}
 
-function scanLinks() {
-  const links = Array.from(document.querySelectorAll('a[href]')).filter((a) =>
-    /tiktok\.com\/@.+\/video.+/i.test(a.href)
-  );
-
-  for (let i = 0; i < links.length; i++) {
-    const link = links[i];
-    const result = findAwemeItemByVideoId(link);
-    if (result) {
-      const videoInfo = formatAwemeItem(result);
-      if (videoInfo) {
-        setAwemeVideoData(link, videoInfo);
-        const video = findVideoForAnchor(link);
-        if (video) {
-          setAwemeVideoData(video, videoInfo);
-        }
-        const container = findFeedContainer(link);
-        if (container && (!container.querySelectorAll || container.querySelectorAll('video').length <= 1)) {
-          setAwemeVideoData(container, videoInfo);
-        }
-      }
+    const bitrateProps = findReactBitrateProps(video);
+    if (bitrateProps) {
+      setAwemeVideoData(video, bitrateProps);
     }
   }
 }
-
-function scanAllTikTokMedia() {
-  scanVideos();
-  scanLinks();
-}
-
-scanAllTikTokMedia();
 
 if (typeof window !== 'undefined' && !window.__saviorTikTokObserverActive) {
   window.__saviorTikTokObserverActive = true;
   let debounceTimer = null;
   const observer = new MutationObserver(() => {
     if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(scanAllTikTokMedia, 200);
+    debounceTimer = setTimeout(() => {}, 200);
   });
   if (document.body || document.documentElement) {
     observer.observe(document.body || document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['src', 'href', 'poster'] });
   }
   window.addEventListener('scroll', () => {
     if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(scanAllTikTokMedia, 250);
+    debounceTimer = setTimeout(() => {}, 250);
   }, { passive: true });
 }
 

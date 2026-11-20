@@ -1625,10 +1625,15 @@ export default function(module, exports, require) {
                     break;
                   }
                   if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-                    var sniffed = findMatchingSniffedMedia(videoNode, xgPlayerId);
+                    var targetVidId13 = getTikTokItemId(videoNode);
+                    var sniffed = findMatchingSniffedMedia(videoNode, xgPlayerId) || window.__saviorSniffedMedia.slice().reverse().find(function(m) {
+                      if (!m || !m.url) return false;
+                      if (targetVidId13 && (m.url.includes(targetVidId13) || m.feedVideoId === targetVidId13)) return true;
+                      return m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4") || m.url.includes("tiktokcdn");
+                    }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
                     if (sniffed && sniffed.url) {
                       var fallbackMedia = urlUtils.f(sniffed.url);
-                      fallbackMedia.filename = getTikTokVideoTitle(videoNode) || document.title;
+                      fallbackMedia.filename = getTikTokVideoTitle(videoNode) || sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || (targetVidId13 ? ("tiktok_" + targetVidId13) : document.title);
                       fallbackMedia.ext = "mp4";
                       fallbackMedia.exts = ["mp4"];
                       fallbackMedia.type = "video";
@@ -1657,10 +1662,15 @@ export default function(module, exports, require) {
                       return step.a(2, [cachedMedia]);
                     }
                     if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-                      var sMedia = findMatchingSniffedMedia(videoNode, resolvedVid);
+                      var targetVidId14 = getTikTokItemId(videoNode);
+                      var sMedia = findMatchingSniffedMedia(videoNode, resolvedVid) || window.__saviorSniffedMedia.slice().reverse().find(function(m) {
+                        if (!m || !m.url) return false;
+                        if (targetVidId14 && (m.url.includes(targetVidId14) || m.feedVideoId === targetVidId14)) return true;
+                        return m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4") || m.url.includes("tiktokcdn");
+                      }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
                       if (sMedia && sMedia.url) {
                         var fb = urlUtils.f(sMedia.url);
-                        fb.filename = getTikTokVideoTitle(videoNode) || document.title;
+                        fb.filename = getTikTokVideoTitle(videoNode) || sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || (targetVidId14 ? ("tiktok_" + targetVidId14) : document.title);
                         fb.ext = "mp4";
                         fb.exts = ["mp4"];
                         fb.type = "video";

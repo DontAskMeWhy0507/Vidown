@@ -74,7 +74,8 @@ export default function (moduleObj, exportsObj, requireFn) {
   NEW_MEDIA_DOWNLOAD: var_r(">= 151.0.0.0")
   };
   }
-  (param_e.navigator.userAgent);
+  var userAgentStr = (param_e && param_e.navigator && param_e.navigator.userAgent) ? param_e.navigator.userAgent : (typeof navigator !== "undefined" && navigator && navigator.userAgent ? navigator.userAgent : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+  var_a = var_a(userAgentStr);
   exportsObj.a = var_a;
   }
   ).call(this, requireFn(13));

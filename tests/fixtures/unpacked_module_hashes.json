@@ -1,8 +1,8 @@
 {
   "0": {
     "path": "core/dom-utils.js",
-    "sha256": "a79e4e3a2dfa7ed22e2e76b6641029d69b8b3733165250faf8097342bd7aa560",
-    "size": 41133,
+    "sha256": "e6c81692d471d04a2e85b353bc9d5e65f840272cebf811c75621cac1c43a6a10",
+    "size": 41255,
     "fileSize": 39799
   },
   "1": {
@@ -55,8 +55,8 @@
   },
   "11": {
     "path": "detector/feature-flags.js",
-    "sha256": "fd9d2a4aa22a4cd7d863647b099061f5b056d2d08673d61a252de479a08add06",
-    "size": 3219,
+    "sha256": "0972254316c6423bcd5d844f2e253b587cbccea0da1e7202b85627ce8ec1c18b",
+    "size": 3549,
     "fileSize": 3219
   },
   "12": {
@@ -469,8 +469,8 @@
   },
   "80": {
     "path": "detector/filename-sanitizer.js",
-    "sha256": "618cb45d7ba37ae54c56188da379093f650ccad21ad21817ec6c293deb7e9ef5",
-    "size": 3097,
+    "sha256": "cd3be27494f9b153182a02439aca1ea2ba004d532ecb4e86eede90a43edf4d03",
+    "size": 3564,
     "fileSize": 3097
   },
   "81": {
@@ -1315,8 +1315,8 @@
   },
   "232": {
     "path": "platform/facebook.js",
-    "sha256": "f6322a8a225c222ba979ae0b1541c532bddd73e8296edb2e0b8ace87b246924a",
-    "size": 44089,
+    "sha256": "8165cd8a9b648d4c7310e10e6903448dd7701621fff88505e507cce746274bf5",
+    "size": 44802,
     "fileSize": 42039
   },
   "233": {
@@ -1447,8 +1447,8 @@
   },
   "254": {
     "path": "platform/instagram_com-extractor.js",
-    "sha256": "7093ccd760c5580dfb49f133089c9866e0d8de0572c0781cf671afc0db106a65",
-    "size": 20252,
+    "sha256": "0694bae120d7301dace374ebd2d8ac841fea22653b671b584e9369d58c38b539",
+    "size": 20323,
     "fileSize": 20518
   },
   "255": {
@@ -2551,8 +2551,8 @@
   },
   "442": {
     "path": "platform/tiktok-douyin.js",
-    "sha256": "e97f89d5edc120b8502ade403323436dec56d2d041466af50bc7a99b4e14f8bc",
-    "size": 82921,
+    "sha256": "719a6c9c45d199dd7f2c40756849d0372a894701a7004b96d5cdb26b4961f9dd",
+    "size": 84213,
     "fileSize": 72792
   },
   "443": {

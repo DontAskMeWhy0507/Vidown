@@ -4,6 +4,8 @@ const assert = require('assert');
 
 console.log('=== TEST SUITE: CRYPTOJS AES DECRYPTION CONSOLIDATION ===\n');
 
+global.navigator = global.navigator || { userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
+
 const reg = require('../src/content/module-registry');
 const installed = {};
 

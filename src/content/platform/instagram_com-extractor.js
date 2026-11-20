@@ -205,9 +205,9 @@ export default function (moduleObj, exportsObj, requireFn) {
   var obj_d = getDynamicInstagramHeaders();
   function var_h(param_t) {
   var var_e,
-  var_r = param_t.closest("article");
+  var_r = param_t.closest("article, [role='dialog'], main, section");
   return null === (var_e = Object(dep_dom_utils.queryAll)("a", var_r ||
-  document).filter(param_t_1 => param_t_1.href.includes("/p/") &&
+  document).filter(param_t_1 => (param_t_1.href.includes("/p/") || param_t_1.href.includes("/reel/")) &&
   !param_t_1.href.includes("liked_by"))[0]) || void 0 === var_e ?
   void 0 : var_e.href;
   }

@@ -57,6 +57,9 @@ async function runTests() {
       console.error('Unexpected error message:', err.message);
     }
   } finally {
+    if (typeof mockServer.closeAllConnections === 'function') {
+      mockServer.closeAllConnections();
+    }
     mockServer.close();
     try { if (fs.existsSync(testOutPath)) fs.unlinkSync(testOutPath); } catch (_) {}
     try { if (fs.existsSync(testOutPath + ".part")) fs.unlinkSync(testOutPath + ".part"); } catch (_) {}
@@ -95,6 +98,9 @@ async function runTests() {
       console.error('Unexpected mismatch error message:', err.message);
     }
   } finally {
+    if (typeof sizeMismatchServer.closeAllConnections === 'function') {
+      sizeMismatchServer.closeAllConnections();
+    }
     sizeMismatchServer.close();
     try { if (fs.existsSync(sizeMismatchOut)) fs.unlinkSync(sizeMismatchOut); } catch (_) {}
     try { if (fs.existsSync(sizeMismatchOut + ".part")) fs.unlinkSync(sizeMismatchOut + ".part"); } catch (_) {}
@@ -226,12 +232,17 @@ async function runTests() {
 
   console.log('✓ Test 5: Google Drive & video URLs are allowed in startDownload.');
 
+  if (host.httpKeepAliveAgent?.destroy) host.httpKeepAliveAgent.destroy();
+  if (host.httpsKeepAliveAgent?.destroy) host.httpsKeepAliveAgent.destroy();
+
   console.log('\n======================================================');
   console.log('ALL HOST INTEGRITY & SECURITY TESTS PASSED! 🎉');
   console.log('======================================================\n');
 }
 
-runTests().catch(err => {
+runTests().then(() => {
+  process.exit(0);
+}).catch(err => {
   console.error('\n❌ Test Suite Failed:', err);
   process.exit(1);
 });
