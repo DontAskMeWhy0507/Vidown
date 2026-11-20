@@ -1495,7 +1495,9 @@ ${t2.text}`;
           box.className = "extension-box";
           var lbl = document.createElement("div");
           lbl.className = "extensions-label";
-          lbl.innerHTML = "<strong>" + (bucket.i18n_type || bucket.type || "VIDEO") + "</strong>";
+          var lblStrong = document.createElement("strong");
+          lblStrong.textContent = String(bucket.i18n_type || bucket.type || "VIDEO");
+          lbl.appendChild(lblStrong);
           box.appendChild(lbl);
           (bucket.media || []).forEach((m) => {
             var q = document.createElement("div");
@@ -1503,8 +1505,24 @@ ${t2.text}`;
             q.setAttribute("data-id", m.id || "");
             q.setAttribute("data-quality-value", (m.ext || "mp4") + "/" + (m.quality || "HD"));
             q.className = "quality-label j-quality";
-            var resSpan = m.resolution ? '<span class="media-sub-info info-resolution">' + m.resolution + '</span>' : '';
-            q.innerHTML = '<strong class="media-name ' + (m.type || "video") + '">' + (m.i18n_quality || m.quality || "Default") + '</strong><p class="media-sub-wrap ' + (m.resolution ? "with-resolution" : "") + '">' + resSpan + '<span class="media-sub-info info-ext">.' + (m.ext || "mp4") + '</span></p>';
+            var safeType = String(m.type || "video").replace(/[^a-zA-Z0-9_-]/g, "");
+            var nameEl = document.createElement("strong");
+            nameEl.className = "media-name " + (safeType || "video");
+            nameEl.textContent = String(m.i18n_quality || m.quality || "Default");
+            var subWrap = document.createElement("p");
+            subWrap.className = "media-sub-wrap" + (m.resolution ? " with-resolution" : "");
+            if (m.resolution) {
+              var resEl = document.createElement("span");
+              resEl.className = "media-sub-info info-resolution";
+              resEl.textContent = String(m.resolution);
+              subWrap.appendChild(resEl);
+            }
+            var extEl = document.createElement("span");
+            extEl.className = "media-sub-info info-ext";
+            extEl.textContent = "." + String(m.ext || "mp4");
+            subWrap.appendChild(extEl);
+            q.appendChild(nameEl);
+            q.appendChild(subWrap);
             box.appendChild(q);
           });
           this.$el.appendChild(box);

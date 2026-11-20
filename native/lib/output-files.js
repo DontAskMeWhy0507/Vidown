@@ -238,10 +238,13 @@ module.exports = {
 };
 
 function validateRelayCoverage(intervals, total) {
-  if (!total || !Array.isArray(intervals) || intervals.length === 0) return true;
-  intervals.sort((a, b) => a[0] - b[0]);
+  if (!total || total <= 0) return true;
+  if (!Array.isArray(intervals) || intervals.length === 0) {
+    throw new Error('Sparse file: empty coverage');
+  }
+  const sorted = intervals.slice().sort((a, b) => a[0] - b[0]);
   let currEnd = -1;
-  for (const [s, e] of intervals) {
+  for (const [s, e] of sorted) {
     if (currEnd === -1) {
       if (s !== 0) throw new Error('Sparse file: missing start');
       currEnd = e;

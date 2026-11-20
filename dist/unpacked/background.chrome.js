@@ -213,6 +213,8 @@ if (typeof self !== 'undefined' && typeof self.addEventListener === 'function') 
 // ==========================================
 function setupAnti403Rules() {
   if (!chrome.declarativeNetRequest || !chrome.declarativeNetRequest.updateSessionRules) return;
+  const extDomain = (chrome.runtime && chrome.runtime.id) ? [chrome.runtime.id] : [];
+  const withExt = (domains) => domains.concat(extDomain);
   try {
     chrome.declarativeNetRequest.updateSessionRules({
       removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008].concat([1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1099]),
@@ -261,6 +263,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*tiktokcdn-us.com/*',
+            initiatorDomains: withExt(['tiktok.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -276,6 +279,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*tiktokcdn-eu.com/*',
+            initiatorDomains: withExt(['tiktok.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -291,6 +295,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*douyinvod.com/*',
+            initiatorDomains: withExt(['douyin.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -306,6 +311,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*zjcdn.com/*',
+            initiatorDomains: withExt(['douyin.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -321,6 +327,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*bytevd.com/*',
+            initiatorDomains: withExt(['douyin.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -336,6 +343,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*bilivideo.com/*',
+            initiatorDomains: withExt(['bilibili.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -351,6 +359,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*hdslb.com/*',
+            initiatorDomains: withExt(['bilibili.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -366,6 +375,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*twimg.com/*',
+            initiatorDomains: withExt(['x.com', 'twitter.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -381,6 +391,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*xhscdn.com/*',
+            initiatorDomains: withExt(['xiaohongshu.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -396,6 +407,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*weibocdn.com/*',
+            initiatorDomains: withExt(['weibo.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -411,6 +423,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*vimeocdn.com/*',
+            initiatorDomains: withExt(['vimeo.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -443,6 +456,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*tiktokcdn.com/*',
+            initiatorDomains: withExt(['tiktok.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -458,6 +472,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*byteoversea.com/*',
+            initiatorDomains: withExt(['tiktok.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -473,6 +488,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*ibytedtos.com/*',
+            initiatorDomains: withExt(['tiktok.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -488,6 +504,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*douyin.com/*',
+            initiatorDomains: withExt(['douyin.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -503,6 +520,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*iesdouyin.com/*',
+            initiatorDomains: withExt(['douyin.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -518,6 +536,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*cdninstagram.com/*',
+            initiatorDomains: withExt(['instagram.com', 'threads.net', 'threads.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -533,6 +552,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*instagram.com/*',
+            initiatorDomains: withExt(['instagram.com', 'threads.net', 'threads.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -548,6 +568,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*tiktok.com/*',
+            initiatorDomains: withExt(['tiktok.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -563,6 +584,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*tiktokv.com/*',
+            initiatorDomains: withExt(['tiktok.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -578,6 +600,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*googlevideo.com/*',
+            initiatorDomains: withExt(['youtube.com']),
             resourceTypes: ['main_frame', 'sub_frame', 'xmlhttprequest', 'media', 'other']
           }
         },
@@ -1870,6 +1893,23 @@ function resolveRealStreamForDownload(targetUrl, pageUrl, tabId) {
   return targetUrl;
 }
 
+function isGenericFeedTitle(str) {
+  if (!str || typeof str !== 'string') return true;
+  const lower = str.trim().toLowerCase();
+  return lower === 'tiktok - make your day' || lower === 'tiktok' || lower === 'facebook' ||
+    lower === 'x' || lower === 'twitter' || lower === 'instagram' || lower === 'youtube' ||
+    lower === 'video' || lower === 'videos' || lower === 'watch' || lower === 'untitled' ||
+    lower === 'null' || lower === 'undefined';
+}
+
+function isFeedPageUrl(u) {
+  try {
+    const p = new URL(u).pathname.toLowerCase();
+    return p === '/' || p === '' || p === '/feed' || p === '/foryou' || p === '/following' ||
+      p === '/explore' || p === '/reels' || p === '/watch' || p === '/home';
+  } catch (_) { return false; }
+}
+
 function startNativeDownload(downloadParams, callback) {
   const normalizeStreamField = (v) => {
     if (!v) return '';
@@ -1970,21 +2010,7 @@ function startNativeDownload(downloadParams, callback) {
   // a second task and the user got a stray .m4a next to their finished .mp4.
   // Skips the request's own placeholder (queued tasks are re-entered by the
   // queue drain with the same taskId).
-  const isGenericFeedTitle = (str) => {
-    if (!str || typeof str !== 'string') return true;
-    const lower = str.trim().toLowerCase();
-    return lower === 'tiktok - make your day' || lower === 'tiktok' || lower === 'facebook' ||
-      lower === 'x' || lower === 'twitter' || lower === 'instagram' || lower === 'youtube' ||
-      lower === 'video' || lower === 'videos' || lower === 'watch' || lower === 'untitled' ||
-      lower === 'null' || lower === 'undefined';
-  };
-  const isFeedPageUrl = (u) => {
-    try {
-      const p = new URL(u).pathname.toLowerCase();
-      return p === '/' || p === '' || p === '/feed' || p === '/foryou' || p === '/following' ||
-        p === '/explore' || p === '/reels' || p === '/watch' || p === '/home';
-    } catch (_) { return false; }
-  };
+  // Uses module-scoped isGenericFeedTitle / isFeedPageUrl
 
   for (const [dupId, t] of activeDownloads.entries()) {
     if (downloadParams.taskId && String(t.id) === String(downloadParams.taskId)) continue;
@@ -2330,27 +2356,36 @@ function startNativeDownload(downloadParams, callback) {
   // the same authenticated session as the tab that discovered it.
   const resolvedPageUrl = downloadParams.pageUrl || downloadParams.referrer || currentActiveTabUrl || '';
   const postDownload = (sessionCookie) => {
-    port.postMessage({
-      action: 'download',
-      mediaType: mediaType,
-      ext: downloadParams.ext,
-      _isHls: Boolean(downloadParams._isHls || downloadParams.hls),
-      _isDash: Boolean(downloadParams._isDash || downloadParams.dashMPD),
-      url: downloadParams.url || '',
-      videoUrl: downloadParams.videoUrl || downloadParams.url || '',
-      audioUrl: downloadParams.audioUrl || '',
-      play_list: downloadParams.play_list || downloadParams.playList || '',
-      title: safeFilename.replace(/\.[^.]+$/, ''),
-      filename: safeFilename,
-      referer: downloadParams.referrer || resolvedPageUrl,
-      pageUrl: resolvedPageUrl,
-      quality: downloadParams.convertToMp3 || downloadParams.soundOnly ? 'audio' : (downloadParams.quality || 'best'),
-      soundOnly: Boolean(downloadParams.soundOnly),
-      convertToMp3: Boolean(downloadParams.convertToMp3 || downloadParams.soundOnly),
-      cookie: downloadParams.cookie || sessionCookie || '',
-      outputDir: downloadParams.outputDir || configuredDownloadDir || '',
-      taskId: fakeId
-    });
+    try {
+      port.postMessage({
+        action: 'download',
+        mediaType: mediaType,
+        ext: downloadParams.ext,
+        _isHls: Boolean(downloadParams._isHls || downloadParams.hls),
+        _isDash: Boolean(downloadParams._isDash || downloadParams.dashMPD),
+        url: downloadParams.url || '',
+        videoUrl: downloadParams.videoUrl || downloadParams.url || '',
+        audioUrl: downloadParams.audioUrl || '',
+        play_list: downloadParams.play_list || downloadParams.playList || '',
+        title: safeFilename.replace(/\.[^.]+$/, ''),
+        filename: safeFilename,
+        referer: downloadParams.referrer || resolvedPageUrl,
+        pageUrl: resolvedPageUrl,
+        quality: downloadParams.convertToMp3 || downloadParams.soundOnly ? 'audio' : (downloadParams.quality || 'best'),
+        soundOnly: Boolean(downloadParams.soundOnly),
+        convertToMp3: Boolean(downloadParams.convertToMp3 || downloadParams.soundOnly),
+        cookie: downloadParams.cookie || sessionCookie || '',
+        outputDir: downloadParams.outputDir || configuredDownloadDir || '',
+        taskId: fakeId
+      });
+    } catch (postErr) {
+      activeDownloads.delete(fakeId);
+      try { port.onMessage.removeListener(messageHandler); } catch (_) {}
+      const errMsg = (postErr && postErr.message) || 'Native port disconnected before dispatch';
+      updateDownloadHistory({ id: fakeId, state: 'error', error: errMsg, speed: '' });
+      broadcastTaskEvent({ action: 'nativeError', taskId: fakeId, error: errMsg });
+      setTimeout(processNextQueuedNativeDownload, 50);
+    }
   };
   getCookieHeader([targetUrl], postDownload);
 
@@ -2714,7 +2749,19 @@ function startStreamRelayDownload(downloadParams, callback) {
           if (splitErr && (splitErr.message === 'RANGE_UNSUPPORTED_STATUS_200' || splitErr.name === 'RANGE_UNSUPPORTED_STATUS_200')) {
             console.log('[Savior] Range request returned 200 OK; falling back to single stream');
             bytesRelayed = 0;
+            task._inFlight = 0;
             fallbackToSingle = true;
+            // Reset .part file and coverage intervals on native host before pumping single stream from offset 0
+            port.postMessage({
+              action: 'streamDownload',
+              taskId: fakeId,
+              url: targetUrl,
+              filename: safeFilename,
+              title: task.title,
+              referer: task.referer,
+              pageUrl: resolvedPageUrl,
+              outputDir: task.outputDir
+            });
           } else {
             throw splitErr;
           }
@@ -2839,9 +2886,37 @@ try {
     .catch(() => {});
 } catch (_) {}
 
+function isPrivilegedExtensionSender(sender) {
+  if (!sender || typeof sender !== 'object') return false;
+  if (sender.tab) return false;
+  if (typeof sender.url === 'string' && sender.url) {
+    const extPrefix = (typeof chrome !== 'undefined' && chrome.runtime && typeof chrome.runtime.getURL === 'function')
+      ? chrome.runtime.getURL('')
+      : 'chrome-extension://';
+    return sender.url.startsWith(extPrefix) || sender.url.startsWith('chrome-extension://');
+  }
+  return !sender.origin || String(sender.origin).startsWith('chrome-extension://');
+}
+
+const PRIVILEGED_RUNTIME_ACTIONS = new Set([
+  'openFile',
+  'openFolder',
+  'openDownloadsFolder',
+  'showInFolder',
+  'browseFolder',
+  'clearHistory',
+  'removeDownload',
+  'reloadExtension'
+]);
+
 chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
   const action = req ? (req.action || req.type) : null;
   if (!req || !action) return false;
+
+  if (typeof PRIVILEGED_RUNTIME_ACTIONS !== 'undefined' && PRIVILEGED_RUNTIME_ACTIONS.has(action) && !isPrivilegedExtensionSender(sender)) {
+    sendResponse({ success: false, error: 'UNAUTHORIZED_CALLER' });
+    return false;
+  }
 
   switch (action) {
     case 'resolveBrowserMedia': {
@@ -3218,18 +3293,32 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'clearHistory': {
+      nativeDownloadQueue.length = 0;
+      let hadActiveNative = false;
       for (const [k, t] of activeDownloads.entries()) {
         purgedTaskIds.add(String(k));
         if (t && t.id) purgedTaskIds.add(String(t.id));
         if (t && t.chromeId) purgedTaskIds.add(String(t.chromeId));
+        if (t && t.abortController) {
+          try { t.abortController.abort(); } catch (_) {}
+        }
         if (t && t.isBrowserDownload) {
           try { _origCancel(k, () => {}); } catch (_) {}
           try { _origErase({ id: Number(k) }, () => {}); } catch (_) {}
+        } else {
+          hadActiveNative = true;
         }
+      }
+      if (hadActiveNative && activeNativePort) {
+        try { activeNativePort.postMessage({ action: 'cancel' }); } catch (_) {}
       }
       activeDownloads.clear();
       setActionBadge('');
-      chrome.storage.local.set({ downloadHistory: [] });
+      historyWritePromise = historyWritePromise
+        .then(() => new Promise((resolve) => {
+          try { chrome.storage.local.set({ downloadHistory: [] }, () => resolve()); } catch (_) { resolve(); }
+        }))
+        .catch(() => {});
       try {
         if (chrome.downloads && chrome.downloads.search) {
           chrome.downloads.search({}, (items) => {
@@ -3301,17 +3390,23 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         } catch (_) {}
       }
 
-      chrome.storage.local.get(['downloadHistory'], (res) => {
-        const history = Array.isArray(res.downloadHistory) ? res.downloadHistory : [];
-        const updated = history.filter(item => {
-          const itId = String(item.id || '');
-          const itChromeId = item.chromeId ? String(item.chromeId) : '';
-          if (targetId && (itId === targetId || itChromeId === targetId)) return false;
-          if (chromeId && (itId === chromeId || itChromeId === chromeId)) return false;
-          return String(item.id || '') !== targetId && String(item.chromeId || '') !== targetId;
-        });
-        chrome.storage.local.set({ downloadHistory: updated });
-      });
+      historyWritePromise = historyWritePromise
+        .then(() => new Promise((resolve) => {
+          try {
+            chrome.storage.local.get(['downloadHistory'], (res) => {
+              const history = Array.isArray(res && res.downloadHistory) ? res.downloadHistory : [];
+              const updated = history.filter(item => {
+                const itId = String(item.id || '');
+                const itChromeId = item.chromeId ? String(item.chromeId) : '';
+                if (targetId && (itId === targetId || itChromeId === targetId)) return false;
+                if (chromeId && (itId === chromeId || itChromeId === chromeId)) return false;
+                return String(item.id || '') !== targetId && String(item.chromeId || '') !== targetId;
+              });
+              try { chrome.storage.local.set({ downloadHistory: updated }, () => resolve()); } catch (_) { resolve(); }
+            });
+          } catch (_) { resolve(); }
+        }))
+        .catch(() => {});
       sendResponse({ success: true });
       return false;
     }
@@ -3334,7 +3429,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         referrer: req.referer || req.pageUrl,
         pageUrl: req.pageUrl,
         taskId: req.taskId,
-        outputDir: req.outputDir || configuredDownloadDir || '',
+        outputDir: (isPrivilegedExtensionSender(sender) ? req.outputDir : '') || configuredDownloadDir || '',
         quality: req.quality || (isAudio ? 'audio' : 'best'),
         soundOnly: isAudio
       };

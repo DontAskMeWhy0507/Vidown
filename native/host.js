@@ -390,7 +390,7 @@ function startStreamRelayJob(msg) {
   const targetDir = resolveTargetDir(msg.outputDir);
   const finalFilename = sanitizeFilename(msg.filename || msg.title || 'video', 'mp4');
   const outPath = path.join(targetDir, finalFilename);
-  const part = partPathFor(outPath);
+  const part = partPathFor(outPath, msg.taskId);
   try {
     const fd = fs.openSync(part, 'w');
     const job = { taskId: msg.taskId, fd, outPath, partPath: part, bytesWritten: 0, total: Number(msg.total) || 0, intervals: [] };
@@ -499,7 +499,7 @@ function finishStreamJob(msg) {
       if (written !== job.total) throw new Error(`size mismatch: wrote ${written} of ${job.total} bytes`);
       validateRelayCoverage(job.intervals, job.total);
     }
-    const publishedPath = finalizePartFile(job.outPath);
+    const publishedPath = finalizePartFile(job.outPath, job.taskId);
     if (!publishedPath) throw new Error('rename failed');
     logHost(`Stream relay completed: "${publishedPath}" (${job.bytesWritten} bytes)`);
     sendMessage({ action: 'progress', taskId: msg.taskId, percent: '100%', speed: 'Completed', eta: '', size: formatBytes(job.bytesWritten) });
@@ -1004,12 +1004,13 @@ const httpsKeepAliveAgent = new https.Agent({ keepAlive: true, maxSockets: 32, m
 // Downloads stage into `<final>.part` and rename atomically on success, so a
 // crash, kill, or second host process retrying the same title can never leave a
 // corrupt file that looks complete to the user and the openFile matcher.
-function partPathFor(outPath) {
-  return `${outPath}.part`;
+function partPathFor(outPath, taskId) {
+  const safeId = sanitizeTaskId(taskId);
+  return safeId ? `${outPath}.${safeId}.part` : `${outPath}.part`;
 }
 
-function finalizePartFile(outPath) {
-  const part = partPathFor(outPath);
+function finalizePartFile(outPath, taskId) {
+  const part = partPathFor(outPath, taskId);
   try {
     if (!fs.existsSync(part)) return false;
     const targetDir = path.dirname(outPath);
@@ -1040,8 +1041,8 @@ function finalizePartFile(outPath) {
   }
 }
 
-function cleanupPartialFiles(outPath) {
-  try { if (fs.existsSync(partPathFor(outPath))) fs.unlinkSync(partPathFor(outPath)); } catch (_) {}
+function cleanupPartialFiles(outPath, taskId) {
+  try { if (fs.existsSync(partPathFor(outPath, taskId))) fs.unlinkSync(partPathFor(outPath, taskId)); } catch (_) {}
 }
 
 function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency = 10, onProgress, signal }) {
@@ -1151,15 +1152,22 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
       }
     }
 
-    function fetchBlock(block, retryCount) {
+    function fetchBlock(block, retryCount, blockUrl = url, blockHeaders = headers, redirectsLeft = 5) {
       return new Promise((blockResolve) => {
         if (isAborted || hasError) return blockResolve();
 
         let currentWritePos = block.start;
-        const u = new URL(url);
+        let attemptBytes = 0;
+        const rollbackAttemptBytes = () => {
+          if (attemptBytes > 0) {
+            totalDownloaded = Math.max(0, totalDownloaded - attemptBytes);
+            attemptBytes = 0;
+          }
+        };
+        const u = new URL(blockUrl);
         const client = u.protocol === 'https:' ? https : http;
         const agent = u.protocol === 'https:' ? httpsKeepAliveAgent : httpKeepAliveAgent;
-        const reqHeaders = { ...headers, Range: `bytes=${currentWritePos}-${block.end}` };
+        const reqHeaders = { ...blockHeaders, Range: `bytes=${currentWritePos}-${block.end}` };
 
         const blockChunks = [];
 
@@ -1171,18 +1179,14 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
           if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
             activeReqs.delete(req);
             res.destroy();
-            const nextUrl = new URL(res.headers.location, url).href;
-            const origHost = new URL(url).hostname;
-            const targetHost = new URL(nextUrl).hostname;
-            if (!isSameOriginOrSubdomain(origHost, targetHost)) {
-              delete reqHeaders.Cookie;
-              delete reqHeaders.cookie;
-              delete reqHeaders.Authorization;
-              delete reqHeaders.authorization;
+            if (redirectsLeft <= 0) {
+              hasError = true;
+              cleanup();
+              return reject(new Error('Too many redirects'));
             }
-            headers = redirectHeaders(headers, url, nextUrl);
-            url = nextUrl;
-            return fetchBlock(block, retryCount).then(blockResolve);
+            const nextUrl = new URL(res.headers.location, blockUrl).href;
+            const nextHeaders = redirectHeaders(blockHeaders, blockUrl, nextUrl);
+            return fetchBlock(block, retryCount, nextUrl, nextHeaders, redirectsLeft - 1).then(blockResolve);
           }
 
           // Block requests MUST return 206 Partial Content. Reject 200 on chunked block requests.
@@ -1224,6 +1228,7 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
             if (isAborted || hasError) return;
             blockChunks.push(chunk);
             currentWritePos += chunk.length;
+            attemptBytes += chunk.length;
             totalDownloaded += chunk.length;
           });
 
@@ -1232,8 +1237,9 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
             if (isAborted || hasError) return blockResolve();
 
             if (currentWritePos <= block.end) {
+              rollbackAttemptBytes();
               if (retryCount < 4) {
-                return setTimeout(() => fetchBlock(block, retryCount + 1).then(blockResolve), 500);
+                return setTimeout(() => fetchBlock(block, retryCount + 1, blockUrl, blockHeaders, redirectsLeft).then(blockResolve), 500);
               }
               hasError = true;
               cleanup();
@@ -1271,8 +1277,9 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
 
           res.on('error', (err) => {
             activeReqs.delete(req);
+            rollbackAttemptBytes();
             if (retryCount < 4 && !isAborted && !hasError) {
-              setTimeout(() => fetchBlock(block, retryCount + 1).then(blockResolve), 600);
+              setTimeout(() => fetchBlock(block, retryCount + 1, blockUrl, blockHeaders, redirectsLeft).then(blockResolve), 600);
             } else if (!hasError && !isAborted) {
               hasError = true;
               cleanup();
@@ -1285,8 +1292,9 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
 
         req.on('error', (err) => {
           activeReqs.delete(req);
+          rollbackAttemptBytes();
           if (retryCount < 4 && !isAborted && !hasError) {
-            setTimeout(() => fetchBlock(block, retryCount + 1).then(blockResolve), 600);
+            setTimeout(() => fetchBlock(block, retryCount + 1, blockUrl, blockHeaders, redirectsLeft).then(blockResolve), 600);
           } else if (!hasError && !isAborted) {
             hasError = true;
             cleanup();
@@ -1317,8 +1325,11 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
   });
 }
 
-function downloadFileSingleStream({ url, outPath, headers, onProgress, signal }) {
+function downloadFileSingleStream({ url, outPath, headers, onProgress, signal, maxRedirects = 5, timeoutMs = 15000, bodyTimeoutMs = 30000 }) {
   return new Promise((resolve, reject) => {
+    if (maxRedirects <= 0) {
+      return reject(new Error('Too many redirects'));
+    }
     const u = new URL(url);
     const client = u.protocol === 'https:' ? https : http;
     const partPath = partPathFor(outPath);
@@ -1329,11 +1340,14 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
     let lastBytes = 0;
 
     const req = client.get(u, { headers }, (res) => {
+      res.setTimeout(bodyTimeoutMs, () => {
+        res.destroy(new Error('RESPONSE_BODY_TIMEOUT'));
+      });
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         fileStream.close();
         try { fs.unlinkSync(partPath); } catch (e) {}
         const nextUrl = new URL(res.headers.location, url).href;
-        return downloadFileSingleStream({ url: nextUrl, outPath, headers: redirectHeaders(headers, url, nextUrl), onProgress, signal }).then(resolve).catch(reject);
+        return downloadFileSingleStream({ url: nextUrl, outPath, headers: redirectHeaders(headers, url, nextUrl), onProgress, signal, maxRedirects: maxRedirects - 1, timeoutMs, bodyTimeoutMs }).then(resolve).catch(reject);
       }
       if (res.statusCode < 200 || res.statusCode >= 300) {
         fileStream.close();
@@ -1410,6 +1424,9 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
         reject(new Error('USER_CANCELED'));
       };
     }
+    req.setTimeout(timeoutMs, () => {
+      req.destroy(new Error('CONNECT_TIMEOUT'));
+    });
     req.on('error', (err) => {
       cleanupPartialFiles(outPath);
       if (totalBytes > 0 && downloadedBytes < totalBytes) {
