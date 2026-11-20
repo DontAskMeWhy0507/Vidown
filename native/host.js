@@ -2418,7 +2418,13 @@ async function startFfmpegDirectStream(req) {
   }
 
   const isAudio = req.quality === 'audio' || req.soundOnly;
-  const ext = isAudio ? 'mp3' : 'mp4';
+  const DIRECT_EXTS = new Set(['mp4', 'webm', 'mkv', 'mov', 'm4v', 'mp3', 'm4a', 'aac', 'wav', 'flac', 'ogg', 'opus', 'vtt', 'srt']);
+  let requestedExt = String(req.ext || '').toLowerCase().replace(/^\./, '');
+  if (!requestedExt && req.filename) {
+    const fnMatch = String(req.filename).toLowerCase().match(/\.([a-z0-9]{2,5})$/);
+    if (fnMatch) requestedExt = fnMatch[1];
+  }
+  const ext = isAudio ? 'mp3' : (DIRECT_EXTS.has(requestedExt) ? requestedExt : 'mp4');
   const targetDir = resolveTargetDir(req.outputDir);
   const rawTitle = (req.filename || req.title || 'video').replace(/\.[a-z0-9]{2,5}$/i, '');
   const finalFilename = sanitizeFilename(`${rawTitle}.${ext}`, ext);
@@ -3217,8 +3223,22 @@ function startImageTransfer(req, outPath) {
   });
 }
 
+function isNativeImageRequest(req) {
+  if (!req) return false;
+  if (req.mediaType === 'image' || req.type === 'image') return true;
+  if (req.mediaType === 'video' || req.type === 'video' || req.mediaType === 'audio' || req.type === 'audio' || req.type === 'subtitles') return false;
+  if (req.filename && /\.(jpe?g|png|gif|webp|avif|bmp)$/i.test(String(req.filename).trim())) return true;
+  for (const raw of [req.url, req.videoUrl]) {
+    if (typeof raw !== 'string' || !raw) continue;
+    try {
+      if (/\.(jpe?g|png|gif|webp|avif|bmp)$/i.test(new URL(raw).pathname)) return true;
+    } catch (_) {}
+  }
+  return false;
+}
+
 function startDownload(req) {
-  if (req.mediaType === 'image' || [req.url, req.videoUrl, req.filename].some(value => /\.(jpe?g|png|gif|webp|avif|bmp)(?:[?#]|$)/i.test(String(value || '')))) return startImageDownload(req);
+  if (isNativeImageRequest(req)) return startImageDownload(req);
 
   logHost(`startDownload: ${JSON.stringify({ url: req.url, videoUrl: req.videoUrl, audioUrl: req.audioUrl, title: req.title, quality: req.quality, hasPlayList: Boolean(req.play_list || req.playList) })}`);
 

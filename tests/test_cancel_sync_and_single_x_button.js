@@ -16,7 +16,7 @@ assert.ok(downloadsJs.includes("confirm('Are you sure you want to cancel this do
 assert.ok(downloadsJs.includes("cancelDownloadItem(item)"), 'btn-card-remove must invoke cancelDownloadItem when confirmed');
 
 // Ensure context menu item is synchronized
-assert.ok(downloadsJs.includes("itemDel.textContent = item.state === 'downloading' ? 'Cancel download' : 'Remove from list'"), 'Context menu delete item must show Cancel download during download');
+assert.ok(downloadsJs.includes("isActiveDownloadState(item.state) ? 'Cancel download' : 'Remove from list'"), 'Context menu delete item must show Cancel download during download');
 
 // Ensure cancelDownloadItem implementation
 assert.ok(downloadsJs.includes("function cancelDownloadItem(item)"), 'cancelDownloadItem must be defined in downloads.js');

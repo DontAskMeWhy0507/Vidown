@@ -50,12 +50,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  let toastTimer = null;
   function showToast(msg) {
     if (!toast) return;
+    if (toastTimer) clearTimeout(toastTimer);
     toast.textContent = msg;
     toast.style.display = 'block';
-    setTimeout(() => {
+    toastTimer = setTimeout(() => {
       toast.style.display = 'none';
+      toastTimer = null;
     }, 2500);
   }
 
@@ -216,11 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (statusRes) {
           if (statusRes.item) activeItem = statusRes.item;
           if (Array.isArray(statusRes.activeTaskIds)) {
-            activeIds = new Set(statusRes.activeTaskIds);
+            activeIds = new Set(statusRes.activeTaskIds.map(String));
           } else if (Array.isArray(statusRes.activeDownloads)) {
-            activeIds = new Set(statusRes.activeDownloads.map(t => t.id));
+            activeIds = new Set(statusRes.activeDownloads.map(t => String(t.id)));
           } else if (activeItem && activeItem.id) {
-            activeIds.add(activeItem.id);
+            activeIds.add(String(activeItem.id));
           }
         }
       } catch (e) {}
@@ -243,11 +246,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item.state === 'interrupted' && item.error !== 'USER_CANCELED') item.state = 'error';
 
         const isFinished = item.percent === '100%' || item.speed === 'Completed';
-        if (isFinished) {
+        if (isFinished && item.state !== 'canceled' && item.state !== 'deleted' && item.state !== 'error') {
           item.state = 'completed';
         }
         if (item.state === 'downloading') {
-          const isTaskActive = activeIds.has(item.id) || (activeItem && activeItem.id === item.id);
+          const isTaskActive = activeIds.has(String(item.id)) || (item.chromeId && activeIds.has(String(item.chromeId))) || (activeItem && String(activeItem.id) === String(item.id));
           // If task is not active in the background engine
           if (!isTaskActive) {
             if (isFinished || item.percent === '100%') {
@@ -366,15 +369,26 @@ document.addEventListener('DOMContentLoaded', () => {
     return it.type === 'audio' || /\.(mp3|m4a|aac|flac|wav|ogg)$/i.test(fn);
   }
 
+  function isImageOrSubtitleItem(it) {
+    if (!it) return false;
+    if (it.type === 'image' || it.type === 'subtitles') return true;
+    const fn = (it.filename || it.outputPath || it.outputFile || it.title || '').toLowerCase();
+    return /\.(jpe?g|png|gif|webp|bmp|avif|vtt|srt|ass|ssa|ttml)$/i.test(fn);
+  }
+
   function isVideoItem(it) {
     if (!it) return false;
-    if (it.type === 'image' || isAudioItem(it)) return false;
+    if (isImageOrSubtitleItem(it) || isAudioItem(it)) return false;
     return true;
+  }
+
+  function isActiveDownloadState(state) {
+    return state === 'downloading' || state === 'in_progress' || state === 'queued';
   }
 
   function updateCounts() {
     const total = allItems.length;
-    const downloading = allItems.filter(it => it.state === 'downloading').length;
+    const downloading = allItems.filter(it => isActiveDownloadState(it.state)).length;
     const completed = allItems.filter(it => it.state === 'completed').length;
     const video = allItems.filter(it => isVideoItem(it)).length;
     const audio = allItems.filter(it => isAudioItem(it)).length;
@@ -389,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function getFilteredItems() {
     return allItems.filter(item => {
       // Filter by category
-      if (currentFilter === 'downloading' && item.state !== 'downloading') return false;
+      if (currentFilter === 'downloading' && !isActiveDownloadState(item.state)) return false;
       if (currentFilter === 'completed' && item.state !== 'completed') return false;
       if (currentFilter === 'video' && !isVideoItem(item)) return false;
       if (currentFilter === 'audio' && !isAudioItem(item)) return false;
@@ -523,11 +537,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const itemDel = document.createElement('div');
     itemDel.className = 'menu-dropdown-item danger';
-    itemDel.textContent = item.state === 'downloading' ? 'Cancel download' : 'Remove from list';
+    itemDel.textContent = isActiveDownloadState(item.state) ? 'Cancel download' : 'Remove from list';
     itemDel.addEventListener('click', (e) => {
       e.stopPropagation();
       menu.remove();
-      if (item.state === 'downloading') {
+      if (isActiveDownloadState(item.state)) {
         if (confirm('Are you sure you want to cancel this download?')) {
           cancelDownloadItem(item);
         }
@@ -970,6 +984,9 @@ document.addEventListener('DOMContentLoaded', () => {
       audioUrl: item.audioUrl || '',
       isYouTubeDash: Boolean(item.isYouTubeDash),
       title: item.title,
+      type: item.type || (isAudioItem(item) ? 'audio' : (isImageOrSubtitleItem(item) ? (item.type || 'image') : 'video')),
+      mediaType: item.type || (isAudioItem(item) ? 'audio' : (isImageOrSubtitleItem(item) ? (item.type || 'image') : 'video')),
+      ext: item.ext || ((item.filename || '').match(/\.([a-z0-9]{2,5})$/i)?.[1] || ''),
       quality: item.quality || (item.type === 'audio' ? 'audio' : 'best'),
       soundOnly: Boolean(item.soundOnly || item.type === 'audio'),
       referer: item.referer || item.pageUrl || item.url,
@@ -1588,6 +1605,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (changes.downloadHistory) {
         syncHistoryUpdatesInPlace(changes.downloadHistory.newValue);
       }
+      if (settingOnpageButtons && (changes.on_page_buttons || changes.onPageButtonsEnabled)) {
+        const ch = changes.on_page_buttons || changes.onPageButtonsEnabled;
+        if (ch && typeof ch.newValue === 'boolean') settingOnpageButtons.checked = ch.newValue;
+      }
+      if (settingImageButtons && (changes.image_download_enabled || changes.imageDownloadEnabled)) {
+        const ch = changes.image_download_enabled || changes.imageDownloadEnabled;
+        if (ch && typeof ch.newValue === 'boolean') settingImageButtons.checked = ch.newValue;
+      }
     }
   });
 
@@ -1605,18 +1630,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else if (msg.action === 'nativeComplete' || msg.action === 'nativeError' || msg.action === 'nativeCanceled') {
       loadDownloads();
-    } else if (msg.action === 'openFileResult' && !msg.success && msg.fileNotFound) {
-      const missingId = msg.id || msg.taskId;
-      const target = missingId
-        ? allItems.find(it => String(it.id) === String(missingId) || String(it.chromeId) === String(missingId))
-        : null;
-      if (target) {
-        target.state = 'deleted';
-        renderList();
-      } else {
-        loadDownloads();
+    } else if (msg.action === 'openFileResult' && !msg.success) {
+      if (msg.fileNotFound) {
+        const missingId = msg.id || msg.taskId;
+        const target = missingId
+          ? allItems.find(it => String(it.id) === String(missingId) || String(it.chromeId) === String(missingId))
+          : null;
+        if (target) {
+          target.state = 'deleted';
+          renderList();
+        } else {
+          loadDownloads();
+        }
+        showToast('File was moved or deleted from disk. Click Retry to download again.');
+      } else if (msg.error) {
+        showToast(msg.error);
       }
-      showToast('File was moved or deleted from disk. Click Retry to download again.');
     }
   });
 

@@ -58,12 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const recentlyDeletedIds = new Set();
 
+  let toastTimer = null;
   function showToast(msg) {
     if (!toast) return;
+    if (toastTimer) clearTimeout(toastTimer);
     toast.textContent = msg;
     toast.style.display = 'block';
-    setTimeout(() => {
+    toastTimer = setTimeout(() => {
       toast.style.display = 'none';
+      toastTimer = null;
     }, 2800);
   }
 
@@ -416,6 +419,9 @@ document.addEventListener('DOMContentLoaded', () => {
       audioUrl: item.audioUrl || '',
       isYouTubeDash: Boolean(item.isYouTubeDash),
       title: item.title,
+      type: item.type || detectMediaType(item),
+      mediaType: item.type || detectMediaType(item),
+      ext: item.ext || ((item.filename || '').match(/\.([a-z0-9]{2,5})$/i)?.[1] || ''),
       quality: item.quality || (item.type === 'audio' ? 'audio' : 'best'),
       soundOnly: Boolean(item.soundOnly || item.type === 'audio'),
       referer: item.referer || item.pageUrl || item.url,
@@ -443,10 +449,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const strId = String(item.id || '');
     const strChromeId = item.chromeId ? String(item.chromeId) : '';
 
-    const numChromeId = Number(item.chromeId || item.id);
-    if (!isNaN(numChromeId) && numChromeId > 0 && typeof chrome !== 'undefined' && chrome.downloads) {
+    const validChromeId = Number(item.chromeId);
+    if (Number.isInteger(validChromeId) && validChromeId > 0 && typeof chrome !== 'undefined' && chrome.downloads) {
       try {
-        chrome.downloads.cancel(numChromeId, () => {});
+        chrome.downloads.cancel(validChromeId, () => {});
       } catch (_) {}
     }
 
@@ -720,10 +726,12 @@ document.addEventListener('DOMContentLoaded', () => {
         msg.action === 'progress' || msg.action === 'complete' || msg.action === 'error' ||
         msg.action === 'nativeProgress' || msg.action === 'nativeComplete' || msg.action === 'nativeError' ||
         msg.action === 'nativeCanceled' || msg.action === 'openFileFailed' ||
-        (msg.action === 'openFileResult' && !msg.success && msg.fileNotFound)
+        (msg.action === 'openFileResult' && !msg.success)
       ) {
         if (msg.action === 'openFileFailed' || (msg.action === 'openFileResult' && !msg.success && msg.fileNotFound)) {
           showToast('File was moved or deleted from disk');
+        } else if (msg.action === 'openFileResult' && !msg.success && msg.error) {
+          showToast(msg.error);
         }
         loadRecentDownloads();
         // Direct single load on terminal events

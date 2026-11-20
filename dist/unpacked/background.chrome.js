@@ -916,8 +916,28 @@ function formatSpeed(bytesPerSec) {
   return `${Math.round(bytesPerSec / 1024)} KB/s`;
 }
 
+function isSubtitleDownload(options) {
+  if (!options) return false;
+  if (options.type === 'subtitles' || options.mediaType === 'subtitles') return true;
+  const ext = String(options.ext || '').toLowerCase().replace(/^\./, '');
+  if (ext === 'vtt' || ext === 'srt' || ext === 'ass' || ext === 'ssa' || ext === 'ttml') return true;
+  const fn = String(options.filename || '').toLowerCase();
+  if (/\.(vtt|srt|ass|ssa|ttml)$/i.test(fn)) return true;
+  const urls = [options.url, options.videoUrl].filter(u => typeof u === 'string' && u);
+  for (const raw of urls) {
+    if (raw.startsWith('data:text/plain') || raw.startsWith('data:text/vtt')) return true;
+    try {
+      const parsed = new URL(raw);
+      const p = parsed.pathname.toLowerCase();
+      if (/\.(vtt|srt|ass|ssa|ttml)$/i.test(p)) return true;
+      if (p.includes('/api/timedtext') && (parsed.hostname.includes('youtube.com') || parsed.searchParams.has('fmt'))) return true;
+    } catch (_) {}
+  }
+  return false;
+}
+
 function requiresNativeHelper(options) {
-  if (!options || isImageDownload(options)) return false;
+  if (!options || isImageDownload(options) || (typeof isSubtitleDownload === "function" && isSubtitleDownload(options))) return false;
   const rawUrlObj = (options.url && typeof options.url === 'object' && !Array.isArray(options.url)) ? options.url : null;
   const videoUrl = options.videoUrl || (rawUrlObj && rawUrlObj.videoUrl) || '';
   const audioUrl = options.audioUrl || (rawUrlObj && rawUrlObj.audioUrl) || '';
@@ -961,12 +981,25 @@ function cleanMediaCdnUrl(rawUrl) {
   } catch (_) { return rawUrl; }
 }
 function isImageDownload(options) {
-  return Boolean(options && (options.mediaType === 'image' || options.type === 'image' ||
-    [options.url, options.videoUrl, options.filename].some(value => /\.(jpe?g|png|webp|gif|bmp|avif)(?:[?#]|$)/i.test(String(value || '')))));
+  if (!options) return false;
+  if (options.mediaType === 'image' || options.type === 'image') return true;
+  if (options.mediaType === 'video' || options.type === 'video' || options.mediaType === 'audio' || options.type === 'audio' || options.type === 'subtitles') {
+    return false;
+  }
+  const fn = String(options.filename || '').trim();
+  if (fn && /\.(jpe?g|png|webp|gif|bmp|avif)$/i.test(fn)) return true;
+  for (const raw of [options.url, options.videoUrl]) {
+    if (typeof raw !== 'string' || !raw) continue;
+    try {
+      const pathname = new URL(raw).pathname;
+      if (/\.(jpe?g|png|webp|gif|bmp|avif)$/i.test(pathname)) return true;
+    } catch (_) {}
+  }
+  return false;
 }
 
 function isSessionProtectedStream(options) {
-  if (!options || isImageDownload(options)) return false;
+  if (!options || isImageDownload(options) || (typeof isSubtitleDownload === "function" && isSubtitleDownload(options))) return false;
   const url = String(options.videoUrl || options.url || '').toLowerCase();
   const page = String(options.pageUrl || options.referrer || '').toLowerCase();
   return (
@@ -1024,7 +1057,7 @@ function getCookieHeader(urls, callback) {
 function trackBrowserDownload(chromeId, options, filename, url) {
   if (!chromeId) return;
   const safeFilename = filename || (options.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
-  const mediaType = (options.convertToMp3 || options.soundOnly) ? 'audio' : 'video';
+  const mediaType = (typeof isSubtitleDownload === "function" && isSubtitleDownload(options)) ? 'subtitles' : (isImageDownload(options) ? 'image' : ((options.convertToMp3 || options.soundOnly) ? 'audio' : 'video'));
   const targetUrl = url || options.videoUrl || options.url || '';
   const historyId = options.taskId || chromeId;
   if (purgedTaskIds.has(String(historyId)) || purgedTaskIds.has(String(chromeId))) {
@@ -1828,6 +1861,10 @@ function isBogusStreamUrl(url, pageUrl) {
   ) {
     return true;
   }
+  if (typeof isSubtitleDownload === "function" && isSubtitleDownload(options || { url })) {
+    if (clean.startsWith('data:text/plain') || clean.startsWith('data:text/vtt')) return false;
+    try { return !/^https?:$/.test(new URL(url).protocol); } catch (_) { return true; }
+  }
   if (isImageDownload(options || { url })) {
     try { return !/^https?:$/.test(new URL(url).protocol); } catch (_) { return true; }
   }
@@ -1961,6 +1998,10 @@ function startNativeDownload(downloadParams, callback) {
     : (downloadParams.referrer && !downloadParams.referrer.startsWith('chrome-extension:')
         ? downloadParams.referrer
         : currentActiveTabUrl);
+  if (typeof isSubtitleDownload === "function" && isSubtitleDownload(downloadParams)) {
+    // Subtitles (.vtt/.srt/timedtext/data:text/plain) must download directly via browser engine without FFmpeg muxing
+    return false;
+  }
   const hasPlayList = Boolean(downloadParams.play_list || downloadParams.playList);
   if (!hasPlayList) {
     const resolvedTarget = resolveRealStreamForDownload(targetUrl, effectivePage, downloadParams.tabId);
@@ -2422,7 +2463,7 @@ function formatRelayBytes(bytes) {
 
 let nextRelayRuleId = 20000;
 function startStreamRelayDownload(downloadParams, callback) {
-  if (isImageDownload(downloadParams)) return false;
+  if (isImageDownload(downloadParams) || (typeof isSubtitleDownload === "function" && isSubtitleDownload(downloadParams))) return false;
   // Same availability guard as the native engine: no host, no relay.
   if (nativeProbeSettled && !nativeHelperAvailable) return false;
   const port = getOrCreateNativePort();
@@ -3434,8 +3475,9 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'downloadNative': {
-      const isAudio = Boolean(req.soundOnly || req.quality === 'audio');
-      const ext = isAudio ? 'mp3' : (req.ext || 'mp4');
+      const isAudio = Boolean(req.soundOnly || req.quality === 'audio' || req.type === 'audio' || req.mediaType === 'audio');
+      const reqExt = String(req.ext || '').toLowerCase().replace(/^\./, '');
+      const ext = reqExt || (isAudio ? 'mp3' : 'mp4');
       const baseTitle = (req.title || 'video')
         .replace(/\.[a-zA-Z0-9]+$/, '')
         .replace(/[<>:"/\\|?*]/g, '_')
@@ -3447,6 +3489,10 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         url: req.videoUrl || req.url,
         videoUrl: req.videoUrl || req.url,
         audioUrl: req.audioUrl,
+        play_list: req.play_list || req.playList || '',
+        ext: ext,
+        type: req.type || req.mediaType || (isAudio ? 'audio' : undefined),
+        mediaType: req.mediaType || req.type || (isAudio ? 'audio' : undefined),
         filename: `${baseTitle || 'video'}.${ext}`,
         referrer: req.referer || req.pageUrl,
         pageUrl: req.pageUrl,

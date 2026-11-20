@@ -68,7 +68,7 @@ const bgCode = fs.readFileSync(path.join(__dirname, '../background.chrome.js'), 
 
 // Ensure nativeHelperAvailable is prioritized before browser downloads so Save As is eliminated
 const downloadNativeIdx = bgCode.indexOf("case 'downloadNative':");
-const nativeBlock = bgCode.slice(downloadNativeIdx, downloadNativeIdx + 1500);
+const nativeBlock = bgCode.slice(downloadNativeIdx, downloadNativeIdx + 2200);
 
 assert.ok(
   nativeBlock.includes('startNativeDownload(opts)'),
