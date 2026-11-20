@@ -2,13 +2,13 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 NODE_BIN="$(which node 2>/dev/null || echo "")"
 if [ -z "$NODE_BIN" ] || [ ! -x "$NODE_BIN" ]; then
-  if [ -x "/opt/homebrew/bin/node" ]; then
-    NODE_BIN="/opt/homebrew/bin/node"
-  elif [ -x "/usr/local/bin/node" ]; then
-    NODE_BIN="/usr/local/bin/node"
-  elif [ -x "/usr/bin/node" ]; then
-    NODE_BIN="/usr/bin/node"
-  fi
+  NODE_BIN=""
+  for candidate in     "/opt/homebrew/bin/node"     "/usr/local/bin/node"     "/usr/bin/node"     "$HOME/.volta/bin/node"     "$HOME/.asdf/shims/node"     "$HOME/.local/share/mise/shims/node"     "$HOME/.nvm/versions/node/"*/bin/node; do
+    if [ -x "$candidate" ]; then
+      NODE_BIN="$candidate"
+      break
+    fi
+  done
 fi
 
 if [ -z "$NODE_BIN" ]; then

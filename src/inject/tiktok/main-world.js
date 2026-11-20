@@ -27,7 +27,7 @@ function findReactBitrateProps(element) {
     return null;
   })(element);
 
-  let propsKey = '__reactProps' + suffix;
+  let propsKey = suffix ? ('__reactProps' + suffix) : '__reactProps';
   let current = element;
   while (current && current.parentElement && current.parentElement.tagName !== 'ARTICLE' && current.parentElement.tagName !== 'HTML') {
     const children = current[propsKey]?.children || [];
@@ -221,17 +221,18 @@ for (let i = 0; i < videos.length; i++) {
 
 if (typeof window !== 'undefined' && !window.__saviorTikTokObserverActive) {
   window.__saviorTikTokObserverActive = true;
-  let debounceTimer = null;
   const observer = new MutationObserver(() => {
-    if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {}, 200);
+    if (window.__tiktokVideoMap && Object.keys(window.__tiktokVideoMap).length > 500) {
+      window.__tiktokVideoMap = {};
+    }
   });
   if (document.body || document.documentElement) {
     observer.observe(document.body || document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['src', 'href', 'poster'] });
   }
   window.addEventListener('scroll', () => {
-    if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {}, 250);
+    if (window.__tiktokVideoMap && Object.keys(window.__tiktokVideoMap).length > 500) {
+      window.__tiktokVideoMap = {};
+    }
   }, { passive: true });
 }
 

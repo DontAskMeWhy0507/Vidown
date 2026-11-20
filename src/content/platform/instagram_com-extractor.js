@@ -194,7 +194,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_f = new Map();
   function getDynamicInstagramHeaders() {
     var match = typeof document !== "undefined" && document.cookie ? document.cookie.match(/csrftoken=([^;]+)/) : null;
-    var csrf = match ? match[1] : "xvl5U8HSBDNKZnlUyZpYttlfwNqlgyLX";
+    var csrf = match ? match[1] : "";
     return {
       "x-asbd-id": "198387",
       "x-csrftoken": csrf,
@@ -361,7 +361,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return null === (var_r_1 = null === (var_e_1 = null == param_t_2 ?
   void 0 : param_t_2.image_versions2) || void 0 === var_e_1 ?
   void 0 : var_e_1.candidates) || void 0 === var_r_1 ? void 0 :
-  var_r_1[0].url;
+  (var_r_1[0] ? var_r_1[0].url : void 0);
   }
   )) || [], var_f.set(var_c_1, var_l);
   case 5:
@@ -400,8 +400,9 @@ export default function (moduleObj, exportsObj, requireFn) {
   headers: getDynamicInstagramHeaders(),
   credentials: "include"
   }
-  ).then(param_t_1 => param_t_1.json()).then(param_t_1 => {
+  ).then(param_t_1 => param_t_1.ok ? param_t_1.json() : null).then(param_t_1 => {
   var var_e_1;
+  if (!param_t_1 || !param_t_1.items || !param_t_1.items[0] || !param_t_1.items[0].video_dash_manifest) return [var_r];
   return Object(dep_format_resolver.d)(param_t_1.items[0].video_dash_manifest, (
   null === (var_e_1 = param_t_1.items[0].caption) || void 0 === var_e_1 ?
   void 0 : var_e_1.text) || var_u_1).map(param_t_2 => (param_t_2.ext = "mp4", param_t_2.exts = ["mp4"],
@@ -413,7 +414,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   if (var_f_1) return Object(dep_format_resolver.d)(var_f_1, var_u_1).map(param_t_1 => (
   param_t_1.ext = "mp4", param_t_1.exts = ["mp4"], param_t_1));
   var var_h_1 = /("|')video_versions("|'):\s*(.+?\]),/.exec(var_s);
-  return var_h_1 ? JSON.parse(var_h_1[3]).map(param_t_1 => {
+  return var_h_1 ? (function() { try { return JSON.parse(var_h_1[3]); } catch (_) { return []; } })().map(param_t_1 => {
   var var_e_1 = Object(dep_url_utils.f)(param_t_1.url);
   var_e_1.resolution = param_t_1.height + "p";
   var qualConst = dep_media_constants.r[var_e_1.resolution];

@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-11-02T11:10:44.216Z",
   "baselineBundleSize": 2404925,
-  "currentBuiltBundleSize": 2362018,
+  "currentBuiltBundleSize": 2363160,
   "totalSlots": 776,
   "realModulesCount": 649,
   "holesCount": 127,
@@ -110,7 +110,7 @@
       "start": 4421,
       "end": 32014,
       "size": 27593,
-      "fileSize": 41255,
+      "fileSize": 41538,
       "requires": [
         1,
         3,
@@ -535,7 +535,7 @@
       "start": 67261,
       "end": 106540,
       "size": 39279,
-      "fileSize": 54668,
+      "fileSize": 54711,
       "requires": [
         0,
         1,
@@ -837,7 +837,7 @@
       "start": 134172,
       "end": 149521,
       "size": 15349,
-      "fileSize": 22478,
+      "fileSize": 22489,
       "requires": [
         0,
         1,
@@ -1086,7 +1086,7 @@
       "start": 163288,
       "end": 165920,
       "size": 2632,
-      "fileSize": 4222,
+      "fileSize": 4225,
       "requires": [],
       "hasRegenerator": false,
       "isBnCopy": false,
@@ -1675,7 +1675,7 @@
       "start": 430922,
       "end": 443696,
       "size": 12774,
-      "fileSize": 23205,
+      "fileSize": 23316,
       "requires": [
         0,
         1,
@@ -2316,7 +2316,7 @@
       "start": 478844,
       "end": 480263,
       "size": 1419,
-      "fileSize": 3564,
+      "fileSize": 3714,
       "requires": [],
       "hasRegenerator": false,
       "isBnCopy": false,
@@ -2600,7 +2600,7 @@
       "start": 557964,
       "end": 561431,
       "size": 3467,
-      "fileSize": 7226,
+      "fileSize": 7239,
       "requires": [
         0,
         1
@@ -3046,7 +3046,7 @@
       "start": 578115,
       "end": 591956,
       "size": 13841,
-      "fileSize": 14902,
+      "fileSize": 15212,
       "requires": [
         0,
         1,
@@ -3070,7 +3070,7 @@
       "start": 591957,
       "end": 601262,
       "size": 9305,
-      "fileSize": 20742,
+      "fileSize": 20899,
       "requires": [
         0,
         1,
@@ -3215,7 +3215,7 @@
       "start": 663105,
       "end": 673585,
       "size": 10480,
-      "fileSize": 19968,
+      "fileSize": 19964,
       "requires": [
         0,
         1,
@@ -3942,7 +3942,7 @@
       "start": 848495,
       "end": 868682,
       "size": 20187,
-      "fileSize": 35480,
+      "fileSize": 35691,
       "requires": [
         0,
         1,
@@ -4173,7 +4173,7 @@
       "start": 881412,
       "end": 893571,
       "size": 12159,
-      "fileSize": 19250,
+      "fileSize": 19590,
       "requires": [
         0,
         1,
@@ -4294,7 +4294,7 @@
       "start": 908278,
       "end": 912614,
       "size": 4336,
-      "fileSize": 8570,
+      "fileSize": 8580,
       "requires": [
         0,
         1,
@@ -4776,7 +4776,7 @@
       "start": 983958,
       "end": 993557,
       "size": 9599,
-      "fileSize": 17758,
+      "fileSize": 17797,
       "requires": [
         1,
         3
@@ -5063,7 +5063,7 @@
       "start": 1049918,
       "end": 1069850,
       "size": 19932,
-      "fileSize": 44802,
+      "fileSize": 44980,
       "requires": [
         0,
         1,
@@ -5215,7 +5215,7 @@
       "start": 1083095,
       "end": 1094421,
       "size": 11326,
-      "fileSize": 21524,
+      "fileSize": 21546,
       "requires": [
         0,
         1,
@@ -5411,7 +5411,7 @@
       "start": 1123136,
       "end": 1134654,
       "size": 11518,
-      "fileSize": 20323,
+      "fileSize": 20517,
       "requires": [
         0,
         1,
@@ -6037,7 +6037,7 @@
       "start": 1235354,
       "end": 1243408,
       "size": 8054,
-      "fileSize": 15411,
+      "fileSize": 15823,
       "requires": [
         0,
         3,
@@ -6765,7 +6765,7 @@
       "start": 1361239,
       "end": 1364433,
       "size": 3194,
-      "fileSize": 5539,
+      "fileSize": 5516,
       "requires": [
         0,
         3,
@@ -6841,7 +6841,7 @@
       "start": 1371587,
       "end": 1380917,
       "size": 9330,
-      "fileSize": 17259,
+      "fileSize": 17368,
       "requires": [
         0,
         1,
@@ -7070,7 +7070,7 @@
       "start": 1411611,
       "end": 1416533,
       "size": 4922,
-      "fileSize": 3508,
+      "fileSize": 3540,
       "requires": [
         0,
         28
@@ -8354,7 +8354,7 @@
       "start": 1619236,
       "end": 1658768,
       "size": 39532,
-      "fileSize": 84213,
+      "fileSize": 84506,
       "requires": [
         0,
         1,
@@ -9713,7 +9713,7 @@
       "start": 1874310,
       "end": 1879106,
       "size": 4796,
-      "fileSize": 6931,
+      "fileSize": 7017,
       "requires": [
         12,
         32,
@@ -9732,7 +9732,7 @@
       "start": 1879107,
       "end": 1879908,
       "size": 801,
-      "fileSize": 1279,
+      "fileSize": 1293,
       "requires": [
         544,
         545,
@@ -9899,7 +9899,7 @@
       "start": 1882978,
       "end": 1993549,
       "size": 110571,
-      "fileSize": 156982,
+      "fileSize": 156776,
       "requires": [
         0,
         1,
@@ -9952,7 +9952,7 @@
       "start": 1993551,
       "end": 2001839,
       "size": 8288,
-      "fileSize": 12544,
+      "fileSize": 12607,
       "requires": [
         7,
         13,
@@ -12126,7 +12126,7 @@
       "start": 2256133,
       "end": 2256834,
       "size": 701,
-      "fileSize": 1239,
+      "fileSize": 1348,
       "requires": [
         25,
         171,
@@ -12675,7 +12675,7 @@
       "start": 2365055,
       "end": 2369088,
       "size": 4033,
-      "fileSize": 8006,
+      "fileSize": 8008,
       "requires": [
         0,
         89

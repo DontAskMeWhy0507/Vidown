@@ -1,7 +1,9 @@
 (() => {
   // Read the selected player's current state. Do not choose a tab-wide stream.
   window.__vidownResolveMedia = async function(request) {
-    const node = document.querySelector('[data-vidown-media-token="' + request.token + '"]');
+    if (!request || typeof request.token !== 'string' || !request.token) return {error:'INVALID_TOKEN'};
+    const safeToken = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function') ? CSS.escape(request.token) : request.token.replace(/["\\]/g, '\\$&');
+    const node = document.querySelector('[data-vidown-media-token="' + safeToken + '"]');
     const unchanged = () => node && location.href === request.sourceUrl &&
       (node.currentSrc || node.src || '') === request.currentSrc && (node.poster || '') === request.poster;
     if (!unchanged()) return {error:'MEDIA_CHANGED'};

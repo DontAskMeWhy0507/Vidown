@@ -20,7 +20,7 @@ export default function(t, e, r) {
               return false;
             case "width":
             case "height":
-              return a2["_" + t4.attributeName] !== o2;
+              return Boolean(a2 && a2["_" + t4.attributeName] !== o2);
           }
           return false;
         }).map((t4) => t4.target);
@@ -68,7 +68,10 @@ export default function(t, e, r) {
       }
       _applyStyleForNode(t3) {
         var e2 = this._appliedStyles.get(t3);
-        e2 && Object(n.p)(t3, e2), e2._width && (t3.width = e2._width), e2._height && (t3.height = e2._height);
+        if (!e2) return;
+        Object(n.p)(t3, e2);
+        if (e2._width) t3.width = e2._width;
+        if (e2._height) t3.height = e2._height;
       }
       _maximizeNode(e2) {
         var r2 = arguments.length > 1 && void 0 !== arguments[1] && arguments[1], n2 = null, i2 = h._getNodeSize(e2);
@@ -77,7 +80,7 @@ export default function(t, e, r) {
         o2 && (this._saveStyle(o2), this._saveAppliedStyle(o2, f));
         for (var a2 = e2; a2 && a2 !== document; a2 = a2.parentNode) {
           var d2 = a2;
-          if (!d2.matches("head, script, style, link, meta")) {
+          if (typeof d2.matches === "function" && !d2.matches("head, script, style, link, meta")) {
             if (this._saveStyle(d2), this._saveAppliedStyle(d2, c), r2 && this._saveAppliedStyle(d2, l), d2.matches("object, embed") && this._saveAppliedStyle(d2, f), d2.matches("iframe")) r2 = true;
             else if (!r2 && (Math.min(d2.parentNode.scrollWidth, d2.parentNode.offsetWidth) !== i2.width || Math.min(d2.parentNode.scrollHeight, d2.parentNode.offsetHeight) !== i2.height)) {
               r2 = true;

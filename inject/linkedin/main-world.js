@@ -9,7 +9,7 @@ if (videos) {
   Array.from(videos).filter(Boolean).forEach((video) => {
     try {
       const player = video.parentElement?.player;
-      const manifestUrl = player?.lastSource_?.player;
+      const manifestUrl = typeof player?.lastSource_?.src === 'string' ? player.lastSource_.src : (typeof player?.lastSource_?.player === 'string' ? player.lastSource_.player : '');
       if (manifestUrl) {
         video.setAttribute('savior-manifest-url', manifestUrl);
       }

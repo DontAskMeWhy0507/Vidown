@@ -46,7 +46,9 @@ function base64ToUint8Array(base64String) {
 
   // Extract secret key from JWT token payload (jti odd characters)
   const [, payloadBase64] = avsToken.split('.');
-  const jwtPayload = JSON.parse(atob(payloadBase64));
+  const normalizedB64 = String(payloadBase64 || '').replace(/-/g, '+').replace(/_/g, '/');
+  const paddedB64 = normalizedB64.padEnd(Math.ceil(normalizedB64.length / 4) * 4, '=');
+  const jwtPayload = JSON.parse(atob(paddedB64));
   const secretKey = [...jwtPayload.jti].filter((_, idx) => idx % 2 === 1).join('');
 
   const lines = decryptedM3u8?.split('\n') || [];

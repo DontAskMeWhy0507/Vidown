@@ -67,7 +67,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   },
   mediaObjectChange: param_t => {
   var var_e = param_t.mediaObject;
-  var_e.fixName = obj_u[var_e.url], var_e.filename = obj_u[var_e.url];
+  if (obj_u[var_e.url]) { var_e.fixName = obj_u[var_e.url]; var_e.filename = obj_u[var_e.url]; }
   }
   }
   ,
@@ -90,7 +90,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   turnOff: {
   updated() {
   var var_t;
-  if (/https:\/\/twitter\.com\/.*\/video\/[^\/]*/.test(location.href)) {
+  if (/https:\/\/(?:twitter|x)\.com\/.*\/video\/[^\/]*/.test(location.href)) {
   var var_e = document.querySelector('[data-viewportview="true"]');
   var_e && (null === (var_t = var_e.previousSibling) || void 0 === var_t ||
   var_t.classList.add("--savior-overlay-z-index-top"));

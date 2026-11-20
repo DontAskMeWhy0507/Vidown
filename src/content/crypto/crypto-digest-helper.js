@@ -23,10 +23,12 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   else {
   var var_y = var_c.match(regex_o);
+  if (!var_y || !var_y[2]) throw new Error("Invalid PEM format");
   var_r = var_u.from(var_y[2].replace(/[\r\n]/g, ""), "base64");
   }
+  var tagMatch = var_c.match(regex_i);
   return {
-  tag: var_c.match(regex_i)[1],
+  tag: tagMatch ? tagMatch[1] : "",
   data: var_r
   };
   };

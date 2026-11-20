@@ -69,7 +69,10 @@ export default function(module, exports, require) {
     }
 
     if (document.location.host === "keeng.vn" && resolvedFallback.includes("Album")) {
-      candidateTitle = document.getElementsByClassName("song_active")[0].children[0].title;
+      var activeSong = document.getElementsByClassName("song_active")[0];
+      if (activeSong && activeSong.children && activeSong.children[0] && activeSong.children[0].title) {
+        candidateTitle = activeSong.children[0].title;
+      }
     }
 
     if (document.location.host === "www.facebook.com") {

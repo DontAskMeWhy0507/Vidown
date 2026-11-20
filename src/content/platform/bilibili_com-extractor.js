@@ -465,7 +465,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return var_n.ext = "m3u8", var_n.exts = ["m3u8"], var_n.playData = var_u, "video";
   }
   catch (var_t) {
-  return console.warn(var_t), "null";
+  return console.warn(var_t), null;
   }
   }
   }
@@ -511,10 +511,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_v = var_p.split("/"),
   var_m = var_v[var_v.length - 2],
   list_y = [];
-  list_y.push(list_c[0]), list_y[0].url = {
-  videoUrl: var_p,
-  audioUrl: var_p
-  };
+  list_y.push(Object.assign({}, list_c[0], { url: { videoUrl: var_p, audioUrl: var_p } }));
   for (var obj_g = {
   }
   , num_b = 1;
@@ -522,7 +519,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   num_b++) {
   var var_w = list_c[num_b].url;
   if ("string" == typeof list_c[num_b].url && var_w.includes(var_m)) {
-  var var_A = new URL(var_w).searchParams.get("upsig");
+  var var_A = null; try { var_A = new URL(var_w).searchParams.get("upsig"); } catch (_) {}
   var_A && (!obj_g[var_A] || obj_g[var_A].size < list_c[num_b].size) &&
   (obj_g[var_A] = list_c[num_b]);
   }

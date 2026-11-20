@@ -347,7 +347,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return crypto.subtle.digest("SHA-256", var_e);
   }
   function var_w(param_t) {
-  return new Uint8Array(param_t.match(/.{1,2}/g).map(param_t_1 => parseInt(param_t_1,
+  return new Uint8Array((String(param_t || "").match(/.{1,2}/g) || []).map(param_t_1 => parseInt(param_t_1,
   16))).buffer;
   }
   function var_A(param_t, param_e) {

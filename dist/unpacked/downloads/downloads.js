@@ -518,8 +518,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return iconWrap;
   }
 
-  function showCardContextMenu(triggerBtn, item) {
+  let activeCloseMenuListener = null;
+  function clearActiveCardMenu() {
     document.querySelectorAll('.card-menu-dropdown').forEach(d => d.remove());
+    if (activeCloseMenuListener) {
+      document.removeEventListener('click', activeCloseMenuListener);
+      activeCloseMenuListener = null;
+    }
+  }
+  function showCardContextMenu(triggerBtn, item) {
+    clearActiveCardMenu();
 
     const menu = document.createElement('div');
     menu.className = 'card-menu-dropdown';
@@ -529,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
     itemCopy.textContent = 'Copy download link';
     itemCopy.addEventListener('click', (e) => {
       e.stopPropagation();
-      menu.remove();
+      clearActiveCardMenu();
       if (item.url) {
         navigator.clipboard.writeText(item.url).then(() => showToast('Link copied!')).catch(() => {});
       }
@@ -540,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
     itemDel.textContent = isActiveDownloadState(item.state) ? 'Cancel download' : 'Remove from list';
     itemDel.addEventListener('click', (e) => {
       e.stopPropagation();
-      menu.remove();
+      clearActiveCardMenu();
       if (isActiveDownloadState(item.state)) {
         if (confirm('Are you sure you want to cancel this download?')) {
           cancelDownloadItem(item);
@@ -555,11 +563,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeMenu = (e) => {
       if (!menu.contains(e.target)) {
-        menu.remove();
-        document.removeEventListener('click', closeMenu);
+        clearActiveCardMenu();
       }
     };
-    setTimeout(() => document.addEventListener('click', closeMenu), 0);
+    activeCloseMenuListener = closeMenu;
+    setTimeout(() => {
+      if (activeCloseMenuListener === closeMenu) {
+        document.addEventListener('click', closeMenu);
+      }
+    }, 0);
   }
 
   function openDownloadedItem(item) {
@@ -697,6 +709,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       topRow.append(titleTxt, progInfo);
+    } else {
+      const titleTxt = document.createElement('span');
+      titleTxt.className = 'card-title-text';
+      titleTxt.textContent = formatDisplayTitle(item);
+      titleTxt.title = item.title || item.filename || '';
+      const statusTxt = document.createElement('span');
+      statusTxt.className = 'card-status-text';
+      statusTxt.textContent = item.state ? String(item.state).charAt(0).toUpperCase() + String(item.state).slice(1) : 'Paused';
+      topRow.append(titleTxt, statusTxt);
     }
 
     // Row 2: Source URL
@@ -973,6 +994,7 @@ document.addEventListener('DOMContentLoaded', () => {
       await chrome.storage.local.set({ downloadHistory: list });
     }
 
+    updateCounts();
     renderList();
     showToast('Connecting to retry download...');
 
@@ -1053,6 +1075,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }).catch(() => {});
     }
 
+    updateCounts();
     renderList();
     showToast('Download canceled');
   }
@@ -1061,7 +1084,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const target = allItems.find(it => String(it.id) === String(id) || String(it.chromeId) === String(id));
     const targetId = target ? target.id : id;
     const strTargetId = String(targetId);
-    const chromeId = target ? target.chromeId : (String(id).startsWith('chrome_') ? id.replace('chrome_', '') : (Number.isInteger(Number(id)) ? Number(id) : null));
+    const rawChromeId = target ? target.chromeId : (String(id).startsWith('chrome_') ? id.replace('chrome_', '') : (Number.isInteger(Number(id)) ? Number(id) : null));
+    const chromeId = (rawChromeId !== null && rawChromeId !== undefined && rawChromeId !== '' && Number.isInteger(Number(rawChromeId))) ? Number(rawChromeId) : null;
     const strChromeId = chromeId ? String(chromeId) : '';
 
     if (strTargetId) recentlyDeletedIds.add(strTargetId);
@@ -1080,7 +1104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Erase from browser download shelf if applicable
     const numChromeId = Number(chromeId);
-    if (!isNaN(numChromeId) && numChromeId > 0 && typeof chrome !== 'undefined' && chrome.downloads) {
+    if (Number.isInteger(numChromeId) && numChromeId > 0 && typeof chrome !== 'undefined' && chrome.downloads) {
       try {
         chrome.downloads.cancel(numChromeId, () => {
           try { chrome.downloads.erase({ id: chromeId }, () => {}); } catch (_) {}
@@ -1223,10 +1247,13 @@ document.addEventListener('DOMContentLoaded', () => {
       del.textContent = '✕';
       del.style.cssText = 'border:none;background:none;cursor:pointer;color:#ef4444;font-size:13px;padding:2px 6px;';
       del.addEventListener('click', () => {
-        chrome.storage.local.get(['disable_savior_sites'], (s) => {
-          const list = Array.isArray(s.disable_savior_sites) ? s.disable_savior_sites : [];
+        chrome.storage.local.get(['disable_savior_sites', 'hidePermanent'], (s) => {
+          const list = Array.from(new Set([
+            ...(Array.isArray(s.disable_savior_sites) ? s.disable_savior_sites : []),
+            ...(Array.isArray(s.hidePermanent) ? s.hidePermanent : [])
+          ]));
           const next = list.filter((d) => d !== domain);
-          chrome.storage.local.set({ disable_savior_sites: next }, () => {
+          chrome.storage.local.set({ disable_savior_sites: next, hidePermanent: next }, () => {
             renderSettingsSiteList(next);
             showToast('Removed ' + domain + ' from list');
           });
@@ -1247,14 +1274,17 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast('Invalid domain name. Example: example.com');
       return;
     }
-    chrome.storage.local.get(['disable_savior_sites'], (s) => {
-      const list = Array.isArray(s.disable_savior_sites) ? s.disable_savior_sites : [];
+    chrome.storage.local.get(['disable_savior_sites', 'hidePermanent'], (s) => {
+      const list = Array.from(new Set([
+        ...(Array.isArray(s.disable_savior_sites) ? s.disable_savior_sites : []),
+        ...(Array.isArray(s.hidePermanent) ? s.hidePermanent : [])
+      ]));
       if (list.includes(raw)) {
         showToast(raw + ' is already in the list');
         return;
       }
       const next = list.concat(raw);
-      chrome.storage.local.set({ disable_savior_sites: next }, () => {
+      chrome.storage.local.set({ disable_savior_sites: next, hidePermanent: next }, () => {
         settingSiteInput.value = '';
         renderSettingsSiteList(next);
         showToast('Added ' + raw + ' — floating download toolbar will be hidden on this site');
@@ -1278,7 +1308,8 @@ document.addEventListener('DOMContentLoaded', () => {
       'prefer_last_quality',
       'show_3gp_ext',
       'min_stream_size',
-      'disable_savior_sites'
+      'disable_savior_sites',
+      'hidePermanent'
     ], (data) => {
       const currentDir = data.customDownloadDir || (sidebarFolderPath ? sidebarFolderPath.textContent : '') || 'Downloads';
       if (modalFolderPath) {
@@ -1304,10 +1335,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (settingRememberQuality) settingRememberQuality.checked = rememberVal !== false;
       if (setting3gp) setting3gp.checked = data.show_3gp_ext === true;
       if (settingMinSize) {
-        settingMinSize.value = Number(data.min_stream_size) > 0 ? Number(data.min_stream_size) : 0;
+        const minSizeVal = data.min_stream_size !== undefined ? Number(data.min_stream_size) : 30720;
+        settingMinSize.value = Number.isFinite(minSizeVal) && minSizeVal >= 0 ? minSizeVal : 30720;
         if (settingMinSizeValue) settingMinSizeValue.textContent = beautifySize(settingMinSize.value);
       }
-      renderSettingsSiteList(data.disable_savior_sites);
+      const mergedSites = Array.from(new Set([
+        ...(Array.isArray(data.disable_savior_sites) ? data.disable_savior_sites : []),
+        ...(Array.isArray(data.hidePermanent) ? data.hidePermanent : [])
+      ]));
+      renderSettingsSiteList(mergedSites);
     });
   }
 
@@ -1405,13 +1441,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (strId) recentlyDeletedIds.add(strId);
         if (strChromeId) recentlyDeletedIds.add(strChromeId);
 
+        const numCid = Number(it.chromeId);
         if (it.state === 'downloading') {
-          if (it.chromeId && typeof chrome !== 'undefined' && chrome.downloads) {
-            try { chrome.downloads.cancel(it.chromeId); } catch (_) {}
+          if (Number.isInteger(numCid) && numCid > 0 && typeof chrome !== 'undefined' && chrome.downloads) {
+            try { chrome.downloads.cancel(numCid); } catch (_) {}
           }
         }
-        if (it.chromeId && typeof chrome !== 'undefined' && chrome.downloads && chrome.downloads.erase) {
-          try { chrome.downloads.erase({ id: it.chromeId }, () => {}); } catch (_) {}
+        if (Number.isInteger(numCid) && numCid > 0 && typeof chrome !== 'undefined' && chrome.downloads && chrome.downloads.erase) {
+          try { chrome.downloads.erase({ id: numCid }, () => {}); } catch (_) {}
         }
       }
       allItems = [];
@@ -1621,6 +1658,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (msg.action === 'nativeProgress') {
       const activeItem = msg.taskId ? allItems.find(it => String(it.id) === String(msg.taskId)) : null;
       if (activeItem) {
+        if (activeItem.state === 'queued') activeItem.state = 'downloading';
         activeItem.percent = msg.percent || activeItem.percent;
         activeItem.speed = msg.speed || activeItem.speed;
         if (msg.size) activeItem.sizeFormatted = msg.size;

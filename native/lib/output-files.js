@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const WINDOWS_RESERVED_NAMES = /^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\..*)?$/i;
+const WINDOWS_RESERVED_NAMES = /^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\s*\..*)?$/i;
 
 /**
  * Sanitize and validate filename at native boundary.
@@ -36,9 +36,11 @@ function sanitizeFilename(rawFilename, defaultExt = 'mp4') {
 
   // 5. Length limit (max 150 chars to allow room for directory paths and suffixes)
   if (name.length > 150) {
-    const ext = path.extname(name);
-    const base = path.basename(name, ext);
-    name = `${base.slice(0, 150 - ext.length)}${ext}`;
+    const rawExt = path.extname(name);
+    const ext = rawExt.length <= 16 ? rawExt : '';
+    const base = ext ? path.basename(name, ext) : name;
+    const maxBase = Math.max(1, 150 - ext.length);
+    name = `${Array.from(base).slice(0, maxBase).join('')}${ext}`;
   }
 
   // 6. Ensure non-empty and has extension
@@ -63,7 +65,17 @@ function sanitizeTaskId(taskId) {
 function isSafeOutputDirectory(dirPath) {
   if (!dirPath || typeof dirPath !== 'string') return false;
   try {
-    const resolved = path.resolve(dirPath);
+    let resolved = path.resolve(dirPath);
+    try {
+      if (fs.existsSync(resolved)) {
+        resolved = fs.realpathSync(resolved);
+      } else {
+        const parent = path.dirname(resolved);
+        if (fs.existsSync(parent)) {
+          resolved = path.join(fs.realpathSync(parent), path.basename(resolved));
+        }
+      }
+    } catch (_) {}
     const parsed = path.parse(resolved);
     // Never allow filesystem roots (e.g. "/" or "C:\")
     if (resolved === parsed.root) return false;

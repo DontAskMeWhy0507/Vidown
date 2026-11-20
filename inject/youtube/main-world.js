@@ -15,7 +15,9 @@
     // Policy may already exist
   }
 
+  if (!document.body) return;
   const videoId = document.body.getAttribute('savior-meta-video-id');
+  if (!videoId) return;
   try {
     const rawFormats = document.body.getAttribute('savior-meta-formats-' + videoId);
     const formats = JSON.parse(rawFormats);
@@ -24,8 +26,9 @@
       const { decodeFunc, decodeArgs } = formats[i];
       if (decodeFunc) {
         let decoded;
-        decoded = window.trustedTypes.defaultPolicy
-          ? eval(window.trustedTypes.defaultPolicy.createScript(decodeFunc))
+        const ttPolicy = window.trustedTypes && window.trustedTypes.defaultPolicy;
+        decoded = ttPolicy
+          ? eval(ttPolicy.createScript(decodeFunc))
           : eval(decodeFunc);
 
         if (decoded) {

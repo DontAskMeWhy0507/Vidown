@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
               item.state = 'completed';
               item.percent = '100%';
               storageNeedsHealing = true;
-            } else if (nowTs - (item.startTime || 0) > 300000) {
+            } else if (nowTs - (item.lastActiveTime || item.lastUpdateTime || item.startTime || 0) > 300000) {
               item.state = 'error';
               item.errorMessage = 'Interrupted';
               storageNeedsHealing = true;
@@ -365,8 +365,26 @@ document.addEventListener('DOMContentLoaded', () => {
   function markItemMissing(item) {
     if (!item) return;
     item.state = 'deleted';
+    item.fileMissing = true;
     showToast('File was moved or deleted from disk. Click Retry to download again.');
-    loadRecentDownloads();
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.get(['downloadHistory'], (res) => {
+        const list = Array.isArray(res && res.downloadHistory) ? res.downloadHistory : [];
+        const found = list.find(it => it && (
+          (it.id !== undefined && item.id !== undefined && String(it.id) === String(item.id)) ||
+          (it.chromeId !== undefined && item.chromeId !== undefined && String(it.chromeId) === String(item.chromeId))
+        ));
+        if (found) {
+          found.state = 'deleted';
+          found.fileMissing = true;
+          chrome.storage.local.set({ downloadHistory: list }, () => loadRecentDownloads());
+        } else {
+          loadRecentDownloads();
+        }
+      });
+    } else {
+      loadRecentDownloads();
+    }
   }
 
   function detectMediaType(item) {
@@ -396,7 +414,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
       chrome.storage.local.get(['downloadHistory'], (res) => {
         const list = Array.isArray(res.downloadHistory) ? res.downloadHistory : [];
-        const found = list.find(it => it && (String(it.id) === String(item.id) || String(it.chromeId) === String(item.chromeId)));
+        const found = list.find(it => it && (
+          (it.id !== undefined && item.id !== undefined && String(it.id) === String(item.id)) ||
+          (it.chromeId !== undefined && item.chromeId !== undefined && String(it.chromeId) === String(item.chromeId))
+        ));
         if (found) {
           found.state = 'downloading';
           found.speed = 'Reconnecting...';
@@ -714,8 +735,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (card) {
           const fill = card.querySelector('.progress-bar-fill');
           if (fill && msg.percent) fill.style.width = msg.percent;
-          const badge = card.querySelector('.status-badge.downloading');
+          const badge = card.querySelector('.status-badge.downloading, .status-badge.queued');
           if (badge && msg.percent) {
+            if (badge.classList.contains('queued')) {
+              badge.classList.remove('queued');
+              badge.classList.add('downloading');
+            }
             const speedText = msg.speed ? ` • ${msg.speed}` : '';
             badge.textContent = `Downloading: ${msg.percent}${speedText}`;
           }

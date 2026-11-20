@@ -325,8 +325,8 @@ export default function (moduleObj, exportsObj, requireFn) {
   case 3:
   param_i.p = 3, param_i.v, var_c_1 = void 0;
   case 4:
-  for (var_p_1 = var_s(var_c_1.ip, "vp0DGD9E5rp6X0a3QYZ1qbDpilL83FO7"), var_m_1 = new URL(
-  var_d).hostname, var_y = navigator.platform || "noplf", 1, var_g = param_e.data,
+  if (!var_c_1 || !var_c_1.ip) return param_i.a(2, "");
+  for (var_p_1 = var_s(var_c_1.ip, "vp0DGD9E5rp6X0a3QYZ1qbDpilL83FO7"), var_m_1 = (function(){ try { return new URL(var_d).hostname; } catch(_) { return ""; } })(), var_y = navigator.platform || "noplf", 1, var_g = param_e.data,
   var_b = param_e.tgdr, (var_w_1 = ["#EXTM3U"]).push("#EXT-X-VERSION:3"), var_w_1.push(
   "#EXT-X-TARGETDURATION:" + var_b), var_w_1.push("#EXT-X-PLAYLIST-TYPE:VOD"), var_A_1 = 0;
   var_A_1 < var_g[0].length;

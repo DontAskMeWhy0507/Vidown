@@ -18,29 +18,32 @@ if not exist "%HOST_PATH%" (
     echo [ERROR] csc.exe not found in Microsoft.NET Framework!
     exit /b 1
   )
+  if errorlevel 1 (
+    echo [ERROR] Failed to compile host.cs!
+    exit /b 1
+  )
 )
 
 :: Ensure target directory in %LOCALAPPDATA% exists
 if not exist "%TARGET_DIR%" mkdir "%TARGET_DIR%"
+if errorlevel 1 (
+  echo [ERROR] Failed to create target directory: %TARGET_DIR%
+  exit /b 1
+)
 
-:: Escape backslashes for JSON
-set "HOST_PATH_ESC=%HOST_PATH:\=\\%"
-
-:: Write absolute path into %LOCALAPPDATA%\SaviorHelper\com.savior.helper.json (leaving native\com.savior.helper.json untouched)
-(
-  echo {
-  echo   "name": "com.savior.helper",
-  echo   "description": "Savior Native Download Helper",
-  echo   "path": "%HOST_PATH_ESC%",
-  echo   "type": "stdio",
-  echo   "allowed_origins": [
-  echo     "chrome-extension://nnjbdidmmnecdmcllkcaajboplpcimcf/"
-  echo   ]
-  echo }
-) > "%MANIFEST_PATH%"
+:: Write manifest safely via PowerShell ConvertTo-Json (handles paths with parentheses, spaces, ampersands)
+powershell -NoProfile -NonInteractive -Command "$obj = [ordered]@{ name='com.savior.helper'; description='Savior Native Download Helper'; path=$env:HOST_PATH; type='stdio'; allowed_origins=@('chrome-extension://nnjbdidmmnecdmcllkcaajboplpcimcf/') }; $obj | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $env:MANIFEST_PATH -Encoding UTF8"
+if errorlevel 1 (
+  echo [ERROR] Failed to write native messaging manifest!
+  exit /b 1
+)
 
 :: Register with Google Chrome in HKCU
 reg add "HKCU\Software\Google\Chrome\NativeMessagingHosts\com.savior.helper" /ve /t REG_SZ /d "%MANIFEST_PATH%" /f >nul
+if errorlevel 1 (
+  echo [ERROR] Failed to register Native Messaging Host in Windows Registry!
+  exit /b 1
+)
 
 :: Register with CocCoc Browser (both keys)
 reg add "HKCU\Software\CocCoc\NativeMessagingHosts\com.savior.helper" /ve /t REG_SZ /d "%MANIFEST_PATH%" /f >nul 2>&1

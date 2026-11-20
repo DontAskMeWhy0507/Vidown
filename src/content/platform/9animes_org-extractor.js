@@ -255,7 +255,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   ,
   getUrl: param_t => {
   var var_e = param_t.url,
-  var_r = null == var_e ? void 0 : var_e.match(/(https*:\/\/(\S+\.)*9anime[a-z0-9]{1,2}\.[\S]+?)\/embed\/([a-z0-9]+)/i);
+  var_r = null == var_e ? void 0 : var_e.match(/(https?:\/\/(?:[a-z0-9-]+\.)*9anime[a-z0-9]{1,2}\.[^\s/]+)\/embed\/([a-z0-9]+)/i);
   if (var_r && var_r.length > 2) return `${var_r[1]}/playlist/${var_r[3]}.m3u8`;
   }
   ,

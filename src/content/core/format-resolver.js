@@ -416,7 +416,7 @@ export default function(t, e, r) {
         var m3 = new URL(s2);
         r2 = `${m3.protocol}//${r2}`;
       } catch (t4) {
-        r2 = "https//" + r2;
+        r2 = "https://" + r2;
       }
       try {
         var g2 = t3.getElementsByTagName("BaseURL")[0].childNodes[0].nodeValue;
@@ -435,7 +435,7 @@ export default function(t, e, r) {
       } catch (e3) {
         console.warn("Cought", e3), c3 = s2;
         var A2 = l2.cloneNode(true);
-        [...A2.getElementsByTagName("Representation")].filter((e4) => ("audio/mp4" !== e4.getAttribute("mimeType") || e4.id != d2[0].id) && e4.id != t3.id).forEach((t4) => t4.remove()), v3 = A2.documentElement.outerHTML;
+        [...A2.getElementsByTagName("Representation")].filter((e4) => ("audio/mp4" !== e4.getAttribute("mimeType") || !d2[0] || e4.id != d2[0].id) && e4.id != t3.id).forEach((t4) => t4.remove()), v3 = A2.documentElement.outerHTML;
       }
       var _2 = w(c3, e2, p3, h3);
       return v3 && (_2.play_list = v3, _2._isDashMPD = true), _2.ext = (null === (u3 = t3.getAttribute("mimeType")) || void 0 === u3 ? void 0 : u3.split("/")[1]) || "mp4", _2;

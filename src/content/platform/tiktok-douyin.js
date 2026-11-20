@@ -1300,11 +1300,11 @@ export default function(module, exports, require) {
                 try {
                   sigiState = JSON.parse(sigiJsonStr);
                 } catch (parseErr) {
-                  sigiState = JSON.parse(rawSigiState);
+                  try { sigiState = JSON.parse(rawSigiState); } catch (_) { sigiState = null; }
                 }
                 matchedItemModule = targetMedia.originVideoId ? sigiState?.ItemModule?.[targetMedia.originVideoId] :
                   sigiState?.ItemModule?.[sigiState?.ItemList?.f?.list?.[0] || sigiState?.ItemList?.foryou?.list?.[0] || sigiState?.ItemList?.video?.list?.[0]];
-                if (matchedItemModule) {
+                if (matchedItemModule && matchedItemModule.video && matchedItemModule.video.playAddr) {
                   singleParsedMedia = urlUtils.f(matchedItemModule.video.playAddr);
                   singleParsedMedia.filename = matchedItemModule.desc;
                   singleParsedMedia.ext = "mp4";
@@ -1714,7 +1714,7 @@ export default function(module, exports, require) {
                   }
                   if (douyinItemApiCache[videoId]) {
                     var cachedApi = douyinItemApiCache[videoId];
-                    mediaObj.url = cachedApi.url || cachedApi;
+                    mediaObj.url = (cachedApi && typeof cachedApi.url === "string") ? cachedApi.url : (typeof cachedApi === "string" ? cachedApi : "");
                     if (cachedApi.desc && (!mediaObj.filename || mediaObj.filename === "TikTok - Make Your Day" || mediaObj.filename === "TikTok")) {
                       mediaObj.filename = cleanTikTokTitle(cachedApi.desc);
                     }
@@ -1732,7 +1732,7 @@ export default function(module, exports, require) {
                   fetchedDetail = step.v;
                   if (fetchedDetail) {
                     douyinItemApiCache[videoId] = fetchedDetail;
-                    mediaObj.url = fetchedDetail.url || fetchedDetail;
+                    mediaObj.url = (fetchedDetail && typeof fetchedDetail.url === "string") ? fetchedDetail.url : (typeof fetchedDetail === "string" ? fetchedDetail : "");
                     if (fetchedDetail.desc && (!mediaObj.filename || mediaObj.filename === "TikTok - Make Your Day" || mediaObj.filename === "TikTok")) {
                       mediaObj.filename = cleanTikTokTitle(fetchedDetail.desc);
                     }

@@ -81,9 +81,9 @@ export default function(module, exports, require) {
   var DEFAULT_WIDGET_HEIGHT = 32;
 
   var YOUTUBE_AD_SKIP_SELECTORS = [
-    "videoAdUiSkipButton",
-    "ytp-ad-skip-button ytp-button",
-    "ytp-ad-overlay-close-button",
+    ".videoAdUiSkipButton",
+    ".ytp-ad-skip-button.ytp-button",
+    ".ytp-ad-overlay-close-button",
     ".ytp-ad-skip-button-container",
     ".ytp-skip-ad-button",
     ".ytp-ad-skip-button-modern .ytp-button",

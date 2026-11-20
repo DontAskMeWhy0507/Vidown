@@ -289,10 +289,15 @@ function isSafeRemoteHlsUrl(urlStr) {
     if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
     const host = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, '');
     if (!host) return false;
-    // Normalize IPv4-mapped IPv6 (e.g. ::ffff:127.0.0.1 or ::ffff:7f00:1)
+    // Normalize IPv4-mapped (::ffff:), IPv4-translated (::ffff:0:), NAT64 (64:ff9b::), IPv4-compatible (::x.x.x.x or ::7f00:1)
     let mappedV4 = host;
-    if (host.startsWith('::ffff:')) {
-      const tail = host.slice(7);
+    let v6Tail = '';
+    if (host.startsWith('::ffff:0:')) v6Tail = host.slice(9);
+    else if (host.startsWith('::ffff:')) v6Tail = host.slice(7);
+    else if (host.startsWith('64:ff9b::')) v6Tail = host.slice(9);
+    else if (host.startsWith('::') && host !== '::' && host !== '::1') v6Tail = host.slice(2);
+    if (v6Tail) {
+      const tail = v6Tail;
       if (/^\d+\.\d+\.\d+\.\d+$/.test(tail)) {
         mappedV4 = tail;
       } else {
@@ -320,7 +325,8 @@ function isSafeRemoteHlsUrl(urlStr) {
       /^172\.(1[6-9]|2\d|3[0-1])\./.test(mappedV4) ||
       /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./.test(mappedV4) ||
       /^(fc|fd)[0-9a-f]{2}:/i.test(host) ||
-      /^fe[89ab][0-9a-f]:/i.test(host)
+      /^fe[89ab][0-9a-f]:/i.test(host) ||
+      /^ff[0-9a-f]{2}:/i.test(host)
     ) {
       return false;
     }
@@ -333,8 +339,19 @@ function isSafeRemoteHlsUrl(urlStr) {
 function isPathInsideDir(filePath, dirPath) {
   if (!filePath || !dirPath) return false;
   try {
-    const resolvedFile = path.resolve(filePath);
-    const resolvedDir = path.resolve(dirPath);
+    let resolvedFile = path.resolve(filePath);
+    let resolvedDir = path.resolve(dirPath);
+    try { if (fs.existsSync(resolvedDir)) resolvedDir = fs.realpathSync(resolvedDir); } catch (_) {}
+    try {
+      if (fs.existsSync(resolvedFile)) {
+        resolvedFile = fs.realpathSync(resolvedFile);
+      } else {
+        const parentDir = path.dirname(resolvedFile);
+        if (fs.existsSync(parentDir)) {
+          resolvedFile = path.join(fs.realpathSync(parentDir), path.basename(resolvedFile));
+        }
+      }
+    } catch (_) {}
     const cmpFile = isWin ? resolvedFile.toLowerCase() : resolvedFile;
     const cmpDir = isWin ? resolvedDir.toLowerCase() : resolvedDir;
     if (cmpFile === cmpDir) return true;
@@ -456,9 +473,11 @@ function handleStreamChunk(msg) {
     const buf = msg.data !== undefined ? Buffer.from(msg.data || '', 'base64') : Buffer.from(rawB64 || '', 'base64');
     // Multi-threaded relays send each batch at an explicit file offset so
     // parallel workers may land out of order; positional writes handle both.
-    const off = Number(msg.offset);
+    const hasExplicitOffset = msg.offset !== undefined && msg.offset !== null && msg.offset !== '';
+    const off = hasExplicitOffset ? Number(msg.offset) : NaN;
+    const MAX_STREAM_OFFSET = 50 * 1024 * 1024 * 1024;
     let startPos = 0;
-    if (Number.isFinite(off) && off >= 0) {
+    if (Number.isFinite(off) && off >= 0 && off <= MAX_STREAM_OFFSET) {
       fs.writeSync(activeStreamJob.fd, buf, 0, buf.length, off);
       startPos = off;
     } else {
@@ -617,6 +636,7 @@ function handleMessage(msg) {
         ];
         execFile('osascript', osaArgs, { windowsHide: true }, (err, stdout) => {
           const selected = (stdout || '').trim();
+          if (selected) registerAuthorizedDir(selected);
           sendMessage({
             action: 'browseFolderResult',
             path: selected,
@@ -1197,7 +1217,13 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
               cleanup();
               return reject(new Error('Too many redirects'));
             }
-            const nextUrl = new URL(res.headers.location, blockUrl).href;
+            let nextUrl;
+            try { nextUrl = new URL(res.headers.location, blockUrl).href; } catch (_) {
+              hasError = true; cleanup(); return reject(new Error('Invalid redirect URL'));
+            }
+            if (require.main === module && !isSafeRemoteHlsUrl(nextUrl)) {
+              hasError = true; cleanup(); return reject(new Error('Blocked unsafe redirect URL'));
+            }
             const nextHeaders = redirectHeaders(blockHeaders, blockUrl, nextUrl);
             return fetchBlock(block, retryCount, nextUrl, nextHeaders, redirectsLeft - 1).then(blockResolve);
           }
@@ -1357,9 +1383,15 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal, m
         res.destroy(new Error('RESPONSE_BODY_TIMEOUT'));
       });
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        fileStream.close();
-        try { fs.unlinkSync(partPath); } catch (e) {}
-        const nextUrl = new URL(res.headers.location, url).href;
+        res.destroy();
+        fileStream.close(() => { try { fs.unlinkSync(partPath); } catch (e) {} });
+        let nextUrl;
+        try { nextUrl = new URL(res.headers.location, url).href; } catch (_) {
+          return reject(new Error('Invalid redirect URL'));
+        }
+        if (require.main === module && !isSafeRemoteHlsUrl(nextUrl)) {
+          return reject(new Error('Blocked unsafe redirect URL'));
+        }
         return downloadFileSingleStream({ url: nextUrl, outPath, headers: redirectHeaders(headers, url, nextUrl), onProgress, signal, maxRedirects: maxRedirects - 1, timeoutMs, bodyTimeoutMs }).then(resolve).catch(reject);
       }
       if (res.statusCode < 200 || res.statusCode >= 300) {
@@ -1400,6 +1432,8 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal, m
             onProgress({
               percent: pct,
               speed: formatSpeed(speed),
+              downloadedBytes,
+              totalBytes,
               size: totalBytes > 0 ? `${formatBytes(downloadedBytes)} / ${formatBytes(totalBytes)}` : formatBytes(downloadedBytes)
             });
           }
@@ -1452,9 +1486,10 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal, m
 
 async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin, onFallback, onComplete) {
   const taskKey = String((req && req.taskId) || 'default');
-  const signal = { onAbort: null };
+  const signal = { onAbort: null, cancelled: false };
   const mtJobObj = {
     cancel: () => {
+      signal.cancelled = true;
       if (signal.onAbort) signal.onAbort();
     }
   };
@@ -1483,7 +1518,11 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
   });
 
   try {
+    if (require.main === module && !isSafeRemoteHlsUrl(targetUrl)) {
+      throw new Error('Blocked unsafe remote URL');
+    }
     const probe = await probeHttpRange(targetUrl, reqHeaders);
+    if (signal.cancelled) throw new Error('USER_CANCELED');
     logHost(`Multi-thread probe: url="${targetUrl}", supported=${probe.supported}, size=${probe.size}`);
 
     const onProgress = (prog) => {
@@ -1588,12 +1627,15 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
     '-rw_timeout', '15000000'
   ];
 
-  const allowFileProto = !videoUrl.startsWith('http') && (!audioUrl || !audioUrl.startsWith('http'));
+  if ((require.main === module && !isSafeRemoteHlsUrl(videoUrl)) || (audioUrl && require.main === module && !isSafeRemoteHlsUrl(audioUrl))) {
+    sendMessage({ action: 'error', taskId: req.taskId, error: 'Blocked unsafe remote URL for FFmpeg mux' });
+    return;
+  }
   const args = [
     '-y',
     '-threads', FFMPEG_THREAD_LIMIT,
     '-fflags', '+genpts+igndts+discardcorrupt+sortdts',
-    '-protocol_whitelist', allowFileProto ? 'file,http,https,tcp,tls,crypto' : 'http,https,tcp,tls,crypto'
+    '-protocol_whitelist', 'http,https,tcp,tls,crypto'
   ];
   if (videoUrl.startsWith('http')) {
     args.push(...netInputFlags, '-headers', headers);
@@ -1769,8 +1811,17 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
 function isSameOriginOrSubdomain(baseHost, targetHost) {
   if (!baseHost || !targetHost) return false;
   try {
-    if (baseHost.includes('://')) baseHost = new URL(baseHost).hostname;
-    if (targetHost.includes('://')) targetHost = new URL(targetHost).hostname;
+    const bHasProto = String(baseHost).includes('://');
+    const tHasProto = String(targetHost).includes('://');
+    if (bHasProto && tHasProto) {
+      const bUrl = new URL(baseHost);
+      const tUrl = new URL(targetHost);
+      // Never allow HTTPS -> HTTP credential downgrade
+      if (bUrl.protocol === 'https:' && tUrl.protocol !== 'https:') return false;
+      return bUrl.hostname.toLowerCase() === tUrl.hostname.toLowerCase();
+    }
+    if (bHasProto) baseHost = new URL(baseHost).hostname;
+    if (tHasProto) targetHost = new URL(targetHost).hostname;
   } catch (_) {}
   return String(baseHost).toLowerCase() === String(targetHost).toLowerCase();
 }
@@ -1869,8 +1920,10 @@ async function startFfmpegMux(req) {
       };
     }
   };
+  let muxCancelled = false;
   const mtJobObj = {
     cancel: () => {
+      muxCancelled = true;
       for (const cb of abortCallbacks) {
         try { cb(); } catch (e) {}
       }
@@ -1895,6 +1948,7 @@ async function startFfmpegMux(req) {
       probeHttpRange(videoUrl, reqHeadersObj),
       (audioUrl && audioUrl !== videoUrl) ? probeHttpRange(audioUrl, reqHeadersObj) : Promise.resolve({ supported: false, size: 0, url: '' })
     ]);
+    if (muxCancelled) throw new Error('USER_CANCELED');
 
     logHost(`Mux Range probe: Video size=${probeVideo.size}, Audio size=${probeAudio.size}`);
 
@@ -2077,6 +2131,7 @@ async function startFfmpegMux(req) {
           downloadsDir: targetDir
         });
       } else {
+        cleanupPartialFiles(outPath);
         const shortErr = muxErr.split('\n').filter(l => l.trim() && !l.startsWith('ffmpeg version')).slice(-2).join(' ') || `FFmpeg code ${code}`;
         sendMessage({
           action: 'error',
@@ -2088,16 +2143,18 @@ async function startFfmpegMux(req) {
 
     proc.on('error', (err) => {
       try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
+      cleanupPartialFiles(outPath);
       if (activeProcesses.get(taskKey) === proc) activeProcesses.delete(taskKey);
       if (activeProcess === proc) activeProcess = null;
       sendMessage({ action: 'error', taskId: req.taskId, error: err.message });
     });
 
   } catch (err) {
+    try { mtJobObj.cancel(); } catch (_) {}
     if (activeMultiThreadJobs.get(taskKey) === mtJobObj) activeMultiThreadJobs.delete(taskKey);
     if (activeMultiThreadJob === mtJobObj) activeMultiThreadJob = null;
     try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
-    if (err && err.message === 'USER_CANCELED') {
+    if (muxCancelled || (err && err.message === 'USER_CANCELED')) {
       logHost(`Mux Range download canceled by user.`);
       sendMessage({ action: 'cancelled', taskId: req.taskId });
       return;
@@ -2143,10 +2200,10 @@ function fetchHttpResource(urlStr, referer = '', isBin = false, cookie = '', max
 
     const req = client.get(urlStr, { headers: reqHeaders, timeout: 15000 }, res => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        const redir = new URL(res.headers.location, urlStr).href;
         res.resume();
         let redirParsed;
-        try { redirParsed = new URL(redir); } catch (_) { return reject(new Error('Invalid redirect URL')); }
+        try { redirParsed = new URL(res.headers.location, urlStr); } catch (_) { return reject(new Error('Invalid redirect URL')); }
+        const redir = redirParsed.href;
         if ((redirParsed.protocol !== 'http:' && redirParsed.protocol !== 'https:') || (initWasPublic && !isSafeRemoteHlsUrl(redir))) {
           return reject(new Error(`Blocked unsafe redirect URL: ${redir}`));
         }
@@ -2291,8 +2348,8 @@ async function rewriteHlsPlaylistLines(playlistText, baseUrl, tempSessionDir, re
 
 function isSafeDashManifest(mpdText, baseUrl) {
   if (!mpdText || typeof mpdText !== 'string') return false;
-  // Block any file://, data:, php:, ftp:, etc. schemes inside MPD
-  if (/\b(?:file|data|ftp|gopher|dict|concat|subfile):/i.test(mpdText)) return false;
+  // Block any file://, data:, php:, ftp:, tcp:, tls:, crypto:, etc. schemes inside MPD
+  if (/\b(?:file|data|ftp|gopher|dict|concat|subfile|tcp|tls|crypto):/i.test(mpdText)) return false;
   const checkCandidate = (raw) => {
     const trimmed = String(raw || '').trim();
     if (!trimmed) return true;
@@ -2309,11 +2366,11 @@ function isSafeDashManifest(mpdText, baseUrl) {
     }
     return !trimmed.startsWith('/');
   };
-  const baseUrlMatches = mpdText.matchAll(/<BaseURL[^>]*>([^<]+)<\/BaseURL>/gi);
+  const baseUrlMatches = mpdText.matchAll(/<(?:BaseURL|Location)[^>]*>([^<]+)<\/(?:BaseURL|Location)>/gi);
   for (const m of baseUrlMatches) {
     if (!checkCandidate(m[1])) return false;
   }
-  const attrMatches = mpdText.matchAll(/\b(?:media|initialization|sourceURL)=["']([^"']+)["']/gi);
+  const attrMatches = mpdText.matchAll(/\b(?:media|initialization|sourceURL|xlink:href|index)=["']([^"']+)["']/gi);
   for (const m of attrMatches) {
     if (!checkCandidate(m[1])) return false;
   }
@@ -2570,20 +2627,22 @@ async function startFfmpegDirectStream(req) {
                 if (uMatch) {
                   const rawAudioUri = uMatch[1];
                   const absAudioUrl = new URL(rawAudioUri, targetUrl).href;
-                  if (isSafeRemoteHlsUrl(absAudioUrl)) {
-                    try {
-                      const audioPlText = await fetchHttpResource(absAudioUrl, referer, false, safeCookie);
-                      if (audioPlText && audioPlText.includes('#EXTM3U')) {
-                        const rewrittenAudio = await rewriteHlsPlaylistLines(audioPlText, absAudioUrl, tempSessionDir, referer, safeCookie, keyState);
-                        const localAudioName = `variant_audio_${++audioIdx}.m3u8`;
-                        fs.writeFileSync(path.join(tempSessionDir, localAudioName), rewrittenAudio.text, 'utf8');
-                        updatedMediaLine = mLine.replace(rawAudioUri, localAudioName);
-                      } else {
-                        updatedMediaLine = mLine.replace(rawAudioUri, absAudioUrl);
-                      }
-                    } catch (_) {
+                  if (!isSafeRemoteHlsUrl(absAudioUrl)) {
+                    continue;
+                  }
+                  const audioCookie = isSameOriginOrSubdomain(targetUrl, absAudioUrl) ? safeCookie : '';
+                  try {
+                    const audioPlText = await fetchHttpResource(absAudioUrl, referer, false, audioCookie);
+                    if (audioPlText && audioPlText.includes('#EXTM3U')) {
+                      const rewrittenAudio = await rewriteHlsPlaylistLines(audioPlText, absAudioUrl, tempSessionDir, referer, audioCookie, keyState);
+                      const localAudioName = `variant_audio_${++audioIdx}.m3u8`;
+                      fs.writeFileSync(path.join(tempSessionDir, localAudioName), rewrittenAudio.text, 'utf8');
+                      updatedMediaLine = mLine.replace(rawAudioUri, localAudioName);
+                    } else {
                       updatedMediaLine = mLine.replace(rawAudioUri, absAudioUrl);
                     }
+                  } catch (_) {
+                    updatedMediaLine = mLine.replace(rawAudioUri, absAudioUrl);
                   }
                 }
                 masterLines.push(updatedMediaLine);
@@ -2645,6 +2704,20 @@ async function startFfmpegDirectStream(req) {
       }
     } catch (prepErr) {
       logHost(`HLS prep error: ${prepErr.message}`);
+      if (prepErr && /Blocked unsafe/i.test(String(prepErr.message || ''))) {
+        if (tempSessionDir) {
+          try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (_) {}
+        }
+        sendMessage({ action: 'error', taskId: req.taskId, error: prepErr.message });
+        return;
+      }
+      if (require.main === module && !isSafeRemoteHlsUrl(targetUrl)) {
+        if (tempSessionDir) {
+          try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (_) {}
+        }
+        sendMessage({ action: 'error', taskId: req.taskId, error: 'Blocked unsafe remote HLS URL' });
+        return;
+      }
       ffmpegInput = targetUrl;
     }
   }

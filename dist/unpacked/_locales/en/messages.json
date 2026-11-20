@@ -59,7 +59,7 @@
     "placeholders": {
       "number": {
         "content": "$1",
-        "example": 42
+        "example": "42"
       }
     }
   },
@@ -517,7 +517,7 @@
     "placeholders": {
       "number": {
         "content": "$1",
-        "example": 42
+        "example": "42"
       }
     }
   },

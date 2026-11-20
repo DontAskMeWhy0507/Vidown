@@ -87,7 +87,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   const VIMEO_POSTER_REGEX = /\/\/.+\.vimeocdn.com\/video\/([0-9]+)/i;
 
   const vimeoExtractor = {
-    siteMatcher: () => /^vimeo.com/.test(location.href),
+    siteMatcher: () => /^https?:\/\/([^/]+\.)?vimeo\.com/i.test(location.href),
     getCustomParent: node => node.closest(".player_area"),
     toggleLight: {
       turnOff: {
@@ -235,7 +235,7 @@ export default function (moduleObj, exportsObj, requireFn) {
           }
           const configUrl = activeConfigUrl;
           const res = await dep_dom_utils.send("GET", configUrl);
-          const parsed = JSON.parse(res.responseText);
+          let parsed; try { parsed = JSON.parse(res.responseText); } catch (_) { return []; }
           configUrlCache[configUrl] = dep_url_filter.a({ config: parsed });
           return configUrlCache[configUrl];
         }
@@ -289,7 +289,7 @@ export default function (moduleObj, exportsObj, requireFn) {
             requestedConfigUrls.push(loadConfigUrl);
             pendingConfigPromises[loadConfigUrl] = fetch(loadConfigUrl, {
               headers: { "X-Requested-With": "XMLHttpRequest" }
-            }).then(r => r.json());
+            }).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).catch(err => { delete pendingConfigPromises[loadConfigUrl]; throw err; });
           }
           const configRes = await pendingConfigPromises[loadConfigUrl];
           const playerConfigUrl = configRes.player.config_url;
@@ -326,7 +326,7 @@ export default function (moduleObj, exportsObj, requireFn) {
             const matchedScript = scriptTexts.find(text => text.match(reg));
             if (matchedScript) {
               const execRes = reg.exec(matchedScript);
-              const parsedConfig = JSON.parse(execRes?.[1] || "{}");
+              let parsedConfig = {}; try { parsedConfig = JSON.parse(execRes?.[1] || "{}"); } catch (_) {}
               configUrlCache[url] = dep_url_filter.a({ config: parsedConfig });
               configUrlCache[playerVideoUrl] = dep_url_filter.a({ config: parsedConfig });
               videoConfigMap[url] = parsedConfig;
@@ -355,9 +355,11 @@ export default function (moduleObj, exportsObj, requireFn) {
       }
     },
     idsProcess(param) {
-      if (new URL(param.id.url).searchParams.has("range")) {
-        param.defaultIds.splice(param.index, 1);
-      }
+      try {
+        if (param && param.id && param.id.url && new URL(param.id.url).searchParams.has("range")) {
+          param.defaultIds.splice(param.index, 1);
+        }
+      } catch (_) {}
     },
     processRequestIds: param => {
       if (param.url.includes("config")) {

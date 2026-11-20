@@ -1,4 +1,6 @@
 (() => {
+  if (window.__vidownMessengerAudioHooked) return;
+  window.__vidownMessengerAudioHooked = true;
 /**
  * Facebook Messenger Voice Message Interceptor (Main World)
  * Hooks URL.createObjectURL and URL.revokeObjectURL to capture audio blobs and durations.

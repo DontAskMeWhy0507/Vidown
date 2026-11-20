@@ -124,7 +124,7 @@ export default function(module, exports, require) {
           var scopeMedia = self.state.renderDownloads[event.scopeIndex]?.media || [];
           for (var group of scopeMedia) {
             var matched = group.media.find(m => m.id === event.id && m.url === event.url);
-            if (!matched) break;
+            if (!matched) continue;
             matched.succeed = event.succeed;
             matched.error = event.error;
             break;
@@ -358,7 +358,7 @@ export default function(module, exports, require) {
                   }
                   payload.skipReferrer = downloadItem.skipReferrer;
                   if (downloadItem.skipConvert) payload.skipConvert = downloadItem.skipConvert;
-                  if (payload.referrer && payload.referrer.includes("bilutv.org/") && payload.url.includes("zadn.vn/")) {
+                  if (payload.referrer && payload.referrer.includes("bilutv.org/") && typeof payload.url === "string" && payload.url.includes("zadn.vn/")) {
                     delete payload.referrer;
                   }
                   if (downloadItem.play_list) payload.play_list = downloadItem.play_list;
@@ -401,7 +401,7 @@ export default function(module, exports, require) {
                   return Promise.allSettled(playlistItems.map(item => fetch(item.uri).then(r => r.text())));
                 case 5:
                   allResponses = ctx.v;
-                  combinedPlaylist = allResponses.map(r => r.value).join("\n");
+                  combinedPlaylist = allResponses.filter(r => r && r.status === "fulfilled" && typeof r.value === "string").map(r => r.value).join("\n");
                   payload.play_list = combinedPlaylist;
                   subtitleData = Object.assign(Object.assign({}, downloadItem), {
                     ext: "vtt",
@@ -662,9 +662,10 @@ export default function(module, exports, require) {
       _checkFileSize(task, doneCallback) {
         var scopeIndex = task.scopeIndex;
         var mediaIndex = task.index;
-        var downloadObj = this.state.downloadScopes[scopeIndex].scopeDownloads[mediaIndex];
+        var scopeObj = this.state.downloadScopes[scopeIndex];
+        var downloadObj = scopeObj && scopeObj.scopeDownloads ? scopeObj.scopeDownloads[mediaIndex] : null;
         var scopeElements = utils.queryAll(".j-media-scope", this.$el);
-        var sizeEl = utils.query("#size_" + downloadObj.id, scopeElements[scopeIndex]);
+        var sizeEl = downloadObj ? utils.query("#size_" + downloadObj.id, scopeElements[scopeIndex]) : null;
 
         if (!downloadObj || downloadObj.size || "" === downloadObj.size) {
           sizeEl?.classList.add("done");

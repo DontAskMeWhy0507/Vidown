@@ -100,7 +100,7 @@ if (isDev) {
     const relPath = relPathRaw.replace(/\\/g, '/');
     const full = path.join(COMMON_DIR, relPath);
     let code = fs.readFileSync(full, 'utf8');
-    code = code.replace(/^\/\/[^\n]*\n/, '').replace(/^export default\s+/, '').trim();
+    code = code.replace(/^\uFEFF/, '').replace(/^(?:\/\/[^\n]*\r?\n)+/, '').replace(/^export default\s+/, '').trim();
     if (code.endsWith(';')) code = code.slice(0, -1);
 
     const res = esbuild.transformSync('(' + code + ')', {

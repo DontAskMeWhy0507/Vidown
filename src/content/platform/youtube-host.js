@@ -196,7 +196,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   for (;;
   ) switch (param_t_1.p = param_t_1.n) {
   case 0:
-  if (!location.hostname.match(/(www\.youtube\.com)/i) || /^(channel|@)/i.test(location.pathname)) {
+  if (!location.hostname.match(/(www\.youtube\.com)/i) || /^\/(channel|@)/i.test(location.pathname)) {
   param_t_1.n = 3;
   break;
   }

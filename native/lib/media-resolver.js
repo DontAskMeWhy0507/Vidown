@@ -52,8 +52,12 @@ async function resolveMediaMetadata(request, binary, run = execFile) {
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'vidown-resolve-'));
   try {
     const args=['--ignore-config','--no-warnings','--no-playlist','--skip-download','--dump-single-json','--socket-timeout','12','--retries','1','--user-agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'];
-    const host=new URL(request.pageUrl).hostname;
-    const cookies=(request.cookies || []).filter(c => c && c.name && typeof c.value === 'string' && (host === String(c.domain).replace(/^\./,'') || (!c.hostOnly && host.endsWith('.'+String(c.domain).replace(/^\./,'')))));
+    const host=new URL(request.pageUrl).hostname.toLowerCase();
+    const cookies=(request.cookies || []).filter(c => {
+      if (!c || !c.name || typeof c.value !== 'string') return false;
+      const dom = String(c.domain || '').replace(/^\./, '').toLowerCase();
+      return dom && (host === dom || (!c.hostOnly && host.endsWith('.' + dom)));
+    });
     if(cookies.length){
       const safe=v=>String(v).replace(/[\r\n\t]/g,'');
       const jar='# Netscape HTTP Cookie File\n'+cookies.map(c=>[safe(c.domain),c.hostOnly?'FALSE':'TRUE',safe(c.path || '/'),c.secure?'TRUE':'FALSE',Math.floor(c.expirationDate || 0),safe(c.name),safe(c.value)].join('\t')).join('\n');
@@ -64,8 +68,7 @@ async function resolveMediaMetadata(request, binary, run = execFile) {
     return mediaFromMetadata(JSON.parse(stdout),request);
   } finally {
     // This directory was created by this invocation under the OS temporary directory.
-    for(const file of fs.readdirSync(dir)) fs.unlinkSync(path.join(dir,file));
-    fs.rmdirSync(dir);
+    try { fs.rmSync(dir, { recursive: true, force: true }); } catch (_) {}
   }
 }
 module.exports={resolveMediaMetadata,mediaFromMetadata};

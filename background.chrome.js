@@ -263,7 +263,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*tiktokcdn-us.com/*',
-            initiatorDomains: withExt(['tiktok.com']),
+            initiatorDomains: ['tiktok.com'],
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -423,7 +423,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*vimeocdn.com/*',
-            initiatorDomains: withExt(['vimeo.com']),
+            initiatorDomains: ['vimeo.com'],
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -439,7 +439,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*vod-progressive.akamaized.net/*',
-            initiatorDomains: ['vimeo.com'],
+            initiatorDomains: withExt(['vimeo.com']),
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -616,7 +616,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*akamaized.net/*',
-            initiatorDomains: ['tiktok.com'],
+            initiatorDomains: withExt(['tiktok.com']),
             resourceTypes: ['main_frame', 'sub_frame', 'xmlhttprequest', 'media', 'other']
           }
         }
@@ -636,7 +636,7 @@ var DEFAULT_TEMPLATES = {
   "template-media-sidepanel": "\n<div class=\"j-media-scope media-scope\" title=\"{{title}}\">\n        <span class=\"filename\" title=\"{{title}}\">\n            <label class=\"filename-content\">\n                <input type=\"checkbox\" />\n                <span> {{title}} </span>\n            </label>\n        </span>\n        <span class=\"content-holder\">\n            {{#hasVideo}}\n                {{#videoThumbnail}}\n                    <img class=\"banner video-banner\" src=\"{{videoThumbnail}}\" />\n                {{/videoThumbnail}}\n                {{^videoThumbnail}}\n                    <picture>\n                        <source srcset=\"images/PlaceholderVideoDark.png\" media=\"(prefers-color-scheme: dark)\">\n                        <img class=\"banner video-banner\" src=\"images/PlaceholderVideo.png\" />\n                    </picture>\n                {{/videoThumbnail}}\n            {{/hasVideo}}\n            {{^hasVideo}}\n                <picture>\n                    <source srcset=\"images/PlaceholderAudioDark.png\" media=\"(prefers-color-scheme: dark)\">\n                    <img class=\"banner audio-banner\" src=\"images/PlaceholderAudio.png\" />\n                </picture>\n            {{/hasVideo}}\n            <span class=\"options-holder\">\n                {{#audio_channel}}\n                    <div class=\"select-wrapper\">\n                        <span class=\"select audio-channel\">\n                            <span class=\"j-quality-option quality-option\">\n                                <span class=\"selected-type\">{{i18n_audio_channel_label}}</span>\n                                <span class=\"quality-option-ext-quality media-name audio\">\n                                    {{selected_audio.i18n_quality}}\n                                </span>\n                            </span>\n                        </span>\n\n                        <!-- Pseudo Select -->\n                        <div class=\"audio-channel-selector-box j-quality-selector\" hidden>\n                            <div class=\"quality-selector-box-relative\">\n                                {{#media}}\n                                    <div class=\"audio-item\" data-id=\"{{id}}\" title=\"{{quality}}\" data-quality-value=\"{{ext}}/{{quality}}\" class=\"j-audio-item\">\n                                        {{i18n_quality}}\n                                    </div>\n                                {{/media}}\n                            </div>\n                        </div>\n                    </div>\n                {{/audio_channel}}\n\n                <div class=\"select-wrapper\">\n                    <span class=\"select video\">\n                        <span class=\"j-quality-option quality-option\" data-item=\"auto\" hidden>\n                            <span class=\"quality-option-ext-quality\"></span>\n                        </span>\n                        <span class=\"j-quality-option quality-option\" data-item=\"loading\" hidden>\n                            <span class=\"quality-select-skeleton\"></span>\n                        </span>\n                        {{#media}}\n                            {{#media}}\n                                <span class=\"j-quality-option quality-option\" data-quality=\"{{ext}}/{{quality}}/{{resolution}}\" hidden>\n                                    <span class=\"quality-option-ext-quality\">\n                                        {{#i18n_quality}}\n                                            {{i18n_quality}}\n                                        {{/i18n_quality}}\n                                        {{^i18n_quality}}\n                                            {{#quality}}{{quality}}{{/quality}}\n                                        {{/i18n_quality}}\n                                    </span>\n                                    <span class=\"file-size{{#size}} done{{/size}}\" id=\"size_{{id}}\">{{size}}</span>\n                                </span>\n                            {{/media}}\n                        {{/media}}\n                    </span>\n\n                    <!-- Pseudo Select -->\n                    <div class=\"quality-selector-box j-quality-selector\" hidden>\n                        <div class=\"quality-selector-box-relative\">\n                            <div class=\"quality-selector-status\" data-status=\"loading\" hidden>\n                                <div class=\"quality-selector-qualities-header\">\n                                    <savior-image data-src=\"images/logo_cc.svg\"></savior-image>\n                                    <h3>{{i18n_download_box_header_title}}</h3>\n                                    <button class=\"quality-selector-qualities-close-button\">\n                                        <svg width=\"28\" height=\"28\" viewBox=\"0 0 28 28\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                                            <path d=\"M9.33339 19.5448L8.4552 18.6666L13.1219 13.9999L8.4552 9.33327L9.33339 8.45508L14.0001 13.1217L18.6667 8.45508L19.5449 9.33327L14.8782 13.9999L19.5449 18.6666L18.6667 19.5448L14.0001 14.8781L9.33339 19.5448Z\" fill=\"currentColor\"/>\n                                        </svg>\n                                    </button>\n                                </div>\n                                <div class=\"quality-selector-status-content\">\n                                    <span class=\"loading-3-dots quality-selector-status-icon\"></span>\n                                    <span class=\"quality-selector-status-text\"></span>\n                                </div>\n                            </div>\n                            <div class=\"quality-selector-status\" data-status=\"error\" hidden>\n                                <div class=\"quality-selector-qualities-header\">\n                                    <savior-image data-src=\"images/logo_cc.svg\"></savior-image>\n                                    <h3>{{i18n_download_box_header_title}}</h3>\n                                    <button class=\"quality-selector-qualities-close-button\">\n                                        <svg width=\"28\" height=\"28\" viewBox=\"0 0 28 28\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                                            <path d=\"M9.33339 19.5448L8.4552 18.6666L13.1219 13.9999L8.4552 9.33327L9.33339 8.45508L14.0001 13.1217L18.6667 8.45508L19.5449 9.33327L14.8782 13.9999L19.5449 18.6666L18.6667 19.5448L14.0001 14.8781L9.33339 19.5448Z\" fill=\"currentColor\"/>\n                                        </svg>\n                                    </button>\n                                </div>\n                                <div class=\"quality-selector-status-content\">\n                                    <img src=\"/images/ic-report-circle.svg\" alt=\"ic-not-found\" class=\"notfound-icon\" />\n                                    <span class=\"quality-selector-status-text\"></span>\n                                </div>\n                            </div>\n                            <div class=\"quality-selector-qualities\">\n                                <div class=\"quality-selector-qualities-header\">\n                                    <savior-image data-src=\"images/logo_cc.svg\"></savior-image>\n                                    <h3>{{i18n_download_box_header_title}}</h3>\n                                    <button class=\"quality-selector-qualities-close-button\">\n                                        <svg width=\"28\" height=\"28\" viewBox=\"0 0 28 28\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                                            <path d=\"M9.33339 19.5448L8.4552 18.6666L13.1219 13.9999L8.4552 9.33327L9.33339 8.45508L14.0001 13.1217L18.6667 8.45508L19.5449 9.33327L14.8782 13.9999L19.5449 18.6666L18.6667 19.5448L14.0001 14.8781L9.33339 19.5448Z\" fill=\"currentColor\"/>\n                                        </svg>\n                                    </button>\n                                </div>\n                                {{#media}}\n                                    <div class=\"extension-box\">\n                                        <div class=\"extensions-label\">\n                                            {{{type_icon}}}\n                                            <strong>{{i18n_type}}</strong>\n                                        </div>\n                                        {{#media}}\n                                            <div data-id=\"{{id}}\" data-quality-value=\"{{ext}}/{{quality}}/{{resolution}}\" class=\"quality-label j-quality {{#fast}}is-fast{{/fast}} {{#useConverter}}use-converter{{/useConverter}}\">\n                                                <strong class=\"media-name {{type}}\">\n                                                    {{#i18n_quality}}\n                                                        {{i18n_quality}}\n                                                    {{/i18n_quality}}\n                                                    {{^i18n_quality}}\n                                                        {{quality}}\n                                                    {{/i18n_quality}}\n                                                </strong>\n\n                                                <p class=\"media-sub-wrap {{#resolution}}with-resolution{{/resolution}}\">\n                                                    {{#resolution}}\n                                                        <span class=\"media-sub-info info-resolution\">\n                                                            {{resolution}}\n                                                        </span>\n                                                    {{/resolution}}\n                                                    <span class=\"media-sub-info info-ext\">\n                                                        .{{i18n_ext}}{{^i18n_ext}}{{ext}}{{/i18n_ext}}\n                                                    </span>\n                                                </p>\n                                            </div>\n                                        {{/media}}\n                                    </div>\n                                {{/media}}\n                            </div>\n                        </div>\n                    </div>\n                </div>\n\n                {{#media}}\n                    {{#media}}\n                        <a title=\"{{title}}\" class=\"{{#playable}}play-now-btn{{/playable}} {{^playable}}download-btn{{/playable}} {{#hide}}visible{{/hide}} j-quality-download\"\n                        data-quality=\"{{ext}}/{{quality}}/{{resolution}}\"\n                        data-id=\"{{id}}\"\n                        data-url=\"{{url}}\"\n                        id=\"media_{{id}}\"\n                        >\n                            <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                                <path d=\"M5.25645 16.2499C4.8355 16.2499 4.4792 16.1041 4.18753 15.8124C3.89586 15.5207 3.75003 15.1644 3.75003 14.7435V12.4999H5.00001V14.7435C5.00001 14.8076 5.02672 14.8664 5.08013 14.9198C5.13356 14.9732 5.19234 14.9999 5.25645 14.9999H14.7436C14.8077 14.9999 14.8665 14.9732 14.9199 14.9198C14.9733 14.8664 15 14.8076 15 14.7435V12.4999H16.25V14.7435C16.25 15.1644 16.1042 15.5207 15.8125 15.8124C15.5208 16.1041 15.1645 16.2499 14.7436 16.2499H5.25645ZM10 13.0127L6.44236 9.45507L7.32055 8.55125L9.37503 10.6057V3.60571H10.625V10.6057L12.6795 8.55125L13.5577 9.45507L10 13.0127Z\" fill=\"#25AF50\"/>\n                            </svg>\n                            <span>\n                                {{#hasVideo}}\n                                    {{i18n_download_video}}\n                                {{/hasVideo}}\n\n                                {{^hasVideo}}\n                                    {{i18n_download_audio}}\n                                {{/hasVideo}}\n                            </span>\n                        </a>\n                    {{/media}}\n                {{/media}}\n            </span>\n        </span>\n</div>\n",
   "template-media-sidepanel-image": "<div class=\"j-media-scope media-scope\" title=\"{{url}}\" data-title=\"{{url}}\" data-filename=\"{{filename}}\" data-totalpixel=\"{{totalPixel}}\">\n        <span class=\"filename\">\n            <label  class=\"filename-content\">\n                <input type=\"checkbox\" />\n                <span> {{url}} </span>\n            </label>\n        </span>\n        <span class=\"content-holder\">\n            <img class=\"image-media-display\" src=\"{{url}}\" crossorigin=\"anonymous\" />\n            <span class=\"options-holder\">\n                <div class=\"details\">\n                    {{width}}x{{height}} • {{sizeKiloBytes}}KB • {{extension}}\n                </div>\n                <a title=\"{{title}}\" class=\"download-btn {{#hide}}visible{{/hide}} j-image-download\"\n                data-url=\"{{url}}\"\n                >       \n                    <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                        <path d=\"M5.25645 16.2499C4.8355 16.2499 4.4792 16.1041 4.18753 15.8124C3.89586 15.5207 3.75003 15.1644 3.75003 14.7435V12.4999H5.00001V14.7435C5.00001 14.8076 5.02672 14.8664 5.08013 14.9198C5.13356 14.9732 5.19234 14.9999 5.25645 14.9999H14.7436C14.8077 14.9999 14.8665 14.9732 14.9199 14.9198C14.9733 14.8664 15 14.8076 15 14.7435V12.4999H16.25V14.7435C16.25 15.1644 16.1042 15.5207 15.8125 15.8124C15.5208 16.1041 15.1645 16.2499 14.7436 16.2499H5.25645ZM10 13.0127L6.44236 9.45507L7.32055 8.55125L9.37503 10.6057V3.60571H10.625V10.6057L12.6795 8.55125L13.5577 9.45507L10 13.0127Z\" fill=\"#25AF50\"/>\n                    </svg>\n                    {{i18n_download_image}}\n                </a>                \n            </span>\n        </span>\n</div>",
   "template-onboard-popup": "{{#sidebar_onboard_title}}\n    <div class='popup-header'>\n        {{^no_logo}}<div class='logo'></div>{{/no_logo}}\n        <div class='title'>{{sidebar_onboard_title}}</div>\n        {{#close_button}}\n            <div class='close_button'>\n                <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M13.41 12L17.71 7.71C17.8983 7.5217 18.0041 7.2663 18.0041 7C18.0041 6.7337 17.8983 6.47831 17.71 6.29C17.5217 6.1017 17.2663 5.99591 17 5.99591C16.7337 5.99591 16.4783 6.1017 16.29 6.29L12 10.59L7.71 6.29C7.5217 6.1017 7.2663 5.99591 7 5.99591C6.7337 5.99591 6.4783 6.1017 6.29 6.29C6.1017 6.47831 5.99591 6.7337 5.99591 7C5.99591 7.2663 6.1017 7.5217 6.29 7.71L10.59 12L6.29 16.29C6.19627 16.383 6.12188 16.4936 6.07111 16.6154C6.02034 16.7373 5.9942 16.868 5.9942 17C5.9942 17.132 6.02034 17.2627 6.07111 17.3846C6.12188 17.5064 6.19627 17.617 6.29 17.71C6.38296 17.8037 6.49356 17.8781 6.61542 17.9289C6.73728 17.9797 6.86799 18.0058 7 18.0058C7.13201 18.0058 7.26272 17.9797 7.38458 17.9289C7.50644 17.8781 7.61704 17.8037 7.71 17.71L12 13.41L16.29 17.71C16.383 17.8037 16.4936 17.8781 16.6154 17.9289C16.7373 17.9797 16.868 18.0058 17 18.0058C17.132 18.0058 17.2627 17.9797 17.3846 17.9289C17.5064 17.8781 17.617 17.8037 17.71 17.71C17.8037 17.617 17.8781 17.5064 17.9289 17.3846C17.9797 17.2627 18.0058 17.132 18.0058 17C18.0058 16.868 17.9797 16.7373 17.9289 16.6154C17.8781 16.4936 17.8037 16.383 17.71 16.29L13.41 12Z\" fill=\"currentColor\"/>\n                </svg>\n            </div>\n        {{/close_button}}\n    </div>\n{{/sidebar_onboard_title}}\n{{#img_class}}\n    <div class='feature-img {{#has_sep}}has_sep{{/has_sep}} {{#img_no_padding}}img_no_padding{{/img_no_padding}}'>\n        <picture>\n            {{#img_sources}}\n                <source srcset='{{srcset}}' media=\"{{mediaQuery}}\" />\n            {{/img_sources}}\n            <img src='{{img_class}}'/>\n            {{#img_central_qr}}\n                <img class='central-qr' src='{{img_central_qr}}'/>\n            {{/img_central_qr}}\n        </picture>\n        {{#button_icon_selector_show}}\n            <div class='control'>\n                <div class='icon messenger {{#messenger_active}}active{{/messenger_active}}'></div>\n                <div class='icon zalo {{#zalo_active}}active{{/zalo_active}}'></div>\n                <div class='icon tele {{#tele_active}}active{{/tele_active}}'></div>\n                <div class='icon skype {{#skype_active}}active{{/skype_active}}'></div>\n            </div>\n        {{/button_icon_selector_show}}\n    </div>\n{{/img_class}}\n<div class ='big-desc'no_header>\n    {{i18n_big_desc_text}}\n</div>\n<div class='desc {{#i18n_big_desc_text}} has-big-desc {{/i18n_big_desc_text}} {{^sidebar_onboard_title}}no_header{{/sidebar_onboard_title}}'>\n    {{{i18n_desc_text}}}\n</div>\n<div class='bottom-control {{^sidebar_onboard_title}}no_header{{/sidebar_onboard_title}} {{^img_class}}no_img{{/img_class}} {{#has_sep}}has_sep{{/has_sep}}'>\n    {{#pass_text}}\n        <button class='cancel-btn'>\n            {{pass_text}}\n        </button>\n    {{/pass_text}}\n    {{#i18n_try_now}}\n        <button class='onboarding-btn'>\n            {{#button_icon}}\n                <div class='icon {{button_icon}}'></div>\n            {{/button_icon}}\n            <span>{{i18n_try_now}}</span>\n        </button>\n    {{/i18n_try_now}}\n</div>",
-  "template-onboard-popup-horizontal": "<div class=\"onboard-popup-body-horizontal\">\n    {{#img_class}}\n        <div class='feature-img'>\n            <picture>\n                {{#img_sources}}\n                    <source srcset='{{srcset}}' media=\"{{mediaQuery}}\" />\n                {{/img_sources}}\n                <img src='{{img_class}}'/>\n                {{#img_central_qr}}\n                    <img class='central-qr' src='{{img_central_qr}}'/>\n                {{/img_central_qr}}\n            </picture>\n            {{#button_icon_selector_show}}\n                <div class='control'>\n                    <div class='icon messenger {{#messenger_active}}active{{/messenger_active}}'></div>\n                    <div class='icon zalo {{#zalo_active}}active{{/zalo_active}}'></div>\n                    <div class='icon tele {{#tele_active}}active{{/tele_active}}'></div>\n                    <div class='icon skype {{#skype_active}}active{{/skype_active}}'></div>\n                </div>\n            {{/button_icon_selector_show}}\n        </div>\n    {{/img_class}}\n    {{#feature_video_url}}\n        <video class=\"feature-video\" height='180' width=\"auto\" autoplay muted loop>\n            <source src=\"https://cdn.coccoc.com/static/videos/browser/onboarding-en-to-vi.mp4\" type=\"video/mp4\">\n            Your browser does not support HTML video.\n        </video>\n    {{/feature_video_url}}\n    <div class=\"onboard-popup-body-horizontal-content\">\n        <div class='desc {{^img_class}}{{^feature_video_url}}no_header{{/feature_video_url}}{{/img_class}}'>\n            {{#feature_video_url}}\n                <div class='title'>\n                    {{{sidebar_onboard_title}}}\n                </div>\n            {{/feature_video_url}}\n            {{{i18n_desc_text}}}\n        </div>\n        <div class='bottom-control {{^img_class}}{{^feature_video_url}}no_header{{/feature_video_url}}{{/img_class}} {{#feature_video_url}}video{{/feature_video_url}}'>\n            {{#pass_text}}\n                <button class='cancel-btn'>\n                    <span>{{pass_text}}</span>\n                </button>\n            {{/pass_text}}\n            {{#i18n_try_now}}\n                <button class='onboarding-btn'>\n                    {{#button_icon}}\n                        <div class='icon {{button_icon}}'></div>\n                    {{/button_icon}}\n                    <span>{{i18n_try_now}}</span>\n                </button>\n            {{/i18n_try_now}}\n        </div>\n    </div>\n</div>",
+  "template-onboard-popup-horizontal": "<div class=\"onboard-popup-body-horizontal\">\n    {{#img_class}}\n        <div class='feature-img'>\n            <picture>\n                {{#img_sources}}\n                    <source srcset='{{srcset}}' media=\"{{mediaQuery}}\" />\n                {{/img_sources}}\n                <img src='{{img_class}}'/>\n                {{#img_central_qr}}\n                    <img class='central-qr' src='{{img_central_qr}}'/>\n                {{/img_central_qr}}\n            </picture>\n            {{#button_icon_selector_show}}\n                <div class='control'>\n                    <div class='icon messenger {{#messenger_active}}active{{/messenger_active}}'></div>\n                    <div class='icon zalo {{#zalo_active}}active{{/zalo_active}}'></div>\n                    <div class='icon tele {{#tele_active}}active{{/tele_active}}'></div>\n                    <div class='icon skype {{#skype_active}}active{{/skype_active}}'></div>\n                </div>\n            {{/button_icon_selector_show}}\n        </div>\n    {{/img_class}}\n    {{#feature_video_url}}\n        <video class=\"feature-video\" height='180' width=\"auto\" autoplay muted loop>\n            <source src=\"{{feature_video_url}}\" type=\"video/mp4\">\n            Your browser does not support HTML video.\n        </video>\n    {{/feature_video_url}}\n    <div class=\"onboard-popup-body-horizontal-content\">\n        <div class='desc {{^img_class}}{{^feature_video_url}}no_header{{/feature_video_url}}{{/img_class}}'>\n            {{#feature_video_url}}\n                <div class='title'>\n                    {{{sidebar_onboard_title}}}\n                </div>\n            {{/feature_video_url}}\n            {{{i18n_desc_text}}}\n        </div>\n        <div class='bottom-control {{^img_class}}{{^feature_video_url}}no_header{{/feature_video_url}}{{/img_class}} {{#feature_video_url}}video{{/feature_video_url}}'>\n            {{#pass_text}}\n                <button class='cancel-btn'>\n                    <span>{{pass_text}}</span>\n                </button>\n            {{/pass_text}}\n            {{#i18n_try_now}}\n                <button class='onboarding-btn'>\n                    {{#button_icon}}\n                        <div class='icon {{button_icon}}'></div>\n                    {{/button_icon}}\n                    <span>{{i18n_try_now}}</span>\n                </button>\n            {{/i18n_try_now}}\n        </div>\n    </div>\n</div>",
   "template-tooltip-play-now-bottom": "<div class=\"tooltip-box tooltip-box-bottom\" hidden>\n    <div class=\"tooltip tleft\">\n        {{{i18n_play_text}}}\n        <form action=\"\" class=\"not-show\">\n            <input type=\"checkbox\" name=\"vehicle\" value=\"\" id=\"play-now-not-show-check-bottom\">\n            <label for=\"play-now-not-show-check-bottom\">{{i18n_play_not_show}}</label>\n        </form>\n        <span class=\"closebtn\" id=\"close-play-now-tooltip-bottom\">\n            <svg width=\"16\" height=\"16\" focusable=\"false\" role=\"img\" viewBox=\"0 0 320 512\">\n                <path fill=\"currentColor\" d=\"M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z\" />\n            </svg>\n        </span>\n    </div>\n</div>",
   "template-mobile-transfer-panel": "<dropdown-box class=\"transfer-to-mobile hidden\">\n    <div class=\"mobile-content-box\">\n\n        <dropdown-box-header class=\"mobile-content-box-header\">\n            <savior-image data-src=\"images/logo_cc.svg\"></savior-image>\n            <h2>{{i18n_mobile_header_title}}</h2>\n            <button class=\"dropdown-box-closer\" id=\"mobile-transfer-closer\">\n                <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M5.33327 15.5448L4.45508 14.6667L9.12174 9.99999L4.45508 5.33333L5.33327 4.45514L9.99993 9.12181L14.6666 4.45514L15.5448 5.33333L10.8781 9.99999L15.5448 14.6667L14.6666 15.5448L9.99993 10.8782L5.33327 15.5448Z\" fill=\"currentColor\"/>\n                </svg>\n            </button>\n        </dropdown-box-header>\n\n        <savior-row class=\"mobile-content-body\">\n            <instruction class=\"\">\n                <div class=\"mobile-instruction-text\">{{i18n_mobile_instruction_1}}</div>\n                <div class=\"mobile-instruction-image\">\n                    <picture>\n                        <source srcset=\"\" media=\"(prefers-color-scheme: dark)\" id=\"mobile-instruction-image-dark\">\n                        <img src=\"\" alt=\"Instruction\" id=\"mobile-instruction-image\">\n                    </picture>\n                </div>\n\n            </instruction>\n\n            <instruction class=\"\">\n                <div class=\"mobile-instruction-text\">{{i18n_mobile_instruction_2}}</div>\n                <savior-row class=\"mobile-instruction-body\">\n                    <div class=\"mobile-switch-box\">\n                        <div class=\"switch\">\n                            <savior-row class=\"switch-field\">\n                                <input type=\"radio\" id=\"switch-video\" name=\"send-type\" value=\"video\" checked />\n                                <label for=\"switch-video\">\n                                    <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                                        <path d=\"M4.54791 19.5C4.04278 19.5 3.61521 19.325 3.26521 18.975C2.91523 18.625 2.74023 18.1974 2.74023 17.6922V6.3077C2.74023 5.80257 2.91523 5.375 3.26521 5.025C3.61521 4.675 4.04278 4.5 4.54791 4.5H15.9325C16.4376 4.5 16.8652 4.675 17.2152 5.025C17.5652 5.375 17.7402 5.80257 17.7402 6.3077V10.8846L21.2593 7.36543V16.6345L17.7402 13.1153V17.6922C17.7402 18.1974 17.5652 18.625 17.2152 18.975C16.8652 19.325 16.4376 19.5 15.9325 19.5H4.54791ZM4.54791 18H15.9325C16.0222 18 16.096 17.9711 16.1536 17.9134C16.2113 17.8557 16.2402 17.782 16.2402 17.6922V6.3077C16.2402 6.21795 16.2113 6.14423 16.1536 6.08652C16.096 6.02882 16.0222 5.99997 15.9325 5.99997H4.54791C4.45816 5.99997 4.38443 6.02882 4.32673 6.08652C4.26903 6.14423 4.24018 6.21795 4.24018 6.3077V17.6922C4.24018 17.782 4.26903 17.8557 4.32673 17.9134C4.38443 17.9711 4.45816 18 4.54791 18Z\" fill=\"currentColor\"/>\n                                    </svg>\n                                    <span>{{i18n_mobile_video}}</span>\n                                </label>\n                                <input type=\"radio\" id=\"switch-audio\" name=\"send-type\" value=\"audio\" />\n                                <label for=\"switch-audio\">\n                                    <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                                        <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M4.01641 19.3757C4.70182 20.0611 5.52577 20.4038 6.48826 20.4038C7.45074 20.4038 8.27469 20.0611 8.96011 19.3757C9.64551 18.6903 9.98821 17.8663 9.98821 16.9038V6.86537H19.5123V14.0885C19.2315 13.8603 18.9238 13.6891 18.5892 13.575C18.2546 13.4609 17.8956 13.4039 17.5123 13.4039C16.5498 13.4039 15.7259 13.7466 15.0405 14.432C14.355 15.1174 14.0123 15.9413 14.0123 16.9038C14.0123 17.8663 14.355 18.6903 15.0405 19.3757C15.7259 20.0611 16.5498 20.4038 17.5123 20.4038C18.4748 20.4038 19.2987 20.0611 19.9842 19.3757C20.6696 18.6903 21.0123 17.8663 21.0123 16.9038V6.86537V3.59619H20.0121H19.5123H8.48826V14.0885C8.20749 13.8603 7.8998 13.6891 7.56518 13.575C7.23056 13.4609 6.87159 13.4039 6.48826 13.4039C5.52577 13.4039 4.70182 13.7466 4.01641 14.432C3.33099 15.1174 2.98828 15.9413 2.98828 16.9038C2.98828 17.8663 3.33099 18.6903 4.01641 19.3757Z\" fill=\"currentColor\"/>\n                                    </svg>\n                                    <span>{{i18n_mobile_audio}}</span>\n                                </label>\n                            </savior-row>\n\n                        </div>\n                    </div>\n                    <savior-row class=\"mobile-qrcode mobile-default-row-gap\">\n                        <div class=\"qrcode loading\"></div>\n                    </savior-row>\n                </savior-row>\n            </instruction>\n        </savior-row>\n\n        <savior-row class=\"mobile-footer mobile-default-row-gap\">\n            <div class=\"footer-text\">{{i18n_mobile_panel_footer}}</div>\n            <savior-row class=\"download-web-stores\">\n                <figure class=\"store google-play\" id=\"google-play\"></figure>\n                <figure class=\"store app-store\" id=\"app-store\"></figure>\n            </savior-row>\n        </savior-row>\n    </div>\n</dropdown-box>\n",
   "template-promote-serp": "<div class=\"promote-serp-block\">\n    <div id=\"close\">&times;</div>\n    <p>{{i18n_desc}}</p>\n\n    <div class=\"btn-block\">\n        <button class=\"btn green\" id=\"check\">{{i18n_btn_check}}</button>\n        <button class=\"btn\" id=\"settings\">{{i18n_btn_settings}}</button>\n    </div>\n</div>",
@@ -775,6 +775,20 @@ try {
               }
               const d = results && results[0];
               if (d && d.state === 'in_progress') {
+                const cid = Number(item.chromeId);
+                if (!isNaN(cid) && cid > 0 && !activeDownloads.has(cid)) {
+                  activeDownloads.set(cid, {
+                    ...item,
+                    id: item.id || cid,
+                    chromeId: cid,
+                    isBrowserDownload: true,
+                    state: 'in_progress',
+                    bytesReceived: d.bytesReceived || 0,
+                    totalBytes: d.totalBytes || 0,
+                    lastBytes: d.bytesReceived || 0,
+                    lastTime: Date.now()
+                  });
+                }
                 return resolve(item); // Still in progress in browser!
               } else if (d && d.state === 'complete') {
                 return resolve({ ...item, state: 'completed', percent: '100%', speed: 'Completed' });
@@ -804,7 +818,14 @@ try {
     Promise.all(history.map(checkItemState)).then((sanitized) => {
       const modified = sanitized.some((it, i) => it !== history[i]);
       if (modified) {
-        chrome.storage.local.set({ downloadHistory: sanitized });
+        historyWritePromise = historyWritePromise.then(() => new Promise((res) => {
+          chrome.storage.local.get(['downloadHistory'], (latest) => {
+            const current = (latest && latest.downloadHistory) || [];
+            const sanitizedById = new Map(sanitized.map(it => [String(it && it.id), it]));
+            const merged = current.map(it => sanitizedById.get(String(it && it.id)) || it);
+            chrome.storage.local.set({ downloadHistory: merged }, () => res());
+          });
+        })).catch(() => {});
       }
     });
   });
@@ -1690,8 +1711,12 @@ function getOrCreateNativePort() {
         heartbeatInterval = null;
       }
 
+      nativeDownloadQueue.length = 0;
       for (const [id, task] of Array.from(activeDownloads.entries())) {
         if (!task.isBrowserDownload && !task.chromeId) {
+          if (task.abortController) {
+            try { task.abortController.abort(new Error('NATIVE_HOST_DISCONNECTED')); } catch (_) {}
+          }
           task.state = 'error';
           updateDownloadHistory({
             id: id,
@@ -2343,7 +2368,6 @@ function startNativeDownload(downloadParams, callback) {
         } else if (!opts._relayFailed && startStreamRelayDownload(opts)) {
           // Regular stream whose CDN blocked the native fetch (TLS/header):
           // relay through Chrome's stack before touching the browser engine.
-          opts._relayFailed = true;
           fallbackStarted = true;
         } else {
           delete opts.taskId;
@@ -2397,6 +2421,11 @@ function startNativeDownload(downloadParams, callback) {
   // the same authenticated session as the tab that discovered it.
   const resolvedPageUrl = downloadParams.pageUrl || downloadParams.referrer || currentActiveTabUrl || '';
   const postDownload = (sessionCookie) => {
+    if (purgedTaskIds.has(String(fakeId)) || !activeDownloads.has(fakeId) || task.state === 'canceled') {
+      try { port.onMessage.removeListener(messageHandler); } catch (_) {}
+      setTimeout(processNextQueuedNativeDownload, 50);
+      return;
+    }
     try {
       port.postMessage({
         action: 'download',
@@ -2518,7 +2547,8 @@ function startStreamRelayDownload(downloadParams, callback) {
     startTime: Date.now(),
     complete: false,
     isStreamRelay: true,
-    _inFlight: 0
+    _inFlight: 0,
+    _windowResolvers: new Set()
   };
   activeDownloads.set(fakeId, task);
   updateDownloadHistory({
@@ -2608,16 +2638,22 @@ function startStreamRelayDownload(downloadParams, callback) {
   };
   port.onMessage.addListener(messageHandler);
 
-  port.postMessage({
-    action: 'streamDownload',
-    taskId: fakeId,
-    url: targetUrl,
-    filename: safeFilename,
-    title: task.title,
-    referer: task.referer,
-    pageUrl: resolvedPageUrl,
-    outputDir: task.outputDir
-  });
+  try {
+    port.postMessage({
+      action: 'streamDownload',
+      taskId: fakeId,
+      url: targetUrl,
+      filename: safeFilename,
+      title: task.title,
+      referer: task.referer,
+      pageUrl: resolvedPageUrl,
+      outputDir: task.outputDir
+    });
+  } catch (initPostErr) {
+    activeDownloads.delete(fakeId);
+    try { port.onMessage.removeListener(messageHandler); } catch (_) {}
+    return false;
+  }
 
   const relayRuleId = ++nextRelayRuleId;
   (async () => {
@@ -2655,13 +2691,14 @@ function startStreamRelayDownload(downloadParams, callback) {
     };
     // Drain one response body: batch it and post chunks tagged with their
     // absolute file offset so parallel workers may land out of order.
-    const pumpBody = async (body, fileOffset) => {
+    const pumpBody = async (body, fileOffset, extraSignal) => {
       const reader = body.getReader();
       let batch = new Uint8Array(BATCH);
       let batchLen = 0;
       let pos = fileOffset;
+      const isStopped = () => abortCtrl.signal.aborted || Boolean(extraSignal && extraSignal.aborted);
       const flush = () => {
-        if (batchLen === 0) return;
+        if (batchLen === 0 || isStopped()) return;
         seq++;
         task._inFlight++;
         port.postMessage({ action: 'streamChunk', taskId: fakeId, seq, offset: pos, data: uint8ToBase64(batch.subarray(0, batchLen)), total });
@@ -2670,9 +2707,10 @@ function startStreamRelayDownload(downloadParams, callback) {
         batchLen = 0;
       };
       for (;;) {
-        if (abortCtrl.signal.aborted) return;
+        if (isStopped()) { try { reader.cancel(); } catch (_) {} return; }
         if (task._inFlight >= WINDOW) { await awaitWindowSlot(); continue; }
         const { done, value } = await reader.read();
+        if (isStopped()) { try { reader.cancel(); } catch (_) {} return; }
         if (done) { flush(); return; }
         if (!value || !value.length) continue;
         let o = 0;
@@ -2691,20 +2729,34 @@ function startStreamRelayDownload(downloadParams, callback) {
       const headers = {};
       // Match this URL and extension initiator only; never alter the page's requests.
       if (chrome.declarativeNetRequest && chrome.runtime.id && task.referer) {
-        const escapedUrl = targetUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         let originVal = '';
+        let targetFilter = '';
         try { originVal = new URL(task.referer).origin; } catch (_) {}
+        try {
+          const parsedTarget = new URL(targetUrl);
+          targetFilter = '||' + parsedTarget.hostname + parsedTarget.pathname;
+        } catch (_) {}
         const requestHeaders = [{ header: 'Referer', operation: 'set', value: task.referer }];
         if (originVal && originVal !== 'null') {
           requestHeaders.push({ header: 'Origin', operation: 'set', value: originVal });
         }
-        await chrome.declarativeNetRequest.updateSessionRules({
-          removeRuleIds: [relayRuleId],
-          addRules: [{ id: relayRuleId, priority: 10,
-            action: { type: 'modifyHeaders', requestHeaders },
-            condition: { regexFilter: '^' + escapedUrl + '$', initiatorDomains: [chrome.runtime.id], resourceTypes: ['xmlhttprequest'] }
-          }]
-        });
+        const escapedUrl = targetUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const ruleCondition = escapedUrl.length <= 512
+          ? { regexFilter: '^' + escapedUrl + '$', initiatorDomains: [chrome.runtime.id], resourceTypes: ['xmlhttprequest'] }
+          : (targetFilter && targetFilter.length <= 1024
+              ? { urlFilter: targetFilter, initiatorDomains: [chrome.runtime.id], resourceTypes: ['xmlhttprequest'] }
+              : { urlFilter: targetUrl.slice(0, 512), initiatorDomains: [chrome.runtime.id], resourceTypes: ['xmlhttprequest'] });
+        try {
+          await chrome.declarativeNetRequest.updateSessionRules({
+            removeRuleIds: [relayRuleId],
+            addRules: [{ id: relayRuleId, priority: 10,
+              action: { type: 'modifyHeaders', requestHeaders },
+              condition: ruleCondition
+            }]
+          });
+        } catch (dnrErr) {
+          console.warn('[Savior] Stream relay DNR rule setup failed (continuing):', dnrErr && dnrErr.message);
+        }
       }
       const isTikTokOrDouyin = /tiktok|douyin|byteoversea|ibytedtos|bytevd|zjcdn/i.test(targetUrl) || /tiktok\.com|douyin\.com/i.test(resolvedPageUrl);
       const isCdnStream = !isTikTokOrDouyin && false;
@@ -2775,11 +2827,12 @@ function startStreamRelayDownload(downloadParams, callback) {
             jobs.push((async () => {
               const r = await fetchWithTimeout(targetUrl, { credentials: fetchCreds, headers: { ...headers, Range: `bytes=${start}-${end}` }, signal: splitAbortCtrl.signal }, 25000);
               if (r.status === 200) {
+                try { if (r.body && typeof r.body.cancel === 'function') r.body.cancel(); } catch (_) {}
                 splitAbortCtrl.abort(new Error('RANGE_UNSUPPORTED_STATUS_200'));
                 throw new Error('RANGE_UNSUPPORTED_STATUS_200');
               }
               if (!r.ok || r.status !== 206) throw new Error('HTTP ' + r.status);
-              await pumpBody(r.body, start);
+              await pumpBody(r.body, start, splitAbortCtrl.signal);
             })());
           }
           await Promise.all(jobs);
@@ -2790,6 +2843,7 @@ function startStreamRelayDownload(downloadParams, callback) {
           if (splitErr && (splitErr.message === 'RANGE_UNSUPPORTED_STATUS_200' || splitErr.name === 'RANGE_UNSUPPORTED_STATUS_200')) {
             console.log('[Savior] Range request returned 200 OK; falling back to single stream');
             bytesRelayed = 0;
+            seq = 0;
             task._inFlight = 0;
             fallbackToSingle = true;
             // Reset .part file and coverage intervals on native host before pumping single stream from offset 0
@@ -2828,7 +2882,13 @@ function startStreamRelayDownload(downloadParams, callback) {
         if (isSessionProtectedStream(opts) && !opts._relayFailed && !isBogusStreamUrl(opts.url || opts.videoUrl, opts.pageUrl)) {
           opts._relayFailed = true;
           opts.taskId = fakeId;
+          opts._recentChecked = true;
           fallbackStarted = startCocCocSessionDownload(opts);
+        } else if (!opts._relayFailed && !isBogusStreamUrl(opts.url || opts.videoUrl, opts.pageUrl)) {
+          opts._relayFailed = true;
+          opts.taskId = fakeId;
+          opts._recentChecked = true;
+          fallbackStarted = startBrowserDownload(opts);
         }
         if (!fallbackStarted) {
           const userErr = err && err.message === 'CONNECT_TIMEOUT'
@@ -2883,7 +2943,6 @@ function resolveSelectedPage(req, sender) {
       : '';
     const isExtensionCaller = Boolean(
       sender &&
-      !sender.tab &&
       extPrefix &&
       typeof sender.url === 'string' &&
       sender.url.startsWith(extPrefix) &&
@@ -2929,13 +2988,15 @@ try {
 
 function isPrivilegedExtensionSender(sender) {
   if (!sender || typeof sender !== 'object') return false;
-  if (sender.tab) return false;
+  const runtimeId = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) ? chrome.runtime.id : '';
+  if (runtimeId && sender.id && sender.id !== runtimeId) return false;
   if (typeof sender.url === 'string' && sender.url) {
     const extPrefix = (typeof chrome !== 'undefined' && chrome.runtime && typeof chrome.runtime.getURL === 'function')
       ? chrome.runtime.getURL('')
       : 'chrome-extension://';
     return sender.url.startsWith(extPrefix) || sender.url.startsWith('chrome-extension://');
   }
+  if (sender.tab) return false;
   return !sender.origin || String(sender.origin).startsWith('chrome-extension://');
 }
 
@@ -2992,6 +3053,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
       const urlObj = (params.url && typeof params.url === 'object' && !Array.isArray(params.url)) ? params.url : null;
       const opts = {
+        _recentChecked: true,
         url: rawUrl,
         videoUrl: (urlObj ? urlObj.videoUrl : params.videoUrl) || rawUrl,
         audioUrl: (urlObj && urlObj.audioUrl) || params.audioUrl || '',
@@ -3033,10 +3095,10 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
           sendResponse({ success: false, error: 'NATIVE_HOST_REQUIRED' });
           return false;
         }
+        if (opts && opts._recentChecked) clearUrlRecentlyRequested(cleanMediaCdnUrl(opts.videoUrl || opts.url));
         if (isSessionProtectedStream(opts)) {
           started = Boolean(startCocCocSessionDownload(opts));
         } else if (!opts._relayFailed && startStreamRelayDownload(opts)) {
-          opts._relayFailed = true;
           started = true;
         } else {
           started = Boolean(startBrowserDownload(opts));
@@ -3175,6 +3237,9 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
           if (t && t.isBrowserDownload) {
             try { _origCancel(k); } catch (_) {}
           } else {
+            if (t && t.abortController) {
+              try { t.abortController.abort(new Error('USER_REMOVED')); } catch (_) {}
+            }
             hadNativeJob = true;
           }
         }
@@ -3203,7 +3268,9 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
       if (hadNativeJob) {
         const port = getOrCreateNativePort();
-        if (port) port.postMessage({ action: 'cancel', taskId: targetId });
+        if (port) {
+          try { port.postMessage({ action: 'cancel', taskId: targetId }); } catch (_) {}
+        }
       }
 
       if (targetId) {
@@ -3685,7 +3752,6 @@ if (chrome.runtime.onMessageExternal) {
         if (isSessionProtectedStream(req)) {
           started = Boolean(startCocCocSessionDownload(req));
         } else if (!req._relayFailed && startStreamRelayDownload(req)) {
-          req._relayFailed = true;
           started = true;
         } else {
           started = Boolean(startBrowserDownload(req));
@@ -3781,6 +3847,7 @@ chrome.downloads.download = function(options, callback) {
       if (typeof callback === 'function') callback(null);
       return;
     }
+    if (options && typeof options === 'object') options._recentChecked = true;
     for (const [id, t] of activeDownloads.entries()) {
       const tAudio = t.audioUrl || (t.params && t.params.audioUrl) || '';
       const samePageAndTitle = Boolean(
@@ -3800,12 +3867,13 @@ chrome.downloads.download = function(options, callback) {
   // Reject bogus webpage targets upfront so they never hang at 1% or save HTML
   if (!reqUrl || isBogusStreamUrl(reqUrl, effPage, options)) {
     console.warn('[Savior] chrome.downloads.download rejected bogus media target:', reqUrl);
-    const taskId = options.taskId || `bogus_${Date.now()}`;
+    const safeOpts = options || {};
+    const taskId = safeOpts.taskId || `bogus_${Date.now()}`;
     const errText = 'Video stream not found. Please play the video for VidManager to detect stream.';
     updateDownloadHistory({
       id: taskId,
-      title: options.title || options.filename || 'Video',
-      filename: options.filename || 'video.mp4',
+      title: safeOpts.title || safeOpts.filename || 'Video',
+      filename: safeOpts.filename || 'video.mp4',
       url: reqUrl,
       pageUrl: effPage,
       type: 'video',
@@ -3859,6 +3927,7 @@ chrome.downloads.download = function(options, callback) {
   }
 
   // 2. Session-protected streams fallback when Native Helper is unavailable
+  if (options && options._recentChecked) clearUrlRecentlyRequested(cleanMediaCdnUrl(options.videoUrl || options.url));
   if (isSessionProtectedStream(options)) {
     return startCocCocSessionDownload(options, callback);
   }
@@ -3866,7 +3935,6 @@ chrome.downloads.download = function(options, callback) {
   // 3. Fallback: relay through Chrome's network stack (no browser download
   //    entry), and only then the standard Chrome download engine.
   if (!options._relayFailed && startStreamRelayDownload(options, callback)) {
-    options._relayFailed = true;
     return;
   }
   startBrowserDownload(options, callback);
@@ -3926,12 +3994,18 @@ chrome.downloads.cancel = function(downloadId, callback) {
   if (activeDownloads.has(downloadId)) {
     const t = activeDownloads.get(downloadId);
     activeDownloads.delete(downloadId);
+    if (t && t.abortController) {
+      try { t.abortController.abort(new Error('USER_CANCELED')); } catch (_) {}
+    }
     if (t && t.isBrowserDownload) {
       return _origCancel(downloadId, callback);
     }
     const port = getOrCreateNativePort();
-    if (port) port.postMessage({ action: 'cancel', taskId: downloadId });
+    if (port) {
+      try { port.postMessage({ action: 'cancel', taskId: downloadId }); } catch (_) {}
+    }
     updateDownloadHistory({ id: downloadId, state: 'canceled', speed: 'Canceled' });
+    setTimeout(processNextQueuedNativeDownload, 50);
     if (typeof callback === 'function') callback();
     return;
   }

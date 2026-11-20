@@ -52,15 +52,16 @@
   if (typeof chrome !== 'undefined' && (!chrome.downloads || typeof chrome.downloads.download !== 'function') && chrome.runtime && typeof chrome.runtime.sendMessage === 'function') {
     chrome.downloads = chrome.downloads || {};
     chrome.downloads.download = function(options, callback) {
+      const opts = (options && typeof options === 'object') ? options : {};
       chrome.runtime.sendMessage({
+        ...opts,
         action: 'downloadNative',
-        url: options.url || options.videoUrl,
-        videoUrl: options.videoUrl || options.url,
-        title: options.filename || document.title,
-        quality: options.quality || 'Standard',
-        pageUrl: window.location.href,
-        referer: document.referrer || window.location.href,
-        ...options
+        url: opts.url || opts.videoUrl,
+        videoUrl: opts.videoUrl || opts.url,
+        title: opts.filename || opts.title || document.title,
+        quality: opts.quality || 'Standard',
+        pageUrl: opts.pageUrl || window.location.href,
+        referer: opts.referer || document.referrer || window.location.href
       }, (res) => {
         if (typeof callback === 'function') {
           callback(res && res.taskId ? res.taskId : 1);
@@ -158,7 +159,7 @@
             if (!isPipAllowed()) return Promise.reject(new DOMException('Picture-in-picture not allowed', 'NotAllowedError'));
             const res = _origRequestPip.apply(this, arguments);
             if (res && typeof res.catch === 'function') {
-              return res.catch(() => {});
+              res.catch(() => {});
             }
             return res;
           } catch (e) {
@@ -178,7 +179,7 @@
     window.fetch = function(...args) {
       try {
         const urlStr = String((args[0] && args[0].url) || args[0] || '');
-        if (/^https?:\/\/([a-z0-9-]+\.)*coccoc\.com\//i.test(urlStr)) {
+        if (/^https?:\/\/([a-z0-9-]+\.)*coccoc\.com(?:\/|\?|#|$)/i.test(urlStr)) {
           return Promise.resolve(new Response(JSON.stringify({ success: false }), {
             status: 200,
             statusText: 'OK',

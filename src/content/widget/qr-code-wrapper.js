@@ -6,7 +6,7 @@ export default function(t, e, r) {
     if (!c && !n()) throw new Error("Callback required as last argument");
     if (!c) {
       if (u < 1) throw new Error("Too few arguments provided");
-      return 1 === u ? (r2 = e2, e2 = o2 = void 0) : 2 !== u || e2.getContext || (o2 = r2, r2 = e2, e2 = void 0), new Promise((function(n2, a3) {
+      return 1 === u ? (r2 = e2, e2 = o2 = void 0) : 2 !== u || (e2 && e2.getContext) || (o2 = r2, r2 = e2, e2 = void 0), new Promise((function(n2, a3) {
         try {
           const a4 = i.create(r2, o2);
           n2(t2(a4, e2, o2));
@@ -16,7 +16,7 @@ export default function(t, e, r) {
       }));
     }
     if (u < 2) throw new Error("Too few arguments provided");
-    2 === u ? (a2 = r2, r2 = e2, e2 = o2 = void 0) : 3 === u && (e2.getContext && void 0 === a2 ? (a2 = o2, o2 = void 0) : (a2 = o2, o2 = r2, r2 = e2, e2 = void 0));
+    2 === u ? (a2 = r2, r2 = e2, e2 = o2 = void 0) : 3 === u && (e2 && e2.getContext && void 0 === a2 ? (a2 = o2, o2 = void 0) : (a2 = o2, o2 = r2, r2 = e2, e2 = void 0));
     try {
       const n2 = i.create(r2, o2);
       a2(null, t2(n2, e2, o2));

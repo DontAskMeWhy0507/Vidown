@@ -12,7 +12,9 @@ function r(e, t) {
 }
 (() => {
   var e = document.querySelector("a[role=link][tabindex='0'][href*='https://www.facebook']>img");
-  if (e != null && top.location.toString().indexOf("stories") != -1) {
+  var isStories = false;
+  try { isStories = top.location.toString().indexOf("stories") != -1; } catch (_) { isStories = location.toString().indexOf("stories") != -1; }
+  if (e != null && isStories && document.head) {
     var e = e.alt;
     var t = document.head.getAttribute("savior-story-url");
     if (t && t !== "null") {
@@ -20,6 +22,6 @@ function r(e, t) {
       return r(t, e);
     }
   }
-  document.head.removeAttribute("savior-story-url");
+  if (document.head) document.head.removeAttribute("savior-story-url");
   r(null);
 })();

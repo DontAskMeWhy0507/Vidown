@@ -1,8 +1,8 @@
 {
   "0": {
     "path": "core/dom-utils.js",
-    "sha256": "e6c81692d471d04a2e85b353bc9d5e65f840272cebf811c75621cac1c43a6a10",
-    "size": 41255,
+    "sha256": "405c229d2fae8ccbb0e1868da199a4a756545c49fdd8d1488dc9860ec6f4f4d9",
+    "size": 41538,
     "fileSize": 39799
   },
   "1": {
@@ -31,8 +31,8 @@
   },
   "6": {
     "path": "core/media-sniffer.js",
-    "sha256": "5d661d5ab1a52cffc146871097e4b3d5ff201cd7998792a8e6ffe71f6fd82bdf",
-    "size": 54668,
+    "sha256": "37178312489bb1dc8e3a2d351d7bbc8148eee56cc5a5ec4e0ae7c531451d587b",
+    "size": 54711,
     "fileSize": 54668
   },
   "7": {
@@ -73,8 +73,8 @@
   },
   "14": {
     "path": "core/format-resolver.js",
-    "sha256": "41a6597f7302383cc692336019e77fa598f7f29a611504e938159f86442bfb45",
-    "size": 22478,
+    "sha256": "1708fa1b46380dde264083848020df87ac62d9126e7c09cee7ecd5e3c573d6d6",
+    "size": 22489,
     "fileSize": 22478
   },
   "15": {
@@ -115,8 +115,8 @@
   },
   "21": {
     "path": "widget/dom-constants.js",
-    "sha256": "49ef7fafbb8660d93abc3b06892cec299f296e8cd92bb478f69563a35de0e688",
-    "size": 4222,
+    "sha256": "1ef43ec36a6c410bc93c9f56575b2db588eba45d290d5c3a6e71fcbbd61cd07a",
+    "size": 4225,
     "fileSize": 3938
   },
   "22": {
@@ -259,8 +259,8 @@
   },
   "45": {
     "path": "crypto/token-hash-util.js",
-    "sha256": "fd732c345376cad326a8b26433e01712e12b87d7d6c14ecb2c73d091ceada771",
-    "size": 23205,
+    "sha256": "86482b3d3c012f515631d84cd80d24c905e855e9b0cca4a32f9236a67adb44b3",
+    "size": 23316,
     "fileSize": 23205
   },
   "46": {
@@ -469,8 +469,8 @@
   },
   "80": {
     "path": "detector/filename-sanitizer.js",
-    "sha256": "cd3be27494f9b153182a02439aca1ea2ba004d532ecb4e86eede90a43edf4d03",
-    "size": 3564,
+    "sha256": "c84f9ac8baa9dff3802cdc7232683667d0102eeae30578e602996851e49bc2e6",
+    "size": 3714,
     "fileSize": 3097
   },
   "81": {
@@ -553,8 +553,8 @@
   },
   "94": {
     "path": "detector/request-interceptor.js",
-    "sha256": "feba7dfecfffe23a5c22b17abb8726628d126987cfa68556ad03452c16e4c164",
-    "size": 7226,
+    "sha256": "7102df6c2c1b5ae646bba2af529d181ff674c6a5e63abb59153ff2f44170bde0",
+    "size": 7239,
     "fileSize": 7226
   },
   "96": {
@@ -697,14 +697,14 @@
   },
   "119": {
     "path": "platform/vimeo_com-extractor.js",
-    "sha256": "8e4a72e55b00e9f605cca1ce379c7f5f1b84cc36c04000514c07b1a8fe965def",
-    "size": 14902,
+    "sha256": "fdc1710441be9b1ce6ca78f794237e644d341f4992490dcb5f1b3d3989a00fbe",
+    "size": 15212,
     "fileSize": 25998
   },
   "120": {
     "path": "platform/youtube.js",
-    "sha256": "6aca715e21f60a4c2c572a3883f7d3d1e9944c4cc658fa8cc194c30cc52e342b",
-    "size": 20742,
+    "sha256": "4f30437fcf9a08ce4bc2644802467f36b36e39d7a03c1173b793edeaaa4329a0",
+    "size": 20899,
     "fileSize": 20619
   },
   "121": {
@@ -739,8 +739,8 @@
   },
   "127": {
     "path": "platform/dailymotion-extractor.js",
-    "sha256": "67aabf70c20709bbd13865b524ec3c5c1e1aa72f2f9063e96ad1c50b04192e64",
-    "size": 19968,
+    "sha256": "0265bb4cbf8a97a59b4e5e2076ba870c85b16def02317816a6c1b38f36f18fbb",
+    "size": 19964,
     "fileSize": 19968
   },
   "128": {
@@ -931,8 +931,8 @@
   },
   "164": {
     "path": "widget/download-list.js",
-    "sha256": "e0cbf521d10e4265c1e5d32faab29eb6333920303ee13e0bc6f4be9eeb0568dc",
-    "size": 35480,
+    "sha256": "40f6188d424f0a7a656793d38b010be9c0e71b51fc3ba91a8fb827298e45e52d",
+    "size": 35691,
     "fileSize": 34545
   },
   "165": {
@@ -991,8 +991,8 @@
   },
   "176": {
     "path": "detector/dom-scanner.js",
-    "sha256": "0843cd4ec549c8d6794a90bc8f3c0228b47488bdf6f26a8af91378c95774e633",
-    "size": 19250,
+    "sha256": "d4eea5bbf46a9c65f1006539b505a8befcf34830899af8b10cb413797af80abd",
+    "size": 19590,
     "fileSize": 18934
   },
   "177": {
@@ -1027,8 +1027,8 @@
   },
   "184": {
     "path": "platform/9animes_org-extractor.js",
-    "sha256": "89372911354055cb03e438d8fa5e4add00d2ea3984fa4792b9aab368cb0c8a54",
-    "size": 8570,
+    "sha256": "c85df7e0590b66d4ead3cc7d48d1c70206f4d2bbf2d521966eac840e40250891",
+    "size": 8580,
     "fileSize": 8570
   },
   "185": {
@@ -1207,8 +1207,8 @@
   },
   "214": {
     "path": "platform/bilibili_com-extractor.js",
-    "sha256": "3344f50013dbe1053849b628b05e234ad9877c6187d5230febc92d0f13c4faee",
-    "size": 17758,
+    "sha256": "f82923c26799ea5944ff06998197da7d088d67c37a8ee09411d9cad42083a1d2",
+    "size": 17797,
     "fileSize": 17358
   },
   "215": {
@@ -1315,8 +1315,8 @@
   },
   "232": {
     "path": "platform/facebook.js",
-    "sha256": "8165cd8a9b648d4c7310e10e6903448dd7701621fff88505e507cce746274bf5",
-    "size": 44802,
+    "sha256": "609de90b04eb23ebf9dddac365ded88adb3d085e83bae1fb6fc50b91f2fdad15",
+    "size": 44980,
     "fileSize": 42039
   },
   "233": {
@@ -1375,8 +1375,8 @@
   },
   "242": {
     "path": "platform/hentaiz-extractor.js",
-    "sha256": "c34eb6cea75f6b5ed7ebcbcc5d3854dfb427b66ddea66b00363d4cdcc0268b3c",
-    "size": 21524,
+    "sha256": "301345616446a3645eb4982cc313b9e95fa749e12e205ceb6ca4183579c5ed46",
+    "size": 21546,
     "fileSize": 21524
   },
   "243": {
@@ -1447,8 +1447,8 @@
   },
   "254": {
     "path": "platform/instagram_com-extractor.js",
-    "sha256": "0694bae120d7301dace374ebd2d8ac841fea22653b671b584e9369d58c38b539",
-    "size": 20323,
+    "sha256": "c40796699b2f46cc65f395d9a1c64843e1d7d1b3c05e1d7bb0f3f61769125bc8",
+    "size": 20517,
     "fileSize": 20518
   },
   "255": {
@@ -1693,8 +1693,8 @@
   },
   "295": {
     "path": "platform/nimo_tv-extractor.js",
-    "sha256": "f4465560d8a5fd21472d138b874c3c10d72b27c100998c74bdd06ff2fbb8aad0",
-    "size": 15411,
+    "sha256": "88df6a46bf8ca99f100b687f924aed45b40d8cc1c1efbe35928bd96f57cfa604",
+    "size": 15823,
     "fileSize": 15411
   },
   "296": {
@@ -1975,8 +1975,8 @@
   },
   "342": {
     "path": "platform/soundcloud-extractor.js",
-    "sha256": "31a04b5fea7f797da65ff75d44992b1fd40e951b0123ae04f8be7a0ff2ad6ce5",
-    "size": 5539,
+    "sha256": "14a136b5c9bb32f38c5c30a078d3e15462486378c592ece512de3792ef76221d",
+    "size": 5516,
     "fileSize": 5539
   },
   "343": {
@@ -2005,8 +2005,8 @@
   },
   "347": {
     "path": "platform/supjav_com-extractor.js",
-    "sha256": "09e351f65d040be605f5f3d4d87b3fc31fa5d433e7fbf7bf08674de924d15a20",
-    "size": 17259,
+    "sha256": "bfa1e21b669a77ce89864aeb95f74a75f34fe36d780c184f089b8689662a9e60",
+    "size": 17368,
     "fileSize": 17259
   },
   "348": {
@@ -2095,8 +2095,8 @@
   },
   "362": {
     "path": "platform/twitter_com-extractor.js",
-    "sha256": "639498f3aa565777c0b0a037faeff077bc61b428156afc4978314cc8f6c54f6c",
-    "size": 3508,
+    "sha256": "561cb7ac74af9eebfb5232e5203f38de6d06e4d707c453d8d06e6860e67c8d3c",
+    "size": 3540,
     "fileSize": 10518
   },
   "363": {
@@ -2551,8 +2551,8 @@
   },
   "442": {
     "path": "platform/tiktok-douyin.js",
-    "sha256": "719a6c9c45d199dd7f2c40756849d0372a894701a7004b96d5cdb26b4961f9dd",
-    "size": 84213,
+    "sha256": "c2ccd6b11d17e13c046aa3543b27141e0f2844e727191e08575bad6a6d709127",
+    "size": 84506,
     "fileSize": 72792
   },
   "443": {
@@ -2893,14 +2893,14 @@
   },
   "525": {
     "path": "widget/floating-bar-manager.js",
-    "sha256": "6caf69511ff5ecfef6a96089f0e2ad45e3b916e1cb264f08f8df3589d95fbf77",
-    "size": 6931,
+    "sha256": "d9cb5dbfe1f8a62ce20b03ad306212e235a02f1d2b9849c574ce66f96416dfd0",
+    "size": 7017,
     "fileSize": 6931
   },
   "526": {
     "path": "widget/qr-code-wrapper.js",
-    "sha256": "9267101f57cb481fcad9a0d7cab47b0fb342ae579406bcd9673b7cf9ac6d55d4",
-    "size": 1279,
+    "sha256": "2340fe32763bb5e832100acedcfadcca23fdb3e6397f05744cabbd357fbb3a99",
+    "size": 1293,
     "fileSize": 1279
   },
   "527": {
@@ -2911,14 +2911,14 @@
   },
   "541": {
     "path": "widget/widget-manager.js",
-    "sha256": "243fb8d549a5ee99c6bf19fc6155a893d02616240be2e6ad3e5d8956250c86f0",
-    "size": 156982,
+    "sha256": "f8acee4d00741399ca51f530ab8e9fdd39a41249fe2fad40fbf6d0f0abdbf217",
+    "size": 156776,
     "fileSize": 139222
   },
   "543": {
     "path": "detector/content-entry.js",
-    "sha256": "36d286747443fb071f13eeaa332ed393a5b14e9c25e482c2a2218d2e2e61a7af",
-    "size": 12544,
+    "sha256": "8b74eb3cf48cf91e1cbc2f3e6bc6624d1a15550bf69295a584b75a6735c6d42f",
+    "size": 12607,
     "fileSize": 11490
   },
   "544": {
@@ -3649,8 +3649,8 @@
   },
   "665": {
     "path": "crypto/crypto-digest-helper.js",
-    "sha256": "d9c166075e74d788c89f43daf5ac279e2efb98aafe3951e17706a3f1093f2d23",
-    "size": 1239,
+    "sha256": "839ac634eeccaf5bff7ae4795d80890aebfa5dd5e717f4c8575db938d5c8355f",
+    "size": 1348,
     "fileSize": 1239
   },
   "666": {
@@ -3859,8 +3859,8 @@
   },
   "700": {
     "path": "platform/youtube-host.js",
-    "sha256": "7b234eeffa8e1ff4e4fdf5ea33efec37fcef1706eb4e5f3fbd893e213b52eff0",
-    "size": 8006,
+    "sha256": "02452225b8dffe2d1c06d0aac70a443ec87c0ab8d207ff9749046bf1d3aa8c35",
+    "size": 8008,
     "fileSize": 8006
   },
   "741": {

@@ -463,12 +463,13 @@ export default function(module, exports, require) {
                       });
                     case 2:
                       response = ctx.v;
+                      if (!response || !response.ok) return ctx.a(2, []);
                       ctx.n = 3;
                       return response.text();
                     case 3:
                       rawText = ctx.v;
-                      jsonText = rawText.replace(/^for\s*\(\s*;\s*;\s*\)\s*;/, "");
-                      parsedJson = JSON.parse(jsonText);
+                      jsonText = String(rawText || "").replace(/^for\s*\(\s*;\s*;\s*\)\s*;/, "");
+                      try { parsedJson = JSON.parse(jsonText); } catch (_) { parsedJson = null; }
                       instances = parsedJson?.jsmods?.instances ?? [];
                       videoConfigs = instances.filter(function(item) {
                         return "VideoConfig" === item?.[1]?.[0];
@@ -522,7 +523,7 @@ export default function(module, exports, require) {
                       params = media.params;
                       videoId = params.videoId;
                       storyId = params.storyId;
-                      cUser = document.cookie.match(/c_user.*?(?=;)/g)?.[0]?.split("=")[1];
+                      cUser = (document.cookie.match(/(?:^|;\s*)c_user=([^;]+)/) || [])[1];
                       token = document.documentElement.innerHTML.match(/"token":".*?(?=")/g)?.[0]?.split('"')[3];
                       ctx.n = 1;
                       return fetch("https://www.facebook.com/api/graphql/", {
@@ -993,12 +994,13 @@ export default function(module, exports, require) {
       if (location.href.includes("/stories") && "mp4" == info.ext) {
         var rawUrl = info.url;
         var paramsToDelete = ["bytestart", "byteend"];
-        var parsedUrl = new URL(rawUrl);
+        var parsedUrl;
+        try { parsedUrl = new URL(rawUrl); } catch (_) { return; }
         paramsToDelete.forEach(function(param) {
           parsedUrl.searchParams.delete(param);
         });
         var cleanUrl = parsedUrl.toString();
-        if (cleanUrl != storyAudioUrlBuffer && cleanUrl != storyAudioUrlBuffer) {
+        if (cleanUrl != storyVideoUrlBuffer && cleanUrl != storyAudioUrlBuffer) {
           if (cleanUrl.includes("/m3")) {
             storyVideoUrlBuffer = cleanUrl;
           } else {

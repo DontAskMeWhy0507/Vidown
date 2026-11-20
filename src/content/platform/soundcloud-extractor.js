@@ -84,7 +84,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_u,
   regex_c = /client_id=([^&]+)/,
   regex_l = /soundcloud:tracks:([0-9]+)/,
-  str_f = "https://api-v2.soundcloud.com/tracks?ids={{track_id}}&client_id={{client_id}}&%5Bobject%20Object%5D=&app_version={{app_version}}&app_locale=en",
+  str_f = "https://api-v2.soundcloud.com/tracks?ids={{track_id}}&client_id={{client_id}}&app_version={{app_version}}&app_locale=en",
   list_d = [],
   var_h = location.href,
   obj_p = {

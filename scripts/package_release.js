@@ -226,7 +226,8 @@ function dosDateTime(d) {
   const seconds = Math.floor(dateObj.getUTCSeconds() / 2);
 
   const time = (hours << 11) | (minutes << 5) | seconds;
-  const date = ((year - 1980) << 9) | (month << 5) | day;
+  const safeYear = Math.max(1980, Math.min(2107, year));
+  const date = ((safeYear - 1980) << 9) | (month << 5) | day;
   return { time, date };
 }
 
@@ -292,7 +293,7 @@ function buildZip(files, outputPath) {
     // Central directory header (46 bytes + name)
     const cdh = Buffer.alloc(46 + nameBuf.length);
     cdh.writeUInt32LE(0x02014b50, 0);       // Signature
-    cdh.writeUInt16LE(20, 4);               // Version made by (2.0)
+    cdh.writeUInt16LE((3 << 8) | 20, 4);               // Version made by (2.0)
     cdh.writeUInt16LE(20, 6);               // Version needed (2.0)
     cdh.writeUInt16LE(0x0800, 8);           // Flags (bit 11 = UTF-8)
     cdh.writeUInt16LE(method, 10);          // Compression method
@@ -381,7 +382,7 @@ function validateZip(zipPath) {
   }
 
   // Check required files
-  const required = ['manifest.json', 'background.chrome.js', 'popup/popup.html', 'popup/popup.js'];
+  const required = ['manifest.json', 'background.chrome.js', 'background.js', 'content-script.js', 'context-guard.js', 'downloads-nav.js', 'stream-sniffer.js', 'popup/popup.html', 'popup/popup.js', 'downloads/downloads.html', 'downloads/downloads.js'];
   for (const req of required) {
     if (!entryNames.includes(req)) {
       throw new Error(`Packaging validation failed: missing critical file ${req}`);

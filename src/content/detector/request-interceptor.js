@@ -244,7 +244,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   );
   case 2:
-  var_r = param_t_1.v, str_u = var_r.m3u8;
+  var_r = param_t_1.v, str_u = var_r ? var_r.m3u8 : "";
   case 3:
   return param_t_1.a(2, var_e);
   }

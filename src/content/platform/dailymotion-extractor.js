@@ -262,14 +262,10 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_r_1 = param_e_1;
   (var_h_1 = param_t.match(var_d[var_r_1])) && var_p_1.push(var_l(var_h_1[4]));
   }
-  ), param_e.a(2, Promise.allSettled(var_p_1).then(param_t_1 => param_t_1.reduce(
-  (param_t_2, param_e_1) => ((null == param_t_2 ? void 0 : param_t_2.value) &&
-  var_u_1.push(param_t_2.value), (null == param_e_1 ? void 0 :
-  param_e_1.value) && var_u_1.push(param_e_1.value), {
-  }
-  ), {
-  }
-  )));
+  ), param_e.a(2, Promise.allSettled(var_p_1).then(param_t_1 => {
+  param_t_1.forEach(item => { if (item && item.status === "fulfilled" && item.value) var_u_1.push(item.value); });
+  return var_u_1;
+  }));
   case 3:
   return var_v_1 = param_t.match(/"title":"(.*?)(",")/i), var_m_1 = void 0, var_v_1 &&
   (var_m_1 = var_v_1[1]), Object.keys(var_c).forEach(function (param_t_1) {
@@ -587,10 +583,12 @@ export default function (moduleObj, exportsObj, requireFn) {
   var var_e = [...document.querySelectorAll('div[class*="VideoCard__videoImageWrapper"], div[class*="HomeVideoPreview__videoPreviewHorizontal"], div[class*="HomeVideoPreview__videoPreviewVertical"]')].find(
   param_t => param_t.getBoundingClientRect().top === var_E);
   if (!var_e) return [];
-  var var_r = var_e.querySelector("a").href,
+  var anchor = var_e.querySelector("a");
+  if (!anchor || !anchor.href) return [];
+  var var_r = anchor.href,
   var_n = var_r.match(regex_b) || var_r.match(regex_w);
-  return "http://www.dailymotion.com/player/metadata/video/" + (var_n &&
-  var_n[1]);
+  if (!var_n || !var_n[1]) return [];
+  return "https://www.dailymotion.com/player/metadata/video/" + var_n[1];
   }
   ,
   mediaObjectChange: param_t => {

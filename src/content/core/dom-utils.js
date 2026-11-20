@@ -264,7 +264,7 @@ export default function(t, e, r) {
       return t3 && t3[e2] || "";
     }
     function g(t3) {
-      return t3.replace(/<(?!\/?(?:b|em))[^>]+>/g, "");
+      return String(t3 || "").replace(/<(?!\/?(?:b|em)(?:\s*>))[^>]+>/gi, "");
     }
     function b(t3) {
       return Array.prototype.slice.call(t3);
@@ -555,7 +555,7 @@ export default function(t, e, r) {
       for (var r2, n2 = [/^https?:\/\/(?:www\.)?youtube(?:-nocookie)?(?:\.googleapis)?\.com\/(?:(?:v)|(?:embed)|(?:e))\/(?!videoseries)([\w\-]+)/i, /https?:\/\/(?:www\.)?youtu\.be\/([^#&?]+)/i, /https?:\/\/(?:www\.)?youtube\.com\/.*(?:\?|&)v=([^#&?]+)/i,
         /https?:\/\/(?:www\.)?youtube\.com\/shorts\/(.*)$/, /^https?:\/\/music\.youtube\.com\/watch\?v=([^#&?]+)/, /^https?:\/\/m\.youtube\.com\/watch\?v=([^#&?]+)/, /youtube.*.com\/embed\/([a-z0-9\-_]+)/i,
         /^https?:\/\/(?:www\.)?youtube\.com\/live\/([^#&?]+)/], i2 = 0; i2 < n2.length; ++i2) if (r2 = t3.match(n2[i2])) return r2[1];
-      if (t3.match(/youtube\.com\/embed\/videoseries/i) && (null === (e2 = document.querySelector('link[rel="canonical"]')) || void 0 === e2 ? void 0 : e2.href)) return Y(t3);
+      if (t3.match(/youtube\.com\/embed\/videoseries/i) && (null === (e2 = document.querySelector('link[rel="canonical"]')) || void 0 === e2 ? void 0 : e2.href) && e2.href !== t3) return Y(e2.href);
       return null;
     }
     function W(t3) {
@@ -687,8 +687,13 @@ export default function(t, e, r) {
     },
       ut = (t3) => t3 ? t3.replaceAll(/[^aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s\,\.\<\>\/\?\;\:\'\"\!\@\#\$\%\^\&\*\(\)\-\_\+\=\\\|]/g,
       "").replaceAll(/\s+/g, " ") : t3, ct = (t3, e2, r2) => {
-      var n2 = e2.timeout;
-      return delete e2.timeout, n2 ? (r2 = null != r2 ? r2 : new AbortController(), setTimeout(() => r2.abort(), n2), fetch(t3, Object.assign({ signal: r2.signal }, e2))) : fetch(t3, e2);
+      var opts = Object.assign({}, e2 || {}), n2 = opts.timeout;
+      if (delete opts.timeout, n2) {
+        r2 = null != r2 ? r2 : new AbortController();
+        var tid = setTimeout(() => r2.abort(), n2);
+        return fetch(t3, Object.assign({ signal: r2.signal }, opts)).finally(() => clearTimeout(tid));
+      }
+      return fetch(t3, opts);
     }, lt = (t3) => new Promise((e2) => setTimeout(e2, t3));
     function ft(t3) {
       return function() {
@@ -698,7 +703,7 @@ export default function(t, e, r) {
     }
     function dt(t3, e2, r2) {
       return e2.forEach((e3) => {
-        ("function" == typeof r2 && r2(e3, t3) || t3.includes(e3)) && t3.push(e3);
+        ("function" == typeof r2 ? r2(e3, t3) : !t3.includes(e3)) && t3.push(e3);
       }), t3;
     }
     class ht {
@@ -777,7 +782,9 @@ export default function(t, e, r) {
       }
     }
     var kt = [{ regex: /g\.doubleclick\.net/i, type: "xmlhttprequest", initiators: ["youtube.com", "music.youtube.com"] }, { regex: /youtube\.com\/pagead\//i, type: "xmlhttprequest", initiators: ["youtube.com", "music.youtube.com"] }, { regex: /google\..+\/pagead\/lvz\?/i, type: "image", initiators: ["youtube.com", "music.youtube.com"] }], Mt = () => new Promise((t3) => {
-      chrome.i18n.detectLanguage(document.body.innerText.substring(0, 1e3), (function(e2) {
+      var txt = (document.body && document.body.innerText) ? document.body.innerText.substring(0, 1e3) : "";
+      if (!txt) return t3(null);
+      chrome.i18n.detectLanguage(txt, (function(e2) {
         e2.isReliable && t3(e2.languages[0]), t3(null);
       }));
     }), Tt = (t3) => t3.split(";").map((t4) => t4.trim().split(/=(.+)/)).reduce((t4, e2) => (t4[e2[0]] = e2[1], t4), {});

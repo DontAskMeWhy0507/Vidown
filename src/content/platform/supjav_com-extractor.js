@@ -328,8 +328,9 @@ export default function (moduleObj, exportsObj, requireFn) {
   var_v = var_c(var_h.split("\n"), 2),
   var_m = var_v[0],
   var_y = var_v[1],
-  var_g = parseInt(var_m.match(/RESOLUTION=\d+x(\d+)/)[1]);
-  var_p.url = var_u_1 + var_y, var_p.resolution = Object(dep_dom_utils.getBestFitResolution)(
+  var_g = parseInt((var_m.match(/RESOLUTION=\d+x(\d+)/) || [0, "480"])[1], 10);
+  try { var_p.url = new URL(var_y, var_u_1).href; } catch (_) { var_p.url = var_u_1 + var_y; }
+  var_p.url = var_p.url, var_p.resolution = Object(dep_dom_utils.getBestFitResolution)(
   var_g) + "p", var_p.quality = (null === (var_e = dep_media_constants.r[var_p.resolution]) ||
   void 0 === var_e ? void 0 : var_e.label) || dep_media_constants.r["480p"].label,
   list_s.push(var_p);

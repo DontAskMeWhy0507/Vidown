@@ -28,11 +28,12 @@ else
   )
 fi
 
+HOST_SH_ESC=$(printf '%s' "$HOST_SH" | sed 's/\\/\\\\/g; s/"/\\"/g')
 MANIFEST_CONTENT=$(cat <<EOF
 {
   "name": "com.savior.helper",
   "description": "Savior Native Download Helper",
-  "path": "$HOST_SH",
+  "path": "$HOST_SH_ESC",
   "type": "stdio",
   "allowed_origins": [
     "chrome-extension://$EXT_ID/"
@@ -46,7 +47,7 @@ for TARGET_DIR in "${TARGET_DIRS[@]}"; do
   PARENT_DIR="$(dirname "$TARGET_DIR")"
   if [ -d "$PARENT_DIR" ] || [[ "$TARGET_DIR" == *"google-chrome"* ]] || [[ "$TARGET_DIR" == *"Google/Chrome"* ]]; then
     mkdir -p "$TARGET_DIR"
-    echo "$MANIFEST_CONTENT" > "$TARGET_DIR/com.savior.helper.json"
+    printf '%s\n' "$MANIFEST_CONTENT" > "$TARGET_DIR/com.savior.helper.json"
     echo "Installed host manifest to: $TARGET_DIR/com.savior.helper.json"
     INSTALLED=$((INSTALLED + 1))
   fi

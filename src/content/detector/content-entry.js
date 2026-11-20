@@ -185,11 +185,13 @@ export default function(module, exports, require) {
                 EE.emit("preferred-quality-level.changed");
                 break;
               case "save_adguard_into_localstorage": {
-                var currentAdguard = JSON.parse(localStorage.getItem("adguardInfo") || "{}");
-                localStorage.setItem(
-                  "adguardInfo",
-                  JSON.stringify(Object.assign(Object.assign({}, currentAdguard), receivedEvent.data))
-                );
+                try {
+                  var currentAdguard = JSON.parse(localStorage.getItem("adguardInfo") || "{}");
+                  localStorage.setItem(
+                    "adguardInfo",
+                    JSON.stringify(Object.assign(Object.assign({}, currentAdguard), receivedEvent.data))
+                  );
+                } catch (_) {}
                 break;
               }
               case "ping":

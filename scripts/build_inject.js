@@ -20,5 +20,6 @@ function copyDir(src, dest) {
 }
 
 console.log('=== BUILDING INJECT EXTRACTORS ===\n');
+fs.rmSync(DEST_INJECT, { recursive: true, force: true });
 copyDir(SRC_INJECT, DEST_INJECT);
 console.log('✓ Successfully synchronized inject extractors from src/inject/ to inject/!\n');

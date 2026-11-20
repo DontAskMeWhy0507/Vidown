@@ -6,20 +6,27 @@
   const isExtensionPage = typeof location !== 'undefined' && location.protocol === 'chrome-extension:';
 
   function openDownloadsPage() {
-    const downloadsUrl = chrome.runtime.getURL('downloads/downloads.html');
-    if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
+    let downloadsUrl = '';
+    try {
+      if (typeof chrome !== 'undefined' && chrome.runtime && typeof chrome.runtime.getURL === 'function') {
+        downloadsUrl = chrome.runtime.getURL('downloads/downloads.html');
+      }
+    } catch (_) {
+      return;
+    }
+    if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create && downloadsUrl) {
       chrome.tabs.create({ url: downloadsUrl });
     } else if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
       try {
         chrome.runtime.sendMessage({ action: 'openDownloadsPage' }, () => {
-          if (chrome.runtime.lastError) {
+          if (chrome.runtime && chrome.runtime.lastError && isExtensionPage && downloadsUrl) {
             window.open(downloadsUrl, '_blank');
           }
         });
       } catch (_) {
-        window.open(downloadsUrl, '_blank');
+        if (isExtensionPage && downloadsUrl) window.open(downloadsUrl, '_blank');
       }
-    } else {
+    } else if (isExtensionPage && downloadsUrl) {
       window.open(downloadsUrl, '_blank');
     }
   }
@@ -59,7 +66,7 @@
       return;
     }
 
-    const btn = e.target.closest('#btn-open-downloads-manager');
+    const btn = (e.target && typeof e.target.closest === 'function') ? e.target.closest('#btn-open-downloads-manager') : null;
     if (btn) {
       e.preventDefault();
       e.stopPropagation();

@@ -292,7 +292,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return param_e.n = 2, fetch(var_r[var_c_1].url).then(param_t_1 => param_t_1.text(
   ));
   case 2:
-  return var_p = param_e.v, var_v_1 = new URL(var_d || ""), param_e.n = 3, Object(
+  return var_p = param_e.v, var_v_1 = (function(){ try { return new URL(var_d || location.href); } catch(_) { return { origin: location.origin }; } })(), param_e.n = 3, Object(
   dep_media_sniffer.e)(var_p, param_t.media);
   case 3:
   (var_m = param_e.v[0]).resolution = var_r[var_c_1].resolution + "p", var_y = new dep_quality_helper.a(
@@ -340,7 +340,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return param_r.n = 2, fetch(var_c_2[var_m_1].url).then(param_t_1 => param_t_1.text(
   ));
   case 2:
-  return var_y_1 = param_r.v, var_g_1 = new URL(var_d || ""), param_t.media.url = var_c_2[var_m_1].url,
+  return var_y_1 = param_r.v, var_g_1 = (function(){ try { return new URL(var_d || location.href); } catch(_) { return { origin: location.origin }; } })(), param_t.media.url = var_c_2[var_m_1].url,
   param_r.n = 3, Object(dep_media_sniffer.e)(var_y_1, param_t.media);
   case 3:
   (var_b_1 = param_r.v[0]).resolution = var_c_2[var_m_1].resolution, var_A = new dep_quality_helper.a(
@@ -410,7 +410,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   return param_r.n = 2, fetch(var_n[var_s].url).then(param_t_1 => param_t_1.text(
   ));
   case 2:
-  return var_c_1 = param_r.v, var_l_1 = new URL(var_d || ""), param_t.media.url = var_n[var_s].url,
+  return var_c_1 = param_r.v, var_l_1 = (function(){ try { return new URL(var_d || location.href); } catch(_) { return { origin: location.origin }; } })(), param_t.media.url = var_n[var_s].url,
   param_r.n = 3, Object(dep_media_sniffer.e)(var_c_1, param_t.media);
   case 3:
   (var_f_1 = param_r.v[0]).resolution = obj_p[var_n[var_s].resolutionIndex], var_h = new dep_quality_helper.a(
@@ -457,8 +457,10 @@ export default function (moduleObj, exportsObj, requireFn) {
   referrer: "https://www.nimo.tv",
   body: var_n
   }
-  ).then(param_t_1 => param_t_1.text()).then(param_t_1 => {
-  JSON.parse(param_t_1).data.result.aggregateVideoLists.forEach(param_t_2 => {
+  ).then(param_t_1 => param_t_1.ok ? param_t_1.text() : "").then(param_t_1 => {
+  if (!param_t_1) return;
+  var parsedNimo; try { parsedNimo = JSON.parse(param_t_1); } catch (_) { return; }
+  (parsedNimo?.data?.result?.aggregateVideoLists || []).forEach(param_t_2 => {
   param_t_2.liveVideoViewList.forEach(param_t_3 => {
   var list_e = [];
   param_t_3.multiResolutionVideoUrl.forEach(param_t_4 => {

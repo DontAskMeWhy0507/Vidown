@@ -78,7 +78,7 @@ function extractTwitterVideoMetadata(videoElement) {
     if (contentId) {
       videoElement.setAttribute('savior-twitter-vid', contentId);
     }
-    videoElement.setAttribute('savior-twitter-source', JSON.stringify(source));
+    try { videoElement.setAttribute('savior-twitter-source', JSON.stringify(source)); } catch (_) {}
   }
 }
 

@@ -34,7 +34,7 @@ function runSuite(file) {
     return { file, passed: true, duration, stdout: stdout.toString() };
   } catch (err) {
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
-    const timedOut = err.killed || err.signal === 'SIGTERM';
+    const timedOut = err.killed || err.signal === 'SIGKILL' || err.signal === 'SIGTERM' || err.code === 'ETIMEDOUT';
     return {
       file,
       passed: false,

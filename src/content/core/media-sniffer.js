@@ -26,7 +26,8 @@ export default function(t, e, r) {
     }, e2.off = function(t3, e3) {
       if (!this.listeners[t3]) return false;
       var r2 = this.listeners[t3].indexOf(e3);
-      return this.listeners[t3] = this.listeners[t3].slice(0), this.listeners[t3].splice(r2, 1), r2 > -1;
+      if (r2 < 0) return false;
+      return this.listeners[t3] = this.listeners[t3].slice(0), this.listeners[t3].splice(r2, 1), true;
     }, e2.trigger = function(t3) {
       var e3 = this.listeners[t3];
       if (e3) if (2 === arguments.length) for (var r2 = e3.length, n2 = 0; n2 < r2; ++n2) e3[n2].call(this, arguments[1]);
@@ -649,7 +650,7 @@ export default function(t, e, r) {
         for (; ; ) switch (i3.p = i3.n) {
           case 0:
             return (o2 = new v()).push(t2), o2.end(),
-              t2.includes("#EXT-X-KEY") && location.href.includes("24h.com.vn") && ((u2 = /"hlsPrefix":\s*"(.+?)"(,|;)*\n*/.exec(Object(g.queryAll)("script").filter((t3) => t3.innerText && t3.innerText.includes("videoAds1Conf"))[0].innerText)) && (s2 = u2[1]),
+              t2.includes("#EXT-X-KEY") && location.href.includes("24h.com.vn") && ((u2 = /"hlsPrefix":\s*"(.+?)"(,|;)*\n*/.exec((Object(g.queryAll)("script").filter((t3) => t3.innerText && t3.innerText.includes("videoAds1Conf"))[0] || {}).innerText || "")) && (s2 = u2[1]),
               c2 = new RegExp((s2 || "keybfa4658f7ae831205709fd307698c661") + "([\\s\\S]+)\\.key"), (l2 = c2.exec(t2)) && (f2 = l2[1], d2 = N(f2), a2 = btoa(String.fromCharCode.apply(null, d2)))), h2 = R(t2, e2, true),
               p2 = (null == h2 ? void 0 : h2.map((t3) => j(this, void 0, void 0, T().m((function r3() {
               var n3, i4, s3, u3, c3, l3, f3, d3, h3, p3, v2, b3, w3, A3, _3, E3, S3, O3, M3, I3, j2, N2, D2;

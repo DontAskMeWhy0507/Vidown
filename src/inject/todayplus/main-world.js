@@ -43,11 +43,16 @@ keyElements.forEach((el) => {
     heapView.set(keyArray);
 
     // Call Emscripten compiled decryption function
-    const decryptedHex = window.Module.ccall('emcc', 'string', ['number', 'number'], [heapView.byteOffset, heapView.byteLength]);
-    window.Module._free(heapView.byteOffset);
+    let decryptedHex;
+    try {
+      decryptedHex = window.Module.ccall('emcc', 'string', ['number', 'number'], [heapView.byteOffset, heapView.byteLength]);
+    } finally {
+      window.Module._free(heapView.byteOffset);
+    }
 
     // Convert decrypted hex to formatted key
     const decryptedBuffer = hexStringToBuffer(decryptedHex);
+    if (!decryptedBuffer || decryptedBuffer.byteLength < 16) return;
     const dataView = new DataView(decryptedBuffer);
     const uint32Words = new Uint32Array([
       dataView.getUint32(0),

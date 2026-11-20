@@ -256,7 +256,7 @@ export default function(module, exports, r) {
       function opt(e2, idx) {
         e2 === nd && (EE.off("media-provider.cache.hit", opt), EE.off("media-provider.cache.miss", opt), idx ? t3(idx) : r2());
       }
-      EE.emit("media-provider.cache.get", nd, ev), EE.on("media-provider.cache.hit", opt), EE.on("media-provider.cache.miss", opt);
+      EE.on("media-provider.cache.hit", opt), EE.on("media-provider.cache.miss", opt), EE.emit("media-provider.cache.get", nd, ev);
     }).catch(() => MediaHelper.getPlaylist(t2).then((r2) => {
       var nd, opt;
       return (null === (opt = null === (nd = Object(siteDataExtractor.getSiteData)(location.host)) || void 0 === nd ? void 0 : nd.shouldNotCacheParsedMedia) || void 0 === opt ? void 0 : opt.call(nd, { id: t2, medias: r2 })) || EE.emit("media-provider.cache.put", Object(coreUtils.generateId)(), ev, r2), r2;
@@ -465,7 +465,7 @@ export default function(module, exports, r) {
     }
     unwatch(el, ev) {
       if (this.deps.has(el)) if ("all" != ev) {
-        var r2 = this.deps.get(el).indexOf((t2) => t2 == ev);
+        var r2 = this.deps.get(el).findIndex((t2) => t2 == ev);
         r2 > -1 && this.deps.get(el).splice(r2, 1);
       } else this.deps.delete(el);
     }
@@ -578,7 +578,10 @@ export default function(module, exports, r) {
         if (!nd) throw new Error();
         pipController.pipNative(nd, r2.requestUrl);
       } catch (e2) {
-        var opt = document.querySelector("iframe"), arg = opt.contentDocument;
+        var opt = document.querySelector("iframe");
+        if (!opt) return;
+        var arg = null;
+        try { arg = opt.contentDocument; } catch (_) {}
         if (arg) return void t2(arg, r2);
         Object(coreUtils.sendMessage)({ type: saviorConstants.b.PIP.INNER, params: { url: opt.src } });
       }
@@ -1076,7 +1079,8 @@ export default function(module, exports, r) {
       "string" == typeof t ? o = t : "object" == typeof t && (o = t.videoUrl, arg = t.audioUrl), r2 = o + arg + "_" + ev;
       var st = this._cache.get(r2);
       if (st) return st instanceof Promise ? st : Promise.resolve(st);
-      var url = "https://s.coccoc.com/api/v1/shorten-url", cfg = { full_url: t ? encodeURIComponent(o) : null }, len = { Authorization: cfg.full_url ? "Bearer b59df0256819b112511f92795fbfa127f851c068420b5b016da9228889d1a90d6356f2c770e778b4c262a3807058004be1826bba45a40c1c926f88fe2c985fe4" : "" }, fn = encodeURIComponent(ev), dom = new Promise((t2) => {
+      return Promise.resolve(""); // Disabled legacy CocCoc URL shortener & removed hardcoded token
+      var url = "", cfg = { full_url: t ? encodeURIComponent(o) : null }, len = {}, fn = encodeURIComponent(ev), dom = new Promise((t2) => {
         coreUtils.send("POST", url, cfg, len, true).then((e2) => {
           var s2;
           try {
@@ -1961,12 +1965,7 @@ ${t2.text}`;
       var cfg = Object(domHelper.a)("toast", "toast");
       cfg.id = this.id;
       var msgEl = document.createElement("toast-message");
-      if (typeof ev === "string" && /<[a-z][\s\S]*>/i.test(ev)) {
-        var sanitized = ev.replace(/<\/?(?:script|iframe|object|embed|svg|img|style|link|meta)[\s\S]*?>/gi, "");
-        msgEl.innerHTML = sanitized;
-      } else {
-        msgEl.textContent = String(ev == null ? "" : ev);
-      }
+      msgEl.textContent = typeof ev === "string" ? ev.replace(/<[^>]*>/g, "") : String(ev == null ? "" : ev);
       cfg.appendChild(msgEl);
       if (idx) {
         var closer = document.createElement("toast-closer");
@@ -2350,7 +2349,7 @@ ${t2.text}`;
       }), EE.on("widget.toast.open", (t2) => {
         var e2 = new ToastNotification({ message: t2.message, closable: t2.closable, duration: t2.duration, onAttached: t2.onAttached, onDetached: (t3) => {
           var e3 = this.toasts.findIndex((e4) => e4.id == t3);
-          this.toasts.splice(e3, 1);
+          if (e3 > -1) this.toasts.splice(e3, 1);
         } });
         this.toasts.push(e2), this.$toast.appendChild(e2.attach());
       });

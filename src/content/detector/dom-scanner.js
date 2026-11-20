@@ -124,7 +124,7 @@ export default function(module, exports, require) {
         dynamicMediaTags.push(...additionalNodes);
         var initialMediaNodes = utils.queryAll(this.mediaTags.join(", "));
         this._observer = new MutationObserverClass(this.handleDomChanged.bind(this));
-        this._observer.observe(document.body, {
+        if (document.body) this._observer.observe(document.body, {
           childList: true,
           subtree: true,
           attributeFilter: ["src", "poster", "data-src", "hidden", "opened"]
@@ -466,6 +466,12 @@ export default function(module, exports, require) {
 
       destroy() {
         clearTimeout(this.timeoutAdsBlock);
+        if (this._domThrottleTimer) {
+          try { clearTimeout(this._domThrottleTimer); } catch (_) {}
+          try { cancelAnimationFrame(this._domThrottleTimer); } catch (_) {}
+          this._domThrottleTimer = null;
+        }
+        if (Array.isArray(this._pendingMutations)) this._pendingMutations.length = 0;
         if (this._observer) {
           this._observer.disconnect();
           this._observer = null;

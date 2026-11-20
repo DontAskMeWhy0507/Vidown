@@ -20,8 +20,11 @@
     try { performance.setResourceTimingBufferSize(1000); } catch (_) {}
     if (typeof performance.onresourcetimingbufferfull !== 'undefined') {
       performance.addEventListener('resourcetimingbufferfull', () => {
+        try { scanBufferedEntries(); } catch (_) {}
         try { performance.clearResourceTimings(); } catch (_) {}
         scanCursor = 0;
+        if (reportedUrls.size > 2000) reportedUrls.clear();
+        if (reportedStreamKeys.size > 2000) reportedStreamKeys.clear();
       });
     }
 
@@ -124,16 +127,19 @@
         }
 
         if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
-          chrome.runtime.sendMessage({
-            action: 'mediaDetected',
-            type: 'MEDIA_DETECTED',
-            url: u,
-            format: format,
-            isPlaylist: isM3u8 || isMpd,
-            pageUrl: window.location.href,
-            title: title,
-            mediaItem: mediaItem
-          }).catch(() => {});
+          try {
+            const p = chrome.runtime.sendMessage({
+              action: 'mediaDetected',
+              type: 'MEDIA_DETECTED',
+              url: u,
+              format: format,
+              isPlaylist: isM3u8 || isMpd,
+              pageUrl: window.location.href,
+              title: title,
+              mediaItem: mediaItem
+            });
+            if (p && typeof p.catch === 'function') p.catch(() => {});
+          } catch (_) {}
         }
       }
     }
