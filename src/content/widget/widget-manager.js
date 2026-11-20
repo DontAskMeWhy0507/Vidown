@@ -518,7 +518,10 @@ export default function(module, exports, r) {
         if (!nd) throw new Error();
         this.detachPlayerOrNode({ node: nd, media: ev });
       } catch (n2) {
-        var arg = Array.from((el || document).querySelectorAll("iframe")).filter((t2) => !urlMatcher.a.check(t2.src)), st = arg.find((t2) => t2.src == r2) || arg[0], url = st.contentDocument;
+        var arg = Array.from((el || document).querySelectorAll("iframe")).filter((t2) => !urlMatcher.a.check(t2.src)), st = arg.find((t2) => t2.src == r2) || arg[0];
+        if (!st) return;
+        var url = null;
+        try { url = st.contentDocument; } catch (_) {}
         if (url) return void this.recursivePip(url, ev, r2);
         Object(coreUtils.sendMessage)({ type: saviorConstants.b.PIP.INNER, params: { url: st.src } });
       }
@@ -762,7 +765,8 @@ export default function(module, exports, r) {
           var hdr = null == f ? void 0 : f.parentUpdate, prop = null == f ? void 0 : f.updated;
           this.parent.$parent.classList.add("--savior-overlay-z-index-top"), dom && (this.previousZIndex = this.parent.$parent.style.zIndex, this.parent.$parent.style.setProperty("z-index", "2147483643", "important")), "static" === getComputedStyle(this.parent.$parent).position && (null === (nd = this.parent.$parent) || void 0 === nd || nd.classList.add("--savior-overlay-position-relative"));
           var v = null === (idx = this.parent.$parent) || void 0 === idx ? void 0 : idx.parentElement, msg = ["0px", "0px", "0px"];
-          this.$backdrop.style.top = msg[0], this.$backdrop.style.left = msg[1], this.$backdrop.style.height = msg[2], null == v || v.prepend(this.$backdrop);
+          if (!v) return;
+          this.$backdrop.style.top = msg[0], this.$backdrop.style.left = msg[1], this.$backdrop.style.height = msg[2], v.prepend(this.$backdrop);
           for (var y = v.scrollHeight; (null == v ? void 0 : v.parentElement) && "BODY" !== v.parentElement.nodeName && !v.parentElement.querySelector("head"); ) if ("function" != typeof hdr) {
             v.classList.contains("--savior-overlay-z-index-top") || cfg || v.classList.add("--savior-overlay-z-index-reset");
             var g2 = getComputedStyle(v), b2 = g2.overflowX, w2 = g2.overflowY;
@@ -1585,7 +1589,7 @@ ${t2.text}`;
                       return detectorLogger.a.log("DownloadImage", detectorLogger.a.DOWNLOAD_ALL_IMAGES), t4.n = 1, null === (e3 = this.onItemClick) || void 0 === e3 ? void 0 : e3.call(this, o2, n2);
                     case 1:
                       null === (i3 = null === (r4 = o2.extraImages) || void 0 === r4 ? void 0 : r4.urls) || void 0 === i3 || i3.forEach((t5) => {
-                        EE.emit("download", { method: "download", params: { url: t5, filename: o2.filename } });
+                        EE.emit("download", { method: "download", params: { url: t5, filename: o2.filename, type: "image", mediaType: "image" } });
                       });
                     case 2:
                       return t4.a(2);
@@ -1628,7 +1632,7 @@ ${t2.text}`;
                   "object" == typeof t3.url && (t3.url.audioUrl = String(r3.url));
                 });
                 var i2 = l.media.find((t3) => "audio" === t3.type);
-                if (i2) {
+                if (i2 && i2.media && i2.media[0]) {
                   var o2 = i2.media[0], a2 = s.$el.querySelector(`.extension-box [data-id="${o2.id}"]`);
                   if (i2.media = [r3], a2) {
                     a2.removeEventListener("click", c.get(a2));

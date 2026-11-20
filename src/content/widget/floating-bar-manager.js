@@ -92,10 +92,20 @@ export default function(t, e, r) {
             });
           }
         }
+        if (this._resizeHandler) {
+          window.removeEventListener("resize", this._resizeHandler);
+          this._resizeHandler = null;
+        }
         var v = () => {
+          if (!this._currentPiP) return;
           this._reApplyStyles(), this._watchStyleChanges();
         };
-        t2.env.MOBILE_BUILD ? v() : window.addEventListener("resize", v);
+        if (t2.env.MOBILE_BUILD) {
+          v();
+        } else {
+          this._resizeHandler = v;
+          window.addEventListener("resize", v);
+        }
       }
       _restoreNode(t3) {
         this._savedStyles.forEach((t4, e2) => {
@@ -124,6 +134,10 @@ export default function(t, e, r) {
         }
       }
       restore() {
+        if (this._resizeHandler) {
+          window.removeEventListener("resize", this._resizeHandler);
+          this._resizeHandler = null;
+        }
         this._currentPiP ? (this._stopWatchingStyleChanges(), this._currentPiP.player ? this._currentPiP.player.restore(this._restoreNode.bind(this)) : this._restoreNode(this._currentPiP.node), this._currentPiP = null) : console.warn("Nothing to restore, we're not in PIP.");
       }
       get isPanelMode() {

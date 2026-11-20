@@ -11,13 +11,25 @@ async function notifyMessengerAudio(blob, blobUrl) {
   try {
     duration = await new Promise((resolve, reject) => {
       const audio = new Audio();
+      const cleanup = () => {
+        clearTimeout(timer);
+        audio.onloadedmetadata = null;
+        audio.onerror = null;
+        audio.src = '';
+      };
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('Audio metadata timeout'));
+      }, 5000);
       audio.onloadedmetadata = () => {
-        const totalSecs = Math.round(audio.duration);
+        const totalSecs = Number.isFinite(audio.duration) ? Math.round(audio.duration) : 0;
         const mins = Math.floor(totalSecs / 60);
         const secs = Math.floor(totalSecs % 60);
+        cleanup();
         resolve(String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0'));
       };
       audio.onerror = () => {
+        cleanup();
         reject(new Error('Cannot load audio'));
       };
       audio.src = blobUrl;
@@ -32,7 +44,7 @@ async function notifyMessengerAudio(blob, blobUrl) {
     contentType: blob.type,
     contentLength: blob.size,
     contentDuration: duration
-  });
+  }, window.location.origin);
 }
 
 try {
@@ -51,7 +63,7 @@ try {
     window.postMessage({
       type: 'facebook-messenger-audio-revoked',
       url: blobUrl
-    });
+    }, window.location.origin);
     return originalRevokeObjectURL.call(this, blobUrl);
   };
 } catch (error) {

@@ -37,8 +37,8 @@
   },
   "7": {
     "path": "widget/settings-manager.js",
-    "sha256": "138fa9104e05d848b928b78f7b815d862c82eb3d71e031bbc1335117dde2fb5c",
-    "size": 10505,
+    "sha256": "fdcce1cdca8d59d8ce84552fb33eaf95bbac22baacfeee8039347bbf7e29b4d1",
+    "size": 10802,
     "fileSize": 4077
   },
   "8": {
@@ -2893,8 +2893,8 @@
   },
   "525": {
     "path": "widget/floating-bar-manager.js",
-    "sha256": "d9cb5dbfe1f8a62ce20b03ad306212e235a02f1d2b9849c574ce66f96416dfd0",
-    "size": 7017,
+    "sha256": "8b40df9e1dff6e27c22c70c4ee21f54a8c5e1c9f8d54aa79bb768e40bacf6dd6",
+    "size": 7448,
     "fileSize": 6931
   },
   "526": {
@@ -2911,8 +2911,8 @@
   },
   "541": {
     "path": "widget/widget-manager.js",
-    "sha256": "f8acee4d00741399ca51f530ab8e9fdd39a41249fe2fad40fbf6d0f0abdbf217",
-    "size": 156776,
+    "sha256": "4ad893b2c262adb8c460f97c3f41cf9ea2678ff26d717be8d9887f56c62d2f7b",
+    "size": 156929,
     "fileSize": 139222
   },
   "543": {
