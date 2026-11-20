@@ -45,7 +45,7 @@ assert.ok(
 console.log('✓ Test 3: Dispatches action: openFile to native port with file details.');
 
 // 4. Must respond with sendResponse and return false
-assert.ok(openFileSection.includes('sendResponse({ success: true })'), 'openFile must respond with success: true');
+assert.ok(openFileSection.match(/sendResponse\(\{ success: true(, pending: Boolean\(port\))? \}\)/), 'openFile must respond with success: true');
 assert.ok(openFileSection.includes('return false'), 'openFile must return false to close channel synchronously');
 console.log('✓ Test 4: openFile responds synchronously and returns false.');
 

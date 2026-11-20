@@ -3193,14 +3193,36 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       const port = getOrCreateNativePort();
       if (port) {
         let responded = false;
+        const cleanupBrowse = () => {
+          clearTimeout(browseTimer);
+          try { port.onMessage.removeListener(onFolderResult); } catch (_) {}
+          try { if (port.onDisconnect && port.onDisconnect.removeListener) port.onDisconnect.removeListener(onBrowseDisconnect); } catch (_) {}
+        };
         const onFolderResult = (msg) => {
           if (msg && msg.action === 'browseFolderResult' && !responded) {
             responded = true;
-            try { port.onMessage.removeListener(onFolderResult); } catch (_) {}
+            cleanupBrowse();
             try { sendResponse({ success: !msg.canceled, path: msg.path, canceled: msg.canceled }); } catch (_) {}
           }
         };
+        const onBrowseDisconnect = () => {
+          if (!responded) {
+            responded = true;
+            cleanupBrowse();
+            try { sendResponse({ success: false, canceled: true, error: 'Native host disconnected' }); } catch (_) {}
+          }
+        };
+        const browseTimer = setTimeout(() => {
+          if (!responded) {
+            responded = true;
+            cleanupBrowse();
+            try { sendResponse({ success: false, canceled: true, error: 'Folder picker timed out' }); } catch (_) {}
+          }
+        }, 120000);
         port.onMessage.addListener(onFolderResult);
+        if (port.onDisconnect && port.onDisconnect.addListener) {
+          port.onDisconnect.addListener(onBrowseDisconnect);
+        }
         port.postMessage({ action: 'browseFolder' });
         const keepChannelOpen = true;
         return keepChannelOpen;
@@ -3254,7 +3276,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
           chrome.downloads.open(cId, () => {});
         } catch (_) {}
       }
-      sendResponse({ success: true });
+      sendResponse({ success: true, pending: Boolean(port) });
       return false;
     }
 
@@ -3494,7 +3516,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     }
 
     case 'ping': {
-      sendResponse({ status: 'ok', version: chrome.runtime?.getManifest?.()?.version || '3.0.3' });
+      sendResponse({ status: 'ok', version: chrome.runtime?.getManifest?.()?.version || '3.1.0' });
       return false;
     }
 
@@ -3560,7 +3582,7 @@ if (chrome.runtime.onMessageExternal) {
     }
 
     if (req.action === 'ping' || req.type === 'ping') {
-      sendResponse({ status: 'ok', version: chrome.runtime?.getManifest?.()?.version || '3.0.3' });
+      sendResponse({ status: 'ok', version: chrome.runtime?.getManifest?.()?.version || '3.1.0' });
       return false;
     }
 

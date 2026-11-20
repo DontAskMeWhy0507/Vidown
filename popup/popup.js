@@ -343,6 +343,9 @@ document.addEventListener('DOMContentLoaded', () => {
       title: item.title || ''
     }, (res) => {
       if (chrome.runtime?.lastError) return;
+      if (res && res.pending) {
+        return;
+      }
       if (res && res.success) {
         showToast(`Playing: ${item.title || 'video'}`);
       } else {

@@ -210,6 +210,13 @@ function sendMessage(msg) {
 }
 
 // Read length-prefixed JSON messages from Chrome stdin
+const MAX_NATIVE_MSG_BYTES = 64 * 1024 * 1024;
+const MAX_STDERR_CHARS = 65536;
+function appendBoundedStderr(current, chunk) {
+  const next = current + chunk;
+  return next.length > MAX_STDERR_CHARS ? next.slice(-MAX_STDERR_CHARS) : next;
+}
+
 let inputBuffer = Buffer.alloc(0);
 
 if (require.main === module) {
@@ -218,6 +225,12 @@ if (require.main === module) {
 
     while (inputBuffer.length >= 4) {
       const msgLen = inputBuffer.readUInt32LE(0);
+      if (msgLen > MAX_NATIVE_MSG_BYTES) {
+        logHost(`[SECURITY] Dropped oversized native message length: ${msgLen} bytes`);
+        inputBuffer = Buffer.alloc(0);
+        sendMessage({ status: 'error', error: 'Native message exceeds maximum allowed size' });
+        break;
+      }
       if (inputBuffer.length < 4 + msgLen) {
         break; // Wait for full message
       }
@@ -529,7 +542,7 @@ function handleMessage(msg) {
       sendMessage({
         status: 'ok',
         action: 'pong',
-        version: '3.0.2',
+        version: '3.1.0',
         downloadsDir: DOWNLOADS_DIR,
         hasFfmpeg: fs.existsSync(FFMPEG_PATH),
         hasYtDlp: fs.existsSync(YTDLP_PATH)
@@ -888,8 +901,8 @@ function handleMessage(msg) {
           proc.isKilledByHost = true;
           const pid = proc.pid;
           try {
-            if (isWin && pid) {
-              exec(`taskkill /F /T /PID ${pid}`, () => {});
+            if (isWin && Number.isInteger(pid) && pid > 0) {
+              execFile('taskkill', ['/F', '/T', '/PID', String(pid)], { windowsHide: true }, () => {});
             }
             proc.kill('SIGKILL');
           } catch (e) {}
@@ -909,8 +922,8 @@ function handleMessage(msg) {
           proc.isKilledByHost = true;
           const pid = proc.pid;
           try {
-            if (isWin && pid) {
-              exec(`taskkill /F /T /PID ${pid}`, () => {});
+            if (isWin && Number.isInteger(pid) && pid > 0) {
+              execFile('taskkill', ['/F', '/T', '/PID', String(pid)], { windowsHide: true }, () => {});
             }
             proc.kill('SIGKILL');
           } catch (e) {}
@@ -1649,7 +1662,7 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
   let errOutput = '';
   proc.stderr.on('data', (data) => {
     const chunk = data.toString('utf8');
-    errOutput += chunk;
+    errOutput = appendBoundedStderr(errOutput, chunk);
     if (!totalDuration) {
       const durMatch = errOutput.match(/Duration:\s*(\d+):(\d+):([0-9.]+)/);
       if (durMatch) {
@@ -2032,7 +2045,7 @@ async function startFfmpegMux(req) {
     setBackgroundPriority(proc);
 
     let muxErr = '';
-    proc.stderr.on('data', (d) => { muxErr += d.toString('utf8'); });
+    proc.stderr.on('data', (d) => { muxErr = appendBoundedStderr(muxErr, d.toString('utf8')); });
 
     proc.on('close', (code) => {
       try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (e) {}
@@ -2482,6 +2495,7 @@ async function startFfmpegDirectStream(req) {
 
       // Verify that the response is actually an HLS playlist (#EXTM3U)
       if (!playlistText || !playlistText.includes('#EXTM3U')) {
+        try { if (tempSessionDir && fs.existsSync(tempSessionDir)) fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (_) {}
         logHost(`Invalid playlist response: Does not contain #EXTM3U`);
         sendMessage({ action: 'error', taskId: req.taskId, error: 'Server returned an invalid stream (not an HLS playlist format).' });
         return;
@@ -2692,7 +2706,7 @@ async function startFfmpegDirectStream(req) {
     let errOutput = '';
     proc.stderr.on('data', (data) => {
       const chunk = data.toString('utf8');
-      errOutput += chunk;
+      errOutput = appendBoundedStderr(errOutput, chunk);
       if (!totalPlaylistDuration) {
         const durMatch = errOutput.match(/Duration:\s*(\d+):(\d+):([0-9.]+)/);
         if (durMatch) {
@@ -2855,7 +2869,7 @@ async function startFfmpegDirectStream(req) {
         activeProcess = cProc;
         setBackgroundPriority(cProc);
         let cErr = '';
-        cProc.stderr.on('data', (d) => { cErr += d.toString('utf8'); });
+        cProc.stderr.on('data', (d) => { cErr = appendBoundedStderr(cErr, d.toString('utf8')); });
         cProc.on('close', (code) => {
           try { fs.rmSync(tempMediaFile, { force: true }); } catch (e) {}
           if (activeProcesses.get(taskKey) === cProc) activeProcesses.delete(taskKey);
@@ -3247,6 +3261,8 @@ if (typeof module !== 'undefined') {
     isExecutableFile,
     isAllowedMediaFile,
     sanitizeForLog,
+    appendBoundedStderr,
+    MAX_NATIVE_MSG_BYTES,
     sanitizeHeaderValue,
     isSafeRemoteHlsUrl,
     isSafeDashManifest,

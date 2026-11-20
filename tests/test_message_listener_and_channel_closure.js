@@ -28,7 +28,7 @@ assert(!browseFolderCode.includes('return true'), 'case browseFolder must NOT re
 console.log('✓ Test 2: browseFolder responds immediately and syncs via chrome.storage (prevents hanging message channel).');
 
 // Test 3: Verify all cases in onMessage call sendResponse
-assert(openFileCode.includes('sendResponse({ success: true })'), 'openFile must call sendResponse');
+assert(openFileCode.match(/sendResponse\(\{ success: true(, pending: Boolean\(port\))? \}\)/), 'openFile must call sendResponse');
 assert(browseFolderCode.includes('sendResponse('), 'browseFolder must call sendResponse');
 console.log('✓ Test 3: All message actions consistently invoke sendResponse before returning false.');
 

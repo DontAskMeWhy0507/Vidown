@@ -63,7 +63,9 @@ function functions(file,names){const code=fs.readFileSync(path.join(root,file),'
  const outputDir=fs.mkdtempSync(path.join(require('os').tmpdir(),'vidown-multisite-download-'));
  try{
    const pageUrl='http://127.0.0.1:'+server.address().port+'/watch';
-   const results=await resolveMediaMetadata({pageUrl},path.join(root,'native/bin/yt-dlp.exe'));
+   const ytdlpBin=process.platform==='win32'?path.join(root,'native/bin/yt-dlp.exe'):path.join(root,'native/bin/yt-dlp');
+   if(!fs.existsSync(ytdlpBin)){console.log('SKIP: local yt-dlp binary not present at '+ytdlpBin);}else{
+   const results=await resolveMediaMetadata({pageUrl},ytdlpBin);
    assert.strictEqual(results[0].url,'http://127.0.0.1:'+server.address().port+'/selected.mp4');
    const complete=await new Promise((resolve,reject)=>{
      const timer=setTimeout(()=>reject(new Error('Native selected-page download timed out')),20000);
@@ -71,6 +73,7 @@ function functions(file,names){const code=fs.readFileSync(path.join(root,file),'
      native.startDownload({url:results[0].url,filename:'selected.mp4',pageUrl,outputDir,taskId:'multisite-local'});
    });
    assert.deepStrictEqual(fs.readFileSync(complete.outputPath || path.join(outputDir,complete.outputFile)),bytes,'Selected-page download must preserve exactly the selected media bytes');
+   }
  }finally{native.setMessageHook(null);await new Promise(r=>server.close(r));fs.rmSync(outputDir,{recursive:true,force:true});}
  console.log('PASS: multi-site metadata engine, exact X media, Threads React extraction, opaque CDN, domain routing and real webpage extraction');
 })().catch(e=>{console.error(e);process.exitCode=1;});

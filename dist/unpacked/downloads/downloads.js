@@ -575,6 +575,9 @@ document.addEventListener('DOMContentLoaded', () => {
       title: item.title || ''
     }, (res) => {
       if (chrome.runtime?.lastError) return;
+      if (res && res.pending) {
+        return;
+      }
       if (res && res.success) {
         showToast(`Opening: ${title}`);
       } else if (res && (res.fileNotFound || (res.error && /not found|missing/i.test(res.error)))) {
