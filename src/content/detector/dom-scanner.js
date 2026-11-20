@@ -127,7 +127,7 @@ export default function(module, exports, require) {
         this._observer.observe(document.body, {
           childList: true,
           subtree: true,
-          attributeFilter: ["src", "data-src", "hidden", "opened"]
+          attributeFilter: ["src", "poster", "data-src", "hidden", "opened"]
         });
         var customElements = this.siteData?.getCustomElement?.call(this.siteData) ?? [];
         initialMediaNodes.push(...customElements);
@@ -158,17 +158,13 @@ export default function(module, exports, require) {
             var candidateNode =
               (this.siteData?.getImageNode?.call(this.siteData, imageElement)) ||
               (domHelper.l(imageElement) ? imageElement : null);
-            var validImageNode = candidateNode;
-            if (!validImageNode) return null;
-            var isCachedOrReady = domHelper.g(candidateNode);
-            if (!isCachedOrReady) {
-              isCachedOrReady = await domHelper.k(candidateNode);
+            if (!candidateNode) return null;
+            var isInvalid = domHelper.g(candidateNode);
+            if (!isInvalid) {
+              isInvalid = await domHelper.k(candidateNode);
             }
-            validImageNode = isCachedOrReady;
-            if (!validImageNode) return null;
-            if (candidateNode) {
-              candidateNode.setAttribute("savior-scanned-img", location.href);
-            }
+            if (isInvalid) return null;
+            candidateNode.setAttribute("savior-scanned-img", location.href);
             return candidateNode;
           })
         );
@@ -217,17 +213,16 @@ export default function(module, exports, require) {
         var addedImages = [];
         var removedImages = [];
         var inspectImageNode = async (domNode) => {
+          if (!domNode) return null;
           var candidate =
             (this.siteData?.getImageNode?.call(this.siteData, domNode)) ||
             (domHelper.l(domNode) ? domNode : null);
-          var valid = candidate;
-          if (!valid) return null;
-          var isCached = domHelper.g(candidate);
-          if (!isCached) {
-            isCached = await domHelper.k(candidate);
+          if (!candidate) return null;
+          var isInvalid = domHelper.g(candidate);
+          if (!isInvalid) {
+            isInvalid = await domHelper.k(candidate);
           }
-          valid = isCached;
-          if (!valid) return null;
+          if (isInvalid) return null;
           return candidate;
         };
 
@@ -253,10 +248,22 @@ export default function(module, exports, require) {
             });
             for (var addedIndex = 0; addedIndex < record.addedNodes.length; addedIndex++) {
               var addedNode = record.addedNodes[addedIndex];
-              var inspectedAdded = await inspectImageNode(addedNode);
-              if (inspectedAdded) {
-                inspectedAdded.setAttribute("savior-scanned-img", location.href);
-                addedImages.push(inspectedAdded);
+              if (!(addedNode instanceof HTMLElement)) continue;
+              var candidatesToInspect = [];
+              if (addedNode.tagName === "IMG") {
+                candidatesToInspect.push(addedNode);
+              } else if (addedNode.firstElementChild) {
+                var nestedImgs = addedNode.querySelectorAll("img");
+                if (nestedImgs.length) {
+                  candidatesToInspect.push(...nestedImgs);
+                }
+              }
+              for (var cIdx = 0; cIdx < candidatesToInspect.length; cIdx++) {
+                var inspectedAdded = await inspectImageNode(candidatesToInspect[cIdx]);
+                if (inspectedAdded) {
+                  inspectedAdded.setAttribute("savior-scanned-img", location.href);
+                  addedImages.push(inspectedAdded);
+                }
               }
             }
           }
@@ -336,7 +343,7 @@ export default function(module, exports, require) {
           var targetTag = targetElement.tagName ? targetElement.tagName.toLowerCase() : "";
           if (
             record.type === "attributes" &&
-            record.attributeName === "src" &&
+            (record.attributeName === "src" || record.attributeName === "poster") &&
             this.mediaTags.includes(targetTag)
           ) {
             removedMedia.push(targetElement);

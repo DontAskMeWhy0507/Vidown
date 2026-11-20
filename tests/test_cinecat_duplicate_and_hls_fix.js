@@ -34,7 +34,7 @@ vm.createContext(sandbox);
 
 // Extract isBogusStreamUrl
 const isBogusCode = bg.slice(bg.indexOf('function isBogusStreamUrl'), bg.indexOf('function resolveRealStreamForDownload'));
-vm.runInContext(isBogusCode, sandbox);
+vm.runInContext(bg.match(/function isImageDownload[\s\S]*?\n\}/)[0] + '\n' + isBogusCode, sandbox);
 
 assert.strictEqual(sandbox.isBogusStreamUrl('https://cinecat.eu', 'https://cinecat.eu/media/123'), true,
   'page origin must be marked bogus stream');

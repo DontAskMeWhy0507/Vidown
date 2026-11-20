@@ -67,7 +67,7 @@ function findMediaPk(element) {
   }
 }
 
-const scannedImages = document.querySelectorAll('[savior-scanned-img]:not([image-instagram-pk])');
+const scannedImages = document.querySelectorAll('[savior-scanned-img]:not([image-instagram-pk]), article img:not([image-instagram-pk]), [role="presentation"] img:not([image-instagram-pk])');
 if (scannedImages) {
   Array.from(scannedImages).filter(Boolean).forEach((img) => {
     const pk = findMediaPk(img);

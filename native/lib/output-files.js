@@ -148,9 +148,7 @@ function publishJobFile(jobContext) {
       attempts++;
       if (err.code === 'EEXIST' || err.code === 'EPERM' || err.code === 'EBUSY') {
         // Wait 40ms before next attempt or pick new suffix
-        const delay = 40;
-        const start = Date.now();
-        while (Date.now() - start < delay) {}
+        Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 40);
         destPath = findAvailableOutputPath(targetDir, requestedFilename);
       } else {
         break;

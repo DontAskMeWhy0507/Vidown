@@ -4,12 +4,13 @@
  * Provides multi-threaded downloading and FFmpeg stream muxing/conversion.
  */
 
-const { spawn, exec } = require('child_process');
+const { spawn, exec, execFile } = require('child_process');
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+const { resolveMediaMetadata } = require('./lib/media-resolver');
 
 const {
   sanitizeFilename,
@@ -125,7 +126,7 @@ const LOG_FILE = path.join(__dirname, 'host_activity.log');
 // and signed-URL tokens must never be persisted next to the host binary.
 function sanitizeForLog(value) {
   try {
-    let s = typeof value === 'string' ? value : JSON.stringify(value);
+    let s = typeof value === 'string' ? value : JSON.stringify(value, (key, item) => /^(cookies?|set-cookie|(?:proxy-)?authorization)$/i.test(key) ? '<redacted>' : item);
     if (!s) return s;
     s = s.replace(/"(cookie|set-cookie|authorization)"\s*:\s*"(?:[^"\\]|\\.)*"/gi, '"$1":"<redacted>"');
     s = s.replace(/(\b(?:cookie|set-cookie|authorization):\s*)([^\r\n]+)/gi, '$1<redacted>');
@@ -468,7 +469,13 @@ function finishStreamJob(msg) {
 }
 
 function handleMessage(msg) {
-  logHost(`RECV: ${sanitizeForLog(msg)}`);
+  if (msg && msg.action === 'streamChunk') {
+    const rawData = msg.data !== undefined ? msg.data : msg.chunk;
+    const byteLen = rawData ? (typeof rawData === 'string' ? rawData.length : rawData.byteLength) : 0;
+    logHost('RECV: streamChunk taskId=' + msg.taskId + ' seq=' + msg.seq + ' offset=' + msg.offset + ' length=' + byteLen);
+  } else {
+    logHost(`RECV: ${sanitizeForLog(msg)}`);
+  }
   if (!msg || !msg.action) {
     sendMessage({ status: 'error', error: 'Missing action' });
     return;
@@ -487,6 +494,10 @@ function handleMessage(msg) {
       break;
     }
 
+    case 'resolveMedia': {
+      resolveMediaMetadata(msg, YTDLP_PATH).then(media => sendMessage({action:'mediaResolved',requestId:msg.requestId,media})).catch(err => sendMessage({action:'mediaResolved',requestId:msg.requestId,error:err.message}));
+      break;
+    }
     case 'download': {
       if (msg.taskId) activeTaskId = msg.taskId;
       startDownload(msg);
@@ -530,7 +541,7 @@ function handleMessage(msg) {
     case 'browseFolder': {
       if (isWin) {
         const psScript = `Add-Type -AssemblyName System.Windows.Forms; $f = New-Object System.Windows.Forms.FolderBrowserDialog; $f.Description = 'Select folder to save downloaded videos'; if ($f.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { Write-Output $f.SelectedPath }`;
-        exec(`powershell -NoProfile -Command "${psScript}"`, (err, stdout) => {
+        execFile('powershell.exe', ['-NoProfile', '-Command', psScript], { windowsHide: true }, (err, stdout) => {
           const selected = (stdout || '').trim();
           sendMessage({
             action: 'browseFolderResult',
@@ -539,8 +550,15 @@ function handleMessage(msg) {
           });
         });
       } else if (isMac) {
-        const osaCmd = `osascript -e 'try' -e 'set folderPath to POSIX path of (choose folder with prompt "Select folder to save downloaded videos")' -e 'return folderPath' -e 'on error' -e 'return ""' -e 'end try'`;
-        exec(osaCmd, (err, stdout) => {
+        const osaArgs = [
+          '-e', 'try',
+          '-e', 'set folderPath to POSIX path of (choose folder with prompt "Select folder to save downloaded videos")',
+          '-e', 'return folderPath',
+          '-e', 'on error',
+          '-e', 'return ""',
+          '-e', 'end try'
+        ];
+        execFile('osascript', osaArgs, { windowsHide: true }, (err, stdout) => {
           const selected = (stdout || '').trim();
           sendMessage({
             action: 'browseFolderResult',
@@ -559,17 +577,22 @@ function handleMessage(msg) {
     }
 
     case 'openFolder': {
-      let folderPath = msg.path || msg.downloadDir || msg.outputDir || DOWNLOADS_DIR;
+      const allowedBaseDir = resolveTargetDir(msg.downloadDir || msg.outputDir || msg.customDownloadDir) || DOWNLOADS_DIR;
+      let folderPath = msg.path || allowedBaseDir;
+      if (!isPathInsideDir(folderPath, allowedBaseDir) && !isPathInsideDir(folderPath, DOWNLOADS_DIR)) {
+        logHost('[SECURITY] Blocked openFolder path outside allowed download dir: "' + folderPath + '"');
+        folderPath = allowedBaseDir;
+      }
       try {
         if (folderPath && fs.existsSync(folderPath)) {
           if (fs.statSync(folderPath).isFile()) {
             folderPath = path.dirname(folderPath);
           }
         } else if (folderPath && !path.isAbsolute(folderPath)) {
-          folderPath = DOWNLOADS_DIR;
+          folderPath = allowedBaseDir;
         }
       } catch (_) {
-        folderPath = DOWNLOADS_DIR;
+        folderPath = allowedBaseDir;
       }
       openPathWithSystem(folderPath, { selectInExplorer: false }, (err) => {
         if (err) logHost(`openFolder error: ${err.message}`);
@@ -781,9 +804,17 @@ function handleMessage(msg) {
         }
       }
       if (filePath && fs.existsSync(filePath)) {
-        openPathWithSystem(filePath, { selectInExplorer: true }, () => {
-          sendMessage({ action: 'showInFolderResult', success: true });
-        });
+        if (!isPathInsideDir(filePath, baseDir) && !isPathInsideDir(filePath, DOWNLOADS_DIR)) {
+          logHost('[SECURITY] Blocked showInFolder path outside allowed download dir: "' + filePath + '"');
+          const fallbackDir = fs.existsSync(baseDir) ? baseDir : DOWNLOADS_DIR;
+          openPathWithSystem(fallbackDir, { selectInExplorer: false }, () => {
+            sendMessage({ action: 'showInFolderResult', success: true });
+          });
+        } else {
+          openPathWithSystem(filePath, { selectInExplorer: true }, () => {
+            sendMessage({ action: 'showInFolderResult', success: true });
+          });
+        }
       } else {
         const fallbackDir = fs.existsSync(baseDir) ? baseDir : DOWNLOADS_DIR;
         openPathWithSystem(fallbackDir, { selectInExplorer: false }, () => {
@@ -856,15 +887,9 @@ function handleMessage(msg) {
 }
 
 function formatBytes(bytes) {
-  if (!bytes || isNaN(bytes) || bytes <= 0) return '0 MB';
-  const units = ['B', 'KB', 'MB', 'GB'];
-  let size = bytes;
-  let unitIndex = 0;
-  while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex++;
-  }
-  return `${size.toFixed(1)} ${units[unitIndex]}`;
+  if (!bytes || isNaN(bytes) || bytes <= 0) return '0 B';
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return `${(bytes / Math.pow(1024, i)).toFixed(i > 0 ? 1 : 0)} ${['B', 'KB', 'MB', 'GB'][i] || 'TB'}`;
 }
 
 function formatSpeed(bytesPerSec) {
@@ -877,7 +902,7 @@ function formatSpeed(bytesPerSec) {
 
 function probeHttpRange(urlStr, headers, maxRedirects = 5) {
   return new Promise((resolve) => {
-    if (maxRedirects <= 0) return resolve({ supported: false, size: 0, url: urlStr });
+    if (maxRedirects <= 0) return resolve({ supported: false, size: 0, url: urlStr, headers });
     try {
       const u = new URL(urlStr);
       const client = u.protocol === 'https:' ? https : http;
@@ -889,7 +914,7 @@ function probeHttpRange(urlStr, headers, maxRedirects = 5) {
         if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           res.destroy();
           const nextUrl = new URL(res.headers.location, urlStr).href;
-          return probeHttpRange(nextUrl, headers, maxRedirects - 1).then(resolve);
+          return probeHttpRange(nextUrl, redirectHeaders(headers, urlStr, nextUrl), maxRedirects - 1).then(resolve);
         }
         let size = 0;
         let supported = false;
@@ -903,13 +928,13 @@ function probeHttpRange(urlStr, headers, maxRedirects = 5) {
           if (res.headers['accept-ranges'] === 'bytes') supported = true;
         }
         res.destroy();
-        resolve({ supported, size, url: urlStr });
+        resolve({ supported, size, url: urlStr, headers });
       });
-      req.on('error', () => resolve({ supported: false, size: 0, url: urlStr }));
-      req.on('timeout', () => { req.destroy(); resolve({ supported: false, size: 0, url: urlStr }); });
+      req.on('error', () => resolve({ supported: false, size: 0, url: urlStr, headers }));
+      req.on('timeout', () => { req.destroy(); resolve({ supported: false, size: 0, url: urlStr, headers }); });
       req.end();
     } catch (e) {
-      resolve({ supported: false, size: 0, url: urlStr });
+      resolve({ supported: false, size: 0, url: urlStr, headers });
     }
   });
 }
@@ -956,8 +981,7 @@ function finalizePartFile(outPath) {
       } catch (err) {
         attempts++;
         if (err.code === 'EEXIST' || err.code === 'EPERM' || err.code === 'EBUSY') {
-          const start = Date.now();
-          while (Date.now() - start < 40) {}
+          Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 40);
         } else {
           break;
         }
@@ -1102,6 +1126,7 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
               delete reqHeaders.Authorization;
               delete reqHeaders.authorization;
             }
+            headers = redirectHeaders(headers, url, nextUrl);
             url = nextUrl;
             return fetchBlock(block, retryCount).then(blockResolve);
           }
@@ -1161,20 +1186,33 @@ function downloadFileMultiThread({ url, outPath, headers, totalSize, concurrency
               return reject(new Error('Incomplete block ' + block.blockIdx + ' after max retries'));
             }
 
+            if (isAborted || hasError || fd === null) return blockResolve();
+
             // Write full 1 MB block asynchronously to disk in a single I/O call
             const fullBuf = Buffer.concat(blockChunks);
             pendingWrites++;
-            fs.write(fd, fullBuf, 0, fullBuf.length, block.start, (writeErr) => {
+            try {
+              fs.write(fd, fullBuf, 0, fullBuf.length, block.start, (writeErr) => {
+                pendingWrites--;
+                if (writeErr && !hasError && !isAborted) {
+                  hasError = true;
+                  cleanup();
+                  return reject(writeErr);
+                }
+                completedBlocks++;
+                checkDone();
+                blockResolve();
+              });
+            } catch (err) {
               pendingWrites--;
-              if (writeErr && !hasError && !isAborted) {
+              if (!hasError && !isAborted) {
                 hasError = true;
                 cleanup();
-                return reject(writeErr);
+                reject(err);
+              } else {
+                blockResolve();
               }
-              completedBlocks++;
-              checkDone();
-              blockResolve();
-            });
+            }
           });
 
           res.on('error', (err) => {
@@ -1241,7 +1279,7 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
         fileStream.close();
         try { fs.unlinkSync(partPath); } catch (e) {}
         const nextUrl = new URL(res.headers.location, url).href;
-        return downloadFileSingleStream({ url: nextUrl, outPath, headers, onProgress, signal }).then(resolve).catch(reject);
+        return downloadFileSingleStream({ url: nextUrl, outPath, headers: redirectHeaders(headers, url, nextUrl), onProgress, signal }).then(resolve).catch(reject);
       }
       if (res.statusCode < 200 || res.statusCode >= 300) {
         fileStream.close();
@@ -1287,7 +1325,18 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
         }
       });
       res.pipe(fileStream);
+      res.on('error', (err) => {
+        cleanupPartialFiles(outPath);
+        if (totalBytes > 0 && downloadedBytes < totalBytes) {
+          return reject(new Error(`Download truncated: expected ${totalBytes} bytes, received ${downloadedBytes} (${err.message})`));
+        }
+        reject(err);
+      });
       fileStream.on('finish', () => {
+        if (totalBytes > 0 && downloadedBytes !== totalBytes) {
+          cleanupPartialFiles(outPath);
+          return reject(new Error(`Download truncated: expected ${totalBytes} bytes, received ${downloadedBytes}`));
+        }
         // Stream fully flushed: promote .part to the final name atomically.
         const publishedPath = finalizePartFile(outPath);
         if (publishedPath) return resolve(publishedPath);
@@ -1309,6 +1358,9 @@ function downloadFileSingleStream({ url, outPath, headers, onProgress, signal })
     }
     req.on('error', (err) => {
       cleanupPartialFiles(outPath);
+      if (totalBytes > 0 && downloadedBytes < totalBytes) {
+        return reject(new Error(`Download truncated: expected ${totalBytes} bytes, received ${downloadedBytes} (${err.message})`));
+      }
       reject(err);
     });
   });
@@ -1367,7 +1419,7 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
       publishedPath = await downloadFileMultiThread({
         url: probe.url || targetUrl,
         outPath,
-        headers: reqHeaders,
+        headers: probe.headers || reqHeaders,
         totalSize: probe.size,
         concurrency: 10,
         onProgress,
@@ -1378,7 +1430,7 @@ async function startMultiThreadDownload(req, targetUrl, outPath, referer, origin
       publishedPath = await downloadFileSingleStream({
         url: probe.url || targetUrl,
         outPath,
-        headers: reqHeaders,
+        headers: probe.headers || reqHeaders,
         onProgress,
         signal
       });
@@ -1432,15 +1484,13 @@ function cleanFbCdnUrl(rawUrl) {
   if (!rawUrl || typeof rawUrl !== 'string') return rawUrl;
   try {
     const u = new URL(rawUrl);
-    u.searchParams.delete('bytestart');
-    u.searchParams.delete('byteend');
-    u.searchParams.delete('range');
-    u.searchParams.delete('rn');
-    u.searchParams.delete('rbuf');
+    const known = /(^|\.)(fbcdn\.net|cdninstagram\.com|googlevideo\.com)$/.test(u.hostname);
+    if (!known || [...u.searchParams.keys()].some(k => /^(signature|sig|policy|x-amz-signature|hdnts)$/i.test(k))) return rawUrl;
+    if (!['bytestart', 'byteend', 'range', 'rn', 'rbuf'].some(key => u.searchParams.has(key))) return rawUrl;
+    // These CDN playback range controls are not the identity of a media file.
+    for (const key of ['bytestart', 'byteend', 'range', 'rn', 'rbuf']) u.searchParams.delete(key);
     return u.toString();
-  } catch (e) {
-    return rawUrl.replace(/[?&]bytestart=\d+/g, '').replace(/[?&]byteend=\d+/g, '');
-  }
+  } catch (_) { return rawUrl; }
 }
 
 function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilename, targetDir, headers) {
@@ -1469,15 +1519,29 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
     if (audioUrl.startsWith('http')) {
       args.push(...netInputFlags, '-headers', headers);
     }
-    const isOpusOrWebm = audioUrl.includes('mime=audio%2Fwebm') || audioUrl.includes('opus') || (req && req.audioCodec === 'opus');
-    if (isOpusOrWebm && outPath.endsWith('.mp4')) {
-      args.push(
-        '-i', audioUrl,
-        '-c:v', 'copy',
-        '-c:a', 'aac',
-        '-b:a', '192k',
-        '-strict', '-2'
-      );
+    const isOpusOrWebm = audioUrl.includes('mime=audio%2Fwebm') ||
+                         audioUrl.includes('opus') ||
+                         audioUrl.includes('itag=249') ||
+                         audioUrl.includes('itag=250') ||
+                         audioUrl.includes('itag=251') ||
+                         (req && (req.audioCodec === 'opus' || req.audioCodec === 'webm'));
+    if (outPath.endsWith('.mp4')) {
+      const isDefiniteAac = audioUrl.includes('mime=audio%2Fmp4') || audioUrl.includes('itag=140') || (req && req.audioCodec === 'aac');
+      if (isOpusOrWebm || !isDefiniteAac) {
+        args.push(
+          '-i', audioUrl,
+          '-c:v', 'copy',
+          '-c:a', 'aac',
+          '-b:a', '192k',
+          '-strict', '-2'
+        );
+      } else {
+        args.push(
+          '-i', audioUrl,
+          '-c', 'copy',
+          '-strict', '-2'
+        );
+      }
     } else {
       args.push(
         '-i', audioUrl,
@@ -1623,15 +1687,17 @@ function isSameOriginOrSubdomain(baseHost, targetHost) {
     if (baseHost.includes('://')) baseHost = new URL(baseHost).hostname;
     if (targetHost.includes('://')) targetHost = new URL(targetHost).hostname;
   } catch (_) {}
-  const b = String(baseHost).toLowerCase().replace(/:\d+$/, '');
-  const t = String(targetHost).toLowerCase().replace(/:\d+$/, '');
-  if (b === t) return true;
-  if (t.endsWith('.' + b) || b.endsWith('.' + t)) return true;
-  const bClean = b.replace(/^www\./, '');
-  const tClean = t.replace(/^www\./, '');
-  if (bClean === tClean) return true;
-  if (t.endsWith('.' + bClean) || b.endsWith('.' + tClean)) return true;
-  return false;
+  return String(baseHost).toLowerCase() === String(targetHost).toLowerCase();
+}
+
+function redirectHeaders(headers, source, destination) {
+  const next = { ...headers };
+  if (!isSameOriginOrSubdomain(source, destination)) {
+    for (const name of Object.keys(next)) {
+      if (/^(cookie|authorization|proxy-authorization)$/i.test(name)) delete next[name];
+    }
+  }
+  return next;
 }
 
 async function startFfmpegMux(req) {
@@ -1662,7 +1728,7 @@ async function startFfmpegMux(req) {
     try { origin = sanitizeHeaderValue(new URL(referer).origin); } catch (e) {}
   }
 
-  let allowCookie = Boolean(req.cookie);
+  let allowCookie = false;
   const refOrPage = req.referer || req.pageUrl || '';
   if (req.cookie && refOrPage) {
     try {
@@ -1673,6 +1739,8 @@ async function startFfmpegMux(req) {
       const aMatch = !audioUrl || isSameOriginOrSubdomain(baseHost, aHost);
       if (vMatch && aMatch) {
         allowCookie = true;
+      } else {
+        logHost('[SECURITY] Blocked cross-origin cookie forward: base="' + baseHost + '", video="' + vHost + '", audio="' + aHost + '"');
       }
     } catch (_) {}
   }
@@ -1856,14 +1924,24 @@ async function startFfmpegMux(req) {
     ];
 
     if (fs.existsSync(tempAudioPath) && fs.statSync(tempAudioPath).size > 100) {
-      const isOpusOrWebm = audioUrl.includes('mime=audio%2Fwebm') || audioUrl.includes('opus') || (req && req.audioCodec === 'opus');
-      if (isOpusOrWebm && outPath.endsWith('.mp4')) {
-        muxArgs.push('-i', tempAudioPath, '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-strict', '-2');
+      const isOpusOrWebm = audioUrl.includes('mime=audio%2Fwebm') ||
+                           audioUrl.includes('opus') ||
+                           audioUrl.includes('itag=249') ||
+                           audioUrl.includes('itag=250') ||
+                           audioUrl.includes('itag=251') ||
+                           (req && (req.audioCodec === 'opus' || req.audioCodec === 'webm'));
+      if (outPath.endsWith('.mp4')) {
+        const isDefiniteAac = audioUrl.includes('mime=audio%2Fmp4') || audioUrl.includes('itag=140') || (req && req.audioCodec === 'aac');
+        if (isOpusOrWebm || !isDefiniteAac) {
+          Array.prototype.push.apply(muxArgs, ['-i', tempAudioPath, '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-strict', '-2']);
+        } else {
+          Array.prototype.push.apply(muxArgs, ['-i', tempAudioPath, '-c', 'copy', '-strict', '-2']);
+        }
       } else {
-        muxArgs.push('-i', tempAudioPath, '-c', 'copy', '-strict', '-2');
+        Array.prototype.push.apply(muxArgs, ['-i', tempAudioPath, '-c', 'copy', '-strict', '-2']);
       }
     } else {
-      muxArgs.push('-c', 'copy');
+      Array.prototype.push.apply(muxArgs, ['-c', 'copy']);
     }
 
     muxArgs.push(
@@ -2716,30 +2794,71 @@ function extractYouTubeUrl(candidates) {
 
 function checkIsTikTok(u) {
   if (!u || typeof u !== 'string') return false;
-  return u.includes('tiktok.com') || u.includes('tiktokcdn.com') || u.includes('byteoversea.com') || u.includes('ibytedtos.com');
+  return (
+    u.includes('tiktok.com') ||
+    u.includes('tiktokcdn.com') ||
+    u.includes('tiktokcdn-us.com') ||
+    u.includes('tiktokcdn-eu.com') ||
+    u.includes('tiktokv.com') ||
+    u.includes('byteoversea.com') ||
+    u.includes('ibytedtos.com') ||
+    u.includes('bytevd.com')
+  );
 }
 
 function resolveDefaultReferer(targetUrl = '', reqReferer = '', pageUrl = '') {
   const u = String(targetUrl || '').toLowerCase();
   const p = String(pageUrl || '').toLowerCase();
+  const r = String(reqReferer || '').toLowerCase();
 
-  // Strict CDN Referrer Rules:
-  // These CDNs actively block 3rd-party embedder referers with HTTP 403 Forbidden.
-  // Their standard referer MUST take precedence over any 3rd-party reqReferer.
+  // 1. Explicit platform check on source page or provided referer first
+  if (p.includes('instagram.com') || r.includes('instagram.com')) {
+    return 'https://www.instagram.com/';
+  }
+  if (p.includes('threads.com') || r.includes('threads.com')) return 'https://www.threads.com/';
+  if (p.includes('threads.net') || r.includes('threads.net')) {
+    return 'https://www.threads.net/';
+  }
+  if (p.includes('tiktok.com') || r.includes('tiktok.com')) {
+    return 'https://www.tiktok.com/';
+  }
+  if (p.includes('douyin.com') || r.includes('douyin.com')) {
+    return 'https://www.douyin.com/';
+  }
+  if (p.includes('x.com') || p.includes('twitter.com') || r.includes('x.com') || r.includes('twitter.com')) {
+    return 'https://x.com/';
+  }
+  if (p.includes('youtube.com') || r.includes('youtube.com')) {
+    return 'https://www.youtube.com/';
+  }
+  if (p.includes('facebook.com') || r.includes('facebook.com')) {
+    return 'https://www.facebook.com/';
+  }
+
+  // 2. Strict CDN Target URL matching
   if (u.includes('twimg.com') || u.includes('twitter.com') || u.includes('x.com')) {
     return 'https://x.com/';
   }
-  if (u.includes('tiktok.com') || u.includes('tiktokcdn.com') || u.includes('byteoversea.com') || u.includes('ibytedtos.com')) {
+  if (
+    u.includes('tiktok.com') ||
+    u.includes('tiktokcdn.com') ||
+    u.includes('tiktokcdn-us.com') ||
+    u.includes('tiktokcdn-eu.com') ||
+    u.includes('tiktokv.com') ||
+    u.includes('byteoversea.com') ||
+    u.includes('ibytedtos.com') ||
+    u.includes('bytevd.com')
+  ) {
     return 'https://www.tiktok.com/';
-  }
-  if (u.includes('facebook.com') || u.includes('fbcdn.net') || u.includes('fb.watch')) {
-    return 'https://www.facebook.com/';
-  }
-  if (p.includes('threads.net') || u.includes('threads.net')) {
-    return 'https://www.threads.net/';
   }
   if (u.includes('instagram.com') || u.includes('cdninstagram.com')) {
     return 'https://www.instagram.com/';
+  }
+  if (u.includes('threads.net')) {
+    return 'https://www.threads.net/';
+  }
+  if (u.includes('facebook.com') || u.includes('fbcdn.net') || u.includes('fb.watch')) {
+    return 'https://www.facebook.com/';
   }
   if (u.includes('googlevideo.com') || u.includes('youtube.com') || u.includes('youtu.be')) {
     return 'https://www.youtube.com/';
@@ -2747,7 +2866,7 @@ function resolveDefaultReferer(targetUrl = '', reqReferer = '', pageUrl = '') {
   if (u.includes('bilivideo.com') || u.includes('bilibili.com')) {
     return 'https://www.bilibili.com/';
   }
-  if (u.includes('douyin.com') || u.includes('iesdouyin.com')) {
+  if (u.includes('douyin.com') || u.includes('douyinvod.com') || u.includes('zjcdn.com') || u.includes('iesdouyin.com')) {
     return 'https://www.douyin.com/';
   }
   if (u.includes('v.redd.it') || u.includes('reddit.com')) {
@@ -2778,55 +2897,6 @@ function resolveDefaultReferer(targetUrl = '', reqReferer = '', pageUrl = '') {
   // If a specific reqReferer was provided and not forbidden by target CDN rules, use it
   if (reqReferer && typeof reqReferer === 'string' && reqReferer.trim()) {
     return reqReferer.trim();
-  }
-
-  if (p.includes('threads.net') || u.includes('threads.net')) {
-    return 'https://www.threads.net/';
-  }
-  if (p.includes('tiktok.com')) {
-    return 'https://www.tiktok.com/';
-  }
-  if (p.includes('youtube.com')) {
-    return 'https://www.youtube.com/';
-  }
-  if (p.includes('facebook.com')) {
-    return 'https://www.facebook.com/';
-  }
-  if (p.includes('instagram.com')) {
-    return 'https://www.instagram.com/';
-  }
-  if (p.includes('x.com') || p.includes('twitter.com')) {
-    return 'https://x.com/';
-  }
-  if (p.includes('bilibili.com')) {
-    return 'https://www.bilibili.com/';
-  }
-  if (p.includes('douyin.com')) {
-    return 'https://www.douyin.com/';
-  }
-  if (p.includes('reddit.com')) {
-    return 'https://www.reddit.com/';
-  }
-  if (p.includes('vimeo.com')) {
-    return 'https://vimeo.com/';
-  }
-  if (p.includes('twitch.tv')) {
-    return 'https://www.twitch.tv/';
-  }
-  if (p.includes('dailymotion.com')) {
-    return 'https://www.dailymotion.com/';
-  }
-  if (p.includes('pinterest.com')) {
-    return 'https://www.pinterest.com/';
-  }
-  if (p.includes('zingmp3.vn')) {
-    return 'https://zingmp3.vn/';
-  }
-  if (p.includes('nhaccuatui.com')) {
-    return 'https://www.nhaccuatui.com/';
-  }
-  if (p.includes('soundcloud.com')) {
-    return 'https://soundcloud.com/';
   }
 
   if (pageUrl && /^https?:\/\//i.test(pageUrl)) {
@@ -2952,7 +3022,44 @@ function parseProgressLine(line, targetUrl = '') {
   return null;
 }
 
+async function startImageDownload(req) {
+  const targetDir = resolveTargetDir(req.outputDir);
+  const tempPath = path.join(targetDir, `.savior-image-${Date.now()}-${Math.random().toString(36).slice(2)}.tmp`);
+  let downloaded;
+  try {
+    downloaded = await startImageTransfer(req, tempPath);
+    const head = Buffer.alloc(32);
+    const fd = fs.openSync(downloaded, 'r');
+    try { fs.readSync(fd, head, 0, 32, 0); } finally { fs.closeSync(fd); }
+    const ext = head[0] === 255 && head[1] === 216 && head[2] === 255 ? 'jpg' :
+      head.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) ? 'png' :
+      /^GIF8[79]a/.test(head.toString('ascii', 0, 6)) ? 'gif' :
+      head.toString('ascii', 0, 4) === 'RIFF' && head.toString('ascii', 8, 12) === 'WEBP' ? 'webp' :
+      head.toString('ascii', 0, 2) === 'BM' ? 'bmp' :
+      head.toString('ascii', 4, 8) === 'ftyp' && /avif|avis/.test(head.toString('ascii', 8, 32)) ? 'avif' : null;
+    if (!ext) throw new Error('IMAGE_CONTENT_MISMATCH');
+    const title = (req.filename || req.title || 'image').replace(/\.[a-z0-9]{2,5}$/i, '');
+    const job = createJobFileContext({ outputDir: targetDir, filename: sanitizeFilename(title + '.' + ext, ext) });
+    fs.renameSync(downloaded, job.partPath);
+    const outputPath = publishJobFile(job);
+    sendMessage({ action: 'complete', taskId: req.taskId, outputFile: path.basename(outputPath), outputPath, downloadsDir: targetDir });
+  } catch (err) {
+    if (downloaded) { try { fs.unlinkSync(downloaded); } catch (_) {} }
+    cleanupPartialFiles(tempPath);
+    sendMessage({ action: 'error', taskId: req.taskId, error: err.message });
+  }
+}
+function startImageTransfer(req, outPath) {
+  return new Promise((resolve, reject) => {
+    startMultiThreadDownload(req, req.url || req.videoUrl, outPath,
+      resolveDefaultReferer(req.url || req.videoUrl, req.referer, req.pageUrl), '', reject,
+      (_probe, published) => resolve(published || outPath));
+  });
+}
+
 function startDownload(req) {
+  if (req.mediaType === 'image' || [req.url, req.videoUrl, req.filename].some(value => /\.(jpe?g|png|gif|webp|avif|bmp)(?:[?#]|$)/i.test(String(value || '')))) return startImageDownload(req);
+
   logHost(`startDownload: ${JSON.stringify({ url: req.url, videoUrl: req.videoUrl, audioUrl: req.audioUrl, title: req.title, quality: req.quality, hasPlayList: Boolean(req.play_list || req.playList) })}`);
 
   const manifestContent = req.play_list || req.playList || null;
@@ -2998,6 +3105,8 @@ if (typeof module !== 'undefined') {
     isSafeRemoteHlsUrl,
     openPathWithSystem,
     downloadFileMultiThread,
+    downloadFileSingleStream,
+    cleanFbCdnUrl,
     fetchHttpResource,
     rewriteHlsPlaylistLines,
     handleInMemoryPlaylist,

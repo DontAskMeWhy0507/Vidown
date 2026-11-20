@@ -62,22 +62,21 @@
 
       if (isM3u8 || isMpd || isMedia || isAudio) {
         let streamKey = u;
+        let cleanUrl = u;
+        // Query values may identify a different video, format, or renewed signed URL.
+        streamKey = u;
         try {
-          const parsed = new URL(u);
-          parsed.searchParams.delete('range');
-          parsed.searchParams.delete('bytestart');
-          parsed.searchParams.delete('byteend');
-          parsed.searchParams.delete('subrange');
-          parsed.searchParams.delete('sq');
-          parsed.searchParams.delete('rn');
-          streamKey = parsed.origin + parsed.pathname;
-        } catch (_) {
-          streamKey = u.split('?')[0];
-        }
+          const keyUrl = new URL(u);
+          if (/(^|\.)(fbcdn\.net|cdninstagram\.com|googlevideo\.com)$/.test(keyUrl.hostname)) {
+            for (const key of ['range', 'bytestart', 'byteend', 'rn', 'rbuf']) keyUrl.searchParams.delete(key);
+            streamKey = keyUrl.href;
+          }
+        } catch (_) {}
 
         // Deduplicate streaming chunk ranges so playback is never interrupted by floods
         if (reportedStreamKeys.has(streamKey)) return;
         reportedStreamKeys.add(streamKey);
+        reportedUrls.add(cleanUrl);
         reportedUrls.add(u);
 
         const format = isM3u8 ? 'M3U8' : (isMpd ? 'MPD' : (lower.includes('.webm') ? 'WEBM' : (isAudio ? 'MP3' : 'MP4')));
@@ -91,13 +90,13 @@
 
         let urlObj;
         try {
-          urlObj = new URL(u);
+          urlObj = new URL(cleanUrl);
         } catch (_) {
           urlObj = { protocol: 'https:', host: location.host, pathname: '/' };
         }
 
         const mediaItem = {
-          url: u,
+          url: cleanUrl,
           protocol: urlObj.protocol || 'https:',
           host: urlObj.host || location.host,
           pathname: urlObj.pathname || '/',
@@ -111,8 +110,11 @@
 
         // Cache on window for instant pickup by content-script.js
         window.__saviorSniffedMedia = window.__saviorSniffedMedia || [];
-        if (!window.__saviorSniffedMedia.some(m => m && m.url === u)) {
+        if (!window.__saviorSniffedMedia.some(m => m && (m.url === cleanUrl || m.url === u))) {
           window.__saviorSniffedMedia.push(mediaItem);
+          if (window.__saviorSniffedMedia.length > 100) {
+            window.__saviorSniffedMedia.shift();
+          }
         }
         // Instantaneous emission to content-script.js's EventEmitter (~0ms) if already loaded
         if (window.EE && typeof window.EE.emit === 'function') {

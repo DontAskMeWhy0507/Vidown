@@ -555,6 +555,7 @@ export default function(t, e, r) {
       return null;
     }
     function W(t3) {
+        if (t3 && (t3._nativeRequest || t3._browserRequest)) return false;
       if (i.a.M3U8 && Object(n.B)(t3.ext)) return true;
       var e2 = t3.type;
       if (!e2) return false;

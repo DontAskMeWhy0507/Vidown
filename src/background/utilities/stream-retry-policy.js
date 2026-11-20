@@ -48,13 +48,8 @@ export default function (moduleObj, exportsObj, requireFn) {
   function var_s(param_e_1) {
   return typeof param_e_1 == "function";
   }
-  exportsObj.arraybuffer = exportsObj.fetch || var_i && var_o("arraybuffer");
-  exportsObj.msstream = !exportsObj.fetch && var_a && var_o("ms-stream");
-  exportsObj.mozchunkedarraybuffer = !exportsObj.fetch && var_i &&
-  var_o("moz-chunked-arraybuffer");
-  exportsObj.overrideMimeType = exportsObj.fetch || !!var_n() &&
-  var_s(var_n().overrideMimeType);
-  exportsObj.vbArray = var_s(param_e.VBArray);
+  exportsObj.arraybuffer = true;
+  exportsObj.overrideMimeType = true;
   var_r = null;
   }
   ).call(this, requireFn(13));

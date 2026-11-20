@@ -215,7 +215,7 @@ function setupAnti403Rules() {
   if (!chrome.declarativeNetRequest || !chrome.declarativeNetRequest.updateSessionRules) return;
   try {
     chrome.declarativeNetRequest.updateSessionRules({
-      removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008].concat([1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025]),
+      removeRuleIds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008].concat([1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1099]),
       addRules: [
         {
           id: 1001,
@@ -230,7 +230,7 @@ function setupAnti403Rules() {
           condition: {
             urlFilter: '*fbcdn.net/*',
             initiatorDomains: ['facebook.com'],
-            resourceTypes: ['xmlhttprequest', 'media', 'other']
+            resourceTypes: ['main_frame', 'sub_frame', 'xmlhttprequest', 'media', 'other']
           }
         },
         {
@@ -246,7 +246,7 @@ function setupAnti403Rules() {
           condition: {
             urlFilter: '*fbcdn.net/*',
             initiatorDomains: ['instagram.com'],
-            resourceTypes: ['xmlhttprequest', 'media', 'other']
+            resourceTypes: ['main_frame', 'sub_frame', 'xmlhttprequest', 'media', 'other']
           }
         },
         {
@@ -426,6 +426,7 @@ function setupAnti403Rules() {
           },
           condition: {
             urlFilter: '*vod-progressive.akamaized.net/*',
+            initiatorDomains: ['vimeo.com'],
             resourceTypes: ['xmlhttprequest', 'media', 'other']
           }
         },
@@ -563,6 +564,37 @@ function setupAnti403Rules() {
           condition: {
             urlFilter: '*tiktokv.com/*',
             resourceTypes: ['xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1026,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.youtube.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.youtube.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*googlevideo.com/*',
+            resourceTypes: ['main_frame', 'sub_frame', 'xmlhttprequest', 'media', 'other']
+          }
+        },
+        {
+          id: 1027,
+          priority: 1,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              { header: 'Referer', operation: 'set', value: 'https://www.tiktok.com/' },
+              { header: 'Origin', operation: 'set', value: 'https://www.tiktok.com' }
+            ]
+          },
+          condition: {
+            urlFilter: '*akamaized.net/*',
+            initiatorDomains: ['tiktok.com'],
+            resourceTypes: ['main_frame', 'sub_frame', 'xmlhttprequest', 'media', 'other']
           }
         }
       ]
@@ -849,14 +881,8 @@ function updateDownloadHistory(record) {
 
 function formatBytes(bytes) {
   if (!bytes || bytes <= 0) return '0 B';
-  const units = ['B', 'KB', 'MB', 'GB'];
-  let size = bytes;
-  let idx = 0;
-  while (size >= 1024 && idx < units.length - 1) {
-    size /= 1024;
-    idx++;
-  }
-  return `${size.toFixed(1)} ${units[idx]}`;
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return `${(bytes / Math.pow(1024, i)).toFixed(i > 0 ? 1 : 0)} ${['B', 'KB', 'MB', 'GB'][i] || 'TB'}`;
 }
 
 function formatSpeed(bytesPerSec) {
@@ -868,7 +894,7 @@ function formatSpeed(bytesPerSec) {
 }
 
 function requiresNativeHelper(options) {
-  if (!options) return false;
+  if (!options || isImageDownload(options)) return false;
   const rawUrlObj = (options.url && typeof options.url === 'object' && !Array.isArray(options.url)) ? options.url : null;
   const videoUrl = options.videoUrl || (rawUrlObj && rawUrlObj.videoUrl) || '';
   const audioUrl = options.audioUrl || (rawUrlObj && rawUrlObj.audioUrl) || '';
@@ -899,16 +925,39 @@ function requiresNativeHelper(options) {
   return false;
 }
 
+function cleanMediaCdnUrl(rawUrl) {
+  if (!rawUrl || typeof rawUrl !== 'string') return rawUrl;
+  try {
+    const u = new URL(rawUrl);
+    const known = /(^|\.)(fbcdn\.net|cdninstagram\.com|googlevideo\.com)$/.test(u.hostname);
+    if (!known || [...u.searchParams.keys()].some(k => /^(signature|sig|policy|x-amz-signature|hdnts)$/i.test(k))) return rawUrl;
+    if (!['bytestart', 'byteend', 'range', 'rn', 'rbuf'].some(key => u.searchParams.has(key))) return rawUrl;
+    // These CDN playback range controls are not the identity of a media file.
+    for (const key of ['bytestart', 'byteend', 'range', 'rn', 'rbuf']) u.searchParams.delete(key);
+    return u.toString();
+  } catch (_) { return rawUrl; }
+}
+function isImageDownload(options) {
+  return Boolean(options && (options.mediaType === 'image' || options.type === 'image' ||
+    [options.url, options.videoUrl, options.filename].some(value => /\.(jpe?g|png|webp|gif|bmp|avif)(?:[?#]|$)/i.test(String(value || '')))));
+}
+
 function isSessionProtectedStream(options) {
-  if (!options) return false;
-  const url = options.videoUrl || options.url || '';
-  const page = options.pageUrl || options.referrer || '';
+  if (!options || isImageDownload(options)) return false;
+  const url = String(options.videoUrl || options.url || '').toLowerCase();
+  const page = String(options.pageUrl || options.referrer || '').toLowerCase();
   return (
     url.includes('tiktok.com') ||
     url.includes('tiktokcdn.com') ||
+    url.includes('tiktokcdn-us.com') ||
+    url.includes('tiktokcdn-eu.com') ||
+    url.includes('tiktokv.com') ||
     url.includes('byteoversea.com') ||
     url.includes('ibytedtos.com') ||
+    url.includes('bytevd.com') ||
     url.includes('douyin.com') ||
+    url.includes('douyinvod.com') ||
+    url.includes('zjcdn.com') ||
     url.includes('iesdouyin.com') ||
     page.includes('tiktok.com') ||
     page.includes('douyin.com')
@@ -1055,13 +1104,17 @@ function isUrlRecentlyRequested(u) {
   return false;
 }
 
+function clearUrlRecentlyRequested(u) {
+  if (u && inFlightBrowserDownloads.has(u)) inFlightBrowserDownloads.delete(u);
+}
+
 function startBrowserDownload(options, callback) {
   if (options && options.taskId && purgedTaskIds.has(String(options.taskId))) {
     console.log(`[Savior] startBrowserDownload called for purged task ${options.taskId}, dropping.`);
     if (typeof callback === 'function') callback(null);
     return false;
   }
-  const targetUrl = options.videoUrl || options.url;
+  const targetUrl = cleanMediaCdnUrl(options.videoUrl || options.url);
   if (!targetUrl) {
     if (typeof callback === 'function') callback(null);
     return false;
@@ -1103,9 +1156,16 @@ function startBrowserDownload(options, callback) {
     saveAs: false
   };
 
-  const ref = options.referrer || options.pageUrl || currentActiveTabUrl;
-  if (ref && !targetUrl.includes('googlevideo.com')) {
-    chromeOptions.headers = [{ name: 'Referer', value: ref }];
+  let safeReferrer = options.referrer || options.pageUrl || '';
+  if (!safeReferrer && currentActiveTabUrl && targetUrl) {
+    try {
+      if (new URL(currentActiveTabUrl).origin === new URL(targetUrl).origin) {
+        safeReferrer = currentActiveTabUrl;
+      }
+    } catch (_) {}
+  }
+  if (safeReferrer && !targetUrl.includes('googlevideo.com')) {
+    chromeOptions.headers = [{ name: 'Referer', value: safeReferrer }];
   }
 
   try {
@@ -1745,6 +1805,9 @@ function isBogusStreamUrl(url, pageUrl) {
   ) {
     return true;
   }
+  if (isImageDownload(options || { url })) {
+    try { return !/^https?:$/.test(new URL(url).protocol); } catch (_) { return true; }
+  }
   // Static assets and non-media extensions (exclude fonts, scripts, stylesheets, raw images)
   if (/\.(otf|ttf|woff2?|jpe?g|png|webp|svg|gif|css|js)(\?|$)/i.test(clean)) {
     return true;
@@ -1787,7 +1850,7 @@ function isBogusStreamUrl(url, pageUrl) {
       clean.includes('vkusercontents.com') || clean.includes('mycdn.me') || clean.includes('sndcdn.com') ||
       clean.includes('zadn.vn') || clean.includes('zmdcdn.me') || clean.includes('nixcdn.com') ||
       clean.includes('fptplay.net') || clean.includes('vieon.vn') || clean.includes('twimg.com');
-    if (!hasStreamSignature) {
+    if (!hasStreamSignature && !(options && options.verifiedMedia && options.mediaType === 'video')) {
       return true;
     }
   } catch (_) {
@@ -1802,43 +1865,8 @@ function resolveRealStreamForDownload(targetUrl, pageUrl, tabId) {
   if (Array.isArray(targetUrl)) targetUrl = targetUrl.find(u => typeof u === 'string' && u) || '';
   if (typeof targetUrl !== 'string') targetUrl = '';
 
-  const isBogus = isBogusStreamUrl(targetUrl, pageUrl);
-
-  if (!isBogus) return targetUrl;
-
-  const targetPage = (pageUrl && !pageUrl.startsWith('chrome-extension:') && !pageUrl.startsWith('about:'))
-    ? pageUrl
-    : currentActiveTabUrl || '';
-
-  // 1. Try exact or path-based match
-  if (targetPage) {
-    try {
-      const u = new URL(targetPage);
-      const cleanKey = u.origin + u.pathname;
-      let list = sniffedStreamsByPage.get(cleanKey);
-
-      // 2. If exact match fails, check domain / hostname match in sniffedStreamsByPage
-      if (!list && u.hostname) {
-        for (const [key, val] of sniffedStreamsByPage.entries()) {
-          if (key.includes(u.hostname) && val && val.length > 0) {
-            list = val;
-            break;
-          }
-        }
-      }
-
-      const found = findBestStreamFromList(list);
-      if (found) return found;
-    } catch (_) {}
-  }
-
-  // 3. Try tabId match
-  if (typeof tabId === 'number' && tabId >= 0) {
-    const list = sniffedStreamsByTab.get(tabId);
-    const found = findBestStreamFromList(list);
-    if (found) return found;
-  }
-
+  // The downloader cannot infer which post owns an opaque/blob URL.
+  // Extractors must supply the selected node's resolved URL; never substitute another post.
   return targetUrl;
 }
 
@@ -1970,7 +1998,7 @@ function startNativeDownload(downloadParams, callback) {
       console.log('[Savior] Native helper busy; queueing DASH/conversion task for execution after current job finishes.');
       const fakeId = downloadParams.taskId || ++fakeIdCounter;
       const safeFilename = (downloadParams.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
-      const mediaType = (downloadParams.convertToMp3 || downloadParams.soundOnly) ? 'audio' : 'video';
+      const mediaType = isImageDownload(downloadParams) ? 'image' : ((downloadParams.convertToMp3 || downloadParams.soundOnly) ? 'audio' : 'video');
 
       const task = {
         id: fakeId,
@@ -2045,7 +2073,7 @@ function startNativeDownload(downloadParams, callback) {
 
   const fakeId = downloadParams.taskId || ++fakeIdCounter;
   const safeFilename = (downloadParams.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
-  const mediaType = (downloadParams.convertToMp3 || downloadParams.soundOnly) ? 'audio' : 'video';
+  const mediaType = isImageDownload(downloadParams) ? 'image' : ((downloadParams.convertToMp3 || downloadParams.soundOnly) ? 'audio' : 'video');
 
   const task = {
     id: fakeId,
@@ -2286,6 +2314,10 @@ function startNativeDownload(downloadParams, callback) {
   const postDownload = (sessionCookie) => {
     port.postMessage({
       action: 'download',
+      mediaType: mediaType,
+      ext: downloadParams.ext,
+      _isHls: Boolean(downloadParams._isHls || downloadParams.hls),
+      _isDash: Boolean(downloadParams._isDash || downloadParams.dashMPD),
       url: downloadParams.url || '',
       videoUrl: downloadParams.videoUrl || downloadParams.url || '',
       audioUrl: downloadParams.audioUrl || '',
@@ -2302,7 +2334,7 @@ function startNativeDownload(downloadParams, callback) {
       taskId: fakeId
     });
   };
-  getCookieHeader([resolvedPageUrl, targetUrl], postDownload);
+  getCookieHeader([targetUrl], postDownload);
 
   if (typeof callback === 'function') {
     callback(fakeId);
@@ -2335,12 +2367,14 @@ function formatRelayBytes(bytes) {
   return b + ' B';
 }
 
+let nextRelayRuleId = 20000;
 function startStreamRelayDownload(downloadParams, callback) {
+  if (isImageDownload(downloadParams)) return false;
   // Same availability guard as the native engine: no host, no relay.
   if (nativeProbeSettled && !nativeHelperAvailable) return false;
   const port = getOrCreateNativePort();
   if (!port) return false;
-  let targetUrl = downloadParams.videoUrl || downloadParams.url || '';
+  let targetUrl = cleanMediaCdnUrl(downloadParams.videoUrl || downloadParams.url || '');
   const effectivePage = (downloadParams.pageUrl && !downloadParams.pageUrl.startsWith('chrome-extension:') && !downloadParams.pageUrl.startsWith('about:'))
     ? downloadParams.pageUrl
     : (downloadParams.referrer && !downloadParams.referrer.startsWith('chrome-extension:')
@@ -2348,9 +2382,9 @@ function startStreamRelayDownload(downloadParams, callback) {
         : currentActiveTabUrl);
   const resolvedTarget = resolveRealStreamForDownload(targetUrl, effectivePage, downloadParams.tabId);
   if (resolvedTarget && resolvedTarget !== targetUrl) {
-    targetUrl = resolvedTarget;
-    downloadParams.url = resolvedTarget;
-    downloadParams.videoUrl = resolvedTarget;
+    targetUrl = cleanMediaCdnUrl(resolvedTarget);
+    downloadParams.url = targetUrl;
+    downloadParams.videoUrl = targetUrl;
   }
   if (!targetUrl || !/^https?:\/\//i.test(targetUrl) || isBogusStreamUrl(targetUrl, effectivePage)) {
     console.warn('[Savior] Stream Relay rejected bogus or non-stream URL:', targetUrl);
@@ -2366,7 +2400,7 @@ function startStreamRelayDownload(downloadParams, callback) {
 
   const fakeId = downloadParams.taskId || ++fakeIdCounter;
   const safeFilename = (downloadParams.filename || 'video.mp4').replace(/[<>:"/\\|?*]/g, '_');
-  const mediaType = (downloadParams.convertToMp3 || downloadParams.soundOnly) ? 'audio' : 'video';
+  const mediaType = isImageDownload(downloadParams) ? 'image' : ((downloadParams.convertToMp3 || downloadParams.soundOnly) ? 'audio' : 'video');
   const resolvedPageUrl = downloadParams.pageUrl || downloadParams.referrer || currentActiveTabUrl || '';
 
   const task = {
@@ -2409,10 +2443,14 @@ function startStreamRelayDownload(downloadParams, callback) {
   const messageHandler = (msg) => {
     if (!msg) return;
     if (msg.taskId !== undefined && String(msg.taskId) !== String(fakeId)) return;
+    task._windowResolvers = task._windowResolvers || new Set();
     if (msg.action === 'streamAck') {
       task._inFlight = Math.max(0, task._inFlight - 1);
-      // A slot opened — wake the pump immediately (no polling delay).
-      if (task._windowResolve) { try { task._windowResolve(); } catch (_) {} }
+      if (task._windowResolvers.size > 0) {
+        const nextRes = task._windowResolvers.values().next().value;
+        task._windowResolvers.delete(nextRes);
+        try { nextRes(); } catch (_) {}
+      }
       return;
     }
     if (msg.action === 'progress') {
@@ -2487,6 +2525,7 @@ function startStreamRelayDownload(downloadParams, callback) {
     outputDir: task.outputDir
   });
 
+  const relayRuleId = ++nextRelayRuleId;
   (async () => {
     // Throughput: single-stream relaying measured ~1 MB/s — the CDN will
     // happily serve more. Batch reads into 512KB payloads, keep 6 in flight,
@@ -2512,10 +2551,12 @@ function startStreamRelayDownload(downloadParams, callback) {
     const awaitWindowSlot = async () => {
       while (task._inFlight >= WINDOW && !abortCtrl.signal.aborted) {
         await new Promise(res => {
-          task._windowResolve = res;
-          setTimeout(res, 250);
+          task._windowResolvers.add(res);
+          setTimeout(() => {
+            task._windowResolvers.delete(res);
+            res();
+          }, 250);
         });
-        task._windowResolve = null;
       }
     };
     // Drain one response body: batch it and post chunks tagged with their
@@ -2554,6 +2595,23 @@ function startStreamRelayDownload(downloadParams, callback) {
 
     try {
       const headers = {};
+      // Match this URL and extension initiator only; never alter the page's requests.
+      if (chrome.declarativeNetRequest && chrome.runtime.id && task.referer) {
+        const escapedUrl = targetUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        let originVal = '';
+        try { originVal = new URL(task.referer).origin; } catch (_) {}
+        const requestHeaders = [{ header: 'Referer', operation: 'set', value: task.referer }];
+        if (originVal && originVal !== 'null') {
+          requestHeaders.push({ header: 'Origin', operation: 'set', value: originVal });
+        }
+        await chrome.declarativeNetRequest.updateSessionRules({
+          removeRuleIds: [relayRuleId],
+          addRules: [{ id: relayRuleId, priority: 10,
+            action: { type: 'modifyHeaders', requestHeaders },
+            condition: { regexFilter: '^' + escapedUrl + '$', initiatorDomains: [chrome.runtime.id], resourceTypes: ['xmlhttprequest'] }
+          }]
+        });
+      }
       const isTikTokOrDouyin = /tiktok|douyin|byteoversea|ibytedtos|bytevd|zjcdn/i.test(targetUrl) || /tiktok\.com|douyin\.com/i.test(resolvedPageUrl);
       const isCdnStream = !isTikTokOrDouyin && false;
       const fetchCreds = isCdnStream ? 'omit' : 'include'; // Uses credentials: 'include' for same-origin and TikTok/Douyin session streams
@@ -2677,7 +2735,12 @@ function startStreamRelayDownload(downloadParams, callback) {
           setActionBadge('!', '#ef4444');
         }
       }
+    } finally {
+      if (chrome.declarativeNetRequest && chrome.runtime.id) {
+        await chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds: [relayRuleId] }).catch(() => {});
+      }
     }
+
   })();
 
   if (typeof callback === 'function') callback(fakeId);
@@ -2687,6 +2750,58 @@ function startStreamRelayDownload(downloadParams, callback) {
 // ==========================================
 // 3. Downloads Manager IPC Message Routing
 // ==========================================
+
+const mediaResolutionCache = new Map();
+function canUseNativePageExtractor(pageUrl) {
+  try {
+    return /(^|\.)(youtube\.com|youtu\.be|facebook\.com|instagram\.com|x\.com|twitter\.com|tiktok\.com|douyin\.com|reddit\.com|vimeo\.com|dailymotion\.com|twitch\.tv|pinterest\.com|bilibili\.com|soundcloud\.com)$/.test(new URL(pageUrl).hostname);
+  } catch (_) { return false; }
+}
+async function resolveBrowserSelectedMedia(req, sender) {
+  if (!sender.tab || !Number.isInteger(sender.tab.id) || !/^[a-z0-9_-]{1,100}$/i.test(req.token || '')) return {error:'INVALID_MEDIA_REQUEST'};
+  try {
+    const target = {tabId:sender.tab.id,frameIds:[sender.frameId || 0]};
+    await chrome.scripting.executeScript({target,world:'MAIN',files:['inject/media-source/main-world.js']});
+    const results = await chrome.scripting.executeScript({target,world:'MAIN',func:request => window.__vidownResolveMedia(request),args:[{token:req.token,sourceUrl:sender.url || req.sourceUrl,currentSrc:req.currentSrc || '',poster:req.poster || '',pageUrl:req.pageUrl || '',mediaId:req.mediaId || ''}]});
+    const result = results[0]?.result || {error:'BROWSER_MEDIA_NOT_FOUND'};
+    if (result.error === 'BROWSER_MEDIA_NOT_FOUND' && canUseNativePageExtractor(req.pageUrl)) return resolveSelectedPage(req,sender);
+    return result;
+  } catch (_) { return {error:'BROWSER_EXTRACTION_FAILED'}; }
+}
+function resolveSelectedPage(req, sender) {
+  let target;
+  try {
+    target = new URL(req.pageUrl);
+    const isExtensionCaller = Boolean(sender && typeof chrome !== 'undefined' && chrome.runtime && sender.id === chrome.runtime.id);
+    if (!/^https?:$/.test(target.protocol)) throw new Error('INVALID_PAGE_PROTOCOL');
+    if (!isExtensionCaller) {
+      const sourceUrl = sender && sender.url ? new URL(sender.url) : null;
+      const tabUrl = (sender && sender.tab && sender.tab.url) ? new URL(sender.tab.url) : null;
+      const originMatches = Boolean((sourceUrl && sourceUrl.origin === target.origin) || (tabUrl && tabUrl.origin === target.origin));
+      if (!originMatches) throw new Error('INVALID_PAGE_ORIGIN');
+    }
+  } catch (_) { return Promise.resolve({error:'INVALID_PAGE_ORIGIN'}); }
+  if (!canUseNativePageExtractor(target.href)) return Promise.resolve({error:'NATIVE_EXTRACTOR_UNSUPPORTED'});
+  const key=target.href+'|'+(req.mediaId || '');
+  const old=mediaResolutionCache.get(key);
+  if(old && Date.now()-old.time<30000) return old.promise;
+  const promise=new Promise(resolve => {
+    const port=getOrCreateNativePort();
+    if(!port) return resolve({error:'NATIVE_HOST_REQUIRED'});
+    const requestId='resolve_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    let settled=false;
+    const finish=result=>{if(settled)return;settled=true;clearTimeout(timer);port.onMessage.removeListener(onMessage);if(port.onDisconnect.removeListener)port.onDisconnect.removeListener(onDisconnect);resolve(result);};
+    const onMessage=msg=>{if(msg.action==='mediaResolved' && msg.requestId===requestId) finish({media:msg.media || [],error:msg.error});};
+    const onDisconnect=()=>finish({error:'NATIVE_HOST_DISCONNECTED'});
+    const timer=setTimeout(()=>finish({error:'MEDIA_RESOLUTION_TIMEOUT'}),35000);
+    port.onMessage.addListener(onMessage);port.onDisconnect.addListener(onDisconnect);
+    chrome.cookies.getAll({url:target.href},cookies=>{if(!settled){try{port.postMessage({action:'resolveMedia',requestId,pageUrl:target.href,mediaId:req.mediaId || '',cookies:cookies || []});}catch(err){finish({error:err.message});}}});
+  }).catch(err => ({error:err.message || 'MEDIA_RESOLUTION_FAILED'}));
+  mediaResolutionCache.set(key,{time:Date.now(),promise});
+  if(mediaResolutionCache.size>50) mediaResolutionCache.delete(mediaResolutionCache.keys().next().value);
+  promise.then(result=>{if(result.error)mediaResolutionCache.delete(key);});
+  return promise;
+}
 
 const cachedContentCss = {};
 try {
@@ -2701,7 +2816,18 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
   if (!req || !action) return false;
 
   switch (action) {
+    case 'resolveBrowserMedia': {
+      resolveBrowserSelectedMedia(req, sender).then(sendResponse);
+      return true;
+    }
+    case 'resolveSelectedMedia': {
+      resolveSelectedPage(req, sender).then(sendResponse);
+      return true;
+    }
     case 'download': {
+      // The legacy widget protocol needs download.result events from its own
+      // manager, which already uses the unified chrome.downloads bridge.
+      if (req.type === 'download' && !req.action) return false;
       // In Savior content-script.js, EE.emit("download", { method: "download", params: o })
       // sends { type: "download", data: { method: "download", params: o } }
       const params = (req.data && req.data.params) ? req.data.params : (req.data || req);
@@ -2727,6 +2853,11 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
         audioUrl: (urlObj && urlObj.audioUrl) || params.audioUrl || '',
         play_list: params.play_list || params.playList || (req.data && (req.data.play_list || req.data.playList)) || '',
         filename: safeFilename,
+        mediaType: params.mediaType || params.type,
+        verifiedMedia: Boolean(params.verifiedMedia),
+        ext: params.ext,
+        _isHls: Boolean(params.hls || params._isHls),
+        _isDash: Boolean(params.dashMPD || params._isDash),
         title: baseTitle,
         referrer: params.referrer || (sender && sender.tab && sender.tab.url) || '',
         pageUrl: (sender && sender.tab && sender.tab.url) || params.referrer || '',
@@ -2758,9 +2889,14 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
           sendResponse({ success: false, error: 'NATIVE_HOST_REQUIRED' });
           return false;
         }
-        if (isSessionProtectedStream(opts)) startCocCocSessionDownload(opts);
-        else if (!opts._relayFailed && startStreamRelayDownload(opts)) { opts._relayFailed = true; }
-        else startBrowserDownload(opts);
+        if (isSessionProtectedStream(opts)) {
+          started = Boolean(startCocCocSessionDownload(opts));
+        } else if (!opts._relayFailed && startStreamRelayDownload(opts)) {
+          opts._relayFailed = true;
+          started = true;
+        } else {
+          started = Boolean(startBrowserDownload(opts));
+        }
       }
       sendResponse({ success: !!started });
       return false;
@@ -3154,7 +3290,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
     case 'downloadNative': {
       const isAudio = Boolean(req.soundOnly || req.quality === 'audio');
-      const ext = isAudio ? 'mp3' : 'mp4';
+      const ext = isAudio ? 'mp3' : (req.ext || 'mp4');
       const baseTitle = (req.title || 'video')
         .replace(/\.[a-zA-Z0-9]+$/, '')
         .replace(/[<>:"/\\|?*]/g, '_')
@@ -3355,9 +3491,14 @@ if (chrome.runtime.onMessageExternal) {
         started = startNativeDownload(req);
       }
       if (!started) {
-        if (isSessionProtectedStream(req)) startCocCocSessionDownload(req);
-        else if (!req._relayFailed && startStreamRelayDownload(req)) { req._relayFailed = true; }
-        else startBrowserDownload(req);
+        if (isSessionProtectedStream(req)) {
+          started = Boolean(startCocCocSessionDownload(req));
+        } else if (!req._relayFailed && startStreamRelayDownload(req)) {
+          req._relayFailed = true;
+          started = true;
+        } else {
+          started = Boolean(startBrowserDownload(req));
+        }
       }
       sendResponse({ success: !!started });
       return false;

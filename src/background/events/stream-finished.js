@@ -2,7 +2,7 @@
 export default function (moduleObj, exportsObj, requireFn) {
   "use strict";
   (function (param_e) {
-  var dep_event_emitter_3 = requireFn(79);
+  var dep_event_emitter_3 = requireFn(42);
   param_e.EE ||= new dep_event_emitter_3.EventEmitter();
   param_e.IS_CONTENT_SCRIPT = true;
   param_e.savior_referrer = location.href;

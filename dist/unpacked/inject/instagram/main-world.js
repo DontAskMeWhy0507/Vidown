@@ -97,6 +97,37 @@ function extractInstagramVideoDetails(videoElement) {
       }
     }
 
+    // Threads/modern Meta players expose video_versions on the selected component.
+    if (/(^|\.)threads\.(com|net)$/.test(location.hostname)) {
+      const seen = new WeakSet();
+      function collectMedia(value, candidates, depth=0) {
+        if (!value || typeof value !== 'object' || depth>8 || seen.has(value)) return;
+        seen.add(value);
+        if ((Array.isArray(value.video_versions) && value.video_versions.length) || value.video_dash_manifest) { candidates.add(value); return; }
+        for (const key of ['item','media','post','video','children','props','carousel_media','thread_items']) {
+          const child=value[key];
+          if (Array.isArray(child)) child.forEach(item=>collectMedia(item,candidates,depth+1));
+          else collectMedia(child,candidates,depth+1);
+        }
+      }
+      let current=videoElement;
+      while(current && current!==document.body){
+        for(const key of Object.keys(current).filter(k=>k.startsWith('__reactProps') || k.startsWith('__reactFiber'))){
+          const value=current[key];
+          const candidates=new Set(); collectMedia(value?.memoizedProps || value,candidates);
+          if(candidates.size>1) return null;
+          const media=candidates.values().next().value;
+          if(media){
+            if(media.video_dash_manifest) return media;
+            return {videoResources:media.video_versions.filter(v=>v.url).map(v=>({src:v.url,configHeight:v.height,configWidth:v.width})),caption:media.caption?.text || document.title};
+          }
+        }
+        if(current.tagName==='ARTICLE' || current.getAttribute?.('role')==='article')break;
+        current=current.parentElement;
+      }
+      return null;
+    }
+
     // Standard feed & Reels
     const unclassedDiv = videoElement.closest('div:not([class])');
     const unclassedProps = unclassedDiv?.[propsKey];
@@ -168,7 +199,7 @@ function updateVideo(video) {
     const details = extractInstagramVideoDetails(video);
     if (details) {
       video.setAttribute('savior-video-detail', JSON.stringify(details));
-    } else if (!currentSrc) {
+    } else {
       video.removeAttribute('savior-video-detail');
     }
   } catch {}
@@ -189,7 +220,7 @@ function reExtractAll() {
     runReExtractAll();
   }, 150);
 }
-window.__saviorIgReExtract = reExtractAll;
+window.__saviorIgReExtract = runReExtractAll;
 
 // 1. Initial extraction
 runReExtractAll();
@@ -203,7 +234,7 @@ try {
         shouldUpdate = true;
         break;
       }
-      if (m.type === 'attributes' && m.attributeName === 'src') {
+      if (m.type === 'attributes' && (m.attributeName === 'src' || m.attributeName === 'poster')) {
         shouldUpdate = true;
         break;
       }
@@ -214,7 +245,7 @@ try {
   const attachObserver = () => {
     const target = document.body || document.documentElement;
     if (target) {
-      observer.observe(target, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
+      observer.observe(target, { childList: true, subtree: true, attributes: true, attributeFilter: ['src','poster'] });
     }
   };
 

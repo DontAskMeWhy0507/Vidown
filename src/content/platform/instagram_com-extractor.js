@@ -305,17 +305,17 @@ export default function (moduleObj, exportsObj, requireFn) {
   return var_D || var_S;
   }
   var obj_v = {
-  getDomains: () => ["instagram.com"],
+  getDomains: () => ["instagram.com", "threads.com", "threads.net"],
   getCustomParent: param_t => {
   var var_e;
   return location.href.includes("/reels/") ? Object(dep_dom_helper.d)(param_t) :
-  "IMG" === param_t.tagName ? param_t.closest("._aagu") : null !== (var_e = param_t.closest(
-  "li")) && void 0 !== var_e ? var_e : param_t.closest("div:not([class])");
+  "IMG" === param_t.tagName ? (param_t.closest("._aagu") || param_t.closest('article div[style*="padding-bottom"]') || param_t.closest('div[class*="_aag"]') || param_t.closest('div[role="button"]') || param_t.closest("article") || param_t.parentElement) : null !== (var_e = param_t.closest(
+  "li")) && void 0 !== var_e ? var_e : (param_t.closest("article, [role='presentation'], [role='dialog'], [data-e2e='browse-video'], ._aagu, ._aagv") || Object(dep_dom_helper.d)(param_t));
   }
   ,
   shouldWidgetAttachToParentNode: param_t => "IMG" === param_t.tagName,
   getImageNode: param_t => Object(dep_dom_helper.l)(param_t) &&
-  (param_t.closest("._aagu") || param_t.closest("article") || param_t.closest('div[class*="_aag"]') || param_t.closest('[role="presentation"]') || param_t.closest('[role="dialog"]') || (param_t.src && (param_t.src.includes("cdninstagram.com") || param_t.src.includes("fbcdn.net")))) ? param_t : null,
+  (param_t.closest("._aagu") || param_t.closest("article") || param_t.closest('div[class*="_aag"]') || param_t.closest('[role="presentation"]') || param_t.closest('[role="dialog"]') || (param_t.src && (param_t.src.includes("cdninstagram.com") || param_t.src.includes("fbcdn.net") || param_t.src.includes("instagram.com")))) ? param_t : null,
   shouldShowWidgetForImage: () => !0,
   parse: {
   sources: [{
@@ -430,7 +430,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   ,
   imageUrls: [{
-  checkUrl: param_t => param_t.node.matches("[savior-scanned-img]"),
+  checkUrl: param_t => param_t.node && (param_t.node.matches("[savior-scanned-img]") || "IMG" === param_t.node.tagName),
   getUrl: param_t => {
   var var_e = param_t.node,
   var_r = param_t.url;
@@ -441,7 +441,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   ) switch (param_t_1.n) {
   case 0:
   return param_t_1.n = 1, Object(dep_url_utils.g)({
-  url: var_r,
+  url: var_r || var_e.currentSrc || var_e.src || var_e.getAttribute("src"),
   node: var_e
   }
   );
@@ -500,97 +500,27 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   ],
   default: {
-  getUrl: param_t => {
-  var var_e = param_t.node,
-  var_r = param_t.url;
-  return fn_l(void 0, void 0, void 0, var_u().m(function var_t() {
-  var var_s, var_c_1, var_l, var_f_1, var_d, var_v, var_m;
-  return var_u().w(function (param_t_1) {
-  for (;;
-  ) switch (param_t_1.p = param_t_1.n) {
-  case 0:
-  return param_t_1.n = 1, new Promise(param_t_2 => {
-  Object(dep_dom_utils.sendMessage)({
-  type: dep_media_constants.b.SCRIPTING.INJECT,
-  file: "instagram",
-  node: var_e
-  }
-  ).then(param_t_2), setTimeout(() => {
-  param_t_2(!0);
-  }
-  , 1e3);
-  }
-  );
-  case 1:
-  if (param_t_1.p = 1, var_c_1 = var_p(var_e), var_l = JSON.parse(var_e.getAttribute(
-  "savior-video-detail") || "{}")) {
-  param_t_1.n = 2;
-  break;
-  }
-  throw new Error("No data");
-  case 2:
-  if (var_l.caption && (var_c_1 = var_l.caption), var_f_1 = (null === (var_s = var_l.dashInfo) ||
-  void 0 === var_s ? void 0 : var_s.video_dash_manifest) || var_l.video_dash_manifest ||
-  var_l.videoDashManifest || var_l.manifest, !var_l.videoResources) {
-  param_t_1.n = 3;
-  break;
-  }
-  return param_t_1.a(2, var_l.videoResources.map(param_t_2 => {
-  var var_e_1,
-  var_r_1 = Object(dep_url_utils.f)(param_t_2.src);
-  var_r_1.type = "video", var_r_1.filename = var_c_1, var_r_1.resolution = param_t_2.configHeight + "p";
-  var var_n = Object(dep_dom_utils.getBestFitResolution)(param_t_2.configHeight) ||
-  `${param_t_2.configWidth}x${param_t_2.configHeight}` || var_r_1.resolution;
-  return var_r_1.quality = null === (var_e_1 = dep_media_constants.r[var_n + "p"]) ||
-  void 0 === var_e_1 ? void 0 : var_e_1.label, var_r_1;
-  }
-  ));
-  case 3:
-  if (!var_f_1) {
-  param_t_1.n = 4;
-  break;
-  }
-  return var_d = Object(dep_format_resolver.d)(var_f_1, var_c_1), param_t_1.a(2,
-  var_d);
-  case 4:
-  if (!var_l.sdSrc && !var_l.hdSrc) {
-  param_t_1.n = 5;
-  break;
-  }
-  return var_v = ["sdSrc", "hdSrc"], param_t_1.a(2, var_v.map(param_t_2 => {
-  var var_e_1 = var_l[param_t_2],
-  var_r_1 = Object(dep_url_utils.f)(var_e_1);
-  var_r_1.filename = var_c_1, var_r_1.type = "video";
-  var var_n = "hdSrc" == param_t_2 ? dep_media_constants.r["720p"] :
-  dep_media_constants.r["480p"];
-  return var_r_1.quality = var_n.label, var_r_1.i18n_quality = Object(dep_dom_utils.i18n)(
-  var_n.i18n_label), var_r_1.filename = var_l.videoFBID || document.title, var_r_1;
-  }
-  ));
-  case 5:
-  if (!var_l.videoSrc && !var_l.videoUrl) {
-  param_t_1.n = 6;
-  break;
-  }
-  return param_t_1.a(2, var_l.videoSrc || var_l.videoUrl);
-  case 6:
-  param_t_1.n = 8;
-  break;
-  case 7:
-  param_t_1.p = 7, var_m = param_t_1.v, console.warn(var_m);
-  case 8:
-  if (!var_r.includes(".mp4")) {
-  param_t_1.n = 9;
-  break;
-  }
-  return param_t_1.a(2, var_r);
-  case 9:
-  return param_t_1.a(2, var_h(var_e));
-  }
-  }
-  , var_t, null, [[1, 7]]);
-  }
-  ));
+  getUrl: async ({node, url}) => {
+    let timer;
+    try {
+      await Promise.race([
+        Object(dep_dom_utils.sendMessage)({type:dep_media_constants.b.SCRIPTING.INJECT,file:'instagram'}).catch(()=>{}),
+        new Promise(resolve=>{timer=setTimeout(resolve,1000);})
+      ]);
+      clearTimeout(timer);
+      const details=JSON.parse(node.getAttribute('savior-video-detail') || '{}');
+      const title=details.caption || var_p(node) || document.title;
+      const manifest=details.dashInfo?.video_dash_manifest || details.video_dash_manifest || details.videoDashManifest || details.manifest;
+      if(manifest)return Object(dep_format_resolver.d)(manifest,title);
+      const sources=details.videoResources || [details.hdSrc,details.sdSrc,details.videoSrc,details.videoUrl].filter(Boolean).map(src=>({src}));
+      if(sources.length)return sources.filter(s=>s.src).map(source=>{
+        const media=Object(dep_url_utils.f)(source.src);
+        media.ext=media.ext || 'mp4';media.exts=[media.ext];media.type='video';media.filename=title;
+        media.resolution=source.configHeight?source.configHeight+'p':undefined;
+        media.quality=media.resolution || 'Original';return media;
+      });
+    }catch(_) {clearTimeout(timer);}
+    return typeof url==='string' && /^https?:/.test(url) ? url : var_h(node);
   }
   ,
   mediaObjectChange: param_t => {

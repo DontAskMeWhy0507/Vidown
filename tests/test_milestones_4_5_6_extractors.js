@@ -138,10 +138,10 @@ assert.ok(
   'Twitter main-world must traverse React Fiber tree memoizedProps and props'
 );
 
-// 2. Reverse sniffed media lookup
+// 2. Media lookup must be bound to the selected node ID.
 assert.ok(
-  twContent.includes('window.__saviorSniffedMedia.slice().reverse().find'),
-  'Twitter extractor must search sniffed media in reverse order to match current post'
+  twContent.includes("node.getAttribute('savior-twitter-vid')") && twContent.includes('obj_l[id]') && !twContent.includes('window.__saviorSniffedMedia'),
+  'Twitter extractor must use exact media ID instead of the last tab-wide stream'
 );
 console.log('✓ Test 5: Twitter / X extractor & fiber traversal verified.\n');
 

@@ -593,7 +593,12 @@ export default function (moduleObj, exportsObj, requireFn) {
   return param_e_1 && param_e_1[param_t] || "";
   }
   function var_y(param_e_1) {
-  return param_e_1.replace(/<(?!\/?(?:b|em))[^>]+>/g, "");
+    if (!param_e_1 || typeof param_e_1 !== "string") return "";
+    return param_e_1
+      .replace(/<script(?:\s+[^>]*)?>[\s\S]*?<\/script>/gi, "")
+      .replace(/<b(?:\s+[^>]*)?>/gi, "<b>")
+      .replace(/<em(?:\s+[^>]*)?>/gi, "<em>")
+      .replace(/<(?!\/?(?:b|em)>)[^>]+>/g, "");
   }
   function var__(param_e_1) {
   return Array.prototype.slice.call(param_e_1);
@@ -602,12 +607,14 @@ export default function (moduleObj, exportsObj, requireFn) {
   return Array.from(new Set(param_e_1));
   }
   function var_w(param_e_1) {
-  for (var var_t = new Uint8Array(param_e_1), str_r = "", num_n = 0;
-  num_n < var_t.byteLength;
-  num_n++) {
-  str_r += String.fromCharCode(var_t[num_n]);
-  }
-  return btoa(str_r);
+    var bytes = new Uint8Array(param_e_1);
+    var CHUNK_SIZE = 8192;
+    var str = '';
+    for (var i = 0; i < bytes.length; i += CHUNK_SIZE) {
+      var chunk = bytes.subarray(i, i + CHUNK_SIZE);
+      str += String.fromCharCode.apply(null, chunk);
+    }
+    return btoa(str);
   }
   function var_E(param_e_1) {
   for (var var_t = atob(param_e_1), var_r = new Uint8Array(var_t.length), num_n = 0;

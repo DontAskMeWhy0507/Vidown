@@ -8,7 +8,11 @@ export default function(t, e, r) {
   function a(t2, e2) {
     var r2 = i.find((r3) => r3.siteMatcher(t2, e2));
     if (r2) return r2;
-    var o2 = Object.keys(n).find((e3) => t2.includes(e3));
+    var host = String(t2 || '').toLowerCase().split(':')[0];
+    var domains = Object.keys(n);
+    var o2 = domains.find((domain) => host === domain || host.endsWith('.' + domain));
+    // Legacy entries ending in '.' (or without a suffix) name rotating domain families.
+    if (!o2) o2 = domains.find((domain) => domain.endsWith('.') ? host.startsWith(domain) || host.includes('.' + domain) : !domain.includes('.') && host.split('.').some(label => label.startsWith(domain)));
     return n[o2 || ""];
   }
   o.keys().forEach((t2) => {

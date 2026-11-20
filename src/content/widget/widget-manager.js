@@ -180,15 +180,16 @@ export default function(module, exports, r) {
     });
   } };
   var LazyMediaTracker = { _ids: [], getMediaObjectsFromNode(t) {
+    if (t.tagName !== 'IMG' && /(^|\.)threads\.(com|net)$/.test(location.hostname)) return resolveNodeWithBrowser(t);
     var ev, r2, nd, opt, arg, st, url;
     return _(this, void 0, void 0, g().m((function overlayCssPkg2() {
       var len, d, v, ctx, b2, w2, A2, _2, E, size, O, pos, key;
       return g().w((function(c) {
         for (; ; ) switch (c.n) {
           case 0:
-            return len = location.host, null == (d = t.src || t.href || (null === (ev = t.querySelector("source")) || void 0 === ev ? void 0 : ev.src)) || d.replace(/^\/+/, ""), (null == d ? void 0 : d.includes("blob:")) && (d = (null === (r2 = t.querySelector("source")) || void 0 === r2 ? void 0 : r2.src) || d), v = Object(siteDataExtractor.getSiteData)(len, d), c.n = 1, null === (nd = null == v ? void 0 : v.beforeGetUrl) || void 0 === nd ? void 0 : nd.call(v);
+            return len = location.host, null == (d = t.tagName === "IMG" ? (t.currentSrc || t.src || t.getAttribute("src")) : (t.src || t.href || (null === (ev = t.querySelector("source")) || void 0 === ev ? void 0 : ev.src))) || d.replace(/^\/+/, ""), (null == d ? void 0 : d.includes("blob:")) && (d = (null === (r2 = t.querySelector("source")) || void 0 === r2 ? void 0 : r2.src) || (t.tagName === "IMG" ? (t.currentSrc || t.src) : d)), v = Object(siteDataExtractor.getSiteData)(len, d), c.n = 1, null === (nd = null == v ? void 0 : v.beforeGetUrl) || void 0 === nd ? void 0 : nd.call(v);
           case 1:
-            return ctx = t.hasAttribute("savior-scanned-img"), b2 = ctx ? null === (opt = null == v ? void 0 : v.imageUrls) || void 0 === opt ? void 0 : opt.find((e2) => e2.checkUrl({ url: d || "", node: t })) : (null === (arg = null == v ? void 0 : v.urls) || void 0 === arg ? void 0 : arg.find((e2) => e2.checkUrl({ url: d || "", node: t }))) || (null == v ? void 0 : v.default), c.n = 2, null === (st = null == b2 ? void 0 : b2.getUrl) || void 0 === st ? void 0 : st.call(b2, { url: d, node: t, ids: this._ids });
+            return ctx = t.hasAttribute("savior-scanned-img") || "IMG" === t.tagName, b2 = ctx ? null === (opt = null == v ? void 0 : v.imageUrls) || void 0 === opt ? void 0 : opt.find((e2) => e2.checkUrl({ url: d || "", node: t })) : (null === (arg = null == v ? void 0 : v.urls) || void 0 === arg ? void 0 : arg.find((e2) => e2.checkUrl({ url: d || "", node: t }))) || (null == v ? void 0 : v.default), c.n = 2, null === (st = null == b2 ? void 0 : b2.getUrl) || void 0 === st ? void 0 : st.call(b2, { url: d, node: t, ids: this._ids });
           case 2:
             if (w2 = c.v, !Array.isArray(w2)) {
               c.n = 3;
@@ -197,14 +198,15 @@ export default function(module, exports, r) {
             if (w2.length > 0) {
               return c.a(2, w2);
             }
+            w2 = null;
             c.n = 3;
             break;
           case 3:
-            if (A2 = w2 || d) {
+            if (A2 = w2 || d || (ctx ? (t.currentSrc || t.src || t.getAttribute("src")) : null)) {
               c.n = 4;
               break;
             }
-            return c.a(2);
+            return c.a(2, ctx ? [] : resolveNodeWithBrowser(t));
           case 4:
             if (!ctx) {
               c.n = 6;
@@ -226,6 +228,10 @@ export default function(module, exports, r) {
               c.n = 9;
               break;
             }
+            if (ctx || "IMG" === t.tagName) {
+              var imgUrl = A2 || t.currentSrc || t.src || (t.getAttribute && t.getAttribute("src"));
+              return c.a(2, imgUrl ? [Object.assign(Object(urlUtils.f)(imgUrl), { type: "image", quality: qualityHelper.b.DEFAULT_QUALITY_TYPE })] : []);
+            }
             if (!this._ids.length && typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
               try {
                 this.processRequest(window.__saviorSniffedMedia);
@@ -233,13 +239,17 @@ export default function(module, exports, r) {
               }
             }
             for (O = this._ids.length - 1; O >= 0; O--) pos = this._ids[O], (null == v ? void 0 : v.idsProcess) && v.idsProcess({ defaultIds: this._ids, id: pos, index: O });
-            return c.a(2, this._ids);
+            var nodeSrc = t.currentSrc || t.src;
+            var bound = this._ids.filter(item => item && item.url === nodeSrc);
+            return c.a(2, bound.length ? bound : resolveNodeWithBrowser(t));
           case 9:
             return E.filename = Object(filenameSanitizer.a)(E.filename), E.quality = qualityHelper.b.DEFAULT_QUALITY_TYPE, c.a(2, [E]);
         }
       }), overlayCssPkg2, this);
-    })));
-  }, getDownloadsByMediaObjects: (el) => Promise.all(el.map((t2) => {
+    }))).catch(() => resolveNodeWithBrowser(t));
+  }, getDownloadsByMediaObjects: (el, node) => Promise.all(el.map((t2) => {
+    if (t2._resolvedMedia) return Promise.resolve([t2]);
+    if (t2._browserRequest) return resolveBrowserDownloads(t2);
     var ev = "object" != typeof t2.url ? `${location.href}_${t2.originalUrl || t2.url}` : `${location.href}_${t2.url.videoUrl}`;
     return t2.identifier && (ev += "_" + t2.identifier), t2.extraData ? t2.extraData.some((t3) => "tab_url" == t3.name) || t2.extraData.push({ name: "tab_url", value: location.href }) : t2.extraData = [{ name: "tab_url", value: location.href }], new Promise((t3, r2) => {
       var nd = Object(coreUtils.generateId)();
@@ -251,7 +261,13 @@ export default function(module, exports, r) {
       var nd, opt;
       return (null === (opt = null === (nd = Object(siteDataExtractor.getSiteData)(location.host)) || void 0 === nd ? void 0 : nd.shouldNotCacheParsedMedia) || void 0 === opt ? void 0 : opt.call(nd, { id: t2, medias: r2 })) || EE.emit("media-provider.cache.put", Object(coreUtils.generateId)(), ev, r2), r2;
     }).catch(() => (t2 && Object(coreUtils.logDownloadError)({ url: JSON.stringify(t2.url), referrer: document.referrer || JSON.stringify(t2.referrer) || location.host || t2.url, error: "Error: Cannot get media size or media url is wrong" }), [])));
-  })).then((t2) => Object(coreUtils.flatten)(t2)).then((ev) => el.some((t2) => t2.noAudio) ? ev : ev.concat(Object(coreUtils.createMP3Resources)(ev))), processRequest(el) {
+  })).then((t2) => Object(coreUtils.flatten)(t2)).then(async items => {
+    if (!items.length && node && !el.some(item => item._browserRequest)) {
+      const candidates = await resolveNodeWithBrowser(node,true);
+      if (candidates[0]) return resolveBrowserDownloads(candidates[0]);
+    }
+    return items;
+  }).then((ev) => el.some((t2) => t2.noAudio) ? ev : ev.concat(Object(coreUtils.createMP3Resources)(ev))), processRequest(el) {
     var ev, r2 = this, nd = false, idx = w(el);
     try {
       var opt = function() {
@@ -282,6 +298,62 @@ export default function(module, exports, r) {
   }, refreshIds() {
     this._ids = [];
   } };
+  async function resolveBrowserDownloads(item) {
+    try {
+      const result = await chrome.runtime.sendMessage({action:'resolveBrowserMedia',...item._browserRequest});
+      if (!result || result.error) {
+        const reason = result?.error || '';
+        EE.emit('widget.toast.open',{message:reason === 'AMBIGUOUS_MEDIA' ? 'Open the individual video post and try again.' : /NATIVE_HOST/.test(reason) ? 'Connect the native download helper and try again.' : reason === 'MEDIA_CHANGED' ? 'The video changed. Select the current video and try again.' : 'Could not find the selected video source in this player.',duration:6500});
+        return [];
+      }
+      if (result.media) return result.media;
+      return (result.formats || []).flatMap(source => {
+        if (source.manifest) return Object(detectorHelper.d)(source.manifest,result.title).map(media => ({...media,_resolvedMedia:true,verifiedMedia:true,referrer:result.pageUrl}));
+        const media = Object(urlUtils.f)(source.url);
+        const dashMPD = /dash\+xml/i.test(source.mime || '') || media.ext === 'mpd';
+        const hls = !dashMPD && (/mpegurl/i.test(source.mime || '') || media.ext === 'm3u8');
+        const ext = hls || dashMPD ? 'mp4' : /^(mp4|webm|mov)$/.test(media.ext) ? media.ext : 'mp4';
+        return [{...media,ext,exts:[ext],type:'video',filename:result.title || 'Video',quality:source.height ? source.height+'p' : source.quality || 'Original',referrer:result.pageUrl,hls,dashMPD,_resolvedMedia:true,verifiedMedia:true}];
+      });
+    } catch (_) { return []; }
+  }
+  async function resolveNodeWithBrowser(node, force = false) {
+    if (!node || node.tagName === 'IMG') return [];
+    const nodeSrc = node.currentSrc || node.src;
+    if (!force && node.tagName === 'VIDEO' && /^https?:\/\//i.test(nodeSrc || '')) {
+      const media = Object(urlUtils.f)(nodeSrc);
+      media.type = 'video';
+      media.ext = /^(mp4|webm|mov|m3u8|mpd)$/.test(media.ext) ? media.ext : 'mp4';
+      media.exts = [media.ext];
+      media.filename = document.title || 'Video';
+      media.verifiedMedia = true;
+      return [media];
+    }
+    let scope = node.closest && node.closest('article, [role="article"], [data-testid="tweet"], [data-e2e="feed-item"]');
+    let pageUrl = '';
+    let linkCount = 0;
+    if (scope) {
+      const links = Array.from(scope.querySelectorAll('a[href]')).map(a=>a.href).filter(h=>/\/(status|posts?|permalink|videos?|reels?|p)\/[\w-]+|\/watch\?v=/.test(h));
+      const unique = [...new Set(links.map(h=>h.replace(/\/media\/?(?:\?.*)?$/, '')))];
+      linkCount = unique.length;
+      if (unique.length === 1) pageUrl = unique[0];
+    }
+    if (!pageUrl && linkCount === 0 && document.querySelectorAll('video').length === 1) {
+      const isFeedSite = /(^|\.)(x\.com|twitter\.com|threads\.(com|net)|instagram\.com|facebook\.com|tiktok\.com)$/.test(location.hostname);
+      if (!isFeedSite || /\/(status|posts?|permalink|videos?|reels?|p|watch)\b/.test(location.pathname)) pageUrl = location.href;
+    }
+    let token = node.getAttribute('data-vidown-media-token');
+    if (!token) { token = 'media_'+Date.now()+'_'+Math.random().toString(36).slice(2); node.setAttribute('data-vidown-media-token',token); }
+    return [{url:pageUrl || location.href,type:'video',ext:'mp4',exts:['mp4'],quality:'Auto',filename:document.title || 'Video',
+      _browserRequest:{token,pageUrl,sourceUrl:location.href,currentSrc:nodeSrc || '',poster:node.poster || '',mediaId:node.getAttribute('savior-twitter-vid') || (/tiktok\.com$/.test(location.hostname) ? getMediaProvider()?.getItemIdFromNode?.(node) : '')}}];
+  }
+
+  function getNodeMediaIdentity(node, previous) {
+    const source = [location.href,node && (node.currentSrc || node.src || ''),node && (node.poster || '')].join('|');
+    const id = node && node.getAttribute && (node.getAttribute('data-video-id') || node.getAttribute('data-aweme-id') || '') || '';
+    // The first extraction may add a missing ID to the same unchanged player.
+    return previous === source+'|' ? previous : source+'|'+id;
+  }
   function getPageTitle() {
     var el, ev;
     return document.title || (null === (el = document.querySelector('meta[property="og:title"]')) || void 0 === el ? void 0 : el.content) || (null === (ev = document.querySelector('meta[name="twitter:title"]')) || void 0 === ev ? void 0 : ev.content) || "";
@@ -1731,14 +1803,23 @@ ${t2.text}`;
       EE.off("widget.updateMedia", this.onUpdateMedia), EE.off("widget.fbUpdate", this.onFbUpdate);
     }
     onUpdateMedia() {
-      if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
+      var revision = this._mediaRevision = (this._mediaRevision || 0) + 1;
+      var identity = getNodeMediaIdentity(this.parent.$node);
+      if (this._mediaIdentity !== identity) {
+        this._mediaIdentity = identity;
+        this.setState({ mediaObjects:null, downloads:null, isGettingDownloads:false });
+      }
+      var isImg = this.parent && (this.parent.isImage || (this.parent.$node && "IMG" === this.parent.$node.tagName));
+      if (!isImg && typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
         try {
           LazyMediaTracker.processRequest(window.__saviorSniffedMedia);
         } catch (_2) {
         }
       }
       LazyMediaTracker.getMediaObjectsFromNode(this.parent.$node).then((t) => {
-        t && 0 != t.length && (this.found = true), t = enrichMediaMeta((null == t ? void 0 : t.filter((t2) => !!t2)) || []), this.setState({ mediaObjects: t }), this.parent.activeOmnibox(t);
+        if (revision !== this._mediaRevision || identity !== getNodeMediaIdentity(this.parent.$node,identity)) return;
+        this._mediaIdentity = getNodeMediaIdentity(this.parent.$node);
+        t && 0 != t.length && (this.found = true), t = enrichMediaMeta((null == t ? void 0 : t.filter((t2) => !!t2)) || []), this.setState({ mediaObjects: t, downloads: null }), this.parent.activeOmnibox(t);
       });
     }
     onFbUpdate() {
@@ -1749,6 +1830,7 @@ ${t2.text}`;
     }
     fetchDownloads(el) {
       var ev, r2, nd, opt, arg, st, url, cfg;
+      var identity = getNodeMediaIdentity(this.parent.$node);
       return wt(this, void 0, void 0, mt().m((function overlayCss2() {
         var f, hdr, prop, v, msg, ctx, g2, b2, w2, A2, _2;
         return mt().w((function(l) {
@@ -1759,26 +1841,8 @@ ${t2.text}`;
                 break;
               }
               if (!(null === (ev = this.state.mediaObjects) || void 0 === ev ? void 0 : ev.length)) {
-                if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-                  LazyMediaTracker.processRequest(window.__saviorSniffedMedia);
-                  this.state.mediaObjects = enrichMediaMeta(window.__saviorSniffedMedia);
-                } else {
-                  var directVideoTag = this.parent && this.parent.$node ? ("VIDEO" === this.parent.$node.tagName ? this.parent.$node : this.parent.$node.querySelector("video")) : null;
-                  if (directVideoTag && (directVideoTag.currentSrc || directVideoTag.src)) {
-                    var vSrc = directVideoTag.currentSrc || directVideoTag.src;
-                    var directMediaObj = [{
-                      url: vSrc,
-                      ext: "mp4",
-                      quality: "HD",
-                      resolution: (directVideoTag.videoWidth && directVideoTag.videoHeight) ? (directVideoTag.videoWidth + "x" + directVideoTag.videoHeight) : "720p",
-                      type: "video"
-                    }];
-                    this.state.mediaObjects = enrichMediaMeta(directMediaObj);
-                  } else {
-                    l.n = 7;
-                    break;
-                  }
-                }
+                this.setState({isGettingDownloads:true});
+                return l.n = 8, LazyMediaTracker.getMediaObjectsFromNode(this.parent.$node).then(items => items?.length ? items : resolveNodeWithBrowser(this.parent.$node)).catch(() => resolveNodeWithBrowser(this.parent.$node));
               }
               if (detectorLogger.a.log("ButtonClicked", detectorLogger.a.BUTTON_FAKE_QUALITY), this.setState({ isGettingDownloads: true }), f = getMediaProvider(), !(null === (r2 = null == f ? void 0 : f.findItemRoot) || void 0 === r2 ? void 0 : r2.call(f, this.parent.$node)) || !f.resolveItemFromNode) {
                 l.n = 5;
@@ -1786,11 +1850,16 @@ ${t2.text}`;
               }
               return l.p = 1, l.n = 2, f.resolveItemFromNode(this.parent.$node);
             case 2:
+              if (identity !== getNodeMediaIdentity(this.parent.$node,identity)) {
+                this.setState({ downloads: null, isGettingDownloads: false });
+                return l.a(2);
+              }
               if (!(hdr = l.v).length) {
                 l.n = 3;
                 break;
               }
               prop = hdr.filter((t2) => Object(coreUtils.isValidData)(t2)), v = gt(prop);
+              if (!prop.length) { l.n = 5; break; }
               try {
                 for (v.s(); !(msg = v.n()).done; ) ctx = msg.value, (null === (opt = null === (nd = this.state.mediaObjects) || void 0 === nd ? void 0 : nd[0]) || void 0 === opt ? void 0 : opt.thumbnail) && !ctx.thumbnail && (ctx.thumbnail = this.state.mediaObjects[0].thumbnail);
               } catch (t2) {
@@ -1805,11 +1874,15 @@ ${t2.text}`;
             case 4:
               l.p = 4, l.v;
             case 5:
-              return l.n = 6, LazyMediaTracker.getDownloadsByMediaObjects(this.state.mediaObjects);
+              return l.n = 6, LazyMediaTracker.getDownloadsByMediaObjects(this.state.mediaObjects,this.parent.$node);
             case 6:
+              if (identity !== getNodeMediaIdentity(this.parent.$node,identity)) {
+                this.setState({ downloads: null, isGettingDownloads: false });
+                return l.a(2);
+              }
               g2 = (g2 = l.v).filter((t2) => Object(coreUtils.isValidData)(t2)), b2 = gt(g2);
               if ((!g2 || !g2.length) && this.state.mediaObjects && this.state.mediaObjects.length) {
-                g2 = this.state.mediaObjects.filter((t2) => Object(coreUtils.isValidData)(t2));
+                g2 = this.state.mediaObjects.filter((t2) => t2.type === 'image' && Object(coreUtils.isValidData)(t2));
               }
               try {
                 for (b2.s(); !(w2 = b2.n()).done; ) A2 = w2.value, (null === (st = null === (arg = this.state.mediaObjects) || void 0 === arg ? void 0 : arg[0]) || void 0 === st ? void 0 : st.thumbnail) && (A2.thumbnail = null === (url = this.state.mediaObjects) || void 0 === url ? void 0 : url[0].thumbnail), Object(saviorConstants.B)(A2.ext) && ("audio" === A2.type ? A2.ext = "mp3" : "subtitles" === A2.type ? (_2 = (null === (cfg = A2.quality) || void 0 === cfg ? void 0 : cfg.split(".").pop()) || "srt", A2.ext = _2) : A2.ext = "mp4", A2.hasOwnProperty("_hls") || (A2._hls = true));
@@ -1821,6 +1894,22 @@ ${t2.text}`;
               0 === g2.length && detectorLogger.a.log("PageShown", detectorLogger.a.PAGE_CONTENT_NO_MEDIA), this.setState({ downloads: g2, isGettingDownloads: false, download: false, buttonClicked: !!(null == el ? void 0 : el.target) });
             case 7:
               return l.a(2);
+            case 8:
+              if (identity !== getNodeMediaIdentity(this.parent.$node,identity)) {
+                this.setState({downloads:null,isGettingDownloads:false});
+                return l.a(2);
+              }
+              var resolvedMedia = l.v || [];
+              var pNode = this.parent && this.parent.$node;
+              var isImg = this.parent && (this.parent.isImage || pNode?.tagName === 'IMG');
+              if (isImg && pNode && !resolvedMedia.length) {
+                var iSrc = pNode.currentSrc || pNode.src || pNode.getAttribute('src');
+                if (iSrc) resolvedMedia = [{url:iSrc,type: "image",ext:(iSrc.match(/\.(png|webp|gif|svg|jpe?g)(?:\?|$)/i) || [])[1] || 'jpg'}];
+              }
+              this.setState({mediaObjects:enrichMediaMeta(resolvedMedia),isGettingDownloads:false});
+              if (!this.state.mediaObjects.length) { this.setState({downloads:[]}); return l.a(2); }
+              l.n = 0;
+              break;
           }
         }), overlayCss2, this, [[1, 4]]);
       })));
@@ -2099,8 +2188,8 @@ ${t2.text}`;
       var st, cfg, len, fn, hdr, prop, val, msg, ctx, g2, b2;
       super(), this.isSkipVideoEnabled = false, this.autoHideWidget = false, this.isImage = false, this.id = el, this.EE = new styleInjector.a(), this.$el = Object(domHelper.a)("div", domConstants.h.WrapperClassName), this.$node = ev, this.sharedState = r2, this.updateSharedState = arg, EE.emit("onboarding-popup.refresh_popup"), this.getSiteData(), this.$parent = null !== (len = null === (cfg = null === (st = this.siteData) || void 0 === st ? void 0 : st.getCustomParent) || void 0 === cfg ? void 0 : cfg.call(st, this.$node)) && void 0 !== len ? len : Object(domHelper.d)(this.$node);
       var w2 = (Object(domHelper.m)(this.$node) || (null === (hdr = null === (fn = this.getSiteData()) || void 0 === fn ? void 0 : fn.isValidVideoNode) || void 0 === hdr ? void 0 : hdr.call(fn, this.$node))) && settingsManager.a.get("detach_enabled") && !urlMatcher.a.checkRegex(location.href, "disallow-pip");
-      this.isImage = this.$node.hasAttribute("savior-scanned-img");
-      var A2 = { behavior: new WidgetContainer(domConstants.h.Savior, this, void 0, { hasImage: this.isImage }), toggleLight: new CinemaModeComponent(domConstants.h.ToggleLightButton, this, { isLightOff: this.sharedState.isLightOffGlobal, isHidden: this.isImage }), otherFeature: new DownloadBtnComp(domConstants.h.OtherFeatureButton, this), download: new MainDownloadComponent(domConstants.h.DownloadButton, this), skipVideo: new SkipVideoAdComponent(domConstants.h.SkipVideoButton, this, { isHidden: this.$node.hasAttribute("savior-scanned-img") }) };
+      this.isImage = this.$node.hasAttribute("savior-scanned-img") || "IMG" === this.$node.tagName;
+      var A2 = { behavior: new WidgetContainer(domConstants.h.Savior, this, void 0, { hasImage: this.isImage }), toggleLight: new CinemaModeComponent(domConstants.h.ToggleLightButton, this, { isLightOff: this.sharedState.isLightOffGlobal, isHidden: this.isImage }), otherFeature: new DownloadBtnComp(domConstants.h.OtherFeatureButton, this), download: new MainDownloadComponent(domConstants.h.DownloadButton, this), skipVideo: new SkipVideoAdComponent(domConstants.h.SkipVideoButton, this, { isHidden: this.isImage }) };
       SaviorWidgetController.siteDismissed() ? (null === (prop = this.getComponent("behavior")) || void 0 === prop || prop.destroy(), null === (val = this.getComponent("otherFeature")) || void 0 === val || val.destroy(), null === (msg = this.getComponent("toggleLight")) || void 0 === msg || msg.destroy(), null === (ctx = this.getComponent("pin")) || void 0 === ctx || ctx.destroy(), null === (g2 = this.getComponent("transferMobile")) || void 0 === g2 || g2.destroy()) : A2.transferMobile = new TransferComp(domConstants.h.TransferMobileWrapper, this), w2 && (A2.pin = new PipComponent(domConstants.h.PinButton, this, { opening: document.pictureInPictureElement == this.$node })), widgetConfigOptions && (A2.clientChooser = new SettingsMenuComp(domConstants.h.ChangeYoutubeClientButton, this)), super.components = A2, this.fetchDownloads = this.fetchDownloads.bind(this), this.onForceUpdate = this.onForceUpdate.bind(this), this.runChilds((t2) => {
         t2.bind();
       }), this.isWindow = "Windows" === (null === (b2 = window.navigator.userAgentData) || void 0 === b2 ? void 0 : b2.platform), this.state = {}, EE.on("widget.forceUpdate", this.onForceUpdate), settingsManager.a.has("image_download_enabled") && "IMG" == this.$node.nodeName && (this.autoHideWidget = !settingsManager.a.get("image_download_enabled")), this.isSkipVideoEnabled = false, this.render(), super._bindListener(this.$node);
@@ -2314,7 +2403,10 @@ ${t2.text}`;
       }, 42);
     }, mountWidget(el) {
       var ev, r2, idx, opt, arg, st, url, cfg, len, fn, dom, hdr, prop, val;
-      if (!(null === (r2 = null === (ev = this.widget) || void 0 === ev ? void 0 : ev.$parent) || void 0 === r2 ? void 0 : r2.contains(el.$node)) && !this.sharedState.isDismissed) {
+      if (!el || this.sharedState.isDismissed) return;
+      var isSameNode = this.widget && (this.widget === el || this.widget.$node === el.$node);
+      var parentContains = !isSameNode && (null === (r2 = null === (ev = this.widget) || void 0 === ev ? void 0 : ev.$parent) || void 0 === r2 ? void 0 : r2.contains(el.$node));
+      if (!isSameNode && (!parentContains || this.widget.isImage !== el.isImage || (this.widget.$node && el.$node && this.widget.$node !== el.$node))) {
         if (this.unmountCurrentWidget(), this.widget = el, this.mountDirectly) {
           var msg = Object(domHelper.a)("style"), ctx = (null === (idx = chrome.runtime.getManifest().web_accessible_resources) || void 0 === idx ? void 0 : idx[0]).resources || chrome.runtime.getManifest().web_accessible_resources || [];
           msg.innerHTML = '\n					:not(:defined){display:flex;}\n					.info-ext{max-width:100px;overflow:hidden;text-overflow:ellipsis;}\n					dropdown-box-body{margin:auto;width:100%;}\n					panel[value="loading"]{margin:auto;}\n					.download-box dropdown-box-header img{width:auto}\n				', null === (arg = null === (opt = this.widget) || void 0 === opt ? void 0 : opt.$parent) || void 0 === arg || (arg.appendChild(msg), ctx.forEach((function(t2) {

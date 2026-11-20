@@ -93,7 +93,9 @@
         "css/*",
         "css/content-script.css",
         "images/*",
-        "images/*.*"
+        "images/*.*",
+        "inject/*",
+        "inject/*/*"
       ]
     }
   ]

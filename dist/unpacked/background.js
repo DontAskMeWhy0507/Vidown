@@ -666,7 +666,12 @@
   return param_e_1 && param_e_1[param_t] || "";
   }
   function var_y(param_e_1) {
-  return param_e_1.replace(/<(?!\/?(?:b|em))[^>]+>/g, "");
+    if (!param_e_1 || typeof param_e_1 !== "string") return "";
+    return param_e_1
+      .replace(/<script(?:\s+[^>]*)?>[\s\S]*?<\/script>/gi, "")
+      .replace(/<b(?:\s+[^>]*)?>/gi, "<b>")
+      .replace(/<em(?:\s+[^>]*)?>/gi, "<em>")
+      .replace(/<(?!\/?(?:b|em)>)[^>]+>/g, "");
   }
   function var__(param_e_1) {
   return Array.prototype.slice.call(param_e_1);
@@ -675,12 +680,14 @@
   return Array.from(new Set(param_e_1));
   }
   function var_w(param_e_1) {
-  for (var var_t = new Uint8Array(param_e_1), str_r = "", num_n = 0;
-  num_n < var_t.byteLength;
-  num_n++) {
-  str_r += String.fromCharCode(var_t[num_n]);
-  }
-  return btoa(str_r);
+    var bytes = new Uint8Array(param_e_1);
+    var CHUNK_SIZE = 8192;
+    var str = '';
+    for (var i = 0; i < bytes.length; i += CHUNK_SIZE) {
+      var chunk = bytes.subarray(i, i + CHUNK_SIZE);
+      str += String.fromCharCode.apply(null, chunk);
+    }
+    return btoa(str);
   }
   function var_E(param_e_1) {
   for (var var_t = atob(param_e_1), var_r = new Uint8Array(var_t.length), num_n = 0;
@@ -25569,7 +25576,7 @@ function (moduleObj, exportsObj) {
 function (moduleObj, exportsObj, requireFn) {
   "use strict";
   (function (param_e) {
-  var dep_event_emitter_3 = requireFn(79);
+  var dep_event_emitter_3 = requireFn(42);
   param_e.EE ||= new dep_event_emitter_3.EventEmitter();
   param_e.IS_CONTENT_SCRIPT = true;
   param_e.savior_referrer = location.href;
@@ -30027,9 +30034,15 @@ function (module, __webpack_exports__, __webpack_require__) {
   tabId: param_e.tabId
   }
   ,
-  files: ["cleanup.js"]
+  func: () => {
+    try {
+      if (typeof window.__saviorCleanup === 'function') {
+        window.__saviorCleanup();
+      }
+    } catch (_) {}
   }
-  );
+  }
+  ).catch(() => {});
   case 5:
   return param_t.a(2);
   }
@@ -30057,6 +30070,9 @@ function (module, __webpack_exports__, __webpack_require__) {
   var var_r_1 = `${param_e.tabId}_${param_e.frameId}`;
   obj_t[var_r_1] ||= [];
   obj_t[var_r_1].push(param_e.url);
+  if (obj_t[var_r_1].length > 20) {
+    obj_t[var_r_1].shift();
+  }
   }
   );
   chrome.tabs.onRemoved.addListener(param_e => {
@@ -30070,6 +30086,9 @@ function (module, __webpack_exports__, __webpack_require__) {
   );
   var var_r = new Map();
   chrome.runtime.onMessage.addListener(function (param_n, param_o, param_i) {
+  // Shim action messages have their own responder. Returning a Promise here
+  // would race its response with null on Chrome versions supporting promises.
+  if (!param_n || !param_n.type) return false;
   var var_p;
   var var_b;
   var var_w;
@@ -30813,8 +30832,7 @@ function (module, __webpack_exports__, __webpack_require__) {
   world: chrome.scripting.ExecutionWorld.MAIN,
   files: [`inject/${param_n.file}/main-world.js`]
   }
-  );
-  chrome.scripting.executeScript({
+  ).then(() => chrome.scripting.executeScript({
   target: {
   tabId: var_k,
   frameIds: var_j ? [var_j] : undefined
@@ -30822,7 +30840,10 @@ function (module, __webpack_exports__, __webpack_require__) {
   ,
   files: [`inject/${param_n.file}/index.js`]
   }
-  );
+  )).catch(() => {
+    var_r.delete(var_N);
+    sendMessage(var_k, {type:'return_inner_data',data:{id:param_n.id,data:{error:'SCRIPT_INJECTION_FAILED'}}});
+  });
   return param_T.a(3, 86);
   case 48:
   var_V = param_n.data?.videoId || var_k;
@@ -31148,26 +31169,13 @@ function (module, __webpack_exports__, __webpack_require__) {
   url: "https://www.youtube.com"
   }
   , param_e => {
-  var var_r_1;
-  var obj_i = {
-  };
-  var var_a = _createForOfIteratorHelper(param_n.cookies);
-  try {
-  function var_s() {
-  var var_n = var_r_1.value;
-  obj_i[var_n] = param_e.find(param_e_1 => param_e_1.name === var_n)?.value;
-  }
-  for (var_a.s();
-  !(var_r_1 = var_a.n()).done;
-  ) {
-  var_s();
-  }
-  }
-  catch (var_e_1) {
-  var_a.e(var_e_1);
-  }
-  finally {
-  var_a.f();
+  var obj_i = {};
+  const requestedCookieNames = Array.isArray(param_n?.cookies) ? param_n.cookies : [];
+  const activeCookies = Array.isArray(param_e) ? param_e : [];
+  for (const name of requestedCookieNames) {
+    if (name) {
+      obj_i[name] = activeCookies.find(c => c && c.name === name)?.value;
+    }
   }
   sendMessage(var_k, {
   type: "return_inner_data",
@@ -32188,6 +32196,12 @@ function (moduleObj, exportsObj, requireFn) {
   var obj__ = {
   filename: param_t.filename.trim()
   };
+  obj__.mediaType = param_t.type;
+  obj__.verifiedMedia = Boolean(param_t.type && param_t.ext);
+  obj__.ext = param_t.ext;
+  obj__._isHls = Boolean(param_t.hls);
+  obj__._isDash = Boolean(param_t.dashMPD);
+  obj__.tabId = param_r && param_r.id;
   var var_b = param_t.url;
   if (typeof var_b == "object") {
   if (!var_b.videoUrl || !var_b.audioUrl) {
@@ -32267,11 +32281,29 @@ function (moduleObj, exportsObj, requireFn) {
   if (param_t.hls && param_t.dashVideoId) {
   obj__.videoId = param_t.dashVideoId;
   }
-  var var_k = new URL(param_t.referrer || param_e.tab_url).origin;
+  var refUrl = param_t.referrer || param_e.tab_url || (param_r == null ? undefined : param_r.url);
+  var refOrigin = "";
+  try {
+    if (param_t.referrer || param_e.tab_url) {
+      refOrigin = new URL(param_t.referrer || param_e.tab_url).origin;
+    } else if (param_r && param_r.url) {
+      refOrigin = new URL(param_r.url).origin;
+    }
+  } catch (_) {}
+
+  // Map Referer and Origin to standard Chrome MV3 download options headers
+  obj__.headers = obj__.headers || [];
+  if (refUrl && !obj__.headers.some(h => h.name.toLowerCase() === "referer")) {
+    obj__.headers.push({ name: "Referer", value: refUrl });
+  }
+  if (refOrigin && !param_t.removeOrigin && !obj__.headers.some(h => h.name.toLowerCase() === "origin")) {
+    obj__.headers.push({ name: "Origin", value: refOrigin });
+  }
+
+  var var_k = refOrigin;
   var list_A = [{
   name: "tab_url",
-  value: param_t.referrer || param_e.tab_url || (param_r == null ?
-  undefined : param_r.url)
+  value: refUrl
   }
   , {
   name: "origin",
@@ -32375,9 +32407,14 @@ function (moduleObj, exportsObj, requireFn) {
   chrome.downloads.download(var_m, var_f);
   }
   else {
-  delete var_m.convertToMp4;
-  delete var_m.playList;
-  var_o(var_m, var_f);
+    delete var_m.convertToMp4;
+    delete var_m.playList;
+    if (typeof var_o === 'function') {
+      var_o(var_m, var_f);
+    } else {
+      var_m.url = var_m.videoUrl || var_m.url;
+      chrome.downloads.download(var_m, var_f);
+    }
   }
   }
   else {
@@ -34053,13 +34090,8 @@ function (moduleObj, exportsObj, requireFn) {
   function var_s(param_e_1) {
   return typeof param_e_1 == "function";
   }
-  exportsObj.arraybuffer = exportsObj.fetch || var_i && var_o("arraybuffer");
-  exportsObj.msstream = !exportsObj.fetch && var_a && var_o("ms-stream");
-  exportsObj.mozchunkedarraybuffer = !exportsObj.fetch && var_i &&
-  var_o("moz-chunked-arraybuffer");
-  exportsObj.overrideMimeType = exportsObj.fetch || !!var_n() &&
-  var_s(var_n().overrideMimeType);
-  exportsObj.vbArray = var_s(param_e.VBArray);
+  exportsObj.arraybuffer = true;
+  exportsObj.overrideMimeType = true;
   var_r = null;
   }
   ).call(this, requireFn(13));
@@ -34299,13 +34331,8 @@ function (moduleObj, exportsObj, requireFn) {
   ).call(this, requireFn(32), requireFn(27).Buffer, requireFn(13));
   },
 function (moduleObj, exportsObj, requireFn) {
-  (exportsObj = moduleObj.exports = requireFn(510)).Stream = exportsObj;
-  exportsObj.Readable = exportsObj;
-  exportsObj.Writable = requireFn(513);
-  exportsObj.Duplex = requireFn(146);
-  exportsObj.Transform = requireFn(514);
-  exportsObj.PassThrough = requireFn(713);
-  },
+  moduleObj.exports = requireFn(47);
+},
 function (moduleObj, exportsObj, requireFn) {
   "use strict";
   (function (param_t, param_n) {
@@ -38214,65 +38241,14 @@ function (moduleObj, exportsObj, requireFn) {
   exportsObj.getVideoID = dep_priority_queue.getVideoID;
   },
 function (moduleObj, exportsObj, requireFn) {
-  "use strict";
-  function var_n(param_e, param_t) {
-  return Object.prototype.hasOwnProperty.call(param_e, param_t);
-  }
-  moduleObj.exports = function (param_e, param_t, param_r, param_i) {
-  param_t = param_t || "&";
-  param_r = param_r || "=";
-  var obj_a = {
+  moduleObj.exports = function (queryStr) {
+    if (!queryStr || typeof queryStr !== 'string') return {};
+    const params = new URLSearchParams(queryStr);
+    const result = {};
+    for (const [key, val] of params.entries()) result[key] = val;
+    return result;
   };
-  if (typeof param_e != "string" || param_e.length === 0) {
-  return obj_a;
-  }
-  var regex_s = /\+/g;
-  param_e = param_e.split(param_t);
-  var num_c = 1000;
-  if (param_i && typeof param_i.maxKeys == "number") {
-  num_c = param_i.maxKeys;
-  }
-  var var_u = param_e.length;
-  if (num_c > 0 && var_u > num_c) {
-  var_u = num_c;
-  }
-  for (var num_l = 0;
-  num_l < var_u;
-  ++num_l) {
-  var var_d;
-  var var_p;
-  var var_f;
-  var var_h;
-  var var_m = param_e[num_l].replace(regex_s, "%20");
-  var var_g = var_m.indexOf(param_r);
-  if (var_g >= 0) {
-  var_d = var_m.substr(0, var_g);
-  var_p = var_m.substr(var_g + 1);
-  }
-  else {
-  var_d = var_m;
-  var_p = "";
-  }
-  var_f = decodeURIComponent(var_d);
-  var_h = decodeURIComponent(var_p);
-  if (var_n(obj_a, var_f)) {
-  if (var_o(obj_a[var_f])) {
-  obj_a[var_f].push(var_h);
-  }
-  else {
-  obj_a[var_f] = [obj_a[var_f], var_h];
-  }
-  }
-  else {
-  obj_a[var_f] = var_h;
-  }
-  }
-  return obj_a;
-  };
-  var var_o = Array.isArray || function (param_e) {
-  return Object.prototype.toString.call(param_e) === "[object Array]";
-  };
-  },
+},
 function (moduleObj, exportsObj, requireFn) {
   "use strict";
   function var_n(param_e) {
@@ -41683,18 +41659,7 @@ function (moduleObj, exportsObj, requireFn) {
   }
   }
   _removeByteRequestFromUrl(param_e) {
-  var flag_t = false;
-  if (param_e.match(/(googlevideo\.com)|(mycdn\.me)/g)) {
-  if (param_e !== (param_e = param_e.replace(/[&?]begin=\d+/g, "").replace(/&bytes=\d+-\d+/g,
-  "").replace(/&range=\d+-\d+/g, "").replace(/&rn=\d+/g, "").replace(/&rbuf=\d+/g,
-  ""))) {
-  flag_t = true;
-  }
-  }
-  return {
-  url: param_e,
-  hasChanged: flag_t
-  };
+  return { url: param_e, hasChanged: false };
   }
   }
   new class {
@@ -41969,7 +41934,7 @@ function (moduleObj, exportsObj, requireFn) {
   }
   );
   }
-  if (param_e.url.match(/\.(mpd|m3u8)$/i)) {
+  if (param_e.url.match(/\.(mpd|m3u8)(\?|$)/i)) {
   var var_$ = Object(dep_url_utils.f)(param_e.url);
   this._listener.match(param_e, Object.assign(Object.assign({
   }

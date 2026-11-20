@@ -66,9 +66,17 @@ console.log('✓ chrome.downloads.download in-flight guard verified.\n');
 
 // 5. case 'download' in-flight guard
 console.log('[Test 5] Verifying case download in-flight guard...');
-const caseDlIdx = bgCode.indexOf("case 'download':");
-assert.ok(caseDlIdx !== -1, "case 'download' must exist");
-const caseDlBlock = bgCode.slice(caseDlIdx, caseDlIdx + 1000);
+let caseDlBlock = '';
+function findDownloadCase(node) {
+  if (!node || typeof node !== 'object') return;
+  if (!caseDlBlock && node.type === 'SwitchCase' && node.test?.value === 'download') caseDlBlock = bgCode.slice(node.start,node.end);
+  for (const value of Object.values(node)) {
+    if (Array.isArray(value)) value.forEach(findDownloadCase);
+    else if (value && typeof value === 'object') findDownloadCase(value);
+  }
+}
+findDownloadCase(require('acorn').parse(bgCode,{ecmaVersion:'latest'}));
+assert.ok(caseDlBlock, "case 'download' must exist");
 assert.ok(
   caseDlBlock.includes('if (isUrlRecentlyRequested(rawUrl))'),
   "case 'download' must check isUrlRecentlyRequested(rawUrl)"

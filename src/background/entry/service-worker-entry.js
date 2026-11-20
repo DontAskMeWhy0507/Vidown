@@ -1555,9 +1555,15 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   tabId: param_e.tabId
   }
   ,
-  files: ["cleanup.js"]
+  func: () => {
+    try {
+      if (typeof window.__saviorCleanup === 'function') {
+        window.__saviorCleanup();
+      }
+    } catch (_) {}
   }
-  );
+  }
+  ).catch(() => {});
   case 5:
   return param_t.a(2);
   }
@@ -1585,6 +1591,9 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   var var_r_1 = `${param_e.tabId}_${param_e.frameId}`;
   obj_t[var_r_1] ||= [];
   obj_t[var_r_1].push(param_e.url);
+  if (obj_t[var_r_1].length > 20) {
+    obj_t[var_r_1].shift();
+  }
   }
   );
   chrome.tabs.onRemoved.addListener(param_e => {
@@ -1598,6 +1607,9 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   );
   var var_r = new Map();
   chrome.runtime.onMessage.addListener(function (param_n, param_o, param_i) {
+  // Shim action messages have their own responder. Returning a Promise here
+  // would race its response with null on Chrome versions supporting promises.
+  if (!param_n || !param_n.type) return false;
   var var_p;
   var var_b;
   var var_w;
@@ -2341,8 +2353,7 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   world: chrome.scripting.ExecutionWorld.MAIN,
   files: [`inject/${param_n.file}/main-world.js`]
   }
-  );
-  chrome.scripting.executeScript({
+  ).then(() => chrome.scripting.executeScript({
   target: {
   tabId: var_k,
   frameIds: var_j ? [var_j] : undefined
@@ -2350,7 +2361,10 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   ,
   files: [`inject/${param_n.file}/index.js`]
   }
-  );
+  )).catch(() => {
+    var_r.delete(var_N);
+    sendMessage(var_k, {type:'return_inner_data',data:{id:param_n.id,data:{error:'SCRIPT_INJECTION_FAILED'}}});
+  });
   return param_T.a(3, 86);
   case 48:
   var_V = param_n.data?.videoId || var_k;
@@ -2676,26 +2690,13 @@ export default function (module, __webpack_exports__, __webpack_require__) {
   url: "https://www.youtube.com"
   }
   , param_e => {
-  var var_r_1;
-  var obj_i = {
-  };
-  var var_a = _createForOfIteratorHelper(param_n.cookies);
-  try {
-  function var_s() {
-  var var_n = var_r_1.value;
-  obj_i[var_n] = param_e.find(param_e_1 => param_e_1.name === var_n)?.value;
-  }
-  for (var_a.s();
-  !(var_r_1 = var_a.n()).done;
-  ) {
-  var_s();
-  }
-  }
-  catch (var_e_1) {
-  var_a.e(var_e_1);
-  }
-  finally {
-  var_a.f();
+  var obj_i = {};
+  const requestedCookieNames = Array.isArray(param_n?.cookies) ? param_n.cookies : [];
+  const activeCookies = Array.isArray(param_e) ? param_e : [];
+  for (const name of requestedCookieNames) {
+    if (name) {
+      obj_i[name] = activeCookies.find(c => c && c.name === name)?.value;
+    }
   }
   sendMessage(var_k, {
   type: "return_inner_data",

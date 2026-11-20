@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const countVideo = document.getElementById('count-video');
   const countAudio = document.getElementById('count-audio');
 
+  const modalFolderPath = document.getElementById('modal-folder-path');
+  const btnModalChangeFolder = document.getElementById('btn-modal-change-folder');
+  const settingOnpageButtons = document.getElementById('setting-onpage-buttons');
+  const settingImageButtons = document.getElementById('setting-image-buttons');
+
   const navItems = document.querySelectorAll('.nav-item');
 
   let currentFilter = 'all';
@@ -56,14 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function formatBytes(bytes) {
     if (!bytes || isNaN(bytes) || bytes <= 0) return '0 B';
-    const units = ['B', 'KB', 'MB', 'GB'];
-    let size = bytes;
-    let unitIndex = 0;
-    while (size >= 1024 && unitIndex < units.length - 1) {
-      size /= 1024;
-      unitIndex++;
-    }
-    return `${size.toFixed(1)} ${units[unitIndex]}`;
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return `${(bytes / Math.pow(1024, i)).toFixed(i > 0 ? 1 : 0)} ${['B', 'KB', 'MB', 'GB'][i] || 'TB'}`;
   }
 
   function formatDate(timestamp) {
@@ -254,10 +253,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isFinished || item.percent === '100%') {
               item.state = 'completed';
               item.percent = '100%';
-            } else if (now - (item.startTime || 0) > 300000) {
-              item.state = 'error';
-              item.error = 'Interrupted';
-              item.errorMessage = 'Interrupted';
+            } else {
+              const lastActive = item.lastActiveTime || item.lastUpdateTime || item.startTime || 0;
+              if (now - lastActive > 300000) {
+                item.state = 'error';
+                item.error = 'Interrupted';
+                item.errorMessage = 'Interrupted';
+              }
             }
           }
         }
@@ -1149,10 +1151,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSettings = null; /* settings panel is always visible now */
   const settingsModal = document.getElementById('settings-modal');
   const btnSaveSettings = null; /* settings auto-save on change */
-  const modalFolderPath = document.getElementById('modal-folder-path');
-  const btnModalChangeFolder = document.getElementById('btn-modal-change-folder');
-  const settingOnpageButtons = document.getElementById('setting-onpage-buttons');
-  const settingImageButtons = document.getElementById('setting-image-buttons');
   const settingDetachButton = null; /* dead feature removed */
   let cachedDetachEnabled = undefined;
   let cachedDetachButtonEnabled = undefined;

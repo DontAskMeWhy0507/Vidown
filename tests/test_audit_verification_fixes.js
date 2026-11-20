@@ -13,6 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
+const child_process = require('child_process');
 
 console.log('=== TEST SUITE: AUDIT VERIFICATION FIXES ===\n');
 
@@ -57,7 +58,23 @@ assert(pkgScript.includes("'node_modules'"), 'package_release.js EXCLUDED_DIRS m
 
 // 5. Verify release zip contains zero node_modules
 const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'manifest.json'), 'utf8'));
-const zipPath = path.join(__dirname, '..', `dist/savior-extension-v${manifest.version}.zip`);
+let zipPath = path.join(__dirname, '..', `dist/savior-extension-v${manifest.version}.zip`);
+
+// Ensure release zip artifact exists on clean checkout or when missing
+if (!fs.existsSync(zipPath)) {
+  const packageScriptPath = path.join(__dirname, '..', 'scripts', 'package_release.js');
+  child_process.execFileSync(process.execPath, [packageScriptPath], {
+    cwd: path.join(__dirname, '..'),
+    stdio: 'pipe'
+  });
+  if (!fs.existsSync(zipPath)) {
+    const standbyPath = zipPath.replace(/\.zip$/, '-new.zip');
+    if (fs.existsSync(standbyPath)) {
+      zipPath = standbyPath;
+    }
+  }
+}
+
 assert(fs.existsSync(zipPath), 'Release zip must exist');
 const zipBuf = fs.readFileSync(zipPath);
 

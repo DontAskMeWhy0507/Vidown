@@ -306,18 +306,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   }
   _removeByteRequestFromUrl(param_e) {
-  var flag_t = false;
-  if (param_e.match(/(googlevideo\.com)|(mycdn\.me)/g)) {
-  if (param_e !== (param_e = param_e.replace(/[&?]begin=\d+/g, "").replace(/&bytes=\d+-\d+/g,
-  "").replace(/&range=\d+-\d+/g, "").replace(/&rn=\d+/g, "").replace(/&rbuf=\d+/g,
-  ""))) {
-  flag_t = true;
-  }
-  }
-  return {
-  url: param_e,
-  hasChanged: flag_t
-  };
+  return { url: param_e, hasChanged: false };
   }
   }
   new class {
@@ -592,7 +581,7 @@ export default function (moduleObj, exportsObj, requireFn) {
   }
   );
   }
-  if (param_e.url.match(/\.(mpd|m3u8)$/i)) {
+  if (param_e.url.match(/\.(mpd|m3u8)(\?|$)/i)) {
   var var_$ = Object(dep_url_utils.f)(param_e.url);
   this._listener.match(param_e, Object.assign(Object.assign({
   }

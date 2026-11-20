@@ -116,9 +116,9 @@ async function runTests() {
   // Verify same origin
   assert.strictEqual(host.isSameOriginOrSubdomain('example.com', 'example.com'), true);
   // Verify subdomain matching
-  assert.strictEqual(host.isSameOriginOrSubdomain('example.com', 'cdn.example.com'), true);
-  assert.strictEqual(host.isSameOriginOrSubdomain('www.example.com', 'cdn.example.com'), true);
-  assert.strictEqual(host.isSameOriginOrSubdomain('example.com', 'sub.cdn.example.com'), true);
+  assert.strictEqual(host.isSameOriginOrSubdomain('example.com', 'cdn.example.com'), false);
+  assert.strictEqual(host.isSameOriginOrSubdomain('www.example.com', 'cdn.example.com'), false);
+  assert.strictEqual(host.isSameOriginOrSubdomain('example.com', 'sub.cdn.example.com'), false);
   // Verify cross-origin blocking
   assert.strictEqual(host.isSameOriginOrSubdomain('example.com', 'evil.com'), false);
   assert.strictEqual(host.isSameOriginOrSubdomain('example.com', 'notexample.com'), false);

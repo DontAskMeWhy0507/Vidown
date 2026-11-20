@@ -132,6 +132,12 @@ export default function (moduleObj, exportsObj, requireFn) {
   var obj__ = {
   filename: param_t.filename.trim()
   };
+  obj__.mediaType = param_t.type;
+  obj__.verifiedMedia = Boolean(param_t.type && param_t.ext);
+  obj__.ext = param_t.ext;
+  obj__._isHls = Boolean(param_t.hls);
+  obj__._isDash = Boolean(param_t.dashMPD);
+  obj__.tabId = param_r && param_r.id;
   var var_b = param_t.url;
   if (typeof var_b == "object") {
   if (!var_b.videoUrl || !var_b.audioUrl) {
@@ -211,11 +217,29 @@ export default function (moduleObj, exportsObj, requireFn) {
   if (param_t.hls && param_t.dashVideoId) {
   obj__.videoId = param_t.dashVideoId;
   }
-  var var_k = new URL(param_t.referrer || param_e.tab_url).origin;
+  var refUrl = param_t.referrer || param_e.tab_url || (param_r == null ? undefined : param_r.url);
+  var refOrigin = "";
+  try {
+    if (param_t.referrer || param_e.tab_url) {
+      refOrigin = new URL(param_t.referrer || param_e.tab_url).origin;
+    } else if (param_r && param_r.url) {
+      refOrigin = new URL(param_r.url).origin;
+    }
+  } catch (_) {}
+
+  // Map Referer and Origin to standard Chrome MV3 download options headers
+  obj__.headers = obj__.headers || [];
+  if (refUrl && !obj__.headers.some(h => h.name.toLowerCase() === "referer")) {
+    obj__.headers.push({ name: "Referer", value: refUrl });
+  }
+  if (refOrigin && !param_t.removeOrigin && !obj__.headers.some(h => h.name.toLowerCase() === "origin")) {
+    obj__.headers.push({ name: "Origin", value: refOrigin });
+  }
+
+  var var_k = refOrigin;
   var list_A = [{
   name: "tab_url",
-  value: param_t.referrer || param_e.tab_url || (param_r == null ?
-  undefined : param_r.url)
+  value: refUrl
   }
   , {
   name: "origin",
@@ -319,9 +343,14 @@ export default function (moduleObj, exportsObj, requireFn) {
   chrome.downloads.download(var_m, var_f);
   }
   else {
-  delete var_m.convertToMp4;
-  delete var_m.playList;
-  var_o(var_m, var_f);
+    delete var_m.convertToMp4;
+    delete var_m.playList;
+    if (typeof var_o === 'function') {
+      var_o(var_m, var_f);
+    } else {
+      var_m.url = var_m.videoUrl || var_m.url;
+      chrome.downloads.download(var_m, var_f);
+    }
   }
   }
   else {

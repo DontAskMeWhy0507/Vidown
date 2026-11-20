@@ -72,7 +72,7 @@ console.log('[Test 5] Functional verification of isBogusStreamUrl...');
 const isBogusMatch = bg.match(/function isBogusStreamUrl\(url, pageUrl\) \{[\s\S]*?\n\}/);
 assert.ok(isBogusMatch, 'isBogusStreamUrl function must be present in background.chrome.js');
 
-const isBogusStreamUrl = new Function('url', 'pageUrl', isBogusMatch[0] + '\nreturn isBogusStreamUrl(url, pageUrl);');
+const isBogusStreamUrl = new Function('url', 'pageUrl', bg.match(/function isImageDownload[\s\S]*?\n\}/)[0] + '\n' + isBogusMatch[0] + '\nreturn isBogusStreamUrl(url, pageUrl);');
 
 // Webpage URLs must be marked as bogus
 assert.strictEqual(isBogusStreamUrl('https://www.tiktok.com/', 'https://www.tiktok.com/'), true, 'TikTok home URL must be bogus');

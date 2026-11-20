@@ -12,14 +12,15 @@
     "build:background": "node scripts/build_background.js",
     "build:content": "node scripts/build_content_script.js",
     "build:inject": "node scripts/build_inject.js",
-    "build:dev": "node scripts/build_common.js --dev && node scripts/build_background.js --dev && node scripts/build_content_script.js --dev && node scripts/build_inject.js",
-    "build": "npm run build:common && npm run build:background && npm run build:content && npm run build:inject && npm run package",
+    "build:dev": "node scripts/build_background.js --dev && node scripts/build_content_script.js --dev && node scripts/build_inject.js",
+    "build": "npm run build:background && npm run build:content && npm run build:inject && npm run package",
     "test": "node scripts/test_runner.js",
     "sync:integrity": "node scripts/sync_module_integrity.js",
     "package": "node scripts/package_release.js"
   },
   "devDependencies": {
     "acorn": "^8.19.0",
-    "esbuild": "^0.28.2"
+    "esbuild": "^0.28.2",
+    "linkedom": "^0.18.15"
   }
 }

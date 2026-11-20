@@ -207,67 +207,62 @@ export default function(module, exports, require) {
     ]);
   }
 
+  var awemeParsedCache = new WeakMap();
   function parseAwemeVideoAttribute(videoElement) {
-    if (!videoElement?.hasAttribute?.("data-aweme-video")) return null;
+    if (!videoElement) return null;
+    var raw = videoElement.getAttribute && videoElement.getAttribute("data-aweme-video");
+    var cached = awemeParsedCache.get(videoElement);
+    if (cached && cached.raw === raw) return cached.data;
+    if (!videoElement.hasAttribute || !videoElement.hasAttribute("data-aweme-video")) return null;
     try {
-      return JSON.parse(videoElement.getAttribute("data-aweme-video"));
+      var data = JSON.parse(videoElement.getAttribute("data-aweme-video"));
+      awemeParsedCache.set(videoElement, { raw: raw, data: data });
+      return data;
     } catch (parseErr) {
       return null;
-    } finally {
-      videoElement.removeAttribute("data-aweme-video");
     }
   }
 
-  function getAwemeVideoData(videoElement, findMainVideoFn) {
-    var awemeData = parseAwemeVideoAttribute(videoElement);
-    if (!awemeData && findMainVideoFn) {
-      var mainVideo = findMainVideoFn(videoElement);
-      if (mainVideo) {
-        awemeData = parseAwemeVideoAttribute(mainVideo);
+  function getAwemeVideoData(videoElement, findAnchorFn) {
+    var expectedId = getTikTokItemId(videoElement);
+    var accept = data => data && (!expectedId || !data.id || String(data.id) === String(expectedId)) ? data : null;
+    var awemeData = accept(parseAwemeVideoAttribute(videoElement));
+    if (awemeData) return awemeData;
+    if (findAnchorFn) {
+      var candidate = findAnchorFn(videoElement);
+      if (candidate && candidate !== videoElement && candidate !== document.querySelector("video")) {
+        awemeData = accept(parseAwemeVideoAttribute(candidate));
+        if (awemeData) return awemeData;
       }
     }
-    return awemeData;
+    var anchor = getTikTokAnchorElement(videoElement);
+    if (anchor && anchor !== videoElement) {
+      awemeData = accept(parseAwemeVideoAttribute(anchor));
+      if (awemeData) return awemeData;
+    }
+    var root = findTikTokItemRoot(videoElement);
+    if (root && root !== videoElement && (!root.querySelectorAll || root.querySelectorAll("video").length <= 1)) {
+      awemeData = accept(parseAwemeVideoAttribute(root));
+      if (awemeData) return awemeData;
+    }
+    return null;
   }
 
-  function parseTikTokMediaItems(bitrates, videoTitle, audioBitrates) {
-    return asyncRunner1(void 0, void 0, void 0, c().m(function parseMediaGenerator() {
-      var resultList, iterator, item, playUrl, mediaFormat, qualityLabel, i18nLabel;
-      return c().w(function(step) {
-        for (;;) switch (step.n) {
-          case 0:
-            resultList = [];
-            iterator = createForOfIteratorHelper(bitrates);
-          case 1:
-            if ((item = iterator.n()).done) {
-              step.n = 5;
-              break;
-            }
-            playUrl = item.value?.playAddr?.urlList?.[0] || item.value?.playAddr?.UrlList?.[0];
-            if (!playUrl) {
-              step.n = 4;
-              break;
-            }
-            mediaFormat = urlUtils.f(playUrl);
-            mediaFormat.filename = videoTitle;
-            mediaFormat.ext = "mp4";
-            mediaFormat.exts = ["mp4"];
-            mediaFormat.type = "video";
-            mediaFormat.resolution = item.value?.gearName || item.value?.qualityType || "default";
-            qualityLabel = mediaConstants.r[mediaFormat.resolution]?.label || mediaFormat.resolution;
-            mediaFormat.quality = qualityLabel;
-            try {
-              i18nLabel = mediaConstants.r[mediaFormat.resolution]?.i18n_label;
-              if (i18nLabel) mediaFormat.i18n_quality = cryptoUtils.i18n(i18nLabel);
-            } catch (i18nErr) {}
-            resultList.push(mediaFormat);
-          case 4:
-            step.n = 1;
-            break;
-          case 5:
-            return step.a(2, resultList);
-        }
-      }, parseMediaGenerator);
-    }));
+  async function parseTikTokMediaItems(bitrates, videoTitle, audioBitrates) {
+    const resultList = [];
+    for (const item of bitrates || []) {
+      const playUrl = getTikTokPlaybackUrl(item?.playAddr || item?.PlayAddr);
+      if (!playUrl) continue;
+      const mediaFormat = urlUtils.f(playUrl);
+      mediaFormat.filename = videoTitle;
+      mediaFormat.ext = 'mp4';mediaFormat.exts = ['mp4'];mediaFormat.type = 'video';
+      mediaFormat.resolution = item.gearName || item.GearName || item.qualityType || 'default';
+      const quality = mediaConstants.r[mediaFormat.resolution];
+      mediaFormat.quality = quality?.label || mediaFormat.resolution;
+      if (quality?.i18n_label) mediaFormat.i18n_quality = cryptoUtils.i18n(quality.i18n_label);
+      resultList.push(mediaFormat);
+    }
+    return resultList;
   }
 
   function w() {/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
@@ -333,32 +328,9 @@ export default function(module, exports, require) {
       regeneratorDefine(h, "toString", (function() { return "[object Generator]"; })),
       (w=function(){return{w:o,m:p}})()}
 
-  function A(context, args, extra, generatorFn) {
-    return new Promise(function(resolve, reject) {
-      var gen = generatorFn.apply(context, args || []);
-      function step(key, arg) {
-        try {
-          var info = gen[key](arg);
-          var value = info.value;
-        } catch (error) {
-          reject(error);
-          return;
-        }
-        if (info.done) {
-          resolve(value);
-        } else {
-          Promise.resolve(value).then(function(val) {
-            step("next", val);
-          }, function(err) {
-            step("throw", err);
-          });
-        }
-      }
-      step("next");
-    });
-  }
 
-  var asyncRunner2 = A;
+
+  var asyncRunner2 = l;
   var TIKTOK_VIDEO_URL_REGEX = /\/video\/(\d+)/i;
   var TIKTOK_VIDEO_PATH_REGEX = /\/@([\w.-]+)\/video\/(\d+)/i;
 
@@ -389,19 +361,40 @@ export default function(module, exports, require) {
   }
 
   function getTikTokAnchorElement(videoElement) {
-    var parentAnchor = videoElement?.closest('a[href*="/video/"]');
-    if (parentAnchor) return parentAnchor;
-    var container = videoElement?.closest('[data-e2e="user-post-item"], [data-e2e="feed-item"], [data-e2e="explore-item"]');
-    if (container) {
-      var links = findTikTokVideoLinks(container);
-      if (links.length > 0) return links[0];
+    if (!videoElement) return null;
+    var expected = extractXgPlayerId(videoElement);
+    var parentAnchor = videoElement.closest?.('a[href*="/video/"]');
+    if (parentAnchor && isTikTokAnchorLink(parentAnchor) && (!expected || getTikTokVideoIdFromUrl(parentAnchor.href) === expected)) return parentAnchor;
+    var curr = videoElement.parentElement;
+    for (var i = 0; i < 8 && curr && curr !== document.body; i++) {
+      var links = findTikTokVideoLinks(curr);
+      var exact = expected && links.find(link => getTikTokVideoIdFromUrl(link.href) === expected);
+      if (exact) return exact;
+      if (curr.querySelectorAll('video').length > 1) break;
+      var ids = new Set(links.map(link => getTikTokVideoIdFromUrl(link.href)));
+      if (ids.size === 1 && (!expected || ids.has(expected))) return links[0];
+      curr = curr.parentElement;
     }
     return null;
   }
 
   function findTikTokMainVideo(element) {
+    if (element && "VIDEO" === element.tagName) return element;
     var rootItem = findTikTokItemRoot(element);
-    return rootItem ? rootItem.querySelector("video") : document.querySelector("video");
+    var videoInRoot = rootItem ? rootItem.querySelector("video") : null;
+    if (videoInRoot) return videoInRoot;
+    if (element && element.querySelector) {
+      var childVid = element.querySelector("video");
+      if (childVid) return childVid;
+    }
+    if (typeof document !== "undefined") {
+      var playing = Array.from(document.querySelectorAll("video")).find(function(v) {
+        return !v.paused && !v.ended && v.readyState > 2;
+      });
+      if (playing) return playing;
+      return document.querySelector("video");
+    }
+    return null;
   }
 
   function isStandaloneTikTokVideo(videoElement) {
@@ -409,26 +402,82 @@ export default function(module, exports, require) {
   }
 
   function findTikTokItemRoot(videoElement) {
-    return videoElement?.closest('[data-e2e="feed-item"]') ||
-      videoElement?.closest('[data-e2e="user-post-item"]') ||
-      videoElement?.closest('[data-e2e="explore-item"]') ||
-      videoElement?.closest('[data-e2e="browse-video"]') ||
-      videoElement?.parentElement;
+    if (!videoElement) return null;
+    var container = videoElement.closest?.(
+      '[data-e2e="feed-item"], [data-e2e="recommend-list-item-container"], [data-e2e="user-post-item"], [data-e2e="explore-item"], [data-e2e="browse-video"], [class*="ItemContainer"], [class*="VideoContainer"], [class*="PlayerContainer"], article'
+    );
+    if (container && container.querySelectorAll('video').length <= 1) return container;
+    var curr = videoElement.parentElement;
+    for (var i = 0; i < 8 && curr && curr !== document.body; i++) {
+      if (curr.querySelectorAll('video').length > 1) break;
+      if (curr.querySelector && curr.querySelector('a[href*="/video/"]') && curr.querySelectorAll('video').length <= 1) {
+        return curr;
+      }
+      curr = curr.parentElement;
+    }
+    return videoElement.parentElement || null;
   }
 
   function getTikTokItemId(element) {
-    var container = findTikTokItemRoot(element);
-    if (!container) return null;
-    var dataE2e = container.getAttribute("data-e2e-vid") || container.getAttribute("data-e2e");
-    if (dataE2e && /\d+/.test(dataE2e)) return dataE2e.match(/\d+/)[0];
+    if (!element) return null;
+    var playerId = extractXgPlayerId(element);
+    if (playerId) return playerId;
     var link = getTikTokAnchorElement(element);
-    return link ? getTikTokVideoIdFromUrl(link.href) : null;
+    if (link) {
+      var href = link.href || link.getAttribute?.("href");
+      var id = getTikTokVideoIdFromUrl(href);
+      if (id) return id;
+    }
+    var container = findTikTokItemRoot(element);
+    if (container) {
+      var dataE2e = container.getAttribute?.("data-e2e-vid") || container.getAttribute?.("data-e2e");
+      if (dataE2e && /\d+/.test(dataE2e)) return dataE2e.match(/\d+/)[0];
+    }
+    if (element.getAttribute) return element.getAttribute('data-video-id') || element.getAttribute('data-aweme-id') || null;
+    return null;
+  }
+
+  function cleanTikTokTitle(rawTitle) {
+    if (!rawTitle) return "";
+    try {
+      var str = typeof rawTitle === "string" ? rawTitle : (rawTitle.innerText || rawTitle.textContent || "");
+      var withoutTags = str.replace(/#\S+/gi, "").replace(/\s+/g, " ").trim();
+      if (withoutTags.length > 0) return withoutTags;
+      var tagsAsWords = str.replace(/#/g, "").replace(/\s+/g, " ").trim();
+      if (tagsAsWords.length > 0) return tagsAsWords;
+      return str.replace(/\s+/g, " ").trim();
+    } catch (err) {
+      return String(rawTitle).trim();
+    }
+  }
+
+  function getTikTokVideoTitle(videoElement) {
+    if (!videoElement) return "";
+    var extracted = cleanTikTokTitle(extractTikTokVideoPostTitle(videoElement));
+    if (extracted && extracted !== "TikTok - Make Your Day" && extracted !== "TikTok") {
+      return extracted;
+    }
+    var postItem = videoElement.closest ? videoElement.closest('div[data-e2e$="user-post-item"]')?.parentElement : null;
+    var postTitle = postItem ? Array.from(postItem.querySelectorAll("a")).find(function(anchor) {
+      return Boolean(anchor.title);
+    })?.title : "";
+    if (postTitle && cleanTikTokTitle(postTitle)) {
+      return cleanTikTokTitle(postTitle);
+    }
+    var root = findTikTokItemRoot(videoElement);
+    var posterAlt = root?.querySelector?.("img")?.alt;
+    if (posterAlt && cleanTikTokTitle(posterAlt)) {
+      return cleanTikTokTitle(posterAlt);
+    }
+    return "";
   }
 
   function sanitizeVideoTitle(titleCandidate) {
     if (!titleCandidate) return "";
-    var cleanTitle = typeof titleCandidate === "string" ? titleCandidate : titleCandidate.innerText || titleCandidate.textContent || "";
-    return cleanTitle.replace(/\s+/g, " ").trim();
+    if (typeof titleCandidate === "object" && titleCandidate.nodeType) {
+      return getTikTokVideoTitle(titleCandidate) || cleanTikTokTitle(titleCandidate);
+    }
+    return cleanTikTokTitle(titleCandidate);
   }
 
   function getTikTokPostItemTitle(videoElement) {
@@ -503,45 +552,26 @@ export default function(module, exports, require) {
     } : null;
   }
 
-  function formatBitratesOrPlayAddr(videoData, videoTitle) {
-    return asyncRunner2(this, void 0, void 0, w().m(function bitrateGenerator() {
-      var parsedList, singleMedia;
-      return w().w(function(step) {
-        for (;;) switch (step.n) {
-          case 0:
-            if (!videoData.bitrateInfo?.length) {
-              step.n = 2;
-              break;
-            }
-            step.n = 1;
-            return parseTikTokMediaItems(videoData.bitrateInfo, videoTitle || document.title);
-          case 1:
-            parsedList = step.v;
-            if (!parsedList.length) {
-              step.n = 2;
-              break;
-            }
-            return step.a(2, parsedList);
-          case 2:
-            if (!videoData.url) {
-              step.n = 3;
-              break;
-            }
-            singleMedia = urlUtils.f(videoData.url);
-            singleMedia.filename = videoTitle;
-            if (videoData.ratio) {
-              singleMedia.resolution = videoData.ratio;
-              singleMedia.quality = mediaConstants.r[singleMedia.resolution]?.label;
-            }
-            singleMedia.ext = "mp4";
-            singleMedia.exts = ["mp4"];
-            singleMedia.type = "video";
-            return step.a(2, [singleMedia]);
-          case 3:
-            return step.a(2, []);
-        }
-      }, bitrateGenerator);
-    }));
+  async function formatBitratesOrPlayAddr(videoData, videoTitle) {
+    if (videoData.bitrateInfo?.length) {
+      const formats = await parseTikTokMediaItems(videoData.bitrateInfo,videoTitle || document.title);
+      if (formats.length) return formats;
+    }
+    const url = getTikTokPlaybackUrl(videoData.url || videoData.playAddr || videoData.PlayAddr);
+    if (!url) return [];
+    const media = urlUtils.f(url);
+    Object.assign(media,{filename:videoTitle,ext:'mp4',exts:['mp4'],type:'video'});
+    if (videoData.ratio) {
+      media.resolution = videoData.ratio;
+      media.quality = mediaConstants.r[media.resolution]?.label;
+    }
+    return [media];
+  }
+
+  function getTikTokPlaybackUrl(value) {
+    if (typeof value === 'string') return /^https?:\/\//i.test(value) ? value : '';
+    if (Array.isArray(value)) return value.map(getTikTokPlaybackUrl).find(Boolean) || '';
+    return value && typeof value === 'object' ? getTikTokPlaybackUrl(value.urlList || value.UrlList || value.url_list || value.url || value.src) : '';
   }
 
   function scrapeUniversalDataById(videoId, videoTitle) {
@@ -589,6 +619,24 @@ export default function(module, exports, require) {
     }));
   }
 
+  function findMatchingSniffedMedia(targetNode, targetId) {
+    if (typeof window === "undefined" || !window.__saviorSniffedMedia || !window.__saviorSniffedMedia.length) {
+      return null;
+    }
+    var list = window.__saviorSniffedMedia;
+    var vid = targetId || getTikTokItemId(targetNode);
+    if (vid) {
+      for (var i = list.length - 1; i >= 0; i--) {
+        var m = list[i];
+        if (m && m.url && (String(m.contentId || m.id || "") === String(vid) || (() => { try { return new URL(m.url).searchParams.get("__vid") === String(vid); } catch (_) { return false; } })())) {
+          return m;
+        }
+      }
+    }
+    var direct = targetNode && (targetNode.currentSrc || targetNode.src);
+    return direct && /^https?:/.test(direct) ? list.find(m => m && m.url === direct) || null : null;
+  }
+
   function resolveTikTokVideoFromNode(videoNode) {
     return asyncRunner2(this, void 0, void 0, w().m(function resolveGenerator() {
       var itemRoot, previewTitle, awemeData, resolvedTitle, parsedBitrates, currentVid, scrapedData;
@@ -596,7 +644,7 @@ export default function(module, exports, require) {
         for (;;) switch (step.n) {
           case 0:
             itemRoot = findTikTokItemRoot(videoNode);
-            if (itemRoot || isTikTokExplorePage() || isTikTokUserPage()) {
+            if (itemRoot || isTikTokExplorePage() || isTikTokUserPage() || /^(www\.)?tiktok\.com$/i.test(location.host)) {
               step.n = 1;
               break;
             }
@@ -656,7 +704,15 @@ export default function(module, exports, require) {
               }]);
             }
             if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-              return step.a(2, window.__saviorSniffedMedia);
+              var matched = findMatchingSniffedMedia(videoNode, currentVid);
+              if (matched) {
+                var single = Object.assign({}, matched, {
+                  title: resolvedTitle || document.title,
+                  filename: resolvedTitle || document.title,
+                  id: currentVid || matched.id || ("tt_" + Date.now())
+                });
+                return step.a(2, [single]);
+              }
             }
             return step.a(2, []);
         }
@@ -665,7 +721,7 @@ export default function(module, exports, require) {
   }
 
   var lazyBulkDownloadProvider = {
-    isActive: () => isTikTokExplorePage() || isTikTokUserPage(),
+    isActive: () => isTikTokExplorePage() || isTikTokUserPage() || /^(www\.)?tiktok\.com$/i.test(location.host),
     collectPendingItems: () => {
       var seenIds = new Set();
       var items = [];
@@ -736,10 +792,6 @@ export default function(module, exports, require) {
     return createForOfIteratorHelper(iterable, allowArrayLike);
   }
 
-  function unsupportedDouyinIterableToArray(arrayLike, maxLen) {
-    return unsupportedIterableToArray(arrayLike, maxLen);
-  }
-
   function V() {/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
     var t, e, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", i = r.toStringTag || "@@toStringTag";
     function o(r, n, i, o) {
@@ -803,40 +855,18 @@ export default function(module, exports, require) {
       regeneratorDefine(h, "toString", (function() { return "[object Generator]"; })),
       (V=function(){return{w:o,m:p}})()}
 
-  function $(context, args, extra, generatorFn) {
-    return new Promise(function(resolve, reject) {
-      var gen = generatorFn.apply(context, args || []);
-      function step(key, arg) {
-        try {
-          var info = gen[key](arg);
-          var value = info.value;
-        } catch (error) {
-          reject(error);
-          return;
-        }
-        if (info.done) {
-          resolve(value);
-        } else {
-          Promise.resolve(value).then(function(val) {
-            step("next", val);
-          }, function(err) {
-            step("throw", err);
-          });
-        }
-      }
-      step("next");
-    });
-  }
 
-  var asyncRunner3 = $;
+
+  var asyncRunner3 = l;
 
   function extractTikTokVideoPostTitle(videoElement) {
+    if (!videoElement) return null;
     for (
       var currentElem = videoElement;
-      currentElem != null && cryptoUtils.queryAll("video", currentElem).length < 2;
+      currentElem != null && (currentElem.querySelectorAll ? currentElem.querySelectorAll("video").length < 2 : true);
     ) {
-      var descElem = cryptoUtils.query('div[data-e2e$="video-desc"]', currentElem);
-      if (descElem?.innerText) return descElem.innerText;
+      var descElem = currentElem.querySelector ? currentElem.querySelector('div[data-e2e$="video-desc"]') : null;
+      if (descElem?.innerText || descElem?.textContent) return (descElem.innerText || descElem.textContent).trim();
       currentElem = currentElem.parentNode;
     }
     var playerWrapper = videoElement?.closest?.(
@@ -990,7 +1020,7 @@ export default function(module, exports, require) {
 
   var fetchTikTokItemDetail = function(itemId) {
     return asyncRunner3(void 0, void 0, void 0, V().m(function fetchItemGenerator() {
-      var apiUrl, responseData, playAddr;
+      var apiUrl, responseData, itemStruct, playAddr;
       return V().w(function(step) {
         for (;;) switch (step.p = step.n) {
           case 0:
@@ -1008,8 +1038,14 @@ export default function(module, exports, require) {
             step.n = 3;
             return responseData.json();
           case 3:
-            playAddr = step.v?.itemInfo?.itemStruct?.video?.playAddr;
-            return step.a(2, playAddr);
+            itemStruct = step.v?.itemInfo?.itemStruct;
+            playAddr = itemStruct?.video?.playAddr;
+            return step.a(2, {
+              url: playAddr,
+              desc: itemStruct?.desc,
+              bitrateInfo: itemStruct?.video?.bitrateInfo,
+              ratio: itemStruct?.video?.ratio || itemStruct?.video?.definition
+            });
           case 4:
             step.p = 4;
             return step.a(2);
@@ -1019,8 +1055,13 @@ export default function(module, exports, require) {
   };
 
   var extractXgPlayerId = function(nodeElement) {
-    var xgWrapper = nodeElement?.closest?.('.xgplayer-container, [id^="xgwrapper"]');
-    return xgWrapper?.id?.split("-")?.at(-1);
+    var current = nodeElement;
+    for (var depth = 0; current && current !== document.body && depth < 8; depth++,current = current.parentElement) {
+      var id = (current.id || '').match(/^xgwrapper-.*?-(\d{18,20})$/)?.[1];
+      if (id) return id;
+      if (current.tagName === 'ARTICLE' || current.querySelectorAll?.('video').length > 1) break;
+    }
+    return null;
   };
 
   var douyinResolvedCache = {};
@@ -1044,14 +1085,17 @@ export default function(module, exports, require) {
             return step.a(2, cachedParsed);
           case 1:
             videoElement.setAttribute("data-target", "");
-            if (!douyinInFlightInjectMap.hasOwnProperty("douyin-" + videoId)) {
-              douyinInFlightInjectMap["douyin-" + videoId] = Promise.race([
+            const mapKey = "douyin-" + videoId;
+            if (!douyinInFlightInjectMap.hasOwnProperty(mapKey)) {
+              douyinInFlightInjectMap[mapKey] = Promise.race([
                 cryptoUtils.sendMessage({ type: mediaConstants.b.SCRIPTING.INJECT, file: "douyin" }),
                 cryptoUtils.sleep(1000)
-              ]);
+              ]).finally(() => {
+                delete douyinInFlightInjectMap[mapKey];
+              });
             }
             step.n = 2;
-            return douyinInFlightInjectMap["douyin-" + videoId];
+            return douyinInFlightInjectMap[mapKey];
           case 2:
             delete douyinInFlightInjectMap["douyin-" + videoId];
             videoElement.removeAttribute("data-target");
@@ -1142,7 +1186,12 @@ export default function(module, exports, require) {
       } catch (_) {
         return false;
       }
-      var videoId = parsedUrl.pathname.match(/\/video\/tos\/.*\/(\w+)/i)?.[1];
+      var vidParam = parsedUrl.searchParams.get("__vid") || parsedUrl.searchParams.get("_vid") || parsedUrl.searchParams.get("vid");
+      var videoId = vidParam ? (vidParam.match(/-(\d+)$/i)?.[1] || vidParam.match(/(\d{15,})/)?.[1]) : null;
+      if (!videoId) {
+        var directMatch = requestItem.url.match(/\/video\/(\d{15,})/i) || requestItem.url.match(/[?&]item_id=(\d{15,})/i);
+        videoId = directMatch?.[1] || null;
+      }
       if (videoId && !douyinResolvedCache[videoId]) {
         douyinResolvedCache[videoId] = requestItem;
       }
@@ -1150,7 +1199,6 @@ export default function(module, exports, require) {
       if (pageVidMatch && pageVidMatch[1] && !douyinResolvedCache[pageVidMatch[1]]) {
         douyinResolvedCache[pageVidMatch[1]] = requestItem;
       }
-      douyinResolvedCache['latest'] = requestItem;
       if (typeof window !== "undefined") {
         window.__saviorSniffedMedia = window.__saviorSniffedMedia || [];
         if (!window.__saviorSniffedMedia.some(function(m) { return m && m.url === requestItem.url; })) {
@@ -1317,31 +1365,10 @@ export default function(module, exports, require) {
                 if (targetMedia.filename?.includes?.("_media_")) {
                   targetMedia.filename = douyinVideoTitleCache[targetMedia.url] || targetMedia.filename;
                 }
-                if (!targetMedia.filename || !targetMedia.filename.length) {
-                  targetMedia.filename = document.title;
+                if (!targetMedia.filename || !targetMedia.filename.length || targetMedia.filename === "TikTok - Make Your Day" || targetMedia.filename === "TikTok") {
+                  targetMedia.filename = (targetMedia.originVideoId ? ("tiktok_" + targetMedia.originVideoId) : (document.title && document.title !== "TikTok - Make Your Day" && document.title !== "TikTok" ? document.title : "tiktok_video"));
                 }
-                var cleanEmojiFilename = targetMedia.filename.replace(
-                  new RegExp([
-                    "(?:[\\xA9\\xAE\\u203C\\u2049\\u2122\\u2139\\u2194-\\u2199\\u21A9\\u21AA\\u231A\\u231B\\u2328\\u23CF\\u23E9-\\u23F3\\u",
-                    "23F8-\\u23FA\\u24C2\\u25AA\\u25AB\\u25B6\\u25C0\\u25FB-\\u25FE\\u2600-\\u2604\\u260E\\u2611\\u2614\\u2615\\u2618\\u2",
-                    "61D\\u2620\\u2622\\u2623\\u2626\\u262A\\u262E\\u262F\\u2638-\\u263A\\u2640\\u2642\\u2648-\\u2653\\u265F\\u2660\\u266",
-                    "3\\u2665\\u2666\\u2668\\u267B\\u267E\\u267F\\u2692-\\u2697\\u2699\\u269B\\u269C\\u26A0\\u26A1\\u26A7\\u26AA\\u26AB\\u",
-                    "26B0\\u26B1\\u26BD\\u26BE\\u26C4\\u26C5\\u26C8\\u26CE\\u26CF\\u26D1\\u26D3\\u26D4\\u26E9\\u26EA\\u26F0-\\u26F5\\u26F",
-                    "7-\\u26FA\\u26FD\\u2702\\u2705\\u2708-\\u270D\\u270F\\u2712\\u2714\\u2716\\u271D\\u2721\\u2728\\u2733\\u2734\\u2744\\",
-                    "u2747\\u274C\\u274E\\u2753-\\u2755\\u2757\\u2763\\u2764\\u2795-\\u2797\\u27A1\\u27B0\\u27BF\\u2934\\u2935\\u2B05-\\u",
-                    "2B07\\u2B1B\\u2B1C\\u2B50\\u2B55\\u3030\\u303D\\u3297\\u3299]|\\uD83C[\\uDC04\\uDC2C-\\uDC2F\\uDC94-\\uDC9F\\uDCAF\\",
-                    "uDCB0\\uDCC0\\uDCCF\\uDCD0\\uDCF6-\\uDCFF\\uDD70\\uDD71\\uDD7E\\uDD7F\\uDD8E\\uDD91-\\uDD9A\\uDDAF-\\uDDFF\\uDE01-\\",
-                    "uDE0F\\uDE1A\\uDE2F\\uDE32-\\uDE3A\\uDE3C-\\uDE3F\\uDE49-\\uDE5F\\uDE66-\\uDF21\\uDF24-\\uDF93\\uDF96\\uDF97\\uDF99",
-                    "-\\uDF9B\\uDF9E-\\uDFF0\\uDFF3-\\uDFF5\\uDFF8-\\uDFFF]|\\uD83D[\\uDC00-\\uDCFD]|\\uD83C[\\uDFF7-\\uDFFA]|\\uD83D[\\",
-                    "uDCFF-\\uDD3D\\uDD49-\\uDD4E\\uDD50-\\uDD67\\uDD6F\\uDD70\\uDD73-\\uDD7A\\uDD87\\uDD8A-\\uDD8D\\uDD90\\uDD95\\uDD96",
-                    "\\uDDA4\\uDDA5\\uDDA8\\uDDB1\\uDDB2\\uDDBC\\uDDC2-\\uDDC4\\uDDD1-\\uDDD3\\uDDDC-\\uDDDE\\uDDE1\\uDDE3\\uDDE8\\uDDEF\\",
-                    "uDDF3\\uDDFA-\\uDE4F\\uDE80-\\uDEC5\\uDECB-\\uDED2\\uDED5-\\uDEE5\\uDEE9\\uDEEB-\\uDEF0\\uDEF3-\\uDEFF\\uDFDC-\\uDF",
-                    "F0]|\\uD83E[\\uDC0C-\\uDC0F\\uDC48-\\uDC4F\\uDC5A-\\uDC5F\\uDC88-\\uDC8F\\uDCAE\\uDCAF\\uDCBC-\\uDCBF\\uDCC2-\\uDCC",
-                    "F\\uDCD9-\\uDCFF\\uDD0C-\\uDD3A\\uDD3C-\\uDD45\\uDD47-\\uDDFF\\uDE58-\\uDE5F\\uDE6E-\\uDEFF]|\\uD83F[\\uDC00-\\uDFF",
-                    "D])"
-                  ].join(""), "g"),
-                  ""
-                );
+                var cleanEmojiFilename = targetMedia.filename.replace(/\p{Extended_Pictographic}/gu, "").trim();
                 if (0 === cleanEmojiFilename.length) {
                   targetMedia.filename = document.title;
                 }
@@ -1530,7 +1557,7 @@ export default function(module, exports, require) {
                     universalScope = null;
                   }
                   videoDetailStruct = universalScope?.["webapp.video-detail"]?.itemInfo?.itemStruct || {};
-                  videoTitle = sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || postItemTitle || document.title;
+                  videoTitle = getTikTokVideoTitle(videoNode) || postItemTitle || document.title;
                   videoMeta = videoDetailStruct.video;
                   if ((extractXgPlayerId(videoNode) || location.pathname.match(/\/video\/(\d+)/i)?.[1]) == videoMeta?.id) {
                     step.n = 4;
@@ -1548,7 +1575,8 @@ export default function(module, exports, require) {
                   parsedBitrates = step.v;
                   if (parsedBitrates?.length) return step.a(2, parsedBitrates);
                 case 6:
-                  singlePlayMedia = urlUtils.f(videoMeta.playAddr);
+                  singlePlayMedia = urlUtils.f(getTikTokPlaybackUrl(videoMeta.playAddr || videoMeta.PlayAddr));
+                  singlePlayMedia.type = 'video';singlePlayMedia.ext = 'mp4';singlePlayMedia.exts = ['mp4'];
                   singlePlayMedia.resolution = videoMeta.ratio || videoMeta.definition;
                   singlePlayMedia.quality = mediaConstants.r[singlePlayMedia.resolution]?.label;
                   singlePlayMedia.filename = videoTitle;
@@ -1556,8 +1584,8 @@ export default function(module, exports, require) {
                 case 7:
                   step.p = 7;
                   step.v;
-                  mainVideoNode = findTikTokMainVideo(videoNode);
-                  if (videoNode.hasAttribute("data-aweme-video") || mainVideoNode?.hasAttribute("data-aweme-video")) {
+                  mainVideoNode = videoNode;
+                  if (videoNode.hasAttribute("data-aweme-video") || getTikTokAnchorElement(videoNode)?.hasAttribute("data-aweme-video")) {
                     step.n = 8;
                     break;
                   }
@@ -1565,12 +1593,12 @@ export default function(module, exports, require) {
                   return injectTikTokMainWorldScript();
                 case 8:
                   step.p = 8;
-                  awemeData = getAwemeVideoData(videoNode, findTikTokMainVideo);
+                  awemeData = getAwemeVideoData(videoNode, getTikTokAnchorElement);
                   if (!awemeData) {
                     step.n = 11;
                     break;
                   }
-                  videoTitle = sanitizeVideoTitle(awemeData.desc) || sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || postItemTitle || document.title;
+                  videoTitle = cleanTikTokTitle(awemeData.desc) || getTikTokVideoTitle(videoNode) || postItemTitle || document.title;
                   if (!awemeData.bitrateInfo?.length) {
                     step.n = 10;
                     break;
@@ -1581,7 +1609,8 @@ export default function(module, exports, require) {
                   awemeBitrates = step.v;
                   if (awemeBitrates?.length) return step.a(2, awemeBitrates);
                 case 10:
-                  singleAwemeMedia = urlUtils.f(awemeData.url);
+                  singleAwemeMedia = urlUtils.f(getTikTokPlaybackUrl(awemeData.url));
+                  singleAwemeMedia.type = 'video';singleAwemeMedia.ext = 'mp4';singleAwemeMedia.exts = ['mp4'];
                   singleAwemeMedia.filename = videoTitle;
                   return step.a(2, [singleAwemeMedia]);
                 case 11:
@@ -1596,12 +1625,10 @@ export default function(module, exports, require) {
                     break;
                   }
                   if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-                    var sniffed = window.__saviorSniffedMedia.find(function(m) {
-                      return m && m.url && (m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4"));
-                    }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
+                    var sniffed = findMatchingSniffedMedia(videoNode, xgPlayerId);
                     if (sniffed && sniffed.url) {
                       var fallbackMedia = urlUtils.f(sniffed.url);
-                      fallbackMedia.filename = sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || document.title;
+                      fallbackMedia.filename = getTikTokVideoTitle(videoNode) || document.title;
                       fallbackMedia.ext = "mp4";
                       fallbackMedia.exts = ["mp4"];
                       fallbackMedia.type = "video";
@@ -1611,17 +1638,34 @@ export default function(module, exports, require) {
                   return step.a(2, []);
                 case 14:
                   var isBogusTargetUrl = !targetUrl || targetUrl.startsWith("blob:") || targetUrl === location.href || targetUrl === "https://www.tiktok.com/" || targetUrl === "https://www.tiktok.com";
-                  if (isBogusTargetUrl && typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
-                    var sMedia = window.__saviorSniffedMedia.find(function(m) {
-                      return m && m.url && (m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4") || m.url.includes("tiktokcdn"));
-                    }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
-                    if (sMedia && sMedia.url) {
-                      var fb = urlUtils.f(sMedia.url);
-                      fb.filename = sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || document.title;
-                      fb.ext = "mp4";
-                      fb.exts = ["mp4"];
-                      fb.type = "video";
-                      return step.a(2, [fb]);
+                  if (isBogusTargetUrl) {
+                    var resolvedVid = xgPlayerId || getTikTokItemId(videoNode);
+                    if (resolvedVid && douyinItemApiCache[resolvedVid]?.url) {
+                      var cachedApiMedia = urlUtils.f(douyinItemApiCache[resolvedVid].url);
+                      cachedApiMedia.filename = getTikTokVideoTitle(videoNode) || cleanTikTokTitle(douyinItemApiCache[resolvedVid]?.desc) || ("tiktok_" + resolvedVid);
+                      cachedApiMedia.ext = "mp4";
+                      cachedApiMedia.exts = ["mp4"];
+                      cachedApiMedia.type = "video";
+                      return step.a(2, [cachedApiMedia]);
+                    }
+                    if (resolvedVid && douyinResolvedCache[resolvedVid]?.url) {
+                      var cachedMedia = urlUtils.f(douyinResolvedCache[resolvedVid].url);
+                      cachedMedia.filename = getTikTokVideoTitle(videoNode) || ("tiktok_" + resolvedVid);
+                      cachedMedia.ext = "mp4";
+                      cachedMedia.exts = ["mp4"];
+                      cachedMedia.type = "video";
+                      return step.a(2, [cachedMedia]);
+                    }
+                    if (typeof window !== "undefined" && window.__saviorSniffedMedia && window.__saviorSniffedMedia.length) {
+                      var sMedia = findMatchingSniffedMedia(videoNode, resolvedVid);
+                      if (sMedia && sMedia.url) {
+                        var fb = urlUtils.f(sMedia.url);
+                        fb.filename = getTikTokVideoTitle(videoNode) || document.title;
+                        fb.ext = "mp4";
+                        fb.exts = ["mp4"];
+                        fb.type = "video";
+                        return step.a(2, [fb]);
+                      }
                     }
                   }
                   return step.a(2, targetUrl);
@@ -1633,7 +1677,7 @@ export default function(module, exports, require) {
           var mediaObj = changeItem.mediaObject;
           var videoNode = changeItem.node;
           return asyncRunner3(void 0, void 0, void 0, V().m(function tiktokMediaChangeGenerator() {
-            var postItemContainer, postTitle, anchorElem, videoIdMatch, videoId, currentUrl, fetchedDetail;
+            var postItemContainer, postTitle, videoTitle, anchorElem, videoIdMatch, videoId, currentUrl, fetchedDetail;
             return V().w(function(step) {
               for (;;) switch (step.n) {
                 case 0:
@@ -1641,12 +1685,10 @@ export default function(module, exports, require) {
                   postTitle = Array.from(postItemContainer ? postItemContainer.querySelectorAll("a") : []).find(function(anchor) {
                     return Boolean(anchor.title);
                   })?.title;
-                  var itemRoot = findTikTokItemRoot(videoNode);
-                  var captionEl = itemRoot?.querySelector?.('[data-e2e$="video-desc"], [data-e2e$="browse-video-desc"], [data-e2e="video-desc"], [data-e2e="browse-video-desc"]');
-                  var captionText = sanitizeVideoTitle(captionEl?.innerText || captionEl?.textContent);
-                  var rootTitle = sanitizeVideoTitle(itemRoot);
-                  var resolvedTitle = captionText || (rootTitle && rootTitle !== document.title ? rootTitle : "") || postTitle;
-                  mediaObj.filename = resolvedTitle || sanitizeVideoTitle(findTikTokItemRoot(videoNode)) || postTitle || mediaObj.filename;
+                  videoTitle = getTikTokVideoTitle(videoNode) || postTitle;
+                  if (videoTitle && videoTitle !== "TikTok - Make Your Day" && videoTitle !== "TikTok") {
+                    mediaObj.filename = videoTitle;
+                  }
                   anchorElem = getTikTokAnchorElement(videoNode);
                   videoIdMatch = (anchorElem?.href || videoNode.closest('a[href*="/video/"]')?.getAttribute("href") || "").match(/\/video\/(\d+)/);
                   videoId = extractXgPlayerId(videoNode) || videoIdMatch?.[1];
@@ -1661,16 +1703,16 @@ export default function(module, exports, require) {
                     break;
                   }
                   if (douyinItemApiCache[videoId]) {
-                    mediaObj.url = douyinItemApiCache[videoId];
+                    var cachedApi = douyinItemApiCache[videoId];
+                    mediaObj.url = cachedApi.url || cachedApi;
+                    if (cachedApi.desc && (!mediaObj.filename || mediaObj.filename === "TikTok - Make Your Day" || mediaObj.filename === "TikTok")) {
+                      mediaObj.filename = cleanTikTokTitle(cachedApi.desc);
+                    }
                     step.n = 4;
                     break;
                   }
                   if (douyinResolvedCache[videoId]) {
                     mediaObj.url = douyinResolvedCache[videoId].url;
-                    step.n = 4;
-                    break;
-                  }
-                  if (anchorElem) {
                     step.n = 4;
                     break;
                   }
@@ -1680,7 +1722,10 @@ export default function(module, exports, require) {
                   fetchedDetail = step.v;
                   if (fetchedDetail) {
                     douyinItemApiCache[videoId] = fetchedDetail;
-                    mediaObj.url = fetchedDetail;
+                    mediaObj.url = fetchedDetail.url || fetchedDetail;
+                    if (fetchedDetail.desc && (!mediaObj.filename || mediaObj.filename === "TikTok - Make Your Day" || mediaObj.filename === "TikTok")) {
+                      mediaObj.filename = cleanTikTokTitle(fetchedDetail.desc);
+                    }
                   }
                 case 4:
                   var isBogusTarget = !mediaObj.url ||
@@ -1692,21 +1737,20 @@ export default function(module, exports, require) {
                   if (isBogusTarget) {
                     if (videoId && douyinResolvedCache[videoId]) {
                       mediaObj.url = douyinResolvedCache[videoId].url;
-                    } else if (douyinResolvedCache['latest']?.url) {
-                      mediaObj.url = douyinResolvedCache['latest'].url;
+                    } else if (videoId && douyinItemApiCache[videoId]?.url) {
+                      mediaObj.url = douyinItemApiCache[videoId].url;
                     } else if (typeof window !== "undefined" && window.__saviorSniffedMedia?.length) {
-                      var sniffed = window.__saviorSniffedMedia.find(function(m) {
-                        return m && m.url && (m.url.includes("/video/tos/") || m.url.includes("mime_type=video_mp4") || m.url.includes("tiktokcdn"));
-                      }) || window.__saviorSniffedMedia[window.__saviorSniffedMedia.length - 1];
+                      var sniffed = findMatchingSniffedMedia(videoNode, videoId);
                       if (sniffed?.url) {
                         mediaObj.url = sniffed.url;
                       }
                     }
                   }
-                  if (!mediaObj.filename || mediaObj.filename === document.title || mediaObj.filename === "TikTok - Make Your Day") {
-                    var fallbackDesc = document.querySelector('[data-e2e$="video-desc"], [data-e2e$="browse-video-desc"]')?.innerText;
-                    var ogDesc = document.querySelector('meta[property="og:title"]')?.getAttribute("content");
-                    mediaObj.filename = sanitizeVideoTitle(fallbackDesc) || sanitizeVideoTitle(ogDesc) || (videoId ? ("tiktok_" + videoId) : "tiktok_video");
+                  if (!mediaObj.filename || mediaObj.filename === document.title || mediaObj.filename === "TikTok - Make Your Day" || mediaObj.filename === "TikTok") {
+                    var finalTitle = getTikTokVideoTitle(videoNode) ||
+                      cleanTikTokTitle(douyinItemApiCache[videoId]?.desc) ||
+                      (videoId ? ("tiktok_" + videoId) : "tiktok_video");
+                    mediaObj.filename = finalTitle;
                   }
                   mediaObj.ext = mediaObj.ext || "mp4";
                   mediaObj.exts = mediaObj.exts || ["mp4"];

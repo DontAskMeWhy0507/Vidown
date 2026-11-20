@@ -31,8 +31,8 @@ assert.ok(
   'twitter_com-extractor.js must match all twimg video URLs, not only specific m3u8 playlists'
 );
 assert.ok(
-  twSrc.includes('savior-twitter-source') && twSrc.includes('window.__saviorSniffedMedia'),
-  'twitter_com-extractor.js must fallback to savior-twitter-source attribute or sniffed media when obj_l is missing'
+  twSrc.includes('savior-twitter-source') && twSrc.includes('obj_l[id]') && !twSrc.includes('window.__saviorSniffedMedia'),
+  'Twitter must use selected-node metadata or its exact media ID, without unrelated tab-wide fallback'
 );
 console.log('✓ Test 2: Twitter / X matches all twimg streams and resolves via stamped props or sniffing!\n');
 

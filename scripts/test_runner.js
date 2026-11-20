@@ -23,6 +23,7 @@ function runSuite(file) {
   const startTime = Date.now();
   try {
     const stdout = cp.execFileSync(process.execPath, [fullPath], {
+      cwd: path.resolve(__dirname, '..'),
       stdio: ['pipe', 'pipe', 'pipe'],
       timeout: SUITE_TIMEOUT_MS,
       windowsHide: true,

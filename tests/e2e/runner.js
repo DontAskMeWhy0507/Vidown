@@ -34,14 +34,14 @@ function parseArgs() {
     platform: null,
     testId: null,
     headless: true,
-    downloadsDir: path.resolve('f:\\Vidown\\test_downloads'),
+    downloadsDir: path.resolve(__dirname, '..', '..', 'test_downloads'),
     cdpPort: 9333,
     serverPort: 9444,
     mode: 'auto', // 'live', 'fixture', 'auto'
     cleanBefore: true,
     timeoutMs: 45000,
-    reportJson: path.resolve('f:\\Vidown\\tests\\e2e\\reports\\test_results.json'),
-    reportMd: path.resolve('f:\\Vidown\\tests\\e2e\\reports\\test_matrix.md')
+    reportJson: path.resolve(__dirname, 'reports', 'test_results.json'),
+    reportMd: path.resolve(__dirname, 'reports', 'test_matrix.md')
   };
 
   for (const arg of args) {
@@ -409,7 +409,7 @@ async function dispatchServiceWorkerDownload(cdpClient, engineType, params, opti
         }, ${timeoutMs});
 
         try {
-          const fn = ${engineType === 'relay' ? 'startStreamRelayDownload' : 'startNativeDownload'};
+          const fn = ${engineType === 'extension' ? '((params, cb) => { chrome.downloads.download(params, cb); return true; })' : engineType === 'relay' ? 'startStreamRelayDownload' : 'startNativeDownload'};
           const started = fn(${JSON.stringify(params)}, (id) => {
             if (!settled) {
               settled = true;
@@ -815,6 +815,7 @@ async function runE2ESuite() {
           continue;
         }
 
+        executionMode = 'TRANSPORT_FIXTURE';
         // Case D: Multi-Item Albums / Carousels / Playlists (Deadlock-Free)
         if (tc.expected && (tc.expected.isAlbum || tc.expected.isPlaylist)) {
           const isImage = tc.expected.mediaType === 'image';
@@ -918,6 +919,7 @@ async function runE2ESuite() {
           continue;
         }
 
+        executionMode = 'TRANSPORT_FIXTURE';
         // Case E: Standard Video / Audio / Photo Download
         let mediaFile = 'sample_1080p.mp4';
         let isAudio = false;
@@ -946,7 +948,8 @@ async function runE2ESuite() {
 
         if (isPhoto) {
           downloadedPath = path.join(options.downloadsDir, filename);
-          await downloadAsset(mediaSource, downloadedPath);
+          await dispatchServiceWorkerDownload(cdpClient, 'extension', { url: mediaSource, filename, mediaType: 'image', outputDir: options.downloadsDir });
+          downloadedPath = await waitForDownload(options.downloadsDir, filename, options.timeoutMs);
         } else if (tc.feature.includes('DASH') || tc.feature.includes('Mux')) {
           const videoTrack = `${server.baseUrl}/media/sample_video_only.mp4?tc=${tc.id.toLowerCase()}&track=video`;
           const audioTrack = `${server.baseUrl}/media/sample_audio_only.m4a?tc=${tc.id.toLowerCase()}&track=audio`;
@@ -1072,8 +1075,9 @@ async function runE2ESuite() {
     console.log(`Emitted Markdown matrix to: ${options.reportMd}`);
 
     const testReadyMd = generateTestReadyFile(results, results.summary);
-    fs.writeFileSync(path.resolve('f:\\Vidown\\TEST_READY.md'), testReadyMd, 'utf8');
-    console.log(`Published TEST_READY.md to: f:\\Vidown\\TEST_READY.md`);
+    const testReadyPath = path.resolve(__dirname, '..', '..', 'TEST_READY.md');
+    fs.writeFileSync(testReadyPath, testReadyMd, 'utf8');
+    console.log(`Published TEST_READY.md to: ${testReadyPath}`);
 
     console.log('========================================================================');
     console.log(`  E2E SUMMARY: Total ${results.summary.total} | PASS: ${results.summary.passed} | BLOCKED: ${results.summary.blocked} | FAIL: ${results.summary.failed}`);

@@ -13,7 +13,7 @@ function extractFunction(name) {
   const regex = new RegExp(`function\\s+${name}\\s*\\([\\s\\S]*?\\)\\s*\\{([\\s\\S]*?)\n\\}`, 'm');
   const match = bgCode.match(regex);
   if (!match) throw new Error(`Could not find function ${name} in background.chrome.js`);
-  return new Function(...match[0].match(/\(([^)]*)\)/)[1].split(',').map(s => s.trim()).filter(Boolean), match[1]);
+  return new Function(...match[0].match(/\(([^)]*)\)/)[1].split(',').map(s => s.trim()).filter(Boolean), bgCode.match(/function isImageDownload[\s\S]*?\n\}/)[0] + '\n' + match[1]);
 }
 
 const requiresNativeHelper = extractFunction('requiresNativeHelper');

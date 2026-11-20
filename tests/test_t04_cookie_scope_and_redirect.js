@@ -8,8 +8,8 @@ console.log('=== TEST SUITE: T04 COOKIE BINDING & REDIRECT POLICY ===\n');
 // 1. Same-origin & subdomain validation
 console.log('[Test 1] Cookie origin domain scoping');
 assert.strictEqual(isSameOriginOrSubdomain('https://example.com/video', 'https://example.com/stream'), true);
-assert.strictEqual(isSameOriginOrSubdomain('https://example.com', 'https://cdn.example.com'), true);
-assert.strictEqual(isSameOriginOrSubdomain('https://cdn.example.com', 'https://example.com'), true);
+assert.strictEqual(isSameOriginOrSubdomain('https://example.com', 'https://cdn.example.com'), false);
+assert.strictEqual(isSameOriginOrSubdomain('https://cdn.example.com', 'https://example.com'), false);
 assert.strictEqual(isSameOriginOrSubdomain('https://example.com', 'https://evil.com'), false);
 assert.strictEqual(isSameOriginOrSubdomain('https://example.com', 'https://example.com.attacker.com'), false);
 assert.strictEqual(isSameOriginOrSubdomain('https://bank.com', 'https://notbank.com'), false);
@@ -43,8 +43,8 @@ const sameHostRedirect = filterHeadersOnRedirect(
   'https://cdn.example.com/path2',
   reqHeaders
 );
-assert.ok(sameHostRedirect.Cookie, 'Same origin/subdomain retains cookie');
-assert.ok(sameHostRedirect.Authorization, 'Same origin/subdomain retains authorization');
+assert.strictEqual(sameHostRedirect.Cookie, undefined, 'Different host strips cookie');
+assert.strictEqual(sameHostRedirect.Authorization, undefined, 'Different host strips authorization');
 
 const crossHostRedirect = filterHeadersOnRedirect(
   'https://example.com/entry',
