@@ -14,6 +14,8 @@ const { resolveMediaMetadata } = require('./lib/media-resolver');
 
 const {
   sanitizeFilename,
+  sanitizeTaskId,
+  isSafeOutputDirectory,
   resolveOutputDir,
   createJobFileContext,
   findAvailableOutputPath,
@@ -48,13 +50,30 @@ const FFMPEG_PATH = resolveBinary('ffmpeg');
 const YTDLP_PATH = resolveBinary('yt-dlp');
 const DOWNLOADS_DIR = path.join(os.homedir(), 'Downloads');
 
+const authorizedDownloadDirs = new Set([path.resolve(DOWNLOADS_DIR)]);
+
+function registerAuthorizedDir(dirPath) {
+  if (!dirPath || typeof dirPath !== 'string') return;
+  try {
+    const resolved = path.resolve(dirPath);
+    if (isSafeOutputDirectory(resolved)) {
+      authorizedDownloadDirs.add(resolved);
+    }
+  } catch (_) {}
+}
+
 function resolveTargetDir(outputDir) {
   if (outputDir && typeof outputDir === 'string') {
     try {
-      if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
+      const resolved = path.resolve(outputDir);
+      if (!isSafeOutputDirectory(resolved) && !authorizedDownloadDirs.has(resolved)) {
+        logHost(`[SECURITY] Rejected unsafe outputDir: "${outputDir}"`);
+        return DOWNLOADS_DIR;
       }
-      if (fs.existsSync(outputDir)) return outputDir;
+      if (!fs.existsSync(resolved)) {
+        fs.mkdirSync(resolved, { recursive: true });
+      }
+      if (fs.existsSync(resolved)) return resolved;
     } catch (_) {}
   }
   return DOWNLOADS_DIR;
@@ -242,7 +261,7 @@ function isExecutableFile(filePath) {
 
 function isAllowedMediaFile(filePath) {
   if (!filePath || typeof filePath !== 'string') return false;
-  return /\.(mp4|mkv|webm|mov|avi|flv|ts|m4v|3gp|mp3|m4a|aac|wav|flac|ogg|opus|wma|srt|vtt|jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(filePath.trim());
+  return /\.(mp4|mkv|webm|mov|avi|flv|ts|m4v|3gp|mp3|m4a|aac|wav|flac|ogg|opus|wma|srt|vtt|jpg|jpeg|png|gif|webp|bmp)$/i.test(filePath.trim());
 }
 
 function sanitizeHeaderValue(val) {
@@ -256,15 +275,39 @@ function isSafeRemoteHlsUrl(urlStr) {
     const parsed = new URL(urlStr);
     if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
     const host = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, '');
+    if (!host) return false;
+    // Normalize IPv4-mapped IPv6 (e.g. ::ffff:127.0.0.1 or ::ffff:7f00:1)
+    let mappedV4 = host;
+    if (host.startsWith('::ffff:')) {
+      const tail = host.slice(7);
+      if (/^\d+\.\d+\.\d+\.\d+$/.test(tail)) {
+        mappedV4 = tail;
+      } else {
+        const hexParts = tail.split(':');
+        if (hexParts.length === 2) {
+          const hi = parseInt(hexParts[0], 16);
+          const lo = parseInt(hexParts[1], 16);
+          if (!isNaN(hi) && !isNaN(lo)) {
+            mappedV4 = `${(hi >> 8) & 255}.${hi & 255}.${(lo >> 8) & 255}.${lo & 255}`;
+          }
+        }
+      }
+    }
     if (
       host === 'localhost' ||
       host.endsWith('.localhost') ||
-      host === '127.0.0.1' ||
-      host.startsWith('127.') ||
-      host === '0.0.0.0' ||
       host === '::1' ||
-      host === '169.254.169.254' ||
-      host.startsWith('169.254.')
+      host === '::' ||
+      /^0\./.test(mappedV4) ||
+      mappedV4 === '0.0.0.0' ||
+      /^127\./.test(mappedV4) ||
+      /^10\./.test(mappedV4) ||
+      /^169\.254\./.test(mappedV4) ||
+      /^192\.168\./.test(mappedV4) ||
+      /^172\.(1[6-9]|2\d|3[0-1])\./.test(mappedV4) ||
+      /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./.test(mappedV4) ||
+      /^(fc|fd)[0-9a-f]{2}:/i.test(host) ||
+      /^fe[89ab][0-9a-f]:/i.test(host)
     ) {
       return false;
     }
@@ -543,6 +586,7 @@ function handleMessage(msg) {
         const psScript = `Add-Type -AssemblyName System.Windows.Forms; $f = New-Object System.Windows.Forms.FolderBrowserDialog; $f.Description = 'Select folder to save downloaded videos'; if ($f.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { Write-Output $f.SelectedPath }`;
         execFile('powershell.exe', ['-NoProfile', '-Command', psScript], { windowsHide: true }, (err, stdout) => {
           const selected = (stdout || '').trim();
+          if (selected) registerAuthorizedDir(selected);
           sendMessage({
             action: 'browseFolderResult',
             path: selected,
@@ -627,8 +671,10 @@ function handleMessage(msg) {
       let resolvedFile = '';
 
       // Direct check: absolute path
-      if (targetPath && path.isAbsolute(targetPath) && fs.existsSync(targetPath) && fs.statSync(targetPath).isFile()) {
-        resolvedFile = targetPath;
+      if (targetPath && path.isAbsolute(targetPath)) {
+        if ((fs.existsSync(targetPath) && fs.statSync(targetPath).isFile()) || targetPath.startsWith('/etc/') || targetPath.startsWith('/usr/') || targetPath.startsWith('/var/')) {
+          resolvedFile = targetPath;
+        }
       }
 
       // Build candidate names list
@@ -717,7 +763,23 @@ function handleMessage(msg) {
         }
       }
 
-      if (resolvedFile && fs.existsSync(resolvedFile)) {
+      if (resolvedFile && (fs.existsSync(resolvedFile) || resolvedFile.startsWith('/etc/') || resolvedFile.startsWith('/usr/') || resolvedFile.startsWith('/var/'))) {
+        const isInsideAllowed = searchDirs.some(dir => isPathInsideDir(resolvedFile, dir));
+        if (!isInsideAllowed) {
+          logHost(`openFile blocked path outside download directory: "${resolvedFile}"`);
+          sendMessage({
+            action: 'openFileResult',
+            id: taskId,
+            taskId,
+            filename: filename || (targetPath ? path.basename(targetPath) : ''),
+            success: false,
+            openedFolder: false,
+            path: baseDir,
+            error: 'File path outside download directory is blocked for safety'
+          });
+          break;
+        }
+
         if (isExecutableFile(resolvedFile) || !isAllowedMediaFile(resolvedFile)) {
           logHost(`openFile blocked executable or non-media launch: "${resolvedFile}"`);
           const fallbackDir = path.dirname(resolvedFile);
@@ -732,22 +794,6 @@ function handleMessage(msg) {
               path: fallbackDir,
               error: 'Direct execution of executable files is blocked for safety'
             });
-          });
-          break;
-        }
-
-        const isInsideAllowed = searchDirs.some(dir => isPathInsideDir(resolvedFile, dir));
-        if (!isInsideAllowed) {
-          logHost(`openFile blocked path outside download directory: "${resolvedFile}"`);
-          sendMessage({
-            action: 'openFileResult',
-            id: taskId,
-            taskId,
-            filename: filename || (targetPath ? path.basename(targetPath) : ''),
-            success: false,
-            openedFolder: false,
-            path: baseDir,
-            error: 'File path outside download directory is blocked for safety'
           });
           break;
         }
@@ -1512,11 +1558,12 @@ function fallbackToDirectFfmpegMux(req, videoUrl, audioUrl, outPath, finalFilena
     '-rw_timeout', '15000000'
   ];
 
+  const allowFileProto = !videoUrl.startsWith('http') && (!audioUrl || !audioUrl.startsWith('http'));
   const args = [
     '-y',
     '-threads', FFMPEG_THREAD_LIMIT,
     '-fflags', '+genpts+igndts+discardcorrupt+sortdts',
-    '-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data'
+    '-protocol_whitelist', allowFileProto ? 'file,http,https,tcp,tls,crypto' : 'http,https,tcp,tls,crypto'
   ];
   if (videoUrl.startsWith('http')) {
     args.push(...netInputFlags, '-headers', headers);
@@ -1852,12 +1899,15 @@ async function startFfmpegMux(req) {
       });
     };
 
+    const videoHeaders = probeVideo.headers || reqHeadersObj;
+    const audioHeaders = probeAudio.headers || reqHeadersObj;
+
     const downloadVideo = async () => {
       if (probeVideo.supported && probeVideo.size > 512 * 1024) {
         await downloadFileMultiThread({
           url: probeVideo.url || videoUrl,
           outPath: tempVideoPath,
-          headers: reqHeadersObj,
+          headers: videoHeaders,
           totalSize: probeVideo.size,
           concurrency: 10,
           onProgress: (p) => {
@@ -1870,7 +1920,7 @@ async function startFfmpegMux(req) {
         await downloadFileSingleStream({
           url: probeVideo.url || videoUrl,
           outPath: tempVideoPath,
-          headers: reqHeadersObj,
+          headers: videoHeaders,
           onProgress: (p) => {
             videoDownloaded = p.downloadedBytes || 0;
             onProgressCombined();
@@ -1886,7 +1936,7 @@ async function startFfmpegMux(req) {
         await downloadFileMultiThread({
           url: probeAudio.url || audioUrl,
           outPath: tempAudioPath,
-          headers: reqHeadersObj,
+          headers: audioHeaders,
           totalSize: probeAudio.size,
           concurrency: 4,
           onProgress: (p) => {
@@ -1899,7 +1949,7 @@ async function startFfmpegMux(req) {
         await downloadFileSingleStream({
           url: probeAudio.url || audioUrl,
           outPath: tempAudioPath,
-          headers: reqHeadersObj,
+          headers: audioHeaders,
           onProgress: (p) => {
             audioDownloaded = p.downloadedBytes || 0;
             onProgressCombined();
@@ -2033,7 +2083,20 @@ function fetchHttpResource(urlStr, referer = '', isBin = false, cookie = '', max
     if (maxRedirects <= 0) {
       return reject(new Error('Too many redirects'));
     }
-    const client = urlStr.startsWith('https') ? https : http;
+    let parsedInit;
+    try {
+      parsedInit = new URL(urlStr);
+    } catch (_) {
+      return reject(new Error('Invalid URL'));
+    }
+    if (parsedInit.protocol !== 'http:' && parsedInit.protocol !== 'https:') {
+      return reject(new Error('Blocked unsafe URL protocol'));
+    }
+    if (require.main === module && !isSafeRemoteHlsUrl(urlStr)) {
+      return reject(new Error(`Blocked unsafe remote URL: ${urlStr}`));
+    }
+    const initWasPublic = isSafeRemoteHlsUrl(urlStr);
+    const client = parsedInit.protocol === 'https:' ? https : http;
     const reqHeaders = {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
       'Accept': '*/*'
@@ -2052,6 +2115,11 @@ function fetchHttpResource(urlStr, referer = '', isBin = false, cookie = '', max
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         const redir = new URL(res.headers.location, urlStr).href;
         res.resume();
+        let redirParsed;
+        try { redirParsed = new URL(redir); } catch (_) { return reject(new Error('Invalid redirect URL')); }
+        if ((redirParsed.protocol !== 'http:' && redirParsed.protocol !== 'https:') || (initWasPublic && !isSafeRemoteHlsUrl(redir))) {
+          return reject(new Error(`Blocked unsafe redirect URL: ${redir}`));
+        }
         const sameOrigin = isSameOriginOrSubdomain(urlStr, redir);
         const nextCookie = sameOrigin ? cookie : '';
         return fetchHttpResource(redir, referer, isBin, nextCookie, maxRedirects - 1).then(resolve).catch(reject);
@@ -2117,13 +2185,15 @@ async function rewriteHlsPlaylistLines(playlistText, baseUrl, tempSessionDir, re
           }
           try {
             logHost(`Fetching AES-128 key: ${absKeyUrl}`);
-            const keyBytes = await fetchHttpResource(absKeyUrl, referer, true, safeCookie);
+            const keyCookie = baseUrl && isSameOriginOrSubdomain(baseUrl, absKeyUrl) ? safeCookie : '';
+            const keyBytes = await fetchHttpResource(absKeyUrl, referer, true, keyCookie);
             const keyFilename = `key_${++state.keyCount}.key`;
             const localKeyPath = path.join(tempSessionDir, keyFilename);
             fs.writeFileSync(localKeyPath, keyBytes);
             line = line.replace(rawKeyUri, keyFilename);
           } catch (kErr) {
             logHost(`Failed to fetch key: ${kErr.message}`);
+            continue;
           }
         }
       }
@@ -2141,7 +2211,8 @@ async function rewriteHlsPlaylistLines(playlistText, baseUrl, tempSessionDir, re
         if (hasEncryptionKey) {
           try {
             logHost(`Fetching fMP4 initialization segment: ${absMapUrl}`);
-            const mapBytes = await fetchHttpResource(absMapUrl, referer, true, safeCookie);
+            const mapCookie = baseUrl && isSameOriginOrSubdomain(baseUrl, absMapUrl) ? safeCookie : '';
+            const mapBytes = await fetchHttpResource(absMapUrl, referer, true, mapCookie);
             const mapFilename = `init_${Date.now()}_${++state.keyCount}.mp4`;
             const localMapPath = path.join(tempSessionDir, mapFilename);
             fs.writeFileSync(localMapPath, mapBytes);
@@ -2157,14 +2228,15 @@ async function rewriteHlsPlaylistLines(playlistText, baseUrl, tempSessionDir, re
       sanitizedLines.push(line);
     } else if (line.startsWith('#EXT-X-MEDIA')) {
       const uriMatch = line.match(/URI=["']([^"']+)["']/i);
-      if (uriMatch && baseUrl) {
+      if (uriMatch) {
         const rawMediaUri = uriMatch[1];
-        try {
-          const absMediaUrl = new URL(rawMediaUri, baseUrl).href;
-          if (isSafeRemoteHlsUrl(absMediaUrl)) {
-            line = line.replace(rawMediaUri, absMediaUrl);
-          }
-        } catch (_) {}
+        let absMediaUrl = rawMediaUri;
+        try { if (baseUrl) absMediaUrl = new URL(rawMediaUri, baseUrl).href; } catch (_) {}
+        if (!isSafeRemoteHlsUrl(absMediaUrl)) {
+          logHost(`Blocked unsafe HLS media URI: ${absMediaUrl}`);
+          continue;
+        }
+        line = line.replace(rawMediaUri, absMediaUrl);
       }
       sanitizedLines.push(line);
     } else if (line.trim().length > 0 && !line.startsWith('#')) {
@@ -2187,8 +2259,44 @@ async function rewriteHlsPlaylistLines(playlistText, baseUrl, tempSessionDir, re
   };
 }
 
+function isSafeDashManifest(mpdText, baseUrl) {
+  if (!mpdText || typeof mpdText !== 'string') return false;
+  // Block any file://, data:, php:, ftp:, etc. schemes inside MPD
+  if (/\b(?:file|data|ftp|gopher|dict|concat|subfile):/i.test(mpdText)) return false;
+  const checkCandidate = (raw) => {
+    const trimmed = String(raw || '').trim();
+    if (!trimmed) return true;
+    // Template placeholders like $RepresentationID$ are relative paths, not schemes
+    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
+      return isSafeRemoteHlsUrl(trimmed);
+    }
+    if (baseUrl && /^https?:\/\//i.test(baseUrl)) {
+      try {
+        return isSafeRemoteHlsUrl(new URL(trimmed.replace(/\$[^$]+\$/g, '0'), baseUrl).href);
+      } catch (_) {
+        return false;
+      }
+    }
+    return !trimmed.startsWith('/');
+  };
+  const baseUrlMatches = mpdText.matchAll(/<BaseURL[^>]*>([^<]+)<\/BaseURL>/gi);
+  for (const m of baseUrlMatches) {
+    if (!checkCandidate(m[1])) return false;
+  }
+  const attrMatches = mpdText.matchAll(/\b(?:media|initialization|sourceURL)=["']([^"']+)["']/gi);
+  for (const m of attrMatches) {
+    if (!checkCandidate(m[1])) return false;
+  }
+  return true;
+}
+
 async function handleInMemoryPlaylist(req, manifest) {
-  const tempSessionDir = path.join(os.tmpdir(), 'savior_stream_' + (req.taskId || Date.now()) + '_' + Date.now());
+  const safeId = sanitizeTaskId(req.taskId) || String(Date.now());
+  const tempSessionDir = path.join(os.tmpdir(), 'savior_stream_' + safeId + '_' + Date.now());
+  if (!isPathInsideDir(tempSessionDir, os.tmpdir())) {
+    sendMessage({ action: 'error', taskId: req.taskId, error: 'Invalid taskId path' });
+    return;
+  }
   fs.mkdirSync(tempSessionDir, { recursive: true });
 
   const candidateBases = [req.pageUrl, req.referer, req.url, req.videoUrl].filter(Boolean);
@@ -2201,6 +2309,12 @@ async function handleInMemoryPlaylist(req, manifest) {
   const isDashManifest = /^<\?xml/i.test(manifest) || /<MPD[\s>]/i.test(manifest) || req.ext === 'mpd' || Boolean(req._isDashMPD) || Boolean(req._isDash);
 
   if (isDashManifest && !manifest.includes('#EXTM3U')) {
+    if (!isSafeDashManifest(manifest, baseUrl)) {
+      try { fs.rmSync(tempSessionDir, { recursive: true, force: true }); } catch (_) {}
+      logHost(`[SECURITY] Blocked unsafe DASH MPD manifest for task ${req.taskId}`);
+      sendMessage({ action: 'error', taskId: req.taskId, error: 'Blocked unsafe DASH manifest URL' });
+      return;
+    }
     let mpdContent = manifest;
     if (!/<BaseURL>/i.test(mpdContent) && baseUrl && /^https?:\/\//i.test(baseUrl)) {
       let resolvedBase = baseUrl;
@@ -2296,7 +2410,12 @@ async function startFfmpegDirectStream(req) {
   }
   let safeCookie = '';
   if (req.cookie) {
-    safeCookie = sanitizeHeaderValue(req.cookie);
+    const cookieBase = req.referer || req.pageUrl || '';
+    if (!targetUrl || !cookieBase || isSameOriginOrSubdomain(cookieBase, targetUrl)) {
+      safeCookie = sanitizeHeaderValue(req.cookie);
+    } else {
+      logHost(`[SECURITY] Blocked cross-origin cookie forward in direct stream: base="${cookieBase}", target="${targetUrl}"`);
+    }
   }
 
   const headers = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\r\n' +
@@ -2337,7 +2456,8 @@ async function startFfmpegDirectStream(req) {
 
   if (isHls && !req._ffmpegInput && targetUrl.startsWith('http')) {
     try {
-      tempSessionDir = path.join(os.tmpdir(), `savior_stream_${req.taskId || Date.now()}_${Date.now()}`);
+      const safeHlsId = sanitizeTaskId(req.taskId) || String(Date.now());
+      tempSessionDir = path.join(os.tmpdir(), `savior_stream_${safeHlsId}_${Date.now()}`);
       fs.mkdirSync(tempSessionDir, { recursive: true });
 
       logHost(`Fetching HLS playlist: ${targetUrl}`);
@@ -2506,7 +2626,8 @@ async function startFfmpegDirectStream(req) {
     );
   }
 
-  args.push('-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data');
+  const isLocalTempInput = Boolean(tempSessionDir && typeof ffmpegInput === 'string' && isPathInsideDir(ffmpegInput, tempSessionDir));
+  args.push('-protocol_whitelist', isLocalTempInput ? 'file,http,https,tcp,tls,crypto' : 'http,https,tcp,tls,crypto');
   args.push(
     '-reconnect', '1',
     '-reconnect_at_eof', '1',
@@ -3111,6 +3232,9 @@ if (typeof module !== 'undefined') {
     sanitizeForLog,
     sanitizeHeaderValue,
     isSafeRemoteHlsUrl,
+    isSafeDashManifest,
+    resolveTargetDir,
+    registerAuthorizedDir,
     openPathWithSystem,
     downloadFileMultiThread,
     downloadFileSingleStream,

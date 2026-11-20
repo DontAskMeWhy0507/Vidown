@@ -18,7 +18,7 @@ console.log('✓ Test 2: background.chrome.js queues DASH/conversion tasks to pr
 // 3. Verify resolveTargetDir in native/host.js
 const hostCode = fs.readFileSync(path.join(__dirname, '../native/host.js'), 'utf8');
 assert(hostCode.includes('function resolveTargetDir'), 'host.js must define resolveTargetDir');
-assert(hostCode.includes('fs.mkdirSync(outputDir, { recursive: true })'), 'host.js must auto-create custom outputDir');
+assert(/fs\.mkdirSync\((?:outputDir|resolved), \{ recursive: true \}\)/.test(hostCode), 'host.js must auto-create custom outputDir');
 console.log('✓ Test 3: native/host.js auto-creates non-existent custom output directories.');
 
 // 4. Verify downloads-nav.js is protected against polluting third-party websites

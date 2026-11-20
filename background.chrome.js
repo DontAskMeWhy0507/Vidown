@@ -2790,7 +2790,17 @@ function resolveSelectedPage(req, sender) {
   let target;
   try {
     target = new URL(req.pageUrl);
-    const isExtensionCaller = Boolean(sender && typeof chrome !== 'undefined' && chrome.runtime && sender.id === chrome.runtime.id);
+    const extPrefix = (typeof chrome !== 'undefined' && chrome.runtime && typeof chrome.runtime.getURL === 'function')
+      ? chrome.runtime.getURL('')
+      : '';
+    const isExtensionCaller = Boolean(
+      sender &&
+      !sender.tab &&
+      extPrefix &&
+      typeof sender.url === 'string' &&
+      sender.url.startsWith(extPrefix) &&
+      sender.id === chrome.runtime.id
+    );
     if (!/^https?:$/.test(target.protocol)) throw new Error('INVALID_PAGE_PROTOCOL');
     if (!isExtensionCaller) {
       const sourceUrl = sender && sender.url ? new URL(sender.url) : null;

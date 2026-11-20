@@ -219,7 +219,7 @@ async function runTests() {
 
     // 2c. Verify FFmpeg in startFfmpegDirectStream ALWAYS gets -protocol_whitelist file,http,https,tcp,tls,crypto,data and -headers
     assert.ok(
-      hostCode.includes("args.push('-protocol_whitelist', 'file,http,https,tcp,tls,crypto,data')"),
+      hostCode.includes("args.push('-protocol_whitelist', isLocalTempInput ? 'file,http,https,tcp,tls,crypto' : 'http,https,tcp,tls,crypto')"),
       'startFfmpegDirectStream must always pass file,http,https,tcp,tls,crypto,data in -protocol_whitelist'
     );
     assert.ok(

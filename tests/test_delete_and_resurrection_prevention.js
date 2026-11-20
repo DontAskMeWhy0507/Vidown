@@ -22,7 +22,7 @@ console.log('✓ 2. downloads.js recentlyDeletedIds, chrome.downloads.erase, and
 // 3. Verify popup.js has recentlyDeletedIds and erase calls
 const popupCode = fs.readFileSync('popup/popup.js', 'utf8');
 assert.ok(popupCode.includes('recentlyDeletedIds = new Set()'), 'popup.js must declare recentlyDeletedIds');
-assert.ok(popupCode.includes('chrome.downloads.erase({ id: item.chromeId }'), 'removeRecentItem must call chrome.downloads.erase');
+assert.ok(popupCode.includes('chrome.downloads.erase({ id: validChromeId }'), 'removeRecentItem must call chrome.downloads.erase');
 console.log('✓ 3. popup.js recentlyDeletedIds and erase synchronization verified.');
 
 // 4. Test Deduplication logic prevents duplicate "download" ghost cards

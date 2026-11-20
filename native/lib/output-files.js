@@ -55,6 +55,49 @@ function sanitizeFilename(rawFilename, defaultExt = 'mp4') {
  * Resolve target output directory and ensure it exists.
  * Verifies that resolved path doesn't escape.
  */
+function sanitizeTaskId(taskId) {
+  if (taskId === null || taskId === undefined) return '';
+  return String(taskId).replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 64);
+}
+
+function isSafeOutputDirectory(dirPath) {
+  if (!dirPath || typeof dirPath !== 'string') return false;
+  try {
+    const resolved = path.resolve(dirPath);
+    const parsed = path.parse(resolved);
+    // Never allow filesystem roots (e.g. "/" or "C:\")
+    if (resolved === parsed.root) return false;
+    const lower = resolved.toLowerCase();
+    // Block sensitive OS and credential directories
+    const blockedPrefixes = [
+      '/etc', '/usr', '/bin', '/sbin', '/boot', '/sys', '/proc', '/dev',
+      'c:\\windows', 'c:\\program files', 'c:\\program files (x86)', 'c:\\programdata'
+    ];
+    for (const prefix of blockedPrefixes) {
+      if (lower === prefix || lower.startsWith(prefix + path.sep)) return false;
+    }
+    const home = path.resolve(os.homedir());
+    const tmp = path.resolve(os.tmpdir());
+    const sensitiveHomeDirs = ['.ssh', '.gnupg', '.aws', '.kube', '.config/autostart'].map(
+      (sub) => path.resolve(home, sub).toLowerCase()
+    );
+    for (const sDir of sensitiveHomeDirs) {
+      if (lower === sDir || lower.startsWith(sDir + path.sep)) return false;
+    }
+    if (lower.includes('\\start menu\\programs\\startup')) return false;
+    // Allow paths under user home or OS temp directory
+    const isInside = (target, base) => {
+      const cmpT = process.platform === 'win32' ? target.toLowerCase() : target;
+      const cmpB = process.platform === 'win32' ? base.toLowerCase() : base;
+      const pref = cmpB.endsWith(path.sep) ? cmpB : cmpB + path.sep;
+      return cmpT === cmpB || cmpT.startsWith(pref);
+    };
+    return isInside(resolved, home) || isInside(resolved, tmp);
+  } catch (_) {
+    return false;
+  }
+}
+
 function resolveOutputDir(customDir) {
   const defaultDir = path.join(os.homedir(), 'Downloads');
   if (!customDir || typeof customDir !== 'string') {
@@ -62,6 +105,9 @@ function resolveOutputDir(customDir) {
   }
   try {
     const resolved = path.resolve(customDir);
+    if (!isSafeOutputDirectory(resolved)) {
+      return defaultDir;
+    }
     if (!fs.existsSync(resolved)) {
       fs.mkdirSync(resolved, { recursive: true });
     }
@@ -78,9 +124,10 @@ function resolveOutputDir(customDir) {
 function createJobFileContext({ taskId, outputDir, filename }) {
   const safeFilename = sanitizeFilename(filename);
   const targetDir = resolveOutputDir(outputDir);
+  const safeTaskId = sanitizeTaskId(taskId);
   
   // Staging file in the exact same directory (same filesystem partition)
-  const partPrefix = taskId ? `.vidown_tmp_${taskId}` : `.vidown_tmp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const partPrefix = safeTaskId ? `.vidown_tmp_${safeTaskId}` : `.vidown_tmp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const partPath = path.join(targetDir, `${partPrefix}.part`);
   const preferredOutputPath = path.join(targetDir, safeFilename);
 
@@ -180,6 +227,8 @@ function cleanupJobStaging(jobContext) {
 
 module.exports = {
   sanitizeFilename,
+  sanitizeTaskId,
+  isSafeOutputDirectory,
   resolveOutputDir,
   createJobFileContext,
   findAvailableOutputPath,

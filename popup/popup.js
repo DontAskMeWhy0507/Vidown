@@ -465,14 +465,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (strId) recentlyDeletedIds.add(strId);
     if (strChromeId) recentlyDeletedIds.add(strChromeId);
 
-    const numChromeId = Number(item.chromeId || item.id);
-    if (!isNaN(numChromeId) && numChromeId > 0 && typeof chrome !== 'undefined' && chrome.downloads) {
+    const validChromeId = Number(item.chromeId);
+    if (Number.isInteger(validChromeId) && validChromeId > 0 && typeof chrome !== 'undefined' && chrome.downloads) {
       try {
-        chrome.downloads.cancel(numChromeId, () => {
-          try { chrome.downloads.erase({ id: item.chromeId }, () => {}); } catch (_) {}
+        chrome.downloads.cancel(validChromeId, () => {
+          try { chrome.downloads.erase({ id: validChromeId }, () => {}); } catch (_) {}
         });
       } catch (_) {
-        try { chrome.downloads.erase({ id: item.chromeId }, () => {}); } catch (_) {}
+        try { chrome.downloads.erase({ id: validChromeId }, () => {}); } catch (_) {}
       }
     }
 
